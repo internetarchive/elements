@@ -44,7 +44,7 @@ have built thus far for their respective teams.
 
 - __ads-toggle-switch (vault)__ - Nice toggle switch with CSS animation moving toggle back and forth.
   [(link)](https://git.archive.org/dps/vault-site/-/blob/fe99de1d53c62f426b1d6b70cc100321d651a9aa/frontend/src/web-components/ads-toggle-switch.ts)
-- __toggle-switch (UX team)__ - Toggle switch with screen-reader support and a lot of CSS customization options. Point: [@nsharma123][nsharma123]. [(link)](https://git.archive.org/www/offshoot/-/blob/main/src/widgets/toggle-switch.ts)
+- __toggle-switch (UX team)__ - Toggle switch with screen-reader support and a lot of CSS customization options. Point: [@latonv][latonv] & [@nsharma123][nsharma123]. [(link)](https://git.archive.org/www/offshoot/-/blob/main/src/widgets/toggle-switch.ts)
 - __ia-password-toggle__ - Intended for password inputs but definitely extensible, renders an eye open/closed icon that switches the type of any input passed in from `text` to `password` and back. Point: [@rebecca-shoptaw][rebecca-shoptaw]. [(link)](https://git.archive.org/www/offshoot/-/blob/main/src/widgets/ia-password-toggle.ts)
 
 ### Icons
