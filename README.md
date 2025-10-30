@@ -78,11 +78,28 @@ have built thus far for their respective teams.
 - __ia-otp-input (UX team)__ - Complex little component to handle rendering a 6-box OTP input. Autofocuses first input, hops between inputs, supports pasting, autocomplete, a custom number of boxes and a custom allowed-characters regex (defaults to numeric-only). Used i.e. in the `Email me a code` modal on the [account settings](https://archive.org/account/settings) page. Point: [@rebecca-shoptaw][rebecca-shoptaw]. [(link)](https://git.archive.org/www/offshoot/-/blob/main/src/widgets/otp/ia-otp-input.ts)
 - __ia-clearable-text-input__ - Text input with a clear button and substantial a11y support. Point: [@latonv][latonv]. [(link)](https://github.com/internetarchive/iaux-clearable-text-input/blob/main/src/ia-clearable-text-input.ts)
 
+### Menu
+
+- __ia-dropdown__ - Supports various customized dropdown menu use cases. Point: [@latonv][latonv]. [(link)](https://github.com/internetarchive/iaux-dropdown)
+
+### Infinite Scroller
+
+- __infinite-scroller (UX team)__ - Supports virtualized buffered scrolling of large lists. Point: [@latonv][latonv]. [(link)](https://github.com/internetarchive/iaux-infinite-scroller)
+
+### Histogram
+
+- __collection-histogram (UX team)__ - Histogram component, only used on collection pages at the moment, but the component is fairly general already. Point: [@latonv][latonv]. [(link)](https://git.archive.org/www/offshoot/-/blob/main/src/scenes/collection-page/components/histograms/collection-histogram.ts)
+- __histogram-date-range (UX team)__ - Date range component for histogram, which we might explore consolidating with the above. Point: [@latonv][latonv]. [(link)](https://github.com/internetarchive/iaux-histogram-date-range)
+
 ### Activity Indicator
 
 - __ia-activity-indicator__ - SVG-based circular activity indicator with two mode options, used in `ia-button` and throughout site. Point: [@jbuckner][jbuckner]. [(link)](https://github.com/internetarchive/iaux/blob/master/packages/ia-activity-indicator/src/ia-activity-indicator.ts)
 - __circular-activity-indicator (UX team)__ - Variation on the IA activity indicator with CSS variable customization. Point: [@jbuckner][jbuckner]. [(link)](https://git.archive.org/www/offshoot/-/blob/main/src/widgets/activity-indicators/circular-activity-indicator.ts)
 - __horizontal-activity-indicator (UX team)__ - Horizontal page-wide activity indicator, relies on the `sharedResizeObserver` which we'd need to convert and generalize as well. Point: [@jbuckner][jbuckner]. [(link)](https://git.archive.org/www/offshoot/-/blob/main/src/widgets/activity-indicators/horizontal-activity-indicator.ts)
+
+### Responsiveness Helpers
+
+- __SharedResizeObserver__ - Could be made into a more declarative component similar to [what Shoelace has done](https://shoelace.style/components/resize-observer). I.e., the component itself manages attaching/detaching the shared observer instance from its slotted children as part of its lifecycle, so that we don't have to repeat that logic all over our other components. Used by horizontal activity indicator and carousel. Point: [@latonv][latonv]. [(link)](https://github.com/internetarchive/iaux-shared-resize-observer)
 
 ### Accessibility Helpers
 
