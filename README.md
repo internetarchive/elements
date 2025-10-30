@@ -58,7 +58,7 @@ have built thus far for their respective teams.
 ### Library (non-rendering)
 
 - __ads-library__ - Includes: Helpful `fetch()` abstraction, data formatters, event abstractions,
-  a place for common code dependencies within the broader component library.
+  a place for common code dependencies within the broader component library. [@jeffwklein][jeffwklein]
   [(link)](https://github.com/internetarchive/ads-common/tree/d1dbdd0b137b54b871f1ed41a54e4256af2abaee/packages/ads-library/src)
 
 ### Carousel
