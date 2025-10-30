@@ -12,45 +12,45 @@ have built thus far for their respective teams.
 
 ### Button
 
-- __ads-button__ - 3 varieties, a few CSS params, and borderless styles.
+- __ads-button__ - 3 varieties, a few CSS params, and borderless styles. [@jeffwklein][jeffwklein]
   [(link)](https://github.com/internetarchive/ads-common/blob/d1dbdd0b137b54b871f1ed41a54e4256af2abaee/packages/ads-button/src/ads-button.ts)
 - __ia-button__ - Many CSS-based style variations, plus loading and disabled state support, including optional custom loading message. Point: [@rebecca-shoptaw][rebecca-shoptaw]. [(link)](https://git.archive.org/www/offshoot/-/blob/main/src/widgets/ia-button.ts)
 
 ### Table
 
 - __ads-table__ - Sortable columns, arrow key navigation, and
-  multiselect support.
+  multiselect support. [@jeffwklein][jeffwklein]
   [(link)](https://github.com/internetarchive/ads-common/blob/d1dbdd0b137b54b871f1ed41a54e4256af2abaee/packages/ads-table/src/ads-table.ts)
 
 ### Modal
 
-- __modal-element (vault)__ - Latest modal for ADS, globally in use on Vault site. (ignore ads-modal)
+- __modal-element (vault)__ - Latest modal for ADS, globally in use on Vault site. (ignore ads-modal) [@jeffwklein][jeffwklein]
   [(link)](https://git.archive.org/dps/vault-site/-/blob/fe99de1d53c62f426b1d6b70cc100321d651a9aa/frontend/src/modals/generic-modal.ts#L58)
 - __iaux-modal-manager__ - Finicky but powerful modal manager with a number of config options. Point: likely [@latonv][latonv]. [(link)](https://github.com/internetarchive/iaux-modal-manager)
 
 ### Tree
 
 - __ads-tree (vault)__ - Basic tree component, CSS animation arrow rotation on folder expansion,
-  powers Vault file explorer, has material-UI icon dependency.
+  powers Vault file explorer, has material-UI icon dependency. [@jeffwklein][jeffwklein]
   [(link)](https://git.archive.org/dps/vault-site/-/blob/fe99de1d53c62f426b1d6b70cc100321d651a9aa/frontend/src/web-components/ads-tree.ts)
 
 ### Card
 
-- __ads-card (vault)__ - Very basic card component, in use in Vault a couple places.
+- __ads-card (vault)__ - Very basic card component, in use in Vault a couple places. [@jeffwklein][jeffwklein]
   [(link)](https://git.archive.org/dps/vault-site/-/blob/fe99de1d53c62f426b1d6b70cc100321d651a9aa/frontend/src/web-components/ads-card.ts)
 - __ia-image-card__ - Simple component to display an image as a card, with an optional overlay color, hover-title, and on-click link. Used by various custom collections such as [Democracy's Library](https://archive.org/details/democracys-library). Point: [@rebecca-shoptaw][rebecca-shoptaw]. [(link)](https://git.archive.org/www/offshoot/-/blob/main/src/widgets/ia-image-card.ts)
 
 ### Toggle Switch
 
-- __ads-toggle-switch (vault)__ - Nice toggle switch with CSS animation moving toggle back and forth.
+- __ads-toggle-switch (vault)__ - Nice toggle switch with CSS animation moving toggle back and forth. [@jeffwklein][jeffwklein]
   [(link)](https://git.archive.org/dps/vault-site/-/blob/fe99de1d53c62f426b1d6b70cc100321d651a9aa/frontend/src/web-components/ads-toggle-switch.ts)
 - __toggle-switch (UX team)__ - Toggle switch with screen-reader support and a lot of CSS customization options. Point: [@latonv][latonv] & [@nsharma123][nsharma123]. [(link)](https://git.archive.org/www/offshoot/-/blob/main/src/widgets/toggle-switch.ts)
 - __ia-password-toggle__ - Intended for password inputs but definitely extensible, renders an eye open/closed icon that switches the type of any input passed in from `text` to `password` and back. Point: [@rebecca-shoptaw][rebecca-shoptaw]. [(link)](https://git.archive.org/www/offshoot/-/blob/main/src/widgets/ia-password-toggle.ts)
 
 ### Icons
 
-- Vault uses [material-web](https://github.com/material-components/material-web)'s `md-icon` font-based icon system. This project is
-  unfortunately in maintenance mode, but it nevertheless works well for Lit 3.
+- Vault ([@jeffwklein][jeffwklein]) uses [material-web](https://github.com/material-components/material-web)'s `md-icon` font-based icon system. This project is
+  unfor tunately in maintenance mode, but it nevertheless works well for Lit 3.
 - __ia-icon__ - Icon designed to remove need for CSS-filtering, inherits current color by default and can inherit custom color via `color: ` or CSS variable. Point: [@rebecca-shoptaw][rebecca-shoptaw]. [(link)](https://git.archive.org/www/offshoot/-/blob/main/src/widgets/ia-icon.ts)
 - __iaux-icons__ - Icon monorepo that also exports an `ia-icon`. Hopefully the `ia-icon` above can be folded into this one either by adding both to the library or using a library-hosted component within the icons repo. Point: [@iisa][iisa] & [@jbuckner][jbuckner]? [(link)](https://github.com/internetarchive/iaux-icons)
 - __ia-icons__ - Another icon repo, this one with separate widgets for individual icons, i.e. `ia-icon-video`. Hopefully all three icon implementations here can be somehow standardized/combined in the new world. Point: [@traceypooh][traceypooh]. [(link)](https://github.com/internetarchive/ia-icons)
@@ -108,6 +108,7 @@ have built thus far for their respective teams.
 <!-- URLs for GitHub @s, in alphabetical order -->
 [iisa]: https://github.com/iisa
 [jbuckner]: https://github.com/jbuckner
+[jeffwklein]: https://github.com/jeffwklein
 [latonv]: https://github.com/latonv
 [nsharma123]: https://github.com/nsharma123s
 [rebecca-shoptaw]: https://github.com/rebecca-shoptaw
