@@ -1,0 +1,36 @@
+{
+  "name": "@internetarchive/ia-components",
+  "version": "0.0.1",
+  "description": "A collection of web components for Internet Archive projects.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "wireit",
+    "clean": "wireit"
+  },
+  "devDependencies": {
+    "ts-lit-plugin": "^2.0.2",
+    "tslib": "^2.8.1",
+    "typescript": "^5.9.3",
+    "wireit": "^0.14.12"
+  },
+  "dependencies": {
+    "lit": "^3.3.1"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "wireit": {
+    "build": {
+      "command": "tsc --build --pretty",
+      "files": ["packages/**/*.ts", "tsconfig.json"],
+      "output": ["dist/**"]
+    },
+    "clean": {
+      "command": "rm -rf dist"
+    }
+  }
+}
