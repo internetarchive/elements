@@ -1,1 +1,1 @@
-export * from "./button/button";
+export * from "./ia-button/ia-button";
