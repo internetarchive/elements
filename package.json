@@ -1,7 +1,8 @@
 {
   "name": "@internetarchive/ia-components",
   "version": "0.0.1",
-  "description": "A collection of web components for Internet Archive projects.",
+  "description": "A web component library from the Internet Archive.",
+  "license": "AGPL-3.0-only",
   "main": "dist/packages/components/index.js",
   "types": "dist/packages/components/index.d.ts",
   "scripts": {
