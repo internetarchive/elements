@@ -1,13 +1,12 @@
-import { html, LitElement } from "lit";
-import { state } from "lit/decorators/state.js";
-import { customElement } from "lit/decorators/custom-element.js";
+import { html, LitElement } from 'lit';
+import { state } from 'lit/decorators/state.js';
+import { customElement } from 'lit/decorators/custom-element.js';
 
 import Snowflakes from 'magic-snowflakes';
 
 import '@internetarchive/ia-components/components/ia-button/ia-button.js';
 
-
-@customElement("ia-snow")
+@customElement('ia-snow')
 export class Snow extends LitElement {
   @state()
   private snowing = false;
@@ -16,11 +15,16 @@ export class Snow extends LitElement {
 
   render() {
     return html`
-      <h1>Snowflakes</h1>
-      <ia-button @click=${() => {
-        this.snowing ? this.stopSnowing() : this.startSnowing();
-      }}>
-        ${this.snowing ? "Stop Snowflakes" : "Start Snowflakes"}
+      <ia-button
+        @click=${() => {
+        if (this.snowing) {
+          this.stopSnowing();
+        } else {
+          this.startSnowing();
+        }
+      }}
+      >
+        ${this.snowing ? 'Stop Snowflakes' : 'Start Snowflakes'}
       </ia-button>
     `;
   }
