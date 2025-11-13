@@ -1,9 +1,15 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vitest/config';
+import path from 'path';
 import { playwright } from '@vitest/browser-playwright';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      src: path.resolve(__dirname, './src'),
+    },
+  },
   test: {
     browser: {
       enabled: true,

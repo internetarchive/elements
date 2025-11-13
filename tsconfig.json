@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2021",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "lib": [
       "es2021",
@@ -30,6 +30,11 @@
         "name": "ts-lit-plugin"
       }
     ],
+    "paths": {
+      "src": [
+        "./src"
+      ]
+    },
   },
   "include": [
     "demo",
