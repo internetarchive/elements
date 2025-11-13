@@ -7,7 +7,8 @@ import { playwright } from '@vitest/browser-playwright';
 export default defineConfig({
   resolve: {
     alias: {
-      src: path.resolve(__dirname, './src'),
+      '@src': path.resolve(__dirname, './src'),
+      '@demo': path.resolve(__dirname, './demo'),
     },
   },
   test: {

@@ -1,8 +1,8 @@
 import { html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-import '../src/components/ia-button/ia-button';
-import '../src/labs/ia-snow/ia-snow';
+import '@src/components/ia-button/ia-button';
+import '@src/labs/ia-snow/ia-snow';
 
 @customElement('app-root')
 export class AppRoot extends LitElement {

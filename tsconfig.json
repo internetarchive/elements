@@ -25,19 +25,23 @@
     "noUncheckedSideEffectImports": true,
     "outDir": "dist",
     "rootDir": "./",
+    "baseUrl": "./",
     "plugins": [
       {
         "name": "ts-lit-plugin"
       }
     ],
     "paths": {
-      "src": [
-        "./src"
+      "@src/*": [
+        "./src/*"
+      ],
+      "@demo/*": [
+        "./demo/*"
       ]
     },
   },
   "include": [
-    "demo",
-    "src",
+    "demo/**/*.ts",
+    "src/**/*.ts"
   ]
 }

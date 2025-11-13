@@ -4,7 +4,7 @@ import { customElement } from 'lit/decorators/custom-element.js';
 
 import Snowflakes from 'magic-snowflakes';
 
-import '../../components/ia-button/ia-button';
+import '@src/components/ia-button/ia-button';
 
 @customElement('ia-snow')
 export class IASnow extends LitElement {
