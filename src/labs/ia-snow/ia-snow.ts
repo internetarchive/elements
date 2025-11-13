@@ -4,10 +4,10 @@ import { customElement } from 'lit/decorators/custom-element.js';
 
 import Snowflakes from 'magic-snowflakes';
 
-import '@internetarchive/ia-components/components/ia-button/ia-button.js';
+import '../../components/ia-button/ia-button';
 
 @customElement('ia-snow')
-export class Snow extends LitElement {
+export class IASnow extends LitElement {
   @state()
   private snowing = false;
 
@@ -17,12 +17,12 @@ export class Snow extends LitElement {
     return html`
       <ia-button
         @click=${() => {
-        if (this.snowing) {
-          this.stopSnowing();
-        } else {
-          this.startSnowing();
-        }
-      }}
+          if (this.snowing) {
+            this.stopSnowing();
+          } else {
+            this.startSnowing();
+          }
+        }}
       >
         ${this.snowing ? 'Stop Snowflakes' : 'Start Snowflakes'}
       </ia-button>
