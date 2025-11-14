@@ -3,6 +3,7 @@ import { customElement, query, state } from 'lit/decorators.js';
 
 import './ia-snow';
 import type { SnowflakesParams } from 'magic-snowflakes';
+import '@src/internal/story-template';
 
 @customElement('ia-snow-story')
 export class IASnowStory extends LitElement {
@@ -22,30 +23,37 @@ export class IASnowStory extends LitElement {
 
   render() {
     return html`
-      <ia-snow .snowConfig=${this.snowflakesConfig}></ia-snow>
+      <story-template title="<ia-snow>">
+        <div slot="demo">
+          <ia-snow .snowConfig=${this.snowflakesConfig}></ia-snow>
+        </div>
 
-      <fieldset>
-        <legend>Settings</legend>
-        <table>
-          <tr>
-            <td>Color</td>
-            <td><input type="color" value="#4d94b2" id="color" /></td>
-          </tr>
-          <tr>
-            <td>Count</td>
-            <td><input type="number" value="50" id="count" /></td>
-          </tr>
-          <tr>
-            <td>Wind</td>
-            <td><input type="checkbox" checked id="wind" /></td>
-          </tr>
-          <tr>
-            <td>Rotation</td>
-            <td><input type="checkbox" checked id="rotation" /></td>
-          </tr>
-        </table>
-        <button @click=${this.setupSnowflakes}>Apply</button>
-      </fieldset>
+        <div slot="usage">
+          <pre><code>&lt;ia-snow .snowConfig=${'{ ... }'}&gt;&lt;/ia-snow&gt;</code></pre>
+        </div>
+
+        <div slot="settings">
+          <table>
+            <tr>
+              <td>Color</td>
+              <td><input type="color" value="#4d94b2" id="color" /></td>
+            </tr>
+            <tr>
+              <td>Count</td>
+              <td><input type="number" value="50" id="count" /></td>
+            </tr>
+            <tr>
+              <td>Wind</td>
+              <td><input type="checkbox" checked id="wind" /></td>
+            </tr>
+            <tr>
+              <td>Rotation</td>
+              <td><input type="checkbox" checked id="rotation" /></td>
+            </tr>
+          </table>
+          <button @click=${this.setupSnowflakes}>Apply</button>
+        </div>
+      </story-template>
     `;
   }
 
@@ -59,12 +67,11 @@ export class IASnowStory extends LitElement {
     this.snowflakesConfig = config;
   }
 
-    static get styles(): CSSResultGroup {
-      return css`
-        fieldset {
-          margin-top: 16px;
-        }
-      `;
-    }
-
+  static get styles(): CSSResultGroup {
+    return css`
+      fieldset {
+        margin-top: 16px;
+      }
+    `;
+  }
 }

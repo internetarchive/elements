@@ -10,10 +10,8 @@ export class AppRoot extends LitElement {
     return html`
       <h1>Component Catalog</h1>
 
-      <h2>Button</h2>
       <ia-button-story></ia-button-story>
 
-      <h2>Snow</h2>
       <ia-snow-story></ia-snow-story>
     `;
   }

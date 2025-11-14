@@ -2,6 +2,7 @@ import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { customElement, query } from 'lit/decorators.js';
 
 import './ia-button';
+import '@src/internal/story-template';
 
 @customElement('ia-button-story')
 export class IAButtonStory extends LitElement {
@@ -13,18 +14,27 @@ export class IAButtonStory extends LitElement {
 
   render() {
     return html`
-      <ia-button @click=${() => alert('Button clicked!')}>Click Me</ia-button>
+      <story-template title="<ia-button>">
+        <div slot="demo">
+          <ia-button @click=${() => alert('Button clicked!')}
+            >Click Me</ia-button
+          >
+        </div>
 
-      <fieldset>
-        <legend>Settings</legend>
-        <table>
-          <tr>
-            <td>Color</td>
-            <td><input type="color" value="#007bff" id="color" /></td>
-          </tr>
-        </table>
-        <button @click=${this.apply}>Apply</button>
-      </fieldset>
+        <div slot="usage">
+          <pre><code>&lt;ia-button&gt;Click Me&lt;/ia-button&gt;</code></pre>
+        </div>
+
+        <div slot="settings">
+          <table>
+            <tr>
+              <td>Color</td>
+              <td><input type="color" value="#007bff" id="color" /></td>
+            </tr>
+          </table>
+          <button @click=${this.apply}>Apply</button>
+        </div>
+      </story-template>
     `;
   }
 
@@ -33,13 +43,5 @@ export class IAButtonStory extends LitElement {
       '--ia-button-background-color',
       this.colorInput.value,
     );
-  }
-
-  static get styles(): CSSResultGroup {
-    return css`
-      fieldset {
-        margin-top: 16px;
-      }
-    `;
   }
 }
