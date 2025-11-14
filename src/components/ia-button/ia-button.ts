@@ -15,7 +15,7 @@ export class IAButton extends LitElement {
     return css`
       button {
         padding: 8px 16px;
-        background-color: #007bff;
+        background-color: var(--ia-button-background-color, #007bff);
       }
     `;
   }

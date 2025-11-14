@@ -1,13 +1,16 @@
-import { html, LitElement } from 'lit';
+import { html, LitElement, type PropertyValues } from 'lit';
 import { state } from 'lit/decorators/state.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 
-import Snowflakes from 'magic-snowflakes';
+import Snowflakes, { type SnowflakesParams } from 'magic-snowflakes';
 
 import '@src/components/ia-button/ia-button';
+import { property } from 'lit/decorators.js';
 
 @customElement('ia-snow')
 export class IASnow extends LitElement {
+  @property({ type: Object }) snowConfig?: SnowflakesParams;
+
   @state()
   private snowing = false;
 
@@ -27,6 +30,14 @@ export class IASnow extends LitElement {
         ${this.snowing ? 'Stop Snowflakes' : 'Start Snowflakes'}
       </ia-button>
     `;
+  }
+
+  protected willUpdate(_changedProperties: PropertyValues): void {
+    if (_changedProperties.has('snowConfig') && this.snowConfig) {
+      this.snowflakes?.destroy();
+      this.snowflakes = new Snowflakes(this.snowConfig);
+      this.startSnowing();
+    }
   }
 
   private startSnowing() {
