@@ -11,7 +11,7 @@ export class AppRoot extends LitElement {
       <h1>Component Catalog</h1>
 
       <h2>Button</h2>
-      <ia-button @click=${() => alert('Button clicked!')}>Click Me</ia-button>
+      <ia-button @click=${() => alert('Button clicked!!')}>Click Me</ia-button>
 
       <h2>Snow</h2>
       <ia-snow></ia-snow>
