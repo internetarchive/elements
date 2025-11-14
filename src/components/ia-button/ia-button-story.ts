@@ -22,7 +22,7 @@ export class IAButtonStory extends LitElement {
         </div>
 
         <div slot="usage">
-          <pre><code>&lt;ia-button&gt;Click Me&lt;/ia-button&gt;</code></pre>
+          <pre><code>&lt;ia-button @click=&dollar;{() => alert('Button clicked!')}&gt;Click Me&lt;/ia-button&gt;</code></pre>
         </div>
 
         <div slot="settings">
