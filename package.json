@@ -36,6 +36,7 @@
     "playwright": "^1.56.1",
     "prettier": "^3.6.2",
     "ts-lit-plugin": "^2.0.2",
+    "tsc-alias": "^1.8.16",
     "tslib": "^2.8.1",
     "typescript": "^5.9.3",
     "vite": "^7.2.2",
@@ -49,7 +50,7 @@
   },
   "wireit": {
     "build": {
-      "command": "tsc --build --pretty",
+      "command": "tsc --build --pretty && tsc-alias",
       "dependencies": [
         "circular"
       ],
