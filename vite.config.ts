@@ -5,12 +5,6 @@ import { playwright } from '@vitest/browser-playwright';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  resolve: {
-    alias: {
-      '@src': path.resolve(__dirname, './src'),
-      '@demo': path.resolve(__dirname, './demo'),
-    },
-  },
   test: {
     browser: {
       enabled: true,

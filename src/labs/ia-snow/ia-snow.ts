@@ -1,11 +1,11 @@
 import { html, LitElement, type PropertyValues } from 'lit';
 import { state } from 'lit/decorators/state.js';
 import { customElement } from 'lit/decorators/custom-element.js';
+import { property } from 'lit/decorators.js';
 
 import Snowflakes, { type SnowflakesParams } from 'magic-snowflakes';
 
-import '@src/components/ia-button/ia-button';
-import { property } from 'lit/decorators.js';
+import '../../components/ia-button/ia-button';
 
 @customElement('ia-snow')
 export class IASnow extends LitElement {

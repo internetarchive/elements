@@ -2,7 +2,7 @@ import { html, LitElement } from 'lit';
 import { customElement, query } from 'lit/decorators.js';
 
 import './ia-button';
-import '@src/internal/story-template';
+import '../../internal/story-template';
 
 @customElement('ia-button-story')
 export class IAButtonStory extends LitElement {
