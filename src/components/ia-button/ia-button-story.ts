@@ -1,4 +1,4 @@
-import { css, html, LitElement, type CSSResultGroup } from 'lit';
+import { html, LitElement } from 'lit';
 import { customElement, query } from 'lit/decorators.js';
 
 import './ia-button';
