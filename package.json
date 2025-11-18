@@ -5,6 +5,13 @@
   "license": "AGPL-3.0-only",
   "main": "./dist/src/components/index.js",
   "types": "./dist/src/components/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/internetarchive/ia-components.git"
+  },
+  "bugs": {
+    "url": "https://github.com/internetarchive/ia-components/issues"
+  },
   "scripts": {
     "dev": "wireit",
     "build": "wireit",
