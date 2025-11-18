@@ -56,6 +56,10 @@
     "./components/*": "./dist/src/components/*",
     "./labs/*": "./dist/src/labs/*"
   },
+  "files": [
+    "README.md",
+    "dist"
+  ],
   "wireit": {
     "build": {
       "command": "tsc --build --pretty && tsc-alias",
