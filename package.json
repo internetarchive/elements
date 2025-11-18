@@ -12,6 +12,7 @@
     "lint": "wireit",
     "format": "wireit",
     "circular": "wireit",
+    "postinstall": "wireit",
     "test": "wireit"
   },
   "dependencies": {
@@ -76,6 +77,11 @@
     },
     "format": {
       "command": "eslint . --fix && prettier \"**/*.ts\" --write"
+    },
+    "postinstall": {
+      "dependencies": [
+        "build"
+      ]
     },
     "test": {
       "command": "vitest",
