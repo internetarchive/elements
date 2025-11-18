@@ -24,5 +24,6 @@ export default defineConfig({
       enabled: true,
     },
     watch: false,
+    exclude: ['node_modules', 'dist'],
   },
 });
