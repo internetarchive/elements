@@ -5,6 +5,9 @@
   "license": "AGPL-3.0-only",
   "types": "./dist/src/elements/index.d.ts",
   "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/internetarchive/elements.git"
