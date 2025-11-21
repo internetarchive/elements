@@ -23,7 +23,7 @@ export class IASnowStory extends LitElement {
 
   render() {
     return html`
-      <story-template title="<ia-snow>">
+      <story-template elementTag="ia-snow" labs>
         <div slot="demo">
           <ia-snow .snowConfig=${this.snowflakesConfig}></ia-snow>
         </div>

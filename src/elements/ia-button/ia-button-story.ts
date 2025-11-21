@@ -14,7 +14,7 @@ export class IAButtonStory extends LitElement {
 
   render() {
     return html`
-      <story-template title="<ia-button>">
+      <story-template elementTag="ia-button">
         <div slot="demo">
           <ia-button @click=${() => alert('Button clicked!')}
             >Click Me</ia-button
