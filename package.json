@@ -57,9 +57,7 @@
   "exports": {
     ".": "./dist/src/index.js",
     "./*": "./dist/src/elements/*.js",
-    "./*.js": "./dist/src/elements/*.js",
-    "./labs/*": "./dist/src/labs/*.js",
-    "./labs/*.js": "./dist/src/labs/*.js"
+    "./labs/*": "./dist/src/labs/*.js"
   },
   "files": [
     "README.md",
@@ -67,7 +65,8 @@
     "!dist/**/*.test*",
     "!dist/**/*-story*",
     "!dist/demo",
-    "!dist/src/internal"
+    "!dist/src/internal",
+    "!dist/*.tsbuildinfo"
   ],
   "wireit": {
     "build": {
