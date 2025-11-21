@@ -23,13 +23,9 @@ export class IASnowStory extends LitElement {
 
   render() {
     return html`
-      <story-template elementTag="ia-snow" labs>
+      <story-template elementTag="ia-snow" .exampleUsage=${this.exampleUsage} labs>
         <div slot="demo">
           <ia-snow .snowConfig=${this.snowflakesConfig}></ia-snow>
-        </div>
-
-        <div slot="usage">
-          <pre><code>&lt;ia-snow .snowConfig=${'{ ... }'}&gt;&lt;/ia-snow&gt;</code></pre>
         </div>
 
         <div slot="settings">
@@ -57,14 +53,30 @@ export class IASnowStory extends LitElement {
     `;
   }
 
-  private setupSnowflakes() {
-    const config: SnowflakesParams = {
+  private get exampleUsage() {
+    return this.snowflakesConfig ? `
+      <ia-snow .snowConfig=\${${this.configString}}></ia-snow>
+    ` :
+      `<ia-snow></ia-snow>`;
+  }
+
+  private get configString() {
+    return JSON.stringify(
+      this.snowflakesConfig, null, 2
+    )
+  }
+
+  private get snowflakeConfig(): SnowflakesParams {
+    return {
       color: this.colorInput.value,
       count: Number(this.countInput.value),
       wind: this.windInput.checked,
       rotation: this.rotationInput.checked,
     };
-    this.snowflakesConfig = config;
+  }
+
+  private setupSnowflakes() {
+    this.snowflakesConfig = this.snowflakeConfig;
   }
 
   static get styles(): CSSResultGroup {

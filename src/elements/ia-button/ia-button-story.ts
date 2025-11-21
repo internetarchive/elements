@@ -14,15 +14,11 @@ export class IAButtonStory extends LitElement {
 
   render() {
     return html`
-      <story-template elementTag="ia-button">
+      <story-template elementTag="ia-button" .exampleUsage=${this.exampleUsage}>
         <div slot="demo">
           <ia-button @click=${() => alert('Button clicked!')}
             >Click Me</ia-button
           >
-        </div>
-
-        <div slot="usage">
-          <pre><code>&lt;ia-button @click=&dollar;{() => alert('Button clicked!')}&gt;Click Me&lt;/ia-button&gt;</code></pre>
         </div>
 
         <div slot="settings">
@@ -35,6 +31,12 @@ export class IAButtonStory extends LitElement {
           <button @click=${this.apply}>Apply</button>
         </div>
       </story-template>
+    `;
+  }
+
+  private get exampleUsage() {
+    return `
+<ia-button @click={() => alert('Button clicked!')}>Click Me</ia-button>
     `;
   }
 
