@@ -1,16 +1,16 @@
 {
-  "name": "@internetarchive/ia-components",
+  "name": "@internetarchive/elements",
   "version": "0.0.1-alpha.4",
   "description": "A web component library from the Internet Archive.",
   "license": "AGPL-3.0-only",
-  "main": "./dist/src/components/index.js",
   "types": "./dist/src/components/index.d.ts",
+  "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/internetarchive/ia-components.git"
+    "url": "git+https://github.com/internetarchive/elements.git"
   },
   "bugs": {
-    "url": "https://github.com/internetarchive/ia-components/issues"
+    "url": "https://github.com/internetarchive/elements/issues"
   },
   "scripts": {
     "dev": "wireit",
@@ -52,13 +52,19 @@
     "wireit": "^0.14.12"
   },
   "exports": {
-    ".": "./dist/src/components/index.js",
-    "./components/*": "./dist/src/components/*",
-    "./labs/*": "./dist/src/labs/*"
+    ".": "./dist/src/index.js",
+    "./*": "./dist/src/components/*.js",
+    "./*.js": "./dist/src/components/*.js",
+    "./labs/*": "./dist/src/labs/*.js",
+    "./labs/*.js": "./dist/src/labs/*.js"
   },
   "files": [
     "README.md",
-    "dist"
+    "dist",
+    "!dist/**/*.test*",
+    "!dist/**/*-story*",
+    "!dist/demo",
+    "!dist/src/internal"
   ],
   "wireit": {
     "build": {
