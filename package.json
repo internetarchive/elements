@@ -3,7 +3,7 @@
   "version": "0.0.1-alpha.4",
   "description": "A web component library from the Internet Archive.",
   "license": "AGPL-3.0-only",
-  "types": "./dist/src/components/index.d.ts",
+  "types": "./dist/src/elements/index.d.ts",
   "type": "module",
   "repository": {
     "type": "git",
@@ -53,8 +53,8 @@
   },
   "exports": {
     ".": "./dist/src/index.js",
-    "./*": "./dist/src/components/*.js",
-    "./*.js": "./dist/src/components/*.js",
+    "./*": "./dist/src/elements/*.js",
+    "./*.js": "./dist/src/elements/*.js",
     "./labs/*": "./dist/src/labs/*.js",
     "./labs/*.js": "./dist/src/labs/*.js"
   },

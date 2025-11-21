@@ -5,7 +5,7 @@ import { state } from 'lit/decorators/state.js';
 
 import Snowflakes, { type SnowflakesParams } from 'magic-snowflakes';
 
-import '@src/components/ia-button/ia-button';
+import '@src/elements/ia-button/ia-button';
 
 @customElement('ia-snow')
 export class IASnow extends LitElement {
