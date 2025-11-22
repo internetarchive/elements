@@ -23,7 +23,11 @@ export class IASnowStory extends LitElement {
 
   render() {
     return html`
-      <story-template elementTag="ia-snow" .exampleUsage=${this.exampleUsage} labs>
+      <story-template
+        elementTag="ia-snow"
+        .exampleUsage=${this.exampleUsage}
+        labs
+      >
         <div slot="demo">
           <ia-snow .snowConfig=${this.snowflakesConfig}></ia-snow>
         </div>
@@ -54,16 +58,15 @@ export class IASnowStory extends LitElement {
   }
 
   private get exampleUsage() {
-    return this.snowflakesConfig ? `
+    return this.snowflakesConfig
+      ? `
       <ia-snow .snowConfig=\${${this.configString}}></ia-snow>
-    ` :
-      `<ia-snow></ia-snow>`;
+    `
+      : `<ia-snow></ia-snow>`;
   }
 
   private get configString() {
-    return JSON.stringify(
-      this.snowflakesConfig, null, 2
-    )
+    return JSON.stringify(this.snowflakesConfig, null, 2);
   }
 
   private get snowflakeConfig(): SnowflakesParams {

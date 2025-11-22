@@ -38,11 +38,11 @@ export class IAButtonStory extends LitElement {
   }
 
   private get exampleUsage() {
-    return this.includeStyle ?
-      `<ia-button
+    return this.includeStyle
+      ? `<ia-button
   @click=\${() => alert('Button clicked!')}
-  style="--ia-button-background-color: ${this.colorInput.value}">Click Me</ia-button>` :
-      `<ia-button @click=\${() => alert('Button clicked!')}>Click Me</ia-button>`;
+  style="--ia-button-background-color: ${this.colorInput.value}">Click Me</ia-button>`
+      : `<ia-button @click=\${() => alert('Button clicked!')}>Click Me</ia-button>`;
   }
 
   private apply() {

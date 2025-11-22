@@ -24,7 +24,7 @@ export class StoryTemplate extends LitElement {
         <syntax-highlighter .code=${this.exampleUsage}></syntax-highlighter>
         <h3>Settings</h3>
         <div class="slot-container">
-        <slot name="settings"></slot>
+          <slot name="settings"></slot>
         </div>
       </div>
     `;
@@ -34,7 +34,7 @@ export class StoryTemplate extends LitElement {
     return `
 import '${this.modulePath}';
 import { ${this.elementClassName} } from '${this.modulePath}';
-    `
+    `;
   }
 
   private get elementClassName() {
