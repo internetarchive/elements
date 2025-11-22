@@ -7,7 +7,7 @@ import '@demo/story-template';
 
 @customElement('ia-snow-story')
 export class IASnowStory extends LitElement {
-  @state() private snowflakesConfig?: SnowflakesParams;
+  @state() private config?: SnowflakesParams;
 
   @query('#count')
   private countInput!: HTMLInputElement;
@@ -29,7 +29,7 @@ export class IASnowStory extends LitElement {
         labs
       >
         <div slot="demo">
-          <ia-snow .snowConfig=${this.snowflakesConfig}></ia-snow>
+          <ia-snow .snowConfig=${this.config}></ia-snow>
         </div>
 
         <div slot="settings">
@@ -58,7 +58,7 @@ export class IASnowStory extends LitElement {
   }
 
   private get exampleUsage() {
-    return this.snowflakesConfig
+    return this.config
       ? `
       <ia-snow .snowConfig=\${${this.configString}}></ia-snow>
     `
@@ -66,7 +66,7 @@ export class IASnowStory extends LitElement {
   }
 
   private get configString() {
-    return JSON.stringify(this.snowflakesConfig, null, 2);
+    return JSON.stringify(this.config, null, 2);
   }
 
   private get snowflakeConfig(): SnowflakesParams {
@@ -79,7 +79,7 @@ export class IASnowStory extends LitElement {
   }
 
   private setupSnowflakes() {
-    this.snowflakesConfig = this.snowflakeConfig;
+    this.config = this.snowflakeConfig;
   }
 
   static get styles(): CSSResultGroup {
