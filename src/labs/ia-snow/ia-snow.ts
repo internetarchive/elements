@@ -29,20 +29,30 @@ export class IASnow extends LitElement {
       >
         ${this.snowing ? 'Stop Snowflakes' : 'Start Snowflakes'}
       </ia-button>
+
+      <ia-button
+        @click=${() => {
+          this.stopSnowing();
+          this.snowflakes?.destroy();
+          this.snowflakes = undefined;
+        }}
+      >
+        Clear Snowflakes
+      </ia-button>
     `;
   }
 
   protected willUpdate(_changedProperties: PropertyValues): void {
-    if (_changedProperties.has('snowConfig') && this.snowConfig) {
+    if (_changedProperties.has('snowConfig')) {
       this.snowflakes?.destroy();
-      this.snowflakes = new Snowflakes(this.snowConfig);
+      this.snowflakes = undefined;
       this.startSnowing();
     }
   }
 
   private startSnowing() {
     if (!this.snowflakes) {
-      this.snowflakes = new Snowflakes();
+      this.snowflakes = new Snowflakes(this.snowConfig);
     }
     this.snowflakes?.start();
     this.snowing = true;

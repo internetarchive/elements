@@ -4,6 +4,9 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "noEmitOnError": true,
+    "types": [
+      "vite/client"
+    ],
     "lib": [
       "es2021",
       "dom",

@@ -22,13 +22,8 @@ export class SyntaxHighlighter extends LitElement {
   }
 
   protected willUpdate(_changedProperties: PropertyValues): void {
-    super.willUpdate(_changedProperties);
     if (_changedProperties.has('code')) {
-      const code = this.code.trim();
-      const highlighted = hljs.highlight(code, {
-        language: 'typescript',
-      }).value;
-      this.highlightedCode = highlighted;
+      this.highlightCode();
     }
   }
 
@@ -38,6 +33,14 @@ export class SyntaxHighlighter extends LitElement {
         this.highlightedCode,
       )}</code></pre>
     `;
+  }
+
+  private highlightCode() {
+    const code = this.code.trim();
+    const highlighted = hljs.highlight(code, {
+      language: 'typescript',
+    }).value;
+    this.highlightedCode = highlighted;
   }
 
   static get styles(): CSSResultGroup {
