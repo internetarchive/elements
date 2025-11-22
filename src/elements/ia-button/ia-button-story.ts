@@ -1,5 +1,5 @@
 import { html, LitElement } from 'lit';
-import { customElement, query } from 'lit/decorators.js';
+import { customElement, query, state } from 'lit/decorators.js';
 
 import './ia-button';
 import '@src/internal/story-template';
@@ -11,6 +11,9 @@ export class IAButtonStory extends LitElement {
 
   @query('ia-button')
   private button!: HTMLElement;
+
+  @state()
+  private includeStyle = false;
 
   render() {
     return html`
@@ -35,12 +38,15 @@ export class IAButtonStory extends LitElement {
   }
 
   private get exampleUsage() {
-    return `
-<ia-button @click={() => alert('Button clicked!')}>Click Me</ia-button>
-    `;
+    return this.includeStyle ?
+      `<ia-button
+  @click=\${() => alert('Button clicked!')}
+  style="--ia-button-background-color: ${this.colorInput.value}">Click Me</ia-button>` :
+      `<ia-button @click=\${() => alert('Button clicked!')}>Click Me</ia-button>`;
   }
 
   private apply() {
+    this.includeStyle = true;
     this.button.style.setProperty(
       '--ia-button-background-color',
       this.colorInput.value,
