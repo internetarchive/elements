@@ -14,10 +14,12 @@ export class StoryTemplate extends LitElement {
 
   render() {
     return html`
-      <h2>&lt;${this.elementTag}&gt;</h2>
+      <h2><code> &lt;${this.elementTag}&gt;</code></h2>
       <div id="container">
         <h3>Demo</h3>
-        <slot name="demo"></slot>
+        <div class="slot-container">
+          <slot name="demo"></slot>
+        </div>
         <h3>Import</h3>
         <syntax-highlighter .code=${this.importCode}></syntax-highlighter>
         <h3>Usage</h3>

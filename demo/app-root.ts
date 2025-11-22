@@ -8,7 +8,7 @@ import '@src/labs/ia-snow/ia-snow-story';
 export class AppRoot extends LitElement {
   render() {
     return html`
-      <h1>Component Catalog</h1>
+      <h1>Internet Archive Elements</h1>
 
       <ia-button-story></ia-button-story>
 
