@@ -3,7 +3,7 @@ import { customElement, query, state } from 'lit/decorators.js';
 
 import './ia-snow';
 import type { SnowflakesParams } from 'magic-snowflakes';
-import '@src/internal/story-template';
+import '@demo/story-template';
 
 @customElement('ia-snow-story')
 export class IASnowStory extends LitElement {
