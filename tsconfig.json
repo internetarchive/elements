@@ -5,7 +5,9 @@
     "moduleResolution": "bundler",
     "noEmitOnError": true,
     "types": [
-      "vite/client"
+      "vite/client",
+      "@vitest/spy",
+      "node"
     ],
     "lib": [
       "es2021",
