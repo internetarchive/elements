@@ -3,7 +3,7 @@ import { property, state } from 'lit/decorators.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 
 import hljs from 'highlight.js/lib/core';
-// import typescript from 'highlight.js/lib/languages/typescript';
+import typescript from 'highlight.js/lib/languages/typescript';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { syntaxStyles } from './syntax-highlighting';
 
@@ -18,6 +18,11 @@ export class StoryTemplate extends LitElement {
   @state() highlightedImportCode = '';
 
   @state() highlightedExampleUsage = '';
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    hljs.registerLanguage('typescript', typescript);
+  }
 
   protected willUpdate(_changedProperties: PropertyValues): void {
     super.willUpdate(_changedProperties);
