@@ -7,7 +7,7 @@ import Snowflakes, { type SnowflakesParams } from 'magic-snowflakes';
 
 import '@src/elements/ia-button/ia-button';
 
-import videoIcon from './video.svg';
+import flakeIcon from './flake.svg';
 
 @customElement('ia-snow')
 export class IASnow extends LitElement {
@@ -42,7 +42,7 @@ export class IASnow extends LitElement {
         Clear Snowflakes
       </ia-button>
 
-      <img src=${videoIcon} alt="Snowflakes icon" />
+      <img src=${flakeIcon} alt="Snowflakes icon" />
     `;
   }
 
@@ -71,6 +71,8 @@ export class IASnow extends LitElement {
     return css`
       img {
         width: 16px;
+        filter: invert(1);
+        vertical-align: middle;
       }
     `;
   }
