@@ -4,11 +4,6 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "noEmitOnError": true,
-    "types": [
-      "vite/client",
-      "@vitest/spy",
-      "node"
-    ],
     "lib": [
       "es2021",
       "dom",
