@@ -71,7 +71,7 @@
   ],
   "wireit": {
     "build": {
-      "command": "tsc --build --pretty && tsc-alias",
+      "command": "tsc --build --pretty && tsc-alias && rsync -zarvm --prune-empty-dirs --include \"*/\" --include \"*.svg\" --exclude=\"*\" src dist",
       "dependencies": [
         "circular"
       ],
