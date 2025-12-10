@@ -1,6 +1,9 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 
+/**
+ * A button element to demo the elements library
+ */
 @customElement('ia-button')
 export class IAButton extends LitElement {
   render() {

@@ -9,6 +9,9 @@ import '@src/elements/ia-button/ia-button';
 
 import flakeIcon from './flake.svg';
 
+/**
+ * An element that shows snowflakes to demo the elements library
+ */
 @customElement('ia-snow')
 export class IASnow extends LitElement {
   @property({ type: Object }) snowConfig?: SnowflakesParams;
