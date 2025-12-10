@@ -35,6 +35,7 @@ src
     - ia-foobar.test.ts // the element's tests
     - ia-foobar-story.ts // an element that demos your element
 ```
+Export your component in `src/index.ts`
 
 ### Story
 To demo your component, we have a component catalog that you can add your demo to. Create a component in your component directory. Name it `COMPONENT-NAME-story.ts`, ie `ia-button-story.ts`.
