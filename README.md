@@ -1,5 +1,47 @@
 # 📚 _elements_ 🏛️
 
+## Installation
+
+```
+npm i -S @internetarchive/elements
+```
+
+## Usage
+
+```
+import "@internetarchive/elements/ia-button/ia-button";
+
+...
+
+<ia-button @click=() => alert('Clicked!')>Click Me</ia-button>
+```
+
+## Development
+
+```
+npm i
+npm run dev
+```
+
+## Adding a Component
+
+### Structure
+Each component has its own directory in `src/elements` (or `src/labs` if it's still in development). The basic structure looks like this, though components can have additional files and directories if neededd. Take a look at other elements to see what they each contain.
+```
+src
+- elements
+  - ia-foobar // the name of the element
+    - ia-foobar.ts // the main element class
+    - ia-foobar.test.ts // the element's tests
+    - ia-foobar-story.ts // an element that demos your element
+```
+
+### Story
+To demo your component, we have a component catalog that you can add your demo to. Create a component in your component directory. Name it `COMPONENT-NAME-story.ts`, ie `ia-button-story.ts`.
+
+We have a story template you can use for consistency. The easiest to use this is to copy an existing story and modify it for your needs.
+
+Import your story in `/demo/app-root.ts` and add it to the page.
 
 ## Component Inventory
 
