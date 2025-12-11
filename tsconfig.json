@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "target": "es2021",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "noEmitOnError": true,
+    "lib": [
+      "es2021",
+      "dom",
+      "dom.iterable"
+    ],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "strict": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "outDir": "dist",
+    "rootDir": "./",
+    "baseUrl": "./",
+    "plugins": [
+      {
+        "name": "ts-lit-plugin"
+      }
+    ],
+    "paths": {
+      "@src/*": [
+        "./src/*"
+      ],
+      "@demo/*": [
+        "./demo/*"
+      ]
+    },
+  },
+  "include": [
+    "demo/**/*.ts",
+    "src/**/*.ts"
+  ]
+}
