@@ -8,8 +8,7 @@ import './syntax-highlighter';
 import arrow from './arrow.svg';
 
 /**
- * The Story Template component provides a template for demoing
- * the use of a custom element.
+ * A template for demoing the use of a custom element.
  */
 @customElement('story-template')
 export class StoryTemplate extends LitElement {
@@ -101,7 +100,7 @@ import { ${this.elementClassName} } from '${this.modulePath}';
 
       .disclosure-arrow.open {
         transform: rotate(0deg);
-
+      }
     `;
   }
 }
