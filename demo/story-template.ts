@@ -6,6 +6,7 @@ import { when } from 'lit/directives/when.js';
 import './syntax-highlighter';
 
 import arrow from './arrow.svg';
+import testTube from './test-tube.svg';
 
 /**
  * A template for demoing the use of a custom element.
@@ -22,11 +23,22 @@ export class StoryTemplate extends LitElement {
 
   render() {
     return html`
-      <h2 @click=${() => (this.visible = !this.visible)}>
-        <img
-          class="disclosure-arrow ${this.visible ? 'open' : ''}"
-          src=${arrow}
-        /><code> &lt;${this.elementTag}&gt;</code>
+      <h2>
+        <a @click=${() => (this.visible = !this.visible)}>
+          <img
+            class="disclosure-arrow ${this.visible ? 'open' : ''}"
+            src=${arrow}
+          /><code> &lt;${this.elementTag}&gt;</code> ${when(
+            this.labs,
+            () =>
+              html`<img
+                src=${testTube}
+                alt="Labs icon"
+                title="Labs"
+                class="labs-icon"
+              />`,
+          )}
+        </a>
       </h2>
       ${when(this.visible, () => this.elementDemoTemplate)}
     `;
@@ -100,6 +112,14 @@ import { ${this.elementClassName} } from '${this.modulePath}';
 
       .disclosure-arrow.open {
         transform: rotate(0deg);
+      }
+
+      .labs-icon {
+        width: 20px;
+        height: 20px;
+        margin-left: 4px;
+        filter: invert(1);
+        vertical-align: middle;
       }
     `;
   }

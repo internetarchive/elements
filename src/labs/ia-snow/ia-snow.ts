@@ -1,4 +1,10 @@
-import { css, html, LitElement, type CSSResultGroup, type PropertyValues } from 'lit';
+import {
+  css,
+  html,
+  LitElement,
+  type CSSResultGroup,
+  type PropertyValues,
+} from 'lit';
 import { property } from 'lit/decorators.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { state } from 'lit/decorators/state.js';
