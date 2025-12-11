@@ -10,6 +10,9 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { syntaxStyles } from './syntax-style';
 
+/**
+ * An element that syntax highlights and displays TypeScript code
+ */
 @customElement('syntax-highlighter')
 export class SyntaxHighlighter extends LitElement {
   @property({ type: String }) code = '';

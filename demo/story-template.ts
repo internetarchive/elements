@@ -7,6 +7,10 @@ import './syntax-highlighter';
 
 import arrow from './arrow.svg';
 
+/**
+ * The Story Template component provides a template for demoing
+ * the use of a custom element.
+ */
 @customElement('story-template')
 export class StoryTemplate extends LitElement {
   @property({ type: String }) elementTag = '';
@@ -48,18 +52,18 @@ export class StoryTemplate extends LitElement {
     `;
   }
 
-  private get importCode() {
+  private get importCode(): string {
     return `
 import '${this.modulePath}';
 import { ${this.elementClassName} } from '${this.modulePath}';
     `;
   }
 
-  private get elementClassName() {
+  private get elementClassName(): string | undefined {
     return customElements.get(this.elementTag)?.name;
   }
 
-  private get modulePath() {
+  private get modulePath(): string {
     return this.labs
       ? `@internetarchive/elements/labs/${this.elementTag}/${this.elementTag}`
       : `@internetarchive/elements/${this.elementTag}/${this.elementTag}`;
