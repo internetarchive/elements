@@ -2,13 +2,13 @@
 
 ## Installation
 
-```
+```zsh
 npm i -S @internetarchive/elements
 ```
 
 ## Usage
 
-```
+```typescript
 import "@internetarchive/elements/ia-button/ia-button";
 
 ...
@@ -18,7 +18,7 @@ import "@internetarchive/elements/ia-button/ia-button";
 
 ## Development
 
-```
+```zsh
 npm i
 npm run dev
 ```
@@ -40,9 +40,64 @@ Export your component in `src/index.ts`
 ### Story
 To demo your component, we have a component catalog that you can add your demo to. Create a component in your component directory. Name it `COMPONENT-NAME-story.ts`, ie `ia-button-story.ts`.
 
-We have a story template you can use for consistency. The easiest to use this is to copy an existing story and modify it for your needs.
+We have a story template you can use for consistency. [More info on `story-template`](#story-template). The easiest way to use this is to copy an existing story and modify it for your needs.
 
 Import your story in `/demo/app-root.ts` and add it to the page.
+
+#### Story Template<a id="story-template"></a>
+
+The story template is a component you can use in your story to demo your component. This lets us present them in a consistent way.
+
+It has 5 main configurations:
+
+*Properties*
+- `elementTag` (_string_) your component's name, ie `ia-button`
+- `exampleUsage` (_string_) your element's example usage, displays it with syntax highlighting
+- `labs` (_boolean_) if your component is in `labs` to update links
+
+*Slots*
+- `demo` put your component demo in here
+- `settings` put your component settings in here
+
+Here's an example:
+```typescript
+import '@demo/story-template';
+...
+render() {
+  return html`
+    <story-template elementTag="ia-button" .exampleUsage=${this.exampleUsage}>
+      <div slot="demo">
+        <ia-button @click=${() => alert('Button clicked!')}
+          >Click Me</ia-button
+        >
+      </div>
+
+      <div slot="settings">
+        <table>
+          <tr>
+            <td>Color</td>
+            <td><input type="color" value="#007bff" id="color" /></td>
+          </tr>
+        </table>
+        <button @click=${this.apply}>Apply</button>
+      </div>
+    </story-template>
+  `;
+}
+
+// return a string of your element's usage and it will
+// be displayed with syntax highlighting
+// can be dynamic
+private get exampleUsage(): string {
+  return `<ia-button @click=\${() => alert('Button clicked!')}>
+    Click Me
+  </ia-button>`;
+}
+
+private apply(): void {
+  // update component settings based on settings change
+}
+```
 
 ## Component Inventory
 

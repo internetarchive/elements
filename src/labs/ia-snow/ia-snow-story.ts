@@ -57,7 +57,7 @@ export class IASnowStory extends LitElement {
     `;
   }
 
-  private get exampleUsage() {
+  private get exampleUsage(): string {
     return this.config
       ? `
       <ia-snow .snowConfig=\${${this.configString}}></ia-snow>
@@ -65,7 +65,7 @@ export class IASnowStory extends LitElement {
       : `<ia-snow></ia-snow>`;
   }
 
-  private get configString() {
+  private get configString(): string {
     return JSON.stringify(this.config, null, 2);
   }
 

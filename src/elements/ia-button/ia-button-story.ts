@@ -37,7 +37,7 @@ export class IAButtonStory extends LitElement {
     `;
   }
 
-  private get exampleUsage() {
+  private get exampleUsage(): string {
     return this.includeStyle
       ? `<ia-button
   @click=\${() => alert('Button clicked!')}
