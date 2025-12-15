@@ -9,7 +9,8 @@ import { property } from 'lit/decorators.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { state } from 'lit/decorators/state.js';
 
-import Snowflakes, { type SnowflakesParams } from 'magic-snowflakes';
+import type Snowflakes from 'magic-snowflakes';
+import type { SnowflakesParams } from 'magic-snowflakes';
 
 import '@src/elements/ia-button/ia-button';
 
@@ -63,8 +64,10 @@ export class IASnow extends LitElement {
     }
   }
 
-  private startSnowing() {
+  private async startSnowing() {
     if (!this.snowflakes) {
+      const SnowflakesModule = await import('magic-snowflakes');
+      const Snowflakes = SnowflakesModule.default;
       this.snowflakes = new Snowflakes(this.snowConfig);
     }
     this.snowflakes?.start();
