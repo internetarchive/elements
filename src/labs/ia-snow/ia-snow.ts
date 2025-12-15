@@ -45,7 +45,7 @@ export class IASnow extends LitElement {
     }
   }
 
-  // Consider lazy loading templates if they are large,
+  // Consider lazy loading external templates if they are large,
   // below the fold or not needed immediately. This will reduce the initial
   // bundle size.
   //
