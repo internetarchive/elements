@@ -33,17 +33,15 @@ export type LazyLoadedTemplate = DirectiveResult<typeof LazyLoadTemplate>;
  * get radioPlayerTemplate(): LazyLoadedTemplate {
  *   return lazyLoadTemplate(
  *     async (): Promise<void> => {
- *       await import('./players/radio-player/radio-player-controller');
- *       const appDataStack = await this.appDataStack?.get();
- *       this.browserHistoryHandler = await appDataStack?.browserHistoryHandler.get();
+ *       await import('./players/radio-player');
  *     },
  *     (): TemplateResult => {
  *       return html`
- *         <radio-player-controller
+ *         <radio-player
  *           .metadataResponse=${this.metadataResponse}
  *           .browserHistoryHandler=${this.browserHistoryHandler}
  *         >
- *         </radio-player-controller>
+ *         </radio-player>
  *       `;
  *     },
  *   );
