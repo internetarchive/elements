@@ -41,14 +41,14 @@ export class IAButtonStory extends LitElement {
     return this.includeStyle
       ? `<ia-button
   @click=\${() => alert('Button clicked!')}
-  style="--ia-button-background-color: ${this.colorInput.value}">Click Me</ia-button>`
+  style="--ia-button-primary-background-color: ${this.colorInput.value}">Click Me</ia-button>`
       : `<ia-button @click=\${() => alert('Button clicked!')}>Click Me</ia-button>`;
   }
 
   private apply() {
     this.includeStyle = true;
     this.button.style.setProperty(
-      '--ia-button-background-color',
+      '--ia-button-primary-background-color',
       this.colorInput.value,
     );
   }
