@@ -1,16 +1,17 @@
-import { html, LitElement } from 'lit';
-import { customElement, query, state } from 'lit/decorators.js';
+import { html, LitElement, TemplateResult } from 'lit';
+import { customElement, queryAll, state } from 'lit/decorators.js';
 
 import './ia-loading-indicator';
 import '@demo/story-template';
 
 @customElement('ia-loading-indicator-story')
 export class IALoadingIndicatorStory extends LitElement {
+  @queryAll('.style-input')
+  private styleInputs?: NodeListOf<HTMLInputElement>;
+
+  /* Applied styles for the component, in "--my-variable: #f00;" format */
   @state()
-  private styleValues = {
-    color: { name: '--primary-text-color', value: '' },
-    width: { name: '--icon-width', value: '' },
-  };
+  private stringifiedStyles: string = '';
 
   render() {
     return html`
@@ -23,41 +24,55 @@ export class IALoadingIndicatorStory extends LitElement {
             style=${this.stringifiedStyles}
           ></ia-loading-indicator>
         </div>
+
         <div slot="settings">
           <table>
             <tr>
               <td>Color</td>
               <td>
-                <input
-                  type="color"
-                  value="#8be6fa"
-                  id="color"
-                  @input=${(e: InputEvent) => {
-                    const newColor = (e.target as HTMLInputElement).value ?? '';
-                    console.log(newColor);
-                    this.styleValues.color.value = newColor;
-                    console.log(this.styleValues);
-                    console.log(this.stringifiedStyles);
-                  }}
-                />
+                ${this.createStyleInput(
+                  '--primary-text-color',
+                  '#8be6fa',
+                  'color',
+                )}
               </td>
               <td>Width</td>
-              <td><input type="string" value="30px" id="width" /></td>
+              <td>${this.createStyleInput('--icon-width', '30px')}</td>
             </tr>
           </table>
+          <button @click=${this.apply}>Apply</button>
         </div>
       </story-template>
     `;
   }
 
   private get exampleUsage(): string {
-    return `<ia-loading-indicator style="${this.styleValues.color.value}"></ia-loading-indicator>`;
+    return `<ia-loading-indicator${this.stringifiedStyles ? ` style="${this.stringifiedStyles}"` : ''}></ia-loading-indicator>`;
   }
 
-  private get stringifiedStyles(): string {
-    return Array.from(Object.values(this.styleValues))
-      .filter((style) => style.value !== '')
-      .map((style) => `${style.name}: ${style.value}`)
-      .join(' ');
+  private createStyleInput(
+    cssVariable: string,
+    defaultValue: string = '',
+    type: 'text' | 'color' = 'text',
+  ): TemplateResult {
+    return html`
+      <input
+        type=${type}
+        class="style-input"
+        value=${defaultValue}
+        data-variable=${cssVariable}
+      />
+    `;
+  }
+
+  private apply() {
+    const appliedStyles: string[] = [];
+
+    this.styleInputs?.forEach((input) => {
+      if (!input.dataset.variable || !input.value) return;
+      appliedStyles.push(`${input.dataset.variable}: ${input.value};`);
+    });
+
+    this.stringifiedStyles = appliedStyles.join(' ');
   }
 }
