@@ -1,3 +1,4 @@
+import { msg } from '@lit/localize';
 import { css, CSSResult, html, LitElement, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
@@ -19,10 +20,7 @@ export class IALoadingIndicator extends LitElement {
           xmlns:xlink="http://www.w3.org/1999/xlink"
           aria-labelledby="indicatorTitle indicatorDescription"
         >
-          <title id="indicatorTitle">Activity Indicator</title>
-          <desc id="indicatorDescription">
-            A rotating activity indicator with three dots in the middle.
-          </desc>
+          <title id="indicatorTitle">${msg('Loading indicator')}</title>
           <g stroke="none" stroke-width="1" fill-rule="evenodd">
             <path
               id="activity-ring"
