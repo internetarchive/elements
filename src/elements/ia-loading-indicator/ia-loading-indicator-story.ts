@@ -6,14 +6,11 @@ import '@demo/story-template';
 
 @customElement('ia-loading-indicator-story')
 export class IALoadingIndicatorStory extends LitElement {
-  @query('#color')
-  private colorInput!: HTMLInputElement;
-
-  @query('ia-loading-indicator')
-  private loadingIndicator!: HTMLElement;
-
   @state()
-  private includeStyle = false;
+  private styleValues = {
+    color: { name: '--primary-text-color', value: '' },
+    width: { name: '--icon-width', value: '' },
+  };
 
   render() {
     return html`
@@ -22,35 +19,45 @@ export class IALoadingIndicatorStory extends LitElement {
         .exampleUsage=${this.exampleUsage}
       >
         <div slot="demo">
-          <ia-loading-indicator></ia-loading-indicator>
+          <ia-loading-indicator
+            style=${this.stringifiedStyles}
+          ></ia-loading-indicator>
         </div>
-
         <div slot="settings">
           <table>
             <tr>
               <td>Color</td>
-              <td><input type="color" value="#ffffff" id="color" /></td>
+              <td>
+                <input
+                  type="color"
+                  value="#8be6fa"
+                  id="color"
+                  @input=${(e: InputEvent) => {
+                    const newColor = (e.target as HTMLInputElement).value ?? '';
+                    console.log(newColor);
+                    this.styleValues.color.value = newColor;
+                    console.log(this.styleValues);
+                    console.log(this.stringifiedStyles);
+                  }}
+                />
+              </td>
+              <td>Width</td>
+              <td><input type="string" value="30px" id="width" /></td>
             </tr>
           </table>
-          <button @click=${this.apply}>Apply</button>
         </div>
       </story-template>
     `;
   }
 
   private get exampleUsage(): string {
-    return this.includeStyle
-      ? `<ia-button
-  @click=\${() => alert('Button clicked!')}
-  style="--primary-text-color: ${this.colorInput.value}">Click Me</ia-button>`
-      : `<ia-button @click=\${() => alert('Button clicked!')}>Click Me</ia-button>`;
+    return `<ia-loading-indicator style="${this.styleValues.color.value}"></ia-loading-indicator>`;
   }
 
-  private apply() {
-    this.includeStyle = true;
-    this.loadingIndicator.style.setProperty(
-      '--primary-text-color',
-      this.colorInput.value,
-    );
+  private get stringifiedStyles(): string {
+    return Array.from(Object.values(this.styleValues))
+      .filter((style) => style.value !== '')
+      .map((style) => `${style.name}: ${style.value}`)
+      .join(' ');
   }
 }
