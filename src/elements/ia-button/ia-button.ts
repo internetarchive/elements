@@ -5,7 +5,11 @@ import themeStyles from '@src/themes/theme-styles';
 
 /**
  * A button element to demo the elements library
- */
+ *
+ * @slot The content of the button
+ *
+ * @cssprop --ia-button-background-color - The background color of the button
+  */
 @customElement('ia-button')
 export class IAButton extends LitElement {
   render() {
