@@ -28,7 +28,7 @@ export class IAButtonStory extends LitElement {
           <table>
             <tr>
               <td>Color</td>
-              <td><input type="color" value="#007bff" id="color" /></td>
+              <td><input type="color" value="#9f0a5f" id="color" /></td>
             </tr>
           </table>
           <button @click=${this.apply}>Apply</button>
@@ -41,14 +41,14 @@ export class IAButtonStory extends LitElement {
     return this.includeStyle
       ? `<ia-button
   @click=\${() => alert('Button clicked!')}
-  style="--ia-button-background-color: ${this.colorInput.value}">Click Me</ia-button>`
+  style="--ia-theme-primary-cta-fill: ${this.colorInput.value}">Click Me</ia-button>`
       : `<ia-button @click=\${() => alert('Button clicked!')}>Click Me</ia-button>`;
   }
 
   private apply() {
     this.includeStyle = true;
     this.button.style.setProperty(
-      '--ia-button-background-color',
+      '--ia-theme-primary-cta-fill',
       this.colorInput.value,
     );
   }
