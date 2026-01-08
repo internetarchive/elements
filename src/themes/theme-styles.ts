@@ -4,8 +4,15 @@ const themeStyles = css`
   :host {
     /*
     BASE STYLES
-    Default fallback values for theme styles. To adjust values, use theme styles below.
+    Default fallback values for theme styles. Assumes 16px root font size.
+    To adjust values, use theme styles below.
     */
+
+    /* Typography */
+    --default-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+    /* Sizing */
+    --default-icon-width: 1.25rem;
 
     /* Colors */
     --true-white: #fff;
@@ -15,19 +22,25 @@ const themeStyles = css`
     --navy-blue: #194880;
     --bright-blue: #4b64ff;
 
-    /* Typography */
-    --default-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-
     /*
     ADJUSTABLE STYLES
     To be adjusted by setting i.e. --ia-theme-link-color at the :root or component level.
     */
 
     /* Text */
-    --base-font-family: var(--ia-theme-base-font-family, --default-font-family);
-    --primary-text-color: var(--ia-theme-primary-text-color, --dark-gray);
-    --secondary-text-color: var(--ia-theme-secondary-text-color, --light-gray);
-    --link-color: var(--ia-theme-link-color, --bright-blue);
+    --base-font-family: var(
+      --ia-theme-base-font-family,
+      var(--default-font-family)
+    );
+    --primary-text-color: var(--ia-theme-primary-text-color, var(--dark-gray));
+    --secondary-text-color: var(
+      --ia-theme-secondary-text-color,
+      var(--light-gray)
+    );
+    --link-color: var(--ia-theme-link-color, var(--bright-blue));
+
+    /* Sizing */
+    --icon-width: var(--ia-theme-icon-width, var(--default-icon-width));
 
     /* Backgrounds and fills */
     --primary-background-color: var(

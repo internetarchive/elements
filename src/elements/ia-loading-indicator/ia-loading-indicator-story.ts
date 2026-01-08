@@ -17,6 +17,7 @@ export class IALoadingIndicatorStory extends LitElement {
     return html`
       <story-template
         elementTag="ia-loading-indicator"
+        backgroundStyle="light"
         .exampleUsage=${this.exampleUsage}
       >
         <div slot="demo">
@@ -31,13 +32,20 @@ export class IALoadingIndicatorStory extends LitElement {
               <td>Color</td>
               <td>
                 ${this.createStyleInput(
-                  '--primary-text-color',
-                  '#8be6fa',
+                  'color',
+                  '--ia-theme-primary-text-color',
+                  '#3d7581',
                   'color',
                 )}
               </td>
               <td>Width</td>
-              <td>${this.createStyleInput('--icon-width', '30px')}</td>
+              <td>
+                ${this.createStyleInput(
+                  'width',
+                  '--ia-theme-icon-width',
+                  '30px',
+                )}
+              </td>
             </tr>
           </table>
           <button @click=${this.apply}>Apply</button>
@@ -51,12 +59,14 @@ export class IALoadingIndicatorStory extends LitElement {
   }
 
   private createStyleInput(
+    id: string,
     cssVariable: string,
     defaultValue: string = '',
     type: 'text' | 'color' = 'text',
   ): TemplateResult {
     return html`
       <input
+        id=${id}
         type=${type}
         class="style-input"
         value=${defaultValue}

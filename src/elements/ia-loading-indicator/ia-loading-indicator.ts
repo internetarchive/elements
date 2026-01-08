@@ -1,14 +1,19 @@
-import { msg } from '@lit/localize';
-import { css, CSSResult, html, LitElement, TemplateResult } from 'lit';
+import { css, CSSResultGroup, html, LitElement, TemplateResult } from 'lit';
 import { customElement } from 'lit/decorators.js';
+import { msg } from '@lit/localize';
 
+import themeStyles from '@src/themes/theme-styles';
+
+/**
+ * Renders an SVG loading indicator, which defualts to an animated circular indicator
+ */
 @customElement('ia-loading-indicator')
 export class IALoadingIndicator extends LitElement {
   render(): TemplateResult {
     return this.circularLoadingIndicatorTemplate;
   }
 
-  /** The indicator to display when the status is loading */
+  /** A circular animated loading indicator */
   private get circularLoadingIndicatorTemplate(): TemplateResult {
     return html`
       <div class="circular-loading-indicator">
@@ -42,73 +47,76 @@ export class IALoadingIndicator extends LitElement {
     `;
   }
 
-  static get styles(): CSSResult {
-    return css`
-      :host {
-        --loading-ring-color--: var(--primary-text-color, currentColor);
-        --loading-dot-color--: var(--primary-text-color, currentColor);
-        --loading-indicator-width--: var(--icon-width, 20px);
+  static get styles(): CSSResultGroup {
+    return [
+      themeStyles,
+      css`
+        :host {
+          --loading-ring-color--: var(--primary-text-color);
+          --loading-dot-color--: var(--primary-text-color);
+          --loading-indicator-width--: var(--icon-width);
 
-        display: inline-block;
-        width: var(--loading-indicator-width--);
-      }
-
-      #activity-ring {
-        fill: var(--loading-ring-color--);
-      }
-
-      #activity-dots {
-        fill: var(--loading-dot-color--);
-      }
-
-      .loading-ring {
-        animation: rotate 1.3s infinite linear;
-        transform-origin: 50px 50px;
-        transform-box: fill-box;
-      }
-
-      .loading-dots {
-        transition: opacity 0.25s ease-out;
-      }
-
-      .loading-dots > * {
-        opacity: 0;
-        animation: dot 1.3s infinite;
-      }
-
-      .loading-dots #left-dot {
-        animation-delay: 0.2s;
-      }
-
-      .loading-dots #middle-dot {
-        animation-delay: 0.4s;
-      }
-
-      .loading-dots #right-dot {
-        animation-delay: 0.6s;
-      }
-
-      @keyframes rotate {
-        0% {
-          transform: rotate(-360deg);
+          display: inline-block;
+          width: var(--loading-indicator-width--);
         }
-        100% {
-          /* This frame is supposed to be inferred, but Safari doesn't rotate it unless we're explicit */
-          transform: rotate(0deg);
-        }
-      }
 
-      @keyframes dot {
-        0% {
+        #activity-ring {
+          fill: var(--loading-ring-color--);
+        }
+
+        #activity-dots {
+          fill: var(--loading-dot-color--);
+        }
+
+        .loading-ring {
+          animation: rotate 1.3s infinite linear;
+          transform-origin: 50px 50px;
+          transform-box: fill-box;
+        }
+
+        .loading-dots {
+          transition: opacity 0.25s ease-out;
+        }
+
+        .loading-dots > * {
           opacity: 0;
+          animation: dot 1.3s infinite;
         }
-        25% {
-          opacity: 1;
+
+        .loading-dots #left-dot {
+          animation-delay: 0.2s;
         }
-        100% {
-          opacity: 0;
+
+        .loading-dots #middle-dot {
+          animation-delay: 0.4s;
         }
-      }
-    `;
+
+        .loading-dots #right-dot {
+          animation-delay: 0.6s;
+        }
+
+        @keyframes rotate {
+          0% {
+            transform: rotate(-360deg);
+          }
+          100% {
+            /* This frame is supposed to be inferred, but Safari doesn't rotate it unless we're explicit */
+            transform: rotate(0deg);
+          }
+        }
+
+        @keyframes dot {
+          0% {
+            opacity: 0;
+          }
+          25% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+          }
+        }
+      `,
+    ];
   }
 }
