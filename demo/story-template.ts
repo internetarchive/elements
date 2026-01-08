@@ -19,6 +19,8 @@ export class StoryTemplate extends LitElement {
 
   @property({ type: Boolean }) labs = false;
 
+  @property({ type: String }) backgroundStyle: 'dark' | 'light' = 'dark';
+
   @state() private visible = false;
 
   render() {
@@ -48,7 +50,7 @@ export class StoryTemplate extends LitElement {
     return html`
       <div id="container">
         <h3>Demo</h3>
-        <div class="slot-container">
+        <div class="slot-container ${this.backgroundStyle}">
           <slot name="demo"></slot>
         </div>
         <h3>Import</h3>
@@ -98,8 +100,15 @@ import { ${this.elementClassName} } from '${this.modulePath}';
       }
 
       .slot-container {
-        background: #282c34;
         padding: 1em;
+      }
+
+      .slot-container.dark {
+        background: #282c34;
+      }
+
+      .slot-container.light {
+        background: rgba(255, 255, 255, 0.87);
       }
 
       .disclosure-arrow {

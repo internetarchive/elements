@@ -3,6 +3,7 @@ import { customElement } from 'lit/decorators.js';
 
 import '@src/elements/ia-button/ia-button-story';
 import '@src/labs/ia-snow/ia-snow-story';
+import '@src/elements/ia-loading-indicator/ia-loading-indicator-story';
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
@@ -13,6 +14,8 @@ export class AppRoot extends LitElement {
       <ia-button-story></ia-button-story>
 
       <ia-snow-story></ia-snow-story>
+
+      <ia-loading-indicator-story></ia-loading-indicator-story>
     `;
   }
 }
