@@ -23,9 +23,9 @@ export class IALoadingIndicator extends LitElement {
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink"
-          aria-labelledby="indicatorTitle indicatorDescription"
+          role="status"
         >
-          <title id="indicatorTitle">${msg('Loading indicator')}</title>
+          <title id="indicatorTitle">${msg('Loading...')}</title>
           <g stroke="none" stroke-width="1" fill-rule="evenodd">
             <path
               id="activity-ring"
