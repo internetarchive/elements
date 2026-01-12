@@ -11,11 +11,14 @@ export class AppRoot extends LitElement {
     return html`
       <h1>🏛️ Internet Archive Elements ⚛️</h1>
 
+      <h2>🚀 Production-Ready Elements</h2>
+
       <ia-button-story></ia-button-story>
 
-      <ia-snow-story></ia-snow-story>
-
       <ia-status-indicator-story></ia-status-indicator-story>
+
+      <h2>🧪 Labs Elements</h2>
+      <ia-snow-story></ia-snow-story>
     `;
   }
 }
