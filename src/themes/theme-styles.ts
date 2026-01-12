@@ -2,8 +2,8 @@ import { css } from 'lit';
 
 const themeStyles = css`
   :host {
-    /* 
-    BASE STYLES 
+    /*
+    BASE STYLES
     Default fallback values for theme styles. To adjust values, use theme styles below.
     */
 
@@ -18,8 +18,8 @@ const themeStyles = css`
     /* Typography */
     --default-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
-    /* 
-    ADJUSTABLE STYLES 
+    /*
+    ADJUSTABLE STYLES
     To be adjusted by setting i.e. --ia-theme-link-color at the :root or component level.
     */
 
@@ -32,15 +32,15 @@ const themeStyles = css`
     /* Backgrounds and fills */
     --primary-background-color: var(
       --ia-theme-primary-background-color,
-      --off-white
+      var(--off-white)
     );
     --secondary-background-color: var(
       --ia-theme-secondary-background-color,
-      --true-white
+      var(--true-white)
     );
 
     /* State colors */
-    --primary-cta-fill: var(--ia-theme-primary-cta-fill, --navy-blue);
+    --primary-cta-fill: var(--ia-theme-primary-cta-fill, --dark-gray);
   }
 `;
 
