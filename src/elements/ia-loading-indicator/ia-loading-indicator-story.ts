@@ -1,5 +1,7 @@
 import { html, LitElement, TemplateResult } from 'lit';
-import { customElement, queryAll, state } from 'lit/decorators.js';
+import { customElement, query, queryAll, state } from 'lit/decorators.js';
+
+import { IALoadingIndicator } from './ia-loading-indicator';
 
 import './ia-loading-indicator';
 import '@demo/story-template';
@@ -9,9 +11,15 @@ export class IALoadingIndicatorStory extends LitElement {
   @queryAll('.style-input')
   private styleInputs?: NodeListOf<HTMLInputElement>;
 
+  @query('#title')
+  private titleInput!: HTMLInputElement;
+
   /* Applied styles for the component, in "--my-variable: #f00;" format */
   @state()
   private stringifiedStyles: string = '';
+
+  @query('ia-loading-indicator')
+  private component!: IALoadingIndicator;
 
   render() {
     return html`
@@ -29,6 +37,16 @@ export class IALoadingIndicatorStory extends LitElement {
         <div slot="settings">
           <table>
             <tr>
+              <td>Title</td>
+              <td>
+                <input
+                  class="prop-input"
+                  type="text"
+                  id="title"
+                  data-prop="title"
+                  value="Content loading..."
+                />
+              </td>
               <td>Color</td>
               <td>
                 ${this.createStyleInput(
@@ -76,6 +94,8 @@ export class IALoadingIndicatorStory extends LitElement {
   }
 
   private apply() {
+    this.component.title = this.titleInput.value;
+
     const appliedStyles: string[] = [];
 
     this.styleInputs?.forEach((input) => {
