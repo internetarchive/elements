@@ -2,13 +2,13 @@ import { fixture } from '@open-wc/testing-helpers';
 import { describe, expect, test } from 'vitest';
 import { html } from 'lit';
 
-import type { IALoadingIndicator } from './ia-loading-indicator';
-import './ia-loading-indicator';
+import type { IAStatusIndicator } from './ia-status-indicator';
+import './ia-status-indicator';
 
-describe('IA Loading Indicator', () => {
+describe('IA Status Indicator', () => {
   test('renders a circular loading indicator by default', async () => {
-    const el = await fixture<IALoadingIndicator>(
-      html`<ia-loading-indicator></ia-loading-indicator>`,
+    const el = await fixture<IAStatusIndicator>(
+      html`<ia-status-indicator></ia-status-indicator>`,
     );
     const circularLoadingIndicator = el.shadowRoot?.querySelector(
       '.circular-loading-indicator',
@@ -16,19 +16,19 @@ describe('IA Loading Indicator', () => {
     expect(circularLoadingIndicator).toBeDefined();
   });
 
-  test('uses a custom title for the indicator if desired', async () => {
-    const el = await fixture<IALoadingIndicator>(
-      html`<ia-loading-indicator
-        .title=${'Download in progress...'}
-      ></ia-loading-indicator>`,
+  test('uses a custom loading text for the indicator if desired', async () => {
+    const el = await fixture<IAStatusIndicator>(
+      html`<ia-status-indicator
+        .loadingTitle=${'Download in progress...'}
+      ></ia-status-indicator>`,
     );
     const indicatorTitle = el.shadowRoot?.querySelector('title');
     expect(indicatorTitle?.innerHTML).to.contain('Download in progress...');
   });
 
   test('uses a default title if no title provided', async () => {
-    const el = await fixture<IALoadingIndicator>(
-      html`<ia-loading-indicator></ia-loading-indicator>`,
+    const el = await fixture<IAStatusIndicator>(
+      html`<ia-status-indicator></ia-status-indicator>`,
     );
 
     const indicatorTitle = el.shadowRoot?.querySelector('title');

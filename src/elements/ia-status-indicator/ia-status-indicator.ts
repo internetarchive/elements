@@ -5,12 +5,12 @@ import { msg } from '@lit/localize';
 import themeStyles from '@src/themes/theme-styles';
 
 /**
- * Renders an SVG loading indicator, which defualts to an animated circular indicator
+ * Renders an SVG indicator, which defualts to an animated circular indicator
  */
-@customElement('ia-loading-indicator')
-export class IALoadingIndicator extends LitElement {
-  /* An optional title to use for the indicator. Will be used for screen readers. */
-  @property({ type: String }) title = msg('Loading...');
+@customElement('ia-status-indicator')
+export class IAStatusIndicator extends LitElement {
+  /* An optional title to use for the loading state of the indicator. Will be used for screen readers. */
+  @property({ type: String }) loadingTitle = msg('Loading...');
 
   render(): TemplateResult {
     return this.circularLoadingIndicatorTemplate;
@@ -28,7 +28,7 @@ export class IALoadingIndicator extends LitElement {
           xmlns:xlink="http://www.w3.org/1999/xlink"
           role="status"
         >
-          <title>${this.title}</title>
+          <title>${this.loadingTitle}</title>
           <g stroke="none" stroke-width="1" fill-rule="evenodd">
             <path
               id="activity-ring"

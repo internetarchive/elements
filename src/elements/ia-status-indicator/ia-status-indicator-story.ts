@@ -1,13 +1,13 @@
 import { html, LitElement, TemplateResult } from 'lit';
 import { customElement, query, queryAll, state } from 'lit/decorators.js';
 
-import { IALoadingIndicator } from './ia-loading-indicator';
+import { IAStatusIndicator } from './ia-status-indicator';
 
-import './ia-loading-indicator';
+import './ia-status-indicator';
 import '@demo/story-template';
 
-@customElement('ia-loading-indicator-story')
-export class IALoadingIndicatorStory extends LitElement {
+@customElement('ia-status-indicator-story')
+export class IAStatusIndicatorStory extends LitElement {
   @queryAll('.style-input')
   private styleInputs?: NodeListOf<HTMLInputElement>;
 
@@ -18,20 +18,20 @@ export class IALoadingIndicatorStory extends LitElement {
   @state()
   private stringifiedStyles: string = '';
 
-  @query('ia-loading-indicator')
-  private component!: IALoadingIndicator;
+  @query('ia-status-indicator')
+  private component!: IAStatusIndicator;
 
   render() {
     return html`
       <story-template
-        elementTag="ia-loading-indicator"
+        elementTag="ia-status-indicator"
         backgroundStyle="light"
         .exampleUsage=${this.exampleUsage}
       >
         <div slot="demo">
-          <ia-loading-indicator
+          <ia-status-indicator
             style=${this.stringifiedStyles}
-          ></ia-loading-indicator>
+          ></ia-status-indicator>
         </div>
 
         <div slot="settings">
@@ -73,7 +73,7 @@ export class IALoadingIndicatorStory extends LitElement {
   }
 
   private get exampleUsage(): string {
-    return `<ia-loading-indicator${this.stringifiedStyles ? ` style="${this.stringifiedStyles}"` : ''}></ia-loading-indicator>`;
+    return `<ia-status-indicator${this.stringifiedStyles ? ` style="${this.stringifiedStyles}"` : ''}></ia-status-indicator>`;
   }
 
   private createStyleInput(
