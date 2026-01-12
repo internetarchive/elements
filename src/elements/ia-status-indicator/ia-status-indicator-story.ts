@@ -11,12 +11,16 @@ export class IAStatusIndicatorStory extends LitElement {
   @queryAll('.style-input')
   private styleInputs?: NodeListOf<HTMLInputElement>;
 
-  @query('#title')
-  private titleInput!: HTMLInputElement;
+  @query('#loading-title')
+  private loadingTitleInput!: HTMLInputElement;
 
   /* Applied styles for the component, in "--my-variable: #f00;" format */
   @state()
   private stringifiedStyles: string = '';
+
+  /* Applied properties fro the component in .myprop=${'foo'} format */
+  @state()
+  private stringifiedProps: string = '';
 
   @query('ia-status-indicator')
   private component!: IAStatusIndicator;
@@ -42,7 +46,7 @@ export class IAStatusIndicatorStory extends LitElement {
                 <input
                   class="prop-input"
                   type="text"
-                  id="title"
+                  id="loading-title"
                   data-prop="title"
                   value="Content loading..."
                 />
@@ -73,7 +77,7 @@ export class IAStatusIndicatorStory extends LitElement {
   }
 
   private get exampleUsage(): string {
-    return `<ia-status-indicator${this.stringifiedStyles ? ` style="${this.stringifiedStyles}"` : ''}></ia-status-indicator>`;
+    return `<ia-status-indicator${this.stringifiedProps ? ' ' + this.stringifiedProps : ''}${this.stringifiedStyles ? ` style="${this.stringifiedStyles}"` : ''}></ia-status-indicator>`;
   }
 
   private createStyleInput(
@@ -94,7 +98,9 @@ export class IAStatusIndicatorStory extends LitElement {
   }
 
   private apply() {
-    this.component.title = this.titleInput.value;
+    const loadingTitle = this.loadingTitleInput.value;
+    this.component.loadingTitle = loadingTitle;
+    this.stringifiedProps = `.loadingTitle=\${'${loadingTitle}'}`;
 
     const appliedStyles: string[] = [];
 
