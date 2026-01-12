@@ -1,5 +1,5 @@
 import { css, CSSResultGroup, html, LitElement, TemplateResult } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
@@ -9,6 +9,9 @@ import themeStyles from '@src/themes/theme-styles';
  */
 @customElement('ia-loading-indicator')
 export class IALoadingIndicator extends LitElement {
+  /* An optional title to use for the indicator. Will be used for screen readers. */
+  @property({ type: String }) title = msg('Loading...');
+
   render(): TemplateResult {
     return this.circularLoadingIndicatorTemplate;
   }
@@ -25,7 +28,7 @@ export class IALoadingIndicator extends LitElement {
           xmlns:xlink="http://www.w3.org/1999/xlink"
           role="status"
         >
-          <title id="indicatorTitle">${msg('Loading...')}</title>
+          <title>${this.title}</title>
           <g stroke="none" stroke-width="1" fill-rule="evenodd">
             <path
               id="activity-ring"

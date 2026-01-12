@@ -15,4 +15,23 @@ describe('IA Loading Indicator', () => {
     );
     expect(circularLoadingIndicator).toBeDefined();
   });
+
+  test('uses a custom title for the indicator if desired', async () => {
+    const el = await fixture<IALoadingIndicator>(
+      html`<ia-loading-indicator
+        .title=${'Download in progress...'}
+      ></ia-loading-indicator>`,
+    );
+    const indicatorTitle = el.shadowRoot?.querySelector('title');
+    expect(indicatorTitle?.innerHTML).to.contain('Download in progress...');
+  });
+
+  test('uses a default title if no title provided', async () => {
+    const el = await fixture<IALoadingIndicator>(
+      html`<ia-loading-indicator></ia-loading-indicator>`,
+    );
+
+    const indicatorTitle = el.shadowRoot?.querySelector('title');
+    expect(indicatorTitle?.innerHTML).to.contain('Loading...');
+  });
 });
