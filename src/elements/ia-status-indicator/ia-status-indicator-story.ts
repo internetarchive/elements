@@ -29,7 +29,6 @@ export class IAStatusIndicatorStory extends LitElement {
     return html`
       <story-template
         elementTag="ia-status-indicator"
-        backgroundStyle="light"
         .exampleUsage=${this.exampleUsage}
       >
         <div slot="demo">
