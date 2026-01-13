@@ -3,6 +3,7 @@ import { customElement } from 'lit/decorators.js';
 
 import '@src/elements/ia-button/ia-button-story';
 import '@src/labs/ia-snow/ia-snow-story';
+import '@src/elements/ia-status-indicator/ia-status-indicator-story';
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
@@ -10,9 +11,14 @@ export class AppRoot extends LitElement {
     return html`
       <h1>🏛️ Internet Archive Elements ⚛️</h1>
 
-      <ia-button-story></ia-button-story>
+      <h2>🚀 Production-Ready Elements</h2>
+
+      <ia-status-indicator-story></ia-status-indicator-story>
+
+      <h2>🧪 Labs Elements</h2>
 
       <ia-snow-story></ia-snow-story>
+      <ia-button-story></ia-button-story>
     `;
   }
 }
