@@ -4,6 +4,7 @@ import { customElement } from 'lit/decorators/custom-element.js';
 import { when } from 'lit/directives/when.js';
 
 import './syntax-highlighter';
+import themeStyles from '@src/themes/theme-styles';
 
 import arrow from './arrow.svg';
 import testTube from './test-tube.svg';
@@ -81,46 +82,48 @@ import { ${this.elementClassName} } from '${this.modulePath}';
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      #container {
-        border: 1px solid #ccc;
-        padding: 0 16px 16px 16px;
-      }
+    return [
+      themeStyles,
+      css`
+        #container {
+          border: 1px solid #ccc;
+          padding: 0 16px 16px 16px;
+        }
 
-      h2 {
-        cursor: pointer;
-        margin-top: 8px;
-        margin-bottom: 8px;
-      }
+        h2 {
+          cursor: pointer;
+          margin-top: 8px;
+          margin-bottom: 8px;
+        }
 
-      h3 {
-        margin-bottom: 8px;
-      }
+        h3 {
+          margin-bottom: 8px;
+        }
 
-      .slot-container {
-        background: #282c34;
-        padding: 1em;
-      }
+        .slot-container {
+          background-color: var(--primary-background-color);
+          padding: 1em;
+        }
 
-      .disclosure-arrow {
-        width: 12px;
-        height: 12px;
-        transform: rotate(-90deg);
-        filter: invert(1);
-        transition: transform 0.2s ease-in-out;
-      }
+        .disclosure-arrow {
+          width: 12px;
+          height: 12px;
+          transform: rotate(-90deg);
+          transition: transform 0.2s ease-in-out;
+        }
 
-      .disclosure-arrow.open {
-        transform: rotate(0deg);
-      }
+        .disclosure-arrow.open {
+          transform: rotate(0deg);
+        }
 
-      .labs-icon {
-        width: 20px;
-        height: 20px;
-        margin-left: 4px;
-        filter: invert(1);
-        vertical-align: middle;
-      }
-    `;
+        .labs-icon {
+          width: 20px;
+          height: 20px;
+          margin-left: 4px;
+          filter: invert(1);
+          vertical-align: middle;
+        }
+      `,
+    ];
   }
 }

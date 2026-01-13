@@ -8,7 +8,7 @@ import {
 } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
-import { syntaxStyles } from './syntax-style';
+import { syntaxStyles } from './syntax-style-light';
 
 /**
  * An element that syntax highlights and displays TypeScript code

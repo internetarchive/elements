@@ -6,8 +6,11 @@ import '@demo/story-template';
 
 @customElement('ia-button-story')
 export class IAButtonStory extends LitElement {
-  @query('#color')
-  private colorInput!: HTMLInputElement;
+  @query('#backgroundColor')
+  private backgroundColorInput!: HTMLInputElement;
+
+  @query('#textColor')
+  private textColorInput!: HTMLInputElement;
 
   @query('ia-button')
   private button!: HTMLElement;
@@ -27,8 +30,14 @@ export class IAButtonStory extends LitElement {
         <div slot="settings">
           <table>
             <tr>
-              <td>Color</td>
-              <td><input type="color" value="#9f0a5f" id="color" /></td>
+              <td>Text Color</td>
+              <td><input type="color" value="#ffffff" id="textColor" /></td>
+            </tr>
+            <tr>
+              <td>Background Color</td>
+              <td>
+                <input type="color" value="#194880" id="backgroundColor" />
+              </td>
             </tr>
           </table>
           <button @click=${this.apply}>Apply</button>
@@ -41,7 +50,7 @@ export class IAButtonStory extends LitElement {
     return this.includeStyle
       ? `<ia-button
   @click=\${() => alert('Button clicked!')}
-  style="--ia-theme-primary-cta-fill: ${this.colorInput.value}">Click Me</ia-button>`
+  style="--ia-theme-primary-cta-fill: ${this.backgroundColorInput.value}; --ia-theme-primary-cta-text-color: ${this.textColorInput.value}">Click Me</ia-button>`
       : `<ia-button @click=\${() => alert('Button clicked!')}>Click Me</ia-button>`;
   }
 
@@ -49,7 +58,11 @@ export class IAButtonStory extends LitElement {
     this.includeStyle = true;
     this.button.style.setProperty(
       '--ia-theme-primary-cta-fill',
-      this.colorInput.value,
+      this.backgroundColorInput.value,
+    );
+    this.button.style.setProperty(
+      '--ia-theme-primary-cta-text-color',
+      this.textColorInput.value,
     );
   }
 }
