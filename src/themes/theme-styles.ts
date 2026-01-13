@@ -41,7 +41,10 @@ const themeStyles = css`
 
     /* State colors */
     --primary-cta-fill: var(--ia-theme-primary-cta-fill, var(--navy-blue));
-    --primary-cta-color: var(--ia-theme-primary-cta-color, var(--true-white));
+    --primary-cta-text-color: var(
+      --ia-theme-primary-cta-text-color,
+      var(--true-white)
+    );
   }
 `;
 
