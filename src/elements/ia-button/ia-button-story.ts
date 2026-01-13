@@ -12,6 +12,12 @@ export class IAButtonStory extends LitElement {
   @query('#textColor')
   private textColorInput!: HTMLInputElement;
 
+  @state()
+  private backgroundColor: string = '#194880';
+
+  @state()
+  private textColor: string = '#ffffff';
+
   @query('ia-button')
   private button!: HTMLElement;
 
@@ -50,19 +56,21 @@ export class IAButtonStory extends LitElement {
     return this.includeStyle
       ? `<ia-button
   @click=\${() => alert('Button clicked!')}
-  style="--ia-theme-primary-cta-fill: ${this.backgroundColorInput.value}; --ia-theme-primary-cta-text-color: ${this.textColorInput.value}">Click Me</ia-button>`
+  style="--ia-theme-primary-cta-fill: ${this.backgroundColor}; --ia-theme-primary-cta-text-color: ${this.textColor}">Click Me</ia-button>`
       : `<ia-button @click=\${() => alert('Button clicked!')}>Click Me</ia-button>`;
   }
 
   private apply() {
     this.includeStyle = true;
+    this.backgroundColor = this.backgroundColorInput.value;
+    this.textColor = this.textColorInput.value;
     this.button.style.setProperty(
       '--ia-theme-primary-cta-fill',
-      this.backgroundColorInput.value,
+      this.backgroundColor,
     );
     this.button.style.setProperty(
       '--ia-theme-primary-cta-text-color',
-      this.textColorInput.value,
+      this.textColor,
     );
   }
 }
