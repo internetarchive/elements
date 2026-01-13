@@ -40,7 +40,7 @@ const themeStyles = css`
     );
 
     /* State colors */
-    --primary-cta-fill: var(--ia-theme-primary-cta-fill, var(--dark-gray));
+    --primary-cta-fill: var(--ia-theme-primary-cta-fill, var(--light-gray));
   }
 `;
 

@@ -21,15 +21,12 @@ export class IAButton extends LitElement {
       themeStyles,
       css`
         :host {
-          --ia-button-primary-background-color--: var(
-            --ia-theme-primary-cta-fill,
-            var(--primary-cta-fill)
-          );
+          --primary-background-color--: var(--primary-cta-fill);
         }
 
         button {
           padding: 8px 16px;
-          background-color: var(--ia-button-primary-background-color--);
+          background-color: var(--primary-background-color--);
         }
       `,
     ];
