@@ -95,20 +95,29 @@ export class StoryTemplate extends LitElement {
 
     return html`
       <h3>Styles</h3>
-      <div class="slot-container">
-        ${this.styleInputData.map(
-          (input) => html`
-            <label for=${this.labelToId(input.label)}>${input.label}</label>
-            <input
-              id=${this.labelToId(input.label)}
-              class="style-input"
-              type=${input.inputType ?? 'text'}
-              value=${input.defaultValue ?? ''}
-              data-variable=${input.cssVariable}
-            />
-          `,
-        )}
-        <br />
+      <div class="style-options">
+        <table>
+          ${this.styleInputData.map(
+            (input) => html`
+              <tr>
+                <td>
+                  <label for=${this.labelToId(input.label)}
+                    >${input.label}</label
+                  >
+                </td>
+                <td>
+                  <input
+                    id=${this.labelToId(input.label)}
+                    class="style-input"
+                    type=${input.inputType ?? 'text'}
+                    value=${input.defaultValue ?? ''}
+                    data-variable=${input.cssVariable}
+                  />
+                </td>
+              </tr>
+            `,
+          )}
+        </table>
         <button @click=${this.applyStyles}>Apply</button>
       </div>
     `;
@@ -177,7 +186,8 @@ ${this.elementTag} {
           margin-bottom: 8px;
         }
 
-        .slot-container {
+        .slot-container,
+        .style-options {
           background-color: var(--primary-background-color);
           padding: 1em;
         }
