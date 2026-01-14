@@ -23,7 +23,11 @@
     "format": "wireit",
     "circular": "wireit",
     "prepare": "wireit",
-    "test": "wireit"
+    "test": "wireit",
+    "ghpages:build": "wireit",
+    "ghpages:publish": "wireit",
+    "ghpages:prepare": "wireit",
+    "ghpages:generate": "wireit"
   },
   "dependencies": {
     "@lit/localize": "^0.12.2",
@@ -110,6 +114,31 @@
       "dependencies": [
         "circular"
       ]
+    },
+    "ghpages:build": {
+      "dependencies": [
+        "build"
+      ],
+      "command": "gh-pages -d dist && npm run prepare && vite build"
+    },
+    "ghpages:publish": {
+      "dependencies": [
+        "ghpages:prepare"
+      ],
+      "command": "gh-pages:prepare -e $(git branch --show-current)"
+    },
+    "ghpages:nojekyll": {
+      "command": "mkdir -p ghpages && touch ./ghpages/.nojekyll"
+    },
+    "ghpages:prepare": {
+      "dependencies": [
+        "ghpages:build",
+        "ghpages:nojekyll",
+        "ghpages:generate"
+      ]
+    },
+    "ghpages:generate": {
+      "command": "gh-pages -t -d ghpages -m \"Build for $(git log --pretty=format:\"%h %an %ai %s\" -n1) [skip ci]\""
     }
   }
 }
