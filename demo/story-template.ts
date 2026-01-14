@@ -78,7 +78,9 @@ export class StoryTemplate extends LitElement {
         <h3>Import</h3>
         <syntax-highlighter .code=${this.importCode}></syntax-highlighter>
         <h3>Usage</h3>
-        <syntax-highlighter .code=${this.exampleUsage}></syntax-highlighter>
+        <syntax-highlighter
+          .code=${this.exampleUsage + this.cssCode}
+        ></syntax-highlighter>
         ${this.styleSettingsTemplate}
         <h3>Settings</h3>
         <div class="slot-container">
@@ -106,8 +108,9 @@ export class StoryTemplate extends LitElement {
             />
           `,
         )}
+        <br />
+        <button @click=${this.applyStyles}>Apply</button>
       </div>
-      <button @click=${this.applyStyles}>Apply</button>
     `;
   }
 
@@ -115,6 +118,16 @@ export class StoryTemplate extends LitElement {
     return `
 import '${this.modulePath}';
 import { ${this.elementClassName} } from '${this.modulePath}';
+    `;
+  }
+
+  private get cssCode(): string {
+    if (!this.appliedStyles) return '';
+    return `
+
+${this.elementTag} {
+  ${this.appliedStyles}     
+}
     `;
   }
 
@@ -137,7 +150,7 @@ import { ${this.elementClassName} } from '${this.modulePath}';
       appliedStyles.push(`${input.dataset.variable}: ${input.value};`);
     });
 
-    this.appliedStyles = appliedStyles.join(' ');
+    this.appliedStyles = appliedStyles.join('\n  ');
   }
 
   /* Converts a labe to a usable input id, i.e. My setting -> my-setting */
