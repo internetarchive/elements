@@ -1,4 +1,11 @@
-import { css, html, LitElement, type CSSResultGroup } from 'lit';
+import {
+  css,
+  html,
+  LitElement,
+  nothing,
+  TemplateResult,
+  type CSSResultGroup,
+} from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { when } from 'lit/directives/when.js';
@@ -9,6 +16,13 @@ import themeStyles from '@src/themes/theme-styles';
 import arrow from './arrow.svg';
 import testTube from './test-tube.svg';
 
+export interface StyleInputSettings {
+  id: string;
+  cssVariable: string;
+  defaultValue?: string;
+  inputType?: 'color' | 'text';
+}
+
 /**
  * A template for demoing the use of a custom element.
  */
@@ -17,6 +31,8 @@ export class StoryTemplate extends LitElement {
   @property({ type: String }) elementTag = '';
 
   @property({ type: String }) exampleUsage = '';
+
+  @property({ type: Array }) styleInputData?: StyleInputSettings[];
 
   @property({ type: Boolean }) labs = false;
 
@@ -56,12 +72,29 @@ export class StoryTemplate extends LitElement {
         <syntax-highlighter .code=${this.importCode}></syntax-highlighter>
         <h3>Usage</h3>
         <syntax-highlighter .code=${this.exampleUsage}></syntax-highlighter>
+        ${this.styleSettingsTemplate}
         <h3>Settings</h3>
         <div class="slot-container">
           <slot name="settings"></slot>
         </div>
       </div>
     `;
+  }
+
+  private get styleSettingsTemplate(): TemplateResult | typeof nothing {
+    if (!this.styleInputData) return nothing;
+
+    return html`${this.styleInputData.map(
+      (input) => html`
+        <input
+          id=${input.id}
+          class="style-input"
+          type=${input.inputType ?? 'text'}
+          value=${input.defaultValue ?? ''}
+          data-variable=${input.cssVariable}
+        />
+      `,
+    )}`;
   }
 
   private get importCode(): string {
