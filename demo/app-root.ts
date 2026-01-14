@@ -14,7 +14,7 @@ export class AppRoot extends LitElement {
       <fieldset>
         <legend>Settings</legend>
         <label for="darkModeToggle">Dark Mode</label>
-        <input type="checkbox" switch @change=${this._toggleDarkMode} />
+        <input type="checkbox" switch @change=${this.toggleDarkMode} />
       </fieldset>
 
       <h2>🚀 Production-Ready Elements</h2>
@@ -28,7 +28,7 @@ export class AppRoot extends LitElement {
     `;
   }
 
-  _toggleDarkMode(event: Event) {
+  private toggleDarkMode(event: Event) {
     const checkbox = event.target as HTMLInputElement;
     if (checkbox.checked) {
       document.documentElement.classList.add('dark');
