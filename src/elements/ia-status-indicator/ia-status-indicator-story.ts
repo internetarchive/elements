@@ -1,10 +1,25 @@
 import { html, LitElement, TemplateResult } from 'lit';
 import { customElement, query, queryAll, state } from 'lit/decorators.js';
 
+import { StyleInputSettings } from '@demo/story-template';
 import { IAStatusIndicator } from './ia-status-indicator';
 
 import './ia-status-indicator';
 import '@demo/story-template';
+
+const styleInputData: StyleInputSettings[] = [
+  {
+    label: 'Color',
+    cssVariable: '--ia-theme-primary-text-color',
+    defaultValue: '#3d7581',
+    inputType: 'color',
+  },
+  {
+    label: 'Width',
+    cssVariable: '--ia-theme-icon-width',
+    defaultValue: '30px',
+  },
+];
 
 @customElement('ia-status-indicator-story')
 export class IAStatusIndicatorStory extends LitElement {
@@ -30,6 +45,7 @@ export class IAStatusIndicatorStory extends LitElement {
       <story-template
         elementTag="ia-status-indicator"
         .exampleUsage=${this.exampleUsage}
+        .styleInputData=${styleInputData}
       >
         <div slot="demo">
           <ia-status-indicator

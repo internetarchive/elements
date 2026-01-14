@@ -17,7 +17,7 @@ import arrow from './arrow.svg';
 import testTube from './test-tube.svg';
 
 export interface StyleInputSettings {
-  id: string;
+  label: string;
   cssVariable: string;
   defaultValue?: string;
   inputType?: 'color' | 'text';
@@ -82,19 +82,26 @@ export class StoryTemplate extends LitElement {
   }
 
   private get styleSettingsTemplate(): TemplateResult | typeof nothing {
+    console.log(this.styleInputData);
     if (!this.styleInputData) return nothing;
 
-    return html`${this.styleInputData.map(
-      (input) => html`
-        <input
-          id=${input.id}
-          class="style-input"
-          type=${input.inputType ?? 'text'}
-          value=${input.defaultValue ?? ''}
-          data-variable=${input.cssVariable}
-        />
-      `,
-    )}`;
+    return html`
+      <h3>Styles</h3>
+      <div class="slot-container">
+        ${this.styleInputData.map(
+          (input) => html`
+            <label for=${this.labelToId(input.label)}>${input.label}</label>
+            <input
+              id=${this.labelToId(input.label)}
+              class="style-input"
+              type=${input.inputType ?? 'text'}
+              value=${input.defaultValue ?? ''}
+              data-variable=${input.cssVariable}
+            />
+          `,
+        )}
+      </div>
+    `;
   }
 
   private get importCode(): string {
@@ -112,6 +119,11 @@ import { ${this.elementClassName} } from '${this.modulePath}';
     return this.labs
       ? `@internetarchive/elements/labs/${this.elementTag}/${this.elementTag}`
       : `@internetarchive/elements/${this.elementTag}/${this.elementTag}`;
+  }
+
+  /* Converts a labe to a usable input id, i.e. My setting -> my-setting */
+  private labelToId(label: string): string {
+    return label.toLowerCase().split(' ').join('-');
   }
 
   static get styles(): CSSResultGroup {
