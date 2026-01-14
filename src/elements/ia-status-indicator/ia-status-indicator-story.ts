@@ -11,13 +11,13 @@ const styleInputData: StyleInputSettings[] = [
   {
     label: 'Color',
     cssVariable: '--ia-theme-primary-text-color',
-    defaultValue: '#3d7581',
+    defaultValue: '#2c2c2c',
     inputType: 'color',
   },
   {
     label: 'Width',
     cssVariable: '--ia-theme-icon-width',
-    defaultValue: '30px',
+    defaultValue: '1.25rem',
   },
 ];
 
@@ -54,7 +54,7 @@ export class IAStatusIndicatorStory extends LitElement {
                   type="text"
                   id="loading-title"
                   data-prop="title"
-                  value="Content loading..."
+                  value="Loading..."
                 />
               </td>
             </tr>

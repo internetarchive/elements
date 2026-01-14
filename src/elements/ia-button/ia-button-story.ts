@@ -10,13 +10,13 @@ const styleInputData: StyleInputSettings[] = [
   {
     label: 'Text Color (Primary)',
     cssVariable: '--ia-theme-primary-cta-text-color',
-    defaultValue: '#000000',
+    defaultValue: '#ffffff',
     inputType: 'color',
   },
   {
     label: 'Background Color (Primary)',
     cssVariable: '--ia-theme-primary-cta-fill',
-    defaultValue: '#c8eff4',
+    defaultValue: '#194880',
     inputType: 'color',
   },
 ];
