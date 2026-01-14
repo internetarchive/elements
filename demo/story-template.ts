@@ -6,9 +6,10 @@ import {
   TemplateResult,
   type CSSResultGroup,
 } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { property, queryAll, state } from 'lit/decorators.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { when } from 'lit/directives/when.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
 import './syntax-highlighter';
 import themeStyles from '@src/themes/theme-styles';
@@ -38,6 +39,12 @@ export class StoryTemplate extends LitElement {
 
   @state() private visible = false;
 
+  /* Stringified styles applied for the demo component */
+  @state() private appliedStyles?: string;
+
+  @queryAll('.style-input')
+  private styleInputs?: NodeListOf<HTMLInputElement>;
+
   render() {
     return html`
       <h2>
@@ -65,7 +72,7 @@ export class StoryTemplate extends LitElement {
     return html`
       <div id="container">
         <h3>Demo</h3>
-        <div class="slot-container">
+        <div class="slot-container" style=${ifDefined(this.appliedStyles)}>
           <slot name="demo"></slot>
         </div>
         <h3>Import</h3>
@@ -82,7 +89,6 @@ export class StoryTemplate extends LitElement {
   }
 
   private get styleSettingsTemplate(): TemplateResult | typeof nothing {
-    console.log(this.styleInputData);
     if (!this.styleInputData) return nothing;
 
     return html`
@@ -101,6 +107,7 @@ export class StoryTemplate extends LitElement {
           `,
         )}
       </div>
+      <button @click=${this.applyStyles}>Apply</button>
     `;
   }
 
@@ -119,6 +126,18 @@ import { ${this.elementClassName} } from '${this.modulePath}';
     return this.labs
       ? `@internetarchive/elements/labs/${this.elementTag}/${this.elementTag}`
       : `@internetarchive/elements/${this.elementTag}/${this.elementTag}`;
+  }
+
+  /* Applies styles to demo component. */
+  private applyStyles(): void {
+    const appliedStyles: string[] = [];
+
+    this.styleInputs?.forEach((input) => {
+      if (!input.dataset.variable || !input.value) return;
+      appliedStyles.push(`${input.dataset.variable}: ${input.value};`);
+    });
+
+    this.appliedStyles = appliedStyles.join(' ');
   }
 
   /* Converts a labe to a usable input id, i.e. My setting -> my-setting */

@@ -47,11 +47,10 @@ export class IAStatusIndicatorStory extends LitElement {
         .exampleUsage=${this.exampleUsage}
         .styleInputData=${styleInputData}
       >
-        <div slot="demo">
-          <ia-status-indicator
-            style=${this.stringifiedStyles}
-          ></ia-status-indicator>
-        </div>
+        <ia-status-indicator
+          slot="demo"
+          style=${this.stringifiedStyles}
+        ></ia-status-indicator>
 
         <div slot="settings">
           <table>
