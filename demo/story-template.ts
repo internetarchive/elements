@@ -46,6 +46,9 @@ export class StoryTemplate extends LitElement {
   /* Stringified styles applied for the demo component */
   @state() private appliedStyles?: string;
 
+  /* Whether settings inputs have been slotted in and should be displayed */
+  @state() private shouldShowPropertySettings: boolean = false;
+
   @queryAll('.style-input')
   private styleInputs?: NodeListOf<HTMLInputElement>;
 
@@ -86,8 +89,12 @@ export class StoryTemplate extends LitElement {
           .code=${this.exampleUsage + this.cssCode}
         ></syntax-highlighter>
         ${this.styleSettingsTemplate}
-        <h3>Settings</h3>
-        <div class="slot-container">
+        ${this.shouldShowPropertySettings ? html` <h3>Settings</h3>` : nothing}
+        <div
+          class="slot-container"
+          style="${!this.shouldShowPropertySettings ? 'display: none' : ''}"
+          @slotchange=${this.handleSettingsSlotChange}
+        >
           <slot name="settings"></slot>
         </div>
       </div>
@@ -152,6 +159,12 @@ ${this.elementTag} {
     return this.labs
       ? `@internetarchive/elements/labs/${this.elementTag}/${this.elementTag}`
       : `@internetarchive/elements/${this.elementTag}/${this.elementTag}`;
+  }
+
+  /* Toggles visibility of section depending on whether inputs have been slotted into it */
+  private handleSettingsSlotChange(e: Event): void {
+    const slottedChildren = (e.target as HTMLSlotElement).assignedElements();
+    this.shouldShowPropertySettings = slottedChildren.length > 0;
   }
 
   /* Applies styles to demo component. */
