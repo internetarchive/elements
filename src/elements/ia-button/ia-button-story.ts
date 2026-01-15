@@ -6,7 +6,7 @@ import type { StyleInputSettings } from '@demo/story-template';
 import './ia-button';
 import '@demo/story-template';
 
-const styleInputData: StyleInputSettings[] = [
+const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Text Color (Primary)',
     cssVariable: '--ia-theme-primary-cta-text-color',
@@ -28,7 +28,7 @@ export class IAButtonStory extends LitElement {
       <story-template
         elementTag="ia-button"
         .exampleUsage=${this.exampleUsage}
-        .styleInputData=${styleInputData}
+        .styleInputData=${{ settings: styleInputSettings }}
       >
         <div slot="demo">
           <ia-button @click=${() => alert('Button clicked!')}

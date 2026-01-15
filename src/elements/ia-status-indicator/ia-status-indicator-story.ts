@@ -7,7 +7,7 @@ import { IAStatusIndicator } from './ia-status-indicator';
 import './ia-status-indicator';
 import '@demo/story-template';
 
-const styleInputData: StyleInputSettings[] = [
+const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Color',
     cssVariable: '--ia-theme-primary-text-color',
@@ -38,7 +38,7 @@ export class IAStatusIndicatorStory extends LitElement {
       <story-template
         elementTag="ia-status-indicator"
         .exampleUsage=${this.exampleUsage}
-        .styleInputData=${styleInputData}
+        .styleInputData=${{ settings: styleInputSettings }}
       >
         <div slot="demo">
           <ia-status-indicator></ia-status-indicator>

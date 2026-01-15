@@ -17,12 +17,16 @@ import themeStyles from '@src/themes/theme-styles';
 import arrow from './arrow.svg';
 import testTube from './test-tube.svg';
 
-export interface StyleInputSettings {
+export type StyleInputSettings = {
   label: string;
   cssVariable: string;
   defaultValue?: string;
   inputType?: 'color' | 'text';
-}
+};
+
+export type StyleInputData = {
+  settings: StyleInputSettings[];
+};
 
 /**
  * A template for demoing the use of a custom element.
@@ -33,7 +37,7 @@ export class StoryTemplate extends LitElement {
 
   @property({ type: String }) exampleUsage = '';
 
-  @property({ type: Array }) styleInputData?: StyleInputSettings[];
+  @property({ type: Object }) styleInputData?: StyleInputData;
 
   @property({ type: Boolean }) labs = false;
 
@@ -97,7 +101,7 @@ export class StoryTemplate extends LitElement {
       <h3>Styles</h3>
       <div class="style-options">
         <table>
-          ${this.styleInputData.map(
+          ${this.styleInputData.settings.map(
             (input) => html`
               <tr>
                 <td>
