@@ -125,7 +125,7 @@
       "dependencies": [
         "ghpages:prepare"
       ],
-      "command": "gh-pages:prepare -e $(git branch --show-current)"
+      "command": "gh-pages prepare -d dist -e $(git branch --show-current)"
     },
     "ghpages:nojekyll": {
       "command": "mkdir -p ghpages && touch ./ghpages/.nojekyll"

@@ -1,4 +1,4 @@
-# This workflow will generate the static page under `pr` subdirectory inside the `gh-pages` branch
+# This workflow will generate the static page under `pr` subdirectory inside the `ghpages` branch
 
 # This workflow will run every time there's a PR opened, reopened, synchronize, or closed
 
@@ -15,7 +15,7 @@ on:
 concurrency: preview-${{ github.ref }}
 
 env:
-  PREVIEW_BRANCH: gh-pages
+  PREVIEW_BRANCH: ghpages
 jobs:
   deploy-preview:
     runs-on: ubuntu-latest
