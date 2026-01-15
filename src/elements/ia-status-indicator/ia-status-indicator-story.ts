@@ -37,7 +37,8 @@ export type PropInputSettings<T> = {
   label: string;
   propertyName: keyof T;
   defaultValue?: string;
-  inputType?: 'text';
+  inputType?: 'text' | 'radio';
+  radioOptions?: string[];
 };
 
 const propInputSettings: PropInputSettings<IAStatusIndicator>[] = [
@@ -45,6 +46,8 @@ const propInputSettings: PropInputSettings<IAStatusIndicator>[] = [
     label: 'Mode',
     propertyName: 'mode',
     defaultValue: 'loading',
+    inputType: 'radio',
+    radioOptions: ['loading', 'success', 'error'],
   },
   {
     label: 'Accessible title - loading',
@@ -103,6 +106,27 @@ export class IAStatusIndicatorStory extends LitElement {
     settings: PropInputSettings<IAStatusIndicator>,
   ): TemplateResult {
     const inputId = settings.label.toLowerCase().split(' ').join('-');
+
+    if (settings.inputType === 'radio' && settings.radioOptions)
+      return html`
+        <tr>
+          <td><legend>${settings.label}</legend></td>
+          <td>
+            ${settings.radioOptions.map(
+              (option) =>
+                html`<input
+                    type="radio"
+                    class="prop-input"
+                    name=${inputId}
+                    id=${option}
+                    value=${option}
+                    data-prop=${settings.propertyName}
+                    ?checked=${settings.defaultValue === option}
+                  /><label for=${option}> ${option} </label>`,
+            )}
+          </td>
+        </tr>
+      `;
     return html`
       <tr>
         <td><label for=${inputId}>${settings.label}</label></td>
@@ -126,7 +150,12 @@ export class IAStatusIndicatorStory extends LitElement {
   private apply() {
     const appliedProps: string[] = [];
     this.propInputs?.forEach((input) => {
-      if (!input.dataset.prop || !input.value) return;
+      if (
+        !input.dataset.prop ||
+        !input.value ||
+        (input.type === 'radio' && !input.checked)
+      )
+        return;
 
       const prop = input.dataset.prop;
       appliedProps.push(`.${prop}=\${'${input.value}'}`);
