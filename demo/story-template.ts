@@ -166,7 +166,7 @@ ${this.elementTag} {
     this.appliedStyles = appliedStyles.join('\n  ');
   }
 
-  /* Converts a labe to a usable input id, i.e. My setting -> my-setting */
+  /* Converts a label to a usable input id, i.e. My setting -> my-setting */
   private labelToId(label: string): string {
     return label.toLowerCase().split(' ').join('-');
   }
