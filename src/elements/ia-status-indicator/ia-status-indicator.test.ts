@@ -60,4 +60,32 @@ describe('IA Status Indicator', () => {
     const indicatorTitle = el.shadowRoot?.querySelector('title');
     expect(indicatorTitle?.innerHTML).to.contain('Success');
   });
+
+  test('can render an error indicator instead if requested', async () => {
+    const el = await fixture<IAStatusIndicator>(
+      html`<ia-status-indicator .mode=${'error'}></ia-status-indicator>`,
+    );
+    const errorIndicator = el.shadowRoot?.querySelector('.error-indicator');
+    expect(errorIndicator).to.exist;
+  });
+
+  test('uses a custom error title for the indicator if desired', async () => {
+    const el = await fixture<IAStatusIndicator>(
+      html`<ia-status-indicator
+        .mode=${'error'}
+        .errorTitle=${'Download failed'}
+      ></ia-status-indicator>`,
+    );
+    const indicatorTitle = el.shadowRoot?.querySelector('title');
+    expect(indicatorTitle?.innerHTML).to.contain('Download failed');
+  });
+
+  test('uses a default error title if no title provided', async () => {
+    const el = await fixture<IAStatusIndicator>(
+      html`<ia-status-indicator .mode=${'error'}></ia-status-indicator>`,
+    );
+
+    const indicatorTitle = el.shadowRoot?.querySelector('title');
+    expect(indicatorTitle?.innerHTML).to.contain('Error');
+  });
 });
