@@ -60,7 +60,7 @@ const themeStyles = css`
       --ia-theme-primary-cta-text-color,
       var(--true-white)
     );
-    --color-success: var(--ia-theme-color-succes, var(--mint-green));
+    --color-success: var(--ia-theme-color-success, var(--mint-green));
     --color-danger: var(--ia-theme-color-danger, var(--classic-red));
   }
 `;
