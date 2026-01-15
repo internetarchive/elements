@@ -19,6 +19,9 @@ export class IAStatusIndicator extends LitElement {
   /* An optional title to use for the error state of the indicator. Will be used for screen readers. */
   @property({ type: String }) errorTitle = msg('Error');
 
+  /* Whether to include the dots in the loading indicator or just the simple ring */
+  @property({ type: Boolean }) showLoadingDots: boolean = true;
+
   /* The state of the indicator that should be shown */
   @property({ type: String }) mode: 'loading' | 'success' | 'error' = 'loading';
 
@@ -48,7 +51,10 @@ export class IAStatusIndicator extends LitElement {
             class="loading-ring"
             d="M60,10 C69.8019971,10 78.9452178,12.8205573 86.6623125,17.6943223 L76.4086287,27.9484118 C71.4880919,25.4243078 65.9103784,24 60,24 C40.117749,24 24,40.117749 24,60 C24,79.882251 40.117749,96 60,96 C79.882251,96 96,79.882251 96,60 C96,53.3014663 94.1704984,47.0302355 90.9839104,41.6587228 L101.110332,31.5326452 C106.715332,39.6116982 110,49.4222615 110,60 C110,87.6142375 87.6142375,110 60,110 C32.3857625,110 10,87.6142375 10,60 C10,32.3857625 32.3857625,10 60,10 Z"
           ></path>
-          <g class="loading-dots" transform="translate(40.000000, 55.000000)">
+          <g
+            class="loading-dots ${!this.showLoadingDots ? 'hidden' : ''}"
+            transform="translate(40.000000, 55.000000)"
+          >
             <circle id="left-dot" cx="5" cy="5" r="5"></circle>
             <circle id="middle-dot" cx="20" cy="5" r="5"></circle>
             <circle id="right-dot" cx="35" cy="5" r="5"></circle>
@@ -146,6 +152,10 @@ export class IAStatusIndicator extends LitElement {
         .loading-dots {
           fill: var(--loading-dot-color--);
           transition: opacity 0.25s ease-out;
+        }
+
+        .loading-dots.hidden {
+          display: none;
         }
 
         .loading-dots > * {

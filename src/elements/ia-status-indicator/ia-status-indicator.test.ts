@@ -33,6 +33,32 @@ describe('IA Status Indicator', () => {
     expect(indicatorTitle?.innerHTML).to.contain('Loading...');
   });
 
+  test('shows loading dots inside the ring by default', async () => {
+    const el = await fixture<IAStatusIndicator>(
+      html`<ia-status-indicator></ia-status-indicator>`,
+    );
+
+    const loadingRing = el.shadowRoot?.querySelector('.loading-ring');
+    expect(loadingRing).to.exist;
+    const loadingDots = el.shadowRoot?.querySelector('.loading-dots');
+    expect(loadingDots).to.exist;
+  });
+
+  test('can hide the loading dots if requested', async () => {
+    const el = await fixture<IAStatusIndicator>(
+      html`<ia-status-indicator
+        ?showLoadingDots=${false}
+      ></ia-status-indicator>`,
+    );
+
+    const loadingDots = el.shadowRoot?.querySelector(
+      '.loading-dots',
+    ) as HTMLElement;
+    expect(loadingDots.computedStyleMap().get('display')?.toString()).to.equal(
+      'none',
+    );
+  });
+
   test('can render a success indicator instead if requested', async () => {
     const el = await fixture<IAStatusIndicator>(
       html`<ia-status-indicator .mode=${'success'}></ia-status-indicator>`,
