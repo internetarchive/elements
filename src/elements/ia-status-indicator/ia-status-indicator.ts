@@ -69,11 +69,11 @@ export class IAStatusIndicator extends LitElement {
         <title>${this.successTitle}</title>
         <g stroke="none" stroke-width="1" fill-rule="evenodd">
           <path
-            class="success-ring"
+            class="success-icon"
             d="M60,10 C70.5816709,10 80.3955961,13.2871104 88.4763646,18.8959201 L78.3502633,29.0214223 C72.9767592,25.8315427 66.7022695,24 60,24 C40.117749,24 24,40.117749 24,60 C24,79.882251 40.117749,96 60,96 C79.882251,96 96,79.882251 96,60 L95.995,59.46 L108.327675,47.128668 C109.350926,50.9806166 109.925886,55.015198 109.993301,59.1731586 L110,60 C110,87.6142375 87.6142375,110 60,110 C32.3857625,110 10,87.6142375 10,60 C10,32.3857625 32.3857625,10 60,10 Z"
           ></path>
           <polygon
-            class="success-check"
+            class="success-icon"
             transform="translate(75.000000, 41.500000) rotate(44.000000) translate(-75.000000, -41.500000) "
             points="96 85 54 85 54 65 76 64.999 76 -2 96 -2"
           ></polygon>
@@ -87,12 +87,24 @@ export class IAStatusIndicator extends LitElement {
       themeStyles,
       css`
         :host {
+          --indicator-width--: var(--icon-width);
+
+          /* Loading */
           --loading-ring-color--: var(--primary-text-color);
           --loading-dot-color--: var(--primary-text-color);
-          --loading-indicator-width--: var(--icon-width);
+
+          /* Success */
+          --success-icon-color--: var(--color-success);
+
+          /* Error */
+          --error-icon-color--: var(--color-danger);
 
           display: inline-block;
-          width: var(--loading-indicator-width--);
+          width: var(--indicator-width--);
+        }
+
+        .success-icon {
+          fill: var(--success-icon-color--);
         }
 
         .loading-ring {
