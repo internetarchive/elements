@@ -1,6 +1,7 @@
 import { html, LitElement, nothing, TemplateResult } from 'lit';
 import { customElement, query, queryAll, state } from 'lit/decorators.js';
 import { choose } from 'lit/directives/choose.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 
 import { StyleInputSettings } from '@demo/story-template';
 import { IAStatusIndicator } from './ia-status-indicator';
@@ -110,7 +111,7 @@ export class IAStatusIndicatorStory extends LitElement {
   }
 
   private get exampleUsage(): string {
-    return `<ia-status-indicator${this.stringifiedProps ? ' ' + this.stringifiedProps : ''}></ia-status-indicator>`;
+    return `<ia-status-indicator${this.stringifiedProps ?? ''}></ia-status-indicator>`;
   }
 
   /* Creates a property input */
@@ -140,7 +141,7 @@ export class IAStatusIndicatorStory extends LitElement {
             type=${settings.inputType ?? 'text'}
             id=${inputId}
             data-prop=${settings.propertyName}
-            value=${settings?.defaultValue ?? ''}
+            placeholder=${ifDefined(settings?.defaultValue)}
           />
         </td>
       </tr>
@@ -192,6 +193,8 @@ export class IAStatusIndicatorStory extends LitElement {
       this.component.setAttribute(prop, input.value);
     });
 
-    this.stringifiedProps = appliedProps.join(' ');
+    if (!appliedProps.length) return;
+
+    this.stringifiedProps = '\n  ' + appliedProps.join('\n  ') + '\n';
   }
 }
