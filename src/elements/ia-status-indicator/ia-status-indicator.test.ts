@@ -46,9 +46,7 @@ describe('IA Status Indicator', () => {
 
   test('can hide the loading dots if requested', async () => {
     const el = await fixture<IAStatusIndicator>(
-      html`<ia-status-indicator
-        ?showLoadingDots=${false}
-      ></ia-status-indicator>`,
+      html`<ia-status-indicator .loadingStyle=${'ring'}></ia-status-indicator>`,
     );
 
     const loadingDots = el.shadowRoot?.querySelector(

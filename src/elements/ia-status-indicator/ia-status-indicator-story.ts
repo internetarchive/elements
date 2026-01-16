@@ -56,6 +56,13 @@ const propInputSettings: PropInputSettings<IAStatusIndicator>[] = [
     defaultValue: 'Loading...',
   },
   {
+    label: 'Loading style',
+    propertyName: 'loadingStyle',
+    defaultValue: 'ring-dots',
+    inputType: 'radio',
+    radioOptions: ['ring-dots', 'ring'],
+  },
+  {
     label: 'Accessible title - success',
     propertyName: 'successTitle',
     defaultValue: 'Success',
