@@ -1,5 +1,6 @@
-import { html, LitElement, TemplateResult } from 'lit';
+import { html, LitElement, nothing, TemplateResult } from 'lit';
 import { customElement, query, queryAll, state } from 'lit/decorators.js';
+import { choose } from 'lit/directives/choose.js';
 
 import { StyleInputSettings } from '@demo/story-template';
 import { IAStatusIndicator } from './ia-status-indicator';
@@ -101,32 +102,28 @@ export class IAStatusIndicatorStory extends LitElement {
     `;
   }
 
+  private get exampleUsage(): string {
+    return `<ia-status-indicator${this.stringifiedProps ? ' ' + this.stringifiedProps : ''}></ia-status-indicator>`;
+  }
+
   /* Creates a property input */
   private createPropInput(
+    settings: PropInputSettings<IAStatusIndicator>,
+  ): TemplateResult | typeof nothing {
+    return (
+      choose(
+        settings.inputType,
+        [['radio', () => this.radioPropInputTemplate(settings)]],
+        () => this.defaultPropInputTemplate(settings),
+      ) ?? nothing
+    );
+  }
+
+  private defaultPropInputTemplate(
     settings: PropInputSettings<IAStatusIndicator>,
   ): TemplateResult {
     const inputId = settings.label.toLowerCase().split(' ').join('-');
 
-    if (settings.inputType === 'radio' && settings.radioOptions)
-      return html`
-        <tr>
-          <td><legend>${settings.label}</legend></td>
-          <td>
-            ${settings.radioOptions.map(
-              (option) =>
-                html`<input
-                    type="radio"
-                    class="prop-input"
-                    name=${inputId}
-                    id=${option}
-                    value=${option}
-                    data-prop=${settings.propertyName}
-                    ?checked=${settings.defaultValue === option}
-                  /><label for=${option}> ${option} </label>`,
-            )}
-          </td>
-        </tr>
-      `;
     return html`
       <tr>
         <td><label for=${inputId}>${settings.label}</label></td>
@@ -143,8 +140,34 @@ export class IAStatusIndicatorStory extends LitElement {
     `;
   }
 
-  private get exampleUsage(): string {
-    return `<ia-status-indicator${this.stringifiedProps ? ' ' + this.stringifiedProps : ''}></ia-status-indicator>`;
+  /* Generator for a radio prop input, including the associated label text */
+  private radioPropInputTemplate(
+    settings: PropInputSettings<IAStatusIndicator>,
+  ): TemplateResult | typeof nothing {
+    if (settings.inputType !== 'radio' || !settings.radioOptions)
+      return nothing;
+
+    const inputId = settings.label.toLowerCase().split(' ').join('-');
+
+    return html`
+      <tr>
+        <td><legend>${settings.label}</legend></td>
+        <td>
+          ${settings.radioOptions.map(
+            (option) =>
+              html`<input
+                  type="radio"
+                  class="prop-input"
+                  name=${inputId}
+                  id=${option}
+                  value=${option}
+                  data-prop=${settings.propertyName}
+                  ?checked=${settings.defaultValue === option}
+                /><label for=${option}> ${option} </label>`,
+          )}
+        </td>
+      </tr>
+    `;
   }
 
   private apply() {
