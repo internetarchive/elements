@@ -33,7 +33,7 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.7.3
         with:
-          branch: gh-pages
+          branch: ghpages
           folder: ghpages
           clean-exclude: pr/
           force: false
