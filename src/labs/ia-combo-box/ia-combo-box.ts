@@ -258,18 +258,15 @@ export class IAComboBox extends LitElement {
   }
 
   render(): TemplateResult | typeof nothing {
+    const mainWidgetClasses = classMap({
+      disabled: this.disabled,
+      focused: this.hasFocus,
+    });
+
     return html`
-      <div
-        id="container"
-        class=${classMap({ focused: this.hasFocus })}
-        part="container"
-      >
+      <div id="container" part="container">
         ${this.labelTemplate}
-        <div
-          id="main-widget-row"
-          class=${classMap({ disabled: this.disabled })}
-          part="combo-box"
-        >
+        <div id="main-widget-row" class=${mainWidgetClasses} part="combo-box">
           ${this.textInputTemplate}
           ${this.clearable ? this.clearButtonTemplate : nothing}
           ${this.caretButtonTemplate}
@@ -1159,7 +1156,12 @@ export class IAComboBox extends LitElement {
         width: 100%;
       }
 
-      .focused #main-widget-row {
+      #main-widget-row:not(.focused):hover,
+      #main-widget-row:not(.focused):active {
+        background: #fafafa;
+      }
+
+      #main-widget-row.focused {
         outline: black auto 1px;
         outline-offset: 3px;
       }
