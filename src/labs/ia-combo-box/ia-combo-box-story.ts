@@ -138,11 +138,11 @@ export class IAComboBoxStory extends LitElement {
             .options=${this.options}
             .behavior=${this.behavior}
             .placeholder=${this.placeholder}
-            .maxAutocompleteEntries=${this.maxAutocompleteEntries}
+            .max-autocomplete-entries=${this.maxAutocompleteEntries}
             .filter=${this.filterFn}
-            ?caseSensitive=${this.caseSensitive}
+            ?case-sensitive=${this.caseSensitive}
             ?sort=${this.shouldSort}
-            ?wrapArrowKeys=${this.wrapArrowKeys}
+            ?wrap-arrow-keys=${this.wrapArrowKeys}
             ?disabled=${this.disabled}
             @change=${this.handleComboBoxChange}
           >
@@ -263,13 +263,13 @@ export class IAComboBoxStory extends LitElement {
     const bindings: Record<string, string | boolean> = {
       behavior: behavior ? `"${behavior}"` : '',
       placeholder: placeholder ? `"${placeholder}"` : '',
-      maxAutocompleteEntries: maxAutocompleteEntries
+      'max-autocomplete-entries': maxAutocompleteEntries
         ? `"${maxAutocompleteEntries}"`
         : '',
       filter: filterFn && filterFn !== 'substring' ? `"${filterFn}"` : '',
-      caseSensitive: this.caseSensitive,
+      'case-sensitive': this.caseSensitive,
       sort: this.shouldSort,
-      wrapArrowKeys: this.wrapArrowKeys,
+      'wrap-arrow-keys': this.wrapArrowKeys,
       disabled: this.disabled,
     };
 
