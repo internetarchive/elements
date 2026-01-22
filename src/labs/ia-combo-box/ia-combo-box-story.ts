@@ -129,6 +129,9 @@ export class IAComboBoxStory extends LitElement {
   @query('#settings__options')
   private optionSetSelect!: HTMLInputElement;
 
+  @query('#settings__custom-content')
+  private customContentCheck!: HTMLInputElement;
+
   @query('#settings__behavior')
   private behaviorSelect!: HTMLSelectElement;
 
@@ -158,9 +161,6 @@ export class IAComboBoxStory extends LitElement {
 
   @query('#settings__disabled')
   private disabledCheck!: HTMLInputElement;
-
-  @query('#settings__custom-content')
-  private customContentCheck!: HTMLInputElement;
 
   render() {
     return html`
@@ -199,6 +199,17 @@ export class IAComboBoxStory extends LitElement {
                   <option value="countries" selected>Countries</option>
                 </select>
               </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="settings__custom-content">
+                  Show custom option content
+                </label>
+              </td>
+              <td><input type="checkbox" id="settings__custom-content" /></td>
+            </tr>
+            <tr>
+              <td colspan="2"><hr /></td>
             </tr>
             <tr>
               <td><label for="settings__behavior">Behavior</label></td>
@@ -261,36 +272,32 @@ export class IAComboBoxStory extends LitElement {
             <tr>
               <td>
                 <label for="settings__case-sensitive">
-                  Case sensitive filtering?
+                  Case sensitive filtering
                 </label>
               </td>
               <td><input type="checkbox" id="settings__case-sensitive" /></td>
             </tr>
             <tr>
-              <td><label for="settings__sort">Sort items?</label></td>
+              <td><label for="settings__sort">Sort items</label></td>
               <td><input type="checkbox" id="settings__sort" /></td>
             </tr>
             <tr>
               <td>
-                <label for="settings__wrap">Wrap arrow-key navigation?</label>
+                <label for="settings__wrap">Wrap arrow-key navigation</label>
               </td>
               <td><input type="checkbox" checked id="settings__wrap" /></td>
             </tr>
             <tr>
-              <td><label for="settings__clearable">Show clear button?</label></td>
-              <td><input type="checkbox" checked id="settings__clearable" /></td>
-            </tr>
-            <tr>
-              <td><label for="settings__disabled">Disabled?</label></td>
-              <td><input type="checkbox" id="settings__disabled" /></td>
-            </tr>
-            <tr>
               <td>
-                <label for="settings__custom-content">
-                  Show custom option content?
-                </label>
+                <label for="settings__clearable">Show clear button</label>
               </td>
-              <td><input type="checkbox" id="settings__custom-content" /></td>
+              <td>
+                <input type="checkbox" checked id="settings__clearable" />
+              </td>
+            </tr>
+            <tr>
+              <td><label for="settings__disabled">Disabled</label></td>
+              <td><input type="checkbox" id="settings__disabled" /></td>
             </tr>
           </table>
           <button type="submit" @click=${this.applySettings}>Apply</button>
@@ -391,6 +398,42 @@ export class IAComboBoxStory extends LitElement {
     return css`
       #announcer {
         margin-left: 20px;
+      }
+
+      table {
+        margin-bottom: 5px;
+      }
+
+      tr:nth-child(even) {
+        background-color: rgba(0, 0, 0, 0.02);
+      }
+
+      select {
+        width: calc(100% - 5px);
+        padding: 2px 0;
+      }
+
+      input[type='checkbox'] {
+        width: 18px;
+        height: 18px;
+      }
+
+      input[type='text'],
+      input[type='number'] {
+        box-sizing: border-box;
+        width: calc(100% - 5px);
+        padding: 2px 3px;
+      }
+
+      select,
+      input[type='text'],
+      input[type='number'],
+      input[type='checkbox'] {
+        margin-left: 5px;
+      }
+
+      button[type="submit"] {
+        padding: 6px 8px;
       }
     `;
   }
