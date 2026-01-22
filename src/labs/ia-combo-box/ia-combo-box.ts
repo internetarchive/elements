@@ -362,10 +362,15 @@ export class IAComboBox extends LitElement {
    * options or (if freeform behavior) to enter a custom value.
    */
   private get textInputTemplate(): TemplateResult {
+    const textInputClasses = classMap({
+      'clear-padding': this.clearable && !this.shouldShowClearButton,
+    });
+
     return html`
       <input
         type="text"
         id="text-input"
+        class=${textInputClasses}
         .value=${live(this.enteredText)}
         placeholder=${ifDefined(this.placeholder)}
         part="text-input"
@@ -396,14 +401,19 @@ export class IAComboBox extends LitElement {
       <button
         type="button"
         id="clear-button"
-        class=${classMap({ visible: this.shouldShowClearButton })}
         part="clear-button"
         tabindex="-1"
+        ?hidden=${!this.shouldShowClearButton}
         @click=${this.handleClearButtonClick}
       >
         <span class="sr-only">${msg('Clear')}</span>
         <slot name="clear-button">
-          <img class="icon" src=${clearIcon} alt="" />
+          <img
+            class="icon clear-icon"
+            src=${clearIcon}
+            alt=""
+            aria-hidden="true"
+          />
         </slot>
       </button>
     `;
@@ -416,10 +426,20 @@ export class IAComboBox extends LitElement {
   private get caretTemplate(): TemplateResult {
     return html`
       <slot name="caret-closed" ?hidden=${this.open}>
-        <img class="icon" src=${caretClosedIcon} alt="" />
+        <img
+          class="icon caret-icon"
+          src=${caretClosedIcon}
+          alt=""
+          aria-hidden="true"
+        />
       </slot>
       <slot name="caret-open" ?hidden=${!this.open}>
-        <img class="icon" src=${caretOpenIcon} alt="" />
+        <img
+          class="icon caret-icon"
+          src=${caretOpenIcon}
+          alt=""
+          aria-hidden="true"
+        />
       </slot>
     `;
   }
@@ -704,6 +724,7 @@ export class IAComboBox extends LitElement {
   private handleClearButtonClick(): void {
     this.clearSelectedOption();
     this.textInput.focus();
+    this.openOptionsMenu();
   }
 
   /**
@@ -1177,6 +1198,11 @@ export class IAComboBox extends LitElement {
         font-size: inherit;
         color: inherit;
         outline: none;
+        text-overflow: ellipsis;
+      }
+
+      #text-input.clear-padding {
+        padding-right: 30px;
       }
 
       #text-input:read-only {
@@ -1196,19 +1222,15 @@ export class IAComboBox extends LitElement {
       }
 
       #clear-button {
-        margin-right: 5px;
+        flex: 0 0 30px;
+      }
+
+      #clear-button[hidden] {
+        display: none;
       }
 
       #caret-button {
         padding-right: var(--combo-box-padding, 5px);
-      }
-
-      #clear-button {
-        visibility: hidden;
-      }
-
-      #clear-button.visible {
-        visibility: visible;
       }
 
       #options-list {
@@ -1235,9 +1257,14 @@ export class IAComboBox extends LitElement {
         text-align: center;
       }
 
-      .icon {
+      .caret-icon {
         width: 14px;
         height: 14px;
+      }
+
+      .clear-icon {
+        width: 16px;
+        height: 16px;
       }
 
       .option {
