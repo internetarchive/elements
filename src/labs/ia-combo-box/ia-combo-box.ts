@@ -16,6 +16,7 @@ import { msg } from '@lit/localize';
 
 import {
   hasAnyOf,
+  isSubsequence,
   type IAComboBoxBehavior,
   type IAComboBoxFilterFunction,
   type IAComboBoxFilterOption,
@@ -23,37 +24,9 @@ import {
   type IAComboBoxOption,
 } from './models';
 
-import caretClosedIcon from './caret-closed-icon';
-import caretOpenIcon from './caret-open-icon';
-import clearIcon from './clear-icon';
-
-/**
- * Tests whether the given `haystack` string has the given `needle` as a subsequence.
- * Returns `true` if the characters of `needle` appear in order within `haystack`,
- * regardless of whether they are contiguous. Returns `false` otherwise.
- *
- * E.g., `ace` is a subsequence of `archive` (but not a contiguous substring).
- *
- * Note: The empty string is a subsequence of any string, including itself.
- *
- * @param needle The potential subsequence to check for inside `haystack`.
- * @param haystack The string to be tested for containing the `needle` subsequence.
- * @returns Whether `haystack` has `needle` as a subsequence.
- */
-const isSubsequence = (needle: string, haystack: string): boolean => {
-  const needleLen = needle.length;
-  const haystackLen = haystack.length;
-  if (needleLen === 0) return true;
-
-  let needleIdx = 0;
-  let haystackIdx = 0;
-  while (haystackIdx < haystackLen) {
-    if (haystack[haystackIdx] === needle[needleIdx]) needleIdx += 1;
-    if (needleIdx >= needleLen) return true;
-    haystackIdx += 1;
-  }
-  return false;
-};
+import caretClosedIcon from './caret-closed.svg';
+import caretOpenIcon from './caret-open.svg';
+import clearIcon from './clear.svg';
 
 /**
  * Map from filter preset keys to their associated filtering function.
@@ -434,10 +407,13 @@ export class IAComboBox extends LitElement {
         id="clear-button"
         class=${classMap({ visible: this.shouldShowClearButton })}
         part="clear-button"
+        tabindex="-1"
         @click=${this.handleClearButtonClick}
       >
         <span class="sr-only">${msg('Clear')}</span>
-        <slot name="clear-button" class="clear-icon">${clearIcon}</slot>
+        <slot name="clear-button">
+          <img class="icon" src=${clearIcon}>
+        </slot>
       </button>
     `;
   }
@@ -448,11 +424,11 @@ export class IAComboBox extends LitElement {
    */
   private get caretTemplate(): TemplateResult {
     return html`
-      <slot name="caret-closed" class="caret-icon" ?hidden=${this.open}>
-        ${caretClosedIcon}
+      <slot name="caret-closed" ?hidden=${this.open}>
+        <img class="icon" src=${caretClosedIcon}>
       </slot>
-      <slot name="caret-open" class="caret-icon" ?hidden=${!this.open}>
-        ${caretOpenIcon}
+      <slot name="caret-open" ?hidden=${!this.open}>
+        <img class="icon" src=${caretOpenIcon}>
       </slot>
     `;
   }
@@ -1211,8 +1187,7 @@ export class IAComboBox extends LitElement {
         text-align: center;
       }
 
-      .caret-icon > svg,
-      .clear-icon > svg {
+      .icon {
         width: 14px;
         height: 14px;
       }

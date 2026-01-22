@@ -81,3 +81,31 @@ export type IAComboBoxFilterOption =
 export function hasAnyOf<T>(map: Map<T, unknown>, keys: T[]): boolean {
   return keys.some((prop) => map.has(prop));
 }
+
+/**
+ * Tests whether the given `haystack` string has the given `needle` as a subsequence.
+ * Returns `true` if the characters of `needle` appear in order within `haystack`,
+ * regardless of whether they are contiguous. Returns `false` otherwise.
+ *
+ * E.g., `ace` is a subsequence of `archive` (but not a contiguous substring).
+ *
+ * Note: The empty string is a subsequence of any string, including itself.
+ *
+ * @param needle The potential subsequence to check for inside `haystack`.
+ * @param haystack The string to be tested for containing the `needle` subsequence.
+ * @returns Whether `haystack` has `needle` as a subsequence.
+ */
+export function isSubsequence(needle: string, haystack: string): boolean {
+  const needleLen = needle.length;
+  const haystackLen = haystack.length;
+  if (needleLen === 0) return true;
+
+  let needleIdx = 0;
+  let haystackIdx = 0;
+  while (haystackIdx < haystackLen) {
+    if (haystack[haystackIdx] === needle[needleIdx]) needleIdx += 1;
+    if (needleIdx >= needleLen) return true;
+    haystackIdx += 1;
+  }
+  return false;
+}
