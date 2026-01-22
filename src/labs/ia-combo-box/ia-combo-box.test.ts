@@ -26,17 +26,17 @@ describe('IA Combo Box', () => {
 
     test('renders component with label', async () => {
       const el = await fixture<IAComboBox>(html`
-        <ia-combo-box><span>Some label</span></ia-combo-box>
+        <ia-combo-box><span slot="label">Some label</span></ia-combo-box>
       `);
 
       const label = el.shadowRoot?.querySelector('#label');
       expect(label).to.exist;
 
-      const unnamedSlot = label?.querySelector(
-        'slot:not([name])',
+      const labelSlot = label?.querySelector(
+        'slot[name="label"]',
       ) as HTMLSlotElement;
-      expect(unnamedSlot).to.exist;
-      expect(unnamedSlot.assignedElements()[0].textContent).to.equal(
+      expect(labelSlot).to.exist;
+      expect(labelSlot.assignedElements()[0].textContent).to.equal(
         'Some label',
       );
     });
@@ -112,8 +112,9 @@ describe('IA Combo Box', () => {
         ></ia-combo-box>
       `);
 
-      const textInput = el.shadowRoot?.querySelector('#text-input');
-      expect(textInput?.classList.contains('editable')).to.be.false;
+      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      expect(textInput).to.exist;
+      expect(textInput.readOnly).to.be.true;
     });
 
     // TODO ...
@@ -133,8 +134,9 @@ describe('IA Combo Box', () => {
         <ia-combo-box behavior="list" .options=${BASIC_OPTIONS}></ia-combo-box>
       `);
 
-      const textInput = el.shadowRoot?.querySelector('#text-input');
-      expect(textInput?.classList.contains('editable')).to.be.true;
+      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      expect(textInput).to.exist;
+      expect(textInput.readOnly).to.be.false;
     });
 
     // TODO ...
@@ -149,8 +151,9 @@ describe('IA Combo Box', () => {
         ></ia-combo-box>
       `);
 
-      const textInput = el.shadowRoot?.querySelector('#text-input');
-      expect(textInput?.classList.contains('editable')).to.be.true;
+      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      expect(textInput).to.exist;
+      expect(textInput.readOnly).to.be.false;
     });
 
     // TODO ...
