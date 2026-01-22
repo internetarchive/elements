@@ -96,14 +96,16 @@ export function hasAnyOf<T>(map: Map<T, unknown>, keys: T[]): boolean {
  * @returns Whether `haystack` has `needle` as a subsequence.
  */
 export function isSubsequence(needle: string, haystack: string): boolean {
-  const needleLen = needle.length;
-  const haystackLen = haystack.length;
+  const needleChars = [...needle]; // Split out the full code points
+  const haystackChars = [...haystack];
+  const needleLen = needleChars.length;
+  const haystackLen = haystackChars.length;
   if (needleLen === 0) return true;
 
   let needleIdx = 0;
   let haystackIdx = 0;
   while (haystackIdx < haystackLen) {
-    if (haystack[haystackIdx] === needle[needleIdx]) needleIdx += 1;
+    if (haystackChars[haystackIdx] === needleChars[needleIdx]) needleIdx += 1;
     if (needleIdx >= needleLen) return true;
     haystackIdx += 1;
   }
