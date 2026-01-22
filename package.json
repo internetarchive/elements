@@ -24,7 +24,7 @@
     "circular": "wireit",
     "prepare": "wireit",
     "test": "wireit",
-    "ghpages:build": "gh-pages prepare -d ghpages -e $(git branch --show-current)",
+    "ghpages:build": "wireit",
     "ghpages:publish": "wireit",
     "ghpages:prepare": "wireit",
     "ghpages:generate": "wireit"
@@ -114,6 +114,9 @@
       "dependencies": [
         "circular"
       ]
+    },
+    "ghpages:build": {
+      "command": "vite build --config vite.config.ghpages.ts && gh-pages -d ghpages"
     },
     "ghpages:publish": {
       "dependencies": [
