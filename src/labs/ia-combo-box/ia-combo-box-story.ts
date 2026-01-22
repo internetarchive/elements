@@ -28,6 +28,18 @@ const styleInputSettings: StyleInputSettings[] = [
     defaultValue: '5px',
     inputType: 'text',
   },
+  {
+    label: 'Dropdown width',
+    cssVariable: '--combo-box-list-width',
+    defaultValue: '',
+    inputType: 'text',
+  },
+  {
+    label: 'Dropdown max height',
+    cssVariable: '--combo-box-list-max-height',
+    defaultValue: '250px',
+    inputType: 'text',
+  },
 ];
 
 // Option sets
@@ -174,7 +186,7 @@ export class IAComboBoxStory extends LitElement {
           >
             <span slot="label">${this.label}</span>
           </ia-combo-box>
-          <div id="announcer">${this.announcerText}</div>
+          <span id="announcer">${this.announcerText}</span>
         </div>
 
         <form slot="settings">
@@ -378,7 +390,7 @@ export class IAComboBoxStory extends LitElement {
   static get styles(): CSSResultGroup {
     return css`
       #announcer {
-        margin-top: 10px;
+        margin-left: 20px;
       }
     `;
   }
