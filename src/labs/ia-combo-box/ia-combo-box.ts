@@ -1124,6 +1124,11 @@ export class IAComboBox extends LitElement {
 
   static get styles(): CSSResultGroup {
     return css`
+      #container {
+        display: inline-block;
+        width: var(--comboBoxWidth, auto);
+      }
+
       #label {
         display: block;
         width: fit-content;
@@ -1135,6 +1140,7 @@ export class IAComboBox extends LitElement {
         flex-wrap: nowrap;
         background: white;
         border: 1px solid black;
+        width: 100%;
       }
 
       .focused #main-widget-row {

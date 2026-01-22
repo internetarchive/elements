@@ -1,5 +1,6 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { customElement, state, query } from 'lit/decorators.js';
+import { StyleInputSettings } from '@demo/story-template';
 import {
   IAComboBoxBehavior,
   IAComboBoxFilterOption,
@@ -11,6 +12,17 @@ import countries from './200-countries.json';
 
 import '@demo/story-template';
 import './ia-combo-box';
+
+// Styles
+
+const styleInputSettings: StyleInputSettings[] = [
+  {
+    label: 'Width',
+    cssVariable: '--comboBoxWidth',
+    defaultValue: '300px',
+    inputType: 'text',
+  },
+];
 
 // Option sets
 
@@ -137,6 +149,7 @@ export class IAComboBoxStory extends LitElement {
       <story-template
         elementTag="ia-combo-box"
         .exampleUsage=${this.exampleUsage}
+        .styleInputData=${{ settings: styleInputSettings }}
         labs
       >
         <div slot="demo">
