@@ -401,7 +401,7 @@ export class IAComboBox extends LitElement {
         ?disabled=${this.disabled}
         ?required=${this.required}
         @click=${this.handleComboBoxClick}
-        @keydown=${this.handleTextBoxKeyDown}
+        @keydown=${this.handleComboBoxKeyDown}
         @input=${this.handleTextBoxInput}
         @focus=${this.handleFocus}
         @blur=${this.handleBlur}
@@ -434,6 +434,7 @@ export class IAComboBox extends LitElement {
         aria-expanded=${this.open}
         ?disabled=${this.disabled}
         @click=${this.handleComboBoxClick}
+        @keydown=${this.handleComboBoxKeyDown}
         @focus=${this.handleFocus}
         @blur=${this.handleBlur}
       >
@@ -544,7 +545,7 @@ export class IAComboBox extends LitElement {
   /**
    * Handler for `keydown` events on various special keys.
    */
-  private handleTextBoxKeyDown(e: KeyboardEvent): void {
+  private handleComboBoxKeyDown(e: KeyboardEvent): void {
     switch (e.key) {
       case 'Enter':
         this.handleEnterPressed();
@@ -600,13 +601,16 @@ export class IAComboBox extends LitElement {
       return;
     }
 
-    // If an option is highlighted, select it
     if (this.highlightedOption) {
+      // If an option is highlighted, select it
       this.setSelectedOption(this.highlightedOption.id);
-
-      // Close the options list if needed
-      if (!this.stayOpen) this.open = false;
+    } else if (this.behavior === 'freeform') {
+      // Otherwise, in the freeform behavior we just accept the current value regardless
+      this.setValue(this.enteredText);
     }
+
+    // Close the options list if needed
+    if (!this.stayOpen) this.open = false;
   }
 
   /**
