@@ -402,8 +402,8 @@ export class IAComboBox extends LitElement {
         ?disabled=${this.disabled}
         ?required=${this.required}
         @click=${this.handleComboBoxClick}
-        @keydown=${this.handleTextInputKeyDown}
-        @keyup=${this.handleTextInputKeyUp}
+        @keydown=${this.handleTextBoxKeyDown}
+        @input=${this.handleTextBoxInput}
         @focus=${this.handleFocus}
         @blur=${this.handleBlur}
       />
@@ -545,7 +545,7 @@ export class IAComboBox extends LitElement {
   /**
    * Handler for `keydown` events on various special keys.
    */
-  private handleTextInputKeyDown(e: KeyboardEvent): void {
+  private handleTextBoxKeyDown(e: KeyboardEvent): void {
     switch (e.key) {
       case 'Enter':
         this.handleEnterPressed();
@@ -580,13 +580,9 @@ export class IAComboBox extends LitElement {
   }
 
   /**
-   * Handler for `keyup` events in the text input box.
+   * Handler for `input` events in the text input box.
    */
-  private async handleTextInputKeyUp(e: KeyboardEvent): Promise<void> {
-    if (['Enter', 'Escape', 'ArrowUp', 'ArrowDown', 'Tab'].includes(e.key)) {
-      return;
-    }
-
+  private async handleTextBoxInput(): Promise<void> {
     this.enteredText = this.textInput.value;
     this.setFilterText(this.textInput.value);
     this.openOptionsMenu();
