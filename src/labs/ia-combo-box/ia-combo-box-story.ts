@@ -343,11 +343,6 @@ export class IAComboBoxStory extends LitElement {
 
   static get styles(): CSSResultGroup {
     return css`
-      ia-combo-box::part(combo-box) {
-        border: 1px solid #404040;
-        border-radius: 0px;
-      }
-
       #announcer {
         margin-top: 10px;
       }

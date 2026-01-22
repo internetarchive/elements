@@ -851,14 +851,17 @@ export class IAComboBox extends LitElement {
 
   openOptionsMenu(): void {
     this.open = true;
+    this.emitToggleEvent();
   }
 
   closeOptionsMenu(): void {
     this.open = false;
+    this.emitToggleEvent();
   }
 
   toggleOptionsMenu(): void {
     this.open = !this.open;
+    this.emitToggleEvent();
   }
 
   private updateFormValidity(): void {
@@ -877,6 +880,14 @@ export class IAComboBox extends LitElement {
     this.dispatchEvent(
       new CustomEvent<string | null>('change', {
         detail: this.value,
+      }),
+    );
+  }
+
+  private emitToggleEvent(): void {
+    this.dispatchEvent(
+      new CustomEvent<boolean>('toggle', {
+        detail: this.open,
       }),
     );
   }
@@ -904,7 +915,7 @@ export class IAComboBox extends LitElement {
     const optionsListStyles: Record<string, string> = {
       top: `${mainWidgetRect.bottom + scrollY}px`,
       left: `${mainWidgetRect.left + scrollX}px`,
-      width: `${mainWidgetRect.width}px`,
+      width: `var(--comboBoxListWidth, ${mainWidgetRect.width}px)`,
       maxHeight: `min(${usableHeightBelow}px, ${maxHeightVar})`,
     };
 
@@ -1039,7 +1050,7 @@ export class IAComboBox extends LitElement {
   /**
    * The IAComboBoxOption that is currently selected, or null if none is selected.
    */
-  private get selectedOption(): IAComboBoxOption | null {
+  get selectedOption(): IAComboBoxOption | null {
     if (this.value == null) return null;
     return this.getOptionFor(this.value);
   }
@@ -1074,6 +1085,7 @@ export class IAComboBox extends LitElement {
         align-items: stretch;
         flex-wrap: nowrap;
         background: white;
+        border: 1px solid black;
       }
 
       .focused #main-widget-row {
@@ -1086,6 +1098,7 @@ export class IAComboBox extends LitElement {
         background: transparent;
         border: none;
         padding: var(--comboBoxPadding, 5px);
+        width: 100%;
         font-size: inherit;
         outline: none;
       }
