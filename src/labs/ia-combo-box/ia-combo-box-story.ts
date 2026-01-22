@@ -22,6 +22,12 @@ const styleInputSettings: StyleInputSettings[] = [
     defaultValue: '250px',
     inputType: 'text',
   },
+  {
+    label: 'Padding',
+    cssVariable: '--combo-box-padding',
+    defaultValue: '5px',
+    inputType: 'text',
+  },
 ];
 
 // Option sets
