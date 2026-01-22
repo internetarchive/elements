@@ -336,7 +336,7 @@ export class IAComboBoxStory extends LitElement {
         .options=\${[
           { id: 'foo', text: 'Foo Option' },
           { id: 'bar', text: 'Bar Option' },
-          ...
+          // ...
         ]}
         ${bindingsStr}
       >
@@ -408,6 +408,10 @@ export class IAComboBoxStory extends LitElement {
         background-color: rgba(0, 0, 0, 0.02);
       }
 
+      label {
+        display: block;
+      }
+
       select {
         width: calc(100% - 5px);
         padding: 2px 0;
@@ -432,7 +436,7 @@ export class IAComboBoxStory extends LitElement {
         margin-left: 5px;
       }
 
-      button[type="submit"] {
+      button[type='submit'] {
         padding: 6px 8px;
       }
     `;
