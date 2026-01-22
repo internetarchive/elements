@@ -6,10 +6,10 @@ import type { IAComboBox } from './ia-combo-box';
 import './ia-combo-box';
 
 const BASIC_OPTIONS = [
-  { id: 'foo', text: 'Foo Option' },
-  { id: 'bar', text: 'Bar Option' },
-  { id: 'baz', text: 'Baz Option' },
-  { id: 'buzz', text: 'Buzz Option' },
+  { id: 'foo', text: 'Foo' },
+  { id: 'bar', text: 'Bar' },
+  { id: 'baz', text: 'Baz' },
+  { id: 'buzz', text: 'Buzz' },
 ];
 
 describe('IA Combo Box', () => {
@@ -166,9 +166,16 @@ describe('IA Combo Box', () => {
     });
 
     test('"all" filtering preset turns off filtering entirely', async () => {
-      const el = await fixture<IAComboBox>(html`<ia-combo-box .options=${BASIC_OPTIONS} filter="all"></ia-combo-box>`);
-      
-      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      const el = await fixture<IAComboBox>(
+        html`<ia-combo-box
+          .options=${BASIC_OPTIONS}
+          filter="all"
+        ></ia-combo-box>`,
+      );
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
       expect(textInput).to.exist;
 
       textInput.value = 'b';
@@ -181,9 +188,16 @@ describe('IA Combo Box', () => {
     });
 
     test('"prefix" filtering preset works correctly', async () => {
-      const el = await fixture<IAComboBox>(html`<ia-combo-box .options=${BASIC_OPTIONS} filter="prefix"></ia-combo-box>`);
-      
-      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      const el = await fixture<IAComboBox>(
+        html`<ia-combo-box
+          .options=${BASIC_OPTIONS}
+          filter="prefix"
+        ></ia-combo-box>`,
+      );
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
       expect(textInput).to.exist;
 
       textInput.value = 'b';
@@ -199,12 +213,19 @@ describe('IA Combo Box', () => {
     });
 
     test('"suffix" filtering preset works correctly', async () => {
-      const el = await fixture<IAComboBox>(html`<ia-combo-box .options=${BASIC_OPTIONS} filter="suffix"></ia-combo-box>`);
-      
-      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      const el = await fixture<IAComboBox>(
+        html`<ia-combo-box
+          .options=${BASIC_OPTIONS}
+          filter="suffix"
+        ></ia-combo-box>`,
+      );
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
       expect(textInput).to.exist;
 
-      textInput.value = 'b';
+      textInput.value = 'z';
       textInput.dispatchEvent(new InputEvent('input'));
       await el.updateComplete;
 
@@ -216,9 +237,16 @@ describe('IA Combo Box', () => {
     });
 
     test('"substring" filtering preset works correctly', async () => {
-      const el = await fixture<IAComboBox>(html`<ia-combo-box .options=${BASIC_OPTIONS} filter="substring"></ia-combo-box>`);
-      
-      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      const el = await fixture<IAComboBox>(
+        html`<ia-combo-box
+          .options=${BASIC_OPTIONS}
+          filter="substring"
+        ></ia-combo-box>`,
+      );
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
       expect(textInput).to.exist;
 
       textInput.value = 'a';
@@ -233,9 +261,16 @@ describe('IA Combo Box', () => {
     });
 
     test('"subsequence" filtering preset works correctly', async () => {
-      const el = await fixture<IAComboBox>(html`<ia-combo-box .options=${BASIC_OPTIONS} filter="subsequence"></ia-combo-box>`);
-      
-      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      const el = await fixture<IAComboBox>(
+        html`<ia-combo-box
+          .options=${BASIC_OPTIONS}
+          filter="subsequence"
+        ></ia-combo-box>`,
+      );
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
       expect(textInput).to.exist;
 
       textInput.value = 'bz';
@@ -257,8 +292,10 @@ describe('IA Combo Box', () => {
     });
 
     test('shows options in provided order when sort=false', async () => {
-      const el = await fixture<IAComboBox>(html`<ia-combo-box .options=${BASIC_OPTIONS} open></ia-combo-box>`);
-      
+      const el = await fixture<IAComboBox>(
+        html`<ia-combo-box .options=${BASIC_OPTIONS} open></ia-combo-box>`,
+      );
+
       const allOptionElmts = el.shadowRoot?.querySelectorAll('.option');
       expect(allOptionElmts?.length).to.equal(4);
       expect(allOptionElmts?.[0].textContent.trim()).to.equal('Foo');
@@ -268,8 +305,10 @@ describe('IA Combo Box', () => {
     });
 
     test('shows options in lexicographic order when sort=true', async () => {
-      const el = await fixture<IAComboBox>(html`<ia-combo-box .options=${BASIC_OPTIONS} sort open></ia-combo-box>`);
-      
+      const el = await fixture<IAComboBox>(
+        html`<ia-combo-box .options=${BASIC_OPTIONS} sort open></ia-combo-box>`,
+      );
+
       const allOptionElmts = el.shadowRoot?.querySelectorAll('.option');
       expect(allOptionElmts?.length).to.equal(4);
       expect(allOptionElmts?.[0].textContent.trim()).to.equal('Bar');
