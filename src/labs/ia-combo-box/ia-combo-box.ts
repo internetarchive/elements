@@ -16,7 +16,7 @@ import { msg } from '@lit/localize';
 
 import {
   hasAnyOf,
-  type IAComboBoxBehaviorOption,
+  type IAComboBoxBehavior,
   type IAComboBoxFilterFunction,
   type IAComboBoxFilterOption,
   type IAComboBoxFilterPreset,
@@ -67,7 +67,7 @@ const FILTER_PRESETS: Record<IAComboBoxFilterPreset, IAComboBoxFilterFunction> =
     subsequence: isSubsequence,
   };
 
-const DEFAULT_BEHAVIOR: IAComboBoxBehaviorOption = 'list';
+const DEFAULT_BEHAVIOR: IAComboBoxBehavior = 'list';
 const DEFAULT_FILTER_PRESET: IAComboBoxFilterPreset = 'substring';
 
 const STRING_IDENTITY_FN = (str: string): string => str;
@@ -109,8 +109,7 @@ export class IAComboBox extends LitElement {
    *  - `freeform` (allows text entry to filter the dropdown list, and also allows setting
    * custom values not included in the list)
    */
-  @property({ type: String }) behavior: IAComboBoxBehaviorOption =
-    DEFAULT_BEHAVIOR;
+  @property({ type: String }) behavior: IAComboBoxBehavior = DEFAULT_BEHAVIOR;
 
   /**
    * Maximum number of options to include in the autocomplete menu when filtering.

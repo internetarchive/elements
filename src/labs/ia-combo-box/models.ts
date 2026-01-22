@@ -41,7 +41,7 @@ export interface IAComboBoxOption {
  * autocomplete style, etc).
  * @see {@linkcode IAComboBox.behavior}
  */
-export type IAComboBoxBehaviorOption = 'select-only' | 'list' | 'freeform';
+export type IAComboBoxBehavior = 'select-only' | 'list' | 'freeform';
 
 /**
  * Type union of the possible preset options for filtering combo box entries.

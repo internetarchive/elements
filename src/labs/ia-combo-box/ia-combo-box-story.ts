@@ -1,7 +1,7 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { customElement, state, query } from 'lit/decorators.js';
 import {
-  IAComboBoxBehaviorOption,
+  IAComboBoxBehavior,
   IAComboBoxFilterOption,
   IAComboBoxFilterPreset,
   IAComboBoxOption,
@@ -62,7 +62,7 @@ export class IAComboBoxStory extends LitElement {
   private options = COUNTRY_OPTIONS;
 
   @state()
-  private behavior: IAComboBoxBehaviorOption = DEFAULT_BEHAVIOR;
+  private behavior: IAComboBoxBehavior = DEFAULT_BEHAVIOR;
 
   @state()
   private label = DEFAULT_LABEL;
@@ -302,7 +302,7 @@ export class IAComboBoxStory extends LitElement {
     e.preventDefault();
 
     this.updateOptions();
-    this.behavior = this.behaviorSelect.value as IAComboBoxBehaviorOption;
+    this.behavior = this.behaviorSelect.value as IAComboBoxBehavior;
     this.label = this.labelInput.value;
     this.placeholder = this.placeholderInput.value;
     this.maxAutocompleteEntries = Number(this.maxAutocompleteInput.value);
