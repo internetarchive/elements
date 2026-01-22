@@ -367,15 +367,10 @@ export class IAComboBox extends LitElement {
    * options or (if freeform behavior) to enter a custom value.
    */
   private get textInputTemplate(): TemplateResult {
-    const textInputClasses = classMap({
-      editable: this.behavior !== 'select-only',
-    });
-
     return html`
       <input
         type="text"
         id="text-input"
-        class=${textInputClasses}
         .value=${live(this.enteredText)}
         placeholder=${ifDefined(this.placeholder)}
         part="text-input"
@@ -385,6 +380,7 @@ export class IAComboBox extends LitElement {
         aria-controls="options-list"
         aria-expanded=${this.open}
         aria-activedescendant=${ifDefined(this.highlightedOption?.id)}
+        ?readonly=${this.behavior === 'select-only'}
         ?disabled=${this.disabled}
         ?required=${this.required}
         @click=${this.handleComboBoxClick}
@@ -412,7 +408,7 @@ export class IAComboBox extends LitElement {
       >
         <span class="sr-only">${msg('Clear')}</span>
         <slot name="clear-button">
-          <img class="icon" src=${clearIcon}>
+          <img class="icon" src=${clearIcon} alt="">
         </slot>
       </button>
     `;
@@ -425,10 +421,10 @@ export class IAComboBox extends LitElement {
   private get caretTemplate(): TemplateResult {
     return html`
       <slot name="caret-closed" ?hidden=${this.open}>
-        <img class="icon" src=${caretClosedIcon}>
+        <img class="icon" src=${caretClosedIcon} alt="">
       </slot>
       <slot name="caret-open" ?hidden=${!this.open}>
-        <img class="icon" src=${caretOpenIcon}>
+        <img class="icon" src=${caretOpenIcon} alt="">
       </slot>
     `;
   }
@@ -451,6 +447,7 @@ export class IAComboBox extends LitElement {
         @focus=${this.handleFocus}
         @blur=${this.handleBlur}
       >
+        <span class="sr-only">${msg('Toggle options')}</span>
         ${this.caretTemplate}
       </button>
     `;
@@ -465,6 +462,7 @@ export class IAComboBox extends LitElement {
         id="options-list"
         part="options-list"
         role="listbox"
+        tabindex="-1"
         popover
         ?hidden=${!this.open}
         @focus=${this.handleFocus}
@@ -498,6 +496,7 @@ export class IAComboBox extends LitElement {
           id=${opt.id}
           class=${optionClasses}
           part="option"
+          role="option"
           tabindex="-1"
           @pointerenter=${this.handleOptionPointerEnter}
           @pointermove=${this.handleOptionPointerMove}
@@ -581,8 +580,13 @@ export class IAComboBox extends LitElement {
         }
         break;
       case 'Tab':
-        this.textInput.focus();
-        return;
+        this.handleTabPressed();
+        return; // Never cancel the default behavior for Tab
+      case ' ':
+        this.handleSpacePressed();
+        // In the specific case of picking an option in select-only, we skip the defaults
+        if (this.behavior === 'select-only' && this.highlightedOption) break;
+        return; // Otherwise, don't cancel the default behavior
       default:
         // Do nothing and allow propagation otherwise
         return;
@@ -673,6 +677,27 @@ export class IAComboBox extends LitElement {
   }
 
   /**
+   * Handler for when the Tab key is pressed
+   */
+  private handleTabPressed(): void {
+    console.log('Tab pressed')
+    if (this.highlightedOption) {
+      this.setSelectedOption(this.highlightedOption.id);
+      if (!this.stayOpen) this.open = false;
+    }
+  }
+
+  /**
+   * Handler for when the Space key is pressed
+   */
+  private handleSpacePressed(): void {
+    if (this.behavior === 'select-only' && this.highlightedOption) {
+      this.setSelectedOption(this.highlightedOption.id);
+      if (!this.stayOpen) this.open = false;
+    }
+  }
+
+  /**
    * Handler for clicks on the combo box input field or caret button.
    */
   private handleComboBoxClick(): void {
@@ -684,15 +709,14 @@ export class IAComboBox extends LitElement {
    */
   private handleClearButtonClick(): void {
     this.clearSelectedOption();
+    this.textInput.focus();
   }
 
   /**
    * Handler for when any part of the combo box receives focus.
    */
   private handleFocus(): void {
-    if (this.behavior === 'select-only') {
-      this.caretButton.focus();
-    } else {
+    if (this.behavior !== 'select-only') {
       this.textInput.focus();
     }
     this.hasFocus = true;
@@ -931,8 +955,18 @@ export class IAComboBox extends LitElement {
   // HELPERS
   //
 
+  /**
+   * True iff no selection has been made and no text has been entered.
+   */
+  private get isEmpty(): boolean {
+    return !this.selectedOption && !this.enteredText;
+  }
+
+  /**
+   * We only show the clear button when the `clearable` property is set and the combo box is empty.
+   */
   private get shouldShowClearButton(): boolean {
-    return this.clearable && !!this.enteredText;
+    return this.clearable && !this.isEmpty;
   }
 
   /**
@@ -949,12 +983,12 @@ export class IAComboBox extends LitElement {
     const usableHeightBelow = innerHeight - mainWidgetRect.bottom;
 
     // We still want to respect any CSS var specified by the consumer
-    const maxHeightVar = 'var(--comboBoxListMaxHeight, 250px)';
+    const maxHeightVar = 'var(--combo-box-list-max-height, 250px)';
 
     const optionsListStyles: Record<string, string> = {
       top: `${mainWidgetRect.bottom + scrollY}px`,
       left: `${mainWidgetRect.left + scrollX}px`,
-      width: `var(--comboBoxListWidth, ${mainWidgetRect.width}px)`,
+      width: `var(--combo-box-list-width, ${mainWidgetRect.width}px)`,
       maxHeight: `min(${usableHeightBelow}px, ${maxHeightVar})`,
     };
 
@@ -1139,7 +1173,7 @@ export class IAComboBox extends LitElement {
         outline: none;
       }
 
-      #text-input:not(.editable) {
+      #text-input:read-only {
         cursor: pointer;
       }
 
@@ -1153,6 +1187,14 @@ export class IAComboBox extends LitElement {
         padding: var(--combo-box-padding, 5px) 5px;
         outline: none;
         cursor: pointer;
+      }
+
+      #clear-button {
+        margin-right: 5px;
+      }
+
+      #caret-button {
+        padding-right: var(--combo-box-padding, 5px);
       }
 
       #clear-button {
@@ -1193,7 +1235,12 @@ export class IAComboBox extends LitElement {
       }
 
       .option {
-        padding: 5px;
+        padding: 7px 5px;
+        width: 100%;
+        box-sizing: border-box;
+        line-height: 1.1;
+        text-overflow: ellipsis;
+        overflow: hidden;
         cursor: pointer;
       }
 
