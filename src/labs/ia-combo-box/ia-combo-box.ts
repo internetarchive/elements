@@ -214,8 +214,6 @@ export class IAComboBox extends LitElement {
 
   @query('#text-input') private textInput!: HTMLInputElement;
 
-  @query('#caret-button') private caretButton!: HTMLInputElement;
-
   @query('#options-list') private optionsList!: HTMLUListElement;
 
   static formAssociated = true;
@@ -408,7 +406,7 @@ export class IAComboBox extends LitElement {
       >
         <span class="sr-only">${msg('Clear')}</span>
         <slot name="clear-button">
-          <img class="icon" src=${clearIcon} alt="">
+          <img class="icon" src=${clearIcon} alt="" />
         </slot>
       </button>
     `;
@@ -421,10 +419,10 @@ export class IAComboBox extends LitElement {
   private get caretTemplate(): TemplateResult {
     return html`
       <slot name="caret-closed" ?hidden=${this.open}>
-        <img class="icon" src=${caretClosedIcon} alt="">
+        <img class="icon" src=${caretClosedIcon} alt="" />
       </slot>
       <slot name="caret-open" ?hidden=${!this.open}>
-        <img class="icon" src=${caretOpenIcon} alt="">
+        <img class="icon" src=${caretOpenIcon} alt="" />
       </slot>
     `;
   }
@@ -588,7 +586,7 @@ export class IAComboBox extends LitElement {
         if (this.behavior === 'select-only' && this.highlightedOption) break;
         return; // Otherwise, don't cancel the default behavior
       default:
-        // Do nothing and allow propagation otherwise
+        // Do nothing and allow propagation for all other keys
         return;
     }
 
@@ -680,7 +678,6 @@ export class IAComboBox extends LitElement {
    * Handler for when the Tab key is pressed
    */
   private handleTabPressed(): void {
-    console.log('Tab pressed')
     if (this.highlightedOption) {
       this.setSelectedOption(this.highlightedOption.id);
       if (!this.stayOpen) this.open = false;
@@ -717,6 +714,7 @@ export class IAComboBox extends LitElement {
    */
   private handleFocus(): void {
     if (this.behavior !== 'select-only') {
+      // Always keep focus on the text input if it's editable
       this.textInput.focus();
     }
     this.hasFocus = true;
@@ -729,6 +727,10 @@ export class IAComboBox extends LitElement {
   private handleBlur(): void {
     this.hasFocus = false;
     this.losingFocus = true;
+
+    // On the next tick, check whether we've actually lost focus to some other element,
+    // or just had a momentary internal focus switch. If it's the former, we should
+    // close the menu and possibly make a selection (depending on desired behavior).
     setTimeout(() => {
       if (this.losingFocus && !this.shadowRoot?.activeElement) {
         this.losingFocus = false;
@@ -1170,6 +1172,7 @@ export class IAComboBox extends LitElement {
         padding-right: 0;
         width: 100%;
         font-size: inherit;
+        color: inherit;
         outline: none;
       }
 
