@@ -116,16 +116,13 @@
       ]
     },
     "ghpages:build": {
-      "dependencies": [
-        "build"
-      ],
-      "command": "gh-pages -d dist && npm run prepare && vite build --config vite.config.ghpages.ts"
+      "command": "vite build --config vite.config.ghpages.ts && gh-pages -d ghpages"
     },
     "ghpages:publish": {
       "dependencies": [
         "ghpages:prepare"
       ],
-      "command": "gh-pages prepare -d dist -e $(git branch --show-current)"
+      "command": "gh-pages prepare -d ghpages -e $(git branch --show-current)"
     },
     "ghpages:nojekyll": {
       "command": "mkdir -p ghpages && touch ./ghpages/.nojekyll"
