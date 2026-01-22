@@ -962,10 +962,11 @@ export class IAComboBox extends LitElement {
   }
 
   /**
-   * We only show the clear button when the `clearable` property is set and the combo box is empty.
+   * We only show the clear button when the `clearable` property is set
+   * and the combo box is neither empty nor disabled.
    */
   private get shouldShowClearButton(): boolean {
-    return this.clearable && !this.isEmpty;
+    return this.clearable && !this.disabled && !this.isEmpty;
   }
 
   /**
