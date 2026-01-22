@@ -756,7 +756,10 @@ export class IAComboBox extends LitElement {
 
         if (this.behavior === 'list') {
           this.setTextValue(this.selectedOption?.text ?? '');
-        } else if (this.behavior === 'freeform' && (this.enteredText || this.value)) {
+        } else if (
+          this.behavior === 'freeform' &&
+          (this.enteredText || this.value)
+        ) {
           this.setValue(this.enteredText);
         }
       }

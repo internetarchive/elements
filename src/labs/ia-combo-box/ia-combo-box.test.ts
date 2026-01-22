@@ -9,7 +9,7 @@ const BASIC_OPTIONS = [
   { id: 'foo', text: 'Foo Option' },
   { id: 'bar', text: 'Bar Option' },
   { id: 'baz', text: 'Baz Option' },
-  { id: 'boop', text: 'Boop Option' },
+  { id: 'buzz', text: 'Buzz Option' },
 ];
 
 describe('IA Combo Box', () => {
@@ -112,12 +112,12 @@ describe('IA Combo Box', () => {
         ></ia-combo-box>
       `);
 
-      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
       expect(textInput).to.exist;
       expect(textInput.readOnly).to.be.true;
     });
-
-    // TODO ...
   });
 
   describe('List behavior', () => {
@@ -134,12 +134,12 @@ describe('IA Combo Box', () => {
         <ia-combo-box behavior="list" .options=${BASIC_OPTIONS}></ia-combo-box>
       `);
 
-      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
       expect(textInput).to.exist;
       expect(textInput.readOnly).to.be.false;
     });
-
-    // TODO ...
   });
 
   describe('Freeform behavior', () => {
@@ -151,12 +151,12 @@ describe('IA Combo Box', () => {
         ></ia-combo-box>
       `);
 
-      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
       expect(textInput).to.exist;
       expect(textInput.readOnly).to.be.false;
     });
-
-    // TODO ...
   });
 
   describe('Filtering presets', () => {
@@ -165,7 +165,89 @@ describe('IA Combo Box', () => {
       expect(el.filter).to.equal('substring');
     });
 
-    // TODO ...
+    test('"all" filtering preset turns off filtering entirely', async () => {
+      const el = await fixture<IAComboBox>(html`<ia-combo-box .options=${BASIC_OPTIONS} filter="all"></ia-combo-box>`);
+      
+      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.value = 'b';
+      textInput.dispatchEvent(new InputEvent('input'));
+      await el.updateComplete;
+
+      // Options were not filtered
+      const allOptionElmts = el.shadowRoot?.querySelectorAll('.option');
+      expect(allOptionElmts?.length).to.equal(4);
+    });
+
+    test('"prefix" filtering preset works correctly', async () => {
+      const el = await fixture<IAComboBox>(html`<ia-combo-box .options=${BASIC_OPTIONS} filter="prefix"></ia-combo-box>`);
+      
+      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.value = 'b';
+      textInput.dispatchEvent(new InputEvent('input'));
+      await el.updateComplete;
+
+      // Filtered options are 'Bar', 'Baz', and 'Buzz'
+      const allOptionElmts = el.shadowRoot?.querySelectorAll('.option');
+      expect(allOptionElmts?.length).to.equal(3);
+      expect(allOptionElmts?.[0].textContent.trim()).to.equal('Bar');
+      expect(allOptionElmts?.[1].textContent.trim()).to.equal('Baz');
+      expect(allOptionElmts?.[2].textContent.trim()).to.equal('Buzz');
+    });
+
+    test('"suffix" filtering preset works correctly', async () => {
+      const el = await fixture<IAComboBox>(html`<ia-combo-box .options=${BASIC_OPTIONS} filter="suffix"></ia-combo-box>`);
+      
+      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.value = 'b';
+      textInput.dispatchEvent(new InputEvent('input'));
+      await el.updateComplete;
+
+      // Filtered options are 'Baz' and 'Buzz'
+      const allOptionElmts = el.shadowRoot?.querySelectorAll('.option');
+      expect(allOptionElmts?.length).to.equal(2);
+      expect(allOptionElmts?.[0].textContent.trim()).to.equal('Baz');
+      expect(allOptionElmts?.[1].textContent.trim()).to.equal('Buzz');
+    });
+
+    test('"substring" filtering preset works correctly', async () => {
+      const el = await fixture<IAComboBox>(html`<ia-combo-box .options=${BASIC_OPTIONS} filter="substring"></ia-combo-box>`);
+      
+      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.value = 'a';
+      textInput.dispatchEvent(new InputEvent('input'));
+      await el.updateComplete;
+
+      // Filtered options are 'Bar' and 'Baz'
+      const allOptionElmts = el.shadowRoot?.querySelectorAll('.option');
+      expect(allOptionElmts?.length).to.equal(2);
+      expect(allOptionElmts?.[0].textContent.trim()).to.equal('Bar');
+      expect(allOptionElmts?.[1].textContent.trim()).to.equal('Baz');
+    });
+
+    test('"subsequence" filtering preset works correctly', async () => {
+      const el = await fixture<IAComboBox>(html`<ia-combo-box .options=${BASIC_OPTIONS} filter="subsequence"></ia-combo-box>`);
+      
+      const textInput = el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.value = 'bz';
+      textInput.dispatchEvent(new InputEvent('input'));
+      await el.updateComplete;
+
+      // Filtered options are 'Baz' and 'Buzz'
+      const allOptionElmts = el.shadowRoot?.querySelectorAll('.option');
+      expect(allOptionElmts?.length).to.equal(2);
+      expect(allOptionElmts?.[0].textContent.trim()).to.equal('Baz');
+      expect(allOptionElmts?.[1].textContent.trim()).to.equal('Buzz');
+    });
   });
 
   describe('Sorting behavior', () => {
@@ -174,11 +256,31 @@ describe('IA Combo Box', () => {
       expect(el.sort).to.be.false;
     });
 
-    // TODO ...
+    test('shows options in provided order when sort=false', async () => {
+      const el = await fixture<IAComboBox>(html`<ia-combo-box .options=${BASIC_OPTIONS} open></ia-combo-box>`);
+      
+      const allOptionElmts = el.shadowRoot?.querySelectorAll('.option');
+      expect(allOptionElmts?.length).to.equal(4);
+      expect(allOptionElmts?.[0].textContent.trim()).to.equal('Foo');
+      expect(allOptionElmts?.[1].textContent.trim()).to.equal('Bar');
+      expect(allOptionElmts?.[2].textContent.trim()).to.equal('Baz');
+      expect(allOptionElmts?.[3].textContent.trim()).to.equal('Buzz');
+    });
+
+    test('shows options in lexicographic order when sort=true', async () => {
+      const el = await fixture<IAComboBox>(html`<ia-combo-box .options=${BASIC_OPTIONS} sort open></ia-combo-box>`);
+      
+      const allOptionElmts = el.shadowRoot?.querySelectorAll('.option');
+      expect(allOptionElmts?.length).to.equal(4);
+      expect(allOptionElmts?.[0].textContent.trim()).to.equal('Bar');
+      expect(allOptionElmts?.[1].textContent.trim()).to.equal('Baz');
+      expect(allOptionElmts?.[2].textContent.trim()).to.equal('Buzz');
+      expect(allOptionElmts?.[3].textContent.trim()).to.equal('Foo');
+    });
   });
 
-  describe('Keyboard navigation', () => {
-    test('Enter key opens options list', async () => {
+  describe('Common keyboard navigation', () => {
+    test('Enter key opens options list w/o highlight', async () => {
       const el = await fixture<IAComboBox>(html`
         <ia-combo-box .options=${BASIC_OPTIONS}></ia-combo-box>
       `);
@@ -190,11 +292,72 @@ describe('IA Combo Box', () => {
 
       textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
       await el.updateComplete;
-
       expect(el.open).to.be.true;
 
       // No option highlighted
       expect(el.shadowRoot?.querySelector('.highlight')).not.to.exist;
+    });
+
+    test('Alt + Down key combo opens options list w/o highlight', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS}></ia-combo-box>
+      `);
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'ArrowDown', altKey: true }),
+      );
+      await el.updateComplete;
+      expect(el.open).to.be.true;
+
+      // No option highlighted
+      expect(el.shadowRoot?.querySelector('.highlight')).not.to.exist;
+    });
+
+    test('Down arrow opens options list and highlights first option', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS}></ia-combo-box>
+      `);
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'ArrowDown' }),
+      );
+      await el.updateComplete;
+      expect(el.open).to.be.true;
+
+      // Only the first option is highlighted
+      const firstOption = el.shadowRoot?.querySelector('.option');
+      expect(firstOption?.classList.contains('highlight')).to.be.true;
+      expect(el.shadowRoot?.querySelectorAll('.highlight').length).to.equal(1);
+    });
+
+    test('Up arrow opens options list and highlights last option', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS}></ia-combo-box>
+      `);
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+      await el.updateComplete;
+      expect(el.open).to.be.true;
+
+      // Only the last option is highlighted
+      const lastOption = el.shadowRoot?.querySelector('.option:last-of-type');
+      expect(lastOption?.classList.contains('highlight')).to.be.true;
+      expect(el.shadowRoot?.querySelectorAll('.highlight').length).to.equal(1);
     });
 
     test('Escape key closes options list', async () => {
@@ -209,10 +372,24 @@ describe('IA Combo Box', () => {
 
       textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
       await el.updateComplete;
-
       expect(el.open).to.be.false;
     });
 
-    // TODO ...
+    test('Alt + Up key combo closes options list', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS} open></ia-combo-box>
+      `);
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'ArrowUp', altKey: true }),
+      );
+      await el.updateComplete;
+      expect(el.open).to.be.false;
+    });
   });
 });
