@@ -379,10 +379,14 @@ export class IAComboBox extends LitElement {
   /**
    * Template for the main label for the combo box.
    *
-   * Uses the contents of the default (unnamed) slot as the label text.
+   * Uses the contents of the `label` named slot as the label text.
    */
   private get labelTemplate(): TemplateResult {
-    return html`<label id="label" for="text-input"><slot></slot></label>`;
+    return html`
+      <label id="label" for="text-input">
+        <slot name="label"></slot>
+      </label>
+    `;
   }
 
   /**

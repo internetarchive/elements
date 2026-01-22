@@ -172,7 +172,7 @@ export class IAComboBoxStory extends LitElement {
             ?disabled=${this.disabled}
             @change=${this.handleComboBoxChange}
           >
-            ${this.label}
+            <span slot="label">${this.label}</span>
           </ia-combo-box>
           <div id="announcer">${this.announcerText}</div>
         </div>
@@ -320,7 +320,9 @@ export class IAComboBoxStory extends LitElement {
           ...
         ]}
         ${bindingsStr}
-      >${this.label}</ia-combo-box>
+      >
+        <span slot="label">${this.label}</span>
+      </ia-combo-box>
     `
       .replace(/\n\s*\n/g, '\n')
       .replace(/\n {6}/g, '\n');
