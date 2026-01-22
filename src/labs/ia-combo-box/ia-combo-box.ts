@@ -755,7 +755,7 @@ export class IAComboBox extends LitElement {
         this.closeOptionsMenu();
 
         if (this.behavior === 'list') {
-          this.setTextValue(this.selectedOption?.text ?? '');
+          this.setTextValue(this.selectedOption?.text ?? '', false);
         } else if (
           this.behavior === 'freeform' &&
           (this.enteredText || this.value)
@@ -870,7 +870,7 @@ export class IAComboBox extends LitElement {
     const prevValue = this.value;
     this.value = option.id;
     this.internals.setFormValue(this.value);
-    this.setTextValue(option.text);
+    this.setTextValue(option.text, false);
     this.setFilterText('');
     if (this.value !== prevValue) this.emitChangeEvent();
 
@@ -915,11 +915,14 @@ export class IAComboBox extends LitElement {
 
   /**
    * Changes the value of the text input box, and updates the filter accordingly.
+   *
+   * @param setFilter Whether to also update the filter text against which options are
+   * matched. Defaults to `true`.
    */
-  private setTextValue(value: string): void {
+  private setTextValue(value: string, setFilter = true): void {
     this.textInput.value = value;
     this.enteredText = value;
-    this.setFilterText(value);
+    if (setFilter) this.setFilterText(value);
   }
 
   /**
