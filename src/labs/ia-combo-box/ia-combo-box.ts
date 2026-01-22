@@ -1265,13 +1265,13 @@ export class IAComboBox extends LitElement {
       }
 
       .caret-icon {
-        width: 14px;
-        height: 14px;
+        width: var(--combo-box-caret-icon-size, 14px);
+        height: var(--combo-box-caret-icon-size, 14px);
       }
 
       .clear-icon {
-        width: 16px;
-        height: 16px;
+        width: var(--combo-box-clear-icon-size, 16px);
+        height: var(--combo-box-clear-icon-size, 16px);
       }
 
       .option {
