@@ -301,7 +301,7 @@ export class IAComboBoxStory extends LitElement {
   private applySettings(e: Event): void {
     e.preventDefault();
 
-    this.applyOptions();
+    this.updateOptions();
     this.behavior = this.behaviorSelect.value as IAComboBoxBehaviorOption;
     this.label = this.labelInput.value;
     this.placeholder = this.placeholderInput.value;
@@ -317,7 +317,7 @@ export class IAComboBoxStory extends LitElement {
    * Updates which options are shown, depending on the option set chosen and
    * whether custom content should be included.
    */
-  private applyOptions(): void {
+  private updateOptions(): void {
     switch (this.optionSetSelect.value) {
       case 'colors':
         this.options = this.customContentCheck.checked

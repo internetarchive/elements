@@ -152,7 +152,8 @@ export class IAComboBox extends LitElement {
   caseSensitive = false;
 
   /**
-   * Whether the filtered options should be sorted lexicographically before display.
+   * Whether the filtered options should be listed in lexicographically-sorted order.
+   * Default is `false`, displaying them in the same order as the provided options array.
    */
   @property({ type: Boolean, reflect: true }) sort = false;
 
@@ -746,7 +747,8 @@ export class IAComboBox extends LitElement {
   }
 
   /**
-   * Highlights the given option and scrolls it into view if necessary
+   * Highlights the given option and scrolls it into view if necessary.
+   * If `null` is provided, any current highlight will be cleared.
    */
   private async setHighlightedOption(
     option: IAComboBoxOption | null,
