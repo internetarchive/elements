@@ -532,7 +532,7 @@ export class IAComboBox extends LitElement {
    * Handler for when the pointer device is moved within an option in the dropdown.
    */
   private handleOptionPointerMove(e: PointerEvent): void {
-    const target = e.target as HTMLLIElement;
+    const target = e.currentTarget as HTMLLIElement;
     const option = this.getOptionFor(target.id);
     if (option) this.setHighlightedOption(option);
   }
@@ -541,7 +541,7 @@ export class IAComboBox extends LitElement {
    * Handler for when the user clicks on an option in the dropdown.
    */
   private handleOptionClick(e: PointerEvent): void {
-    const target = e.target as HTMLLIElement;
+    const target = e.currentTarget as HTMLLIElement;
     const option = this.getOptionFor(target.id);
     if (option) {
       this.setSelectedOption(option.id);
