@@ -18,8 +18,8 @@ import './ia-combo-box';
 const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Width',
-    cssVariable: '--comboBoxWidth',
-    defaultValue: '300px',
+    cssVariable: '--combo-box-width',
+    defaultValue: '250px',
     inputType: 'text',
   },
 ];

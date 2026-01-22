@@ -1126,7 +1126,7 @@ export class IAComboBox extends LitElement {
     return css`
       #container {
         display: inline-block;
-        width: var(--comboBoxWidth, auto);
+        width: var(--combo-box-width, auto);
       }
 
       #label {
@@ -1152,7 +1152,7 @@ export class IAComboBox extends LitElement {
         appearance: none;
         background: transparent;
         border: none;
-        padding: var(--comboBoxPadding, 5px);
+        padding: var(--combo-box-padding, 5px);
         padding-right: 0;
         width: 100%;
         font-size: inherit;
@@ -1170,7 +1170,7 @@ export class IAComboBox extends LitElement {
         appearance: none;
         background: transparent;
         border: none;
-        padding: var(--comboBoxPadding, 5px);
+        padding: var(--combo-box-padding, 5px) 5px;
         outline: none;
         cursor: pointer;
       }
