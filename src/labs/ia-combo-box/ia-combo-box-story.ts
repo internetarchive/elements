@@ -138,7 +138,7 @@ export class IAComboBoxStory extends LitElement {
             .options=${this.options}
             .behavior=${this.behavior}
             .placeholder=${this.placeholder}
-            .max-autocomplete-entries=${this.maxAutocompleteEntries}
+            .maxAutocompleteEntries=${this.maxAutocompleteEntries}
             .filter=${this.filterFn}
             ?case-sensitive=${this.caseSensitive}
             ?sort=${this.shouldSort}
