@@ -262,6 +262,13 @@ export class IAComboBox extends LitElement {
   private optionFilteringValues: Map<IAComboBoxOption, string> = new Map();
 
   /**
+   * A cache of the current set of options that is pre-sorted if the component's
+   * `sort` flag is set, or as provided otherwise. Just ensures we don't have to
+   * sort all the options again every time we filter them.
+   */
+  private optionsRespectingSortFlag: IAComboBoxOption[] = [];
+
+  /**
    * A cache of the current set of filtered options, so that we don't have to
    * recalculate it unnecessarily whenever the component is opened/closed/etc.
    */
@@ -301,6 +308,11 @@ export class IAComboBox extends LitElement {
     if (changed.has('options')) {
       // Need to update the cached mapping of IDs to options
       this.rebuildOptionIDMap();
+    }
+
+    if (changed.has('options') || changed.has('sort')) {
+      // Sort the options upfront if needed
+      this.rebuildSortedOptions();
     }
 
     if (
@@ -944,6 +956,22 @@ export class IAComboBox extends LitElement {
   }
 
   /**
+   * Applies any required sort to the options and caches the result to be used
+   * at filter/display time.
+   */
+  private rebuildSortedOptions(): void {
+    if (this.sort) {
+      this.optionsRespectingSortFlag = this.options.sort((a, b) => {
+        const aValue = this.optionFilteringValues.get(a) as string;
+        const bValue = this.optionFilteringValues.get(b) as string;
+        return aValue.localeCompare(bValue);
+      });
+    } else {
+      this.optionsRespectingSortFlag = this.options;
+    }
+  }
+
+  /**
    * Clears any previously-cached option filtering values, and rebuilds the
    * map based on the current component properties.
    */
@@ -971,7 +999,7 @@ export class IAComboBox extends LitElement {
         ? FILTER_PRESETS[resolvedFilterOption]
         : resolvedFilterOption;
 
-    const filtered = this.options
+    const filtered = this.optionsRespectingSortFlag
       .filter((opt) => {
         const optionFilteringValue = this.optionFilteringValues.get(opt);
         if (!optionFilteringValue) return false;
@@ -979,14 +1007,6 @@ export class IAComboBox extends LitElement {
         return filterFn(this.filterText, optionFilteringValue, opt);
       })
       .slice(0, this.maxAutocompleteEntries);
-
-    if (this.sort) {
-      filtered.sort((a, b) => {
-        const aValue = this.optionFilteringValues.get(a) as string;
-        const bValue = this.optionFilteringValues.get(b) as string;
-        return aValue.localeCompare(bValue);
-      });
-    }
 
     this.filteredOptions = filtered;
   }
