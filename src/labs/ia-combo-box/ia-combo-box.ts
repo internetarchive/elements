@@ -469,8 +469,8 @@ export class IAComboBox extends LitElement {
    */
   private get optionTemplates(): TemplateResult[] {
     // If there are no options matching the filter, just show a message saying as much.
-    if (this.filteredOptions.length === 0) {
-      return [this.noOptionsMessageTemplate];
+    if (this.filteredOptions.length === 0 && this.maxAutocompleteEntries > 0) {
+      return [this.emptyOptionsTemplate];
     }
 
     // Otherwise build a list item for each filtered option
@@ -500,9 +500,14 @@ export class IAComboBox extends LitElement {
 
   /**
    * Info message shown in the listbox when no options match the entered text.
+   * Renders within an `empty-options` named slot so that its content can be customized.
    */
-  private get noOptionsMessageTemplate(): TemplateResult {
-    return html`<li id="no-options-msg">${msg('No matching options')}</li>`;
+  private get emptyOptionsTemplate(): TemplateResult {
+    return html`
+      <li id="empty-options" part="empty-options">
+        <slot name="empty-options">${msg('No matching options')}</slot>
+      </li>
+    `;
   }
 
   //
@@ -1118,7 +1123,7 @@ export class IAComboBox extends LitElement {
         opacity: 1;
       }
 
-      #no-options-msg {
+      #empty-options {
         padding: 5px;
         color: #606060;
         font-style: italic;
