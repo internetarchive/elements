@@ -86,6 +86,9 @@ export class IAComboBoxStory extends LitElement {
   private wrapArrowKeys = true;
 
   @state()
+  private clearable = true;
+
+  @state()
   private disabled = false;
 
   @state()
@@ -120,6 +123,9 @@ export class IAComboBoxStory extends LitElement {
   @query('#settings__wrap')
   private wrapArrowKeysCheck!: HTMLInputElement;
 
+  @query('#settings__clearable')
+  private clearableCheck!: HTMLInputElement;
+
   @query('#settings__disabled')
   private disabledCheck!: HTMLInputElement;
 
@@ -143,6 +149,7 @@ export class IAComboBoxStory extends LitElement {
             ?case-sensitive=${this.caseSensitive}
             ?sort=${this.shouldSort}
             ?wrap-arrow-keys=${this.wrapArrowKeys}
+            ?clearable=${this.clearable}
             ?disabled=${this.disabled}
             @change=${this.handleComboBoxChange}
           >
@@ -239,6 +246,10 @@ export class IAComboBoxStory extends LitElement {
               <td><input type="checkbox" checked id="settings__wrap" /></td>
             </tr>
             <tr>
+              <td><label for="settings__clearable">Show clear button?</label></td>
+              <td><input type="checkbox" checked id="settings__clearable" /></td>
+            </tr>
+            <tr>
               <td><label for="settings__disabled">Disabled?</label></td>
               <td><input type="checkbox" id="settings__disabled" /></td>
             </tr>
@@ -270,6 +281,7 @@ export class IAComboBoxStory extends LitElement {
       'case-sensitive': this.caseSensitive,
       sort: this.shouldSort,
       'wrap-arrow-keys': this.wrapArrowKeys,
+      clearable: this.clearable,
       disabled: this.disabled,
     };
 
@@ -310,6 +322,7 @@ export class IAComboBoxStory extends LitElement {
     this.caseSensitive = this.caseSensitiveCheck.checked;
     this.shouldSort = this.sortCheck.checked;
     this.wrapArrowKeys = this.wrapArrowKeysCheck.checked;
+    this.clearable = this.clearableCheck.checked;
     this.disabled = this.disabledCheck.checked;
   }
 

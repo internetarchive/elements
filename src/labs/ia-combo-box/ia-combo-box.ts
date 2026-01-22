@@ -23,8 +23,9 @@ import {
   type IAComboBoxOption,
 } from './models';
 
-import caretClosed from './caret-closed';
-import caretOpen from './caret-open';
+import caretClosedIcon from './caret-closed-icon';
+import caretOpenIcon from './caret-open-icon';
+import clearIcon from './clear-icon';
 
 /**
  * Tests whether the given `haystack` string has the given `needle` as a subsequence.
@@ -151,7 +152,8 @@ export class IAComboBox extends LitElement {
   caseSensitive = false;
 
   /**
-   * Whether the filtered options should be listed in lexicographically-sorted order.
+   * Whether the filtered options should be listed in lexicographically-sorted order,
+   * respecting the current `caseSensitive` setting.
    * Default is `false`, displaying them in the same order as the provided options array.
    */
   @property({ type: Boolean, reflect: true }) sort = false;
@@ -178,6 +180,12 @@ export class IAComboBox extends LitElement {
    */
   @property({ type: Boolean, reflect: true, attribute: 'stay-open' })
   stayOpen = false;
+
+  /**
+   * Whether the combo box shows a clear button when a value is selected.
+   * Default is `false`.
+   */
+  @property({ type: Boolean, reflect: true }) clearable = false;
 
   /**
    * Whether the combo box's option menu is currently expanded. Default is `false`.
@@ -291,7 +299,9 @@ export class IAComboBox extends LitElement {
           class=${classMap({ disabled: this.disabled })}
           part="combo-box"
         >
-          ${this.textInputTemplate} ${this.caretButtonTemplate}
+          ${this.textInputTemplate}
+          ${this.clearable ? this.clearButtonTemplate : nothing}
+          ${this.caretButtonTemplate}
         </div>
         ${this.optionsListTemplate}
       </div>
@@ -410,13 +420,36 @@ export class IAComboBox extends LitElement {
   }
 
   /**
+   * Template for the clear button that is shown when the `clearable` property
+   * is true.
+   */
+  private get clearButtonTemplate(): TemplateResult {
+    return html`
+      <button
+        type="button"
+        id="clear-button"
+        class=${classMap({ visible: this.shouldShowClearButton })}
+        part="clear-button"
+        @click=${this.handleClearButtonClick}
+      >
+        <span class="sr-only">${msg('Clear')}</span>
+        <slot name="clear-button" class="clear-icon">${clearIcon}</slot>
+      </button>
+    `;
+  }
+
+  /**
    * Template for the caret open/closed icons to show beside the text input.
    * The icons are wrapped in named slots to allow consumers to override them.
    */
   private get caretTemplate(): TemplateResult {
     return html`
-      <slot name="caret-closed" ?hidden=${this.open}> ${caretClosed} </slot>
-      <slot name="caret-open" ?hidden=${!this.open}> ${caretOpen} </slot>
+      <slot name="caret-closed" class="caret-icon" ?hidden=${this.open}>
+        ${caretClosedIcon}
+      </slot>
+      <slot name="caret-open" class="caret-icon" ?hidden=${!this.open}>
+        ${caretOpenIcon}
+      </slot>
     `;
   }
 
@@ -667,6 +700,13 @@ export class IAComboBox extends LitElement {
   }
 
   /**
+   * Handler for when the clear button is clicked.
+   */
+  private handleClearButtonClick(): void {
+    this.clearSelectedOption();
+  }
+
+  /**
    * Handler for when any part of the combo box receives focus.
    */
   private handleFocus(): void {
@@ -689,7 +729,12 @@ export class IAComboBox extends LitElement {
       if (this.losingFocus && !this.shadowRoot?.activeElement) {
         this.losingFocus = false;
         this.closeOptionsMenu();
-        if (this.behavior === 'freeform') this.setValue(this.enteredText);
+
+        if (this.behavior === 'list') {
+          if (this.selectedOption) this.setTextValue(this.selectedOption.text);
+        } else if (this.behavior === 'freeform') {
+          this.setValue(this.enteredText);
+        }
       }
     }, 0);
   }
@@ -849,6 +894,16 @@ export class IAComboBox extends LitElement {
     this.setFilterText(value);
   }
 
+  /**
+   * Sets the current filter text based on the provided string. The resulting filter
+   * text might not exactly match the provided value, depending on the current case
+   * sensitivity.
+   */
+  private setFilterText(baseFilterText: string): void {
+    const { caseTransform } = this;
+    this.filterText = caseTransform(baseFilterText);
+  }
+
   openOptionsMenu(): void {
     this.open = true;
     this.emitToggleEvent();
@@ -896,6 +951,10 @@ export class IAComboBox extends LitElement {
   // HELPERS
   //
 
+  private get shouldShowClearButton(): boolean {
+    return this.clearable && !!this.enteredText;
+  }
+
   /**
    * Sets the size and position of the options menu to match the size and position of
    * the combo box widget. Prefers to position below the main widget, but will flip
@@ -940,16 +999,6 @@ export class IAComboBox extends LitElement {
    */
   private get caseTransform(): (text: string) => string {
     return this.caseSensitive ? STRING_IDENTITY_FN : STRING_LOWER_CASE_FN;
-  }
-
-  /**
-   * Sets the current filter text based on the provided string. The resulting filter
-   * text might not exactly match the provided value, depending on the current case
-   * sensitivity.
-   */
-  private setFilterText(baseFilterText: string): void {
-    const { caseTransform } = this;
-    this.filterText = caseTransform(baseFilterText);
   }
 
   /**
@@ -1098,6 +1147,7 @@ export class IAComboBox extends LitElement {
         background: transparent;
         border: none;
         padding: var(--comboBoxPadding, 5px);
+        padding-right: 0;
         width: 100%;
         font-size: inherit;
         outline: none;
@@ -1107,6 +1157,7 @@ export class IAComboBox extends LitElement {
         cursor: pointer;
       }
 
+      #clear-button,
       #caret-button {
         display: inline-flex;
         align-items: center;
@@ -1116,6 +1167,14 @@ export class IAComboBox extends LitElement {
         padding: var(--comboBoxPadding, 5px);
         outline: none;
         cursor: pointer;
+      }
+
+      #clear-button {
+        visibility: hidden;
+      }
+
+      #clear-button.visible {
+        visibility: visible;
       }
 
       #options-list {
@@ -1142,7 +1201,8 @@ export class IAComboBox extends LitElement {
         text-align: center;
       }
 
-      .caret {
+      .caret-icon > svg,
+      .clear-icon > svg {
         width: 14px;
         height: 14px;
       }
