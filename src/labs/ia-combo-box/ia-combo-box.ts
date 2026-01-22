@@ -868,6 +868,7 @@ export class IAComboBox extends LitElement {
     this.value = option.id;
     this.internals.setFormValue(this.value);
     this.setTextValue(option.text);
+    this.setFilterText('');
     if (this.value !== prevValue) this.emitChangeEvent();
 
     // Invoke the option's select callback if defined
