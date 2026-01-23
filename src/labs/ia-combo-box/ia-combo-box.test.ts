@@ -283,6 +283,40 @@ describe('IA Combo Box', () => {
       expect(allOptionElmts?.[0].textContent.trim()).to.equal('Baz');
       expect(allOptionElmts?.[1].textContent.trim()).to.equal('Buzz');
     });
+
+    test('custom filtering function works correctly', async () => {
+      const el = await fixture<IAComboBox>(
+        html`<ia-combo-box .options=${BASIC_OPTIONS}></ia-combo-box>`,
+      );
+
+      // Weird custom filter that only includes options if they contain the
+      // filter text _doubled_. E.g., a filter of 'a' only includes options
+      // containing 'aa'.
+      el.filter = (filterText, optionText) =>
+        optionText.includes(filterText + filterText);
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.value = 'a';
+      textInput.dispatchEvent(new InputEvent('input'));
+      await el.updateComplete;
+
+      // No matches; none of the options contain 'aa'
+      let allOptionElmts = el.shadowRoot?.querySelectorAll('.option');
+      expect(allOptionElmts?.length).to.equal(0);
+
+      textInput.value = 'z';
+      textInput.dispatchEvent(new InputEvent('input'));
+      await el.updateComplete;
+
+      // Matches the double z in Buzz, but not the single z in Baz
+      allOptionElmts = el.shadowRoot?.querySelectorAll('.option');
+      expect(allOptionElmts?.length).to.equal(1);
+      expect(allOptionElmts?.[0].textContent.trim()).to.equal('Buzz');
+    });
   });
 
   describe('Sorting behavior', () => {
