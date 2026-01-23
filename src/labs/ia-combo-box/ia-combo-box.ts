@@ -565,7 +565,7 @@ export class IAComboBox extends LitElement {
     const option = this.getOptionFor(target.id);
     if (option) {
       this.setSelectedOption(option.id);
-      this.closeOptionsMenu();
+      if (!this.stayOpen) this.closeOptionsMenu();
     }
   }
 
