@@ -328,6 +328,13 @@ export class IAComboBox extends LitElement {
       this.handleValueChanged();
     }
 
+    if (changed.has('options')) {
+      // May need to clear the value if it no longer corresponds to an option
+      if (this.behavior !== 'freeform' && !this.selectedOption) {
+        this.clearSelectedOption();
+      }
+    }
+
     if (changed.has('open')) {
       if (this.open) {
         this.positionOptionsMenu();
