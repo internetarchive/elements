@@ -1208,14 +1208,20 @@ export class IAComboBox extends LitElement {
         width: 100%;
       }
 
-      #main-widget-row:not(.focused):hover,
-      #main-widget-row:not(.focused):active {
+      #main-widget-row:not(.focused, .disabled):hover,
+      #main-widget-row:not(.focused, .disabled):active {
         background: #fafafa;
       }
 
       #main-widget-row.focused {
         outline: black auto 1px;
         outline-offset: 3px;
+      }
+
+      #main-widget-row.disabled {
+        background: #f4f4f4;
+        border-color: #a0a0a0;
+        color: #404040;
       }
 
       #text-input {
