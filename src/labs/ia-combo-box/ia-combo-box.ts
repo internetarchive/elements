@@ -308,10 +308,6 @@ export class IAComboBox extends LitElement {
       this.rebuildFilteredOptions();
     }
 
-    if (changed.has('value')) {
-      this.handleValueChanged();
-    }
-
     if (changed.has('open')) {
       if (this.open) {
         // Highlight selection on open, if possible
@@ -328,6 +324,10 @@ export class IAComboBox extends LitElement {
   }
 
   updated(changed: PropertyValues): void {
+    if (changed.has('value')) {
+      this.handleValueChanged();
+    }
+
     if (changed.has('open')) {
       if (this.open) {
         this.positionOptionsMenu();
@@ -770,9 +770,32 @@ export class IAComboBox extends LitElement {
    * Handler for when the `value` of this component is changed externally
    */
   private handleValueChanged(): void {
-    if (this.behavior !== 'freeform' && this.value !== null) {
-      // The value must correspond to a valid option or null
-      if (!this.getOptionFor(this.value)) this.clearSelectedOption();
+    // Setting a null value always clears the component
+    if (this.value == null) {
+      if (this.enteredText) this.setTextValue('', false);
+      return;
+    }
+
+    const option = this.getOptionFor(this.value);
+
+    if (this.behavior === 'freeform') {
+      const newText = option?.text ?? this.value;
+      if (newText !== this.enteredText) {
+        this.setTextValue(newText);
+      }
+      return;
+    }
+
+    // In non-freeform modes, the value must correspond to a predefined option.
+    // If it doesn't, just clear the component.
+    if (!option) {
+      this.clearSelectedOption();
+      return;
+    }
+
+    if (this.enteredText !== option.text) {
+      this.setTextValue(option.text, false);
+      this.setFilterText('');
     }
   }
 
