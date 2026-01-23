@@ -214,7 +214,10 @@ export class IAComboBoxStory extends LitElement {
             <tr>
               <td><label for="settings__behavior">Behavior</label></td>
               <td>
-                <select id="settings__behavior">
+                <select
+                  id="settings__behavior"
+                  @change=${() => this.requestUpdate()}
+                >
                   <option value="select-only">Select Only</option>
                   <option value="list" selected>List</option>
                   <option value="freeform">Freeform</option>
@@ -259,7 +262,7 @@ export class IAComboBoxStory extends LitElement {
               <td>
                 <select
                   id="settings__filter-fn"
-                  ?disabled=${this.behavior === 'select-only'}
+                  ?disabled=${this.behaviorSelect?.value === 'select-only'}
                 >
                   <option value="all">All</option>
                   <option value="prefix">Prefix</option>
@@ -275,7 +278,13 @@ export class IAComboBoxStory extends LitElement {
                   Case sensitive filtering
                 </label>
               </td>
-              <td><input type="checkbox" id="settings__case-sensitive" /></td>
+              <td>
+                <input
+                  type="checkbox"
+                  id="settings__case-sensitive"
+                  ?disabled=${this.behaviorSelect?.value === 'select-only'}
+                />
+              </td>
             </tr>
             <tr>
               <td><label for="settings__sort">Sort items</label></td>
