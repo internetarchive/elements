@@ -610,12 +610,10 @@ export class IAComboBox extends LitElement {
         this.handleTabPressed();
         return; // Never cancel the default behavior for Tab
       case ' ':
-        this.handleSpacePressed();
-        // In the specific case of picking an option in select-only, we skip the defaults
-        if (this.behavior === 'select-only' && this.highlightedOption) break;
-        return; // Otherwise, don't cancel the default behavior
+        this.handleSpacePressed(e);
+        return; // Let the Space handler decide whether to cancel defaults/propagation
       default:
-        // Do nothing and allow propagation for all other keys
+        // Do nothing and leave defaults/propagation in place for all other keys
         return;
     }
 
@@ -714,12 +712,19 @@ export class IAComboBox extends LitElement {
   }
 
   /**
-   * Handler for when the Space key is pressed
+   * Handler for when the Space key is handleTabPressed
    */
-  private handleSpacePressed(): void {
-    if (this.behavior === 'select-only' && this.highlightedOption) {
-      this.setSelectedOption(this.highlightedOption.id);
-      if (!this.stayOpen) this.open = false;
+  private handleSpacePressed(e: KeyboardEvent): void {
+    if (this.behavior === 'select-only') {
+      if (!this.open) {
+        this.openOptionsMenu();
+      } else if (this.highlightedOption) {
+        this.setSelectedOption(this.highlightedOption.id);
+        if (!this.stayOpen) this.open = false;
+      }
+      
+      e.stopPropagation();
+      e.preventDefault();
     }
   }
 
