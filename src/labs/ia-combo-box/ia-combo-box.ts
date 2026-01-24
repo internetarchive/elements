@@ -1102,7 +1102,7 @@ export class IAComboBox extends LitElement {
    */
   private rebuildSortedOptions(): void {
     if (this.sort) {
-      this.optionsRespectingSortFlag = this.options.sort((a, b) => {
+      this.optionsRespectingSortFlag = [...this.options].sort((a, b) => {
         const aValue = this.optionFilteringValues.get(a) as string;
         const bValue = this.optionFilteringValues.get(b) as string;
         return aValue.localeCompare(bValue);
