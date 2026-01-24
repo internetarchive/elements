@@ -220,7 +220,7 @@ export class IAComboBox extends LitElement {
 
   static shadowRootOptions: ShadowRootInit = {
     ...LitElement.shadowRootOptions,
-    delegatesFocus: true
+    delegatesFocus: true,
   };
 
   private internals: ElementInternals;
@@ -722,7 +722,7 @@ export class IAComboBox extends LitElement {
         this.setSelectedOption(this.highlightedOption.id);
         if (!this.stayOpen) this.open = false;
       }
-      
+
       e.stopPropagation();
       e.preventDefault();
     }
@@ -941,7 +941,7 @@ export class IAComboBox extends LitElement {
    *
    * @see {@linkcode IAComboBox.setSelectedOption}
    */
-  setValue(value: string): void {
+  private setValue(value: string): void {
     if (this.behavior === 'freeform') {
       const prevValue = this.value;
       this.value = value;

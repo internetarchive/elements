@@ -161,6 +161,34 @@ describe('IA Combo Box', () => {
       expect(highlightedOption.textContent.trim()).to.equal('Baz');
     });
 
+    test('clears the selection & text when a null value is set', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS} value="foo"></ia-combo-box>
+      `);
+
+      el.value = null;
+      await el.updateComplete;
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+      expect(textInput.value).to.equal('');
+      expect(el.value).to.be.null;
+      expect(el.selectedOption).to.be.null;
+    });
+
+    test('throws a RangeError if trying to set selected option to something invalid', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS}></ia-combo-box>
+      `);
+
+      expect(() => el.setSelectedOption('invalid')).to.throw(
+        RangeError,
+        'Unknown option ID',
+      );
+    });
+
     test('disables widget elements when disabled attr is present', async () => {
       const el = await fixture<IAComboBox>(html`
         <ia-combo-box .options=${BASIC_OPTIONS} disabled></ia-combo-box>
@@ -194,6 +222,87 @@ describe('IA Combo Box', () => {
       ) as HTMLInputElement;
       expect(textInput).to.exist;
       expect(textInput.readOnly).to.be.true;
+    });
+
+    test('Space key opens options list w/o highlight if closed', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box
+          .options=${BASIC_OPTIONS}
+          behavior="select-only"
+        ></ia-combo-box>
+      `);
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      await el.updateComplete;
+      expect(el.open).to.be.true;
+
+      // No option highlighted
+      expect(el.shadowRoot?.querySelector('.highlight')).not.to.exist;
+    });
+
+    test('Space key selects highlighted option if list is open', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box
+          .options=${BASIC_OPTIONS}
+          behavior="select-only"
+          open
+        ></ia-combo-box>
+      `);
+
+      // Highlight the last option
+      const lastOption = el.shadowRoot?.querySelector(
+        '.option:last-of-type',
+      ) as HTMLLIElement;
+      expect(lastOption).to.exist;
+      lastOption.dispatchEvent(new PointerEvent('pointerenter'));
+      await el.updateComplete;
+      expect(lastOption.classList.contains('highlight')).to.be.true;
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
+      await el.updateComplete;
+      expect(el.open).to.be.false;
+      expect(el.value).to.equal('buzz');
+      expect(el.selectedOption?.id).to.equal('buzz');
+    });
+
+    test('Enter key selects currently highlighted option', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box
+          .options=${BASIC_OPTIONS}
+          behavior="select-only"
+          open
+        ></ia-combo-box>
+      `);
+
+      // Highlight the last option
+      const lastOption = el.shadowRoot?.querySelector(
+        '.option:last-of-type',
+      ) as HTMLLIElement;
+      expect(lastOption).to.exist;
+      lastOption.dispatchEvent(new PointerEvent('pointerenter'));
+      await el.updateComplete;
+      expect(lastOption.classList.contains('highlight')).to.be.true;
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await el.updateComplete;
+      expect(el.open).to.be.false;
+      expect(el.value).to.equal('buzz');
+      expect(el.selectedOption?.id).to.equal('buzz');
     });
   });
 
@@ -236,7 +345,11 @@ describe('IA Combo Box', () => {
 
     test('clears the selection when an invalid value is set', async () => {
       const el = await fixture<IAComboBox>(html`
-        <ia-combo-box .options=${BASIC_OPTIONS} behavior="list" value="foo"></ia-combo-box>
+        <ia-combo-box
+          .options=${BASIC_OPTIONS}
+          behavior="list"
+          value="foo"
+        ></ia-combo-box>
       `);
 
       el.value = 'invalid';
@@ -248,6 +361,36 @@ describe('IA Combo Box', () => {
       expect(textInput).to.exist;
       expect(textInput.value).to.equal('');
       expect(el.value).to.be.null;
+    });
+
+    test('Enter key selects currently highlighted option', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box
+          .options=${BASIC_OPTIONS}
+          behavior="list"
+          open
+        ></ia-combo-box>
+      `);
+
+      // Highlight the last option
+      const lastOption = el.shadowRoot?.querySelector(
+        '.option:last-of-type',
+      ) as HTMLLIElement;
+      expect(lastOption).to.exist;
+      lastOption.dispatchEvent(new PointerEvent('pointerenter'));
+      await el.updateComplete;
+      expect(lastOption.classList.contains('highlight')).to.be.true;
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await el.updateComplete;
+      expect(el.open).to.be.false;
+      expect(el.value).to.equal('buzz');
+      expect(el.selectedOption?.id).to.equal('buzz');
     });
   });
 
@@ -302,6 +445,61 @@ describe('IA Combo Box', () => {
       ) as HTMLInputElement;
       expect(textInput).to.exist;
       expect(textInput.value).to.equal('some custom text');
+      expect(el.selectedOption).to.be.null;
+    });
+
+    test('Enter key selects currently highlighted option', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box
+          .options=${BASIC_OPTIONS}
+          behavior="freeform"
+          open
+        ></ia-combo-box>
+      `);
+
+      // Highlight the last option
+      const lastOption = el.shadowRoot?.querySelector(
+        '.option:last-of-type',
+      ) as HTMLLIElement;
+      expect(lastOption).to.exist;
+      lastOption.dispatchEvent(new PointerEvent('pointerenter'));
+      await el.updateComplete;
+      expect(lastOption.classList.contains('highlight')).to.be.true;
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await el.updateComplete;
+      expect(el.open).to.be.false;
+      expect(el.value).to.equal('buzz');
+      expect(el.selectedOption?.id).to.equal('buzz');
+    });
+
+    test('Enter key sets value from entered text when no option is highlighted', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box
+          .options=${BASIC_OPTIONS}
+          behavior="freeform"
+          open
+        ></ia-combo-box>
+      `);
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.value = 'something random';
+      textInput.dispatchEvent(new InputEvent('input'));
+      await el.updateComplete;
+
+      textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      await el.updateComplete;
+      expect(el.open).to.be.false;
+      expect(el.value).to.equal('something random');
       expect(el.selectedOption).to.be.null;
     });
   });
@@ -542,18 +740,22 @@ describe('IA Combo Box', () => {
     });
   });
 
-  describe('Arrow key wrapping', () => {
+  describe('Arrow key wraparound', () => {
     test('does not wrap by default', async () => {
       const el = await fixture<IAComboBox>(html`
         <ia-combo-box .options=${BASIC_OPTIONS} open></ia-combo-box>
       `);
 
+      const firstOption = el.shadowRoot?.querySelector(
+        '.option:first-of-type',
+      ) as HTMLLIElement;
       const lastOption = el.shadowRoot?.querySelector(
         '.option:last-of-type',
       ) as HTMLLIElement;
+      expect(firstOption).to.exist;
       expect(lastOption).to.exist;
 
-      // Start by highlighting the last option
+      // Highlight the last option
       lastOption.dispatchEvent(new PointerEvent('pointerenter'));
       await el.updateComplete;
       expect(lastOption.classList.contains('highlight')).to.be.true;
@@ -568,8 +770,19 @@ describe('IA Combo Box', () => {
       );
       await el.updateComplete;
 
-      // After down arrow, last option should still be highlighted (didn't wrap)
+      // After down arrow, last option should still be highlighted (didn't wrap around)
       expect(lastOption.classList.contains('highlight')).to.be.true;
+
+      // Highlight the first option
+      firstOption.dispatchEvent(new PointerEvent('pointerenter'));
+      await el.updateComplete;
+      expect(firstOption.classList.contains('highlight')).to.be.true;
+
+      textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+      await el.updateComplete;
+
+      // After up arrow, first option should still be highlighted (didn't wrap around)
+      expect(firstOption.classList.contains('highlight')).to.be.true;
     });
 
     test('wraps from bottom to top when wrap-arrow-keys is true', async () => {
@@ -824,7 +1037,7 @@ describe('IA Combo Box', () => {
       expect(el.shadowRoot?.querySelectorAll('.highlight').length).to.equal(1);
     });
 
-    test('Escape key closes options list', async () => {
+    test('Escape key closes options list if it is open', async () => {
       const el = await fixture<IAComboBox>(html`
         <ia-combo-box .options=${BASIC_OPTIONS} open></ia-combo-box>
       `);
@@ -837,6 +1050,22 @@ describe('IA Combo Box', () => {
       textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
       await el.updateComplete;
       expect(el.open).to.be.false;
+    });
+
+    test('Escape key clears value if options list is not open', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS} value="foo"></ia-combo-box>
+      `);
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+
+      textInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      await el.updateComplete;
+      expect(el.open).to.be.false;
+      expect(el.value).to.be.null;
     });
 
     test('Alt + Up key combo closes options list', async () => {
@@ -869,19 +1098,25 @@ describe('IA Combo Box', () => {
       const comboBox = el.querySelector('ia-combo-box') as IAComboBox;
       const checkAfter = el.querySelector('#check-after') as HTMLInputElement;
 
-      const comboBoxTextInput = comboBox.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      const comboBoxTextInput = comboBox.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
       expect(comboBoxTextInput).to.exist;
       comboBox.focus();
       await comboBox.updateComplete;
 
       // Open & highlight the first option
-      comboBoxTextInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      comboBoxTextInput.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'ArrowDown' }),
+      );
       await comboBox.updateComplete;
       expect(comboBox.open).to.be.true;
       expect(comboBox.value).to.be.null;
 
       // Simulate tabbing away (the event alone doesn't get the default Tab behavior)
-      comboBoxTextInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
+      comboBoxTextInput.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Tab' }),
+      );
       checkAfter.focus();
       await comboBox.updateComplete;
       expect(comboBox.open).to.be.false;
@@ -893,13 +1128,17 @@ describe('IA Combo Box', () => {
       await comboBox.updateComplete;
 
       // Open & highlight the first option again
-      comboBoxTextInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      comboBoxTextInput.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'ArrowDown' }),
+      );
       await comboBox.updateComplete;
       expect(comboBox.open).to.be.true;
       expect(comboBox.value).to.be.null;
 
       // Simulate tabbing backwards
-      comboBoxTextInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }));
+      comboBoxTextInput.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }),
+      );
       checkBefore.focus();
       await comboBox.updateComplete;
       expect(comboBox.open).to.be.false;
