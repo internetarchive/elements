@@ -101,6 +101,83 @@ describe('IA Combo Box', () => {
       const allOptionElmts = optionsList.querySelectorAll('.option');
       expect(allOptionElmts.length).to.equal(2);
     });
+
+    test('options list is closed by default', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS}></ia-combo-box>
+      `);
+
+      const optionsList = el.shadowRoot?.querySelector(
+        '#options-list',
+      ) as HTMLUListElement;
+      expect(optionsList).to.exist;
+      expect(optionsList.hidden).to.be.true;
+    });
+
+    test('renders visible options list if open attr is present', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS} open></ia-combo-box>
+      `);
+
+      const optionsList = el.shadowRoot?.querySelector(
+        '#options-list',
+      ) as HTMLUListElement;
+      expect(optionsList).to.exist;
+      expect(optionsList.hidden).to.be.false;
+    });
+
+    test('toggles options list when open attr is changed', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS}></ia-combo-box>
+      `);
+
+      const optionsList = el.shadowRoot?.querySelector(
+        '#options-list',
+      ) as HTMLUListElement;
+      expect(optionsList).to.exist;
+      expect(optionsList.hidden).to.be.true;
+
+      el.open = true;
+      await el.updateComplete;
+      expect(optionsList.hidden).to.be.false;
+
+      el.open = false;
+      await el.updateComplete;
+      expect(optionsList.hidden).to.be.true;
+    });
+
+    test('highlights current selection when opened, if possible', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS} value="baz"></ia-combo-box>
+      `);
+
+      el.open = true;
+      await el.updateComplete;
+
+      const highlightedOption = el.shadowRoot?.querySelector(
+        '.option.highlight',
+      ) as HTMLLIElement;
+      expect(highlightedOption).to.exist;
+      expect(highlightedOption.textContent.trim()).to.equal('Baz');
+    });
+
+    test('disables widget elements when disabled attr is present', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS} disabled></ia-combo-box>
+      `);
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+      expect(textInput.disabled).to.be.true;
+
+      const caretButton = el.shadowRoot?.querySelector(
+        '#caret-button',
+      ) as HTMLButtonElement;
+      expect(caretButton).to.exist;
+      expect(caretButton.disabled).to.be.true;
+    });
   });
 
   describe('Select-only behavior', () => {
@@ -596,26 +673,6 @@ describe('IA Combo Box', () => {
     });
   });
 
-  describe('Disabled state', () => {
-    test('disables widget elements when disabled property is true', async () => {
-      const el = await fixture<IAComboBox>(html`
-        <ia-combo-box .options=${BASIC_OPTIONS} disabled></ia-combo-box>
-      `);
-
-      const textInput = el.shadowRoot?.querySelector(
-        '#text-input',
-      ) as HTMLInputElement;
-      expect(textInput).to.exist;
-      expect(textInput.disabled).to.be.true;
-
-      const caretButton = el.shadowRoot?.querySelector(
-        '#caret-button',
-      ) as HTMLButtonElement;
-      expect(caretButton).to.exist;
-      expect(caretButton.disabled).to.be.true;
-    });
-  });
-
   describe('Value property', () => {
     test('in list mode, updates the text box when a valid value is set', async () => {
       const el = await fixture<IAComboBox>(html`
@@ -799,6 +856,56 @@ describe('IA Combo Box', () => {
       );
       await el.updateComplete;
       expect(el.open).to.be.false;
+    });
+
+    test('closes & selects highlighted option upon Tab (or Shift+Tab) away', async () => {
+      const el = await fixture<HTMLDivElement>(html`
+        <div>
+          <input type="checkbox" id="check-before" />
+          <ia-combo-box .options=${BASIC_OPTIONS}></ia-combo-box>
+          <input type="checkbox" id="check-after" />
+        </div>
+      `);
+
+      const checkBefore = el.querySelector('#check-before') as HTMLInputElement;
+      const comboBox = el.querySelector('ia-combo-box') as IAComboBox;
+      const checkAfter = el.querySelector('#check-after') as HTMLInputElement;
+
+      const comboBoxTextInput = comboBox.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
+      expect(comboBoxTextInput).to.exist;
+      comboBox.focus();
+      await comboBox.updateComplete;
+
+      // Open & highlight the first option
+      comboBoxTextInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      await comboBox.updateComplete;
+      expect(comboBox.open).to.be.true;
+      expect(comboBox.value).to.be.null;
+
+      // Simulate tabbing away (the event alone doesn't get the default Tab behavior)
+      comboBoxTextInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
+      checkAfter.focus();
+      await comboBox.updateComplete;
+      expect(comboBox.open).to.be.false;
+      expect(comboBox.value).to.equal('foo');
+
+      // Reset
+      comboBox.clearSelectedOption();
+      comboBox.focus();
+      await comboBox.updateComplete;
+
+      // Open & highlight the first option again
+      comboBoxTextInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      await comboBox.updateComplete;
+      expect(comboBox.open).to.be.true;
+      expect(comboBox.value).to.be.null;
+
+      // Simulate tabbing backwards
+      comboBoxTextInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey: true }));
+      checkBefore.focus();
+      await comboBox.updateComplete;
+      expect(comboBox.open).to.be.false;
+      expect(comboBox.value).to.equal('foo'); // Closed & selected the highlighted option
     });
   });
 });
