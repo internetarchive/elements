@@ -184,8 +184,8 @@ describe('IA Combo Box', () => {
     test('has non-editable text field', async () => {
       const el = await fixture<IAComboBox>(html`
         <ia-combo-box
-          behavior="select-only"
           .options=${BASIC_OPTIONS}
+          behavior="select-only"
         ></ia-combo-box>
       `);
 
@@ -208,7 +208,7 @@ describe('IA Combo Box', () => {
 
     test('has editable text field', async () => {
       const el = await fixture<IAComboBox>(html`
-        <ia-combo-box behavior="list" .options=${BASIC_OPTIONS}></ia-combo-box>
+        <ia-combo-box .options=${BASIC_OPTIONS} behavior="list"></ia-combo-box>
       `);
 
       const textInput = el.shadowRoot?.querySelector(
@@ -217,14 +217,46 @@ describe('IA Combo Box', () => {
       expect(textInput).to.exist;
       expect(textInput.readOnly).to.be.false;
     });
+
+    test('updates the text box when a valid value is set', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS} behavior="list"></ia-combo-box>
+      `);
+
+      el.value = 'baz';
+      await el.updateComplete;
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+      expect(textInput.value).to.equal('Baz');
+      expect(el.selectedOption?.id).to.equal('baz');
+    });
+
+    test('clears the selection when an invalid value is set', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS} behavior="list" value="foo"></ia-combo-box>
+      `);
+
+      el.value = 'invalid';
+      await el.updateComplete;
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+      expect(textInput.value).to.equal('');
+      expect(el.value).to.be.null;
+    });
   });
 
   describe('Freeform behavior', () => {
     test('has editable text field', async () => {
       const el = await fixture<IAComboBox>(html`
         <ia-combo-box
-          behavior="freeform"
           .options=${BASIC_OPTIONS}
+          behavior="freeform"
         ></ia-combo-box>
       `);
 
@@ -234,9 +266,47 @@ describe('IA Combo Box', () => {
       expect(textInput).to.exist;
       expect(textInput.readOnly).to.be.false;
     });
+
+    test('updates the text box when a predefined option value is set', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box
+          .options=${BASIC_OPTIONS}
+          behavior="freeform"
+        ></ia-combo-box>
+      `);
+
+      el.value = 'buzz';
+      await el.updateComplete;
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+      expect(textInput.value).to.equal('Buzz');
+      expect(el.selectedOption?.id).to.equal('buzz');
+    });
+
+    test('updates the text box when an arbitrary value is set', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box
+          .options=${BASIC_OPTIONS}
+          behavior="freeform"
+        ></ia-combo-box>
+      `);
+
+      el.value = 'some custom text';
+      await el.updateComplete;
+
+      const textInput = el.shadowRoot?.querySelector(
+        '#text-input',
+      ) as HTMLInputElement;
+      expect(textInput).to.exist;
+      expect(textInput.value).to.equal('some custom text');
+      expect(el.selectedOption).to.be.null;
+    });
   });
 
-  describe('Filtering presets', () => {
+  describe('Filtering options', () => {
     test('default is substring filtering', async () => {
       const el = await fixture<IAComboBox>(html`<ia-combo-box></ia-combo-box>`);
       expect(el.filter).to.equal('substring');
@@ -670,78 +740,6 @@ describe('IA Combo Box', () => {
       // Also focuses the input and re-opens the options menu
       expect(el.shadowRoot?.activeElement).to.equal(textInput);
       expect(el.open).to.be.true;
-    });
-  });
-
-  describe('Value property', () => {
-    test('in list mode, updates the text box when a valid value is set', async () => {
-      const el = await fixture<IAComboBox>(html`
-        <ia-combo-box .options=${BASIC_OPTIONS}></ia-combo-box>
-      `);
-
-      el.value = 'baz';
-      await el.updateComplete;
-
-      const textInput = el.shadowRoot?.querySelector(
-        '#text-input',
-      ) as HTMLInputElement;
-      expect(textInput).to.exist;
-      expect(textInput.value).to.equal('Baz');
-      expect(el.selectedOption?.id).to.equal('baz');
-    });
-
-    test('in list mode, clears the selection when an invalid value is set', async () => {
-      const el = await fixture<IAComboBox>(html`
-        <ia-combo-box .options=${BASIC_OPTIONS} value="foo"></ia-combo-box>
-      `);
-
-      el.value = 'invalid';
-      await el.updateComplete;
-
-      const textInput = el.shadowRoot?.querySelector(
-        '#text-input',
-      ) as HTMLInputElement;
-      expect(textInput).to.exist;
-      expect(textInput.value).to.equal('');
-      expect(el.value).to.be.null;
-    });
-
-    test('in freeform mode, updates the text box when a predefined option value is set', async () => {
-      const el = await fixture<IAComboBox>(html`
-        <ia-combo-box
-          .options=${BASIC_OPTIONS}
-          behavior="freeform"
-        ></ia-combo-box>
-      `);
-
-      el.value = 'buzz';
-      await el.updateComplete;
-
-      const textInput = el.shadowRoot?.querySelector(
-        '#text-input',
-      ) as HTMLInputElement;
-      expect(textInput).to.exist;
-      expect(textInput.value).to.equal('Buzz');
-      expect(el.selectedOption?.id).to.equal('buzz');
-    });
-
-    test('in freeform mode, updates the text box when an arbitrary value is set', async () => {
-      const el = await fixture<IAComboBox>(html`
-        <ia-combo-box
-          .options=${BASIC_OPTIONS}
-          behavior="freeform"
-        ></ia-combo-box>
-      `);
-
-      el.value = 'some custom text';
-      await el.updateComplete;
-
-      const textInput = el.shadowRoot?.querySelector(
-        '#text-input',
-      ) as HTMLInputElement;
-      expect(textInput).to.exist;
-      expect(textInput.value).to.equal('some custom text');
-      expect(el.selectedOption).to.be.null;
     });
   });
 
