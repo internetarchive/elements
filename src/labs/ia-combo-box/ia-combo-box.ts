@@ -218,6 +218,11 @@ export class IAComboBox extends LitElement {
 
   static formAssociated = true;
 
+  static shadowRootOptions: ShadowRootInit = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true
+  };
+
   private internals: ElementInternals;
 
   /**
