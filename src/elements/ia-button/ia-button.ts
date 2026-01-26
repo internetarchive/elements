@@ -1,6 +1,8 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { customElement } from 'lit/decorators/custom-element.js';
 
+import themeStyles from '@src/themes/theme-styles';
+
 /**
  * A button element to demo the elements library
  *
@@ -19,11 +21,20 @@ export class IAButton extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      button {
-        padding: 8px 16px;
-        background-color: var(--ia-button-background-color, #007bff);
-      }
-    `;
+    return [
+      themeStyles,
+      css`
+        :host {
+          --primary-background-color--: var(--primary-cta-fill);
+          --primary-text-color--: var(--primary-cta-text-color);
+        }
+
+        button {
+          padding: 8px 16px;
+          background-color: var(--primary-background-color--);
+          color: var(--primary-text-color--);
+        }
+      `,
+    ];
   }
 }
