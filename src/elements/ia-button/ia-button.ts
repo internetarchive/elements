@@ -8,7 +8,8 @@ import themeStyles from '@src/themes/theme-styles';
  *
  * @slot The content of the button
  *
- * @cssprop --ia-button-background-color - The background color of the button
+ * @cssprop --primary-cta-fill - The background color of the button
+ * @cssprop --primary-cta-text-color - The text color of the button
   */
 @customElement('ia-button')
 export class IAButton extends LitElement {
