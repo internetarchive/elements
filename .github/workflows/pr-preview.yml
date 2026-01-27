@@ -14,6 +14,10 @@ on:
 
 concurrency: preview-${{ github.ref }}
 
+permissions:
+  contents: write
+  pages: write
+
 env:
   PREVIEW_BRANCH: ghpages
 jobs:
