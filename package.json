@@ -116,7 +116,7 @@
       ]
     },
     "ghpages:build": {
-      "command": "vite build --config vite.config.ghpages.ts && gh-pages -d ghpages"
+      "command": "vite build --config vite.config.ghpages.ts"
     },
     "ghpages:publish": {
       "dependencies": [

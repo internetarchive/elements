@@ -29,14 +29,14 @@ jobs:
       - name: Install and Build
         run: |
           npm install
-          npm run build
+          npm run ghpages:build
 
       # Reference: https://github.com/rossjrw/pr-preview-action
       - name: Deploy preview
         uses: rossjrw/pr-preview-action@v1
         id: preview-step
         with:
-          source-dir: ./dist/
+          source-dir: ./ghpages/
           umbrella-dir: pr
           preview-branch: ${{ env.PREVIEW_BRANCH }}
           comment: false
