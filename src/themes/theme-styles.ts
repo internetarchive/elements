@@ -19,6 +19,8 @@ const themeStyles = css`
     --off-white: #fbfbfd;
     --dark-gray: #2c2c2c;
     --light-gray: #666;
+    --classic-red: #e51c23;
+    --mint-green: #31a481;
     --navy-blue: #194880;
     --bright-blue: #4b64ff;
 
@@ -58,6 +60,8 @@ const themeStyles = css`
       --ia-theme-primary-cta-text-color,
       var(--true-white)
     );
+    --color-success: var(--ia-theme-color-success, var(--mint-green));
+    --color-danger: var(--ia-theme-color-danger, var(--classic-red));
   }
 `;
 
