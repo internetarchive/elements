@@ -14,10 +14,6 @@ on:
 
 concurrency: preview-${{ github.ref }}
 
-permissions:
-  contents: write
-  pages: write
-
 env:
   PREVIEW_BRANCH: ghpages
 jobs:
@@ -33,14 +29,14 @@ jobs:
       - name: Install and Build
         run: |
           npm install
-          npm run ghpages:build
+          npm run build
 
       # Reference: https://github.com/rossjrw/pr-preview-action
       - name: Deploy preview
         uses: rossjrw/pr-preview-action@v1
         id: preview-step
         with:
-          source-dir: ./ghpages/
+          source-dir: ./dist/
           umbrella-dir: pr
           preview-branch: ${{ env.PREVIEW_BRANCH }}
           comment: false
