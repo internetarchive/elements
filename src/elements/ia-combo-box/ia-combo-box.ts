@@ -23,11 +23,11 @@ import {
   type IAComboBoxFilterPreset,
   type IAComboBoxOption,
 } from './models';
+import themeStyles from '@src/themes/theme-styles';
 
 import caretClosedIcon from './caret-closed.svg';
 import caretOpenIcon from './caret-open.svg';
 import clearIcon from './clear.svg';
-import themeStyles from '@src/themes/theme-styles';
 
 /**
  * Map from filter preset keys to their associated filtering function.
