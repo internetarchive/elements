@@ -1,0 +1,20 @@
+{
+  "index.html": {
+    "file": "assets/index-Br__SFVw.js",
+    "name": "index",
+    "src": "index.html",
+    "isEntry": true,
+    "dynamicImports": [
+      "node_modules/magic-snowflakes/dist/snowflakes.esm.js"
+    ],
+    "css": [
+      "assets/index-BO03K1Ot.css"
+    ]
+  },
+  "node_modules/magic-snowflakes/dist/snowflakes.esm.js": {
+    "file": "assets/snowflakes.esm-Dz_MTlsm.js",
+    "name": "snowflakes.esm",
+    "src": "node_modules/magic-snowflakes/dist/snowflakes.esm.js",
+    "isDynamicEntry": true
+  }
+}
