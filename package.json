@@ -23,7 +23,8 @@
     "format": "wireit",
     "circular": "wireit",
     "prepare": "wireit",
-    "test": "wireit"
+    "test": "wireit",
+    "ghpages:build": "wireit"
   },
   "dependencies": {
     "@lit/localize": "^0.12.2",
@@ -109,6 +110,9 @@
       "dependencies": [
         "circular"
       ]
+    },
+    "ghpages:build": {
+      "command": "vite build --config vite.config.ghpages.ts && touch ./ghpages/.nojekyll"
     }
   }
 }

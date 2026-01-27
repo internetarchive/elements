@@ -65,7 +65,7 @@ import '@demo/story-template';
 ...
 render() {
   return html`
-    <story-template elementTag="ia-button" .exampleUsage=${this.exampleUsage}>
+    <story-template elementTag="ia-button" elementClassName="IAButton" .exampleUsage=${this.exampleUsage}>
       <div slot="demo">
         <ia-button @click=${() => alert('Button clicked!')}
           >Click Me</ia-button

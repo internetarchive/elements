@@ -35,6 +35,8 @@ export type StyleInputData = {
 export class StoryTemplate extends LitElement {
   @property({ type: String }) elementTag = '';
 
+  @property({ type: String }) elementClassName = '';
+
   @property({ type: String }) exampleUsage = '';
 
   @property({ type: Object }) styleInputData?: StyleInputData;
@@ -135,10 +137,16 @@ export class StoryTemplate extends LitElement {
   }
 
   private get importCode(): string {
-    return `
+    if (this.elementClassName) {
+      return `
 import '${this.modulePath}';
 import { ${this.elementClassName} } from '${this.modulePath}';
     `;
+    } else {
+      return `
+import '${this.modulePath}';
+  `;
+    }
   }
 
   private get cssCode(): string {
@@ -146,13 +154,9 @@ import { ${this.elementClassName} } from '${this.modulePath}';
     return `
 
 ${this.elementTag} {
-  ${this.appliedStyles}     
+  ${this.appliedStyles}
 }
     `;
-  }
-
-  private get elementClassName(): string | undefined {
-    return customElements.get(this.elementTag)?.name;
   }
 
   private get modulePath(): string {

@@ -91,6 +91,7 @@ export class IAStatusIndicatorStory extends LitElement {
     return html`
       <story-template
         elementTag="ia-status-indicator"
+        elementClassName="IAStatusIndicator"
         .exampleUsage=${this.exampleUsage}
         .styleInputData=${{ settings: styleInputSettings }}
       >
