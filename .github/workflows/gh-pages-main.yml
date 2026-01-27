@@ -34,7 +34,6 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: ghpages
-          folder: ghpages
+          folder: ghpages/demo/
           clean-exclude: pr/
           force: false
-          target-folder: main
