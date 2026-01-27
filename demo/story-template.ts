@@ -70,7 +70,7 @@ export class StoryTemplate extends LitElement {
                 title="Labs"
                 class="labs-icon"
               />`,
-    )}
+          )}
         </a>
       </h2>
       ${when(this.visible, () => this.elementDemoTemplate)}
@@ -129,7 +129,7 @@ export class StoryTemplate extends LitElement {
                 </td>
               </tr>
             `,
-    )}
+          )}
         </table>
         <button @click=${this.applyStyles}>Apply</button>
       </div>
