@@ -8,7 +8,7 @@ import {
   IAComboBoxOption,
 } from './models';
 
-import countries from './200-countries.json';
+import countries from './story-support/200-countries.json';
 
 import '@demo/story-template';
 import './ia-combo-box';
