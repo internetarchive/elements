@@ -11,7 +11,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: './ghpages/demo',
+    outDir: './ghpages',
     emptyOutDir: true,
     manifest: true,
   },

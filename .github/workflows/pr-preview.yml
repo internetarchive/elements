@@ -39,7 +39,7 @@ jobs:
         uses: rossjrw/pr-preview-action@v1
         id: preview-step
         with:
-          source-dir: ./ghpages/demo/
+          source-dir: ./ghpages
           umbrella-dir: pr
           preview-branch: ${{ env.PREVIEW_BRANCH }}
           comment: false
