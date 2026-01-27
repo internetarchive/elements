@@ -166,6 +166,7 @@ export class IAComboBoxStory extends LitElement {
     return html`
       <story-template
         elementTag="ia-combo-box"
+        elementClassName="IAComboBox"
         .exampleUsage=${this.exampleUsage}
         .styleInputData=${{ settings: styleInputSettings }}
         labs
