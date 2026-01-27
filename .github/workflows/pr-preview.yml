@@ -29,7 +29,7 @@ jobs:
       - name: Install and Build
         run: |
           npm install
-          npm run ghpages:build
+          npm run ghpages:publish
 
       # Reference: https://github.com/rossjrw/pr-preview-action
       - name: Deploy preview
