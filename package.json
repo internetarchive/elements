@@ -24,8 +24,7 @@
     "circular": "wireit",
     "prepare": "wireit",
     "test": "wireit",
-    "ghpages:build": "wireit",
-    "ghpages:nojekyll": "wireit"
+    "ghpages:build": "wireit"
   },
   "dependencies": {
     "@lit/localize": "^0.12.2",
@@ -114,13 +113,7 @@
       ]
     },
     "ghpages:build": {
-      "dependencies": [
-        "ghpages:nojekyll"
-      ],
-      "command": "vite build --config vite.config.ghpages.ts"
-    },
-    "ghpages:nojekyll": {
-      "command": "mkdir -p ghpages && touch ./ghpages/.nojekyll"
+      "command": "vite build --config vite.config.ghpages.ts && touch ./ghpages/.nojekyll"
     }
   }
 }
