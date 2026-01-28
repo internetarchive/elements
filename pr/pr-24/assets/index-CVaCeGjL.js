@@ -663,7 +663,6 @@ ${this.elementTag} {
         elementClassName="IAComboBox"
         .exampleUsage=${this.exampleUsage}
         .styleInputData=${{settings:YE}}
-        labs
       >
         <div slot="demo">
           <ia-combo-box
