@@ -88,8 +88,19 @@ export class StoryTemplate extends LitElement {
         <syntax-highlighter .code=${this.importCode}></syntax-highlighter>
         <h3>Usage</h3>
         <syntax-highlighter
-          .code=${this.exampleUsage + this.cssCode}
+          .language=${'html'}
+          .code=${this.exampleUsage}
         ></syntax-highlighter>
+        ${when(
+          this.cssCode,
+          () => html`
+            <h3>Styling</h3>
+            <syntax-highlighter
+              .language=${'css'}
+              .code=${this.cssCode}
+            ></syntax-highlighter>
+          `,
+        )}
         ${this.styleSettingsTemplate}
         ${this.shouldShowPropertySettings ? html` <h3>Settings</h3>` : nothing}
         <div

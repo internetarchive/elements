@@ -1,5 +1,7 @@
 import hljs from 'highlight.js';
 import typescript from 'highlight.js/lib/languages/typescript';
+import xml from 'highlight.js/lib/languages/xml';
+import css from 'highlight.js/lib/languages/css';
 import {
   type CSSResultGroup,
   LitElement,
@@ -17,11 +19,16 @@ import { syntaxStyles } from './syntax-style-light';
 export class SyntaxHighlighter extends LitElement {
   @property({ type: String }) code = '';
 
+  @property({ type: String }) language: 'typescript' | 'html' | 'css' =
+    'typescript';
+
   @state() private highlightedCode = '';
 
   connectedCallback(): void {
     super.connectedCallback();
     hljs.registerLanguage('typescript', typescript);
+    hljs.registerLanguage('html', xml);
+    hljs.registerLanguage('css', css);
   }
 
   protected willUpdate(_changedProperties: PropertyValues): void {
@@ -32,7 +39,7 @@ export class SyntaxHighlighter extends LitElement {
 
   render() {
     return html`
-      <pre><code class="hljs language-typescript">${unsafeHTML(
+      <pre><code class="hljs">${unsafeHTML(
         this.highlightedCode,
       )}</code></pre>
     `;
@@ -41,7 +48,7 @@ export class SyntaxHighlighter extends LitElement {
   private highlightCode() {
     const code = this.code.trim();
     const highlighted = hljs.highlight(code, {
-      language: 'typescript',
+      language: this.language,
     }).value;
     this.highlightedCode = highlighted;
   }
