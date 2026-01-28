@@ -423,6 +423,7 @@ export class IAComboBox extends LitElement {
         <slot name="clear-button">
           <img
             class="icon clear-icon"
+            part="icon clear-icon"
             src=${clearIcon}
             alt=""
             aria-hidden="true"
@@ -441,6 +442,7 @@ export class IAComboBox extends LitElement {
       <slot name="caret-closed" ?hidden=${this.open}>
         <img
           class="icon caret-icon"
+          part="icon caret-icon"
           src=${caretClosedIcon}
           alt=""
           aria-hidden="true"
@@ -449,6 +451,7 @@ export class IAComboBox extends LitElement {
       <slot name="caret-open" ?hidden=${!this.open}>
         <img
           class="icon caret-icon"
+          part="icon caret-icon"
           src=${caretOpenIcon}
           alt=""
           aria-hidden="true"
@@ -514,16 +517,17 @@ export class IAComboBox extends LitElement {
 
     // Otherwise build a list item for each filtered option
     return this.filteredOptions.map((opt) => {
+      const isHighlighted = opt === this.highlightedOption;
       const optionClasses = classMap({
         option: true,
-        highlight: opt === this.highlightedOption,
+        highlight: isHighlighted,
       });
 
       return html`
         <li
           id=${opt.id}
           class=${optionClasses}
-          part="option"
+          part="option ${isHighlighted ? 'highlight' : ''}"
           role="option"
           tabindex="-1"
           @pointerenter=${this.handleOptionPointerEnter}
@@ -1208,12 +1212,10 @@ export class IAComboBox extends LitElement {
   static get styles(): CSSResultGroup {
     const ownStyles = css`
       :host {
-        --combo-box-width--: var(--combo-box-width, auto);
-        --combo-box-padding--: var(--combo-box-padding, 5px);
+        --combo-box-width--: var(--combo-box-width);
+        --combo-box-padding--: var(--padding-sm);
+        --combo-box-list-width--: var(--combo-box-list-width, unset);
         --combo-box-list-max-height--: var(--combo-box-list-max-height, 250px);
-        --combo-box-list-width--: var(--combo-box-list-width);
-        --combo-box-caret-icon-width--: var(--combo-box-caret-icon-width, calc(0.7 * var(--icon-width)));
-        --combo-box-clear-icon-width--: var(--combo-box-clear-icon-width, calc(0.8 * var(--icon-width)));
       }
 
       #container {
@@ -1303,6 +1305,7 @@ export class IAComboBox extends LitElement {
         border: none;
         padding: 0;
         background: white;
+        width: var(--combo-box-list-width--);
         max-height: 400px;
         box-shadow: 0 0 1px 1px #ddd;
         opacity: 0;
@@ -1321,13 +1324,13 @@ export class IAComboBox extends LitElement {
       }
 
       .caret-icon {
-        width: var(--combo-box-caret-icon-width--);
-        height: var(--combo-box-caret-icon-width--);
+        width: 0.875rem;
+        height: 0.875rem;
       }
 
       .clear-icon {
-        width: var(--combo-box-clear-icon-width--);
-        height: var(--combo-box-clear-icon-width--);
+        width: 1rem;
+        height: 1rem;
       }
 
       .option {
