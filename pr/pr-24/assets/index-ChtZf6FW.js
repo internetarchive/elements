@@ -13,6 +13,8 @@
 
     /* Sizing */
     --default-icon-width: 1.25rem;
+    --default-padding-sm: 5px;
+    --default-combo-box-width: auto;
 
     /* Colors */
     --true-white: #fff;
@@ -43,6 +45,8 @@
 
     /* Sizing */
     --icon-width: var(--ia-theme-icon-width, var(--default-icon-width));
+    --padding-sm: var(--ia-theme-padding-sm, var(--default-padding-sm));
+    --combo-box-width: var(--ia-theme-combo-box-width, var(--default-combo-box-width));
 
     /* Backgrounds and fills */
     --primary-background-color: var(
@@ -416,6 +420,7 @@ ${this.elementTag} {
         <slot name="clear-button">
           <img
             class="icon clear-icon"
+            part="icon clear-icon"
             src=${ME}
             alt=""
             aria-hidden="true"
@@ -426,6 +431,7 @@ ${this.elementTag} {
       <slot name="caret-closed" ?hidden=${this.open}>
         <img
           class="icon caret-icon"
+          part="icon caret-icon"
           src=${yE}
           alt=""
           aria-hidden="true"
@@ -434,6 +440,7 @@ ${this.elementTag} {
       <slot name="caret-open" ?hidden=${!this.open}>
         <img
           class="icon caret-icon"
+          part="icon caret-icon"
           src=${DE}
           alt=""
           aria-hidden="true"
@@ -471,11 +478,11 @@ ${this.elementTag} {
         ${to(this.open,()=>this.optionTemplates)}
         <slot name="options-list-bottom"></slot>
       </ul>
-    `}get optionTemplates(){return this.filteredOptions.length===0&&this.maxAutocompleteEntries>0?[this.emptyOptionsTemplate]:this.filteredOptions.map(t=>{const e=ji({option:!0,highlight:t===this.highlightedOption});return H`
+    `}get optionTemplates(){return this.filteredOptions.length===0&&this.maxAutocompleteEntries>0?[this.emptyOptionsTemplate]:this.filteredOptions.map(t=>{const e=t===this.highlightedOption,n=ji({option:!0,highlight:e});return H`
         <li
           id=${t.id}
-          class=${e}
-          part="option"
+          class=${n}
+          part="option ${e?"highlight":""}"
           role="option"
           tabindex="-1"
           @pointerenter=${this.handleOptionPointerEnter}
@@ -492,12 +499,10 @@ ${this.elementTag} {
       </li>
     `}handleOptionPointerEnter(t){this.handleOptionPointerMove(t)}handleOptionPointerMove(t){const e=t.currentTarget,n=this.getOptionFor(e.id);n&&this.setHighlightedOption(n)}handleOptionClick(t){const e=t.currentTarget,n=this.getOptionFor(e.id);n&&(this.setSelectedOption(n.id),this.stayOpen||this.closeOptionsMenu())}handleComboBoxKeyDown(t){switch(t.key){case"Enter":this.handleEnterPressed();break;case"Escape":this.handleEscapePressed();break;case"ArrowUp":t.altKey?this.handleAltUpArrowPressed():this.handleUpArrowPressed();break;case"ArrowDown":t.altKey?this.handleAltDownArrowPressed():this.handleDownArrowPressed();break;case"Tab":this.handleTabPressed();return;case" ":this.handleSpacePressed(t);return;default:return}t.stopPropagation(),t.preventDefault()}async handleTextBoxInput(){this.enteredText=this.textInput.value,this.setFilterText(this.textInput.value),this.openOptionsMenu(),await this.updateComplete,this.highlightFirstOption()}handleEnterPressed(){if(!this.open){this.openOptionsMenu();return}this.highlightedOption?this.setSelectedOption(this.highlightedOption.id):this.behavior==="freeform"&&this.setValue(this.enteredText),this.stayOpen||(this.open=!1)}handleEscapePressed(){if(this.open){this.closeOptionsMenu();return}this.clearSelectedOption()}handleUpArrowPressed(){this.open||this.openOptionsMenu(),this.highlightPreviousOption()}handleDownArrowPressed(){this.open||this.openOptionsMenu(),this.highlightNextOption()}handleAltUpArrowPressed(){this.closeOptionsMenu()}handleAltDownArrowPressed(){this.openOptionsMenu()}handleTabPressed(){this.highlightedOption&&(this.setSelectedOption(this.highlightedOption.id),this.stayOpen||(this.open=!1))}handleSpacePressed(t){this.behavior==="select-only"&&(this.open?this.highlightedOption&&(this.setSelectedOption(this.highlightedOption.id),this.stayOpen||(this.open=!1)):this.openOptionsMenu(),t.stopPropagation(),t.preventDefault())}handleComboBoxClick(){this.toggleOptionsMenu()}handleClearButtonClick(){this.clearSelectedOption(),this.textInput.focus(),this.openOptionsMenu()}handleFocus(){this.behavior!=="select-only"&&this.textInput.focus(),this.hasFocus=!0,this.losingFocus=!1}handleBlur(){this.hasFocus=!1,this.losingFocus=!0,setTimeout(()=>{this.losingFocus&&!this.shadowRoot?.activeElement&&(this.losingFocus=!1,this.closeOptionsMenu(),this.behavior==="list"?this.setTextValue(this.selectedOption?.text??"",!1):this.behavior==="freeform"&&(this.enteredText||this.value)&&this.setValue(this.enteredText))},0)}handleValueChanged(){if(this.value==null){this.enteredText&&this.setTextValue("",!1);return}const t=this.getOptionFor(this.value);if(this.behavior==="freeform"){const e=t?.text??this.value;e!==this.enteredText&&this.setTextValue(e);return}if(!t){this.clearSelectedOption();return}this.enteredText!==t.text&&(this.setTextValue(t.text,!1),this.setFilterText(""))}highlightFirstOption(){this.setHighlightedOption(this.firstFilteredOption)}highlightLastOption(){this.setHighlightedOption(this.lastFilteredOption)}highlightPreviousOption(){const{filteredOptions:t,lastFilteredIndex:e}=this;if(!this.highlightedOption){this.highlightLastOption();return}const{highlightedIndex:n}=this,a=this.wrapArrowKeys&&n===0?e:Math.max(n-1,0);this.setHighlightedOption(t[a])}highlightNextOption(){const{filteredOptions:t,lastFilteredIndex:e}=this;if(!this.highlightedOption){this.highlightFirstOption();return}const{highlightedIndex:n}=this,a=this.wrapArrowKeys&&n===e?0:Math.min(n+1,e);this.setHighlightedOption(t[a])}async setHighlightedOption(t){this.highlightedOption=t,await this.updateComplete;const{optionsList:e,highlightedElement:n}=this;if(!n)return;const a=n.getBoundingClientRect(),r=e.getBoundingClientRect();(a.top<r.top||a.bottom>r.bottom)&&n.scrollIntoView({block:"nearest"})}setSelectedOption(t){const e=this.getOptionFor(t);if(!e)throw new RangeError("Unknown option ID");const n=this.value;this.value=e.id,this.internals.setFormValue(this.value),this.setTextValue(e.text,!1),this.setFilterText(""),this.value!==n&&this.emitChangeEvent(),e.onSelected?.(e)}clearSelectedOption(){const t=this.value;this.value=null,this.internals.setFormValue(this.value),this.setTextValue(""),this.value!==t&&this.emitChangeEvent()}setValue(t){if(this.behavior==="freeform"){const e=this.value;this.value=t,this.internals.setFormValue(this.value),this.setTextValue(t),this.value!==e&&this.emitChangeEvent()}else this.setSelectedOption(t)}setTextValue(t,e=!0){this.textInput.value=t,this.enteredText=t,e&&this.setFilterText(t)}setFilterText(t){const{caseTransform:e}=this;this.filterText=e(t)}openOptionsMenu(){this.open=!0,this.emitToggleEvent()}closeOptionsMenu(){this.open=!1,this.emitToggleEvent()}toggleOptionsMenu(){this.open=!this.open,this.emitToggleEvent()}updateFormValidity(){this.required&&!this.value?this.internals.setValidity({valueMissing:!0},nt("A value is required")):this.internals.setValidity({})}emitChangeEvent(){this.dispatchEvent(new CustomEvent("change",{detail:this.value}))}emitToggleEvent(){this.dispatchEvent(new CustomEvent("toggle",{detail:this.open}))}get isEmpty(){return!this.selectedOption&&!this.enteredText}get shouldShowClearButton(){return this.clearable&&!this.disabled&&!this.isEmpty}positionOptionsMenu(){const{mainWidgetRow:t,optionsList:e}=this,n=t.getBoundingClientRect(),{innerHeight:a,scrollX:r,scrollY:i}=window,o=n.top,s=a-n.bottom,_="var(--combo-box-list-max-height--)",c={top:`${n.bottom+i}px`,left:`${n.left+r}px`,width:`var(--combo-box-list-width--, ${n.width}px)`,maxHeight:`min(${s}px, ${_})`};Object.assign(e.style,c),setTimeout(()=>{const d=e.getBoundingClientRect().bottom>=a,p=o>s;d&&p&&(e.style.top="auto",e.style.bottom=`${a-n.top-i}px`,e.style.maxHeight=`min(${o}px, ${_})`)},0)}get caseTransform(){return this.caseSensitive?UE:FE}getOptionFor(t){return this.optionsByID.get(t)??null}rebuildOptionIDMap(){this.optionsByID.clear();for(const t of this.options)this.optionsByID.set(t.id,t)}rebuildSortedOptions(){this.sort?this.optionsRespectingSortFlag=[...this.options].sort((t,e)=>{const n=this.optionFilteringValues.get(t),a=this.optionFilteringValues.get(e);return n.localeCompare(a)}):this.optionsRespectingSortFlag=this.options}rebuildOptionFilteringValues(){this.optionFilteringValues.clear();const{caseTransform:t}=this;for(const e of this.options){const n=t(e.text);this.optionFilteringValues.set(e,n)}}rebuildFilteredOptions(){const t=this.behavior==="select-only"?"all":this.filter,e=typeof t=="string"?wE[t]:t,n=this.optionsRespectingSortFlag.filter(a=>{const r=this.optionFilteringValues.get(a);return r?e(this.filterText,r,a):!1}).slice(0,this.maxAutocompleteEntries);this.filteredOptions=n}get firstFilteredOption(){return this.filteredOptions[0]??null}get lastFilteredOption(){return this.filteredOptions[this.lastFilteredIndex]??null}get lastFilteredIndex(){return this.filteredOptions.length-1}get selectedOption(){return this.value==null?null:this.getOptionFor(this.value)}get highlightedIndex(){return this.highlightedOption?this.filteredOptions.indexOf(this.highlightedOption):-1}get highlightedElement(){return this.highlightedOption?this.shadowRoot.getElementById(this.highlightedOption.id):null}static get styles(){const t=We`
       :host {
-        --combo-box-width--: var(--combo-box-width, auto);
-        --combo-box-padding--: var(--combo-box-padding, 5px);
+        --combo-box-width--: var(--combo-box-width);
+        --combo-box-padding--: var(--padding-sm);
+        --combo-box-list-width--: var(--combo-box-list-width, unset);
         --combo-box-list-max-height--: var(--combo-box-list-max-height, 250px);
-        --combo-box-list-width--: var(--combo-box-list-width);
-        --combo-box-caret-icon-width--: var(--combo-box-caret-icon-width, calc(0.7 * var(--icon-width)));
-        --combo-box-clear-icon-width--: var(--combo-box-clear-icon-width, calc(0.8 * var(--icon-width)));
       }
 
       #container {
@@ -587,6 +592,7 @@ ${this.elementTag} {
         border: none;
         padding: 0;
         background: white;
+        width: var(--combo-box-list-width--);
         max-height: 400px;
         box-shadow: 0 0 1px 1px #ddd;
         opacity: 0;
@@ -605,13 +611,13 @@ ${this.elementTag} {
       }
 
       .caret-icon {
-        width: var(--combo-box-caret-icon-width--);
-        height: var(--combo-box-caret-icon-width--);
+        width: 0.875rem;
+        height: 0.875rem;
       }
 
       .clear-icon {
-        width: var(--combo-box-clear-icon-width--);
-        height: var(--combo-box-clear-icon-width--);
+        width: 1rem;
+        height: 1rem;
       }
 
       .option {
