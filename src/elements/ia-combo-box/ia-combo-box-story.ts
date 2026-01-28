@@ -18,13 +18,13 @@ import './ia-combo-box';
 const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Width',
-    cssVariable: '--combo-box-width',
+    cssVariable: '--ia-theme-combo-box-width',
     defaultValue: '250px',
     inputType: 'text',
   },
   {
     label: 'Padding',
-    cssVariable: '--combo-box-padding',
+    cssVariable: '--ia-theme-padding-sm',
     defaultValue: '5px',
     inputType: 'text',
   },
@@ -36,7 +36,7 @@ const styleInputSettings: StyleInputSettings[] = [
   },
   {
     label: 'Dropdown max height',
-    cssVariable: '--combo-box-list-max-height',
+    cssVariable: '--combo-box-list-height',
     defaultValue: '250px',
     inputType: 'text',
   },
