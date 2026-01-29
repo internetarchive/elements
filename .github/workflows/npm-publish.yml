@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          registry-url: "https://registry.npmjs.org"
+          registry-url: 'https://registry.npmjs.org'
       - run: npm ci
       - run: npm test
       # Check if the release tag is a semver release (e.g., v1.2.3) or a pre-release (e.g., v1.2.3-alpha)
