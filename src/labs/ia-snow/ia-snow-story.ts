@@ -25,6 +25,7 @@ export class IASnowStory extends LitElement {
     return html`
       <story-template
         elementTag="ia-snow"
+        elementClassName="IASnow"
         .exampleUsage=${this.exampleUsage}
         labs
       >

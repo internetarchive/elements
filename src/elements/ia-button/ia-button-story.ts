@@ -1,55 +1,46 @@
 import { html, LitElement } from 'lit';
-import { customElement, query, state } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
+
+import type { StyleInputSettings } from '@demo/story-template';
 
 import './ia-button';
 import '@demo/story-template';
 
+const styleInputSettings: StyleInputSettings[] = [
+  {
+    label: 'Text Color (Primary)',
+    cssVariable: '--ia-theme-primary-cta-text-color',
+    defaultValue: '#ffffff',
+    inputType: 'color',
+  },
+  {
+    label: 'Background Color (Primary)',
+    cssVariable: '--ia-theme-primary-cta-fill',
+    defaultValue: '#194880',
+    inputType: 'color',
+  },
+];
+
 @customElement('ia-button-story')
 export class IAButtonStory extends LitElement {
-  @query('#color')
-  private colorInput!: HTMLInputElement;
-
-  @query('ia-button')
-  private button!: HTMLElement;
-
-  @state()
-  private includeStyle = false;
-
   render() {
     return html`
-      <story-template elementTag="ia-button" .exampleUsage=${this.exampleUsage}>
+      <story-template
+        elementTag="ia-button"
+        elementClassName="IAButton"
+        .exampleUsage=${this.exampleUsage}
+        .styleInputData=${{ settings: styleInputSettings }}
+      >
         <div slot="demo">
           <ia-button @click=${() => alert('Button clicked!')}
             >Click Me</ia-button
           >
-        </div>
-
-        <div slot="settings">
-          <table>
-            <tr>
-              <td>Color</td>
-              <td><input type="color" value="#007bff" id="color" /></td>
-            </tr>
-          </table>
-          <button @click=${this.apply}>Apply</button>
         </div>
       </story-template>
     `;
   }
 
   private get exampleUsage(): string {
-    return this.includeStyle
-      ? `<ia-button
-  @click=\${() => alert('Button clicked!')}
-  style="--ia-button-background-color: ${this.colorInput.value}">Click Me</ia-button>`
-      : `<ia-button @click=\${() => alert('Button clicked!')}>Click Me</ia-button>`;
-  }
-
-  private apply() {
-    this.includeStyle = true;
-    this.button.style.setProperty(
-      '--ia-button-background-color',
-      this.colorInput.value,
-    );
+    return `<ia-button @click=\${() => alert('Button clicked!')}>Click Me</ia-button>`;
   }
 }
