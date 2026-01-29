@@ -364,7 +364,7 @@ export class IAComboBox extends LitElement {
    */
   private get labelTemplate(): TemplateResult {
     return html`
-      <label id="label" for="text-input">
+      <label id="label" for="text-input" part="label">
         <slot name="label"></slot>
       </label>
     `;
@@ -1260,6 +1260,9 @@ export class IAComboBox extends LitElement {
         padding-right: 0;
         width: 100%;
         font-size: inherit;
+        font-family: inherit;
+        font-weight: inherit;
+        font-style: inherit;
         color: inherit;
         outline: none;
         text-overflow: ellipsis;
@@ -1282,6 +1285,10 @@ export class IAComboBox extends LitElement {
         border: none;
         padding: var(--combo-box-padding--) 5px;
         outline: none;
+        font-size: inherit;
+        font-family: inherit;
+        font-weight: inherit;
+        font-style: inherit;
         cursor: pointer;
       }
 
@@ -1323,13 +1330,13 @@ export class IAComboBox extends LitElement {
       }
 
       .caret-icon {
-        width: 0.875rem;
-        height: 0.875rem;
+        width: 0.875em;
+        height: 0.875em;
       }
 
       .clear-icon {
-        width: 1rem;
-        height: 1rem;
+        width: 1em;
+        height: 1em;
       }
 
       .option {

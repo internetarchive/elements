@@ -46,7 +46,10 @@ const themeStyles = css`
     /* Sizing */
     --icon-width: var(--ia-theme-icon-width, var(--default-icon-width));
     --padding-sm: var(--ia-theme-padding-sm, var(--default-padding-sm));
-    --combo-box-width: var(--ia-theme-combo-box-width, var(--default-combo-box-width));
+    --combo-box-width: var(
+      --ia-theme-combo-box-width,
+      var(--default-combo-box-width)
+    );
 
     /* Backgrounds and fills */
     --primary-background-color: var(
