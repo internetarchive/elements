@@ -1055,11 +1055,13 @@ export class IAComboBox extends LitElement {
     const usableHeightAbove = mainWidgetRect.top;
     const usableHeightBelow = innerHeight - mainWidgetRect.bottom;
 
+    const maxHeightVar = `var(--combo-box-list-max-height--)`;
+
     const optionsListStyles: Record<string, string> = {
       top: `${mainWidgetRect.bottom + scrollY}px`,
       left: `${mainWidgetRect.left + scrollX}px`,
       width: `var(--combo-box-list-width--, ${mainWidgetRect.width}px)`,
-      maxHeight: `${usableHeightBelow}px`,
+      maxHeight: `min(${maxHeightVar}, ${usableHeightBelow}px)`,
     };
 
     Object.assign(optionsList.style, optionsListStyles);
@@ -1072,7 +1074,7 @@ export class IAComboBox extends LitElement {
       if (overflowingViewport && moreSpaceAbove) {
         optionsList.style.top = 'auto';
         optionsList.style.bottom = `${innerHeight - mainWidgetRect.top - scrollY}px`;
-        optionsList.style.maxHeight = `${usableHeightAbove}px`;
+        optionsList.style.maxHeight = `min(${maxHeightVar}, ${usableHeightAbove}px)`;
       }
     }, 0);
   }
@@ -1212,7 +1214,7 @@ export class IAComboBox extends LitElement {
         --combo-box-width--: var(--combo-box-width);
         --combo-box-padding--: var(--padding-sm);
         --combo-box-list-width--: var(--combo-box-list-width, unset);
-        --combo-box-list-height--: var(--combo-box-list-height, 250px);
+        --combo-box-list-max-height--: var(--combo-box-list-max-height, 250px);
       }
 
       #container {
@@ -1303,7 +1305,6 @@ export class IAComboBox extends LitElement {
         padding: 0;
         background: white;
         width: var(--combo-box-list-width--);
-        height: var(--combo-box-list-height--);
         max-height: 400px;
         box-shadow: 0 0 1px 1px #ddd;
         opacity: 0;

@@ -36,7 +36,7 @@ const styleInputSettings: StyleInputSettings[] = [
   },
   {
     label: 'Dropdown max height',
-    cssVariable: '--combo-box-list-height',
+    cssVariable: '--combo-box-list-max-height',
     defaultValue: '250px',
     inputType: 'text',
   },
