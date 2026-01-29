@@ -85,10 +85,13 @@ export class StoryTemplate extends LitElement {
           <slot name="demo"></slot>
         </div>
         <h3>Import</h3>
-        <syntax-highlighter .code=${this.importCode}></syntax-highlighter>
+        <syntax-highlighter
+          language="typescript"
+          .code=${this.importCode}
+        ></syntax-highlighter>
         <h3>Usage</h3>
         <syntax-highlighter
-          .language=${'html'}
+          language="auto"
           .code=${this.exampleUsage}
         ></syntax-highlighter>
         ${when(
@@ -96,7 +99,7 @@ export class StoryTemplate extends LitElement {
           () => html`
             <h3>Styling</h3>
             <syntax-highlighter
-              .language=${'css'}
+              language="css"
               .code=${this.cssCode}
             ></syntax-highlighter>
           `,
