@@ -46,7 +46,10 @@
     /* Sizing */
     --icon-width: var(--ia-theme-icon-width, var(--default-icon-width));
     --padding-sm: var(--ia-theme-padding-sm, var(--default-padding-sm));
-    --combo-box-width: var(--ia-theme-combo-box-width, var(--default-combo-box-width));
+    --combo-box-width: var(
+      --ia-theme-combo-box-width,
+      var(--default-combo-box-width)
+    );
 
     /* Backgrounds and fills */
     --primary-background-color: var(
@@ -381,7 +384,7 @@ ${this.elementTag} {
         ${this.optionsListTemplate}
       </div>
     `}willUpdate(t){(t.has("options")||t.has("caseSensitive"))&&this.rebuildOptionFilteringValues(),t.has("options")&&this.rebuildOptionIDMap(),(t.has("options")||t.has("sort"))&&this.rebuildSortedOptions(),IE(t,["options","behavior","maxAutocompleteEntries","filter","filterText","caseSensitive","sort"])&&this.rebuildFilteredOptions(),t.has("open")&&(this.open?this.value&&this.setHighlightedOption(this.selectedOption):this.setHighlightedOption(null)),t.has("required")&&this.updateFormValidity()}updated(t){t.has("value")&&this.handleValueChanged(),t.has("options")&&this.behavior!=="freeform"&&!this.selectedOption&&this.clearSelectedOption(),t.has("open")&&(this.open?(this.positionOptionsMenu(),this.optionsList.showPopover?.(),this.optionsList.classList.add("visible")):(this.optionsList.hidePopover?.(),this.optionsList.classList.remove("visible")))}get labelTemplate(){return H`
-      <label id="label" for="text-input">
+      <label id="label" for="text-input" part="label">
         <slot name="label"></slot>
       </label>
     `}get textInputTemplate(){const t=ji({"clear-padding":this.clearable&&!this.shouldShowClearButton});return H`
@@ -548,6 +551,9 @@ ${this.elementTag} {
         padding-right: 0;
         width: 100%;
         font-size: inherit;
+        font-family: inherit;
+        font-weight: inherit;
+        font-style: inherit;
         color: inherit;
         outline: none;
         text-overflow: ellipsis;
@@ -570,6 +576,10 @@ ${this.elementTag} {
         border: none;
         padding: var(--combo-box-padding--) 5px;
         outline: none;
+        font-size: inherit;
+        font-family: inherit;
+        font-weight: inherit;
+        font-style: inherit;
         cursor: pointer;
       }
 
@@ -611,13 +621,13 @@ ${this.elementTag} {
       }
 
       .caret-icon {
-        width: 0.875rem;
-        height: 0.875rem;
+        width: 0.875em;
+        height: 0.875em;
       }
 
       .clear-icon {
-        width: 1rem;
-        height: 1rem;
+        width: 1em;
+        height: 1em;
       }
 
       .option {
