@@ -2,12 +2,13 @@ import hljs from 'highlight.js';
 import {
   type CSSResultGroup,
   LitElement,
-  type PropertyValues,
   html,
 } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { syntaxStyles } from './syntax-style-light';
+
+type LanguageName = string
 
 /**
  * An element that syntax highlights and displays TypeScript code
@@ -16,16 +17,12 @@ import { syntaxStyles } from './syntax-style-light';
 export class SyntaxHighlighter extends LitElement {
   @property({ type: String }) code = '';
 
-  @property({ type: String }) language: 'auto' | 'typescript' | 'html' | 'css' =
-    'auto';
-
-  @state() private highlightedCode = '';
-
-  protected willUpdate(_changedProperties: PropertyValues): void {
-    if (_changedProperties.has('code')) {
-      this.highlightCode();
-    }
-  }
+  /**
+   * The language to use for syntax highlighting, or 'auto' to automatically detect
+   *
+   * See https://highlightjs.readthedocs.io/en/latest/supported-languages.html for supported languages.
+   */
+  @property({ type: String }) language: 'auto' | LanguageName = 'auto';
 
   render() {
     return html`
@@ -33,7 +30,7 @@ export class SyntaxHighlighter extends LitElement {
     `;
   }
 
-  private highlightCode() {
+  private get highlightedCode() {
     const code = this.code.trim();
 
     let highlighted: string;
@@ -45,7 +42,7 @@ export class SyntaxHighlighter extends LitElement {
       }).value;
     }
 
-    this.highlightedCode = highlighted;
+    return highlighted;
   }
 
   static get styles(): CSSResultGroup {
