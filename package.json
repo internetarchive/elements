@@ -58,7 +58,7 @@
     "wireit": "^0.14.12"
   },
   "exports": {
-    ".": "./dist/src/index.js",
+    ".": "./dist/index.js",
     "./*": "./dist/src/elements/*.js",
     "./labs/*": "./dist/src/labs/*.js"
   },
@@ -73,7 +73,7 @@
   ],
   "wireit": {
     "build": {
-      "command": "tsc --build --pretty && tsc-alias && rsync -zarvm --prune-empty-dirs --include \"*/\" --include \"*.svg\" --exclude=\"*\" src dist",
+      "command": "tsc --build --pretty && tsc-alias && rsync -zarvm --prune-empty-dirs --include \"*/\" --include \"*.svg\" --exclude=\"*\" src dist && vite build --emptyOutDir=false",
       "dependencies": [
         "circular"
       ],
