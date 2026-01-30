@@ -20,7 +20,7 @@ jobs:
       - run: npx playwright install
       - run: npm test
       - run: |
-          if [[ ${{ github.event.release.prerelease }}; then
+          if ${{ github.event.release.prerelease }}; then
             npm publish --provenance --tag alpha
           else
             npm publish --provenance
