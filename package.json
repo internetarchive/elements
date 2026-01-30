@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/elements",
-  "version": "0.1.0",
+  "version": "0.1.1-webdev-8151.3",
   "description": "A web component library from the Internet Archive.",
   "license": "AGPL-3.0-only",
   "types": "./dist/src/elements/index.d.ts",
@@ -58,7 +58,7 @@
     "wireit": "^0.14.12"
   },
   "exports": {
-    ".": "./dist/src/index.js",
+    ".": "./dist/index.js",
     "./*": "./dist/src/elements/*.js",
     "./labs/*": "./dist/src/labs/*.js"
   },
@@ -73,7 +73,7 @@
   ],
   "wireit": {
     "build": {
-      "command": "tsc --build --pretty && tsc-alias && rsync -zarvm --prune-empty-dirs --include \"*/\" --include \"*.svg\" --exclude=\"*\" src dist",
+      "command": "tsc --build --pretty && tsc-alias && rsync -zarvm --prune-empty-dirs --include \"*/\" --include \"*.svg\" --exclude=\"*\" src dist && vite build --emptyOutDir=false",
       "dependencies": [
         "circular"
       ],

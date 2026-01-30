@@ -11,6 +11,18 @@ export default defineConfig({
       '@demo': path.resolve(__dirname, './demo'),
     },
   },
+  build: {
+    lib: {
+      entry: path.resolve(__dirname, 'src/elements/index'),
+      name: 'Elements',
+      formats: ['es'],
+      fileName: 'index',
+    },
+    rollupOptions: {
+      // Externalize deps that shouldn't be bundled
+      external: ['lit']
+    },
+  },
   test: {
     browser: {
       enabled: true,
