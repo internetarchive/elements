@@ -5,7 +5,7 @@ on:
     types: [published]
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -17,11 +17,11 @@ jobs:
           node-version: 24
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
+      - run: npx playwright install
       - run: npm test
-      # Check if the release tag is a semver release (e.g., v1.2.3) or a pre-release (e.g., v1.2.3-alpha)
       - run: |
-          if [[ ${{ github.event.release.tag_name }} =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            npm publish --provenance
-          else
+          if [[ ${{ github.event.release.prerelease }}; then
             npm publish --provenance --tag alpha
+          else
+            npm publish --provenance
           fi
