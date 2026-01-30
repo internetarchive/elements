@@ -232,6 +232,7 @@ ${this.elementTag} {
           height: 12px;
           transform: rotate(-90deg);
           transition: transform 0.2s ease-in-out;
+          filter: invert(0.5);
         }
 
         .disclosure-arrow.open {
