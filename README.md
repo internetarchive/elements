@@ -1,5 +1,9 @@
 # 📚 _elements_ 🏛️
 
+## Demo
+
+<https://internetarchive.github.io/elements>
+
 ## Installation
 
 ```zsh
@@ -22,6 +26,37 @@ import "@internetarchive/elements/ia-button/ia-button";
 npm i
 npm run dev
 ```
+
+## Versioning and Publishing
+
+### Prerelease Version
+
+1. Create prerelease version on your branch:
+   1. `npm version prerelease --preid=<some_prefix>`
+   2. If you use JIRA, recommend using the ticket number, ie `--preid=webdev-1234`
+   3. This will also create a `git` tag
+2. Push the tag that was created in the `npm version` step
+3. Publish prerelease to npm:
+   1. Go to the [Element's release page](https://github.com/internetarchive/elements/releases)
+   2. Tap `Draft a new release` button
+   3. Select the tag you created
+   4. Tap `Generate release notes`
+   5. Select `Set as a pre-release`
+   6. Tap `Publish release`
+
+### Release Version
+
+1. Use [Semantic Versioning](https://semver.org) to determine release number
+2. On the `main` branch:
+   1. Run `npm version [major | minor | patch]`
+   2. `git push && git push --tags`
+3. Publish release to npm:
+   1. Go to the [Element's release page](https://github.com/internetarchive/elements/releases)
+   2. Tap `Draft a new release` button
+   3. Select the tag you created
+   4. Tap `Generate release notes`
+   5. Select `Set as the latest release`
+   6. Tap `Publish release`
 
 ## Adding a Component
 
