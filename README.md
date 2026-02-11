@@ -20,6 +20,71 @@ import "@internetarchive/elements/ia-button/ia-button";
 <ia-button @click=() => alert('Clicked!')>Click Me</ia-button>
 ```
 
+## Build Dependencies
+
+We use SVGs in this repo, which not all build systems support out of the box. Here's how to support SVGs:
+
+### Webpack
+
+Add this to your Webpack config:
+
+```json
+module: {
+  rules: [
+    {
+      test: /\.svg/,
+      type: 'asset/resource',
+    },
+  ],
+},
+```
+
+### @web/test-runner
+
+Install rollup image plugins:
+
+```shell
+npm i -D @rollup/plugin-image @web/dev-server-rollup
+```
+
+Update config:
+
+```js
+import rollupImage from '@rollup/plugin-image';
+import { rollupAdapter } from '@web/dev-server-rollup';
+
+export default ({
+  mimeTypes: {
+    '**/*.scss': 'js',
+    '**/*.css': 'js',
+    '**/*.svg': 'js',
+    '**/*.json': 'js',
+  },
+  plugins: [rollupAdapter(rollupImage())],
+})
+```
+
+### Jest
+
+Create `SVGMock` file, ie `tests/jest/mocks/svg.js`
+
+```js
+/**
+ * Mock for SVG imports in Jest tests.
+ */
+export class SVGMock {}
+```
+
+Add to Jest config:
+
+```json
+"jest": {
+  "moduleNameMapper": {
+    "\\.svg$": "<rootDir>/tests/jest/mocks/svg.js",
+  },
+}
+```
+
 ## Development
 
 ```zsh
