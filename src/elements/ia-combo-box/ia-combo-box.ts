@@ -211,11 +211,11 @@ export class IAComboBox extends LitElement {
    */
   @state() private filterText: string = '';
 
-  @query('#main-widget-row') private mainWidgetRow!: HTMLDivElement;
+  @query('#main-widget-row') private mainWidgetRow?: HTMLDivElement;
 
-  @query('#text-input') private textInput!: HTMLInputElement;
+  @query('#text-input') private textInput?: HTMLInputElement;
 
-  @query('#options-list') private optionsList!: HTMLUListElement;
+  @query('#options-list') private optionsList?: HTMLUListElement;
 
   static formAssociated = true;
 
@@ -344,11 +344,11 @@ export class IAComboBox extends LitElement {
     if (changed.has('open')) {
       if (this.open) {
         this.positionOptionsMenu();
-        this.optionsList.showPopover?.();
-        this.optionsList.classList.add('visible');
+        this.optionsList?.showPopover?.();
+        this.optionsList?.classList.add('visible');
       } else {
-        this.optionsList.hidePopover?.();
-        this.optionsList.classList.remove('visible');
+        this.optionsList?.hidePopover?.();
+        this.optionsList?.classList.remove('visible');
       }
     }
   }
@@ -630,8 +630,9 @@ export class IAComboBox extends LitElement {
    * Handler for `input` events in the text input box.
    */
   private async handleTextBoxInput(): Promise<void> {
-    this.enteredText = this.textInput.value;
-    this.setFilterText(this.textInput.value);
+    const value = this.textInput?.value ?? '';
+    this.enteredText = value;
+    this.setFilterText(value);
     this.openOptionsMenu();
 
     await this.updateComplete;
@@ -745,7 +746,7 @@ export class IAComboBox extends LitElement {
    */
   private handleClearButtonClick(): void {
     this.clearSelectedOption();
-    this.textInput.focus();
+    this.textInput?.focus();
     this.openOptionsMenu();
   }
 
@@ -755,7 +756,7 @@ export class IAComboBox extends LitElement {
   private handleFocus(): void {
     if (this.behavior !== 'select-only') {
       // Always keep focus on the text input if it's editable
-      this.textInput.focus();
+      this.textInput?.focus();
     }
     this.hasFocus = true;
     this.losingFocus = false;
@@ -890,7 +891,7 @@ export class IAComboBox extends LitElement {
     await this.updateComplete;
 
     const { optionsList, highlightedElement } = this;
-    if (!highlightedElement) return;
+    if (!highlightedElement || !optionsList) return;
 
     // TODO: Not ideal as this will trigger a reflow...
     // But may not be an issue in practice given the highlight isn't changing in a hot loop.
@@ -965,7 +966,7 @@ export class IAComboBox extends LitElement {
    * matched. Defaults to `true`.
    */
   private setTextValue(value: string, setFilter = true): void {
-    this.textInput.value = value;
+    if (this.textInput) this.textInput.value = value;
     this.enteredText = value;
     if (setFilter) this.setFilterText(value);
   }
@@ -1049,6 +1050,7 @@ export class IAComboBox extends LitElement {
    */
   private positionOptionsMenu(): void {
     const { mainWidgetRow, optionsList } = this;
+    if (!mainWidgetRow || !optionsList) return;
     const mainWidgetRect = mainWidgetRow.getBoundingClientRect();
 
     const { innerHeight, scrollX, scrollY } = window;
