@@ -102,7 +102,7 @@ npm run dev
    3. This will also create a `git` tag
 2. Push the tag that was created in the `npm version` step
 3. Publish prerelease to npm:
-   1. Go to the [Element's release page](https://github.com/internetarchive/elements/releases)
+   1. Go to the [Element release page](https://github.com/internetarchive/elements/releases)
    2. Tap `Draft a new release` button
    3. Select the tag you created
    4. Tap `Generate release notes`
@@ -116,7 +116,7 @@ npm run dev
    1. Run `npm version [major | minor | patch]`
    2. `git push && git push --tags`
 3. Publish release to npm:
-   1. Go to the [Element's release page](https://github.com/internetarchive/elements/releases)
+   1. Go to the [Element release page](https://github.com/internetarchive/elements/releases)
    2. Tap `Draft a new release` button
    3. Select the tag you created
    4. Tap `Generate release notes`
@@ -126,7 +126,7 @@ npm run dev
 ## Adding a Component
 
 ### Structure
-Each component has its own directory in `src/elements` (or `src/labs` if it's still in development). The basic structure looks like this, though components can have additional files and directories if neededd. Take a look at other elements to see what they each contain.
+Each component has its own directory in `src/elements` (or `src/labs` if it's still in development). The basic structure looks like this, though components can have additional files and directories if needed. Take a look at other elements to see what they each contain.
 ```
 src
 - elements
