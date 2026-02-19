@@ -1,15 +1,9 @@
-import { defineConfig } from 'vitest/config';
-import path from 'path';
+import { mergeConfig } from 'vitest/config';
+import baseConfig from './vite.config.base';
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default mergeConfig(baseConfig, {
   base: './',
-  resolve: {
-    alias: {
-      '@src': path.resolve(__dirname, './src'),
-      '@demo': path.resolve(__dirname, './demo'),
-    },
-  },
   build: {
     outDir: './ghpages',
     emptyOutDir: true,

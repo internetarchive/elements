@@ -1,16 +1,10 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vitest/config';
-import path from 'path';
+import { mergeConfig } from 'vitest/config';
 import { playwright } from '@vitest/browser-playwright';
+import baseConfig from './vite.config.base';
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  resolve: {
-    alias: {
-      '@src': path.resolve(__dirname, './src'),
-      '@demo': path.resolve(__dirname, './demo'),
-    },
-  },
+export default mergeConfig(baseConfig, {
   test: {
     browser: {
       enabled: true,
