@@ -1,5 +1,9 @@
 # 📚 _elements_ 🏛️
 
+## Demo
+
+<https://internetarchive.github.io/elements>
+
 ## Installation
 
 ```zsh
@@ -16,6 +20,71 @@ import "@internetarchive/elements/ia-button/ia-button";
 <ia-button @click=() => alert('Clicked!')>Click Me</ia-button>
 ```
 
+## Build Dependencies
+
+We use SVGs in this repo, which not all build systems support out of the box. Here's how to support SVGs:
+
+### Webpack
+
+Add this to your Webpack config:
+
+```json
+module: {
+  rules: [
+    {
+      test: /\.svg/,
+      type: 'asset/resource',
+    },
+  ],
+},
+```
+
+### @web/test-runner
+
+Install rollup image plugins:
+
+```shell
+npm i -D @rollup/plugin-image @web/dev-server-rollup
+```
+
+Update config:
+
+```js
+import rollupImage from '@rollup/plugin-image';
+import { rollupAdapter } from '@web/dev-server-rollup';
+
+export default ({
+  mimeTypes: {
+    '**/*.scss': 'js',
+    '**/*.css': 'js',
+    '**/*.svg': 'js',
+    '**/*.json': 'js',
+  },
+  plugins: [rollupAdapter(rollupImage())],
+})
+```
+
+### Jest
+
+Create `SVGMock` file, ie `tests/jest/mocks/svg.js`
+
+```js
+/**
+ * Mock for SVG imports in Jest tests.
+ */
+export class SVGMock {}
+```
+
+Add to Jest config:
+
+```json
+"jest": {
+  "moduleNameMapper": {
+    "\\.svg$": "<rootDir>/tests/jest/mocks/svg.js",
+  },
+}
+```
+
 ## Development
 
 ```zsh
@@ -23,10 +92,41 @@ npm i
 npm run dev
 ```
 
+## Versioning and Publishing
+
+### Prerelease Version
+
+1. Create prerelease version on your branch:
+   1. `npm version prerelease --preid=<some_prefix>`
+   2. If you use JIRA, recommend using the ticket number, ie `--preid=webdev-1234`
+   3. This will also create a `git` tag
+2. Push the tag that was created in the `npm version` step
+3. Publish prerelease to npm:
+   1. Go to the [Element release page](https://github.com/internetarchive/elements/releases)
+   2. Tap `Draft a new release` button
+   3. Select the tag you created
+   4. Tap `Generate release notes`
+   5. Select `Set as a pre-release`
+   6. Tap `Publish release`
+
+### Release Version
+
+1. Use [Semantic Versioning](https://semver.org) to determine release number
+2. On the `main` branch:
+   1. Run `npm version [major | minor | patch]`
+   2. `git push && git push --tags`
+3. Publish release to npm:
+   1. Go to the [Element release page](https://github.com/internetarchive/elements/releases)
+   2. Tap `Draft a new release` button
+   3. Select the tag you created
+   4. Tap `Generate release notes`
+   5. Select `Set as the latest release`
+   6. Tap `Publish release`
+
 ## Adding a Component
 
 ### Structure
-Each component has its own directory in `src/elements` (or `src/labs` if it's still in development). The basic structure looks like this, though components can have additional files and directories if neededd. Take a look at other elements to see what they each contain.
+Each component has its own directory in `src/elements` (or `src/labs` if it's still in development). The basic structure looks like this, though components can have additional files and directories if needed. Take a look at other elements to see what they each contain.
 ```
 src
 - elements
