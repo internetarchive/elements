@@ -146,7 +146,7 @@ import '${this.modulePath}';
     return `
 
 ${this.elementTag} {
-  ${this.stringifiedStyles}
+ ${this.stringifiedStyles}
 }
     `;
   }
