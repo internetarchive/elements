@@ -148,54 +148,61 @@ Import your story in `/demo/app-root.ts` and add it to the page.
 
 The story template is a component you can use in your story to demo your component. This lets us present them in a consistent way.
 
-It has 5 main configurations:
+It has a few main configurations:
 
 *Properties*
 - `elementTag` (_string_) your component's name, ie `ia-button`
-- `exampleUsage` (_string_) your element's example usage, displays it with syntax highlighting
 - `labs` (_boolean_) if your component is in `labs` to update links
+- `styleInputSettings` (_StyleInputSettings array_) the style options to display, in the appropriate format
+- `propInputSettings` (_PropInputSettings array_) the prop options to display, in the appropriate format
+
+**Note:** If the type of prop input you want to use isn't yet available in the `propInputSettings` options,
+you can instead slot in custom property settings by using `slot="settings"`, adding a button to apply the
+properties, and passing in a `customExampleUsage` (see `ia-snow-story.ts` for a sample implementation).
 
 *Slots*
 - `demo` put your component demo in here
-- `settings` put your component settings in here
 
 Here's an example:
 ```typescript
 import '@demo/story-template';
+
+// Style options to display
+const styleInputSettings: StyleInputSettings[] = [
+  {
+    label: 'Button BG color',
+    cssVariable: '--button-background-color',
+    defaultValue: 'blue',  // Should match the actual fallback value for the variable
+    inputType: 'color',
+  },
+];
+
+// Prop options to display
+const propInputSettings: PropInputSettings[] = [
+  {
+    label: 'Mode',
+    inputType: 'radio',
+    propertyName: 'mode', // Should match the name of the property from its @property() declaration
+    radioOptions: ['primary', 'secondary', 'danger'],
+    defaultValue: 'primary', // Should match the actual default value from the @property() declaration, if any
+  },
+]
 ...
 render() {
   return html`
-    <story-template elementTag="ia-button" elementClassName="IAButton" .exampleUsage=${this.exampleUsage}>
+    <story-template 
+      elementTag="ia-button" 
+      elementClassName="IAButton" 
+      .styleInputSettings=${this.styleInputSettings} 
+      .propInputSettings=${this.propInputSettings}
+    >
       <div slot="demo">
-        <ia-button @click=${() => alert('Button clicked!')}
-          >Click Me</ia-button
-        >
-      </div>
-
-      <div slot="settings">
-        <table>
-          <tr>
-            <td>Color</td>
-            <td><input type="color" value="#007bff" id="color" /></td>
-          </tr>
-        </table>
-        <button @click=${this.apply}>Apply</button>
+        <ia-button @click=${() => alert('Button clicked!')}>
+          Click Me
+        </ia-button>
       </div>
     </story-template>
   `;
-}
-
-// return a string of your element's usage and it will
-// be displayed with syntax highlighting
-// can be dynamic
-private get exampleUsage(): string {
-  return `<ia-button @click=\${() => alert('Button clicked!')}>
-    Click Me
-  </ia-button>`;
-}
-
-private apply(): void {
-  // update component settings based on settings change
 }
 ```
 
