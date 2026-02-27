@@ -28,7 +28,7 @@ export class IAButtonStory extends LitElement {
       <story-template
         elementTag="ia-button"
         elementClassName="IAButton"
-        .exampleUsage=${this.exampleUsage}
+        .customExampleUsage=${this.exampleUsage}
         .styleInputData=${{ settings: styleInputSettings }}
       >
         <div slot="demo">

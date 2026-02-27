@@ -27,7 +27,7 @@ export class StoryTemplate extends LitElement {
 
   @property({ type: String }) elementClassName = '';
 
-  @property({ type: String }) exampleUsage = '';
+  @property({ type: String }) customExampleUsage?: string;
 
   @property({ type: Object }) styleInputData?: StyleInputData;
 
@@ -42,6 +42,9 @@ export class StoryTemplate extends LitElement {
 
   /* Stringified properties for the component in .myprop=${'foo'} format */
   @state() private stringifiedProps?: string;
+
+  /* Whether settings inputs have been slotted in and should be displayed */
+  @state() private shouldShowPropertySettings: boolean = false;
 
   /* Component that has been slotted into the demo, if applicable */
   @state() private slottedDemoComponent?: any;
@@ -87,7 +90,9 @@ export class StoryTemplate extends LitElement {
         <h3>Usage</h3>
         <syntax-highlighter
           language="auto"
-          .code=${this.demoUsage}
+          .code=${this.customExampleUsage
+            ? this.customExampleUsage
+            : this.exampleUsage}
         ></syntax-highlighter>
         ${when(
           this.cssCode,
@@ -107,6 +112,14 @@ export class StoryTemplate extends LitElement {
           .propInputData=${this.propInputData}
           @propsApplied=${this.handlePropsApplied}
         ></story-props-settings>
+        ${when(this.shouldShowPropertySettings, () => html` <h3>Settings</h3>`)}
+        <div
+          class="slot-container"
+          style="${!this.shouldShowPropertySettings ? 'display: none' : ''}"
+          @slotchange=${this.handleSettingsSlotChange}
+        >
+          <slot name="settings"></slot>
+        </div>
       </div>
     `;
   }
@@ -124,7 +137,7 @@ import '${this.modulePath}';
     }
   }
 
-  private get demoUsage(): string {
+  private get exampleUsage(): string {
     return `<${this.elementTag}${this.stringifiedProps ?? ''}></${this.elementTag}>`;
   }
 
@@ -142,6 +155,12 @@ ${this.elementTag} {
     return this.labs
       ? `@internetarchive/elements/labs/${this.elementTag}/${this.elementTag}`
       : `@internetarchive/elements/${this.elementTag}/${this.elementTag}`;
+  }
+
+  /* Toggles visibility of section depending on whether inputs have been slotted into it */
+  private handleSettingsSlotChange(e: Event): void {
+    const slottedChildren = (e.target as HTMLSlotElement).assignedElements();
+    this.shouldShowPropertySettings = slottedChildren.length > 0;
   }
 
   /* Detects and stores a reference to slotted demo component */

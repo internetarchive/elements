@@ -1,5 +1,5 @@
 import { html, LitElement } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 
 import type { PropInputSettings } from '@demo/story-components/story-prop-settings';
 import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
@@ -68,25 +68,16 @@ const propInputSettings: PropInputSettings<IAStatusIndicator>[] = [
 
 @customElement('ia-status-indicator-story')
 export class IAStatusIndicatorStory extends LitElement {
-  /* Applied properties fro the component in .myprop=${'foo'} format */
-  @state()
-  private stringifiedProps: string = '';
-
   render() {
     return html`
       <story-template
         elementTag="ia-status-indicator"
         elementClassName="IAStatusIndicator"
-        .exampleUsage=${this.exampleUsage}
         .styleInputData=${{ settings: styleInputSettings }}
         .propInputData=${{ settings: propInputSettings }}
       >
         <ia-status-indicator slot="demo"></ia-status-indicator>
       </story-template>
     `;
-  }
-
-  private get exampleUsage(): string {
-    return `<ia-status-indicator${this.stringifiedProps ?? ''}></ia-status-indicator>`;
   }
 }
