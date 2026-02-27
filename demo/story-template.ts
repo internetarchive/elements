@@ -1,32 +1,22 @@
-import {
-  css,
-  html,
-  LitElement,
-  nothing,
-  TemplateResult,
-  type CSSResultGroup,
-} from 'lit';
-import { property, queryAll, state } from 'lit/decorators.js';
+import { css, html, LitElement, type CSSResultGroup } from 'lit';
+import { property, state } from 'lit/decorators.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { when } from 'lit/directives/when.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
 import './syntax-highlighter';
 import themeStyles from '@src/themes/theme-styles';
+import type { StyleInputData } from './story-components/story-styles-settings';
+import type {
+  AppliedProps,
+  PropInputData,
+} from './story-components/story-prop-settings';
 
 import arrow from './arrow.svg';
 import testTube from './test-tube.svg';
 
-export type StyleInputSettings = {
-  label: string;
-  cssVariable: string;
-  defaultValue?: string;
-  inputType?: 'color' | 'text';
-};
-
-export type StyleInputData = {
-  settings: StyleInputSettings[];
-};
+import './story-components/story-styles-settings';
+import './story-components/story-prop-settings';
 
 /**
  * A template for demoing the use of a custom element.
@@ -37,22 +27,30 @@ export class StoryTemplate extends LitElement {
 
   @property({ type: String }) elementClassName = '';
 
-  @property({ type: String }) exampleUsage = '';
+  @property({ type: String }) customExampleUsage?: string;
+
+  /* Optional stringified properties to always include in the example usage */
+  @property({ type: String }) defaultUsageProps?: string;
 
   @property({ type: Object }) styleInputData?: StyleInputData;
+
+  @property({ type: Object }) propInputData?: PropInputData;
 
   @property({ type: Boolean }) labs = false;
 
   @state() private visible = false;
 
   /* Stringified styles applied for the demo component */
-  @state() private appliedStyles?: string;
+  @state() private stringifiedStyles?: string;
+
+  /* Stringified properties for the component in .myprop=${'foo'} format */
+  @state() private stringifiedProps?: string;
 
   /* Whether settings inputs have been slotted in and should be displayed */
   @state() private shouldShowPropertySettings: boolean = false;
 
-  @queryAll('.style-input')
-  private styleInputs?: NodeListOf<HTMLInputElement>;
+  /* Component that has been slotted into the demo, if applicable */
+  @state() private slottedDemoComponent?: any;
 
   render() {
     return html`
@@ -81,8 +79,11 @@ export class StoryTemplate extends LitElement {
     return html`
       <div id="container">
         <h3>Demo</h3>
-        <div class="slot-container" style=${ifDefined(this.appliedStyles)}>
-          <slot name="demo"></slot>
+        <div class="slot-container" style=${ifDefined(this.stringifiedStyles)}>
+          <slot
+            name="demo"
+            @slotchange=${this.handleDemoComponentSlotted}
+          ></slot>
         </div>
         <h3>Import</h3>
         <syntax-highlighter
@@ -92,7 +93,9 @@ export class StoryTemplate extends LitElement {
         <h3>Usage</h3>
         <syntax-highlighter
           language="auto"
-          .code=${this.exampleUsage}
+          .code=${this.customExampleUsage
+            ? this.customExampleUsage
+            : this.exampleUsage}
         ></syntax-highlighter>
         ${when(
           this.cssCode,
@@ -104,8 +107,15 @@ export class StoryTemplate extends LitElement {
             ></syntax-highlighter>
           `,
         )}
-        ${this.styleSettingsTemplate}
-        ${this.shouldShowPropertySettings ? html` <h3>Settings</h3>` : nothing}
+        <story-styles-settings
+          .styleInputData=${this.styleInputData}
+          @stylesApplied=${this.handleStylesApplied}
+        ></story-styles-settings>
+        <story-props-settings
+          .propInputData=${this.propInputData}
+          @propsApplied=${this.handlePropsApplied}
+        ></story-props-settings>
+        ${when(this.shouldShowPropertySettings, () => html` <h3>Settings</h3>`)}
         <div
           class="slot-container"
           style="${!this.shouldShowPropertySettings ? 'display: none' : ''}"
@@ -113,39 +123,6 @@ export class StoryTemplate extends LitElement {
         >
           <slot name="settings"></slot>
         </div>
-      </div>
-    `;
-  }
-
-  private get styleSettingsTemplate(): TemplateResult | typeof nothing {
-    if (!this.styleInputData) return nothing;
-
-    return html`
-      <h3>Styles</h3>
-      <div class="style-options">
-        <table>
-          ${this.styleInputData.settings.map(
-            (input) => html`
-              <tr>
-                <td>
-                  <label for=${this.labelToId(input.label)}
-                    >${input.label}</label
-                  >
-                </td>
-                <td>
-                  <input
-                    id=${this.labelToId(input.label)}
-                    class="style-input"
-                    type=${input.inputType ?? 'text'}
-                    value=${input.defaultValue ?? ''}
-                    data-variable=${input.cssVariable}
-                  />
-                </td>
-              </tr>
-            `,
-          )}
-        </table>
-        <button @click=${this.applyStyles}>Apply</button>
       </div>
     `;
   }
@@ -163,12 +140,16 @@ import '${this.modulePath}';
     }
   }
 
+  private get exampleUsage(): string {
+    return `<${this.elementTag}${this.defaultUsageProps ? '\n ' + this.defaultUsageProps + '\n' : ''}${this.stringifiedProps ?? ''}></${this.elementTag}>`;
+  }
+
   private get cssCode(): string {
-    if (!this.appliedStyles) return '';
+    if (!this.stringifiedStyles) return '';
     return `
 
 ${this.elementTag} {
-  ${this.appliedStyles}
+ ${this.stringifiedStyles}
 }
     `;
   }
@@ -185,21 +166,32 @@ ${this.elementTag} {
     this.shouldShowPropertySettings = slottedChildren.length > 0;
   }
 
-  /* Applies styles to demo component. */
-  private applyStyles(): void {
-    const appliedStyles: string[] = [];
-
-    this.styleInputs?.forEach((input) => {
-      if (!input.dataset.variable || !input.value) return;
-      appliedStyles.push(`${input.dataset.variable}: ${input.value};`);
-    });
-
-    this.appliedStyles = appliedStyles.join('\n  ');
+  /* Detects and stores a reference to slotted demo component */
+  private handleDemoComponentSlotted(e: Event): void {
+    const slottedComponent = (
+      e.target as HTMLSlotElement
+    ).assignedElements()[0];
+    if (slottedComponent) this.slottedDemoComponent = slottedComponent;
   }
 
-  /* Converts a label to a usable input id, i.e. My setting -> my-setting */
-  private labelToId(label: string): string {
-    return label.toLowerCase().split(' ').join('-');
+  /* Applies styles from the settings to the component and code demo */
+  private handleStylesApplied(e: CustomEvent): void {
+    const stringifiedStyles = e.detail.styles;
+    if (!stringifiedStyles) return;
+
+    this.stringifiedStyles = stringifiedStyles;
+  }
+
+  /* Applies props from the settings to the component and code demo */
+  private handlePropsApplied(e: CustomEvent): void {
+    const stringifiedProps = e.detail.stringifiedProps;
+    const appliedProps: AppliedProps = e.detail.appliedProps;
+    if (!stringifiedProps || !appliedProps) return;
+
+    this.stringifiedProps = stringifiedProps;
+    appliedProps.forEach((prop) =>
+      this.slottedDemoComponent?.setAttribute(prop.propName, prop.value),
+    );
   }
 
   static get styles(): CSSResultGroup {
@@ -221,8 +213,7 @@ ${this.elementTag} {
           margin-bottom: 8px;
         }
 
-        .slot-container,
-        .style-options {
+        .slot-container {
           background-color: var(--primary-background-color);
           padding: 1em;
         }

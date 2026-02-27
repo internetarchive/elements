@@ -1,10 +1,9 @@
-import { html, LitElement, nothing, TemplateResult } from 'lit';
-import { customElement, query, queryAll, state } from 'lit/decorators.js';
-import { choose } from 'lit/directives/choose.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
+import { html, LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
-import { StyleInputSettings } from '@demo/story-template';
-import { IAStatusIndicator } from './ia-status-indicator';
+import type { PropInputSettings } from '@demo/story-components/story-prop-settings';
+import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
+import type { IAStatusIndicator } from './ia-status-indicator';
 
 import './ia-status-indicator';
 import '@demo/story-template';
@@ -34,14 +33,6 @@ const styleInputSettings: StyleInputSettings[] = [
     inputType: 'color',
   },
 ];
-
-export type PropInputSettings<T> = {
-  label: string;
-  propertyName: keyof T;
-  defaultValue?: string;
-  inputType?: 'text' | 'radio';
-  radioOptions?: string[];
-};
 
 const propInputSettings: PropInputSettings<IAStatusIndicator>[] = [
   {
@@ -77,125 +68,16 @@ const propInputSettings: PropInputSettings<IAStatusIndicator>[] = [
 
 @customElement('ia-status-indicator-story')
 export class IAStatusIndicatorStory extends LitElement {
-  /* Applied properties fro the component in .myprop=${'foo'} format */
-  @state()
-  private stringifiedProps: string = '';
-
-  @query('ia-status-indicator')
-  private component!: IAStatusIndicator;
-
-  @queryAll('.prop-input')
-  private propInputs?: NodeListOf<HTMLInputElement>;
-
   render() {
     return html`
       <story-template
         elementTag="ia-status-indicator"
         elementClassName="IAStatusIndicator"
-        .exampleUsage=${this.exampleUsage}
         .styleInputData=${{ settings: styleInputSettings }}
+        .propInputData=${{ settings: propInputSettings }}
       >
-        <div slot="demo">
-          <ia-status-indicator></ia-status-indicator>
-        </div>
-
-        <div slot="settings">
-          <table>
-            ${propInputSettings.map((inputSettings) =>
-              this.createPropInput(inputSettings),
-            )}
-          </table>
-          <button @click=${this.apply}>Apply</button>
-        </div>
+        <ia-status-indicator slot="demo"></ia-status-indicator>
       </story-template>
     `;
-  }
-
-  private get exampleUsage(): string {
-    return `<ia-status-indicator${this.stringifiedProps ?? ''}></ia-status-indicator>`;
-  }
-
-  /* Creates a property input */
-  private createPropInput(
-    settings: PropInputSettings<IAStatusIndicator>,
-  ): TemplateResult | typeof nothing {
-    return (
-      choose(
-        settings.inputType,
-        [['radio', () => this.radioPropInputTemplate(settings)]],
-        () => this.defaultPropInputTemplate(settings),
-      ) ?? nothing
-    );
-  }
-
-  private defaultPropInputTemplate(
-    settings: PropInputSettings<IAStatusIndicator>,
-  ): TemplateResult {
-    const inputId = settings.label.toLowerCase().split(' ').join('-');
-
-    return html`
-      <tr>
-        <td><label for=${inputId}>${settings.label}</label></td>
-        <td>
-          <input
-            class="prop-input"
-            type=${settings.inputType ?? 'text'}
-            id=${inputId}
-            data-prop=${settings.propertyName}
-            placeholder=${ifDefined(settings?.defaultValue)}
-          />
-        </td>
-      </tr>
-    `;
-  }
-
-  /* Generator for a radio prop input, including the associated label text */
-  private radioPropInputTemplate(
-    settings: PropInputSettings<IAStatusIndicator>,
-  ): TemplateResult | typeof nothing {
-    if (settings.inputType !== 'radio' || !settings.radioOptions)
-      return nothing;
-
-    const inputId = settings.label.toLowerCase().split(' ').join('-');
-
-    return html`
-      <tr>
-        <td><legend>${settings.label}</legend></td>
-        <td>
-          ${settings.radioOptions.map(
-            (option) =>
-              html`<input
-                  type="radio"
-                  class="prop-input"
-                  name=${inputId}
-                  id=${option}
-                  value=${option}
-                  data-prop=${settings.propertyName}
-                  ?checked=${settings.defaultValue === option}
-                /><label for=${option}> ${option} </label>`,
-          )}
-        </td>
-      </tr>
-    `;
-  }
-
-  private apply() {
-    const appliedProps: string[] = [];
-    this.propInputs?.forEach((input) => {
-      if (
-        !input.dataset.prop ||
-        !input.value ||
-        (input.type === 'radio' && !input.checked)
-      )
-        return;
-
-      const prop = input.dataset.prop;
-      appliedProps.push(`.${prop}=\${'${input.value}'}`);
-      this.component.setAttribute(prop, input.value);
-    });
-
-    if (!appliedProps.length) return;
-
-    this.stringifiedProps = '\n  ' + appliedProps.join('\n  ') + '\n';
   }
 }
