@@ -1,37 +1,22 @@
-import {
-  css,
-  html,
-  LitElement,
-  nothing,
-  TemplateResult,
-  type CSSResultGroup,
-} from 'lit';
-import { property, queryAll, state } from 'lit/decorators.js';
+import { css, html, LitElement, type CSSResultGroup } from 'lit';
+import { property, state } from 'lit/decorators.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { when } from 'lit/directives/when.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { choose } from 'lit/directives/choose.js';
 
 import './syntax-highlighter';
 import themeStyles from '@src/themes/theme-styles';
 import type { StyleInputData } from './story-components/story-styles-settings';
+import type {
+  AppliedProps,
+  PropInputData,
+} from './story-components/story-prop-settings';
 
 import arrow from './arrow.svg';
 import testTube from './test-tube.svg';
 
 import './story-components/story-styles-settings';
-
-export type PropInputSettings<T> = {
-  label: string;
-  propertyName: keyof T;
-  defaultValue?: string;
-  inputType?: 'text' | 'radio';
-  radioOptions?: string[];
-};
-
-export type PropInputData = {
-  settings: PropInputSettings<any>[];
-};
+import './story-components/story-prop-settings';
 
 /**
  * A template for demoing the use of a custom element.
@@ -53,17 +38,13 @@ export class StoryTemplate extends LitElement {
   @state() private visible = false;
 
   /* Stringified styles applied for the demo component */
-  @state() private appliedStyles?: string;
+  @state() private stringifiedStyles?: string;
 
   /* Stringified properties for the component in .myprop=${'foo'} format */
-  @state()
-  private appliedProps?: string;
+  @state() private stringifiedProps?: string;
 
   /* Component that has been slotted into the demo, if applicable */
   @state() private slottedDemoComponent?: any;
-
-  @queryAll('.prop-input')
-  private propInputs?: NodeListOf<HTMLInputElement>;
 
   render() {
     return html`
@@ -92,7 +73,7 @@ export class StoryTemplate extends LitElement {
     return html`
       <div id="container">
         <h3>Demo</h3>
-        <div class="slot-container" style=${ifDefined(this.appliedStyles)}>
+        <div class="slot-container" style=${ifDefined(this.stringifiedStyles)}>
           <slot
             name="demo"
             @slotchange=${this.handleDemoComponentSlotted}
@@ -122,79 +103,11 @@ export class StoryTemplate extends LitElement {
           .styleInputData=${this.styleInputData}
           @stylesApplied=${this.handleStylesApplied}
         ></story-styles-settings>
-        ${this.propSettingsTemplate}
+        <story-props-settings
+          .propInputData=${this.propInputData}
+          @propsApplied=${this.handlePropsApplied}
+        ></story-props-settings>
       </div>
-    `;
-  }
-
-  private get propSettingsTemplate(): TemplateResult | typeof nothing {
-    if (!this.propInputData) return nothing;
-
-    return html`
-      <h3>Properties</h3>
-      <div class="settings-options">
-        <table>
-          ${this.propInputData.settings.map(
-            (input) =>
-              choose(
-                input.inputType,
-                [['radio', () => this.createRadioPropInput(input)]],
-                () => this.createDefaultPropInput(input),
-              ) ?? nothing,
-          )}
-        </table>
-        <button @click=${this.applyProps}>Apply</button>
-      </div>
-    `;
-  }
-
-  private createDefaultPropInput(
-    settings: PropInputSettings<any>,
-  ): TemplateResult | typeof nothing {
-    const inputId = this.labelToId(settings.label);
-
-    return html`
-      <tr>
-        <td><label for=${inputId}>${settings.label}</label></td>
-        <td>
-          <input
-            class="prop-input"
-            type=${settings.inputType ?? 'text'}
-            id=${inputId}
-            data-prop=${settings.propertyName}
-            placeholder=${ifDefined(settings?.defaultValue)}
-          />
-        </td>
-      </tr>
-    `;
-  }
-
-  private createRadioPropInput(
-    settings: PropInputSettings<any>,
-  ): TemplateResult | typeof nothing {
-    if (settings.inputType !== 'radio' || !settings.radioOptions)
-      return nothing;
-
-    const inputId = this.labelToId(settings.label);
-
-    return html`
-      <tr>
-        <td><legend>${settings.label}</legend></td>
-        <td>
-          ${settings.radioOptions.map(
-            (option) =>
-              html`<input
-                  type="radio"
-                  class="prop-input"
-                  name=${inputId}
-                  id=${option}
-                  value=${option}
-                  data-prop=${settings.propertyName}
-                  ?checked=${settings.defaultValue === option}
-                /><label for=${option}> ${option} </label>`,
-          )}
-        </td>
-      </tr>
     `;
   }
 
@@ -212,15 +125,15 @@ import '${this.modulePath}';
   }
 
   private get demoUsage(): string {
-    return `<${this.elementTag}${this.appliedProps ?? ''}></${this.elementTag}>`;
+    return `<${this.elementTag}${this.stringifiedProps ?? ''}></${this.elementTag}>`;
   }
 
   private get cssCode(): string {
-    if (!this.appliedStyles) return '';
+    if (!this.stringifiedStyles) return '';
     return `
 
 ${this.elementTag} {
-  ${this.appliedStyles}
+  ${this.stringifiedStyles}
 }
     `;
   }
@@ -241,36 +154,22 @@ ${this.elementTag} {
 
   /* Applies styles from the settings to the component and code demo */
   private handleStylesApplied(e: CustomEvent): void {
-    const appliedStyles = e.detail.styles;
-    if (!appliedStyles) return;
+    const stringifiedStyles = e.detail.styles;
+    if (!stringifiedStyles) return;
 
-    this.appliedStyles = appliedStyles;
+    this.stringifiedStyles = stringifiedStyles;
   }
 
-  /* Applies properties to demo component */
-  private applyProps() {
-    const appliedProps: string[] = [];
-    this.propInputs?.forEach((input) => {
-      if (
-        !input.dataset.prop ||
-        !input.value ||
-        (input.type === 'radio' && !input.checked)
-      )
-        return;
+  /* Applies props from the settings to the component and code demo */
+  private handlePropsApplied(e: CustomEvent): void {
+    const stringifiedProps = e.detail.stringifiedProps;
+    const appliedProps: AppliedProps = e.detail.appliedProps;
+    if (!stringifiedProps || !appliedProps) return;
 
-      const prop = input.dataset.prop;
-      appliedProps.push(`.${prop}=\${'${input.value}'}`);
-      this.slottedDemoComponent?.setAttribute(prop, input.value);
-    });
-
-    if (!appliedProps.length) return;
-
-    this.appliedProps = '\n  ' + appliedProps.join('\n  ') + '\n';
-  }
-
-  /* Converts a label to a usable input id, i.e. My setting -> my-setting */
-  private labelToId(label: string): string {
-    return label.toLowerCase().split(' ').join('-');
+    this.stringifiedProps = stringifiedProps;
+    appliedProps.forEach((prop) =>
+      this.slottedDemoComponent?.setAttribute(prop.propName, prop.value),
+    );
   }
 
   static get styles(): CSSResultGroup {
@@ -292,8 +191,7 @@ ${this.elementTag} {
           margin-bottom: 8px;
         }
 
-        .slot-container,
-        .settings-options {
+        .slot-container {
           background-color: var(--primary-background-color);
           padding: 1em;
         }
