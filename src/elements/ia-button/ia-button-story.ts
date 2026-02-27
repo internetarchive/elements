@@ -28,7 +28,7 @@ export class IAButtonStory extends LitElement {
       <story-template
         elementTag="ia-button"
         elementClassName="IAButton"
-        .customExampleUsage=${this.exampleUsage}
+        .defaultUsageProps=${`@click=\${() => alert('Button clicked!')}`}
         .styleInputData=${{ settings: styleInputSettings }}
       >
         <div slot="demo">
@@ -38,9 +38,5 @@ export class IAButtonStory extends LitElement {
         </div>
       </story-template>
     `;
-  }
-
-  private get exampleUsage(): string {
-    return `<ia-button @click=\${() => alert('Button clicked!')}>Click Me</ia-button>`;
   }
 }

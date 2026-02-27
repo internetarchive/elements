@@ -29,6 +29,9 @@ export class StoryTemplate extends LitElement {
 
   @property({ type: String }) customExampleUsage?: string;
 
+  /* Optional stringified properties to always include in the example usage */
+  @property({ type: String }) defaultUsageProps?: string;
+
   @property({ type: Object }) styleInputData?: StyleInputData;
 
   @property({ type: Object }) propInputData?: PropInputData;
@@ -138,7 +141,7 @@ import '${this.modulePath}';
   }
 
   private get exampleUsage(): string {
-    return `<${this.elementTag}${this.stringifiedProps ?? ''}></${this.elementTag}>`;
+    return `<${this.elementTag}${when(this.defaultUsageProps, () => '\n ' + this.defaultUsageProps + '\n')}${this.stringifiedProps ?? ''}></${this.elementTag}>`;
   }
 
   private get cssCode(): string {
