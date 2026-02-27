@@ -1,7 +1,7 @@
 import { html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-import type { StyleInputSettings } from '@demo/story-template';
+import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
 
 import './ia-button';
 import '@demo/story-template';

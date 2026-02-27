@@ -14,20 +14,12 @@ import { choose } from 'lit/directives/choose.js';
 
 import './syntax-highlighter';
 import themeStyles from '@src/themes/theme-styles';
+import type { StyleInputData } from './story-components/story-styles-settings';
 
 import arrow from './arrow.svg';
 import testTube from './test-tube.svg';
 
-export type StyleInputSettings = {
-  label: string;
-  cssVariable: string;
-  defaultValue?: string;
-  inputType?: 'color' | 'text';
-};
-
-export type StyleInputData = {
-  settings: StyleInputSettings[];
-};
+import './story-components/story-styles-settings';
 
 export type PropInputSettings<T> = {
   label: string;
@@ -69,9 +61,6 @@ export class StoryTemplate extends LitElement {
 
   /* Component that has been slotted into the demo, if applicable */
   @state() private slottedDemoComponent?: any;
-
-  @queryAll('.style-input')
-  private styleInputs?: NodeListOf<HTMLInputElement>;
 
   @queryAll('.prop-input')
   private propInputs?: NodeListOf<HTMLInputElement>;
@@ -129,40 +118,11 @@ export class StoryTemplate extends LitElement {
             ></syntax-highlighter>
           `,
         )}
-        ${this.styleSettingsTemplate}${this.propSettingsTemplate}
-      </div>
-    `;
-  }
-
-  private get styleSettingsTemplate(): TemplateResult | typeof nothing {
-    if (!this.styleInputData) return nothing;
-
-    return html`
-      <h3>Styles</h3>
-      <div class="settings-options">
-        <table>
-          ${this.styleInputData.settings.map(
-            (input) => html`
-              <tr>
-                <td>
-                  <label for=${this.labelToId(input.label)}
-                    >${input.label}</label
-                  >
-                </td>
-                <td>
-                  <input
-                    id=${this.labelToId(input.label)}
-                    class="style-input"
-                    type=${input.inputType ?? 'text'}
-                    value=${input.defaultValue ?? ''}
-                    data-variable=${input.cssVariable}
-                  />
-                </td>
-              </tr>
-            `,
-          )}
-        </table>
-        <button @click=${this.applyStyles}>Apply</button>
+        <story-styles-settings
+          .styleInputData=${this.styleInputData}
+          @stylesApplied=${this.handleStylesApplied}
+        ></story-styles-settings>
+        ${this.propSettingsTemplate}
       </div>
     `;
   }
@@ -279,16 +239,12 @@ ${this.elementTag} {
     if (slottedComponent) this.slottedDemoComponent = slottedComponent;
   }
 
-  /* Applies styles to demo component. */
-  private applyStyles(): void {
-    const appliedStyles: string[] = [];
+  /* Applies styles from the settings to the component and code demo */
+  private handleStylesApplied(e: CustomEvent): void {
+    const appliedStyles = e.detail.styles;
+    if (!appliedStyles) return;
 
-    this.styleInputs?.forEach((input) => {
-      if (!input.dataset.variable || !input.value) return;
-      appliedStyles.push(`${input.dataset.variable}: ${input.value};`);
-    });
-
-    this.appliedStyles = appliedStyles.join('\n  ');
+    this.appliedStyles = appliedStyles;
   }
 
   /* Applies properties to demo component */
@@ -304,8 +260,6 @@ ${this.elementTag} {
 
       const prop = input.dataset.prop;
       appliedProps.push(`.${prop}=\${'${input.value}'}`);
-      console.log(this.appliedProps);
-      console.log(this.slottedDemoComponent);
       this.slottedDemoComponent?.setAttribute(prop, input.value);
     });
 

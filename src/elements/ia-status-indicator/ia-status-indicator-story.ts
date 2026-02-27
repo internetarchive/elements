@@ -1,7 +1,8 @@
 import { html, LitElement } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
-import { PropInputSettings, StyleInputSettings } from '@demo/story-template';
+import { PropInputSettings } from '@demo/story-template';
+import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
 import { IAStatusIndicator } from './ia-status-indicator';
 
 import './ia-status-indicator';
