@@ -10,6 +10,7 @@ import { property, queryAll, state } from 'lit/decorators.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { when } from 'lit/directives/when.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { choose } from 'lit/directives/choose.js';
 
 import './syntax-highlighter';
 import themeStyles from '@src/themes/theme-styles';
@@ -28,6 +29,18 @@ export type StyleInputData = {
   settings: StyleInputSettings[];
 };
 
+export type PropInputSettings<T> = {
+  label: string;
+  propertyName: keyof T;
+  defaultValue?: string;
+  inputType?: 'text' | 'radio';
+  radioOptions?: string[];
+};
+
+export type PropInputData = {
+  settings: PropInputSettings<any>[];
+};
+
 /**
  * A template for demoing the use of a custom element.
  */
@@ -41,6 +54,8 @@ export class StoryTemplate extends LitElement {
 
   @property({ type: Object }) styleInputData?: StyleInputData;
 
+  @property({ type: Object }) propInputData?: PropInputData;
+
   @property({ type: Boolean }) labs = false;
 
   @state() private visible = false;
@@ -48,11 +63,18 @@ export class StoryTemplate extends LitElement {
   /* Stringified styles applied for the demo component */
   @state() private appliedStyles?: string;
 
-  /* Whether settings inputs have been slotted in and should be displayed */
-  @state() private shouldShowPropertySettings: boolean = false;
+  /* Stringified properties for the component in .myprop=${'foo'} format */
+  @state()
+  private appliedProps?: string;
+
+  /* Component that has been slotted into the demo, if applicable */
+  @state() private slottedDemoComponent?: any;
 
   @queryAll('.style-input')
   private styleInputs?: NodeListOf<HTMLInputElement>;
+
+  @queryAll('.prop-input')
+  private propInputs?: NodeListOf<HTMLInputElement>;
 
   render() {
     return html`
@@ -82,7 +104,10 @@ export class StoryTemplate extends LitElement {
       <div id="container">
         <h3>Demo</h3>
         <div class="slot-container" style=${ifDefined(this.appliedStyles)}>
-          <slot name="demo"></slot>
+          <slot
+            name="demo"
+            @slotchange=${this.handleDemoComponentSlotted}
+          ></slot>
         </div>
         <h3>Import</h3>
         <syntax-highlighter
@@ -92,7 +117,7 @@ export class StoryTemplate extends LitElement {
         <h3>Usage</h3>
         <syntax-highlighter
           language="auto"
-          .code=${this.exampleUsage}
+          .code=${this.demoUsage}
         ></syntax-highlighter>
         ${when(
           this.cssCode,
@@ -104,15 +129,7 @@ export class StoryTemplate extends LitElement {
             ></syntax-highlighter>
           `,
         )}
-        ${this.styleSettingsTemplate}
-        ${this.shouldShowPropertySettings ? html` <h3>Settings</h3>` : nothing}
-        <div
-          class="slot-container"
-          style="${!this.shouldShowPropertySettings ? 'display: none' : ''}"
-          @slotchange=${this.handleSettingsSlotChange}
-        >
-          <slot name="settings"></slot>
-        </div>
+        ${this.styleSettingsTemplate}${this.propSettingsTemplate}
       </div>
     `;
   }
@@ -122,7 +139,7 @@ export class StoryTemplate extends LitElement {
 
     return html`
       <h3>Styles</h3>
-      <div class="style-options">
+      <div class="settings-options">
         <table>
           ${this.styleInputData.settings.map(
             (input) => html`
@@ -150,6 +167,77 @@ export class StoryTemplate extends LitElement {
     `;
   }
 
+  private get propSettingsTemplate(): TemplateResult | typeof nothing {
+    if (!this.propInputData) return nothing;
+
+    return html`
+      <h3>Properties</h3>
+      <div class="settings-options">
+        <table>
+          ${this.propInputData.settings.map(
+            (input) =>
+              choose(
+                input.inputType,
+                [['radio', () => this.createRadioPropInput(input)]],
+                () => this.createDefaultPropInput(input),
+              ) ?? nothing,
+          )}
+        </table>
+        <button @click=${this.applyProps}>Apply</button>
+      </div>
+    `;
+  }
+
+  private createDefaultPropInput(
+    settings: PropInputSettings<any>,
+  ): TemplateResult | typeof nothing {
+    const inputId = this.labelToId(settings.label);
+
+    return html`
+      <tr>
+        <td><label for=${inputId}>${settings.label}</label></td>
+        <td>
+          <input
+            class="prop-input"
+            type=${settings.inputType ?? 'text'}
+            id=${inputId}
+            data-prop=${settings.propertyName}
+            placeholder=${ifDefined(settings?.defaultValue)}
+          />
+        </td>
+      </tr>
+    `;
+  }
+
+  private createRadioPropInput(
+    settings: PropInputSettings<any>,
+  ): TemplateResult | typeof nothing {
+    if (settings.inputType !== 'radio' || !settings.radioOptions)
+      return nothing;
+
+    const inputId = this.labelToId(settings.label);
+
+    return html`
+      <tr>
+        <td><legend>${settings.label}</legend></td>
+        <td>
+          ${settings.radioOptions.map(
+            (option) =>
+              html`<input
+                  type="radio"
+                  class="prop-input"
+                  name=${inputId}
+                  id=${option}
+                  value=${option}
+                  data-prop=${settings.propertyName}
+                  ?checked=${settings.defaultValue === option}
+                /><label for=${option}> ${option} </label>`,
+          )}
+        </td>
+      </tr>
+    `;
+  }
+
   private get importCode(): string {
     if (this.elementClassName) {
       return `
@@ -161,6 +249,10 @@ import { ${this.elementClassName} } from '${this.modulePath}';
 import '${this.modulePath}';
   `;
     }
+  }
+
+  private get demoUsage(): string {
+    return `<${this.elementTag}${this.appliedProps ?? ''}></${this.elementTag}>`;
   }
 
   private get cssCode(): string {
@@ -179,10 +271,12 @@ ${this.elementTag} {
       : `@internetarchive/elements/${this.elementTag}/${this.elementTag}`;
   }
 
-  /* Toggles visibility of section depending on whether inputs have been slotted into it */
-  private handleSettingsSlotChange(e: Event): void {
-    const slottedChildren = (e.target as HTMLSlotElement).assignedElements();
-    this.shouldShowPropertySettings = slottedChildren.length > 0;
+  /* Detects and stores a reference to slotted demo component */
+  private handleDemoComponentSlotted(e: Event): void {
+    const slottedComponent = (
+      e.target as HTMLSlotElement
+    ).assignedElements()[0];
+    if (slottedComponent) this.slottedDemoComponent = slottedComponent;
   }
 
   /* Applies styles to demo component. */
@@ -195,6 +289,29 @@ ${this.elementTag} {
     });
 
     this.appliedStyles = appliedStyles.join('\n  ');
+  }
+
+  /* Applies properties to demo component */
+  private applyProps() {
+    const appliedProps: string[] = [];
+    this.propInputs?.forEach((input) => {
+      if (
+        !input.dataset.prop ||
+        !input.value ||
+        (input.type === 'radio' && !input.checked)
+      )
+        return;
+
+      const prop = input.dataset.prop;
+      appliedProps.push(`.${prop}=\${'${input.value}'}`);
+      console.log(this.appliedProps);
+      console.log(this.slottedDemoComponent);
+      this.slottedDemoComponent?.setAttribute(prop, input.value);
+    });
+
+    if (!appliedProps.length) return;
+
+    this.appliedProps = '\n  ' + appliedProps.join('\n  ') + '\n';
   }
 
   /* Converts a label to a usable input id, i.e. My setting -> my-setting */
@@ -222,7 +339,7 @@ ${this.elementTag} {
         }
 
         .slot-container,
-        .style-options {
+        .settings-options {
           background-color: var(--primary-background-color);
           padding: 1em;
         }
