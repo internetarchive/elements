@@ -141,7 +141,7 @@ import '${this.modulePath}';
   }
 
   private get exampleUsage(): string {
-    return `<${this.elementTag}${when(this.defaultUsageProps, () => '\n ' + this.defaultUsageProps + '\n')}${this.stringifiedProps ?? ''}></${this.elementTag}>`;
+    return `<${this.elementTag}${this.defaultUsageProps ? '\n ' + this.defaultUsageProps + '\n' : ''}${this.stringifiedProps ?? ''}></${this.elementTag}>`;
   }
 
   private get cssCode(): string {
