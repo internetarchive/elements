@@ -35,7 +35,7 @@ export type AppliedProps = {
  * A template for displaying the prop options.
  */
 @customElement('story-props-settings')
-export class StoryTemplate extends LitElement {
+export class StoryPropsSettings extends LitElement {
   @property({ type: Object }) propInputData?: PropInputData;
 
   @queryAll('.prop-input')

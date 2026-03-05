@@ -17,10 +17,10 @@ export type StyleInputData = {
 };
 
 /**
- * A template for display the style options.
+ * A template for displaying the style options.
  */
 @customElement('story-styles-settings')
-export class StoryTemplate extends LitElement {
+export class StoryStylesSettings extends LitElement {
   @property({ type: Object }) styleInputData?: StyleInputData;
 
   @queryAll('.style-input')
