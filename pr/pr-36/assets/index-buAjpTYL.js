@@ -182,18 +182,18 @@ hue-6-2: #c18401
       <h3>Styles</h3>
       <div class="settings-options">
         <table>
-          ${this.styleInputData.settings.map(t=>h`
+          ${this.styleInputData.settings.map(e=>h`
               <tr>
                 <td>
-                  <label for=${st(t.label)}>${t.label}</label>
+                  <label for=${st(e.label)}>${e.label}</label>
                 </td>
                 <td>
                   <input
-                    id=${st(t.label)}
+                    id=${st(e.label)}
                     class="style-input"
-                    type=${t.inputType??"text"}
-                    value=${t.defaultValue??""}
-                    data-variable=${t.cssVariable}
+                    type=${e.inputType??"text"}
+                    value=${e.defaultValue??""}
+                    data-variable=${e.cssVariable}
                   />
                 </td>
               </tr>
@@ -201,7 +201,7 @@ hue-6-2: #c18401
         </table>
         <button @click=${this.applyStyles}>Apply</button>
       </div>
-    `:u}applyStyles(){const t=[];this.styleInputs?.forEach(i=>{!i.dataset.variable||!i.value||t.push(`${i.dataset.variable}: ${i.value};`)}),this.dispatchEvent(new CustomEvent("stylesApplied",{detail:{styles:t.join(`
+    `:u}applyStyles(){const e=[];this.styleInputs?.forEach(t=>{!t.dataset.variable||!t.value||e.push(`${t.dataset.variable}: ${t.value};`)}),this.dispatchEvent(new CustomEvent("stylesApplied",{detail:{styles:e.join(`
  `)}}))}static get styles(){return[U,T`
         .settings-options {
           background-color: var(--primary-background-color);
@@ -211,42 +211,42 @@ hue-6-2: #c18401
       <h3>Properties</h3>
       <div class="settings-options">
         <table>
-          ${this.propInputData.settings.map(t=>Xt(t.inputType,[["radio",()=>this.createRadioPropInput(t)]],()=>this.createDefaultPropInput(t))??u)}
+          ${this.propInputData.settings.map(e=>Xt(e.inputType,[["radio",()=>this.createRadioPropInput(e)]],()=>this.createDefaultPropInput(e))??u)}
         </table>
         <button @click=${this.applyProps}>Apply</button>
       </div>
-    `:u}createDefaultPropInput(t){const i=st(t.label);return h`
+    `:u}createDefaultPropInput(e){const t=st(e.label);return h`
       <tr>
-        <td><label for=${i}>${t.label}</label></td>
+        <td><label for=${t}>${e.label}</label></td>
         <td>
           <input
             class="prop-input"
-            type=${t.inputType??"text"}
-            id=${i}
-            data-prop=${t.propertyName}
-            placeholder=${it(t?.defaultValue)}
+            type=${e.inputType??"text"}
+            id=${t}
+            data-prop=${e.propertyName}
+            placeholder=${it(e?.defaultValue)}
           />
         </td>
       </tr>
-    `}createRadioPropInput(t){if(t.inputType!=="radio"||!t.radioOptions)return u;const i=st(t.label);return h`
+    `}createRadioPropInput(e){if(e.inputType!=="radio"||!e.radioOptions)return u;const t=st(e.label);return h`
       <tr>
-        <td><legend>${t.label}</legend></td>
+        <td><legend>${e.label}</legend></td>
         <td>
-          ${t.radioOptions.map(s=>h`<input
+          ${e.radioOptions.map(i=>h`<input
                   type="radio"
                   class="prop-input"
-                  name=${i}
-                  id=${s}
-                  value=${s}
-                  data-prop=${t.propertyName}
-                  ?checked=${t.defaultValue===s}
-                /><label for=${s}> ${s} </label>`)}
+                  name=${t}
+                  id="${t}-${i}"
+                  value=${i}
+                  data-prop=${e.propertyName}
+                  ?checked=${e.defaultValue===i}
+                /><label for="${t}-${i}"> ${i} </label>`)}
         </td>
       </tr>
-    `}applyProps(){const t=[],i=[];this.propInputs?.forEach(s=>{if(!s.dataset.prop||!s.value||s.type==="radio"&&!s.checked)return;const o=s.dataset.prop;t.push(`.${o}=\${'${s.value}'}`),i.push({propName:o,value:s.value})}),this.dispatchEvent(new CustomEvent("propsApplied",{detail:{stringifiedProps:`
-  `+t.join(`
+    `}applyProps(){const e=[],t=[];this.propInputs?.forEach(i=>{if(!i.dataset.prop||!i.value||i.type==="radio"&&!i.checked)return;const s=i.dataset.prop;e.push(`.${s}=\${'${i.value}'}`),t.push({propName:s,value:i.value})}),this.dispatchEvent(new CustomEvent("propsApplied",{detail:{stringifiedProps:`
+  `+e.join(`
   `)+`
-`,appliedProps:i}}))}static get styles(){return[U,T`
+`,appliedProps:t}}))}static get styles(){return[U,T`
         .settings-options {
           background-color: var(--primary-background-color);
           padding: 1em;
@@ -283,7 +283,7 @@ hue-6-2: #c18401
         <h3>Usage</h3>
         <syntax-highlighter
           language="auto"
-          .code=${this.customExampleUsage?this.customExampleUsage:this.exampleUsage}
+          .code=${this.customExampleUsage??this.exampleUsage}
         ></syntax-highlighter>
         ${z(this.cssCode,()=>h`
             <h3>Styling</h3>
@@ -314,14 +314,14 @@ import '${this.modulePath}';
 import { ${this.elementClassName} } from '${this.modulePath}';
     `:`
 import '${this.modulePath}';
-  `}get exampleUsage(){return`<${this.elementTag}${this.defaultUsageProps?`
+  `}get exampleUsage(){const e=this.defaultUsageProps?`
  `+this.defaultUsageProps+`
-`:""}${this.stringifiedProps??""}></${this.elementTag}>`}get cssCode(){return this.stringifiedStyles?`
+`:"",t=this.stringifiedProps??"";return`<${this.elementTag}${e}${t}></${this.elementTag}>`}get cssCode(){return this.stringifiedStyles?`
 
 ${this.elementTag} {
  ${this.stringifiedStyles}
 }
-    `:""}get modulePath(){return this.labs?`@internetarchive/elements/labs/${this.elementTag}/${this.elementTag}`:`@internetarchive/elements/${this.elementTag}/${this.elementTag}`}handleSettingsSlotChange(e){const t=e.target.assignedElements();this.shouldShowPropertySettings=t.length>0}handleDemoComponentSlotted(e){const t=e.target.assignedElements()[0];t&&(this.slottedDemoComponent=t)}handleStylesApplied(e){const t=e.detail.styles;t&&(this.stringifiedStyles=t)}handlePropsApplied(e){const t=e.detail.stringifiedProps,i=e.detail.appliedProps;!t||!i||(this.stringifiedProps=t,i.forEach(s=>this.slottedDemoComponent?.setAttribute(s.propName,s.value)))}static get styles(){return[U,T`
+    `:""}get modulePath(){return this.labs?`@internetarchive/elements/labs/${this.elementTag}/${this.elementTag}`:`@internetarchive/elements/${this.elementTag}/${this.elementTag}`}handleSettingsSlotChange(e){const t=e.target.assignedElements();this.shouldShowPropertySettings=t.length>0}handleDemoComponentSlotted(e){const t=e.target.assignedElements()[0];t&&(this.slottedDemoComponent=t)}handleStylesApplied(e){const t=e.detail.styles;t&&(this.stringifiedStyles=t)}handlePropsApplied(e){const t=e.detail.stringifiedProps,i=e.detail.appliedProps;!t||!i||(this.stringifiedProps=t,i.forEach(s=>{this.slottedDemoComponent[s.propName]=s.value}))}static get styles(){return[U,T`
         #container {
           border: 1px solid #ccc;
           padding: 0 16px 16px 16px;
