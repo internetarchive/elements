@@ -193,8 +193,8 @@ render() {
     <story-template 
       elementTag="ia-button" 
       elementClassName="IAButton" 
-      .styleInputSettings=${this.styleInputSettings} 
-      .propInputSettings=${this.propInputSettings}
+      .styleInputData=${{settings: this.styleInputSettings}} 
+      .propInputData=${{settings: this.propInputSettings}}
     >
       <div slot="demo">
         <ia-button @click=${() => alert('Button clicked!')}>
