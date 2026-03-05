@@ -101,11 +101,11 @@ export class StoryPropsSettings extends LitElement {
                   type="radio"
                   class="prop-input"
                   name=${inputId}
-                  id=${'${inputId}-${option}'}
+                  id="${inputId}-${option}"
                   value=${option}
                   data-prop=${settings.propertyName}
                   ?checked=${settings.defaultValue === option}
-                /><label for=${'${inputId}-${option}'}> ${option} </label>`,
+                /><label for="${inputId}-${option}"> ${option} </label>`,
           )}
         </td>
       </tr>
