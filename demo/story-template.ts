@@ -93,9 +93,7 @@ export class StoryTemplate extends LitElement {
         <h3>Usage</h3>
         <syntax-highlighter
           language="auto"
-          .code=${this.customExampleUsage
-            ? this.customExampleUsage
-            : this.exampleUsage}
+          .code=${this.customExampleUsage ?? this.exampleUsage}
         ></syntax-highlighter>
         ${when(
           this.cssCode,
@@ -141,7 +139,11 @@ import '${this.modulePath}';
   }
 
   private get exampleUsage(): string {
-    return `<${this.elementTag}${this.defaultUsageProps ? '\n ' + this.defaultUsageProps + '\n' : ''}${this.stringifiedProps ?? ''}></${this.elementTag}>`;
+    const defaultProps = this.defaultUsageProps
+      ? '\n ' + this.defaultUsageProps + '\n'
+      : '';
+    const appliedProps = this.stringifiedProps ?? '';
+    return `<${this.elementTag}${defaultProps}${appliedProps}></${this.elementTag}>`;
   }
 
   private get cssCode(): string {
