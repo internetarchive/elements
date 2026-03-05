@@ -191,9 +191,9 @@ ${this.elementTag} {
     if (!stringifiedProps || !appliedProps) return;
 
     this.stringifiedProps = stringifiedProps;
-    appliedProps.forEach((prop) =>
-      this.slottedDemoComponent?.setAttribute(prop.propName, prop.value),
-    );
+    appliedProps.forEach((prop) => {
+      this.slottedDemoComponent[prop.propName] = prop.value;
+    });
   }
 
   static get styles(): CSSResultGroup {
