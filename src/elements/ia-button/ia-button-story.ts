@@ -1,7 +1,7 @@
 import { html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-import type { StyleInputSettings } from '@demo/story-template';
+import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
 
 import './ia-button';
 import '@demo/story-template';
@@ -28,7 +28,7 @@ export class IAButtonStory extends LitElement {
       <story-template
         elementTag="ia-button"
         elementClassName="IAButton"
-        .exampleUsage=${this.exampleUsage}
+        .defaultUsageProps=${`@click=\${() => alert('Button clicked!')}`}
         .styleInputData=${{ settings: styleInputSettings }}
       >
         <div slot="demo">
@@ -38,9 +38,5 @@ export class IAButtonStory extends LitElement {
         </div>
       </story-template>
     `;
-  }
-
-  private get exampleUsage(): string {
-    return `<ia-button @click=\${() => alert('Button clicked!')}>Click Me</ia-button>`;
   }
 }
