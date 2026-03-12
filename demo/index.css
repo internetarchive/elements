@@ -41,7 +41,7 @@ app-root {
   top: 0;
   height: 100vh;
   border-right: 1px solid #ddd;
-  padding: 1rem 0.75rem;
+  padding: 1rem 0;
   box-sizing: border-box;
   overflow-y: auto;
 }
@@ -50,13 +50,10 @@ app-root {
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #999;
-  margin: 1rem 0 0.35rem;
-}
-
-#ia-sidebar h2:first-child {
-  margin-top: 0;
+  letter-spacing: 0.08em;
+  color: #767676;
+  padding: 0 1rem;
+  margin: 0 0 0.5rem;
 }
 
 #ia-sidebar a {
@@ -65,19 +62,23 @@ app-root {
   font-weight: 400;
   color: #444;
   text-decoration: none;
-  padding: 3px 6px;
-  border-left: 2px solid transparent;
-  margin-bottom: 2px;
+  padding: 0.3rem 1rem;
+  border-left: 3px solid transparent;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #ia-sidebar a:hover {
+  background: #f0f0f0;
   color: #213547;
-  border-left-color: #aaa;
 }
 
 #ia-sidebar a.active {
-  color: #0f3e6e;
-  border-left-color: #0f3e6e;
+  color: #194880;
+  border-left-color: #194880;
+  background: #f0f4f9;
   font-weight: 600;
 }
 
