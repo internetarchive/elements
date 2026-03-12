@@ -92,10 +92,7 @@ app-root {
   scroll-margin-top: 16px;
 }
 
-ia-status-indicator-story,
-ia-combo-box-story,
-ia-snow-story,
-ia-button-story {
+.ia-anchor > * {
   display: block;
   margin-bottom: 0.5rem;
 }
