@@ -10,7 +10,8 @@ const storyModules = import.meta.glob(
 const storyEntries = Object.keys(storyModules)
   .map(path => {
     const labs = path.includes('/src/labs/');
-    const tag = path.split('/').at(-2)!;
+    const parts = path.split('/');
+    const tag = parts[parts.length - 2];
     return { tag, storyTag: `${tag}-story`, id: `elem-${tag}`, labs };
   })
   .sort((a, b) => a.tag.localeCompare(b.tag));
@@ -76,7 +77,7 @@ export class AppRoot extends LitElement {
     };
 
     allIds.forEach((id, i) => {
-      links[id]?.addEventListener('click', e => {
+      links[id]?.addEventListener('click', (e: Event) => {
         e.preventDefault();
         const top = getAnchorTops()[i];
         if (top !== null) window.scrollTo({ top: Math.max(0, top - 16), behavior: 'smooth' });
