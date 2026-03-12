@@ -12,7 +12,6 @@ import type {
   PropInputData,
 } from './story-components/story-prop-settings';
 
-import arrow from './arrow.svg';
 import testTube from './test-tube.svg';
 
 import './story-components/story-styles-settings';
@@ -38,7 +37,7 @@ export class StoryTemplate extends LitElement {
 
   @property({ type: Boolean }) labs = false;
 
-  @state() private visible = false;
+  @state() private detailsVisible = false;
 
   /* Stringified styles applied for the demo component */
   @state() private stringifiedStyles?: string;
@@ -47,19 +46,20 @@ export class StoryTemplate extends LitElement {
   @state() private stringifiedProps?: string;
 
   /* Whether settings inputs have been slotted in and should be displayed */
-  @state() private shouldShowPropertySettings: boolean = false;
+  @state() private shouldHideSettingsSlot: boolean = true;
 
   /* Component that has been slotted into the demo, if applicable */
   @state() private slottedDemoComponent?: any;
 
+  /* Tracks which copy button was last clicked, for feedback */
+  @state() private copiedKey: 'import' | 'usage' | null = null;
+
   render() {
     return html`
-      <h2>
-        <a @click=${() => (this.visible = !this.visible)}>
-          <img
-            class="disclosure-arrow ${this.visible ? 'open' : ''}"
-            src=${arrow}
-          /><code> &lt;${this.elementTag}&gt;</code> ${when(
+      <div id="container">
+        <h2>
+          <code>&lt;${this.elementTag}&gt;</code>
+          ${when(
             this.labs,
             () =>
               html`<img
@@ -69,15 +69,7 @@ export class StoryTemplate extends LitElement {
                 class="labs-icon"
               />`,
           )}
-        </a>
-      </h2>
-      ${when(this.visible, () => this.elementDemoTemplate)}
-    `;
-  }
-
-  private get elementDemoTemplate() {
-    return html`
-      <div id="container">
+        </h2>
         <h3>Demo</h3>
         <div class="slot-container" style=${ifDefined(this.stringifiedStyles)}>
           <slot
@@ -85,12 +77,46 @@ export class StoryTemplate extends LitElement {
             @slotchange=${this.handleDemoComponentSlotted}
           ></slot>
         </div>
-        <h3>Import</h3>
+        <button
+          class="details-toggle ${this.detailsVisible ? '' : 'collapsed'}"
+          @click=${() => (this.detailsVisible = !this.detailsVisible)}
+        >
+          Import, Usage &amp; Settings
+        </button>
+        ${when(this.detailsVisible, () => this.detailsTemplate)}
+      </div>
+    `;
+  }
+
+  private get detailsTemplate() {
+    return html`
+      <div id="details">
+        <h3>
+          Import
+          <button
+            class="copy-btn ${this.copiedKey === 'import' ? 'copied' : ''}"
+            @click=${() => this.copyToClipboard(this.importCode, 'import')}
+          >
+            ${this.copiedKey === 'import' ? 'Copied!' : 'Copy'}
+          </button>
+        </h3>
         <syntax-highlighter
           language="typescript"
           .code=${this.importCode}
         ></syntax-highlighter>
-        <h3>Usage</h3>
+        <h3>
+          Usage
+          <button
+            class="copy-btn ${this.copiedKey === 'usage' ? 'copied' : ''}"
+            @click=${() =>
+              this.copyToClipboard(
+                this.customExampleUsage ?? this.exampleUsage,
+                'usage',
+              )}
+          >
+            ${this.copiedKey === 'usage' ? 'Copied!' : 'Copy'}
+          </button>
+        </h3>
         <syntax-highlighter
           language="auto"
           .code=${this.customExampleUsage ?? this.exampleUsage}
@@ -105,24 +131,53 @@ export class StoryTemplate extends LitElement {
             ></syntax-highlighter>
           `,
         )}
-        <story-styles-settings
-          .styleInputData=${this.styleInputData}
-          @stylesApplied=${this.handleStylesApplied}
-        ></story-styles-settings>
-        <story-props-settings
-          .propInputData=${this.propInputData}
-          @propsApplied=${this.handlePropsApplied}
-        ></story-props-settings>
-        ${when(this.shouldShowPropertySettings, () => html` <h3>Settings</h3>`)}
-        <div
-          class="slot-container"
-          style="${!this.shouldShowPropertySettings ? 'display: none' : ''}"
-          @slotchange=${this.handleSettingsSlotChange}
-        >
-          <slot name="settings"></slot>
+        <div class="two-col">
+          <div class="left-col">
+            <h3>Settings</h3>
+            ${when(
+              !!this.propInputData,
+              () => html`
+                <story-props-settings
+                  .propInputData=${this.propInputData}
+                  @propsApplied=${this.handlePropsApplied}
+                ></story-props-settings>
+              `,
+              () =>
+                html`<p class="section-placeholder">No settings to adjust</p>`,
+            )}
+            <div
+              class="slot-container ${this.shouldHideSettingsSlot ? 'hidden' : ''}"
+              @slotchange=${this.handleSettingsSlotChange}
+            >
+              <slot name="settings"></slot>
+            </div>
+          </div>
+          <div class="right-col">
+            <h3>Styles</h3>
+            ${when(
+              !!this.styleInputData,
+              () => html`
+                <story-styles-settings
+                  .styleInputData=${this.styleInputData}
+                  @stylesApplied=${this.handleStylesApplied}
+                ></story-styles-settings>
+              `,
+              () =>
+                html`<p class="section-placeholder">No styles to adjust</p>`,
+            )}
+          </div>
         </div>
       </div>
     `;
+  }
+
+  private async copyToClipboard(
+    text: string,
+    which: 'import' | 'usage',
+  ): Promise<void> {
+    await navigator.clipboard.writeText(text);
+    this.copiedKey = which;
+    setTimeout(() => (this.copiedKey = null), 2000);
   }
 
   private get importCode(): string {
@@ -162,10 +217,10 @@ ${this.elementTag} {
       : `@internetarchive/elements/${this.elementTag}/${this.elementTag}`;
   }
 
-  /* Toggles visibility of section depending on whether inputs have been slotted into it */
+  /* Toggles visibility of section depending on whether inputs have been slotted in */
   private handleSettingsSlotChange(e: Event): void {
     const slottedChildren = (e.target as HTMLSlotElement).assignedElements();
-    this.shouldShowPropertySettings = slottedChildren.length > 0;
+    this.shouldHideSettingsSlot = slottedChildren.length === 0;
   }
 
   /* Detects and stores a reference to slotted demo component */
@@ -201,41 +256,118 @@ ${this.elementTag} {
       themeStyles,
       css`
         #container {
+          background: #f0f0f0;
+          padding: 0 10px 10px;
+          margin-bottom: 1rem;
           border: 1px solid #ccc;
-          padding: 0 16px 16px 16px;
+        }
+
+        #details {
+          font-size: 14px;
         }
 
         h2 {
-          cursor: pointer;
-          margin-top: 8px;
-          margin-bottom: 8px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          margin: 10px 0 8px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
         }
 
         h3 {
-          margin-bottom: 8px;
+          font-size: 0.7rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: #666;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          margin: 8px 0 4px;
+        }
+
+        .details-toggle {
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          margin-top: 6px;
+          font-size: 0.7rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: #595959;
+          cursor: pointer;
+          user-select: none;
+          border: none;
+          background: none;
+          padding: 0;
+        }
+
+        .details-toggle::before {
+          content: '▾';
+          font-size: 0.65rem;
+          display: inline-block;
+          transition: transform 0.15s;
+        }
+
+        .details-toggle.collapsed::before {
+          transform: rotate(-90deg);
+        }
+
+        .copy-btn {
+          background: none;
+          border: 1px solid #bbb;
+          border-radius: 3px;
+          padding: 1px 7px;
+          font-size: 0.7rem;
+          cursor: pointer;
+          color: #555;
+          line-height: 1.4;
+        }
+
+        .copy-btn:hover {
+          background: #0f3e6e;
+          color: #fff;
+          border-color: #0f3e6e;
+        }
+
+        .copy-btn.copied {
+          background: #2a7a2a;
+          color: #fff;
+          border-color: #2a7a2a;
         }
 
         .slot-container {
           background-color: var(--primary-background-color);
-          padding: 1em;
+          padding: 0.5em;
         }
 
-        .disclosure-arrow {
-          width: 12px;
-          height: 12px;
-          transform: rotate(-90deg);
-          transition: transform 0.2s ease-in-out;
+        .slot-container.hidden {
+          display: none;
         }
 
-        .disclosure-arrow.open {
-          transform: rotate(0deg);
+        .two-col {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0 12px;
+        }
+
+        .left-col,
+        .right-col {
+          min-width: 0;
+        }
+
+        .section-placeholder {
+          font-size: 0.78rem;
+          color: #767676;
+          margin: 4px 0;
+          font-style: italic;
         }
 
         .labs-icon {
           width: 20px;
           height: 20px;
-          margin-left: 4px;
-          filter: invert(1);
           vertical-align: middle;
         }
       `,

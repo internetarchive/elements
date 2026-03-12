@@ -45,7 +45,6 @@ export class StoryPropsSettings extends LitElement {
     if (!this.propInputData) return nothing;
 
     return html`
-      <h3>Properties</h3>
       <div class="settings-options">
         <table>
           ${this.propInputData.settings.map(

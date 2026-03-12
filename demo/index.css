@@ -1,5 +1,5 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -24,7 +24,78 @@ a:hover {
 }
 
 body {
-  margin: 1rem;
+  margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  display: flex;
+}
+
+app-root {
+  display: contents;
+}
+
+#ia-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  border-right: 1px solid #ddd;
+  padding: 1rem 0.75rem;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+#ia-sidebar h2 {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #999;
+  margin: 1rem 0 0.35rem;
+}
+
+#ia-sidebar h2:first-child {
+  margin-top: 0;
+}
+
+#ia-sidebar a {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: #444;
+  text-decoration: none;
+  padding: 3px 6px;
+  border-left: 2px solid transparent;
+  margin-bottom: 2px;
+}
+
+#ia-sidebar a:hover {
+  color: #213547;
+  border-left-color: #aaa;
+}
+
+#ia-sidebar a.active {
+  color: #0f3e6e;
+  border-left-color: #0f3e6e;
+  font-weight: 600;
+}
+
+#ia-content {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  padding-bottom: 100vh;
+  min-width: 0;
+}
+
+.ia-anchor {
+  scroll-margin-top: 16px;
+}
+
+ia-status-indicator-story,
+ia-combo-box-story,
+ia-snow-story,
+ia-button-story {
+  display: block;
+  margin-bottom: 0.5rem;
 }

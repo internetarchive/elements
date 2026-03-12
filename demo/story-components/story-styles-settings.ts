@@ -30,7 +30,6 @@ export class StoryStylesSettings extends LitElement {
     if (!this.styleInputData) return nothing;
 
     return html`
-      <h3>Styles</h3>
       <div class="settings-options">
         <table>
           ${this.styleInputData.settings.map(
