@@ -46,7 +46,7 @@ export class StoryTemplate extends LitElement {
   @state() private stringifiedProps?: string;
 
   /* Whether settings inputs have been slotted in and should be displayed */
-  @state() private shouldHideSettingsSlot: boolean = true;
+  @state() private shouldShowPropertySettings: boolean = false;
 
   /* Component that has been slotted into the demo, if applicable */
   @state() private slottedDemoComponent?: any;
@@ -142,11 +142,14 @@ export class StoryTemplate extends LitElement {
                   @propsApplied=${this.handlePropsApplied}
                 ></story-props-settings>
               `,
+            )}
+            ${when(
+              !this.propInputData && !this.shouldShowPropertySettings,
               () =>
                 html`<p class="section-placeholder">No settings to adjust</p>`,
             )}
             <div
-              class="slot-container ${this.shouldHideSettingsSlot ? 'hidden' : ''}"
+              class="slot-container ${this.shouldShowPropertySettings ? '' : 'hidden'}"
               @slotchange=${this.handleSettingsSlotChange}
             >
               <slot name="settings"></slot>
@@ -220,7 +223,7 @@ ${this.elementTag} {
   /* Toggles visibility of section depending on whether inputs have been slotted in */
   private handleSettingsSlotChange(e: Event): void {
     const slottedChildren = (e.target as HTMLSlotElement).assignedElements();
-    this.shouldHideSettingsSlot = slottedChildren.length === 0;
+    this.shouldShowPropertySettings = slottedChildren.length > 0;
   }
 
   /* Detects and stores a reference to slotted demo component */
