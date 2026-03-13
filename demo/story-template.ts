@@ -83,14 +83,17 @@ export class StoryTemplate extends LitElement {
         >
           Import, Usage &amp; Settings
         </button>
-        ${when(this.detailsVisible, () => this.detailsTemplate)}
+        <div id="details" class="${this.detailsVisible ? '' : 'collapsed'}">
+          <div class="details-inner">
+            ${this.detailsTemplate}
+          </div>
+        </div>
       </div>
     `;
   }
 
   private get detailsTemplate() {
     return html`
-      <div id="details">
         <h3>
           Import
           <button
@@ -170,7 +173,6 @@ export class StoryTemplate extends LitElement {
             )}
           </div>
         </div>
-      </div>
     `;
   }
 
@@ -266,7 +268,19 @@ ${this.elementTag} {
         }
 
         #details {
+          display: grid;
+          grid-template-rows: 1fr;
+          transition: grid-template-rows 0.2s ease;
+        }
+
+        #details.collapsed {
+          grid-template-rows: 0fr;
+        }
+
+        .details-inner {
           font-size: 14px;
+          overflow: hidden;
+          min-height: 0;
         }
 
         h2 {
@@ -288,6 +302,12 @@ ${this.elementTag} {
           align-items: center;
           gap: 5px;
           margin: 8px 0 4px;
+          position: relative;
+          z-index: 1;
+        }
+
+        h2 code {
+          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
 
         .details-toggle {
