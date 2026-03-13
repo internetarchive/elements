@@ -307,7 +307,15 @@ hue-6-2: #c18401
           .code=${this.customExampleUsage??this.exampleUsage}
         ></syntax-highlighter>
         ${N(this.cssCode,()=>h`
-            <h3>Styling</h3>
+            <h3>
+              Styling
+              <button
+                class="copy-btn ${this.copiedKey==="styling"?"copied":""}"
+                @click=${()=>this.copyToClipboard(this.cssCode,"styling")}
+              >
+                ${this.copiedKey==="styling"?"Copied!":"Copy"}
+              </button>
+            </h3>
             <syntax-highlighter
               language="css"
               .code=${this.cssCode}
