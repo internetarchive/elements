@@ -52,7 +52,7 @@ export class StoryTemplate extends LitElement {
   @state() private slottedDemoComponent?: any;
 
   /* Tracks which copy button was last clicked, for feedback */
-  @state() private copiedKey: 'import' | 'usage' | null = null;
+  @state() private copiedKey: 'import' | 'usage' | 'styling' | null = null;
 
   render() {
     return html`
@@ -127,7 +127,15 @@ export class StoryTemplate extends LitElement {
         ${when(
           this.cssCode,
           () => html`
-            <h3>Styling</h3>
+            <h3>
+              Styling
+              <button
+                class="copy-btn ${this.copiedKey === 'styling' ? 'copied' : ''}"
+                @click=${() => this.copyToClipboard(this.cssCode, 'styling')}
+              >
+                ${this.copiedKey === 'styling' ? 'Copied!' : 'Copy'}
+              </button>
+            </h3>
             <syntax-highlighter
               language="css"
               .code=${this.cssCode}
@@ -178,7 +186,7 @@ export class StoryTemplate extends LitElement {
 
   private async copyToClipboard(
     text: string,
-    which: 'import' | 'usage',
+    which: 'import' | 'usage' | 'styling',
   ): Promise<void> {
     await navigator.clipboard.writeText(text);
     this.copiedKey = which;
