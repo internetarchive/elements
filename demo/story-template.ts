@@ -396,6 +396,11 @@ ${this.elementTag} {
           font-style: italic;
         }
 
+        .details-inner syntax-highlighter {
+          display: block;
+          --syntax-max-height: 5.5rem;
+        }
+
         .labs-icon {
           width: 20px;
           height: 20px;
