@@ -188,21 +188,20 @@ export class StoryTemplate extends LitElement {
     text: string,
     which: 'import' | 'usage' | 'styling',
   ): Promise<void> {
-    await navigator.clipboard.writeText(text);
-    this.copiedKey = which;
-    setTimeout(() => (this.copiedKey = null), 2000);
+    try {
+      await navigator.clipboard.writeText(text);
+      this.copiedKey = which;
+      setTimeout(() => (this.copiedKey = null), 2000);
+    } catch {
+      // Clipboard API unavailable (non-HTTPS or permission denied) — silent fail
+    }
   }
 
   private get importCode(): string {
     if (this.elementClassName) {
-      return `
-import '${this.modulePath}';
-import { ${this.elementClassName} } from '${this.modulePath}';
-    `;
+      return `import '${this.modulePath}';\nimport { ${this.elementClassName} } from '${this.modulePath}';`;
     } else {
-      return `
-import '${this.modulePath}';
-  `;
+      return `import '${this.modulePath}';`;
     }
   }
 
@@ -216,12 +215,7 @@ import '${this.modulePath}';
 
   private get cssCode(): string {
     if (!this.stringifiedStyles) return '';
-    return `
-
-${this.elementTag} {
- ${this.stringifiedStyles}
-}
-    `;
+    return `${this.elementTag} {\n ${this.stringifiedStyles}\n}`;
   }
 
   private get modulePath(): string {
