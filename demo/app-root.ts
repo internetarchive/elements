@@ -24,7 +24,7 @@ const ALL_ENTRIES       = [...productionEntries, ...labsEntries];
 export class AppRoot extends LitElement {
   createRenderRoot() { return this; }
 
-  private _scrollHandler?: () => void;
+  private _observer?: IntersectionObserver;
 
   render() {
     return html`
@@ -59,38 +59,41 @@ export class AppRoot extends LitElement {
       allIds.map(id => [id, this.querySelector(`#ia-sidebar a[href="#${id}"]`)])
     );
 
-    const getAnchorTops = () =>
-      allIds.map(id => {
-        const el = document.getElementById(id);
-        return el ? el.getBoundingClientRect().top + window.scrollY : null;
-      });
+    const visible = new Set<string>();
 
-    const updateActive = () => {
-      const tops = getAnchorTops();
-      let current = 0;
-      for (let i = 0; i < tops.length; i++) {
-        if ((tops[i] ?? Infinity) <= window.scrollY + 40) current = i;
-      }
-      allIds.forEach((id, i) => {
-        links[id]?.classList.toggle('active', i === current);
-      });
-    };
+    // Only anchors in the top 30% of the viewport count as "active".
+    // The first (topmost) visible anchor wins.
+    this._observer = new IntersectionObserver(
+      entries => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) visible.add(entry.target.id);
+          else visible.delete(entry.target.id);
+        }
+        const activeId = allIds.find(id => visible.has(id)) ?? allIds[0];
+        allIds.forEach(id => links[id]?.classList.toggle('active', id === activeId));
+      },
+      { rootMargin: '0px 0px -70% 0px' },
+    );
 
-    allIds.forEach((id, i) => {
-      links[id]?.addEventListener('click', (e: Event) => {
-        e.preventDefault();
-        const top = getAnchorTops()[i];
-        if (top !== null) window.scrollTo({ top: Math.max(0, top - 16), behavior: 'smooth' });
-      });
+    allIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) this._observer!.observe(el);
     });
 
-    this._scrollHandler = updateActive;
-    window.addEventListener('scroll', updateActive, { passive: true });
-    updateActive();
+    allIds.forEach(id => {
+      links[id]?.addEventListener('click', (e: Event) => {
+        e.preventDefault();
+        const el = document.getElementById(id);
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.scrollY;
+          window.scrollTo({ top: Math.max(0, top - 16), behavior: 'smooth' });
+        }
+      });
+    });
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    if (this._scrollHandler) window.removeEventListener('scroll', this._scrollHandler);
+    this._observer?.disconnect();
   }
 }
