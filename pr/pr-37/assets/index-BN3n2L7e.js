@@ -352,19 +352,12 @@ hue-6-2: #c18401
               `,()=>h`<p class="section-placeholder">No styles to adjust</p>`)}
           </div>
         </div>
-    `}async copyToClipboard(e,t){await navigator.clipboard.writeText(e),this.copiedKey=t,setTimeout(()=>this.copiedKey=null,2e3)}get importCode(){return this.elementClassName?`
-import '${this.modulePath}';
-import { ${this.elementClassName} } from '${this.modulePath}';
-    `:`
-import '${this.modulePath}';
-  `}get exampleUsage(){const e=this.defaultUsageProps?`
+    `}async copyToClipboard(e,t){try{await navigator.clipboard.writeText(e),this.copiedKey=t,setTimeout(()=>this.copiedKey=null,2e3)}catch{}}get importCode(){return this.elementClassName?`import '${this.modulePath}';
+import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.modulePath}';`}get exampleUsage(){const e=this.defaultUsageProps?`
  `+this.defaultUsageProps+`
-`:"",t=this.stringifiedProps??"";return`<${this.elementTag}${e}${t}></${this.elementTag}>`}get cssCode(){return this.stringifiedStyles?`
-
-${this.elementTag} {
+`:"",t=this.stringifiedProps??"";return`<${this.elementTag}${e}${t}></${this.elementTag}>`}get cssCode(){return this.stringifiedStyles?`${this.elementTag} {
  ${this.stringifiedStyles}
-}
-    `:""}get modulePath(){return this.labs?`@internetarchive/elements/labs/${this.elementTag}/${this.elementTag}`:`@internetarchive/elements/${this.elementTag}/${this.elementTag}`}handleSettingsSlotChange(e){const t=e.target.assignedElements();this.shouldShowPropertySettings=t.length>0}handleDemoComponentSlotted(e){const t=e.target.assignedElements()[0];t&&(this.slottedDemoComponent=t)}handleStylesApplied(e){const t=e.detail.styles;t&&(this.stringifiedStyles=t)}handlePropsApplied(e){const t=e.detail.stringifiedProps,i=e.detail.appliedProps;!t||!i||(this.stringifiedProps=t,i.forEach(s=>{this.slottedDemoComponent[s.propName]=s.value}))}static get styles(){return[V,T`
+}`:""}get modulePath(){return this.labs?`@internetarchive/elements/labs/${this.elementTag}/${this.elementTag}`:`@internetarchive/elements/${this.elementTag}/${this.elementTag}`}handleSettingsSlotChange(e){const t=e.target.assignedElements();this.shouldShowPropertySettings=t.length>0}handleDemoComponentSlotted(e){const t=e.target.assignedElements()[0];t&&(this.slottedDemoComponent=t)}handleStylesApplied(e){const t=e.detail.styles;t&&(this.stringifiedStyles=t)}handlePropsApplied(e){const t=e.detail.stringifiedProps,i=e.detail.appliedProps;!t||!i||(this.stringifiedProps=t,i.forEach(s=>{this.slottedDemoComponent[s.propName]=s.value}))}static get styles(){return[V,T`
         #container {
           background: #f0f0f0;
           padding: 0 10px 10px;
