@@ -86,6 +86,10 @@
           color: var(--primary-text-color--);
         }
       `]}};gt=Ie([O("ia-button")],gt);const Ut=Object.freeze(Object.defineProperty({__proto__:null,get IAButton(){return gt}},Symbol.toStringTag,{value:"Module"}));function N(e,t,i){return e?t(e):i?.(e)}const it=e=>e??u,ke="modulepreload",Le=function(e,t){return new URL(e,t).href},Vt={},Q=function(t,i,s){let o=Promise.resolve();if(i&&i.length>0){let y=function(d){return Promise.all(d.map(c=>Promise.resolve(c).then(x=>({status:"fulfilled",value:x}),x=>({status:"rejected",reason:x}))))};const a=document.getElementsByTagName("link"),r=document.querySelector("meta[property=csp-nonce]"),l=r?.nonce||r?.getAttribute("nonce");o=y(i.map(d=>{if(d=Le(d,s),d in Vt)return;Vt[d]=!0;const c=d.endsWith(".css"),x=c?'[rel="stylesheet"]':"";if(s)for(let E=a.length-1;E>=0;E--){const J=a[E];if(J.href===d&&(!c||J.rel==="stylesheet"))return}else if(document.querySelector(`link[href="${d}"]${x}`))return;const _=document.createElement("link");if(_.rel=c?"stylesheet":ke,c||(_.as="script"),_.crossOrigin="",_.href=d,l&&_.setAttribute("nonce",l),document.head.appendChild(_),c)return new Promise((E,J)=>{_.addEventListener("load",E),_.addEventListener("error",()=>J(new Error(`Unable to preload CSS for ${d}`)))})}))}function n(a){const r=new Event("vite:preloadError",{cancelable:!0});if(r.payload=a,window.dispatchEvent(r),!r.defaultPrevented)throw a}return o.then(a=>{for(const r of a||[])r.status==="rejected"&&n(r.reason);return t().catch(n)})};const P={ATTRIBUTE:1,CHILD:2,PROPERTY:3,BOOLEAN_ATTRIBUTE:4},ht=e=>(...t)=>({_$litDirective$:e,values:t});class ct{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,i,s){this._$Ct=t,this._$AM=i,this._$Ci=s}_$AS(t,i){return this.update(t,i)}update(t,i){return this.render(...i)}}let ft=class extends ct{constructor(t){if(super(t),this.it=u,t.type!==P.CHILD)throw Error(this.constructor.directiveName+"() can only be used in child bindings")}render(t){if(t===u||t==null)return this._t=void 0,this.it=t;if(t===C)return t;if(typeof t!="string")throw Error(this.constructor.directiveName+"() called with a non-string value");if(t===this.it)return this._t;this.it=t;const i=[t];return i.raw=i,this._t={_$litType$:this.constructor.resultType,strings:i,values:[]}}};ft.directiveName="unsafeHTML",ft.resultType=1;const mt=ht(ft),je=T`
+  pre {
+    max-height: var(--syntax-max-height, none);
+    overflow-y: auto;
+  }
   pre code.hljs {
     display: block;
     overflow-x: auto;
@@ -487,6 +491,11 @@ ${this.elementTag} {
           color: #767676;
           margin: 4px 0;
           font-style: italic;
+        }
+
+        .details-inner syntax-highlighter {
+          display: block;
+          --syntax-max-height: 5.5rem;
         }
 
         .labs-icon {
