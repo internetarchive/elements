@@ -352,7 +352,7 @@ hue-6-2: #c18401
               `,()=>h`<p class="section-placeholder">No styles to adjust</p>`)}
           </div>
         </div>
-    `}async copyToClipboard(e,t){try{await navigator.clipboard.writeText(e),this.copiedKey=t,setTimeout(()=>this.copiedKey=null,2e3)}catch{}}get importCode(){return this.elementClassName?`import '${this.modulePath}';
+    `}async copyToClipboard(e,t){try{await navigator.clipboard.writeText(e),this.copiedKey=t,clearTimeout(this._copyTimeout),this._copyTimeout=setTimeout(()=>this.copiedKey=null,2e3)}catch{}}get importCode(){return this.elementClassName?`import '${this.modulePath}';
 import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.modulePath}';`}get exampleUsage(){const e=this.defaultUsageProps?`
  `+this.defaultUsageProps+`
 `:"",t=this.stringifiedProps??"";return`<${this.elementTag}${e}${t}></${this.elementTag}>`}get cssCode(){return this.stringifiedStyles?`${this.elementTag} {
@@ -402,10 +402,6 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
           margin: 8px 0 4px;
           position: relative;
           z-index: 1;
-        }
-
-        h2 code {
-          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
 
         .details-toggle {
@@ -496,7 +492,7 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
           height: 20px;
           vertical-align: middle;
         }
-      `]}};O([p({type:String})],S.prototype,"elementTag",2);O([p({type:String})],S.prototype,"elementClassName",2);O([p({type:String})],S.prototype,"customExampleUsage",2);O([p({type:String})],S.prototype,"defaultUsageProps",2);O([p({type:Object})],S.prototype,"styleInputData",2);O([p({type:Object})],S.prototype,"propInputData",2);O([p({type:Boolean})],S.prototype,"labs",2);O([m()],S.prototype,"detailsVisible",2);O([m()],S.prototype,"stringifiedStyles",2);O([m()],S.prototype,"stringifiedProps",2);O([m()],S.prototype,"shouldShowPropertySettings",2);O([m()],S.prototype,"slottedDemoComponent",2);O([m()],S.prototype,"copiedKey",2);S=O([A("story-template")],S);var ze=Object.getOwnPropertyDescriptor,Ke=(e,t,i,s)=>{for(var o=s>1?void 0:s?ze(t,i):t,n=e.length-1,a;n>=0;n--)(a=e[n])&&(o=a(o)||o);return o};const qe=[{label:"Text Color (Primary)",cssVariable:"--ia-theme-primary-cta-text-color",defaultValue:"#ffffff",inputType:"color"},{label:"Background Color (Primary)",cssVariable:"--ia-theme-primary-cta-fill",defaultValue:"#194880",inputType:"color"}];let bt=class extends x{render(){return h`
+      `]}disconnectedCallback(){super.disconnectedCallback(),clearTimeout(this._copyTimeout)}};O([p({type:String})],S.prototype,"elementTag",2);O([p({type:String})],S.prototype,"elementClassName",2);O([p({type:String})],S.prototype,"customExampleUsage",2);O([p({type:String})],S.prototype,"defaultUsageProps",2);O([p({type:Object})],S.prototype,"styleInputData",2);O([p({type:Object})],S.prototype,"propInputData",2);O([p({type:Boolean})],S.prototype,"labs",2);O([m()],S.prototype,"detailsVisible",2);O([m()],S.prototype,"stringifiedStyles",2);O([m()],S.prototype,"stringifiedProps",2);O([m()],S.prototype,"shouldShowPropertySettings",2);O([m()],S.prototype,"slottedDemoComponent",2);O([m()],S.prototype,"copiedKey",2);S=O([A("story-template")],S);var ze=Object.getOwnPropertyDescriptor,Ke=(e,t,i,s)=>{for(var o=s>1?void 0:s?ze(t,i):t,n=e.length-1,a;n>=0;n--)(a=e[n])&&(o=a(o)||o);return o};const qe=[{label:"Text Color (Primary)",cssVariable:"--ia-theme-primary-cta-text-color",defaultValue:"#ffffff",inputType:"color"},{label:"Background Color (Primary)",cssVariable:"--ia-theme-primary-cta-fill",defaultValue:"#194880",inputType:"color"}];let bt=class extends x{render(){return h`
       <story-template
         elementTag="ia-button"
         elementClassName="IAButton"
