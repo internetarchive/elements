@@ -1,5 +1,7 @@
 import { html, LitElement } from 'lit';
 import { customElement } from 'lit/decorators.js';
+// unsafeHTML is needed to render dynamic custom-element tag names;
+// Lit's html`` tag cannot render variable tag names directly.
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 const storyModules = import.meta.glob(

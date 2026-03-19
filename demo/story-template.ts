@@ -53,6 +53,7 @@ export class StoryTemplate extends LitElement {
 
   /* Tracks which copy button was last clicked, for feedback */
   @state() private copiedKey: 'import' | 'usage' | 'styling' | null = null;
+  private _copyTimeout?: ReturnType<typeof setTimeout>;
 
   render() {
     return html`
@@ -191,7 +192,8 @@ export class StoryTemplate extends LitElement {
     try {
       await navigator.clipboard.writeText(text);
       this.copiedKey = which;
-      setTimeout(() => (this.copiedKey = null), 2000);
+      clearTimeout(this._copyTimeout);
+      this._copyTimeout = setTimeout(() => (this.copiedKey = null), 2000);
     } catch {
       // Clipboard API unavailable (non-HTTPS or permission denied) — silent fail
     }
@@ -308,10 +310,6 @@ export class StoryTemplate extends LitElement {
           z-index: 1;
         }
 
-        h2 code {
-          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        }
-
         .details-toggle {
           display: inline-flex;
           align-items: center;
@@ -402,5 +400,10 @@ export class StoryTemplate extends LitElement {
         }
       `,
     ];
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    clearTimeout(this._copyTimeout);
   }
 }
