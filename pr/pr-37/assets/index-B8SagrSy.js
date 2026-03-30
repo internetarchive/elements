@@ -272,12 +272,12 @@ hue-6-2: #c18401
           ></slot>
         </div>
         <button
-          class="details-toggle ${this.detailsVisible?"":"collapsed"}"
+          class="details-toggle ${this.detailsVisible?"expanded":"collapsed"}"
           @click=${()=>this.detailsVisible=!this.detailsVisible}
         >
           Import, Usage &amp; Settings
         </button>
-        <div id="details" class="${this.detailsVisible?"":"collapsed"}">
+        <div id="details" class="${this.detailsVisible?"expanded":"collapsed"}">
           <div class="details-inner">
             ${this.detailsTemplate}
           </div>
@@ -352,7 +352,7 @@ hue-6-2: #c18401
               `,()=>h`<p class="section-placeholder">No styles to adjust</p>`)}
           </div>
         </div>
-    `}async copyToClipboard(e,t){try{await navigator.clipboard.writeText(e),this.copiedKey=t,clearTimeout(this._copyTimeout),this._copyTimeout=setTimeout(()=>this.copiedKey=null,2e3)}catch{}}get importCode(){return this.elementClassName?`import '${this.modulePath}';
+    `}async copyToClipboard(e,t){try{await navigator.clipboard.writeText(e),this.copiedKey=t,clearTimeout(this._copyTimeout),this._copyTimeout=setTimeout(()=>this.copiedKey=null,2e3)}catch(i){console.warn("Clipboard write failed:",i)}}get importCode(){return this.elementClassName?`import '${this.modulePath}';
 import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.modulePath}';`}get exampleUsage(){const e=this.defaultUsageProps?`
  `+this.defaultUsageProps+`
 `:"",t=this.stringifiedProps??"";return`<${this.elementTag}${e}${t}></${this.elementTag}>`}get cssCode(){return this.stringifiedStyles?`${this.elementTag} {
@@ -1219,7 +1219,7 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
       fieldset {
         margin-top: 16px;
       }
-    `}};H([m()],k.prototype,"config",2);H([$("#count")],k.prototype,"countInput",2);H([$("#wind")],k.prototype,"windInput",2);H([$("#rotation")],k.prototype,"rotationInput",2);H([$("#color")],k.prototype,"colorInput",2);k=H([A("ia-snow-story")],k);const Mi=Object.freeze(Object.defineProperty({__proto__:null,get IASnowStory(){return k}},Symbol.toStringTag,{value:"Module"}));var Ri=Object.getOwnPropertyDescriptor,Ni=(e,t,i,s)=>{for(var o=s>1?void 0:s?Ri(t,i):t,n=e.length-1,a;n>=0;n--)(a=e[n])&&(o=a(o)||o);return o};const Ui=Object.assign({"../src/elements/ia-button/ia-button-story.ts":We,"../src/elements/ia-combo-box/ia-combo-box-story.ts":_i,"../src/elements/ia-status-indicator/ia-status-indicator-story.ts":Pi,"../src/labs/ia-snow/ia-snow-story.ts":Mi}),oe=Object.keys(Ui).map(e=>{const t=e.includes("/src/labs/"),i=e.split("/"),s=i[i.length-2];return{tag:s,storyTag:`${s}-story`,id:`elem-${s}`,labs:t}}).sort((e,t)=>e.tag.localeCompare(t.tag)),vt=oe.filter(e=>!e.labs),$t=oe.filter(e=>e.labs),Vi=[...vt,...$t];let Wt=class extends x{createRenderRoot(){return this}render(){return h`
+    `}};H([m()],k.prototype,"config",2);H([$("#count")],k.prototype,"countInput",2);H([$("#wind")],k.prototype,"windInput",2);H([$("#rotation")],k.prototype,"rotationInput",2);H([$("#color")],k.prototype,"colorInput",2);k=H([A("ia-snow-story")],k);const Mi=Object.freeze(Object.defineProperty({__proto__:null,get IASnowStory(){return k}},Symbol.toStringTag,{value:"Module"}));var Ri=Object.getOwnPropertyDescriptor,Ni=(e,t,i,s)=>{for(var o=s>1?void 0:s?Ri(t,i):t,n=e.length-1,a;n>=0;n--)(a=e[n])&&(o=a(o)||o);return o};const Ui=Object.assign({"../src/elements/ia-button/ia-button-story.ts":We,"../src/elements/ia-combo-box/ia-combo-box-story.ts":_i,"../src/elements/ia-status-indicator/ia-status-indicator-story.ts":Pi,"../src/labs/ia-snow/ia-snow-story.ts":Mi}),oe=Object.keys(Ui).map(e=>{const t=e.includes("/src/labs/"),i=e.split("/"),o=i[i.length-1].replace(/-story\.ts$/,"");return{tag:o,storyTag:`${o}-story`,id:`elem-${o}`,labs:t}}).sort((e,t)=>e.tag.localeCompare(t.tag)),vt=oe.filter(e=>!e.labs),$t=oe.filter(e=>e.labs),Vi=[...vt,...$t];let Wt=class extends x{constructor(){super(...arguments),this._abortController=new AbortController}createRenderRoot(){return this}render(){return h`
       <nav id="ia-sidebar">
         <h2>Production-Ready</h2>
         ${vt.map(e=>h`<a href="#${e.id}">&lt;${e.tag}&gt;</a>`)}
@@ -1241,4 +1241,4 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
           </div>
         `)}
       </div>
-    `}firstUpdated(){const e=Vi.map(s=>s.id),t=Object.fromEntries(e.map(s=>[s,this.querySelector(`#ia-sidebar a[href="#${s}"]`)])),i=new Set;this._observer=new IntersectionObserver(s=>{for(const n of s)n.isIntersecting?i.add(n.target.id):i.delete(n.target.id);const o=e.find(n=>i.has(n))??e[0];e.forEach(n=>t[n]?.classList.toggle("active",n===o))},{rootMargin:"0px 0px -70% 0px"}),e.forEach(s=>{const o=document.getElementById(s);o&&this._observer.observe(o)}),e.forEach(s=>{t[s]?.addEventListener("click",o=>{o.preventDefault();const n=document.getElementById(s);if(n){const a=n.getBoundingClientRect().top+window.scrollY;window.scrollTo({top:Math.max(0,a-16),behavior:"smooth"})}})})}disconnectedCallback(){super.disconnectedCallback(),this._observer?.disconnect()}};Wt=Ni([A("app-root")],Wt);
+    `}firstUpdated(){const e=Vi.map(s=>s.id),t=Object.fromEntries(e.map(s=>[s,this.querySelector(`#ia-sidebar a[href="#${s}"]`)])),i=new Set;this._observer=new IntersectionObserver(s=>{for(const n of s)n.isIntersecting?i.add(n.target.id):i.delete(n.target.id);const o=e.find(n=>i.has(n))??e[0];e.forEach(n=>t[n]?.classList.toggle("active",n===o))},{rootMargin:"0px 0px -70% 0px"}),e.forEach(s=>{const o=document.getElementById(s);o&&this._observer.observe(o)}),e.forEach(s=>{t[s]?.addEventListener("click",o=>{o.preventDefault();const n=document.getElementById(s);if(n){const a=n.getBoundingClientRect().top+window.scrollY;window.scrollTo({top:Math.max(0,a-16),behavior:"smooth"})}},{signal:this._abortController.signal})})}disconnectedCallback(){super.disconnectedCallback(),this._observer?.disconnect(),this._abortController.abort()}};Wt=Ni([A("app-root")],Wt);
