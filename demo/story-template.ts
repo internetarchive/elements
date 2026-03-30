@@ -79,12 +79,12 @@ export class StoryTemplate extends LitElement {
           ></slot>
         </div>
         <button
-          class="details-toggle ${this.detailsVisible ? '' : 'collapsed'}"
+          class="details-toggle ${this.detailsVisible ? 'expanded' : 'collapsed'}"
           @click=${() => (this.detailsVisible = !this.detailsVisible)}
         >
           Import, Usage &amp; Settings
         </button>
-        <div id="details" class="${this.detailsVisible ? '' : 'collapsed'}">
+        <div id="details" class="${this.detailsVisible ? 'expanded' : 'collapsed'}">
           <div class="details-inner">
             ${this.detailsTemplate}
           </div>
@@ -194,8 +194,8 @@ export class StoryTemplate extends LitElement {
       this.copiedKey = which;
       clearTimeout(this._copyTimeout);
       this._copyTimeout = setTimeout(() => (this.copiedKey = null), 2000);
-    } catch {
-      // Clipboard API unavailable (non-HTTPS or permission denied) — silent fail
+    } catch (e) {
+      console.warn('Clipboard write failed:', e);
     }
   }
 

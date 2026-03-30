@@ -85,7 +85,7 @@ app-root {
 #ia-content {
   flex: 1;
   padding: 0.75rem 1rem;
-  padding-bottom: 100vh;
+  padding-bottom: 100vh; /* lets scroll-spy activate on the last element */
   min-width: 0;
 }
 

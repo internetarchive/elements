@@ -13,20 +13,22 @@ const storyEntries = Object.keys(storyModules)
   .map(path => {
     const labs = path.includes('/src/labs/');
     const parts = path.split('/');
-    const tag = parts[parts.length - 2];
+    const filename = parts[parts.length - 1]; // e.g. "ia-button-story.ts"
+    const tag = filename.replace(/-story\.ts$/, '');
     return { tag, storyTag: `${tag}-story`, id: `elem-${tag}`, labs };
   })
   .sort((a, b) => a.tag.localeCompare(b.tag));
 
 const productionEntries = storyEntries.filter(e => !e.labs);
-const labsEntries       = storyEntries.filter(e => e.labs);
-const ALL_ENTRIES       = [...productionEntries, ...labsEntries];
+const labsEntries = storyEntries.filter(e => e.labs);
+const ALL_ENTRIES = [...productionEntries, ...labsEntries];
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
   createRenderRoot() { return this; }
 
   private _observer?: IntersectionObserver;
+  private _abortController = new AbortController();
 
   render() {
     return html`
@@ -90,12 +92,13 @@ export class AppRoot extends LitElement {
           const top = el.getBoundingClientRect().top + window.scrollY;
           window.scrollTo({ top: Math.max(0, top - 16), behavior: 'smooth' });
         }
-      });
+      }, { signal: this._abortController.signal });
     });
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this._observer?.disconnect();
+    this._abortController.abort();
   }
 }
