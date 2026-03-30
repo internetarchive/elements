@@ -113,6 +113,7 @@ describe('StoryTemplate', () => {
 
       const details = el.shadowRoot?.querySelector('#details');
       expect(details?.classList.contains('collapsed')).to.be.true;
+      expect(details?.classList.contains('expanded')).to.be.false;
     });
 
     test('clicking .details-toggle removes collapsed class from #details', async () => {
@@ -130,6 +131,7 @@ describe('StoryTemplate', () => {
 
       const details = el.shadowRoot?.querySelector('#details');
       expect(details?.classList.contains('collapsed')).to.be.false;
+      expect(details?.classList.contains('expanded')).to.be.true;
     });
 
     test('clicking .details-toggle a second time restores collapsed class', async () => {
@@ -145,10 +147,12 @@ describe('StoryTemplate', () => {
       toggleBtn.click();
       await el.updateComplete;
       expect(details?.classList.contains('collapsed')).to.be.false;
+      expect(details?.classList.contains('expanded')).to.be.true;
 
       toggleBtn.click();
       await el.updateComplete;
       expect(details?.classList.contains('collapsed')).to.be.true;
+      expect(details?.classList.contains('expanded')).to.be.false;
     });
   });
 
