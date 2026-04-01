@@ -142,7 +142,7 @@ To demo your component, we have a component catalog that you can add your demo t
 
 We have a story template you can use for consistency. [More info on `story-template`](#story-template). The easiest way to use this is to copy an existing story and modify it for your needs.
 
-Import your story in `/demo/app-root.ts` and add it to the page.
+Your story will be discovered by `/demo/app-root.ts` and added to the page.
 
 #### Story Template<a id="story-template"></a>
 
