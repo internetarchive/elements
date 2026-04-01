@@ -1,5 +1,5 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -24,7 +24,89 @@ a:hover {
 }
 
 body {
-  margin: 1rem;
+  margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  display: flex;
+}
+
+app-root {
+  display: contents;
+}
+
+#ia-sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  border-right: 1px solid #ddd;
+  padding: 1rem 0;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+#ia-sidebar h2 {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #767676;
+  padding: 0 1rem;
+  margin: 0 0 0.5rem;
+}
+
+#ia-sidebar a {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: #444;
+  text-decoration: none;
+  padding: 0.3rem 1rem;
+  border-left: 3px solid transparent;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#ia-sidebar a:hover {
+  background: #f0f0f0;
+  color: #213547;
+}
+
+#ia-sidebar a.active {
+  color: #194880;
+  border-left-color: #194880;
+  background: #f0f4f9;
+  font-weight: 600;
+}
+
+#ia-content {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  padding-bottom: 100vh; /* lets scroll-spy activate on the last element */
+  min-width: 0;
+}
+
+.ia-anchor {
+  scroll-margin-top: 16px;
+}
+
+.ia-anchor > * {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+#ia-content h1 {
+  font-size: 1.4rem;
+  margin: 0 0 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+#ia-content h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0.75rem 0 0.25rem;
 }
