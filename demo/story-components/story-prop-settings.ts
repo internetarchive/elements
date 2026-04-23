@@ -20,6 +20,7 @@ export type PropInputSettings<T> = {
   defaultValue?: string;
   inputType?: 'text' | 'radio';
   radioOptions?: string[];
+  radioLabels?: string[];
 };
 
 export type PropInputData = {
@@ -95,16 +96,18 @@ export class StoryPropsSettings extends LitElement {
         <td><legend>${settings.label}</legend></td>
         <td>
           ${settings.radioOptions.map(
-            (option) =>
-              html`<input
+            (option, i) => {
+              const label = settings.radioLabels?.[i] ?? option;
+              return html`<input
                   type="radio"
                   class="prop-input"
                   name=${inputId}
-                  id="${inputId}-${option}"
+                  id="${inputId}-${i}"
                   value=${option}
                   data-prop=${settings.propertyName}
                   ?checked=${settings.defaultValue === option}
-                /><label for="${inputId}-${option}"> ${option} </label>`,
+                /><label for="${inputId}-${i}"> ${label} </label>`;
+            },
           )}
         </td>
       </tr>
