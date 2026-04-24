@@ -234,15 +234,15 @@ hue-6-2: #c18401
       <tr>
         <td><legend>${e.label}</legend></td>
         <td>
-          ${e.radioOptions.map((i,s)=>{const o=e.radioLabels?.[s]??i;return l`<input
+          ${e.radioOptions.map(i=>l`<input
                   type="radio"
                   class="prop-input"
                   name=${t}
-                  id="${t}-${s}"
+                  id="${t}-${i}"
                   value=${i}
                   data-prop=${e.propertyName}
                   ?checked=${e.defaultValue===i}
-                /><label for="${t}-${s}"> ${o} </label>`})}
+                /><label for="${t}-${i}"> ${i} </label>`)}
         </td>
       </tr>
     `}applyProps(){const e=[],t=[];this.propInputs?.forEach(i=>{if(!i.dataset.prop||!i.value||i.type==="radio"&&!i.checked)return;const s=i.dataset.prop;e.push(`.${s}=\${'${i.value}'}`),t.push({propName:s,value:i.value})}),this.dispatchEvent(new CustomEvent("propsApplied",{detail:{stringifiedProps:`
@@ -1239,7 +1239,7 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
         background: var(--button-blue);
         color: var(--link-color);
         letter-spacing: 0.6px;
-        font-size: inherit;
+        font-size: 14px;
         transition: opacity 0.12s linear;
         border-radius: 999rem;
         border: 0;
@@ -1298,7 +1298,7 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
 
         <div slot="settings">
           <fieldset>
-            <legend>Widget Key</legend>
+            <legend>Widget Key (refresh the page because new selection)</legend>
             ${zi.map(({label:e,src:t})=>l`
                 <label>
                   <input
