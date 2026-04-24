@@ -85,30 +85,36 @@ export class IAZendeskWidget extends LitElement {
     this.isLoading = true;
     this.dispatchEvent(new Event('zendeskHelpButtonClicked'));
 
-    if (!this.zendeskReady) {
-      await this.loadZendeskScript();
-      await this.waitForZendesk();
+    try {
+      if (!this.zendeskReady) {
+        await this.loadZendeskScript();
+        await this.waitForZendesk();
 
-      // Register lifecycle listeners exactly once.
-      // isLoading is cleared here (not earlier) so the spinner persists until
-      // the widget panel is actually visible to the user.
-      window.zE!('messenger:on', 'open', () => {
-        this.buttonVisible = false;
-        this.isLoading = false;
-      });
+        // Register lifecycle listeners exactly once.
+        // isLoading is cleared here (not earlier) so the spinner persists until
+        // the widget panel is actually visible to the user.
+        window.zE!('messenger:on', 'open', () => {
+          this.buttonVisible = false;
+          this.isLoading = false;
+        });
 
-      // Delay matches the Zendesk close animation so the Help button does not
-      // reappear while the panel is still sliding out.
-      window.zE!('messenger:on', 'close', () => {
-        setTimeout(() => {
-          this.buttonVisible = true;
-        }, 500);
-      });
+        // Delay matches the Zendesk close animation so the Help button does not
+        // reappear while the panel is still sliding out.
+        window.zE!('messenger:on', 'close', () => {
+          setTimeout(() => {
+            this.buttonVisible = true;
+          }, 500);
+        });
 
-      this.zendeskReady = true;
+        this.zendeskReady = true;
+      }
+
+      window.zE!('messenger', 'open');
+    } catch (err) {
+      this.isLoading = false;
+      // eslint-disable-next-line no-console
+      console.error('[ia-zendesk-widget]', err);
     }
-
-    window.zE!('messenger', 'open');
   }
 
   /**
@@ -137,14 +143,19 @@ export class IAZendeskWidget extends LitElement {
    * The snippet performs its own async initialisation after loading, so
    * `window.zE` may not be set immediately when `script.onload` fires.
    */
-  private waitForZendesk(): Promise<void> {
-    return new Promise((resolve) => {
+  private waitForZendesk(timeoutMs = 10_000): Promise<void> {
+    return new Promise((resolve, reject) => {
       const check = setInterval(() => {
         if (window.zE) {
           clearInterval(check);
+          clearTimeout(timeout);
           resolve();
         }
       }, 100);
+      const timeout = setTimeout(() => {
+        clearInterval(check);
+        reject(new Error('Zendesk API did not initialise in time'));
+      }, timeoutMs);
     });
   }
 
