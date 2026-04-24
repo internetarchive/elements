@@ -197,7 +197,7 @@ export class IAZendeskWidget extends LitElement {
         background: var(--button-blue);
         color: var(--link-color);
         letter-spacing: 0.6px;
-        font-size: inherit;
+        font-size: 14px;
         transition: opacity 0.12s linear;
         border-radius: 999rem;
         border: 0;

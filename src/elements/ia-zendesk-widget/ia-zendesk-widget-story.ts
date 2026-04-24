@@ -52,7 +52,7 @@ export class IAZendeskWidgetStory extends LitElement {
 
         <div slot="settings">
           <fieldset>
-            <legend>Widget Key</legend>
+            <legend>Widget Key (refresh the page because new selection)</legend>
             ${SOURCES.map(
               ({ label, src }) => html`
                 <label>
