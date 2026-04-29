@@ -15,6 +15,7 @@ const themeStyles = css`
     --default-icon-width: 1.25rem;
     --default-padding-sm: 5px;
     --default-combo-box-width: auto;
+    --default-font-size-lg: 2.25rem;
 
     /* Colors */
     --true-white: #fff;
@@ -50,6 +51,7 @@ const themeStyles = css`
       --ia-theme-combo-box-width,
       var(--default-combo-box-width)
     );
+    --font-size-lg: var(--ia-theme-font-size-lg, var(--default-font-size-lg));
 
     /* Backgrounds and fills */
     --primary-background-color: var(

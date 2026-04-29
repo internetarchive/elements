@@ -7,6 +7,7 @@ import {
   PropertyValues,
 } from 'lit';
 import { property, customElement, queryAll } from 'lit/decorators.js';
+import themeStyles from '@src/themes/theme-styles';
 
 /**
  * Custom event options for the component
@@ -55,6 +56,7 @@ export class IAOTPInput extends LitElement {
         (i) =>
           html`<input
             id="OTP-input-${i}"
+            part="input"
             type="text"
             autocomplete=${i === 0 ? 'one-time-code' : 'off'}
             inputmode=${this.numericOnly ? 'numeric' : 'text'}
@@ -201,23 +203,32 @@ export class IAOTPInput extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        gap: 5px;
-      }
+    return [
+      themeStyles,
+      css`
+        :host {
+          --primary-text-color--: var(--primary-text-color);
+          --font-size-lg--: var(--font-size-lg);
+        }
 
-      input {
-        font-size: 36px;
-        font-weight: bold;
-        width: 36px;
-        height: 56px;
-        text-align: center;
-        text-transform: uppercase;
-        padding: 0;
-      }
-    `;
+        :host {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          gap: 5px;
+        }
+
+        input {
+          color: var(--primary-text-color--);
+          font-size: var(--font-size-lg--);
+          width: var(--font-size-lg--);
+          font-weight: bold;
+          height: calc(var(--font-size-lg--) + 1.25rem);
+          text-align: center;
+          text-transform: uppercase;
+          padding: 0;
+        }
+      `,
+    ];
   }
 }
