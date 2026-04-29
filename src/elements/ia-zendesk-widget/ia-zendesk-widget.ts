@@ -3,33 +3,13 @@ import {
   html,
   LitElement,
   type CSSResultGroup,
+  type SVGTemplateResult,
   type TemplateResult,
 } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { unsafeHTML, UnsafeHTMLDirective } from 'lit/directives/unsafe-html.js';
-
-import loaderIconSvg from './loader-icon.svg?raw';
-import questionIconSvg from './question-icon.svg?raw';
-import { DirectiveResult } from 'lit/directive.js';
-
-declare global {
-  interface Window {
-    /**
-     * Zendesk Messenger API injected by the ze-snippet script.
-     * Overloaded to cover the two call shapes we use:
-     *   - `messenger:on` — subscribe to open/close lifecycle events
-     *   - `messenger`    — imperatively open or close the widget panel
-     */
-    zE?: {
-      (
-        target: 'messenger:on',
-        event: 'open' | 'close',
-        callback: () => void,
-      ): void;
-      (target: 'messenger', action: 'open' | 'close'): void;
-    };
-  }
-}
+import { loaderIcon } from './loader-icon';
+import { questionIcon } from './question-icon';
+import './zendesk-api';
 
 /**
  * A lightweight launcher button that loads and opens the Zendesk Messenger
@@ -49,15 +29,15 @@ declare global {
  * @example
  * ```html
  * <ia-zendesk-widget
- *   widget-src="https://static.zdassets.com/ekr/snippet.js?key=YOUR_KEY"
+ *   .widgetKey="YOUR_KEY"
  * ></ia-zendesk-widget>
  * ```
  */
 @customElement('ia-zendesk-widget')
 export class IAZendeskWidget extends LitElement {
-  /** URL of the Zendesk `ze-snippet` loader script, including the `key` query param. */
-  @property({ type: String, attribute: 'widget-src' })
-  widgetSrc = '';
+  /** Zendesk account key from the `ze-snippet` URL. */
+  @property({ type: String })
+  widgetKey = '';
 
   /** Controls Help button visibility. Hidden while the widget panel is open. */
   @state() private buttonVisible = true;
@@ -90,17 +70,22 @@ export class IAZendeskWidget extends LitElement {
         await this.loadZendeskScript();
         await this.waitForZendesk();
 
+        if (!window.zE) {
+          this.isLoading = false;
+          return;
+        }
+
         // Register lifecycle listeners exactly once.
         // isLoading is cleared here (not earlier) so the spinner persists until
         // the widget panel is actually visible to the user.
-        window.zE!('messenger:on', 'open', () => {
+        window.zE('messenger:on', 'open', () => {
           this.buttonVisible = false;
           this.isLoading = false;
         });
 
         // Delay matches the Zendesk close animation so the Help button does not
         // reappear while the panel is still sliding out.
-        window.zE!('messenger:on', 'close', () => {
+        window.zE('messenger:on', 'close', () => {
           setTimeout(() => {
             this.buttonVisible = true;
           }, 500);
@@ -109,7 +94,12 @@ export class IAZendeskWidget extends LitElement {
         this.zendeskReady = true;
       }
 
-      window.zE!('messenger', 'open');
+      if (!window.zE) {
+        this.isLoading = false;
+        return;
+      }
+
+      window.zE('messenger', 'open');
     } catch (err) {
       this.isLoading = false;
       // eslint-disable-next-line no-console
@@ -131,7 +121,7 @@ export class IAZendeskWidget extends LitElement {
       }
       const script = document.createElement('script');
       script.id = 'ze-snippet';
-      script.src = this.widgetSrc;
+      script.src = `https://static.zdassets.com/ekr/snippet.js?key=${this.widgetKey}`;
       script.onload = () => resolve();
       script.onerror = () => reject(new Error('Failed to load Zendesk script'));
       document.head.appendChild(script);
@@ -159,10 +149,8 @@ export class IAZendeskWidget extends LitElement {
     });
   }
 
-  private get iconTemplate(): DirectiveResult<typeof UnsafeHTMLDirective> {
-    return this.isLoading
-      ? unsafeHTML(loaderIconSvg)
-      : unsafeHTML(questionIconSvg);
+  private get iconTemplate(): SVGTemplateResult {
+    return this.isLoading ? loaderIcon : questionIcon;
   }
 
   render(): TemplateResult {

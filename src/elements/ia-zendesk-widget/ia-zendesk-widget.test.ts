@@ -5,7 +5,7 @@ import { html } from 'lit';
 import type { IAZendeskWidget } from './ia-zendesk-widget';
 import './ia-zendesk-widget';
 
-const WIDGET_SRC = 'https://static.zdassets.com/ekr/snippet.js?key=test-key';
+const WIDGET_KEY = 'test-key';
 
 describe('IAZendeskWidget', () => {
   afterEach(() => {
@@ -18,7 +18,7 @@ describe('IAZendeskWidget', () => {
   describe('rendering', () => {
     test('renders the Help button', async () => {
       const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget widget-src=${WIDGET_SRC}></ia-zendesk-widget>`,
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
       const btn = el.shadowRoot?.querySelector('.help-widget');
       expect(btn).toBeTruthy();
@@ -26,7 +26,7 @@ describe('IAZendeskWidget', () => {
 
     test('button is visible by default', async () => {
       const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget widget-src=${WIDGET_SRC}></ia-zendesk-widget>`,
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
       const btn = el.shadowRoot?.querySelector('.help-widget');
       expect(btn?.classList.contains('hidden')).toBe(false);
@@ -34,7 +34,7 @@ describe('IAZendeskWidget', () => {
 
     test('button shows "Help" label text', async () => {
       const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget widget-src=${WIDGET_SRC}></ia-zendesk-widget>`,
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
       const label = el.shadowRoot?.querySelector('.hidden-sm');
       expect(label?.textContent?.trim()).toBe('Help');
@@ -42,7 +42,7 @@ describe('IAZendeskWidget', () => {
 
     test('renders question icon when idle', async () => {
       const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget widget-src=${WIDGET_SRC}></ia-zendesk-widget>`,
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
       expect(el.shadowRoot?.querySelector('.icon-question')).toBeTruthy();
       expect(el.shadowRoot?.querySelector('.icon-loader')).toBeFalsy();
@@ -50,7 +50,7 @@ describe('IAZendeskWidget', () => {
 
     test('renders loader icon when isLoading is true', async () => {
       const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget widget-src=${WIDGET_SRC}></ia-zendesk-widget>`,
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
       (el as any).isLoading = true;
       await el.updateComplete;
@@ -60,7 +60,7 @@ describe('IAZendeskWidget', () => {
 
     test('button gets hidden class when buttonVisible is false', async () => {
       const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget widget-src=${WIDGET_SRC}></ia-zendesk-widget>`,
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
       (el as any).buttonVisible = false;
       await el.updateComplete;
@@ -72,7 +72,7 @@ describe('IAZendeskWidget', () => {
   describe('zendeskHelpButtonClicked event', () => {
     test('fires when the Help button is clicked', async () => {
       const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget widget-src=${WIDGET_SRC}></ia-zendesk-widget>`,
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
 
       // Prevent the real async initiateZenDesk from running past the event
@@ -93,7 +93,7 @@ describe('IAZendeskWidget', () => {
   describe('script loading', () => {
     test('injects ze-snippet script on first click', async () => {
       const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget widget-src=${WIDGET_SRC}></ia-zendesk-widget>`,
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
 
       // Stub waitForZendesk so the test doesn't hang
@@ -104,7 +104,7 @@ describe('IAZendeskWidget', () => {
 
       const script = document.getElementById('ze-snippet') as HTMLScriptElement | null;
       expect(script).toBeTruthy();
-      expect(script?.src).toContain('test-key');
+      expect(script?.src).toContain(`key=${WIDGET_KEY}`);
     });
 
     test('does not add a second script if ze-snippet already exists', async () => {
@@ -114,7 +114,7 @@ describe('IAZendeskWidget', () => {
       document.head.appendChild(existing);
 
       const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget widget-src=${WIDGET_SRC}></ia-zendesk-widget>`,
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
 
       await (el as any).loadZendeskScript();
@@ -127,7 +127,7 @@ describe('IAZendeskWidget', () => {
   describe('Zendesk readiness', () => {
     test('waitForZendesk resolves once window.zE is set', async () => {
       const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget widget-src=${WIDGET_SRC}></ia-zendesk-widget>`,
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
 
       // Set window.zE after a short delay
@@ -141,7 +141,7 @@ describe('IAZendeskWidget', () => {
       (window as any).zE = zeStub;
 
       const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget widget-src=${WIDGET_SRC}></ia-zendesk-widget>`,
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
 
       // Skip script loading — zE already present
@@ -161,7 +161,7 @@ describe('IAZendeskWidget', () => {
   describe('open / close lifecycle', () => {
     test('hides button and clears loader when open event fires', async () => {
       const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget widget-src=${WIDGET_SRC}></ia-zendesk-widget>`,
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
 
       let openCallback: (() => void) | undefined;
@@ -185,7 +185,7 @@ describe('IAZendeskWidget', () => {
 
     test('restores button visibility when close event fires', async () => {
       const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget widget-src=${WIDGET_SRC}></ia-zendesk-widget>`,
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
 
       let closeCallback: (() => void) | undefined;

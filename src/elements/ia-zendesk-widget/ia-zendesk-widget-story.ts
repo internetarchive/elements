@@ -1,39 +1,27 @@
 import { html, LitElement, nothing } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
-import type { IAZendeskWidget } from './ia-zendesk-widget';
-
 import './ia-zendesk-widget';
 import '@demo/story-template';
+import '../ia-button/ia-button';
 
-const WIDGET_SRC_TEST =
-  'https://static.zdassets.com/ekr/snippet.js?key=6fe87bd8-d4e3-4b42-8632-be6eb933d54d';
-
-const WIDGET_SRC_PROD =
-  'https://static.zdassets.com/ekr/snippet.js?key=685f6dc4-48c5-411f-8463-cc6dd50abe2d';
-
-const SOURCES = [
-  { label: 'Test', src: WIDGET_SRC_TEST },
-  { label: 'Production', src: WIDGET_SRC_PROD },
-];
+// Test-account key — the host app should supply its own key in production.
+const TEST_WIDGET_KEY = '6fe87bd8-d4e3-4b42-8632-be6eb933d54d';
 
 @customElement('ia-zendesk-widget-story')
 export class IAZendeskWidgetStory extends LitElement {
-  @state() private appliedSrc = WIDGET_SRC_TEST;
-
-  @state() private pendingSrc = WIDGET_SRC_TEST;
-
   @state() private widgetMounted = false;
 
-  private get usageExample(): string {
-    return `<ia-zendesk-widget\n  widget-src="${this.appliedSrc}"\n></ia-zendesk-widget>`;
+  private activateWidget(): void {
+    this.widgetMounted = true;
   }
 
-  private applySelection(): void {
-    this.appliedSrc = this.pendingSrc;
-    this.widgetMounted = true;
-    const demo = this.shadowRoot?.querySelector<IAZendeskWidget>('ia-zendesk-widget');
-    if (demo) demo.widgetSrc = this.appliedSrc;
+  private get usageExample(): string {
+    return [
+      '<ia-zendesk-widget',
+      '  .widgetKey="YOUR_KEY"',
+      '></ia-zendesk-widget>',
+    ].join('\n');
   }
 
   render() {
@@ -43,32 +31,19 @@ export class IAZendeskWidgetStory extends LitElement {
         elementClassName="IAZendeskWidget"
         .customExampleUsage=${this.usageExample}
       >
-        ${this.widgetMounted
-          ? html`<ia-zendesk-widget
-              slot="demo"
-              widget-src=${this.appliedSrc}
-            ></ia-zendesk-widget>`
-          : nothing}
+        <div slot="demo">
+          <ia-button
+            @click=${this.activateWidget}
+            ?disabled=${this.widgetMounted}
+          >
+            ${this.widgetMounted ? 'Activated!' : 'Activate help widget'}
+          </ia-button>
 
-        <div slot="settings">
-          <fieldset>
-            <legend>Widget Key (refresh the page because new selection)</legend>
-            ${SOURCES.map(
-              ({ label, src }) => html`
-                <label>
-                  <input
-                    type="radio"
-                    name="widget-src"
-                    value=${src}
-                    ?checked=${this.pendingSrc === src}
-                    @change=${() => (this.pendingSrc = src)}
-                  />
-                  ${label}
-                </label>
-              `,
-            )}
-          </fieldset>
-          <button @click=${this.applySelection}>Apply</button>
+          ${this.widgetMounted
+            ? html`<ia-zendesk-widget
+                .widgetKey=${TEST_WIDGET_KEY}
+              ></ia-zendesk-widget>`
+            : nothing}
         </div>
       </story-template>
     `;
