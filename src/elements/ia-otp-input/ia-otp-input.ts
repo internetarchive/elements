@@ -8,6 +8,13 @@ import {
 } from 'lit';
 import { property, customElement, queryAll } from 'lit/decorators.js';
 
+/**
+ * Custom event options for the component
+ */
+const Events = {
+  CodeSubmitted: 'codeSubmitted',
+};
+
 const NUMERIC_REGEX = /^[0-9]+$/;
 const ALPHANUMERIC_REGEX = /^[a-zA-Z0-9]+$/;
 
@@ -185,7 +192,7 @@ export class IAOTPInput extends LitElement {
   /* Submits code */
   private triggerSubmit(code: string): void {
     this.dispatchEvent(
-      new CustomEvent('codeSubmitted', {
+      new CustomEvent(Events.CodeSubmitted, {
         detail: code,
         bubbles: true,
         composed: true,
