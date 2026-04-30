@@ -107,13 +107,13 @@ export class IAOTPInput extends LitElement {
   /* Performs special actions associated with some keys */
   private handleKeydown(e: KeyboardEvent): void {
     const input = e.target as HTMLInputElement;
-    const key = e.key.toLowerCase();
+    const key = e.key;
     const prev = input.previousElementSibling as HTMLInputElement;
     const next = input.nextElementSibling as HTMLInputElement;
 
     switch (key) {
-      case 'backspace':
-      case 'delete':
+      case 'Backspace':
+      case 'Delete':
         e.preventDefault();
         if (prev) prev.focus();
 
@@ -124,14 +124,16 @@ export class IAOTPInput extends LitElement {
 
         input.value = '';
         break;
-      case 'tab':
+      case 'Tab':
         input.select();
         break;
-      case 'arrowright':
+      case 'ArrowRight':
+      case 'Right':
         e.preventDefault();
         if (next) next.focus();
         break;
-      case 'arrowleft':
+      case 'ArrowLeft':
+      case 'Left':
         e.preventDefault();
         if (prev) prev.focus();
         break;
