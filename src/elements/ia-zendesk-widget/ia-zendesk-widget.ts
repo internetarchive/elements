@@ -1,15 +1,17 @@
 import {
   css,
   html,
+  nothing,
   LitElement,
   type CSSResultGroup,
+  type PropertyValues,
   type SVGTemplateResult,
   type TemplateResult,
 } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { loaderIcon } from './loader-icon';
 import { questionIcon } from './question-icon';
-import './zendesk-api';
+import { loadZendeskScript, waitForZendesk } from './zendesk-service';
 
 /**
  * A lightweight launcher button that loads and opens the Zendesk Messenger
@@ -22,9 +24,22 @@ import './zendesk-api';
  * @fires zendeskHelpButtonClicked - Dispatched when the user clicks the Help
  *   button, before the widget is opened.
  *
- * @cssprop --button-blue - Button background colour (default: `#194880`).
- * @cssprop --icon-fill-color - SVG icon fill colour (default: `#fff`).
- * @cssprop --link-color - Button text colour (default: `#fff`).
+ * @cssprop [--button-background=#194880] - Button background colour.
+ * @cssprop [--button-color=#fff] - Button text and icon colour.
+ * @cssprop [--icon-fill-color=var(--button-color)] - SVG icon fill; defaults to `--button-color`.
+ * @cssprop [--button-width=auto] - Button width.
+ * @cssprop [--button-padding=13px] - Button padding (overrides fixed width/height when set).
+ * @cssprop [--button-margin=14px 20px] - Margin between button and viewport edges.
+ * @cssprop [--button-top=auto] - Distance from the top of the viewport.
+ * @cssprop [--button-bottom=0] - Distance from the bottom of the viewport.
+ * @cssprop [--button-left=auto] - Distance from the left of the viewport.
+ * @cssprop [--button-right=0] - Distance from the right of the viewport.
+ * @cssprop [--button-z-index=999998] - Stack order.
+ * @cssprop [--button-border-radius=999rem] - Border radius.
+ * @cssprop [--button-font-size=14px] - Font size.
+ * @cssprop [--button-font-weight=700] - Font weight.
+ *
+ * @prop {number} [breakpoint=767] - Viewport width (px) below which the label is automatically hidden.
  *
  * @example
  * ```html
@@ -32,12 +47,29 @@ import './zendesk-api';
  *   .widgetKey="YOUR_KEY"
  * ></ia-zendesk-widget>
  * ```
+ *
+ * @example Customised appearance
+ * ```html
+ * <ia-zendesk-widget
+ *   widgetKey="YOUR_KEY"
+ *   style="
+ *     --button-background: #e03b3b;
+ *     --button-width: 130px;
+ *     --button-bottom: 20px;
+ *     --button-right: 20px;
+ *   "
+ * ></ia-zendesk-widget>
+ * ```
  */
 @customElement('ia-zendesk-widget')
 export class IAZendeskWidget extends LitElement {
   /** Zendesk account key from the `ze-snippet` URL. */
   @property({ type: String })
-  widgetKey = '';
+  widgetKey = '6fe87bd8-d4e3-4b42-8632-be6eb933d54d';
+
+  /** Viewport width (px) below which the label is automatically hidden. */
+  @property({ type: Number })
+  breakpoint = 767;
 
   /** Controls Help button visibility. Hidden while the widget panel is open. */
   @state() private buttonVisible = true;
@@ -45,12 +77,43 @@ export class IAZendeskWidget extends LitElement {
   /** True from the first click until Zendesk fires the `open` event. Shows the spinner. */
   @state() private isLoading = false;
 
+  /** True when the viewport is narrower than `breakpoint`. */
+  @state() private isCompact = false;
+
+  private _mql?: MediaQueryList;
+  private _onMqlChange = (e: MediaQueryListEvent) => {
+    this.isCompact = e.matches;
+  };
+
   /**
    * Set to `true` after the snippet has loaded and the `messenger:on` listeners
    * have been registered. Prevents duplicate listener registration on
    * subsequent clicks.
    */
   private zendeskReady = false;
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    this._setupMediaQuery();
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this._mql?.removeEventListener('change', this._onMqlChange);
+  }
+
+  updated(changed: PropertyValues<this>): void {
+    if (changed.has('breakpoint')) {
+      this._mql?.removeEventListener('change', this._onMqlChange);
+      this._setupMediaQuery();
+    }
+  }
+
+  private _setupMediaQuery(): void {
+    this._mql = window.matchMedia(`(max-width: ${this.breakpoint}px)`);
+    this.isCompact = this._mql.matches;
+    this._mql.addEventListener('change', this._onMqlChange);
+  }
 
   /**
    * Click handler for the Help button.
@@ -67,8 +130,8 @@ export class IAZendeskWidget extends LitElement {
 
     try {
       if (!this.zendeskReady) {
-        await this.loadZendeskScript();
-        await this.waitForZendesk();
+        await loadZendeskScript(this.widgetKey);
+        await waitForZendesk();
 
         if (!window.zE) {
           this.isLoading = false;
@@ -94,59 +157,13 @@ export class IAZendeskWidget extends LitElement {
         this.zendeskReady = true;
       }
 
-      if (!window.zE) {
-        this.isLoading = false;
-        return;
+      if (window.zE) {
+        window.zE('messenger', 'open');
       }
-
-      window.zE('messenger', 'open');
     } catch (err) {
       this.isLoading = false;
-      // eslint-disable-next-line no-console
       console.error('[ia-zendesk-widget]', err);
     }
-  }
-
-  /**
-   * Appends the Zendesk snippet `<script>` to `<head>` if it has not already
-   * been added. Resolves once the script has loaded; rejects on network error.
-   * Guarded by the `ze-snippet` id so multiple widget instances on the same
-   * page share a single script tag.
-   */
-  private loadZendeskScript(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (document.getElementById('ze-snippet')) {
-        resolve();
-        return;
-      }
-      const script = document.createElement('script');
-      script.id = 'ze-snippet';
-      script.src = `https://static.zdassets.com/ekr/snippet.js?key=${this.widgetKey}`;
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error('Failed to load Zendesk script'));
-      document.head.appendChild(script);
-    });
-  }
-
-  /**
-   * Polls `window.zE` at 100 ms intervals until the Zendesk API is available.
-   * The snippet performs its own async initialisation after loading, so
-   * `window.zE` may not be set immediately when `script.onload` fires.
-   */
-  private waitForZendesk(timeoutMs = 10_000): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const check = setInterval(() => {
-        if (window.zE) {
-          clearInterval(check);
-          clearTimeout(timeout);
-          resolve();
-        }
-      }, 100);
-      const timeout = setTimeout(() => {
-        clearInterval(check);
-        reject(new Error('Zendesk API did not initialise in time'));
-      }, timeoutMs);
-    });
   }
 
   private get iconTemplate(): SVGTemplateResult {
@@ -160,74 +177,54 @@ export class IAZendeskWidget extends LitElement {
         @click=${this.initiateZenDesk}
       >
         ${this.iconTemplate}
-        <span class="hidden-sm">Help</span>
+        ${!this.isCompact ? html`<span class="label">Help</span>` : nothing}
       </button>
     `;
   }
 
   static get styles(): CSSResultGroup {
     return css`
-      :host {
-        --button-blue: #194880;
-        --white: #fff;
-        --icon-fill-color: var(--white);
-        --link-color: var(--white);
-      }
-
       .help-widget {
-        width: 108px;
-        height: 46px;
-        margin: 14px 20px;
         position: fixed;
-        bottom: 0;
-        right: 0;
-        z-index: 999998;
-        background: var(--button-blue);
-        color: var(--link-color);
-        letter-spacing: 0.6px;
-        font-size: 14px;
-        transition: opacity 0.12s linear;
-        border-radius: 999rem;
+        top: var(--button-top, auto);
+        bottom: var(--button-bottom, 0);
+        left: var(--button-left, auto);
+        right: var(--button-right, 0);
+        z-index: var(--button-z-index, 999998);
+        width: var(--button-width, auto);
+        padding: var(--button-padding, 14px);
+        margin: var(--button-margin, 14px 20px);
+        background: var(--button-background, #194880);
+        color: var(--button-color, #fff);
+        border-radius: var(--button-border-radius, 999rem);
         border: 0;
+        font-size: var(--button-font-size, 14px);
+        font-weight: var(--button-font-weight, 700);
+        letter-spacing: 0.6px;
         outline: none;
-        font-weight: 700;
         cursor: pointer;
         vertical-align: middle;
+        transition: opacity 0.12s linear;
       }
 
       .fill-color {
-        fill: var(--icon-fill-color);
+        fill: var(--button-color, #fff);
       }
 
       .help-widget svg {
         vertical-align: middle;
-        margin-right: 3px;
         pointer-events: none;
       }
 
-      .help-widget .hidden-sm {
+      .label {
         pointer-events: none;
+        margin-right: 3px;
       }
 
       .hidden {
         opacity: 0;
         display: none;
         visibility: hidden;
-      }
-
-      @media (max-width: 767px) {
-        .hidden-sm {
-          display: none;
-        }
-
-        .help-widget {
-          padding: 13px;
-          width: initial;
-        }
-
-        .help-widget svg {
-          margin-right: 0;
-        }
       }
     `;
   }

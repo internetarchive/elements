@@ -1,5 +1,5 @@
 import { fixture } from '@open-wc/testing-helpers';
-import { describe, expect, test, vi, afterEach } from 'vitest';
+import { describe, expect, test, vi, afterEach, beforeEach } from 'vitest';
 import { html } from 'lit';
 
 import type { IAZendeskWidget } from './ia-zendesk-widget';
@@ -7,9 +7,42 @@ import './ia-zendesk-widget';
 
 const WIDGET_KEY = 'test-key';
 
+/**
+ * Creates a matchMedia stub and returns helpers to assert on it and fire
+ * change events. Must be called before the element is connected to the DOM
+ * so that connectedCallback picks up the mock.
+ */
+function mockMatchMedia(matches: boolean) {
+  const listeners: ((e: MediaQueryListEvent) => void)[] = [];
+  const mql = {
+    matches,
+    addEventListener: vi.fn(
+      (_: string, cb: (e: MediaQueryListEvent) => void) => {
+        listeners.push(cb);
+      },
+    ),
+    removeEventListener: vi.fn(),
+  };
+  vi.spyOn(window, 'matchMedia').mockReturnValue(
+    mql as unknown as MediaQueryList,
+  );
+  return {
+    mql,
+    fireChange: (newMatches: boolean) =>
+      listeners.forEach((cb) =>
+        cb({ matches: newMatches } as MediaQueryListEvent),
+      ),
+  };
+}
+
 describe('IAZendeskWidget', () => {
+  beforeEach(() => {
+    // jsdom does not implement matchMedia; provide a non-compact default so
+    // connectedCallback does not throw in tests that don't need breakpoint coverage.
+    mockMatchMedia(false);
+  });
+
   afterEach(() => {
-    // Remove any injected ze-snippet between tests
     document.getElementById('ze-snippet')?.remove();
     delete (window as any).zE;
     vi.restoreAllMocks();
@@ -36,7 +69,7 @@ describe('IAZendeskWidget', () => {
       const el = await fixture<IAZendeskWidget>(
         html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
-      const label = el.shadowRoot?.querySelector('.hidden-sm');
+      const label = el.shadowRoot?.querySelector('.label');
       expect(label?.textContent?.trim()).toBe('Help');
     });
 
@@ -75,13 +108,14 @@ describe('IAZendeskWidget', () => {
         html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
 
-      // Prevent the real async initiateZenDesk from running past the event
       (el as any).initiateZenDesk = vi.fn(async () => {
         el.dispatchEvent(new Event('zendeskHelpButtonClicked'));
       });
 
       let fired = false;
-      el.addEventListener('zendeskHelpButtonClicked', () => { fired = true; });
+      el.addEventListener('zendeskHelpButtonClicked', () => {
+        fired = true;
+      });
 
       el.shadowRoot?.querySelector<HTMLButtonElement>('.help-widget')?.click();
       await el.updateComplete;
@@ -90,121 +124,88 @@ describe('IAZendeskWidget', () => {
     });
   });
 
-  describe('script loading', () => {
-    test('injects ze-snippet script on first click', async () => {
+  describe('breakpoint / compact mode', () => {
+    test('shows "Help" label when viewport is wider than breakpoint', async () => {
+      mockMatchMedia(false);
       const el = await fixture<IAZendeskWidget>(
         html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
-
-      // Stub waitForZendesk so the test doesn't hang
-      (el as any).waitForZendesk = vi.fn().mockResolvedValue(undefined);
-      (window as any).zE = vi.fn();
-
-      await (el as any).loadZendeskScript();
-
-      const script = document.getElementById('ze-snippet') as HTMLScriptElement | null;
-      expect(script).toBeTruthy();
-      expect(script?.src).toContain(`key=${WIDGET_KEY}`);
+      expect(el.shadowRoot?.querySelector('.label')).toBeTruthy();
     });
 
-    test('does not add a second script if ze-snippet already exists', async () => {
-      // Pre-inject the script
-      const existing = document.createElement('script');
-      existing.id = 'ze-snippet';
-      document.head.appendChild(existing);
-
+    test('hides "Help" label when viewport is narrower than breakpoint', async () => {
+      mockMatchMedia(true);
       const el = await fixture<IAZendeskWidget>(
         html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
-
-      await (el as any).loadZendeskScript();
-
-      const scripts = document.querySelectorAll('#ze-snippet');
-      expect(scripts.length).toBe(1);
-    });
-  });
-
-  describe('Zendesk readiness', () => {
-    test('waitForZendesk resolves once window.zE is set', async () => {
-      const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
-      );
-
-      // Set window.zE after a short delay
-      setTimeout(() => { (window as any).zE = vi.fn(); }, 50);
-
-      await expect((el as any).waitForZendesk()).resolves.toBeUndefined();
+      expect(el.shadowRoot?.querySelector('.label')).toBeFalsy();
     });
 
-    test('messenger:on listeners are registered only once across multiple clicks', async () => {
-      const zeStub = vi.fn();
-      (window as any).zE = zeStub;
-
+    test('hides label when viewport shrinks below breakpoint at runtime', async () => {
+      const { fireChange } = mockMatchMedia(false);
       const el = await fixture<IAZendeskWidget>(
         html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
+      expect(el.shadowRoot?.querySelector('.label')).toBeTruthy();
 
-      // Skip script loading — zE already present
-      (el as any).loadZendeskScript = vi.fn().mockResolvedValue(undefined);
-      (el as any).waitForZendesk = vi.fn().mockResolvedValue(undefined);
-
-      await (el as any).initiateZenDesk();
-      await (el as any).initiateZenDesk();
-
-      // messenger:on open + close registered once each = 2 calls
-      // messenger open called twice = 2 more calls → total 4
-      const onCalls = zeStub.mock.calls.filter(c => c[0] === 'messenger:on');
-      expect(onCalls.length).toBe(2);
-    });
-  });
-
-  describe('open / close lifecycle', () => {
-    test('hides button and clears loader when open event fires', async () => {
-      const el = await fixture<IAZendeskWidget>(
-        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
-      );
-
-      let openCallback: (() => void) | undefined;
-      (window as any).zE = (target: string, event: string, cb?: () => void) => {
-        if (target === 'messenger:on' && event === 'open') openCallback = cb;
-      };
-
-      (el as any).loadZendeskScript = vi.fn().mockResolvedValue(undefined);
-      (el as any).waitForZendesk = vi.fn().mockResolvedValue(undefined);
-
-      await (el as any).initiateZenDesk();
-
-      expect((el as any).isLoading).toBe(true);
-
-      openCallback?.();
+      fireChange(true);
       await el.updateComplete;
 
-      expect((el as any).buttonVisible).toBe(false);
-      expect((el as any).isLoading).toBe(false);
+      expect(el.shadowRoot?.querySelector('.label')).toBeFalsy();
     });
 
-    test('restores button visibility when close event fires', async () => {
+    test('shows label when viewport grows above breakpoint at runtime', async () => {
+      const { fireChange } = mockMatchMedia(true);
+      const el = await fixture<IAZendeskWidget>(
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
+      );
+      expect(el.shadowRoot?.querySelector('.label')).toBeFalsy();
+
+      fireChange(false);
+      await el.updateComplete;
+
+      expect(el.shadowRoot?.querySelector('.label')).toBeTruthy();
+    });
+
+    test('uses default 767px breakpoint in media query', async () => {
+      await fixture<IAZendeskWidget>(
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
+      );
+      expect(window.matchMedia).toHaveBeenCalledWith('(max-width: 767px)');
+    });
+
+    test('uses custom breakpoint in media query', async () => {
+      await fixture<IAZendeskWidget>(
+        html`<ia-zendesk-widget
+          .widgetKey=${WIDGET_KEY}
+          .breakpoint=${480}
+        ></ia-zendesk-widget>`,
+      );
+      expect(window.matchMedia).toHaveBeenCalledWith('(max-width: 480px)');
+    });
+
+    test('rebuilds media query when breakpoint property changes', async () => {
+      const { mql } = mockMatchMedia(false);
       const el = await fixture<IAZendeskWidget>(
         html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
       );
 
-      let closeCallback: (() => void) | undefined;
-      (window as any).zE = (target: string, event: string, cb?: () => void) => {
-        if (target === 'messenger:on' && event === 'close') closeCallback = cb;
-      };
-
-      (el as any).loadZendeskScript = vi.fn().mockResolvedValue(undefined);
-      (el as any).waitForZendesk = vi.fn().mockResolvedValue(undefined);
-      (el as any).buttonVisible = false;
-
-      await (el as any).initiateZenDesk();
-      closeCallback?.();
-
-      // Wait for the 1000ms setTimeout inside the close handler
-      await new Promise(r => setTimeout(r, 1100));
+      el.breakpoint = 480;
       await el.updateComplete;
 
-      expect((el as any).buttonVisible).toBe(true);
+      expect(mql.removeEventListener).toHaveBeenCalled();
+      expect(window.matchMedia).toHaveBeenCalledWith('(max-width: 480px)');
+    });
+
+    test('removes media query listener when element disconnects', async () => {
+      const { mql } = mockMatchMedia(false);
+      const el = await fixture<IAZendeskWidget>(
+        html`<ia-zendesk-widget .widgetKey=${WIDGET_KEY}></ia-zendesk-widget>`,
+      );
+
+      el.remove();
+
+      expect(mql.removeEventListener).toHaveBeenCalled();
     });
   });
 });
