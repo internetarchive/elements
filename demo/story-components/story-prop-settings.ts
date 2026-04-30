@@ -75,6 +75,7 @@ export class StoryPropsSettings extends LitElement {
             type=${settings.inputType ?? 'text'}
             id=${inputId}
             data-prop=${settings.propertyName}
+            data-format=${typeof settings.defaultValue}
             placeholder=${ifDefined(settings?.defaultValue)}
           />
         </td>
@@ -103,6 +104,7 @@ export class StoryPropsSettings extends LitElement {
                   id="${inputId}-${option}"
                   value=${option}
                   data-prop=${settings.propertyName}
+                  data-format=${typeof settings.defaultValue}
                   ?checked=${settings.defaultValue === option}
                 /><label for="${inputId}-${option}"> ${option} </label>`,
           )}
@@ -127,9 +129,15 @@ export class StoryPropsSettings extends LitElement {
       let value: number | string | boolean = input.value;
 
       // Perform necessary conversions for props to apply
-      if (input.type === 'number') value = parseInt(value);
-      if (value === 'true') value = true;
-      if (value === 'false') value = false;
+      switch (input.dataset.format) {
+        case 'number':
+          value = parseInt(value);
+          break;
+        case 'boolean':
+          if (value === 'true') value = true;
+          if (value === 'false') value = false;
+          break;
+      }
 
       const stringifiedValue =
         typeof value === 'string' ? `'${value}'` : value.toString();
