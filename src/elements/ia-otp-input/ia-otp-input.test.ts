@@ -487,6 +487,27 @@ describe('IA OTP Input', () => {
     expect(detail).to.equal('123456');
   });
 
+  test('capitalizes all characters on submit if alphanumeric allowed', async () => {
+    const el = await fixture<IAOTPInput>(
+      html`<ia-otp-input .numericOnly=${false}></ia-otp-input>`,
+    );
+
+    const inputs = el.shadowRoot?.querySelectorAll('input');
+    const firstInput = inputs?.[0] as HTMLInputElement;
+
+    const pastedData = new DataTransfer();
+    pastedData.setData('text/plain', '1a3B56');
+
+    const eventPromise = oneEvent(el, 'codeSubmitted');
+
+    firstInput.dispatchEvent(
+      new ClipboardEvent('paste', { clipboardData: pastedData }),
+    );
+
+    const { detail } = await eventPromise;
+    expect(detail).to.equal('1A3B56');
+  });
+
   test('triggers submission if all inputs filled manually', async () => {
     const el = await fixture<IAOTPInput>(html`<ia-otp-input></ia-otp-input>`);
 

@@ -197,7 +197,7 @@ export class IAOTPInput extends LitElement {
   private triggerSubmit(code: string): void {
     this.dispatchEvent(
       new CustomEvent(Events.CodeSubmitted, {
-        detail: code,
+        detail: this.numericOnly ? code : code.toUpperCase(),
         bubbles: true,
         composed: true,
       }),
