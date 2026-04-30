@@ -228,6 +228,7 @@ hue-6-2: #c18401
             type=${e.inputType??"text"}
             id=${t}
             data-prop=${e.propertyName}
+            data-format=${typeof e.defaultValue}
             placeholder=${ot(e?.defaultValue)}
           />
         </td>
@@ -243,11 +244,12 @@ hue-6-2: #c18401
                   id="${t}-${i}"
                   value=${i}
                   data-prop=${e.propertyName}
+                  data-format=${typeof e.defaultValue}
                   ?checked=${e.defaultValue===i}
                 /><label for="${t}-${i}"> ${i} </label>`)}
         </td>
       </tr>
-    `}applyProps(){const e=[],t=[];this.propInputs?.forEach(i=>{if(!i.dataset.prop||!i.value||i.type==="radio"&&!i.checked)return;const s=i.dataset.prop;let o=i.value;i.type==="number"&&(o=parseInt(o)),o==="true"&&(o=!0),o==="false"&&(o=!1);const n=typeof o=="string"?`'${o}`:o.toString();e.push(`.${s}=\${${n}}`),t.push({propName:s,value:o})}),this.dispatchEvent(new CustomEvent("propsApplied",{detail:{stringifiedProps:`
+    `}applyProps(){const e=[],t=[];this.propInputs?.forEach(i=>{if(!i.dataset.prop||!i.value||i.type==="radio"&&!i.checked)return;const s=i.dataset.prop;let o=i.value;switch(i.dataset.format){case"number":o=parseInt(o);break;case"boolean":o==="true"&&(o=!0),o==="false"&&(o=!1);break}const n=typeof o=="string"?`'${o}'`:o.toString();e.push(`.${s}=\${${n}}`),t.push({propName:s,value:o})}),this.dispatchEvent(new CustomEvent("propsApplied",{detail:{stringifiedProps:`
   `+e.join(`
   `)+`
 `,appliedProps:t}}))}static get styles(){return[N,T`
@@ -1020,7 +1022,7 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
             @paste=${this.handlePaste}
             @keydown=${this.handleKeydown}
           />`)}
-    `}firstUpdated(){this.inputs[0].focus()}willUpdate(e){e.has("numericOnly")&&(this.allowedChars=this.numericOnly?Yt:Ii),e.has("prefillValue")&&this.prefillValue!==void 0&&(this.fillInputs(this.prefillValue),this.prefillValue=void 0)}handleInput(e){e.preventDefault();const t=e.target,i=e.data;if(!i)return;if(i.length>1){this.fillInputs(i);return}if(!this.allowedChars.test(i))return;t.value=i;const s=t.nextElementSibling;s&&s.focus(),this.submitIfInputsFilled()}handleKeydown(e){const t=e.target,i=e.key.toLowerCase(),s=t.previousElementSibling,o=t.nextElementSibling;switch(i){case"backspace":case"delete":if(e.preventDefault(),s&&s.focus(),t.value===""){s.value="";break}t.value="";break;case"tab":t.select();break;case"arrowright":e.preventDefault(),o&&o.focus();break;case"arrowleft":e.preventDefault(),s&&s.focus();break}}handlePaste(e){e.preventDefault();const t=e.clipboardData?.getData("text");t&&this.fillInputs(t)}fillInputs(e){e===""&&this.clearInputs();const t=e.split("").filter(s=>this.allowedChars.test(s)).slice(0,this.numChars);if(!t||t.length===0)return;if(t.forEach((s,o)=>this.inputs[o].value=s),t.length===this.numChars){this.triggerSubmit(t.join("")),this.inputs[this.numChars-1].focus();return}this.inputs[t.length].focus()}clearInputs(){this.inputs.forEach(e=>e.value=""),this.inputs[0].focus()}submitIfInputsFilled(){const e=[];this.inputs.forEach(t=>{t.value&&e.push(t.value)}),e.length===this.numChars&&this.triggerSubmit(e.join(""))}triggerSubmit(e){this.dispatchEvent(new CustomEvent(Pi.CodeSubmitted,{detail:e,bubbles:!0,composed:!0}))}static get styles(){return[N,T`
+    `}firstUpdated(){this.inputs[0].focus()}willUpdate(e){e.has("numericOnly")&&(this.allowedChars=this.numericOnly?Yt:Ii),e.has("prefillValue")&&this.prefillValue!==void 0&&(this.fillInputs(this.prefillValue),this.prefillValue=void 0)}handleInput(e){e.preventDefault();const t=e.target,i=e.data;if(!i)return;if(i.length>1){this.fillInputs(i);return}if(!this.allowedChars.test(i))return;t.value=i;const s=t.nextElementSibling;s&&s.focus(),this.submitIfInputsFilled()}handleKeydown(e){const t=e.target,i=e.key,s=t.previousElementSibling,o=t.nextElementSibling;switch(i){case"Backspace":case"Delete":if(e.preventDefault(),s&&s.focus(),t.value===""){s.value="";break}t.value="";break;case"Tab":t.select();break;case"ArrowRight":case"Right":e.preventDefault(),o&&o.focus();break;case"ArrowLeft":case"Left":e.preventDefault(),s&&s.focus();break}}handlePaste(e){e.preventDefault();const t=e.clipboardData?.getData("text");t&&this.fillInputs(t)}fillInputs(e){e===""&&this.clearInputs();const t=e.split("").filter(s=>this.allowedChars.test(s)).slice(0,this.numChars);if(!t||t.length===0)return;if(t.forEach((s,o)=>this.inputs[o].value=s),t.length===this.numChars){this.triggerSubmit(t.join("")),this.inputs[this.numChars-1].focus();return}this.inputs[t.length].focus()}clearInputs(){this.inputs.forEach(e=>e.value=""),this.inputs[0].focus()}submitIfInputsFilled(){const e=[];this.inputs.forEach(t=>{t.value&&e.push(t.value)}),e.length===this.numChars&&this.triggerSubmit(e.join(""))}triggerSubmit(e){this.dispatchEvent(new CustomEvent(Pi.CodeSubmitted,{detail:this.numericOnly?e:e.toUpperCase(),bubbles:!0,composed:!0}))}static get styles(){return[N,T`
         :host {
           --primary-text-color--: var(--primary-text-color);
           --font-size-lg--: var(--font-size-lg);
