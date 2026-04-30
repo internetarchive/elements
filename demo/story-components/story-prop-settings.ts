@@ -9,7 +9,6 @@ import {
 import { property, queryAll } from 'lit/decorators.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { choose } from 'lit/directives/choose.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
 
 import themeStyles from '@src/themes/theme-styles';
 import { labelToId } from '../story-utils';
@@ -17,7 +16,7 @@ import { labelToId } from '../story-utils';
 export type PropInputSettings<T> = {
   label: string;
   propertyName: keyof T;
-  defaultValue?: string | boolean | number;
+  defaultValue: string | boolean | number;
   inputType?: 'text' | 'radio' | 'number';
   radioOptions?: string[] | boolean[];
 };
@@ -76,7 +75,7 @@ export class StoryPropsSettings extends LitElement {
             id=${inputId}
             data-prop=${settings.propertyName}
             data-format=${typeof settings.defaultValue}
-            placeholder=${ifDefined(settings?.defaultValue)}
+            placeholder=${settings.defaultValue}
           />
         </td>
       </tr>
