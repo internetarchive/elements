@@ -132,7 +132,7 @@ export class StoryPropsSettings extends LitElement {
       if (value === 'false') value = false;
 
       const stringifiedValue =
-        typeof value === 'string' ? `'${value}` : value.toString();
+        typeof value === 'string' ? `'${value}'` : value.toString();
       stringifiedProps.push(`.${propName}=\${${stringifiedValue}}`);
       appliedProps.push({ propName, value });
     });
