@@ -79,15 +79,18 @@ export class StoryTemplate extends LitElement {
           ></slot>
         </div>
         <button
-          class="details-toggle ${this.detailsVisible ? 'expanded' : 'collapsed'}"
+          class="details-toggle ${this.detailsVisible
+            ? 'expanded'
+            : 'collapsed'}"
           @click=${() => (this.detailsVisible = !this.detailsVisible)}
         >
           Import, Usage &amp; Settings
         </button>
-        <div id="details" class="${this.detailsVisible ? 'expanded' : 'collapsed'}">
-          <div class="details-inner">
-            ${this.detailsTemplate}
-          </div>
+        <div
+          id="details"
+          class="${this.detailsVisible ? 'expanded' : 'collapsed'}"
+        >
+          <div class="details-inner">${this.detailsTemplate}</div>
         </div>
       </div>
     `;
@@ -95,93 +98,94 @@ export class StoryTemplate extends LitElement {
 
   private get detailsTemplate() {
     return html`
-        <h3>
-          Import
-          <button
-            class="copy-btn ${this.copiedKey === 'import' ? 'copied' : ''}"
-            @click=${() => this.copyToClipboard(this.importCode, 'import')}
-          >
-            ${this.copiedKey === 'import' ? 'Copied!' : 'Copy'}
-          </button>
-        </h3>
-        <syntax-highlighter
-          language="typescript"
-          .code=${this.importCode}
-        ></syntax-highlighter>
-        <h3>
-          Usage
-          <button
-            class="copy-btn ${this.copiedKey === 'usage' ? 'copied' : ''}"
-            @click=${() =>
-              this.copyToClipboard(
-                this.customExampleUsage ?? this.exampleUsage,
-                'usage',
-              )}
-          >
-            ${this.copiedKey === 'usage' ? 'Copied!' : 'Copy'}
-          </button>
-        </h3>
-        <syntax-highlighter
-          language="auto"
-          .code=${this.customExampleUsage ?? this.exampleUsage}
-        ></syntax-highlighter>
-        ${when(
-          this.cssCode,
-          () => html`
-            <h3>
-              Styling
-              <button
-                class="copy-btn ${this.copiedKey === 'styling' ? 'copied' : ''}"
-                @click=${() => this.copyToClipboard(this.cssCode, 'styling')}
-              >
-                ${this.copiedKey === 'styling' ? 'Copied!' : 'Copy'}
-              </button>
-            </h3>
-            <syntax-highlighter
-              language="css"
-              .code=${this.cssCode}
-            ></syntax-highlighter>
-          `,
-        )}
-        <div class="two-col">
-          <div class="left-col">
-            <h3>Settings</h3>
-            ${when(
-              !!this.propInputData,
-              () => html`
-                <story-props-settings
-                  .propInputData=${this.propInputData}
-                  @propsApplied=${this.handlePropsApplied}
-                ></story-props-settings>
-              `,
+      <h3>
+        Import
+        <button
+          class="copy-btn ${this.copiedKey === 'import' ? 'copied' : ''}"
+          @click=${() => this.copyToClipboard(this.importCode, 'import')}
+        >
+          ${this.copiedKey === 'import' ? 'Copied!' : 'Copy'}
+        </button>
+      </h3>
+      <syntax-highlighter
+        language="typescript"
+        .code=${this.importCode}
+      ></syntax-highlighter>
+      <h3>
+        Usage
+        <button
+          class="copy-btn ${this.copiedKey === 'usage' ? 'copied' : ''}"
+          @click=${() =>
+            this.copyToClipboard(
+              this.customExampleUsage ?? this.exampleUsage,
+              'usage',
             )}
-            ${when(
-              !this.propInputData && !this.shouldShowPropertySettings,
-              () =>
-                html`<p class="section-placeholder">No settings to adjust</p>`,
-            )}
-            <div
-              class="slot-container ${this.shouldShowPropertySettings ? '' : 'hidden'}"
-              @slotchange=${this.handleSettingsSlotChange}
+        >
+          ${this.copiedKey === 'usage' ? 'Copied!' : 'Copy'}
+        </button>
+      </h3>
+      <syntax-highlighter
+        language="auto"
+        .code=${this.customExampleUsage ?? this.exampleUsage}
+      ></syntax-highlighter>
+      ${when(
+        this.cssCode,
+        () => html`
+          <h3>
+            Styling
+            <button
+              class="copy-btn ${this.copiedKey === 'styling' ? 'copied' : ''}"
+              @click=${() => this.copyToClipboard(this.cssCode, 'styling')}
             >
-              <slot name="settings"></slot>
-            </div>
-          </div>
-          <div class="right-col">
-            <h3>Styles</h3>
-            ${when(
-              !!this.styleInputData,
-              () => html`
-                <story-styles-settings
-                  .styleInputData=${this.styleInputData}
-                  @stylesApplied=${this.handleStylesApplied}
-                ></story-styles-settings>
-              `,
-              () =>
-                html`<p class="section-placeholder">No styles to adjust</p>`,
-            )}
+              ${this.copiedKey === 'styling' ? 'Copied!' : 'Copy'}
+            </button>
+          </h3>
+          <syntax-highlighter
+            language="css"
+            .code=${this.cssCode}
+          ></syntax-highlighter>
+        `,
+      )}
+      <div class="two-col">
+        <div class="left-col">
+          <h3>Settings</h3>
+          ${when(
+            !!this.propInputData,
+            () => html`
+              <story-props-settings
+                .propInputData=${this.propInputData}
+                @propsApplied=${this.handlePropsApplied}
+              ></story-props-settings>
+            `,
+          )}
+          ${when(
+            !this.propInputData && !this.shouldShowPropertySettings,
+            () =>
+              html`<p class="section-placeholder">No settings to adjust</p>`,
+          )}
+          <div
+            class="slot-container ${this.shouldShowPropertySettings
+              ? ''
+              : 'hidden'}"
+            @slotchange=${this.handleSettingsSlotChange}
+          >
+            <slot name="settings"></slot>
           </div>
         </div>
+        <div class="right-col">
+          <h3>Styles</h3>
+          ${when(
+            !!this.styleInputData,
+            () => html`
+              <story-styles-settings
+                .styleInputData=${this.styleInputData}
+                @stylesApplied=${this.handleStylesApplied}
+              ></story-styles-settings>
+            `,
+            () => html`<p class="section-placeholder">No styles to adjust</p>`,
+          )}
+        </div>
+      </div>
     `;
   }
 

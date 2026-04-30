@@ -9,7 +9,6 @@ import {
 import { property, queryAll } from 'lit/decorators.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { choose } from 'lit/directives/choose.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
 
 import themeStyles from '@src/themes/theme-styles';
 import { labelToId } from '../story-utils';
@@ -17,9 +16,9 @@ import { labelToId } from '../story-utils';
 export type PropInputSettings<T> = {
   label: string;
   propertyName: keyof T;
-  defaultValue?: string;
-  inputType?: 'text' | 'radio';
-  radioOptions?: string[];
+  defaultValue: string | boolean | number;
+  inputType?: 'text' | 'radio' | 'number';
+  radioOptions?: string[] | boolean[];
 };
 
 export type PropInputData = {
@@ -75,7 +74,8 @@ export class StoryPropsSettings extends LitElement {
             type=${settings.inputType ?? 'text'}
             id=${inputId}
             data-prop=${settings.propertyName}
-            placeholder=${ifDefined(settings?.defaultValue)}
+            data-format=${typeof settings.defaultValue}
+            placeholder=${settings.defaultValue}
           />
         </td>
       </tr>
@@ -103,6 +103,7 @@ export class StoryPropsSettings extends LitElement {
                   id="${inputId}-${option}"
                   value=${option}
                   data-prop=${settings.propertyName}
+                  data-format=${typeof settings.defaultValue}
                   ?checked=${settings.defaultValue === option}
                 /><label for="${inputId}-${option}"> ${option} </label>`,
           )}
@@ -124,8 +125,23 @@ export class StoryPropsSettings extends LitElement {
         return;
 
       const propName = input.dataset.prop;
-      stringifiedProps.push(`.${propName}=\${'${input.value}'}`);
-      appliedProps.push({ propName, value: input.value });
+      let value: number | string | boolean = input.value;
+
+      // Perform necessary conversions for props to apply
+      switch (input.dataset.format) {
+        case 'number':
+          value = parseInt(value);
+          break;
+        case 'boolean':
+          if (value === 'true') value = true;
+          if (value === 'false') value = false;
+          break;
+      }
+
+      const stringifiedValue =
+        typeof value === 'string' ? `'${value}'` : value.toString();
+      stringifiedProps.push(`.${propName}=\${${stringifiedValue}}`);
+      appliedProps.push({ propName, value });
     });
 
     this.dispatchEvent(
