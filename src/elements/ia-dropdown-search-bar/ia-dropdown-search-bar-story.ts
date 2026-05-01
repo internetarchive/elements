@@ -125,24 +125,31 @@ export class IADropdownSearchBarStory extends LitElement {
             <tr>
               <td><label for="settings__query">Pre-filled query</label></td>
               <td>
-                <input
-                  type="text"
-                  id="settings__query"
-                />
+                <input type="text" id="settings__query" />
               </td>
             </tr>
             <tr>
-              <td><label for="settings__selected-category">Pre-selected category</label></td>
+              <td>
+                <label for="settings__selected-category"
+                  >Pre-selected category</label
+                >
+              </td>
               <td>
                 <select id="settings__selected-category">
-                  ${map(DEFAULT_CATEGORIES, (category) =>
-                    html`<option value=${category.id}>${category.label}</option>`
+                  ${map(
+                    DEFAULT_CATEGORIES,
+                    (category) =>
+                      html`<option value=${category.id}>
+                        ${category.label}
+                      </option>`,
                   )}
                 </select>
               </td>
             </tr>
             <tr>
-              <td><label for="settings__placeholder">Placeholder text</label></td>
+              <td>
+                <label for="settings__placeholder">Placeholder text</label>
+              </td>
               <td>
                 <input
                   type="text"
@@ -152,7 +159,11 @@ export class IADropdownSearchBarStory extends LitElement {
               </td>
             </tr>
             <tr>
-              <td><label for="settings__advanced-search-style">Advanced Search style</label></td>
+              <td>
+                <label for="settings__advanced-search-style"
+                  >Advanced Search style</label
+                >
+              </td>
               <td>
                 <select id="settings__advanced-search-style">
                   <option value="link" selected>Link</option>
@@ -162,7 +173,9 @@ export class IADropdownSearchBarStory extends LitElement {
               </td>
             </tr>
             <tr>
-              <td><label for="settings__hide-dropdown">Hide dropdown</label></td>
+              <td>
+                <label for="settings__hide-dropdown">Hide dropdown</label>
+              </td>
               <td><input type="checkbox" id="settings__hide-dropdown" /></td>
             </tr>
             <tr>
@@ -177,13 +190,22 @@ export class IADropdownSearchBarStory extends LitElement {
   }
 
   private get exampleUsage(): string {
-    const { query, selectedCategory, placeholder, advancedSearchStyle, hideDropdown, loading } = this;
+    const {
+      query,
+      selectedCategory,
+      placeholder,
+      advancedSearchStyle,
+      hideDropdown,
+      loading,
+    } = this;
 
     const bindings: Record<string, string | boolean> = {
       query: query ? `"${placeholder}"` : '',
       selectedCategory: selectedCategory ? `"${selectedCategory}"` : '',
       placeholder: placeholder ? `"${placeholder}"` : '',
-      advancedSearchStyle: advancedSearchStyle ? `"${advancedSearchStyle}"` : '',
+      advancedSearchStyle: advancedSearchStyle
+        ? `"${advancedSearchStyle}"`
+        : '',
       hideDropdown: hideDropdown,
       loading: loading,
     };
@@ -220,7 +242,8 @@ export class IADropdownSearchBarStory extends LitElement {
     this.query = this.queryInput.value;
     this.selectedCategory = this.selectedCategorySelect.value;
     this.placeholder = this.placeholderInput.value;
-    this.advancedSearchStyle = this.advancedSearchStyleSelect.value as AdvancedSearchStyle;
+    this.advancedSearchStyle = this.advancedSearchStyleSelect
+      .value as AdvancedSearchStyle;
     this.hideDropdown = this.hideDropdownCheck.checked;
     this.loading = this.loadingCheck.checked;
   }
@@ -229,8 +252,7 @@ export class IADropdownSearchBarStory extends LitElement {
    * Handler for the bar's `searchRequested` event, showing the emitted category & query
    */
   private handleSearchRequested(e: CustomEvent<SearchRequestedDetail>): void {
-    this.announcerText =
-      `Category ID "${e.detail.category}" / Query "${e.detail.query}"`;
+    this.announcerText = `Category ID "${e.detail.category}" / Query "${e.detail.query}"`;
   }
 
   static get styles(): CSSResultGroup {
