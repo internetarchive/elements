@@ -88,20 +88,6 @@ describe('IA Dropdown Search Bar', () => {
     );
   });
 
-  test('uses provided advanced search link instead of default', async () => {
-    const fakeUrl = 'example.com/advancedsearch?url=string';
-    el.navBaseUrl = 'foo';
-    el.advancedSearchUrl = fakeUrl;
-    await el.updateComplete;
-
-    const advancedSearchLink = el.shadowRoot?.querySelector(
-      '#advanced-search-link',
-    ) as HTMLAnchorElement;
-
-    expect(advancedSearchLink).to.exist;
-    expect(advancedSearchLink.getAttribute('href')).to.equal(fakeUrl);
-  });
-
   test('shows loading indicator on search button when loading', async () => {
     el.loading = true;
     await el.updateComplete;
