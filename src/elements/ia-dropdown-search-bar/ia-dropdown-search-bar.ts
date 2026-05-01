@@ -3,7 +3,11 @@ import { css, html, LitElement, nothing, TemplateResult } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-input';
 import type { optionInterface } from '@internetarchive/ia-dropdown';
-import type { AdvancedSearchStyle, SearchCategory, SearchRequestedDetail } from './models';
+import type {
+  AdvancedSearchStyle,
+  SearchCategory,
+  SearchRequestedDetail,
+} from './models';
 
 import themeStyles from '@src/themes/theme-styles';
 import searchIcon from './search.svg';
@@ -202,7 +206,11 @@ export class IADropdownSearchBar extends LitElement {
     return html`
       <div id="search-links-area">
         <slot name="before-search-links"></slot>
-        <div id="search-links" class=${this.useMobileView ? 'mobile' : ''} part="search-links">
+        <div
+          id="search-links"
+          class=${this.useMobileView ? 'mobile' : ''}
+          part="search-links"
+        >
           <slot name="search-links-top"></slot>
           ${this.advancedSearchTemplate}
           <div id="search-links-end">
@@ -324,7 +332,10 @@ export class IADropdownSearchBar extends LitElement {
         --clear-button-offset--: var(--clear-button-offset, 0);
         --search-bar-height--: var(--search-bar-height, 30px);
         --search-bar-width--: var(--search-bar-width, 300px);
-        --search-bar-internal-padding--: var(--search-bar-internal-padding, 5px);
+        --search-bar-internal-padding--: var(
+          --search-bar-internal-padding,
+          5px
+        );
       }
 
       #container {

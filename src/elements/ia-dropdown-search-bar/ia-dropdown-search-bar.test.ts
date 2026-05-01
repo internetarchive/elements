@@ -117,7 +117,8 @@ describe('IA Dropdown Search Bar', () => {
 
       expect(searchListener).toHaveBeenCalledOnce();
 
-      const detail = searchListener.mock.calls[0][0].detail as SearchRequestedDetail;
+      const detail = searchListener.mock.calls[0][0]
+        .detail as SearchRequestedDetail;
       expect(detail.query).to.equal('foo');
       expect(detail.category).to.equal('all');
     });
@@ -135,7 +136,8 @@ describe('IA Dropdown Search Bar', () => {
       );
       await el.updateComplete;
 
-      const detail = searchListener.mock.calls[0][0].detail as SearchRequestedDetail;
+      const detail = searchListener.mock.calls[0][0]
+        .detail as SearchRequestedDetail;
       expect(detail.query).to.equal('foo');
       expect(detail.category).to.equal('web');
     });
@@ -155,7 +157,8 @@ describe('IA Dropdown Search Bar', () => {
 
       expect(searchListener).toHaveBeenCalledOnce();
 
-      const detail = searchListener.mock.calls[0][0].detail as SearchRequestedDetail;
+      const detail = searchListener.mock.calls[0][0]
+        .detail as SearchRequestedDetail;
       expect(detail.query).to.equal('foo');
       expect(detail.category).to.equal('all');
     });

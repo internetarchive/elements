@@ -21,7 +21,4 @@ export type SearchRequestedDetail = {
  * - `dropdown`: as an item at the bottom of the category dropdown
  * - `none`: hidden entirely
  */
-export type AdvancedSearchStyle =
-  | 'link'
-  | 'dropdown'
-  | 'none';
+export type AdvancedSearchStyle = 'link' | 'dropdown' | 'none';
