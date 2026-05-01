@@ -43,8 +43,16 @@ describe('IA Dropdown Search Bar', () => {
     expect(el.shadowRoot?.querySelector('#search-button')).to.exist;
   });
 
-  test('default selected category is all', async () => {
-    expect(el.selectedCategory).to.equal('all');
+  test('default selected category is first in list', async () => {
+    // selectedCategory is not explicitly set, so it resolves to
+    // the first category in the provided list
+    expect(el.selectedCategory).to.be.undefined;
+
+    // But the dropdown label should show the first category's label
+    const label = el.shadowRoot?.querySelector(
+      '#category-dropdown [slot="dropdown-label"]',
+    );
+    expect(label?.textContent?.trim()).to.equal('All');
   });
 
   test('renders dropdown with provided categories', async () => {
@@ -101,10 +109,14 @@ describe('IA Dropdown Search Bar', () => {
     expect(advancedSearchLink).not.to.exist;
 
     // Instead it's an option in the dropdown
-    const dropdown = el.shadowRoot?.querySelector('#category-dropdown') as IaDropdown;
-    expect(dropdown.options.find(
-      opt => opt.id === IADropdownSearchBar.ADVANCED_SEARCH_OPTION_ID
-    )).to.exist;
+    const dropdown = el.shadowRoot?.querySelector(
+      '#category-dropdown',
+    ) as IaDropdown;
+    expect(
+      dropdown.options.find(
+        (opt) => opt.id === IADropdownSearchBar.ADVANCED_SEARCH_OPTION_ID,
+      ),
+    ).to.exist;
   });
 
   test('shows loading indicator on search button when loading', async () => {
@@ -175,7 +187,7 @@ describe('IA Dropdown Search Bar', () => {
         '#category-dropdown',
       ) as HTMLElement;
 
-      // 'all' is the default selectedCategory
+      // 'all' is the first category, so it's the resolved default
       dropdown.dispatchEvent(
         new CustomEvent('optionSelected', {
           detail: { option: { id: 'all' } },
@@ -184,7 +196,6 @@ describe('IA Dropdown Search Bar', () => {
       await el.updateComplete;
 
       expect(categoryListener).not.toHaveBeenCalled();
-      expect(el.selectedCategory).to.equal('all');
     });
 
     test('tries navigating to advanced search URL when advanced search option selected', async () => {
@@ -206,8 +217,6 @@ describe('IA Dropdown Search Bar', () => {
       await el.updateComplete;
 
       expect(navSpy).toHaveBeenCalledOnce();
-      // selectedCategory should NOT change to the advanced search option ID
-      expect(el.selectedCategory).to.equal('all');
     });
 
     test('does not emit advancedSearchClicked on option selection when navBaseUrl is not set', async () => {

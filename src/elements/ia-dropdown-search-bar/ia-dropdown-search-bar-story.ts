@@ -1,11 +1,11 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { customElement, state, query } from 'lit/decorators.js';
+import { map } from 'lit/directives/map.js';
 import { StyleInputSettings } from '@demo/story-components/story-styles-settings';
 import { AdvancedSearchStyle, SearchRequestedDetail } from './models';
 
 import '@demo/story-template';
 import './ia-dropdown-search-bar';
-import { map } from 'lit/directives/map.js';
 
 // Styles
 
@@ -23,7 +23,7 @@ const styleInputSettings: StyleInputSettings[] = [
     inputType: 'text',
   },
   {
-    label: 'Padding',
+    label: 'Internal padding',
     cssVariable: '--ia-theme-padding-sm',
     defaultValue: '5px',
     inputType: 'text',
