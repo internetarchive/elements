@@ -82,6 +82,10 @@ export class IAOTPForm extends LitElement {
     ) {
       this.OTPInput.prefillValue = '';
     }
+
+    if (changed.has('newCodeSending') && this.newCodeSending && this.OTPInput) {
+      this.OTPInput.prefillValue = '';
+    }
   }
 
   /* The button to display to send a new code */
