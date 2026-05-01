@@ -95,7 +95,7 @@ export class IADropdownSearchBarStory extends LitElement {
           <ia-dropdown-search-bar
             navBaseUrl=${''}
             .categories=${DEFAULT_CATEGORIES}
-            .placeholderText=${this.placeholder}
+            .placeholder=${this.placeholder}
             .advancedSearchStyle=${this.advancedSearchStyle}
             ?hideDropdown=${this.hideDropdown}
             ?loading=${this.loading}

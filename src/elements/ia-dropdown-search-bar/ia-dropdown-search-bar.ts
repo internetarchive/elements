@@ -47,7 +47,7 @@ export class IADropdownSearchBar extends LitElement {
   @property({ type: String }) advancedSearchStyle: AdvancedSearchStyle = 'link';
 
   /** Placeholder text for the search input */
-  @property({ type: String }) placeholderText = msg('Search');
+  @property({ type: String }) placeholder = msg('Search');
 
   /** Whether to use the mobile layout */
   @property({ type: Boolean }) useMobileView = false;
@@ -106,7 +106,7 @@ export class IADropdownSearchBar extends LitElement {
       <ia-clearable-text-input
         id="search-input"
         .value=${this.spacedQuery}
-        placeholder=${this.placeholderText}
+        placeholder=${this.placeholder}
         clearButtonScreenReaderLabel=${msg('Clear search query')}
         screenReaderLabel=${msg(
           'Search the Archive. Filters and Advanced Search available below.',
