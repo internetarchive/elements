@@ -58,8 +58,12 @@ export class IAOTPForm extends LitElement {
           ?numericOnly=${this.numericOnly}
           ?disabled=${this.validationStatus === 'loading' ||
           this.validationStatus === 'success'}
-        ></ia-otp-input
-        >${this.iconTemplate}
+        ></ia-otp-input>
+        <ia-status-indicator
+          class="status-indicator"
+          part="status-indicator"
+          .mode=${this.validationStatus}
+        ></ia-status-indicator>
       </div>
       ${this.validationStatus === 'error'
         ? html`<p class="error-msg">
@@ -80,25 +84,16 @@ export class IAOTPForm extends LitElement {
     }
   }
 
-  /* The icon to display next to the input, if necessary */
-  private get iconTemplate(): TemplateResult {
-    return html`
-      <div class="icon">
-        <ia-status-indicator
-          class="status-indicator"
-          .mode=${this.validationStatus}
-        ></ia-status-indicator>
-      </div>
-    `;
-  }
-
   /* The button to display to send a new code */
   private get resendCodeButtonTemplate(): TemplateResult {
     return this.newCodeSending
-      ? html`<span class="new-code-msg">${msg('Emailing...')}</span>`
+      ? html`<span part="new-code-message" class="new-code-msg"
+          >${msg('Emailing...')}</span
+        >`
       : html`
           <button
             class="new-code-btn link"
+            part="new-code-button"
             .disabled=${this.validationStatus === 'loading' ||
             this.validationStatus === 'success'}
             @click=${this.handleNewCodeRequested}
@@ -124,6 +119,12 @@ export class IAOTPForm extends LitElement {
       themeStyles,
       css`
         :host {
+          --font-size-standard--: var(--font-size-standard);
+          --font-size-lg--: var(--font-size-lg);
+          --color-success--: var(--color-success);
+          --color-danger--: var(--color-danger);
+          --link-color--: var(--link-color);
+
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -134,37 +135,45 @@ export class IAOTPForm extends LitElement {
           display: flex;
           flex-direction: row;
           align-items: center;
+          justify-content: center;
           gap: 5px;
         }
 
-        .icon {
-          display: block;
-          width: 48px;
-          height: 48px;
-        }
-
         .status-indicator {
-          --icon-width: 48px;
+          --icon-width: calc(var(--font-size-lg--) * 1.33);
         }
 
         .error-msg {
           margin-top: 10px;
-          font-size: 1.4rem;
-          color: var(--ia-theme-error, #e51c23);
+          font-size: var(--font-size-standard--);
+          color: var(--color-danger--);
           margin-bottom: -10px;
         }
 
         .new-code-btn {
+          font-family: inherit;
+          font-size: var(--font-size-standard--);
           display: block;
           width: fit-content;
           margin-top: 10px;
+          border: 0;
+          padding: 0;
+          appearance: none;
+          background: none;
+          color: var(--link-color--);
+          text-decoration: none;
+          cursor: pointer;
+        }
+
+        .new-code-btn:hover,
+        .new-code-btn:focus {
+          text-decoration: underline;
         }
 
         .new-code-msg {
           margin-top: 10px;
-          font-size: 1.4rem;
-          color: var(--ia-theme-link-color, #4b64ff);
-          min-height: 3.5rem;
+          font-size: var(--font-size-standard--);
+          color: var(--link-color--);
           display: flex;
           flex-direction: column;
           justify-content: center;

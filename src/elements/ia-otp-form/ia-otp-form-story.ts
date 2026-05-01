@@ -16,10 +16,34 @@ const styleInputSettings: StyleInputSettings[] = [
     inputType: 'color',
   },
   {
-    label: 'Font size',
+    label: 'Input font size',
     cssVariable: '--ia-theme-font-size-lg',
     defaultValue: '2.25rem',
     inputType: 'text',
+  },
+  {
+    label: 'Link and error font size',
+    cssVariable: '--ia-theme-font-size-standard',
+    defaultValue: '0.875rem',
+    inputType: 'text',
+  },
+  {
+    label: 'Link font color',
+    cssVariable: '--ia-theme-link-color',
+    defaultValue: '#4b64ff',
+    inputType: 'color',
+  },
+  {
+    label: 'Error message/indicator color',
+    cssVariable: '--ia-theme-color-danger',
+    defaultValue: '#e51c23',
+    inputType: 'color',
+  },
+  {
+    label: 'Success indicator color',
+    cssVariable: '--ia-theme-color-success',
+    defaultValue: '#31a481',
+    inputType: 'color',
   },
 ];
 
