@@ -120,6 +120,185 @@ describe('IA Dropdown Search Bar', () => {
     expect(loadingIcon).to.exist;
   });
 
+  describe('searchFieldCleared behavior', () => {
+    test('emits searchRequested when cleared with existing query', async () => {
+      el.query = 'foo';
+      await el.updateComplete;
+
+      const searchListener = vi.fn();
+      el.addEventListener('searchRequested', searchListener);
+
+      searchInput.dispatchEvent(new CustomEvent('clear'));
+      await el.updateComplete;
+
+      expect(searchListener).toHaveBeenCalledOnce();
+    });
+
+    test('does not emit searchRequested when cleared without query', async () => {
+      // query is undefined by default
+      const searchListener = vi.fn();
+      el.addEventListener('searchRequested', searchListener);
+
+      searchInput.dispatchEvent(new CustomEvent('clear'));
+      await el.updateComplete;
+
+      expect(searchListener).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('category selection behavior', () => {
+    test('emits categoryChanged and updates selectedCategory on new selection', async () => {
+      const categoryListener = vi.fn();
+      el.addEventListener('categoryChanged', categoryListener);
+
+      const dropdown = el.shadowRoot?.querySelector(
+        '#category-dropdown',
+      ) as HTMLElement;
+
+      dropdown.dispatchEvent(
+        new CustomEvent('optionSelected', {
+          detail: { option: { id: 'texts' } },
+        }),
+      );
+      await el.updateComplete;
+
+      expect(categoryListener).toHaveBeenCalledOnce();
+      expect(categoryListener.mock.calls[0][0].detail).to.equal('texts');
+      expect(el.selectedCategory).to.equal('texts');
+    });
+
+    test('does not emit categoryChanged when same category is re-selected', async () => {
+      const categoryListener = vi.fn();
+      el.addEventListener('categoryChanged', categoryListener);
+
+      const dropdown = el.shadowRoot?.querySelector(
+        '#category-dropdown',
+      ) as HTMLElement;
+
+      // 'all' is the default selectedCategory
+      dropdown.dispatchEvent(
+        new CustomEvent('optionSelected', {
+          detail: { option: { id: 'all' } },
+        }),
+      );
+      await el.updateComplete;
+
+      expect(categoryListener).not.toHaveBeenCalled();
+      expect(el.selectedCategory).to.equal('all');
+    });
+
+    test('tries navigating to advanced search URL when advanced search option selected', async () => {
+      const navSpy = vi
+        .spyOn(el as any, 'navigateToAdvancedSearch')
+        .mockImplementation(() => {});
+
+      const dropdown = el.shadowRoot?.querySelector(
+        '#category-dropdown',
+      ) as HTMLElement;
+
+      dropdown.dispatchEvent(
+        new CustomEvent('optionSelected', {
+          detail: {
+            option: { id: IADropdownSearchBar.ADVANCED_SEARCH_OPTION_ID },
+          },
+        }),
+      );
+      await el.updateComplete;
+
+      expect(navSpy).toHaveBeenCalledOnce();
+      // selectedCategory should NOT change to the advanced search option ID
+      expect(el.selectedCategory).to.equal('all');
+    });
+
+    test('does not emit advancedSearchClicked on option selection when navBaseUrl is not set', async () => {
+      const advancedSearchListener = vi.fn();
+      el.addEventListener('advancedSearchClicked', advancedSearchListener);
+
+      const dropdown = el.shadowRoot?.querySelector(
+        '#category-dropdown',
+      ) as HTMLElement;
+
+      dropdown.dispatchEvent(
+        new CustomEvent('optionSelected', {
+          detail: {
+            option: { id: IADropdownSearchBar.ADVANCED_SEARCH_OPTION_ID },
+          },
+        }),
+      );
+      await el.updateComplete;
+
+      expect(advancedSearchListener).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('advanced search link', () => {
+    test('dispatches advancedSearchClicked on link click', async () => {
+      el.navBaseUrl = 'https://example.com';
+      await el.updateComplete;
+
+      const advancedSearchListener = vi.fn();
+      el.addEventListener('advancedSearchClicked', advancedSearchListener);
+
+      const link = el.shadowRoot?.querySelector(
+        '#advanced-search-link',
+      ) as HTMLAnchorElement;
+      expect(link).to.exist;
+
+      // Prevent actual navigation
+      link.addEventListener('click', (e) => e.preventDefault());
+      link.click();
+      await el.updateComplete;
+
+      expect(advancedSearchListener).toHaveBeenCalledOnce();
+    });
+
+    test('does not render link when advancedSearchStyle is none', async () => {
+      el.navBaseUrl = 'https://example.com';
+      el.advancedSearchStyle = 'none';
+      await el.updateComplete;
+
+      const link = el.shadowRoot?.querySelector('#advanced-search-link');
+      expect(link).not.to.exist;
+    });
+
+    test('does not render link when navBaseUrl is not set', async () => {
+      // navBaseUrl is undefined by default
+      const link = el.shadowRoot?.querySelector('#advanced-search-link');
+      expect(link).not.to.exist;
+    });
+  });
+
+  describe('property rendering', () => {
+    test('hides dropdown when hideDropdown property is true', async () => {
+      el.hideDropdown = true;
+      await el.updateComplete;
+
+      const dropdown = el.shadowRoot?.querySelector('#category-dropdown');
+      expect(dropdown).not.to.exist;
+
+      const mainBar = el.shadowRoot?.querySelector('#main-bar');
+      expect(mainBar?.classList.contains('no-dropdown')).to.be.true;
+    });
+
+    test('applies mobile class when useMobileView property is true', async () => {
+      el.useMobileView = true;
+      await el.updateComplete;
+
+      const searchLinks = el.shadowRoot?.querySelector('#search-links');
+      expect(searchLinks?.classList.contains('mobile')).to.be.true;
+    });
+
+    test('falls back to category ID when no matching label found', async () => {
+      el.selectedCategory = 'nonexistent';
+      await el.updateComplete;
+
+      const label = el.shadowRoot?.querySelector(
+        '#category-dropdown [slot="dropdown-label"]',
+      );
+      expect(label?.textContent?.trim()).to.equal('nonexistent');
+    });
+  });
+
   describe('search submission behavior', () => {
     test('emits searchRequested with query and category on submit', async () => {
       el.query = 'foo';
