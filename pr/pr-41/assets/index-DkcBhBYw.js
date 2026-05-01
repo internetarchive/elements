@@ -2077,14 +2077,14 @@ fill=""></path>
           <button type="submit" @click=${this.applySettings}>Apply</button>
         </form>
       </story-template>
-    `}get exampleUsage(){const{query:i,selectedCategory:t,placeholder:e,advancedSearchStyle:o,hideDropdown:s,loading:n}=this,r={query:i?`"${e}"`:"",selectedCategory:t?`"${t}"`:"",placeholder:e?`"${e}"`:"",advancedSearchStyle:o?`"${o}"`:"",hideDropdown:s,loading:n};return`
+    `}get exampleUsage(){const{query:i,selectedCategory:t,placeholder:e,advancedSearchStyle:o,hideDropdown:s,loading:n}=this,r=d=>d?`"${d}"`:"",l={query:r(i),selectedCategory:r(t),placeholder:r(e),advancedSearchStyle:r(o),hideDropdown:s,loading:n};return`
       <ia-dropdown-search-bar
         .categories=\${[
           { id: 'foo', label: 'Foo Option' },
           { id: 'bar', label: 'Bar Option' },
           // ...
         ]}
-        ${Object.entries(r).map(([a,d])=>d?d===!0?a:`${a}=${d}`:"").join(`
+        ${Object.entries(l).map(([d,h])=>h?h===!0?d:`${d}=${h}`:"").join(`
   `)}
       >
       </ia-dropdown-search-bar>
