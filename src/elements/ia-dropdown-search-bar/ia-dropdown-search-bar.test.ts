@@ -19,9 +19,9 @@ let searchInput: IaClearableTextInput;
 describe('IA Dropdown Search Bar', () => {
   beforeEach(async () => {
     el = (await fixture(html`
-      <dropdown-search-bar
+      <ia-dropdown-search-bar
         .categories=${defaultCategories}
-      ></dropdown-search-bar>
+      ></ia-dropdown-search-bar>
     `)) as IADropdownSearchBar;
 
     await el.updateComplete;
