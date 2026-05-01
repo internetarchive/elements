@@ -199,13 +199,12 @@ export class IADropdownSearchBarStory extends LitElement {
       loading,
     } = this;
 
+    const quoteOptionalString = (s: string) => s ? `"${s}"` : '';
     const bindings: Record<string, string | boolean> = {
-      query: query ? `"${placeholder}"` : '',
-      selectedCategory: selectedCategory ? `"${selectedCategory}"` : '',
-      placeholder: placeholder ? `"${placeholder}"` : '',
-      advancedSearchStyle: advancedSearchStyle
-        ? `"${advancedSearchStyle}"`
-        : '',
+      query: quoteOptionalString(query),
+      selectedCategory: quoteOptionalString(selectedCategory),
+      placeholder: quoteOptionalString(placeholder),
+      advancedSearchStyle: quoteOptionalString(advancedSearchStyle),
       hideDropdown: hideDropdown,
       loading: loading,
     };
