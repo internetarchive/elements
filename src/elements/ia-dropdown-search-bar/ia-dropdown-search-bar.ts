@@ -67,11 +67,11 @@ export class IADropdownSearchBar extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <div id="container" role="search" part="container">
+      <div id="container" part="container" role="search">
         <div
-          id="input-row"
-          class=${this.hideDropdown ? 'no-dropdown' : nothing}
+          id="main-bar"
           part="main-bar"
+          class=${this.hideDropdown ? 'no-dropdown' : nothing}
         >
           ${this.hideDropdown ? nothing : this.dropdownTemplate}
           ${this.textBoxTemplate} ${this.searchButtonTemplate}
@@ -88,7 +88,7 @@ export class IADropdownSearchBar extends LitElement {
     return html`
       <ia-dropdown
         id="category-dropdown"
-        part="dropdown"
+        part="category-dropdown"
         displayCaret
         includeSelectedOption
         closeOnSelect
@@ -111,7 +111,7 @@ export class IADropdownSearchBar extends LitElement {
     return html`
       <ia-clearable-text-input
         id="search-input"
-        part="input"
+        part="search-input"
         .value=${this.spacedQuery}
         placeholder=${this.placeholder}
         clearButtonScreenReaderLabel=${msg('Clear search query')}
@@ -131,9 +131,9 @@ export class IADropdownSearchBar extends LitElement {
     return html`
       <button
         id="search-button"
+        part="search-button"
         class=${this.loading ? 'loading' : nothing}
         type="button"
-        part="search-button"
         aria-label=${msg('Search')}
         @click=${this.handleSubmit}
       >
@@ -208,8 +208,8 @@ export class IADropdownSearchBar extends LitElement {
         <slot name="before-search-links"></slot>
         <div
           id="search-links"
-          class=${this.useMobileView ? 'mobile' : ''}
           part="search-links"
+          class=${this.useMobileView ? 'mobile' : ''}
         >
           <slot name="search-links-top"></slot>
           ${this.advancedSearchTemplate}
@@ -343,7 +343,7 @@ export class IADropdownSearchBar extends LitElement {
         width: var(--search-bar-width--);
       }
 
-      #input-row {
+      #main-bar {
         display: flex;
         height: var(--search-bar-height--, 30px);
         margin-bottom: 10px;
