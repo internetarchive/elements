@@ -5,6 +5,7 @@ import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-in
 import type { optionInterface } from '@internetarchive/ia-dropdown';
 import type { AdvancedSearchStyle, SearchCategory, SearchRequestedDetail } from './models';
 
+import themeStyles from '@src/themes/theme-styles';
 import searchIcon from './search.svg';
 
 import '@internetarchive/ia-clearable-text-input';
@@ -330,7 +331,7 @@ export class IADropdownSearchBar extends LitElement {
   }
 
   static get styles() {
-    return css`
+    const ownStyles = css`
       :host {
         --clear-button-offset--: var(--clear-button-offset, 0);
         --search-bar-height--: var(--search-bar-height, 30px);
@@ -502,5 +503,7 @@ export class IADropdownSearchBar extends LitElement {
         height: fit-content;
       }
     `;
+
+    return [themeStyles, ownStyles];
   }
 }
