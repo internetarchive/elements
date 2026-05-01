@@ -63,10 +63,11 @@ export class IADropdownSearchBar extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <div id="container" role="search">
+      <div id="container" role="search" part="container">
         <div
           id="input-row"
           class=${this.hideDropdown ? 'no-dropdown' : nothing}
+          part="main-bar"
         >
           ${this.hideDropdown ? nothing : this.dropdownTemplate}
           ${this.textBoxTemplate} ${this.searchButtonTemplate}
@@ -83,6 +84,7 @@ export class IADropdownSearchBar extends LitElement {
     return html`
       <ia-dropdown
         id="category-dropdown"
+        part="dropdown"
         displayCaret
         includeSelectedOption
         closeOnSelect
@@ -105,6 +107,7 @@ export class IADropdownSearchBar extends LitElement {
     return html`
       <ia-clearable-text-input
         id="search-input"
+        part="input"
         .value=${this.spacedQuery}
         placeholder=${this.placeholder}
         clearButtonScreenReaderLabel=${msg('Clear search query')}
@@ -126,6 +129,7 @@ export class IADropdownSearchBar extends LitElement {
         id="search-button"
         class=${this.loading ? 'loading' : nothing}
         type="button"
+        part="search-button"
         aria-label=${msg('Search')}
         @click=${this.handleSubmit}
       >
@@ -198,7 +202,7 @@ export class IADropdownSearchBar extends LitElement {
     return html`
       <div id="search-links-area">
         <slot name="before-search-links"></slot>
-        <div id="search-links" class=${this.useMobileView ? 'mobile' : ''}>
+        <div id="search-links" class=${this.useMobileView ? 'mobile' : ''} part="search-links">
           <slot name="search-links-top"></slot>
           ${this.advancedSearchTemplate}
           <div id="search-links-end">
@@ -223,6 +227,7 @@ export class IADropdownSearchBar extends LitElement {
 
     return html`<a
       id="advanced-search-link"
+      part="advanced-search-link"
       href=${href}
       @click=${this.advancedSearchClicked}
     >
@@ -324,7 +329,7 @@ export class IADropdownSearchBar extends LitElement {
 
       #container {
         display: inline-block;
-        max-width: var(--search-bar-width--);
+        width: var(--search-bar-width--);
       }
 
       #input-row {
