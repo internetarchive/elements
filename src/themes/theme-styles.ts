@@ -15,6 +15,8 @@ const themeStyles = css`
     --default-icon-width: 1.25rem;
     --default-padding-sm: 5px;
     --default-combo-box-width: auto;
+    --default-search-bar-height: 30px;
+    --default-search-bar-width: auto;
     --default-font-size-lg: 2.25rem;
 
     /* Colors */
@@ -47,6 +49,14 @@ const themeStyles = css`
     /* Sizing */
     --icon-width: var(--ia-theme-icon-width, var(--default-icon-width));
     --padding-sm: var(--ia-theme-padding-sm, var(--default-padding-sm));
+    --search-bar-height: var(
+      --ia-theme-search-bar-height,
+      var(--default-search-bar-height)
+    );
+    --search-bar-width: var(
+      --ia-theme-search-bar-width,
+      var(--default-search-bar-width)
+    );
     --combo-box-width: var(
       --ia-theme-combo-box-width,
       var(--default-combo-box-width)
