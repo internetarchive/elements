@@ -154,7 +154,7 @@ export class IADropdownSearchBarStory extends LitElement {
       .map(([key, val]) => {
         if (!val) return '';
         if (val === true) return key;
-        return val ? `${key}=${val}` : '';
+        return `${key}=${val}`;
       })
       .join('\n  ');
 
