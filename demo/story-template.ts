@@ -213,10 +213,14 @@ export class StoryTemplate extends LitElement {
 
   private get exampleUsage(): string {
     const defaultProps = this.defaultUsageProps
-      ? '\n ' + this.defaultUsageProps + '\n'
+      ? '  ' + this.defaultUsageProps + '\n'
       : '';
-    const appliedProps = this.stringifiedProps ?? '';
-    return `<${this.elementTag}${defaultProps}${appliedProps}></${this.elementTag}>`;
+    const appliedProps = this.stringifiedProps
+      ? '  ' + this.stringifiedProps + '\n'
+      : '';
+    const hasProps = !!defaultProps || !!appliedProps;
+
+    return `<${this.elementTag}${hasProps ? '\n' : ''}${defaultProps}${appliedProps}></${this.elementTag}>`;
   }
 
   private get cssCode(): string {

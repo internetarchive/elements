@@ -60,7 +60,7 @@ export class IAOTPFormStory extends LitElement {
       <story-template
         elementTag="ia-otp-form"
         elementClassName="IAOTPForm"
-        .defaultUsageProps=${"@codeSubmitted=\${(e: CustomEvent) => alert('Code submitted: ' + e.detail)} \n @newCodeRequested=\${() => alert('New code requested')}"}
+        .defaultUsageProps=${"@codeSubmitted=\${(e: CustomEvent) => alert('Code submitted: ' + e.detail)} \n  @newCodeRequested=\${() => alert('New code requested')}"}
         .styleInputData=${{ settings: styleInputSettings }}
         .propInputData=${{ settings: propInputSettings }}
       >
