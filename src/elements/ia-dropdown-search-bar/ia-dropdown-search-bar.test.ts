@@ -2,10 +2,11 @@ import { describe, expect, test, beforeEach, afterEach, vi } from 'vitest';
 import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
 import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-input';
-import type { IADropdownSearchBar } from './ia-dropdown-search-bar';
+import { IADropdownSearchBar } from './ia-dropdown-search-bar';
 import type { SearchRequestedDetail } from './models';
 
 import './ia-dropdown-search-bar';
+import { IaDropdown } from '@internetarchive/ia-dropdown';
 
 const defaultCategories = [
   { id: 'all', label: 'All' },
@@ -86,6 +87,24 @@ describe('IA Dropdown Search Bar', () => {
     expect(advancedSearchLink.getAttribute('href')).to.match(
       /foo\/advancedsearch\.php\?q=bar$/,
     );
+  });
+
+  test('includes advanced search option in dropdown when specified', async () => {
+    el.navBaseUrl = 'foo';
+    el.advancedSearchStyle = 'dropdown';
+    await el.updateComplete;
+
+    // No advanced search link is rendered
+    const advancedSearchLink = el.shadowRoot?.querySelector(
+      '#advanced-search-link',
+    ) as HTMLAnchorElement;
+    expect(advancedSearchLink).not.to.exist;
+
+    // Instead it's an option in the dropdown
+    const dropdown = el.shadowRoot?.querySelector('#category-dropdown') as IaDropdown;
+    expect(dropdown.options.find(
+      opt => opt.id === IADropdownSearchBar.ADVANCED_SEARCH_OPTION_ID
+    )).to.exist;
   });
 
   test('shows loading indicator on search button when loading', async () => {
