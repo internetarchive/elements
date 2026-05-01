@@ -10,6 +10,8 @@ import {
 import { msg } from '@lit/localize';
 import { property, customElement, query } from 'lit/decorators.js';
 
+import themeStyles from '@src/themes/theme-styles';
+
 import type { IAOTPInput } from '@src/elements/ia-otp-input/ia-otp-input';
 import type { LoadingStatus } from '@src/elements/ia-status-indicator/ia-status-indicator';
 
@@ -21,6 +23,7 @@ import '@src/elements/ia-otp-input/ia-otp-input';
  */
 const Events = {
   NewCodeRequested: 'newCodeRequested',
+  CodeSubmitted: 'codeSubmitted', // Bubbles up from ia-otp-input
 };
 
 /**
@@ -28,10 +31,6 @@ const Events = {
  */
 @customElement('ia-otp-form')
 export class IAOTPForm extends LitElement {
-  /* The email the OTP will be sent to */
-  @property({ type: String })
-  email?: string;
-
   /* The state of the validation process */
   @property({ type: String })
   validationStatus: LoadingStatus = 'ready';
@@ -121,53 +120,56 @@ export class IAOTPForm extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
+    return [
+      themeStyles,
+      css`
+        :host {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
 
-      .input-section {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 5px;
-      }
+        .input-section {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 5px;
+        }
 
-      .icon {
-        display: block;
-        width: 48px;
-        height: 48px;
-      }
+        .icon {
+          display: block;
+          width: 48px;
+          height: 48px;
+        }
 
-      .status-indicator {
-        --icon-width: 48px;
-      }
+        .status-indicator {
+          --icon-width: 48px;
+        }
 
-      .error-msg {
-        margin-top: 10px;
-        font-size: 1.4rem;
-        color: var(--ia-theme-error, #e51c23);
-        margin-bottom: -10px;
-      }
+        .error-msg {
+          margin-top: 10px;
+          font-size: 1.4rem;
+          color: var(--ia-theme-error, #e51c23);
+          margin-bottom: -10px;
+        }
 
-      .new-code-btn {
-        display: block;
-        width: fit-content;
-        margin-top: 10px;
-      }
+        .new-code-btn {
+          display: block;
+          width: fit-content;
+          margin-top: 10px;
+        }
 
-      .new-code-msg {
-        margin-top: 10px;
-        font-size: 1.4rem;
-        color: var(--ia-theme-link-color, #4b64ff);
-        min-height: 3.5rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
-    `;
+        .new-code-msg {
+          margin-top: 10px;
+          font-size: 1.4rem;
+          color: var(--ia-theme-link-color, #4b64ff);
+          min-height: 3.5rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+      `,
+    ];
   }
 }

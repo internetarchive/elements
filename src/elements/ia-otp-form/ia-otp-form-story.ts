@@ -3,9 +3,9 @@ import { customElement } from 'lit/decorators.js';
 
 import type { PropInputSettings } from '@demo/story-components/story-prop-settings';
 import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
-import type { IAOTPInput } from './ia-otp-input';
+import type { IAOTPForm } from './ia-otp-form';
 
-import './ia-otp-input';
+import './ia-otp-form';
 import '@demo/story-template';
 
 const styleInputSettings: StyleInputSettings[] = [
@@ -23,12 +23,20 @@ const styleInputSettings: StyleInputSettings[] = [
   },
 ];
 
-const propInputSettings: PropInputSettings<IAOTPInput>[] = [
+const propInputSettings: PropInputSettings<IAOTPForm>[] = [
   {
-    label: 'Number of characters',
-    propertyName: 'numChars',
-    defaultValue: 6,
-    inputType: 'number',
+    label: 'Validation Status',
+    propertyName: 'validationStatus',
+    defaultValue: 'ready',
+    inputType: 'radio',
+    radioOptions: ['ready', 'loading', 'success', 'error'],
+  },
+  {
+    label: 'New code sending in progress',
+    propertyName: 'newCodeSending',
+    defaultValue: false,
+    inputType: 'radio',
+    radioOptions: [true, false],
   },
   {
     label: 'Numeric only',
@@ -38,35 +46,30 @@ const propInputSettings: PropInputSettings<IAOTPInput>[] = [
     radioOptions: [true, false],
   },
   {
-    label: 'Prefill value',
-    propertyName: 'prefillValue',
-    defaultValue: '',
-  },
-  {
-    label: 'Disabled',
-    propertyName: 'disabled',
-    defaultValue: false,
-    inputType: 'radio',
-    radioOptions: [true, false],
+    label: 'Number of passcode characters',
+    propertyName: 'numPasscodeChars',
+    defaultValue: 6,
+    inputType: 'number',
   },
 ];
 
-@customElement('ia-otp-input-story')
-export class IAOTPInputStory extends LitElement {
+@customElement('ia-otp-form-story')
+export class IAOTPFormStory extends LitElement {
   render() {
     return html`
       <story-template
-        elementTag="ia-otp-input"
-        elementClassName="IAOTPInput"
-        .defaultUsageProps=${"@codeSubmitted=\${(e: CustomEvent) => alert('Code submitted: ' + e.detail)}"}
+        elementTag="ia-otp-form"
+        elementClassName="IAOTPForm"
+        .defaultUsageProps=${"@codeSubmitted=\${(e: CustomEvent) => alert('Code submitted: ' + e.detail)} \n @newCodeRequested=\${() => alert('New code requested')}"}
         .styleInputData=${{ settings: styleInputSettings }}
         .propInputData=${{ settings: propInputSettings }}
       >
-        <ia-otp-input
+        <ia-otp-form
+          slot="demo"
           @codeSubmitted=${(e: CustomEvent) =>
             alert('Code submitted: ' + e.detail)}
-          slot="demo"
-        ></ia-otp-input>
+          @newCodeRequested=${() => alert('New code requested')}
+        ></ia-otp-form>
       </story-template>
     `;
   }
