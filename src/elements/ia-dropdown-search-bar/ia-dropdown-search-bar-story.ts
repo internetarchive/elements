@@ -5,6 +5,7 @@ import { AdvancedSearchStyle, SearchRequestedDetail } from './models';
 
 import '@demo/story-template';
 import './ia-dropdown-search-bar';
+import { map } from 'lit/directives/map.js';
 
 // Styles
 
@@ -47,12 +48,19 @@ const DEFAULT_CATEGORIES = [
   { id: 'web', label: 'Web Sites' },
 ];
 
+const DEFAULT_SELECTED_CATEGORY = 'all';
 const DEFAULT_PLACEHOLDER = 'Search';
 const DEFAULT_ADVANCED_SEARCH_STYLE = 'link' as AdvancedSearchStyle;
 
 @customElement('ia-dropdown-search-bar-story')
 export class IADropdownSearchBarStory extends LitElement {
   // Story component state
+
+  @state()
+  private query = '';
+
+  @state()
+  private selectedCategory = DEFAULT_SELECTED_CATEGORY;
 
   @state()
   private placeholder = DEFAULT_PLACEHOLDER;
@@ -70,6 +78,12 @@ export class IADropdownSearchBarStory extends LitElement {
   private announcerText = '';
 
   // Shadow DOM queries
+
+  @query('#settings__query')
+  private queryInput!: HTMLInputElement;
+
+  @query('#settings__selected-category')
+  private selectedCategorySelect!: HTMLSelectElement;
 
   @query('#settings__placeholder')
   private placeholderInput!: HTMLInputElement;
@@ -93,8 +107,10 @@ export class IADropdownSearchBarStory extends LitElement {
       >
         <div slot="demo">
           <ia-dropdown-search-bar
-            navBaseUrl=${''}
+            .navBaseUrl=${''}
+            .query=${this.query}
             .categories=${DEFAULT_CATEGORIES}
+            .selectedCategory=${this.selectedCategory}
             .placeholder=${this.placeholder}
             .advancedSearchStyle=${this.advancedSearchStyle}
             ?hideDropdown=${this.hideDropdown}
@@ -107,7 +123,26 @@ export class IADropdownSearchBarStory extends LitElement {
         <form slot="settings">
           <table>
             <tr>
-              <td><label for="settings__placeholder">Placeholder</label></td>
+              <td><label for="settings__query">Pre-filled query</label></td>
+              <td>
+                <input
+                  type="text"
+                  id="settings__query"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td><label for="settings__selected-category">Pre-selected category</label></td>
+              <td>
+                <select id="settings__selected-category">
+                  ${map(DEFAULT_CATEGORIES, (category) =>
+                    html`<option value=${category.id}>${category.label}</option>`
+                  )}
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><label for="settings__placeholder">Placeholder text</label></td>
               <td>
                 <input
                   type="text"
@@ -142,12 +177,15 @@ export class IADropdownSearchBarStory extends LitElement {
   }
 
   private get exampleUsage(): string {
-    const { placeholder, advancedSearchStyle } = this;
+    const { query, selectedCategory, placeholder, advancedSearchStyle, hideDropdown, loading } = this;
+
     const bindings: Record<string, string | boolean> = {
+      query: query ? `"${placeholder}"` : '',
+      selectedCategory: selectedCategory ? `"${selectedCategory}"` : '',
       placeholder: placeholder ? `"${placeholder}"` : '',
       advancedSearchStyle: advancedSearchStyle ? `"${advancedSearchStyle}"` : '',
-      hideDropdown: this.hideDropdown,
-      loading: this.loading,
+      hideDropdown: hideDropdown,
+      loading: loading,
     };
 
     const bindingsStr = Object.entries(bindings)
@@ -179,6 +217,8 @@ export class IADropdownSearchBarStory extends LitElement {
   private applySettings(e: Event): void {
     e.preventDefault();
 
+    this.query = this.queryInput.value;
+    this.selectedCategory = this.selectedCategorySelect.value;
     this.placeholder = this.placeholderInput.value;
     this.advancedSearchStyle = this.advancedSearchStyleSelect.value as AdvancedSearchStyle;
     this.hideDropdown = this.hideDropdownCheck.checked;
