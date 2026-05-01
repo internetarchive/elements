@@ -39,12 +39,6 @@ export class IADropdownSearchBar extends LitElement {
   @property({ type: String }) navBaseUrl?: string;
 
   /**
-   * The full URL to use for the Advanced Search link.
-   * If not provided, a default URL will be built from the `navBaseUrl` and `query`.
-   */
-  @property({ type: String }) advancedSearchUrl?: string;
-
-  /**
    * Where to display the Advanced Search option:
    * - `link` (default): as a text link below the search bar
    * - `dropdown`: as an item at the bottom of the category dropdown
@@ -157,7 +151,7 @@ export class IADropdownSearchBar extends LitElement {
 
     if (
       this.advancedSearchStyle === 'dropdown' &&
-      this.canBuildAdvancedSearchUrl
+      this.navBaseUrl !== undefined
     ) {
       options.push({
         id: IADropdownSearchBar.ADVANCED_SEARCH_OPTION_ID,
@@ -172,24 +166,13 @@ export class IADropdownSearchBar extends LitElement {
   }
 
   /**
-   * Builds the Advanced Search URL using the given query string.
-   * Returns `advancedSearchUrl` if set, otherwise constructs one from
-   * `navBaseUrl`. Returns `undefined` if neither is available.
+   * Builds the Advanced Search URL using the given query string and the
+   * provided `navBaseUrl`. Returns `undefined` if no `navBaseUrl` is set.
    */
   private buildAdvancedSearchUrl(query: string): string | undefined {
-    if (this.advancedSearchUrl) return this.advancedSearchUrl;
     if (this.navBaseUrl === undefined) return undefined;
     const queryArg = query ? `?q=${encodeURIComponent(query)}` : '';
     return `${this.navBaseUrl}/advancedsearch.php${queryArg}`;
-  }
-
-  /**
-   * Whether we have the means to build an Advanced Search URL,
-   * either using one provided directly or building on a provided
-   * `navBaseUrl`.
-   */
-  private get canBuildAdvancedSearchUrl(): boolean {
-    return !!(this.advancedSearchUrl || this.navBaseUrl !== undefined);
   }
 
   /**
