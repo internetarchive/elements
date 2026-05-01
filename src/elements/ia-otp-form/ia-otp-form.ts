@@ -60,7 +60,6 @@ export class IAOTPForm extends LitElement {
           this.validationStatus === 'success'}
         ></ia-otp-input>
         <ia-status-indicator
-          class="status-indicator"
           part="status-indicator"
           .mode=${this.validationStatus}
         ></ia-status-indicator>
@@ -143,7 +142,7 @@ export class IAOTPForm extends LitElement {
           gap: 5px;
         }
 
-        .status-indicator {
+        ia-status-indicator {
           --icon-width: calc(var(--font-size-lg--) * 1.33);
         }
 
