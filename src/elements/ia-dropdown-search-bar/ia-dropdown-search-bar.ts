@@ -37,7 +37,7 @@ export class IADropdownSearchBar extends LitElement {
   @property({ type: Array }) categories: SearchCategory[] = [];
 
   /** The currently selected dropdown category ID */
-  @property({ type: String }) selectedCategory = 'all';
+  @property({ type: String }) selectedCategory?: string;
 
   /** The base URL for internal navigation within the site */
   @property({ type: String }) navBaseUrl?: string;
@@ -64,6 +64,11 @@ export class IADropdownSearchBar extends LitElement {
 
   @query('#search-input')
   private searchInput!: IaClearableTextInput;
+
+  /** The effective selected category, falling back to the first in the list. */
+  private get resolvedCategory(): string {
+    return this.selectedCategory ?? this.categories[0]?.id ?? '';
+  }
 
   render(): TemplateResult {
     return html`
@@ -95,7 +100,7 @@ export class IADropdownSearchBar extends LitElement {
         closeOnEscape
         closeOnBackdropClick
         openViaButton
-        .selectedOption=${this.selectedCategory}
+        .selectedOption=${this.resolvedCategory}
         .options=${this.dropdownOptions}
         @optionSelected=${this.handleCategorySelected}
       >
@@ -187,8 +192,8 @@ export class IADropdownSearchBar extends LitElement {
    * The display label for the currently selected category.
    */
   private get selectedCategoryLabel(): string {
-    const match = this.categories.find((c) => c.id === this.selectedCategory);
-    return match?.label ?? this.selectedCategory;
+    const match = this.categories.find((c) => c.id === this.resolvedCategory);
+    return match?.label ?? this.resolvedCategory;
   }
 
   /**
@@ -209,7 +214,7 @@ export class IADropdownSearchBar extends LitElement {
         <div
           id="search-links"
           part="search-links"
-          class=${this.useMobileView ? 'mobile' : ''}
+          class=${this.useMobileView ? 'mobile' : nothing}
         >
           <slot name="search-links-top"></slot>
           ${this.advancedSearchTemplate}
@@ -222,10 +227,8 @@ export class IADropdownSearchBar extends LitElement {
   }
 
   /**
-   * Template for the "Advanced Search" link.
-   *
-   * Uses the `advancedSearchUrl` prop as href if one is provided. Otherwise, it
-   * builds a link using the `navBaseUrl` and current query.
+   * Template for the "Advanced Search" link, built from `navBaseUrl` and
+   * the current query. Only rendered when `advancedSearchStyle` is `'link'`.
    */
   private get advancedSearchTemplate(): TemplateResult | typeof nothing {
     if (this.advancedSearchStyle !== 'link') return nothing;
@@ -275,7 +278,7 @@ export class IADropdownSearchBar extends LitElement {
       return;
     }
 
-    if (newCategoryId === this.selectedCategory) return;
+    if (newCategoryId === this.resolvedCategory) return;
 
     this.selectedCategory = newCategoryId;
 
@@ -320,7 +323,7 @@ export class IADropdownSearchBar extends LitElement {
       new CustomEvent<SearchRequestedDetail>(Events.SearchRequested, {
         detail: {
           query: this.searchInput.value,
-          category: this.selectedCategory,
+          category: this.resolvedCategory,
         },
       }),
     );
@@ -329,13 +332,10 @@ export class IADropdownSearchBar extends LitElement {
   static get styles() {
     const ownStyles = css`
       :host {
-        --clear-button-offset--: var(--clear-button-offset, 0);
         --search-bar-height--: var(--search-bar-height, 30px);
         --search-bar-width--: var(--search-bar-width, 300px);
-        --search-bar-internal-padding--: var(
-          --search-bar-internal-padding,
-          5px
-        );
+        --search-bar-internal-padding--: var(--padding-sm, 5px);
+        --clear-button-offset--: var(--clear-button-offset, 0);
       }
 
       #container {
