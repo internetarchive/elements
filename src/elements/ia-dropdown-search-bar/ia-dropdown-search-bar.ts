@@ -15,7 +15,8 @@ import '@src/elements/ia-status-indicator/ia-status-indicator';
  * Event names emitted by this component
  */
 const Events = {
-  /** Event emitted when a search query is submitted */
+  AdvancedSearchClicked: 'advancedSearchClicked',
+  CategoryChanged: 'categoryChanged',
   SearchRequested: 'searchRequested',
 };
 
@@ -285,7 +286,7 @@ export class IADropdownSearchBar extends LitElement {
     setTimeout(() => this.searchInput.focus());
 
     this.dispatchEvent(
-      new CustomEvent<string>('categoryChanged', {
+      new CustomEvent<string>(Events.CategoryChanged, {
         detail: newCategoryId,
       }),
     );
@@ -308,14 +309,14 @@ export class IADropdownSearchBar extends LitElement {
   }
 
   /**
-   * Emits an event when the advanced search link is clicked.
+   * Handler for clicks on the advanced search link/option
    */
   private advancedSearchClicked(): void {
-    this.dispatchEvent(new CustomEvent('advancedSearchClicked'));
+    this.dispatchEvent(new CustomEvent(Events.AdvancedSearchClicked));
   }
 
   /**
-   * Dispatches a `searchRequested` event with the current query and category.
+   * Emits a `searchRequested` event with the current query and category.
    */
   private emitSearchRequested(): void {
     this.dispatchEvent(
