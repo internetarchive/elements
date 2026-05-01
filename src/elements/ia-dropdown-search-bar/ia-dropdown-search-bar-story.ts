@@ -199,7 +199,7 @@ export class IADropdownSearchBarStory extends LitElement {
       loading,
     } = this;
 
-    const quoteOptionalString = (s: string) => s ? `"${s}"` : '';
+    const quoteOptionalString = (s: string) => (s ? `"${s}"` : '');
     const bindings: Record<string, string | boolean> = {
       query: quoteOptionalString(query),
       selectedCategory: quoteOptionalString(selectedCategory),
