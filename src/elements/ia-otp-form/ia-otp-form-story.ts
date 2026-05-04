@@ -95,6 +95,37 @@ export class IAOTPFormStory extends LitElement {
           }}
           @newCodeRequested=${() => alert('New code requested')}
         ></ia-otp-form>
+        <div slot="usage-notes">
+          For a typical One Time Passcode (OTP) use case, the component can be
+          used like so:
+          <ul>
+            <li>
+              The parent component sends the user a code, then displays the
+              <code>ia-otp-form</code> component for code entry
+            </li>
+            <li>
+              Once the user finishes entering a code, the component emits a
+              <code>codeSubmitted</code> event with the code stored in the event
+              <code>detail</code>
+            </li>
+            <li>
+              The parent component sends that code to be verified and sets the
+              <code>validationStatus</code> to <code>loading</code>
+            </li>
+            <li>
+              Depending on the result, the parent then sets the
+              <code>validationStatus</code> to <code>success</code> or
+              <code>error</code> to display a success or error state
+            </li>
+            <li>
+              If the user requests a new code from within the component, it will
+              emit a <code>newCodeRequested</code> event and clear the inputs,
+              and the parent can set the <code>newCodeSending</code> property to
+              <code>true</code> while the code is being sent, then back to
+              <code>false</code> when it is ready for entry
+            </li>
+          </ul>
+        </div>
       </story-template>
     `;
   }
