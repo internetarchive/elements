@@ -147,7 +147,7 @@ export class StoryPropsSettings extends LitElement {
     this.dispatchEvent(
       new CustomEvent('propsApplied', {
         detail: {
-          stringifiedProps: '\n  ' + stringifiedProps.join('\n  ') + '\n',
+          stringifiedProps: stringifiedProps.join('\n  '),
           appliedProps,
         },
       }),

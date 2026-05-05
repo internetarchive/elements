@@ -40,7 +40,7 @@ const propInputSettings: PropInputSettings<IAStatusIndicator>[] = [
     propertyName: 'mode',
     defaultValue: 'loading',
     inputType: 'radio',
-    radioOptions: ['loading', 'success', 'error'],
+    radioOptions: ['ready', 'loading', 'success', 'error'],
   },
   {
     label: 'Accessible title - loading',

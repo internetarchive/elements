@@ -48,6 +48,9 @@ export class StoryTemplate extends LitElement {
   /* Whether settings inputs have been slotted in and should be displayed */
   @state() private shouldShowPropertySettings: boolean = false;
 
+  /* Whether notes have been slotted in and should be displayed */
+  @state() private shouldShowUsageNotes: boolean = false;
+
   /* Component that has been slotted into the demo, if applicable */
   @state() private slottedDemoComponent?: any;
 
@@ -186,6 +189,13 @@ export class StoryTemplate extends LitElement {
           )}
         </div>
       </div>
+      ${when(this.shouldShowUsageNotes, () => html` <h3>Usage Notes</h3>`)}
+      <div class="slot-container">
+        <slot
+          name="usage-notes"
+          @slotchange=${this.handleUsageNotesSlotChange}
+        ></slot>
+      </div>
     `;
   }
 
@@ -213,10 +223,14 @@ export class StoryTemplate extends LitElement {
 
   private get exampleUsage(): string {
     const defaultProps = this.defaultUsageProps
-      ? '\n ' + this.defaultUsageProps + '\n'
+      ? '  ' + this.defaultUsageProps + '\n'
       : '';
-    const appliedProps = this.stringifiedProps ?? '';
-    return `<${this.elementTag}${defaultProps}${appliedProps}></${this.elementTag}>`;
+    const appliedProps = this.stringifiedProps
+      ? '  ' + this.stringifiedProps + '\n'
+      : '';
+    const hasProps = !!defaultProps || !!appliedProps;
+
+    return `<${this.elementTag}${hasProps ? '\n' : ''}${defaultProps}${appliedProps}></${this.elementTag}>`;
   }
 
   private get cssCode(): string {
@@ -234,6 +248,12 @@ export class StoryTemplate extends LitElement {
   private handleSettingsSlotChange(e: Event): void {
     const slottedChildren = (e.target as HTMLSlotElement).assignedElements();
     this.shouldShowPropertySettings = slottedChildren.length > 0;
+  }
+
+  /* Toggles visibility of section heading depending on whether notes have been slotted in */
+  private handleUsageNotesSlotChange(e: Event): void {
+    const slottedChildren = (e.target as HTMLSlotElement).assignedElements();
+    this.shouldShowUsageNotes = slottedChildren.length > 0;
   }
 
   /* Detects and stores a reference to slotted demo component */

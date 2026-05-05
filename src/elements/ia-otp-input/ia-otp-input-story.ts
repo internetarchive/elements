@@ -58,10 +58,16 @@ export class IAOTPInputStory extends LitElement {
       <story-template
         elementTag="ia-otp-input"
         elementClassName="IAOTPInput"
+        .defaultUsageProps=${"@codeSubmitted=\${(e: CustomEvent) => {setTimeout(() => alert('Code submitted: ' + e.detail), 250);}}"}
         .styleInputData=${{ settings: styleInputSettings }}
         .propInputData=${{ settings: propInputSettings }}
       >
-        <ia-otp-input slot="demo"></ia-otp-input>
+        <ia-otp-input
+          @codeSubmitted=${(e: CustomEvent) => {
+            setTimeout(() => alert('Code submitted: ' + e.detail), 250);
+          }}
+          slot="demo"
+        ></ia-otp-input>
       </story-template>
     `;
   }
