@@ -100,7 +100,6 @@ export class IADropdownSearchBarStory extends LitElement {
       >
         <div slot="demo">
           <ia-dropdown-search-bar
-            .navBaseUrl=${''}
             .query=${this.query}
             .categories=${DEFAULT_CATEGORIES}
             .selectedCategory=${this.selectedCategory}
