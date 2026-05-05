@@ -2,7 +2,7 @@ import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { customElement, state, query } from 'lit/decorators.js';
 import { map } from 'lit/directives/map.js';
 import { StyleInputSettings } from '@demo/story-components/story-styles-settings';
-import { AdvancedSearchStyle, SearchRequestedDetail } from './models';
+import { SearchRequestedDetail } from './models';
 
 import '@demo/story-template';
 import './ia-dropdown-search-bar';
@@ -50,7 +50,6 @@ const DEFAULT_CATEGORIES = [
 
 const DEFAULT_SELECTED_CATEGORY = 'all';
 const DEFAULT_PLACEHOLDER = 'Search';
-const DEFAULT_ADVANCED_SEARCH_STYLE = 'link' as AdvancedSearchStyle;
 
 @customElement('ia-dropdown-search-bar-story')
 export class IADropdownSearchBarStory extends LitElement {
@@ -64,9 +63,6 @@ export class IADropdownSearchBarStory extends LitElement {
 
   @state()
   private placeholder = DEFAULT_PLACEHOLDER;
-
-  @state()
-  private advancedSearchStyle = DEFAULT_ADVANCED_SEARCH_STYLE;
 
   @state()
   private hideDropdown = false;
@@ -87,9 +83,6 @@ export class IADropdownSearchBarStory extends LitElement {
 
   @query('#settings__placeholder')
   private placeholderInput!: HTMLInputElement;
-
-  @query('#settings__advanced-search-style')
-  private advancedSearchStyleSelect!: HTMLSelectElement;
 
   @query('#settings__hide-dropdown')
   private hideDropdownCheck!: HTMLInputElement;
@@ -112,7 +105,6 @@ export class IADropdownSearchBarStory extends LitElement {
             .categories=${DEFAULT_CATEGORIES}
             .selectedCategory=${this.selectedCategory}
             .placeholder=${this.placeholder}
-            .advancedSearchStyle=${this.advancedSearchStyle}
             ?hideDropdown=${this.hideDropdown}
             ?loading=${this.loading}
             @searchRequested=${this.handleSearchRequested}
@@ -160,20 +152,6 @@ export class IADropdownSearchBarStory extends LitElement {
             </tr>
             <tr>
               <td>
-                <label for="settings__advanced-search-style"
-                  >Advanced Search style</label
-                >
-              </td>
-              <td>
-                <select id="settings__advanced-search-style">
-                  <option value="link" selected>Link</option>
-                  <option value="dropdown">Dropdown option</option>
-                  <option value="none">None</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>
                 <label for="settings__hide-dropdown">Hide dropdown</label>
               </td>
               <td><input type="checkbox" id="settings__hide-dropdown" /></td>
@@ -194,7 +172,6 @@ export class IADropdownSearchBarStory extends LitElement {
       query,
       selectedCategory,
       placeholder,
-      advancedSearchStyle,
       hideDropdown,
       loading,
     } = this;
@@ -204,7 +181,6 @@ export class IADropdownSearchBarStory extends LitElement {
       query: quoteOptionalString(query),
       selectedCategory: quoteOptionalString(selectedCategory),
       placeholder: quoteOptionalString(placeholder),
-      advancedSearchStyle: quoteOptionalString(advancedSearchStyle),
       hideDropdown: hideDropdown,
       loading: loading,
     };
@@ -241,8 +217,6 @@ export class IADropdownSearchBarStory extends LitElement {
     this.query = this.queryInput.value;
     this.selectedCategory = this.selectedCategorySelect.value;
     this.placeholder = this.placeholderInput.value;
-    this.advancedSearchStyle = this.advancedSearchStyleSelect
-      .value as AdvancedSearchStyle;
     this.hideDropdown = this.hideDropdownCheck.checked;
     this.loading = this.loadingCheck.checked;
   }

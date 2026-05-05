@@ -6,7 +6,6 @@ import { IADropdownSearchBar } from './ia-dropdown-search-bar';
 import type { SearchRequestedDetail } from './models';
 
 import './ia-dropdown-search-bar';
-import { IaDropdown } from '@internetarchive/ia-dropdown';
 
 const defaultCategories = [
   { id: 'all', label: 'All' },
@@ -74,49 +73,6 @@ describe('IA Dropdown Search Bar', () => {
       '#category-dropdown [slot="dropdown-label"]',
     );
     expect(label?.textContent?.trim()).to.equal('Books/Documents');
-  });
-
-  test('appends query string to advanced search link when set', async () => {
-    el.navBaseUrl = 'foo';
-    await el.updateComplete;
-
-    const advancedSearchLink = el.shadowRoot?.querySelector(
-      '#advanced-search-link',
-    ) as HTMLAnchorElement;
-
-    expect(advancedSearchLink).to.exist;
-    expect(advancedSearchLink.getAttribute('href')).to.match(
-      /foo\/advancedsearch\.php$/,
-    );
-
-    el.query = 'bar';
-    await el.updateComplete;
-
-    expect(advancedSearchLink.getAttribute('href')).to.match(
-      /foo\/advancedsearch\.php\?q=bar$/,
-    );
-  });
-
-  test('includes advanced search option in dropdown when specified', async () => {
-    el.navBaseUrl = 'foo';
-    el.advancedSearchStyle = 'dropdown';
-    await el.updateComplete;
-
-    // No advanced search link is rendered
-    const advancedSearchLink = el.shadowRoot?.querySelector(
-      '#advanced-search-link',
-    ) as HTMLAnchorElement;
-    expect(advancedSearchLink).not.to.exist;
-
-    // Instead it's an option in the dropdown
-    const dropdown = el.shadowRoot?.querySelector(
-      '#category-dropdown',
-    ) as IaDropdown;
-    expect(
-      dropdown.options.find(
-        (opt) => opt.id === IADropdownSearchBar.ADVANCED_SEARCH_OPTION_ID,
-      ),
-    ).to.exist;
   });
 
   test('shows loading indicator on search button when loading', async () => {
@@ -196,84 +152,6 @@ describe('IA Dropdown Search Bar', () => {
       await el.updateComplete;
 
       expect(categoryListener).not.toHaveBeenCalled();
-    });
-
-    test('tries navigating to advanced search URL when advanced search option selected', async () => {
-      const navSpy = vi
-        .spyOn(el as any, 'navigateToAdvancedSearch')
-        .mockImplementation(() => {});
-
-      const dropdown = el.shadowRoot?.querySelector(
-        '#category-dropdown',
-      ) as HTMLElement;
-
-      dropdown.dispatchEvent(
-        new CustomEvent('optionSelected', {
-          detail: {
-            option: { id: IADropdownSearchBar.ADVANCED_SEARCH_OPTION_ID },
-          },
-        }),
-      );
-      await el.updateComplete;
-
-      expect(navSpy).toHaveBeenCalledOnce();
-    });
-
-    test('does not emit advancedSearchClicked on option selection when navBaseUrl is not set', async () => {
-      const advancedSearchListener = vi.fn();
-      el.addEventListener('advancedSearchClicked', advancedSearchListener);
-
-      const dropdown = el.shadowRoot?.querySelector(
-        '#category-dropdown',
-      ) as HTMLElement;
-
-      dropdown.dispatchEvent(
-        new CustomEvent('optionSelected', {
-          detail: {
-            option: { id: IADropdownSearchBar.ADVANCED_SEARCH_OPTION_ID },
-          },
-        }),
-      );
-      await el.updateComplete;
-
-      expect(advancedSearchListener).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('advanced search link', () => {
-    test('dispatches advancedSearchClicked on link click', async () => {
-      el.navBaseUrl = 'https://example.com';
-      await el.updateComplete;
-
-      const advancedSearchListener = vi.fn();
-      el.addEventListener('advancedSearchClicked', advancedSearchListener);
-
-      const link = el.shadowRoot?.querySelector(
-        '#advanced-search-link',
-      ) as HTMLAnchorElement;
-      expect(link).to.exist;
-
-      // Prevent actual navigation
-      link.addEventListener('click', (e) => e.preventDefault());
-      link.click();
-      await el.updateComplete;
-
-      expect(advancedSearchListener).toHaveBeenCalledOnce();
-    });
-
-    test('does not render link when advancedSearchStyle is none', async () => {
-      el.navBaseUrl = 'https://example.com';
-      el.advancedSearchStyle = 'none';
-      await el.updateComplete;
-
-      const link = el.shadowRoot?.querySelector('#advanced-search-link');
-      expect(link).not.to.exist;
-    });
-
-    test('does not render link when navBaseUrl is not set', async () => {
-      // navBaseUrl is undefined by default
-      const link = el.shadowRoot?.querySelector('#advanced-search-link');
-      expect(link).not.to.exist;
     });
   });
 
