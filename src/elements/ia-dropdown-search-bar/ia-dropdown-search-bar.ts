@@ -4,7 +4,6 @@ import { customElement, property, query } from 'lit/decorators.js';
 import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-input';
 import type { optionInterface } from '@internetarchive/ia-dropdown';
 import type {
-  AdvancedSearchStyle,
   SearchCategory,
   SearchRequestedDetail,
 } from './models';
@@ -20,16 +19,12 @@ import '@src/elements/ia-status-indicator/ia-status-indicator';
  * Event names emitted by this component
  */
 const Events = {
-  AdvancedSearchClicked: 'advancedSearchClicked',
   CategoryChanged: 'categoryChanged',
   SearchRequested: 'searchRequested',
 };
 
 @customElement('ia-dropdown-search-bar')
 export class IADropdownSearchBar extends LitElement {
-  /** ID used for the special Advanced Search dropdown option */
-  static readonly ADVANCED_SEARCH_OPTION_ID = '__advanced_search__';
-
   /** The query that appears in the search bar */
   @property({ type: String }) query?: string;
 
@@ -38,17 +33,6 @@ export class IADropdownSearchBar extends LitElement {
 
   /** The currently selected dropdown category ID */
   @property({ type: String }) selectedCategory?: string;
-
-  /** The base URL for internal navigation within the site */
-  @property({ type: String }) navBaseUrl?: string;
-
-  /**
-   * Where to display the Advanced Search option:
-   * - `link` (default): as a text link below the search bar
-   * - `dropdown`: as an item at the bottom of the category dropdown
-   * - `none`: hidden entirely
-   */
-  @property({ type: String }) advancedSearchStyle: AdvancedSearchStyle = 'link';
 
   /** Placeholder text for the search input */
   @property({ type: String }) placeholder = msg('Search');
@@ -157,35 +141,10 @@ export class IADropdownSearchBar extends LitElement {
    * expected by `ia-dropdown`.
    */
   private get dropdownOptions(): optionInterface[] {
-    const options: optionInterface[] = this.categories.map((cat) => ({
+    return this.categories.map((cat) => ({
       id: cat.id,
       label: html`<span>${cat.label}</span>`,
     }));
-
-    if (
-      this.advancedSearchStyle === 'dropdown' &&
-      this.navBaseUrl !== undefined
-    ) {
-      options.push({
-        id: IADropdownSearchBar.ADVANCED_SEARCH_OPTION_ID,
-        // Add a separator border above the Advanced Search option
-        label: html`<span style="border-top: 1px solid #999;">
-          ${msg('Go to Advanced Search...')}
-        </span>`,
-      });
-    }
-
-    return options;
-  }
-
-  /**
-   * Builds the Advanced Search URL using the given query string and the
-   * provided `navBaseUrl`. Returns `undefined` if no `navBaseUrl` is set.
-   */
-  private buildAdvancedSearchUrl(query: string): string | undefined {
-    if (this.navBaseUrl === undefined) return undefined;
-    const queryArg = query ? `?q=${encodeURIComponent(query)}` : '';
-    return `${this.navBaseUrl}/advancedsearch.php${queryArg}`;
   }
 
   /**
@@ -204,8 +163,7 @@ export class IADropdownSearchBar extends LitElement {
   }
 
   /**
-   * Template for the search links area beneath the search bar
-   * (Advanced Search link and any slotted content).
+   * Template for any slotted search links beneath the search bar
    */
   private get searchLinksTemplate(): TemplateResult {
     return html`
@@ -217,33 +175,12 @@ export class IADropdownSearchBar extends LitElement {
           class=${this.useMobileView ? 'mobile' : nothing}
         >
           <slot name="search-links-top"></slot>
-          ${this.advancedSearchTemplate}
           <div id="search-links-end">
             <slot name="search-links"></slot>
           </div>
         </div>
       </div>
     `;
-  }
-
-  /**
-   * Template for the "Advanced Search" link, built from `navBaseUrl` and
-   * the current query. Only rendered when `advancedSearchStyle` is `'link'`.
-   */
-  private get advancedSearchTemplate(): TemplateResult | typeof nothing {
-    if (this.advancedSearchStyle !== 'link') return nothing;
-
-    const href = this.buildAdvancedSearchUrl(this.query ?? '');
-    if (!href) return nothing;
-
-    return html`<a
-      id="advanced-search-link"
-      part="advanced-search-link"
-      href=${href}
-      @click=${this.advancedSearchClicked}
-    >
-      ${msg('Advanced Search')}
-    </a>`;
   }
 
   /**
@@ -272,12 +209,6 @@ export class IADropdownSearchBar extends LitElement {
     e: CustomEvent<{ option: optionInterface }>,
   ): void {
     const newCategoryId = e.detail.option.id;
-
-    if (newCategoryId === IADropdownSearchBar.ADVANCED_SEARCH_OPTION_ID) {
-      this.navigateToAdvancedSearch();
-      return;
-    }
-
     if (newCategoryId === this.resolvedCategory) return;
 
     this.selectedCategory = newCategoryId;
@@ -290,29 +221,6 @@ export class IADropdownSearchBar extends LitElement {
         detail: newCategoryId,
       }),
     );
-  }
-
-  /**
-   * Navigates the browser to the Advanced Search page with the current query.
-   */
-  private navigateToAdvancedSearch(): void {
-    // Schedule a re-render so ia-dropdown resets its internal selectedOption
-    // back to the real category (in case navigation is delayed or prevented)
-    this.requestUpdate();
-
-    const query = this.searchInput?.value ?? this.query ?? '';
-    const href = this.buildAdvancedSearchUrl(query);
-    if (!href) return;
-
-    this.advancedSearchClicked();
-    window.location.href = href;
-  }
-
-  /**
-   * Handler for clicks on the advanced search link/option
-   */
-  private advancedSearchClicked(): void {
-    this.dispatchEvent(new CustomEvent(Events.AdvancedSearchClicked));
   }
 
   /**
@@ -461,17 +369,8 @@ export class IADropdownSearchBar extends LitElement {
         margin-bottom: 2px;
       }
 
-      #advanced-search-link {
-        margin-left: auto;
-        padding-left: 5px;
-      }
-
       #search-links-end {
         display: contents;
-      }
-
-      .mobile #advanced-search-link {
-        margin-left: 0;
       }
 
       .mobile #search-links-end {

@@ -14,11 +14,3 @@ export type SearchRequestedDetail = {
   query: string;
   category: string;
 };
-
-/**
- * Options for where to display Advanced Search:
- * - `link` (default): as a text link below the search bar
- * - `dropdown`: as an item at the bottom of the category dropdown
- * - `none`: hidden entirely
- */
-export type AdvancedSearchStyle = 'link' | 'dropdown' | 'none';
