@@ -167,14 +167,6 @@ describe('IA Dropdown Search Bar', () => {
       expect(mainBar?.classList.contains('no-dropdown')).to.be.true;
     });
 
-    test('applies mobile class when useMobileView property is true', async () => {
-      el.useMobileView = true;
-      await el.updateComplete;
-
-      const searchLinks = el.shadowRoot?.querySelector('#search-links');
-      expect(searchLinks?.classList.contains('mobile')).to.be.true;
-    });
-
     test('falls back to category ID when no matching label found', async () => {
       el.selectedCategory = 'nonexistent';
       await el.updateComplete;

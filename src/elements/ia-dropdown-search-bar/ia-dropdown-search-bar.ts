@@ -65,7 +65,6 @@ export class IADropdownSearchBar extends LitElement {
           ${this.hideDropdown ? nothing : this.dropdownTemplate}
           ${this.textBoxTemplate} ${this.searchButtonTemplate}
         </div>
-        ${this.searchLinksTemplate}
       </div>
     `;
   }
@@ -163,27 +162,6 @@ export class IADropdownSearchBar extends LitElement {
   }
 
   /**
-   * Template for any slotted search links beneath the search bar
-   */
-  private get searchLinksTemplate(): TemplateResult {
-    return html`
-      <div id="search-links-area">
-        <slot name="before-search-links"></slot>
-        <div
-          id="search-links"
-          part="search-links"
-          class=${this.useMobileView ? 'mobile' : nothing}
-        >
-          <slot name="search-links-top"></slot>
-          <div id="search-links-end">
-            <slot name="search-links"></slot>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  /**
    * Handler for when the search bar's clear button is pressed.
    */
   private searchFieldCleared(): void {
@@ -254,7 +232,6 @@ export class IADropdownSearchBar extends LitElement {
       #main-bar {
         display: flex;
         height: var(--search-bar-height--, 30px);
-        margin-bottom: 10px;
         flex: 1;
       }
 
@@ -349,56 +326,6 @@ export class IADropdownSearchBar extends LitElement {
       .search-button-loading-icon {
         --icon-width: 20px;
         margin-top: 2px;
-      }
-
-      #search-links-area {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        margin-top: 5px;
-        font-size: inherit;
-      }
-
-      #search-links {
-        display: flex;
-        column-gap: 10px;
-        width: 100%;
-      }
-
-      #search-links > a:not(:last-child) {
-        margin-bottom: 2px;
-      }
-
-      #search-links-end {
-        display: contents;
-      }
-
-      .mobile #search-links-end {
-        display: flex;
-        margin-left: auto;
-        column-gap: 10px;
-      }
-
-      a:link {
-        text-decoration: none;
-        display: block;
-        flex: 0 1 auto;
-        color: var(--ia-theme-link-color, #4b64ff);
-        white-space: nowrap;
-      }
-
-      a:hover {
-        text-decoration: underline;
-      }
-
-      a:visited {
-        color: var(--ia-theme-link-color, #4b64ff);
-      }
-
-      ::slotted(#action-bar-spacing) {
-        --iconLabelGutterWidth: 3px;
-        margin-top: -4px; /* Better icon alignment */
-        height: fit-content;
       }
     `;
 
