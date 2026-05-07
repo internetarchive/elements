@@ -1760,7 +1760,7 @@ fill=""></path>
             opacity: 0;
           }
         }
-      `]}};St([g({type:String})],at.prototype,"loadingTitle",2);St([g({type:String})],at.prototype,"successTitle",2);St([g({type:String})],at.prototype,"errorTitle",2);St([g({type:String})],at.prototype,"loadingStyle",2);St([g({type:String})],at.prototype,"mode",2);at=St([E("ia-status-indicator")],at);var jn=Object.defineProperty,Hn=Object.getOwnPropertyDescriptor,F=(i,t,e,o)=>{for(var s=o>1?void 0:o?Hn(t,e):t,n=i.length-1,r;n>=0;n--)(r=i[n])&&(s=(o?r(t,e,s):r(s))||s);return o&&s&&jn(t,e,s),s};const Fi={CategoryChanged:"categoryChanged",SearchRequested:"searchRequested"};let V=class extends w{constructor(){super(...arguments),this.categories=[],this.placeholder=L("Search"),this.useMobileView=!1,this.hideDropdown=!1,this.loading=!1}get resolvedCategory(){return this.selectedCategory??this.categories[0]?.id??""}render(){return p`
+      `]}};St([g({type:String})],at.prototype,"loadingTitle",2);St([g({type:String})],at.prototype,"successTitle",2);St([g({type:String})],at.prototype,"errorTitle",2);St([g({type:String})],at.prototype,"loadingStyle",2);St([g({type:String})],at.prototype,"mode",2);at=St([E("ia-status-indicator")],at);var jn=Object.defineProperty,Hn=Object.getOwnPropertyDescriptor,F=(i,t,e,o)=>{for(var s=o>1?void 0:o?Hn(t,e):t,n=i.length-1,r;n>=0;n--)(r=i[n])&&(s=(o?r(t,e,s):r(s))||s);return o&&s&&jn(t,e,s),s};const Fi={CategoryChanged:"categoryChanged",SearchRequested:"searchRequested"};let V=class extends w{constructor(){super(...arguments),this.categories=[],this.placeholder=L("Search"),this.useMobileView=!1,this.hideDropdown=!1,this.loading=!1}get resolvedCategory(){return this.selectedCategory??this.categories?.[0]?.id??""}render(){return p`
       <div id="container" part="container" role="search">
         <div
           id="main-bar"
@@ -1863,7 +1863,7 @@ fill=""></path>
 
       #category-dropdown [slot='dropdown-label'] {
         color: var(--ia-theme-primary-text-color, #2c2c2c);
-        font-size: inherit;
+        font-size: 1.4rem;
         font-family: inherit;
         white-space: nowrap;
       }
