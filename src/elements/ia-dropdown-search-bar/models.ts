@@ -1,10 +1,12 @@
+import { TemplateResult } from "lit";
+
 /**
  * A category to include in the dropdown. Consists of an internal `id` string that is
- * emitted on selection, an a human-readable `label` to display in the dropdown.
+ * emitted on selection, and a human-readable `label` to display in the dropdown.
  */
 export type SearchCategory = {
   id: string;
-  label: string;
+  label: string | TemplateResult;
 };
 
 /**

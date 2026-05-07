@@ -51,7 +51,7 @@ export class IADropdownSearchBar extends LitElement {
 
   /** The effective selected category, falling back to the first in the list. */
   private get resolvedCategory(): string {
-    return this.selectedCategory ?? this.categories[0]?.id ?? '';
+    return this.selectedCategory ?? this.categories?.[0]?.id ?? '';
   }
 
   render(): TemplateResult {
@@ -84,7 +84,7 @@ export class IADropdownSearchBar extends LitElement {
         closeOnBackdropClick
         openViaButton
         .selectedOption=${this.resolvedCategory}
-        .options=${this.dropdownOptions}
+        .options=${this.categories}
         @optionSelected=${this.handleCategorySelected}
       >
         <span slot="dropdown-label">${this.selectedCategoryLabel}</span>
@@ -136,20 +136,9 @@ export class IADropdownSearchBar extends LitElement {
   }
 
   /**
-   * Converts the `categories` array into the `optionInterface[]` format
-   * expected by `ia-dropdown`.
-   */
-  private get dropdownOptions(): optionInterface[] {
-    return this.categories.map((cat) => ({
-      id: cat.id,
-      label: html`<span>${cat.label}</span>`,
-    }));
-  }
-
-  /**
    * The display label for the currently selected category.
    */
-  private get selectedCategoryLabel(): string {
+  private get selectedCategoryLabel(): string | TemplateResult {
     const match = this.categories.find((c) => c.id === this.resolvedCategory);
     return match?.label ?? this.resolvedCategory;
   }
@@ -267,7 +256,7 @@ export class IADropdownSearchBar extends LitElement {
 
       #category-dropdown [slot='dropdown-label'] {
         color: var(--ia-theme-primary-text-color, #2c2c2c);
-        font-size: inherit;
+        font-size: 1.4rem;
         font-family: inherit;
         white-space: nowrap;
       }
