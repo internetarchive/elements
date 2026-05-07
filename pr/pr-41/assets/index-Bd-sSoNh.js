@@ -1785,7 +1785,10 @@ fill=""></path>
         .options=${this.categories}
         @optionSelected=${this.handleCategorySelected}
       >
-        <span slot="dropdown-label">${this.selectedCategoryLabel}</span>
+        <span
+          slot="dropdown-label"
+          part="category-dropdown-label"
+        >${this.selectedCategoryLabel}</span>
       </ia-dropdown>
     `}get textBoxTemplate(){return p`
       <ia-clearable-text-input
@@ -2005,6 +2008,15 @@ fill=""></path>
     `.replace(/\n\s*\n/g,`
 `).replace(/\n {6}/g,`
 `)}applySettings(i){i.preventDefault(),this.query=this.queryInput.value,this.selectedCategory=this.selectedCategorySelect.value,this.placeholder=this.placeholderInput.value,this.hideDropdown=this.hideDropdownCheck.checked,this.loading=this.loadingCheck.checked}handleSearchRequested(i){this.announcerText=`Category ID "${i.detail.category}" / Query "${i.detail.query}"`}static get styles(){return P`
+      ia-dropdown-search-bar {
+        --dropdownFontSize: 14px;
+        --dropdownItemButtonPadding: 0 10px;
+      }
+
+      ia-dropdown-search-bar::part(category-dropdown-label) {
+        font-size: 14px;
+      }
+
       #announcer {
         margin-left: 20px;
       }
