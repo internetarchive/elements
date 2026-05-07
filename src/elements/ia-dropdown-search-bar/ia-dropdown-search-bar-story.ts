@@ -167,13 +167,8 @@ export class IADropdownSearchBarStory extends LitElement {
   }
 
   private get exampleUsage(): string {
-    const {
-      query,
-      selectedCategory,
-      placeholder,
-      hideDropdown,
-      loading,
-    } = this;
+    const { query, selectedCategory, placeholder, hideDropdown, loading } =
+      this;
 
     const quoteOptionalString = (s: string) => (s ? `"${s}"` : '');
     const bindings: Record<string, string | boolean> = {

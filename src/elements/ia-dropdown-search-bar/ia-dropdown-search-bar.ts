@@ -3,10 +3,7 @@ import { css, html, LitElement, nothing, TemplateResult } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-input';
 import type { optionInterface } from '@internetarchive/ia-dropdown';
-import type {
-  SearchCategory,
-  SearchRequestedDetail,
-} from './models';
+import type { SearchCategory, SearchRequestedDetail } from './models';
 
 import themeStyles from '@src/themes/theme-styles';
 import searchIcon from './search.svg';
@@ -87,10 +84,9 @@ export class IADropdownSearchBar extends LitElement {
         .options=${this.categories}
         @optionSelected=${this.handleCategorySelected}
       >
-        <span
-          slot="dropdown-label"
-          part="category-dropdown-label"
-        >${this.selectedCategoryLabel}</span>
+        <span slot="dropdown-label" part="category-dropdown-label"
+          >${this.selectedCategoryLabel}</span
+        >
       </ia-dropdown>
     `;
   }

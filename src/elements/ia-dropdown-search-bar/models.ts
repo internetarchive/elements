@@ -1,4 +1,4 @@
-import { TemplateResult } from "lit";
+import { TemplateResult } from 'lit';
 
 /**
  * A category to include in the dropdown. Consists of an internal `id` string that is
