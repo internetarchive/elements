@@ -87,7 +87,10 @@ export class IADropdownSearchBar extends LitElement {
         .options=${this.categories}
         @optionSelected=${this.handleCategorySelected}
       >
-        <span slot="dropdown-label">${this.selectedCategoryLabel}</span>
+        <span
+          slot="dropdown-label"
+          part="category-dropdown-label"
+        >${this.selectedCategoryLabel}</span>
       </ia-dropdown>
     `;
   }
