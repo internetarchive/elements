@@ -1782,7 +1782,7 @@ fill=""></path>
         closeOnBackdropClick
         openViaButton
         .selectedOption=${this.resolvedCategory}
-        .options=${this.dropdownOptions}
+        .options=${this.categories}
         @optionSelected=${this.handleCategorySelected}
       >
         <span slot="dropdown-label">${this.selectedCategoryLabel}</span>
@@ -1812,7 +1812,7 @@ fill=""></path>
               class="search-button-loading-icon"
             ></ia-status-indicator>`:p`<img src=${Gs} alt="" />`}
       </button>
-    `}get dropdownOptions(){return this.categories.map(i=>({id:i.id,label:p`<span>${i.label}</span>`}))}get selectedCategoryLabel(){return this.categories.find(t=>t.id===this.resolvedCategory)?.label??this.resolvedCategory}get spacedQuery(){return this.query?.replace(/\+/g," ")??""}searchFieldCleared(){this.query&&this.emitSearchRequested()}handleSubmit(){this.emitSearchRequested()}handleCategorySelected(i){const t=i.detail.option.id;t!==this.resolvedCategory&&(this.selectedCategory=t,setTimeout(()=>this.searchInput.focus()),this.dispatchEvent(new CustomEvent(Fi.CategoryChanged,{detail:t})))}emitSearchRequested(){this.dispatchEvent(new CustomEvent(Fi.SearchRequested,{detail:{query:this.searchInput.value,category:this.resolvedCategory}}))}static get styles(){const i=P`
+    `}get selectedCategoryLabel(){return this.categories.find(t=>t.id===this.resolvedCategory)?.label??this.resolvedCategory}get spacedQuery(){return this.query?.replace(/\+/g," ")??""}searchFieldCleared(){this.query&&this.emitSearchRequested()}handleSubmit(){this.emitSearchRequested()}handleCategorySelected(i){const t=i.detail.option.id;t!==this.resolvedCategory&&(this.selectedCategory=t,setTimeout(()=>this.searchInput.focus()),this.dispatchEvent(new CustomEvent(Fi.CategoryChanged,{detail:t})))}emitSearchRequested(){this.dispatchEvent(new CustomEvent(Fi.SearchRequested,{detail:{query:this.searchInput.value,category:this.resolvedCategory}}))}static get styles(){const i=P`
       :host {
         --search-bar-height--: var(--search-bar-height, 30px);
         --search-bar-width--: var(--search-bar-width, 300px);
