@@ -1,8 +1,15 @@
 import { msg } from '@lit/localize';
-import { css, html, LitElement, nothing, TemplateResult } from 'lit';
+import {
+  css,
+  html,
+  LitElement,
+  nothing,
+  PropertyValues,
+  TemplateResult,
+} from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-input';
-import type { optionInterface } from '@internetarchive/ia-dropdown';
+import type { IaDropdown, optionInterface } from '@internetarchive/ia-dropdown';
 import type { SearchCategory, SearchRequestedDetail } from './models';
 
 import themeStyles from '@src/themes/theme-styles';
@@ -46,6 +53,9 @@ export class IADropdownSearchBar extends LitElement {
   @query('#search-input')
   private searchInput!: IaClearableTextInput;
 
+  @query('#category-dropdown')
+  private categoryDropdown?: IaDropdown;
+
   /** The effective selected category, falling back to the first in the list. */
   private get resolvedCategory(): string {
     return this.selectedCategory ?? this.categories?.[0]?.id ?? '';
@@ -64,6 +74,21 @@ export class IADropdownSearchBar extends LitElement {
         </div>
       </div>
     `;
+  }
+  
+  willUpdate(changed: PropertyValues) {
+    // Push new categories down to the inner dropdown immediately, since ia-dropdown
+    // mutates its own selected option on interaction which can cause Lit's
+    // property-binding diff to miss the change in certain cases.
+    if (changed.has('selectedCategory') || changed.has('categories')) {
+      const resolved = this.resolvedCategory;
+      if (
+        this.categoryDropdown &&
+        this.categoryDropdown.selectedOption !== resolved
+      ) {
+        this.categoryDropdown.selectedOption = resolved;
+      }
+    }
   }
 
   /**
