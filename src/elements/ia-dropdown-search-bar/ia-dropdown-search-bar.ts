@@ -1,6 +1,6 @@
 import { msg } from '@lit/localize';
 import { css, html, LitElement, nothing, TemplateResult } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { customElement, property, state, query } from 'lit/decorators.js';
 import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-input';
 import type { optionInterface } from '@internetarchive/ia-dropdown';
 import type { SearchCategory, SearchRequestedDetail } from './models';
@@ -47,6 +47,7 @@ export class IADropdownSearchBar extends LitElement {
   private searchInput!: IaClearableTextInput;
 
   /** The effective selected category, falling back to the first in the list. */
+  @state()
   private get resolvedCategory(): string {
     return this.selectedCategory ?? this.categories?.[0]?.id ?? '';
   }
