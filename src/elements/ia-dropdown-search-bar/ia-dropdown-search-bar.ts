@@ -77,7 +77,7 @@ export class IADropdownSearchBar extends LitElement {
   }
   
   willUpdate(changed: PropertyValues) {
-    // Push the new categories down to the inner dropdown immediately, since ia-dropdown
+    // Push new categories down to the inner dropdown immediately, since ia-dropdown
     // mutates its own selected option on interaction which can cause Lit's
     // property-binding diff to miss the change in certain cases.
     if (changed.has('selectedCategory') || changed.has('categories')) {
