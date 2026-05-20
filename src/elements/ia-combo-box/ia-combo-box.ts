@@ -1217,6 +1217,7 @@ export class IAComboBox extends LitElement {
         --combo-box-padding--: var(--padding-sm);
         --combo-box-list-width--: var(--combo-box-list-width, unset);
         --combo-box-list-max-height--: var(--combo-box-list-max-height, 250px);
+        --combo-box-list-fade-duration--: var(--combo-box-list-fade-duration, 125ms);
       }
 
       #container {
@@ -1317,7 +1318,7 @@ export class IAComboBox extends LitElement {
         max-height: 400px;
         box-shadow: 0 0 1px 1px #ddd;
         opacity: 0;
-        transition: opacity 0.125s ease;
+        transition: opacity var(--combo-box-list-fade-duration--) ease;
       }
 
       #options-list.visible {

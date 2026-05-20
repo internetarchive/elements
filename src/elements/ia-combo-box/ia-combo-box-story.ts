@@ -40,6 +40,16 @@ const styleInputSettings: StyleInputSettings[] = [
     defaultValue: '250px',
     inputType: 'text',
   },
+  {
+    label: 'Dropdown fade duration',
+    cssVariable: '--combo-box-list-fade-duration',
+    defaultValue: 125,
+    inputType: 'range',
+    min: 0,
+    max: 1000,
+    step: 25,
+    unit: 'ms',
+  },
 ];
 
 // Option sets
