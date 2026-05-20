@@ -55,7 +55,9 @@ export class StoryStylesSettings extends LitElement {
     `;
   }
 
-  /* Renders one row of the settings table for the given style input. */
+  /**
+   * Renders one row of the settings table for the given style input.
+   */
   private renderStyleRow(input: StyleInputSettings): TemplateResult {
     const inputId = labelToId(input.label);
     const isNumeric =
@@ -90,7 +92,9 @@ export class StoryStylesSettings extends LitElement {
     `;
   }
 
-  /* Updates the live readout next to a range slider as it moves. */
+  /**
+   * Updates the live readout next to a range slider as it moves.
+   */
   private updateRangeReadout(e: Event): void {
     const input = e.currentTarget as HTMLInputElement;
     const output = this.renderRoot.querySelector<HTMLOutputElement>(
@@ -101,7 +105,9 @@ export class StoryStylesSettings extends LitElement {
     output.textContent = `${input.value}${unit}`;
   }
 
-  /* Applies styles to demo component. */
+  /**
+   * Applies styles to demo component.
+   */
   private applyStyles(): void {
     const appliedStyles: string[] = [];
 
