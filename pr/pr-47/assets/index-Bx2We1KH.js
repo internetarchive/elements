@@ -202,34 +202,34 @@ hue-6-2: #c18401
     `}async highlightCode(){const t=(await Vt(()=>import("./index-BBc-AmEf.js"),[],import.meta.url)).default,e=this.code.trim();let o;this.language==="auto"?o=t.highlightAuto(e).value:o=t.highlight(e,{language:this.language}).value,this.highlightedCode=o}static get styles(){return[os]}};se([g({type:String})],Rt.prototype,"code",2);se([g({type:String})],Rt.prototype,"language",2);se([v()],Rt.prototype,"highlightedCode",2);Rt=se([E("syntax-highlighter")],Rt);const rs="data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='UTF-8'?%3e%3csvg%20xmlns='http://www.w3.org/2000/svg'%20xmlns:xlink='http://www.w3.org/1999/xlink'%20width='36pt'%20height='36pt'%20viewBox='0%200%2036%2036'%20version='1.1'%3e%3cg%20id='surface35'%3e%3cpath%20style='%20stroke:none;fill-rule:nonzero;fill:rgb(0%25,0%25,0%25);fill-opacity:1;'%20d='M%2013.5%206.1875%20C%2012.878906%206.1875%2012.375%206.691406%2012.375%207.3125%20C%2012.375%207.933594%2012.878906%208.4375%2013.5%208.4375%20L%2014.0625%208.4375%20L%2014.0625%2013.523438%20C%2014.0625%2014.453125%2013.78125%2015.34375%2013.246094%2016.105469%20L%206.84375%2025.238281%20C%206.140625%2026.238281%206.054688%2027.535156%206.621094%2028.617188%20C%207.183594%2029.703125%208.292969%2030.375%209.515625%2030.375%20L%2026.484375%2030.375%20C%2027.707031%2030.375%2028.816406%2029.703125%2029.378906%2028.617188%20C%2029.941406%2027.535156%2029.859375%2026.238281%2029.15625%2025.238281%20L%2022.753906%2016.105469%20C%2022.21875%2015.34375%2021.9375%2014.453125%2021.9375%2013.523438%20L%2021.9375%208.4375%20L%2022.5%208.4375%20C%2023.121094%208.4375%2023.625%207.933594%2023.625%207.3125%20C%2023.625%206.691406%2023.121094%206.1875%2022.5%206.1875%20Z%20M%2016.3125%208.4375%20L%2019.6875%208.4375%20L%2019.6875%2013.523438%20C%2019.6875%2014.914062%2020.109375%2016.257812%2020.910156%2017.398438%20L%2020.941406%2017.4375%20L%2015.0625%2017.4375%20L%2015.089844%2017.398438%20C%2015.890625%2016.257812%2016.3125%2014.914062%2016.3125%2013.523438%20Z%20M%2015.1875%2020.8125%20C%2015.808594%2020.8125%2016.3125%2021.316406%2016.3125%2021.9375%20C%2016.3125%2022.558594%2015.808594%2023.0625%2015.1875%2023.0625%20C%2014.566406%2023.0625%2014.0625%2022.558594%2014.0625%2021.9375%20C%2014.0625%2021.316406%2014.566406%2020.8125%2015.1875%2020.8125%20Z%20M%2020.53125%2023.0625%20C%2021.617188%2023.0625%2022.5%2023.945312%2022.5%2025.03125%20C%2022.5%2026.117188%2021.617188%2027%2020.53125%2027%20C%2019.445312%2027%2018.5625%2026.117188%2018.5625%2025.03125%20C%2018.5625%2023.945312%2019.445312%2023.0625%2020.53125%2023.0625%20Z%20M%2020.53125%2023.0625%20'/%3e%3c/g%3e%3c/svg%3e";function Ee(i){return i.toLowerCase().split(" ").join("-")}var as=Object.defineProperty,ls=Object.getOwnPropertyDescriptor,Ye=(i,t,e,o)=>{for(var s=o>1?void 0:o?ls(t,e):t,n=i.length-1,r;n>=0;n--)(r=i[n])&&(s=(o?r(t,e,s):r(s))||s);return o&&s&&as(t,e,s),s};let Wt=class extends w{render(){return this.styleInputData?h`
       <div class="settings-options">
         <table>
-          ${this.styleInputData.settings.map(i=>{const t=Ee(i.label),e=i.inputType==="number"||i.inputType==="range";return h`
-              <tr>
-                <td>
-                  <label for=${t}>${i.label}</label>
-                </td>
-                <td class="style-input-cell">
-                  <input
-                    id=${t}
-                    class="style-input"
-                    type=${i.inputType??"text"}
-                    value=${i.defaultValue??""}
-                    min=${it(e?i.min:void 0)}
-                    max=${it(e?i.max:void 0)}
-                    step=${it(e?i.step:void 0)}
-                    data-variable=${i.cssVariable}
-                    data-unit=${it(i.unit)}
-                    @input=${i.inputType==="range"?this.updateRangeReadout:void 0}
-                  />
-                  ${i.inputType==="range"?h`<output class="style-readout" for=${t}
-                        >${i.defaultValue??""}${i.unit??""}</output
-                      >`:m}
-                </td>
-              </tr>
-            `})}
+          ${this.styleInputData.settings.map(i=>this.renderStyleRow(i))}
         </table>
         <button @click=${this.applyStyles}>Apply</button>
       </div>
-    `:m}updateRangeReadout(i){const t=i.currentTarget,e=this.renderRoot.querySelector(`output[for="${t.id}"]`);if(!e)return;const o=t.dataset.unit??"";e.textContent=`${t.value}${o}`}applyStyles(){const i=[];this.styleInputs?.forEach(t=>{if(!t.dataset.variable||!t.value)return;const e=t.dataset.unit??"";i.push(`${t.dataset.variable}: ${t.value}${e};`)}),this.dispatchEvent(new CustomEvent("stylesApplied",{detail:{styles:i.join(`
+    `:m}renderStyleRow(i){const t=Ee(i.label),e=i.inputType==="number"||i.inputType==="range";return h`
+      <tr>
+        <td>
+          <label for=${t}>${i.label}</label>
+        </td>
+        <td class="style-input-cell">
+          <input
+            id=${t}
+            class="style-input"
+            type=${i.inputType??"text"}
+            min=${it(e?i.min:void 0)}
+            max=${it(e?i.max:void 0)}
+            step=${it(e?i.step:void 0)}
+            value=${i.defaultValue}
+            data-variable=${i.cssVariable}
+            data-unit=${it(i.unit)}
+            @input=${i.inputType==="range"?this.updateRangeReadout:void 0}
+          />
+          ${i.inputType==="range"?h`<output class="style-readout" for=${t}
+                >${i.defaultValue}${i.unit??""}</output
+              >`:m}
+        </td>
+      </tr>
+    `}updateRangeReadout(i){const t=i.currentTarget,e=this.renderRoot.querySelector(`output[for="${CSS.escape(t.id)}"]`);if(!e)return;const o=t.dataset.unit??"";e.textContent=`${t.value}${o}`}applyStyles(){const i=[];this.styleInputs?.forEach(t=>{if(!t.dataset.variable||!t.value)return;const e=t.dataset.unit??"";i.push(`${t.dataset.variable}: ${t.value}${e};`)}),this.dispatchEvent(new CustomEvent("stylesApplied",{detail:{styles:i.join(`
  `)}}))}static get styles(){return[F,P`
         .settings-options {
           background-color: var(--primary-background-color);
@@ -242,10 +242,11 @@ hue-6-2: #c18401
         }
 
         .style-readout {
-          display: inline-block;
+          min-width: 3.5em;
+          text-align: right;
         }
 
-        input[type="range"] {
+        input[type='range'] {
           margin: 5px;
         }
       `]}};Ye([g({type:Object})],Wt.prototype,"styleInputData",2);Ye([Ze(".style-input")],Wt.prototype,"styleInputs",2);Wt=Ye([E("story-styles-settings")],Wt);const no=(i,t,e)=>{for(const o of t)if(o[0]===i)return(0,o[1])();return e?.()};var ds=Object.defineProperty,cs=Object.getOwnPropertyDescriptor,Je=(i,t,e,o)=>{for(var s=o>1?void 0:o?cs(t,e):t,n=i.length-1,r;n>=0;n--)(r=i[n])&&(s=(o?r(t,e,s):r(s))||s);return o&&s&&ds(t,e,s),s};let Gt=class extends w{render(){return this.propInputData?h`
@@ -685,7 +686,10 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
         --combo-box-padding--: var(--padding-sm);
         --combo-box-list-width--: var(--combo-box-list-width, unset);
         --combo-box-list-max-height--: var(--combo-box-list-max-height, 250px);
-        --combo-box-list-fade-duration--: var(--combo-box-list-fade-duration, 125ms);
+        --combo-box-list-fade-duration--: var(
+          --combo-box-list-fade-duration,
+          125ms
+        );
       }
 
       #container {
