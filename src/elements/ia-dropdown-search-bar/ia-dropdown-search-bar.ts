@@ -75,7 +75,7 @@ export class IADropdownSearchBar extends LitElement {
       </div>
     `;
   }
-  
+
   willUpdate(changed: PropertyValues) {
     // Push new categories down to the inner dropdown immediately, since ia-dropdown
     // mutates its own selected option on interaction which can cause Lit's
@@ -235,6 +235,7 @@ export class IADropdownSearchBar extends LitElement {
         --search-bar-width--: var(--search-bar-width, 300px);
         --search-bar-internal-padding--: var(--padding-sm, 5px);
         --clear-button-offset--: var(--clear-button-offset, 0);
+        --dropdown-z-index--: var(--dropdown-z-index, initial);
       }
 
       #container {
@@ -276,6 +277,7 @@ export class IADropdownSearchBar extends LitElement {
         --dropdownBorderRadius: 4px;
         --buttonSlotPaddingRight: 0;
         --dropdownTextAlign: left;
+        --dropdownListZIndex: var(--dropdown-z-index--);
       }
 
       #category-dropdown [slot='dropdown-label'] {

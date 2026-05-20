@@ -28,6 +28,14 @@ const styleInputSettings: StyleInputSettings[] = [
     defaultValue: '5px',
     inputType: 'text',
   },
+  {
+    label: 'Dropdown z-index',
+    cssVariable: '--dropdown-z-index',
+    defaultValue: 2,
+    inputType: 'number',
+    min: 0,
+    step: 1,
+  },
 ];
 
 // Component defaults
