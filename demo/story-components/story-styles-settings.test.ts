@@ -1,4 +1,4 @@
-import { fixture, oneEvent } from '@open-wc/testing-helpers';
+import { fixture } from '@open-wc/testing-helpers';
 import { describe, expect, test } from 'vitest';
 import { html } from 'lit';
 
