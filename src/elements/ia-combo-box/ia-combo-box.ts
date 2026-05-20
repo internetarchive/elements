@@ -1217,7 +1217,10 @@ export class IAComboBox extends LitElement {
         --combo-box-padding--: var(--padding-sm);
         --combo-box-list-width--: var(--combo-box-list-width, unset);
         --combo-box-list-max-height--: var(--combo-box-list-max-height, 250px);
-        --combo-box-list-fade-duration--: var(--combo-box-list-fade-duration, 125ms);
+        --combo-box-list-fade-duration--: var(
+          --combo-box-list-fade-duration,
+          125ms
+        );
       }
 
       #container {
