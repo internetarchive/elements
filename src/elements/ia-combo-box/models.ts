@@ -1,4 +1,4 @@
-import { TemplateResult } from 'lit';
+import type { TemplateResult } from 'lit';
 
 /**
  * Represents a single predefined option in a combo box.

@@ -1,12 +1,5 @@
-import {
-  html,
-  LitElement,
-  nothing,
-  TemplateResult,
-  CSSResultGroup,
-  css,
-  PropertyValues,
-} from 'lit';
+import type { TemplateResult, CSSResultGroup, PropertyValues } from 'lit';
+import { html, LitElement, nothing, css } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';

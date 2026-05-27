@@ -1,12 +1,6 @@
 import { msg } from '@lit/localize';
-import {
-  css,
-  html,
-  LitElement,
-  nothing,
-  PropertyValues,
-  TemplateResult,
-} from 'lit';
+import type { PropertyValues, TemplateResult } from 'lit';
+import { css, html, LitElement, nothing } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-input';
 import type { IaDropdown, optionInterface } from '@internetarchive/ia-dropdown';
@@ -75,7 +69,7 @@ export class IADropdownSearchBar extends LitElement {
       </div>
     `;
   }
-  
+
   willUpdate(changed: PropertyValues) {
     // Push new categories down to the inner dropdown immediately, since ia-dropdown
     // mutates its own selected option on interaction which can cause Lit's
