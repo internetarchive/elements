@@ -2326,15 +2326,15 @@ fill=""></path>
         <h1>Internet Archive Elements</h1>
         <h2>Production-Ready Elements</h2>
         ${je.map(i=>p`
-            <div id="${i.id}" class="ia-anchor">
-              ${Ee(`<${i.storyTag}></${i.storyTag}>`)}
-            </div>
-          `)}
+          <div id="${i.id}" class="ia-anchor">
+            ${Ee(`<${i.storyTag}></${i.storyTag}>`)}
+          </div>
+        `)}
         <h2>Labs Elements</h2>
         ${He.map(i=>p`
-            <div id="${i.id}" class="ia-anchor">
-              ${Ee(`<${i.storyTag}></${i.storyTag}>`)}
-            </div>
-          `)}
+          <div id="${i.id}" class="ia-anchor">
+            ${Ee(`<${i.storyTag}></${i.storyTag}>`)}
+          </div>
+        `)}
       </div>
     `}firstUpdated(){const i=Cr.map(o=>o.id),t=Object.fromEntries(i.map(o=>[o,this.querySelector(`#ia-sidebar a[href="#${o}"]`)])),e=new Set;this._observer=new IntersectionObserver(o=>{for(const n of o)n.isIntersecting?e.add(n.target.id):e.delete(n.target.id);const s=i.find(n=>e.has(n))??i[0];i.forEach(n=>t[n]?.classList.toggle("active",n===s))},{rootMargin:"0px 0px -70% 0px"}),i.forEach(o=>{const s=document.getElementById(o);s&&this._observer.observe(s)}),i.forEach(o=>{t[o]?.addEventListener("click",s=>{s.preventDefault();const n=document.getElementById(o);if(n){const r=n.getBoundingClientRect().top+window.scrollY;window.scrollTo({top:Math.max(0,r-16),behavior:"smooth"})}},{signal:this._abortController.signal})})}disconnectedCallback(){super.disconnectedCallback(),this._observer?.disconnect(),this._abortController.abort()}};Yi=xr([E("app-root")],Yi);
