@@ -24,8 +24,15 @@ const themeStyles = css`
     --true-white: #fff;
     --off-white: #fbfbfd;
     --dark-gray: #2c2c2c;
+    --mid-gray: #333;
     --light-gray: #666;
+    --lighter-gray: #999;
+    --lightest-gray: #c5d1df;
     --classic-red: #e51c23;
+    --brick: #d43f3a;
+    --coral: #d9534f;
+    --dark-cantaloupe: #ec7939;
+    --cantaloupe: #ee8950;
     --mint-green: #31a481;
     --navy-blue: #194880;
     --bright-blue: #4b64ff;
@@ -79,11 +86,59 @@ const themeStyles = css`
     );
 
     /* State colors */
+    /* Primary */
     --primary-cta-fill: var(--ia-theme-primary-cta-fill, var(--navy-blue));
     --primary-cta-text-color: var(
       --ia-theme-primary-cta-text-color,
       var(--true-white)
     );
+    --primary-cta-border: var(
+      --ia-theme-primary-cta-border,
+      var(--lightest-gray)
+    );
+
+    /* Secondary */
+    --secondary-cta-text-color: var(
+      --ia-theme-secondary-cta-text-color,
+      var(--true-white)
+    );
+    --secondary-cta-fill: var(--ia-theme-secondary-cta-fill, var(--mid-gray));
+    --secondary-cta-border: var(
+      --ia-theme-secondary-cta-border,
+      var(--lighter-gray)
+    );
+
+    /* Danger */
+    --danger-cta-text-color: var(
+      --ia-theme-danger-cta-text-color,
+      var(--true-white)
+    );
+    --danger-cta-fill: var(--ia-theme-danger-cta-fill, var(--coral));
+    --danger-cta-border: var(--ia-theme-danger-cta-border, var(--brick));
+
+    /* Warning */
+    --warning-cta-text-color: var(
+      --ia-theme-warning-cta-text-color,
+      var(--true-white)
+    );
+    --warning-cta-fill: var(--ia-theme-warning-cta-fill, var(--cantaloupe));
+    --warning-cta-border: var(
+      --ia-theme-warning-cta-border,
+      var(--dark-cantaloupe)
+    );
+
+    /* Disabled */
+    --disabled-cta-text-color: var(
+      --ia-theme-disabled-cta-text-color,
+      var(--true-white)
+    );
+    --disabled-cta-fill: var(--ia-theme-disabled-cta-fill, var(--light-gray));
+    --disabled-cta-border: var(
+      --ia-theme-disabled-cta-border,
+      var(--lighter-gray)
+    );
+
+    /* Standalone colors */
     --color-success: var(--ia-theme-color-success, var(--mint-green));
     --color-danger: var(--ia-theme-color-danger, var(--classic-red));
   }
