@@ -17,6 +17,10 @@ const themeStyles = css`
     --default-combo-box-width: auto;
     --default-search-bar-width: auto;
     --default-search-bar-height: 30px;
+    --default-button-padding: 0 1.875rem; /* 0 30px with 16px root font size */
+    --default-button-height: 2.25rem; /* 36px with 16px root font size */
+    --default-button-width: fit-content;
+    --default-button-border-width: 1px;
     --default-font-size-standard: 0.875rem; /* 14px with 16px root font size */
     --default-font-size-lg: 2.25rem; /* 36px with 16px root font size */
 
@@ -68,6 +72,19 @@ const themeStyles = css`
     --combo-box-width: var(
       --ia-theme-combo-box-width,
       var(--default-combo-box-width)
+    );
+    --button-padding: var(
+      --ia-theme-button-padding,
+      var(--default-button-padding)
+    );
+    --button-height: var(
+      --ia-theme-button-height,
+      var(--default-button-height)
+    );
+    --button-width: var(--ia-theme-button-width, var(--default-button-width));
+    --button-border-width: var(
+      --ia-theme-button-border-width,
+      var(--default-button-border-width)
     );
     --font-size-standard: var(
       --ia-theme-font-size-standard,

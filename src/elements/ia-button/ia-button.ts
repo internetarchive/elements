@@ -25,6 +25,17 @@ import '../ia-status-indicator/ia-status-indicator';
  */
 @customElement('ia-button')
 export class IAButton extends LitElement {
+  /* Which version of the button to display */
+  @property({ type: String }) mode:
+    | 'primary'
+    | 'secondary'
+    | 'danger'
+    | 'warning'
+    | 'disabled'
+    | 'transparent'
+    | 'link'
+    | 'danger-link' = 'primary';
+
   /* Whether to show a loading indicator instead of the button */
   @property({ type: Boolean }) loading: boolean = false;
 
@@ -42,7 +53,11 @@ export class IAButton extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <button ?disabled=${this.loading || this.disabled}>
+      <button
+        part="button"
+        class=${this.mode}
+        ?disabled=${this.loading || this.disabled}
+      >
         ${this.loading ? this.loadingStateTemplate : html`<slot></slot>`}
       </button>
       <slot name="hidden-btn"></slot>
@@ -189,40 +204,51 @@ export class IAButton extends LitElement {
           --link-color--: var(--link-color);
           --color-danger--: var(--color-danger);
 
+          --button-padding--: var(--button-padding);
+          --button-width--: var(--button-width);
+          --button-height--: var(--button-height);
+          --button-border-width--: var(--button-border-width);
+
+          --ia-button-transition--: var(
+            --ia-button-transition,
+            all 0.1s ease 0s
+          );
+
           display: inline-block; /* keeps host sized to button */
         }
 
         button {
-          height: var(--height, 3.5rem);
-          min-height: 3rem;
+          height: var(--button-height--);
+          min-height: var(--button-height--);
+          width: var(--button-width--);
+          padding: var(--button-padding--);
+          font-size: var(--font-size-standard--);
+          border-width: var(--button-border-width--);
+          transition: var(--ia-button-transition--);
+          outline-color: var(--primary-cta-text-color--);
+
+          font-family: inherit;
           cursor: pointer;
-          color: var(--primary-cta-text-color--);
-          background: var(--primary-cta-fill--);
           line-height: normal;
           border-radius: 0.4rem;
-          font-size: var(--fontSize, 1.4rem);
-          font-family: inherit;
-          border: var(--borderWidth, 1px) solid var(--primary-cta-border--);
+          border-style: 'solid';
           white-space: nowrap;
           appearance: auto;
           box-sizing: border-box;
           display: flex;
           align-items: center;
-          transition: var(--transition, all 0.1s ease 0s);
           vertical-align: middle;
-          padding: var(--padding, 0 3rem);
-          outline-color: var(--primary-cta-text-color--);
           outline-offset: -4px;
           user-select: none;
           text-decoration: none;
-          width: var(--width, fit-content);
           -webkit-user-select: none;
           -moz-user-select: none;
           -ms-user-select: none;
           -o-user-select: none;
         }
 
-        button:disabled {
+        button:disabled,
+        button.disabled {
           cursor: not-allowed;
           color: var(--disabled-cta-color--);
           background-color: var(--disabled-cta-fill--);
@@ -243,27 +269,34 @@ export class IAButton extends LitElement {
           opacity: 0.7;
         }
 
-        :host(.primary) button:enabled {
+        button.primary {
           color: var(--primary-cta-text-color--);
           background-color: var(--primary-cta-fill--);
           border-color: var(--primary-cta-border--);
         }
 
-        :host(.danger) button:enabled {
+        button.secondary {
+          color: var(--secondary-cta-text-color--);
+          background-color: var(--secondary-cta-text-color--);
+          border-color: var(--secondary-cta-fill--);
+        }
+
+        button.danger {
           color: var(--danger-cta-text-color--);
           background-color: var(--danger-cta-fill--);
           border-color: var(--danger-cta-border--);
         }
 
-        :host(.dark) button:enabled {
-          background-color: var(--secondary-cta-text-color--);
-          border-color: var(--secondary-cta-fill--);
-        }
-
-        :host(.warning) button:enabled {
+        button.warning {
           color: var(--warning-cta-text-color--);
           background-color: var(--warning-cta-fill--);
           border-color: var(--warning-cta-border--);
+        }
+
+        button.transparent {
+          border-width: 0;
+          background-color: transparent;
+          border-color: transparent;
         }
 
         :host(.custom-active-color) button:enabled:is(:hover, :focus, :active),
@@ -277,32 +310,33 @@ export class IAButton extends LitElement {
           );
         }
 
-        :host(.transparent) button:enabled {
-          background-color: transparent;
-        }
-
         :host(.fit-content) button {
           padding: 0;
           height: fit-content;
         }
 
-        :host(.link) button {
+        button.link:hover,
+        button.danger-link:hover {
+          text-decoration: underline;
+        }
+
+        button.link,
+        button.danger-link {
           margin: 0;
           border: 0;
           appearance: none;
           background: none;
-          color: var(--link-color--);
           text-decoration: none;
           cursor: pointer;
           padding: 0;
         }
 
-        :host(.link.danger-link) button {
-          color: var(--color-danger--);
+        button.link {
+          color: var(--link-color--);
         }
 
-        :host(.link) button:hover {
-          text-decoration: underline;
+        button.danger-link {
+          color: var(--color-danger--);
         }
 
         .loading-indicator {
