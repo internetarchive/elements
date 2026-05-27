@@ -36,6 +36,9 @@ export class IAButton extends LitElement {
     | 'link'
     | 'danger-link' = 'primary';
 
+  /* Whether to use a custom color (passed in via --ia-button-custom-fill etc.) when button is active */
+  @property({ type: Boolean }) useCustomActiveColor: boolean = false;
+
   /* Whether to show a loading indicator instead of the button */
   @property({ type: Boolean }) loading: boolean = false;
 
@@ -55,7 +58,8 @@ export class IAButton extends LitElement {
     return html`
       <button
         part="button"
-        class=${this.mode}
+        class=${this.mode +
+        (this.useCustomActiveColor ? ' custom-active-color' : '')}
         ?disabled=${this.loading || this.disabled}
       >
         ${this.loading ? this.loadingStateTemplate : html`<slot></slot>`}
@@ -213,6 +217,18 @@ export class IAButton extends LitElement {
             --ia-button-transition,
             all 0.1s ease 0s
           );
+          --ia-button-custom-text-color--: var(
+            --ia-button-custom-text-color,
+            var(--primary-cta-text-color--)
+          );
+          --ia-button-custom-fill--: var(
+            --ia-button-custom-fill,
+            var(--primary-cta-fill--)
+          );
+          --ia-button-custom-border--: var(
+            --ia-button-custom-border,
+            var(--primary-cta-border--)
+          );
 
           display: inline-block; /* keeps host sized to button */
         }
@@ -299,15 +315,10 @@ export class IAButton extends LitElement {
           border-color: transparent;
         }
 
-        :host(.custom-active-color) button:enabled:is(:hover, :focus, :active),
-        :host(.custom-active-color.active) button:enabled {
-          color: var(--customActiveForegroundColor, #194880);
-          background-color: var(--customActiveBackgroundColor, #c5d1df);
-          border-color: var(
-            --customActiveBorderColor,
-            --customActiveForegroundColor,
-            #194880
-          );
+        button.custom-active-color:is(:hover, :focus, :active) {
+          color: var(--ia-button-custom-text-color--);
+          background-color: var(--ia-button-custom-fill--);
+          border-color: var(--ia-button-custom-border--);
         }
 
         :host(.fit-content) button {
