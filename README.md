@@ -206,6 +206,66 @@ render() {
 }
 ```
 
+## Adding a Service or Library Module
+
+Not every IA library is a Lit component. Services (HTTP clients, state stores), parsers, domain models, and generic type utilities also belong in this package. They live alongside `src/elements` in dedicated directories:
+
+| Directory | Purpose | Example |
+|---|---|---|
+| `src/services` | Runtime services that do work — fetch data, manage state, etc. | `src/services/metadata-service/` |
+| `src/parsers` | Pure helpers that parse one data shape into another | `src/parsers/duration-parser.ts` |
+| `src/models` | Domain data models / typed value objects | `src/models/item-metadata/file.ts` |
+| `src/types` | Generic reusable TypeScript type utilities | `src/types/result.ts` |
+| `src/util` | Small generic utilities that don't fit the above | `src/util/lazy-load-template.ts` |
+
+### Structure
+
+Each module follows the same colocation pattern as components — implementation, tests, and helpers in one directory:
+
+```
+src
+- services
+  - metadata-service
+    - metadata-service.ts            // main entry
+    - metadata-service.test.ts       // unit tests
+    - metadata-service-interface.ts  // public types
+```
+
+Single-file modules (most types, small parsers) can be flat files inside the parent directory:
+
+```
+src
+- types
+  - result.ts
+  - result.test.ts
+```
+
+### Exports
+
+Each directory has a matching subpath pattern in `package.json`'s `exports` map. Consumers import via the subpath:
+
+```typescript
+import { MetadataService } from "@internetarchive/elements/services/metadata-service/metadata-service";
+import type { Result } from "@internetarchive/elements/types/result";
+```
+
+### Tests
+
+Component tests use `@open-wc/testing-helpers` to mount Lit elements into a real DOM. Service / parser / model / type tests usually don't need that — keep them as plain Vitest:
+
+```typescript
+import { describe, expect, it } from "vitest";
+import { someFunction } from "./some-module";
+
+describe("someFunction", () => {
+  it("returns a value", () => {
+    expect(someFunction()).toBe("value");
+  });
+});
+```
+
+Vitest's browser provider still runs these in a real browser, so DOM globals like `fetch` and `URL` are available without extra setup.
+
 ## Component Inventory
 
 To kickstart our library, we are going to take inventory of what already exists

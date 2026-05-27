@@ -62,7 +62,11 @@
   "exports": {
     ".": "./dist/src/index.js",
     "./*": "./dist/src/elements/*.js",
-    "./labs/*": "./dist/src/labs/*.js"
+    "./labs/*": "./dist/src/labs/*.js",
+    "./services/*": "./dist/src/services/*.js",
+    "./parsers/*": "./dist/src/parsers/*.js",
+    "./models/*": "./dist/src/models/*.js",
+    "./types/*": "./dist/src/types/*.js"
   },
   "files": [
     "README.md",
