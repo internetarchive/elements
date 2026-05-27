@@ -9,6 +9,7 @@ import {
 } from 'lit';
 import { msg } from '@lit/localize';
 import { property, customElement } from 'lit/decorators.js';
+import themeStyles from '@src/themes/theme-styles';
 
 import '../ia-status-indicator/ia-status-indicator';
 
@@ -161,130 +162,133 @@ export class IAButton extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        display: inline-block; /* keeps host sized to button */
-      }
+    return [
+      themeStyles,
+      css`
+        :host {
+          display: inline-block; /* keeps host sized to button */
+        }
 
-      button {
-        height: var(--height, 3.5rem);
-        min-height: 3rem;
-        cursor: pointer;
-        color: var(--textColor, #fff);
-        background: var(--backgroundColor, initial);
-        line-height: normal;
-        border-radius: 0.4rem;
-        font-size: var(--fontSize, 1.4rem);
-        font-family: inherit;
-        border: var(--borderWidth, 1px) solid var(--borderColor, transparent);
-        white-space: nowrap;
-        appearance: auto;
-        box-sizing: border-box;
-        display: flex;
-        align-items: center;
-        transition: var(--transition, all 0.1s ease 0s);
-        vertical-align: middle;
-        padding: var(--padding, 0 3rem);
-        outline-color: var(--textColor, #fff);
-        outline-offset: -4px;
-        user-select: none;
-        text-decoration: none;
-        width: var(--width, fit-content);
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        -o-user-select: none;
-      }
+        button {
+          height: var(--height, 3.5rem);
+          min-height: 3rem;
+          cursor: pointer;
+          color: var(--textColor, #fff);
+          background: var(--backgroundColor, initial);
+          line-height: normal;
+          border-radius: 0.4rem;
+          font-size: var(--fontSize, 1.4rem);
+          font-family: inherit;
+          border: var(--borderWidth, 1px) solid var(--borderColor, transparent);
+          white-space: nowrap;
+          appearance: auto;
+          box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          transition: var(--transition, all 0.1s ease 0s);
+          vertical-align: middle;
+          padding: var(--padding, 0 3rem);
+          outline-color: var(--textColor, #fff);
+          outline-offset: -4px;
+          user-select: none;
+          text-decoration: none;
+          width: var(--width, fit-content);
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          -o-user-select: none;
+        }
 
-      button:disabled {
-        cursor: not-allowed;
-        background-color: var(--primaryDisableCTAFill, #767676);
-        border: 1px solid var(--secondaryCTABorder, #999);
-        opacity: 0.5;
-      }
+        button:disabled {
+          cursor: not-allowed;
+          background-color: var(--primaryDisableCTAFill, #767676);
+          border: 1px solid var(--secondaryCTABorder, #999);
+          opacity: 0.5;
+        }
 
-      button:enabled:hover {
-        opacity: 0.9;
-      }
+        button:enabled:hover {
+          opacity: 0.9;
+        }
 
-      button:focus-visible {
-        opacity: 0.8;
-        outline-style: double;
-      }
+        button:focus-visible {
+          opacity: 0.8;
+          outline-style: double;
+        }
 
-      button:active {
-        opacity: 0.7;
-      }
+        button:active {
+          opacity: 0.7;
+        }
 
-      :host(.primary) button:enabled {
-        background-color: var(--primaryCTAFill, #194880);
-        border-color: var(--primaryCTABorder, #c5d1df);
-      }
+        :host(.primary) button:enabled {
+          background-color: var(--primaryCTAFill, #194880);
+          border-color: var(--primaryCTABorder, #c5d1df);
+        }
 
-      :host(.danger) button:enabled {
-        background-color: var(--primaryErrorCTAFill, #d9534f);
-        border-color: var(--primaryErrorCTABorder, #d43f3a);
-      }
+        :host(.danger) button:enabled {
+          background-color: var(--primaryErrorCTAFill, #d9534f);
+          border-color: var(--primaryErrorCTABorder, #d43f3a);
+        }
 
-      :host(.dark) button:enabled {
-        background-color: var(--secondaryCTAFill, #333);
-        border-color: var(--primaryCTABorder, #979797);
-      }
+        :host(.dark) button:enabled {
+          background-color: var(--secondaryCTAFill, #333);
+          border-color: var(--primaryCTABorder, #979797);
+        }
 
-      :host(.warning) button:enabled {
-        background-color: var(--warningCTAFill, #ee8950);
-        border-color: var(--warningCTABorder, #ec7939);
-      }
+        :host(.warning) button:enabled {
+          background-color: var(--warningCTAFill, #ee8950);
+          border-color: var(--warningCTABorder, #ec7939);
+        }
 
-      :host(.custom-active-color) button:enabled:is(:hover, :focus, :active),
-      :host(.custom-active-color.active) button:enabled {
-        color: var(--customActiveForegroundColor, #194880);
-        background-color: var(--customActiveBackgroundColor, #c5d1df);
-        border-color: var(
-          --customActiveBorderColor,
-          --customActiveForegroundColor,
-          #194880
-        );
-      }
+        :host(.custom-active-color) button:enabled:is(:hover, :focus, :active),
+        :host(.custom-active-color.active) button:enabled {
+          color: var(--customActiveForegroundColor, #194880);
+          background-color: var(--customActiveBackgroundColor, #c5d1df);
+          border-color: var(
+            --customActiveBorderColor,
+            --customActiveForegroundColor,
+            #194880
+          );
+        }
 
-      :host(.transparent) button:enabled {
-        background-color: transparent;
-      }
+        :host(.transparent) button:enabled {
+          background-color: transparent;
+        }
 
-      :host(.fit-content) button {
-        padding: 0;
-        height: fit-content;
-      }
+        :host(.fit-content) button {
+          padding: 0;
+          height: fit-content;
+        }
 
-      :host(.link) button {
-        margin: 0;
-        border: 0;
-        appearance: none;
-        background: none;
-        color: var(--ia-theme-link-color, #4b64ff);
-        text-decoration: none;
-        cursor: pointer;
-        padding: 0;
-      }
+        :host(.link) button {
+          margin: 0;
+          border: 0;
+          appearance: none;
+          background: none;
+          color: var(--ia-theme-link-color, #4b64ff);
+          text-decoration: none;
+          cursor: pointer;
+          padding: 0;
+        }
 
-      :host(.link.danger-link) button {
-        color: var(--ia-theme-danger-link-color, #c9302c);
-      }
+        :host(.link.danger-link) button {
+          color: var(--ia-theme-danger-link-color, #c9302c);
+        }
 
-      :host(.link) button:hover {
-        text-decoration: underline;
-      }
+        :host(.link) button:hover {
+          text-decoration: underline;
+        }
 
-      .loading-indicator {
-        display: flex;
-        flex-direction: row;
-        gap: 0.5rem;
-        align-items: center;
-      }
+        .loading-indicator {
+          display: flex;
+          flex-direction: row;
+          gap: 0.5rem;
+          align-items: center;
+        }
 
-      ia-status-indicator {
-        --primary-text-color: var(--textColor, #fff);
-      }
-    `;
+        ia-status-indicator {
+          --primary-text-color: var(--textColor, #fff);
+        }
+      `,
+    ];
   }
 }
