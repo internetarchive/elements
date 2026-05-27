@@ -36,9 +36,6 @@ export class IAButton extends LitElement {
     | 'link'
     | 'danger-link' = 'primary';
 
-  /* Whether to use a custom color (passed in via --ia-button-custom-fill etc.) when button is active */
-  @property({ type: Boolean }) useCustomActiveColor: boolean = false;
-
   /* Whether to show a loading indicator instead of the button */
   @property({ type: Boolean }) loading: boolean = false;
 
@@ -53,6 +50,9 @@ export class IAButton extends LitElement {
     | 'button'
     | 'submit'
     | 'reset' = 'button';
+
+  /* Whether to use a custom color (passed in via --ia-button-custom-fill etc.) when button is active */
+  @property({ type: Boolean }) useCustomActiveColor: boolean = false;
 
   render(): TemplateResult {
     return html`
@@ -212,21 +212,22 @@ export class IAButton extends LitElement {
           --button-width--: var(--button-width);
           --button-height--: var(--button-height);
           --button-border-width--: var(--button-border-width);
+          --base-font-family--: var(--base-font-family);
 
           --ia-button-transition--: var(
             --ia-button-transition,
             all 0.1s ease 0s
           );
-          --ia-button-custom-text-color--: var(
-            --ia-button-custom-text-color,
+          --ia-button-custom-active-text-color--: var(
+            --ia-button-custom-active-text-color,
             var(--primary-cta-text-color--)
           );
-          --ia-button-custom-fill--: var(
-            --ia-button-custom-fill,
+          --ia-button-custom-active-fill--: var(
+            --ia-button-custom-active-fill,
             var(--primary-cta-fill--)
           );
-          --ia-button-custom-border--: var(
-            --ia-button-custom-border,
+          --ia-button-custom-active-border--: var(
+            --ia-button-custom-active-border,
             var(--primary-cta-border--)
           );
 
@@ -234,16 +235,16 @@ export class IAButton extends LitElement {
         }
 
         button {
+          font-family: var(--base-font-family--);
+          font-size: var(--font-size-standard--);
           height: var(--button-height--);
           min-height: var(--button-height--);
           width: var(--button-width--);
           padding: var(--button-padding--);
-          font-size: var(--font-size-standard--);
           border-width: var(--button-border-width--);
           transition: var(--ia-button-transition--);
           outline-color: var(--primary-cta-text-color--);
 
-          font-family: inherit;
           cursor: pointer;
           line-height: normal;
           border-radius: 0.4rem;
@@ -266,7 +267,7 @@ export class IAButton extends LitElement {
         button:disabled,
         button.disabled {
           cursor: not-allowed;
-          color: var(--disabled-cta-color--);
+          color: var(--disabled-cta-text-color--);
           background-color: var(--disabled-cta-fill--);
           border: 1px solid var(--disabled-cta-border--);
           opacity: 0.5;
@@ -293,8 +294,8 @@ export class IAButton extends LitElement {
 
         button.secondary {
           color: var(--secondary-cta-text-color--);
-          background-color: var(--secondary-cta-text-color--);
-          border-color: var(--secondary-cta-fill--);
+          background-color: var(--secondary-cta-fill--);
+          border-color: var(--secondary-cta-border--);
         }
 
         button.danger {
@@ -310,15 +311,16 @@ export class IAButton extends LitElement {
         }
 
         button.transparent {
+          color: inherit;
           border-width: 0;
           background-color: transparent;
           border-color: transparent;
         }
 
         button.custom-active-color:is(:hover, :focus, :active) {
-          color: var(--ia-button-custom-text-color--);
-          background-color: var(--ia-button-custom-fill--);
-          border-color: var(--ia-button-custom-border--);
+          color: var(--ia-button-custom-active-text-color--);
+          background-color: var(--ia-button-custom-active-fill--);
+          border-color: var(--ia-button-custom-active-border--);
         }
 
         :host(.fit-content) button {
