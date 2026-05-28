@@ -43,5 +43,8 @@
   "include": [
     "demo/**/*.ts",
     "src/**/*.ts"
-  ]
+  ],
+  "tsc-alias": {
+    "resolveFullPaths": true
+  }
 }

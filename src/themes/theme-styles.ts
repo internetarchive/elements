@@ -13,12 +13,20 @@ const themeStyles = css`
 
     /* Sizing */
     --default-icon-width: 1.25rem;
+    --default-padding-sm: 5px;
+    --default-combo-box-width: auto;
+    --default-search-bar-width: auto;
+    --default-search-bar-height: 30px;
+    --default-font-size-standard: 0.875rem; /* 14px with 16px root font size */
+    --default-font-size-lg: 2.25rem; /* 36px with 16px root font size */
 
     /* Colors */
     --true-white: #fff;
     --off-white: #fbfbfd;
     --dark-gray: #2c2c2c;
     --light-gray: #666;
+    --classic-red: #e51c23;
+    --mint-green: #31a481;
     --navy-blue: #194880;
     --bright-blue: #4b64ff;
 
@@ -41,6 +49,24 @@ const themeStyles = css`
 
     /* Sizing */
     --icon-width: var(--ia-theme-icon-width, var(--default-icon-width));
+    --padding-sm: var(--ia-theme-padding-sm, var(--default-padding-sm));
+    --search-bar-height: var(
+      --ia-theme-search-bar-height,
+      var(--default-search-bar-height)
+    );
+    --search-bar-width: var(
+      --ia-theme-search-bar-width,
+      var(--default-search-bar-width)
+    );
+    --combo-box-width: var(
+      --ia-theme-combo-box-width,
+      var(--default-combo-box-width)
+    );
+    --font-size-standard: var(
+      --ia-theme-font-size-standard,
+      var(--default-font-size-standard)
+    );
+    --font-size-lg: var(--ia-theme-font-size-lg, var(--default-font-size-lg));
 
     /* Backgrounds and fills */
     --primary-background-color: var(
@@ -58,6 +84,8 @@ const themeStyles = css`
       --ia-theme-primary-cta-text-color,
       var(--true-white)
     );
+    --color-success: var(--ia-theme-color-success, var(--mint-green));
+    --color-danger: var(--ia-theme-color-danger, var(--classic-red));
   }
 `;
 

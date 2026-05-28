@@ -1,0 +1,35 @@
+# Publish to npm whenever a release/prerelease is published
+name: Publish release to npm
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
+          cache: npm
+      - run: npm ci
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+        timeout-minutes: 6
+      - run: npm test
+      - run: |
+          if ${{ github.event.release.prerelease }}; then
+            npm publish --provenance --tag alpha
+          else
+            npm publish --provenance
+          fi

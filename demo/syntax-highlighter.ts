@@ -1,5 +1,3 @@
-import hljs from 'highlight.js';
-import typescript from 'highlight.js/lib/languages/typescript';
 import {
   type CSSResultGroup,
   LitElement,
@@ -17,32 +15,41 @@ import { syntaxStyles } from './syntax-style-light';
 export class SyntaxHighlighter extends LitElement {
   @property({ type: String }) code = '';
 
-  @state() private highlightedCode = '';
+  /**
+   * The language to use for syntax highlighting, or 'auto' to automatically detect
+   *
+   * See https://highlightjs.readthedocs.io/en/latest/supported-languages.html for supported languages.
+   */
+  @property({ type: String }) language = 'auto';
 
-  connectedCallback(): void {
-    super.connectedCallback();
-    hljs.registerLanguage('typescript', typescript);
-  }
+  @state() private highlightedCode: string = '';
 
   protected willUpdate(_changedProperties: PropertyValues): void {
-    if (_changedProperties.has('code')) {
+    if (_changedProperties.has('code') || _changedProperties.has('language')) {
       this.highlightCode();
     }
   }
 
   render() {
     return html`
-      <pre><code class="hljs language-typescript">${unsafeHTML(
-        this.highlightedCode,
-      )}</code></pre>
+      <pre><code class="hljs">${unsafeHTML(this.highlightedCode)}</code></pre>
     `;
   }
 
-  private highlightCode() {
+  private async highlightCode() {
+    const hljsModule = await import('highlight.js');
+    const hljs = hljsModule.default;
     const code = this.code.trim();
-    const highlighted = hljs.highlight(code, {
-      language: 'typescript',
-    }).value;
+
+    let highlighted: string;
+    if (this.language === 'auto') {
+      highlighted = hljs.highlightAuto(code).value;
+    } else {
+      highlighted = hljs.highlight(code, {
+        language: this.language,
+      }).value;
+    }
+
     this.highlightedCode = highlighted;
   }
 

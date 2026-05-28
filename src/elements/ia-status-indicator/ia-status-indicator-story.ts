@@ -1,113 +1,83 @@
-import { html, LitElement, TemplateResult } from 'lit';
-import { customElement, query, queryAll, state } from 'lit/decorators.js';
+import { html, LitElement } from 'lit';
+import { customElement } from 'lit/decorators.js';
 
-import { IAStatusIndicator } from './ia-status-indicator';
+import type { PropInputSettings } from '@demo/story-components/story-prop-settings';
+import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
+import type { IAStatusIndicator } from './ia-status-indicator';
 
 import './ia-status-indicator';
 import '@demo/story-template';
 
+const styleInputSettings: StyleInputSettings[] = [
+  {
+    label: 'Width',
+    cssVariable: '--ia-theme-icon-width',
+    defaultValue: '1.25rem',
+  },
+  {
+    label: 'Color - loading',
+    cssVariable: '--ia-theme-primary-text-color',
+    defaultValue: '#2c2c2c',
+    inputType: 'color',
+  },
+  {
+    label: 'Color - success',
+    cssVariable: '--ia-theme-color-success',
+    defaultValue: '#31a481',
+    inputType: 'color',
+  },
+  {
+    label: 'Color - error',
+    cssVariable: '--ia-theme-color-danger',
+    defaultValue: '#e51c23',
+    inputType: 'color',
+  },
+];
+
+const propInputSettings: PropInputSettings<IAStatusIndicator>[] = [
+  {
+    label: 'Mode',
+    propertyName: 'mode',
+    defaultValue: 'loading',
+    inputType: 'radio',
+    radioOptions: ['ready', 'loading', 'success', 'error'],
+  },
+  {
+    label: 'Accessible title - loading',
+    propertyName: 'loadingTitle',
+    defaultValue: 'Loading...',
+  },
+  {
+    label: 'Loading style',
+    propertyName: 'loadingStyle',
+    defaultValue: 'ring-dots',
+    inputType: 'radio',
+    radioOptions: ['ring-dots', 'ring'],
+  },
+  {
+    label: 'Accessible title - success',
+    propertyName: 'successTitle',
+    defaultValue: 'Success',
+  },
+  {
+    label: 'Accessible title - error',
+    propertyName: 'errorTitle',
+    defaultValue: 'Error',
+  },
+];
+
 @customElement('ia-status-indicator-story')
 export class IAStatusIndicatorStory extends LitElement {
-  @queryAll('.style-input')
-  private styleInputs?: NodeListOf<HTMLInputElement>;
-
-  @query('#loading-title')
-  private loadingTitleInput!: HTMLInputElement;
-
-  /* Applied styles for the component, in "--my-variable: #f00;" format */
-  @state()
-  private stringifiedStyles: string = '';
-
-  /* Applied properties fro the component in .myprop=${'foo'} format */
-  @state()
-  private stringifiedProps: string = '';
-
-  @query('ia-status-indicator')
-  private component!: IAStatusIndicator;
-
   render() {
     return html`
       <story-template
         elementTag="ia-status-indicator"
-        .exampleUsage=${this.exampleUsage}
+        elementClassName="IAStatusIndicator"
+        .styleInputData=${{ settings: styleInputSettings }}
+        .propInputData=${{ settings: propInputSettings }}
       >
-        <div slot="demo">
-          <ia-status-indicator
-            style=${this.stringifiedStyles}
-          ></ia-status-indicator>
-        </div>
-
-        <div slot="settings">
-          <table>
-            <tr>
-              <td>Title</td>
-              <td>
-                <input
-                  class="prop-input"
-                  type="text"
-                  id="loading-title"
-                  data-prop="title"
-                  value="Content loading..."
-                />
-              </td>
-              <td>Color</td>
-              <td>
-                ${this.createStyleInput(
-                  'color',
-                  '--ia-theme-primary-text-color',
-                  '#3d7581',
-                  'color',
-                )}
-              </td>
-              <td>Width</td>
-              <td>
-                ${this.createStyleInput(
-                  'width',
-                  '--ia-theme-icon-width',
-                  '30px',
-                )}
-              </td>
-            </tr>
-          </table>
-          <button @click=${this.apply}>Apply</button>
-        </div>
+        <ia-status-indicator slot="demo"></ia-status-indicator>
       </story-template>
     `;
-  }
-
-  private get exampleUsage(): string {
-    return `<ia-status-indicator${this.stringifiedProps ? ' ' + this.stringifiedProps : ''}${this.stringifiedStyles ? ` style="${this.stringifiedStyles}"` : ''}></ia-status-indicator>`;
-  }
-
-  private createStyleInput(
-    id: string,
-    cssVariable: string,
-    defaultValue: string = '',
-    type: 'text' | 'color' = 'text',
-  ): TemplateResult {
-    return html`
-      <input
-        id=${id}
-        type=${type}
-        class="style-input"
-        value=${defaultValue}
-        data-variable=${cssVariable}
-      />
-    `;
-  }
-
-  private apply() {
-    const loadingTitle = this.loadingTitleInput.value;
-    this.component.loadingTitle = loadingTitle;
-    this.stringifiedProps = `.loadingTitle=\${'${loadingTitle}'}`;
-
-    const appliedStyles: string[] = [];
-
-    this.styleInputs?.forEach((input) => {
-      if (!input.dataset.variable || !input.value) return;
-      appliedStyles.push(`${input.dataset.variable}: ${input.value};`);
-    });
-
-    this.stringifiedStyles = appliedStyles.join(' ');
   }
 }
