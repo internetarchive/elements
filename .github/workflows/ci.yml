@@ -27,7 +27,8 @@ jobs:
         key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
 
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: npx playwright install --with-deps chromium
+      timeout-minutes: 5
 
     - name: Run tests
       run: npm run test

@@ -23,7 +23,9 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
-      - run: npx playwright install
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+        timeout-minutes: 5
       - run: npm test
       - run: |
           if ${{ github.event.release.prerelease }}; then
