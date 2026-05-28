@@ -65,7 +65,7 @@ describe('DefaultMetadataBackend', () => {
   test('credentials for metadata endpoint', async () => {
     let urlConfig: RequestInit | undefined;
     window.fetch = (
-      input: RequestInfo | URL,
+      _input: RequestInfo | URL,
       init?: RequestInit,
     ): Promise<Response> => {
       urlConfig = init;

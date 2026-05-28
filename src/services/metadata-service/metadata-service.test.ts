@@ -49,8 +49,8 @@ describe('MetadataService', () => {
     class MockMetadataBackend implements MetadataBackendInterface {
       response: any;
       async fetchMetadata(
-        identifier: string,
-        keypath?: string,
+        _identifier: string,
+        _keypath?: string,
       ): Promise<Result<any, MetadataServiceError>> {
         return {
           success: {
@@ -88,7 +88,7 @@ describe('MetadataService', () => {
   test('returns an error result if the item is not found', async () => {
     class MockSearchBackend implements MetadataBackendInterface {
       async fetchMetadata(
-        identifier: string,
+        _identifier: string,
       ): Promise<Result<MetadataResponse, MetadataServiceError>> {
         return { success: {} as any };
       }
@@ -108,7 +108,7 @@ describe('MetadataService', () => {
   test('returns the network error if one occurs', async () => {
     class MockSearchBackend implements MetadataBackendInterface {
       async fetchMetadata(
-        identifier: string,
+        _identifier: string,
       ): Promise<Result<MetadataResponse, MetadataServiceError>> {
         const error = new MetadataServiceError(
           MetadataServiceErrorType.networkError,
@@ -138,7 +138,7 @@ describe('MetadataService', () => {
   test('returns a decoding error if one occurs', async () => {
     class MockSearchBackend implements MetadataBackendInterface {
       async fetchMetadata(
-        identifier: string,
+        _identifier: string,
       ): Promise<Result<MetadataResponse, MetadataServiceError>> {
         const error = new MetadataServiceError(
           MetadataServiceErrorType.decodingError,
