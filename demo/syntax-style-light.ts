@@ -1,6 +1,10 @@
 import { css, type CSSResultGroup } from 'lit';
 
 export const syntaxStyles: CSSResultGroup = css`
+  pre {
+    max-height: var(--syntax-max-height, none);
+    overflow-y: auto;
+  }
   pre code.hljs {
     display: block;
     overflow-x: auto;

@@ -5,6 +5,8 @@ import { choose } from 'lit/directives/choose.js';
 
 import themeStyles from '@src/themes/theme-styles';
 
+export type LoadingStatus = 'ready' | 'loading' | 'success' | 'error';
+
 /**
  * Renders an SVG indicator, which defualts to an animated circular indicator
  */
@@ -23,14 +25,20 @@ export class IAStatusIndicator extends LitElement {
   @property({ type: String }) loadingStyle: 'ring' | 'ring-dots' = 'ring-dots';
 
   /* The state of the indicator that should be shown */
-  @property({ type: String }) mode: 'loading' | 'success' | 'error' = 'loading';
+  @property({ type: String }) mode: LoadingStatus = 'loading';
 
   render(): TemplateResult {
     return html`${choose(this.mode, [
+      ['ready', () => this.placeholderTemplate],
       ['loading', () => this.loadingIndicatorTemplate],
       ['success', () => this.successIndicatorTemplate],
       ['error', () => this.errorIndicatorTemplate],
     ])}`;
+  }
+
+  /** A placeholder to render before loading begins, if desired */
+  private get placeholderTemplate(): TemplateResult {
+    return html`<div class="placeholder"></div>`;
   }
 
   /** A circular loading indicator to render when processing */
@@ -139,6 +147,10 @@ export class IAStatusIndicator extends LitElement {
 
           display: inline-block;
           width: var(--indicator-width--);
+        }
+
+        .placeholder {
+          height: var(--indicator-width--);
         }
 
         .success-icon {

@@ -1,5 +1,9 @@
 # 📚 _elements_ 🏛️
 
+## Demo
+
+<https://internetarchive.github.io/elements>
+
 ## Installation
 
 ```zsh
@@ -16,6 +20,71 @@ import "@internetarchive/elements/ia-button/ia-button";
 <ia-button @click=() => alert('Clicked!')>Click Me</ia-button>
 ```
 
+## Build Dependencies
+
+We use SVGs in this repo, which not all build systems support out of the box. Here's how to support SVGs:
+
+### Webpack
+
+Add this to your Webpack config:
+
+```json
+module: {
+  rules: [
+    {
+      test: /\.svg/,
+      type: 'asset/resource',
+    },
+  ],
+},
+```
+
+### @web/test-runner
+
+Install rollup image plugins:
+
+```shell
+npm i -D @rollup/plugin-image @web/dev-server-rollup
+```
+
+Update config:
+
+```js
+import rollupImage from '@rollup/plugin-image';
+import { rollupAdapter } from '@web/dev-server-rollup';
+
+export default ({
+  mimeTypes: {
+    '**/*.scss': 'js',
+    '**/*.css': 'js',
+    '**/*.svg': 'js',
+    '**/*.json': 'js',
+  },
+  plugins: [rollupAdapter(rollupImage())],
+})
+```
+
+### Jest
+
+Create `SVGMock` file, ie `tests/jest/mocks/svg.js`
+
+```js
+/**
+ * Mock for SVG imports in Jest tests.
+ */
+export class SVGMock {}
+```
+
+Add to Jest config:
+
+```json
+"jest": {
+  "moduleNameMapper": {
+    "\\.svg$": "<rootDir>/tests/jest/mocks/svg.js",
+  },
+}
+```
+
 ## Development
 
 ```zsh
@@ -23,10 +92,41 @@ npm i
 npm run dev
 ```
 
+## Versioning and Publishing
+
+### Prerelease Version
+
+1. Create prerelease version on your branch:
+   1. `npm version prerelease --preid=<some_prefix>`
+   2. If you use JIRA, recommend using the ticket number, ie `--preid=webdev-1234`
+   3. This will also create a `git` tag
+2. Push the tag that was created in the `npm version` step
+3. Publish prerelease to npm:
+   1. Go to the [Element release page](https://github.com/internetarchive/elements/releases)
+   2. Tap `Draft a new release` button
+   3. Select the tag you created
+   4. Tap `Generate release notes`
+   5. Select `Set as a pre-release`
+   6. Tap `Publish release`
+
+### Release Version
+
+1. Use [Semantic Versioning](https://semver.org) to determine release number
+2. On the `main` branch:
+   1. Run `npm version [major | minor | patch]`
+   2. `git push && git push --tags`
+3. Publish release to npm:
+   1. Go to the [Element release page](https://github.com/internetarchive/elements/releases)
+   2. Tap `Draft a new release` button
+   3. Select the tag you created
+   4. Tap `Generate release notes`
+   5. Select `Set as the latest release`
+   6. Tap `Publish release`
+
 ## Adding a Component
 
 ### Structure
-Each component has its own directory in `src/elements` (or `src/labs` if it's still in development). The basic structure looks like this, though components can have additional files and directories if neededd. Take a look at other elements to see what they each contain.
+Each component has its own directory in `src/elements` (or `src/labs` if it's still in development). The basic structure looks like this, though components can have additional files and directories if needed. Take a look at other elements to see what they each contain.
 ```
 src
 - elements
@@ -42,60 +142,67 @@ To demo your component, we have a component catalog that you can add your demo t
 
 We have a story template you can use for consistency. [More info on `story-template`](#story-template). The easiest way to use this is to copy an existing story and modify it for your needs.
 
-Import your story in `/demo/app-root.ts` and add it to the page.
+Your story will be discovered by `/demo/app-root.ts` and added to the page.
 
 #### Story Template<a id="story-template"></a>
 
 The story template is a component you can use in your story to demo your component. This lets us present them in a consistent way.
 
-It has 5 main configurations:
+It has a few main configurations:
 
 *Properties*
 - `elementTag` (_string_) your component's name, ie `ia-button`
-- `exampleUsage` (_string_) your element's example usage, displays it with syntax highlighting
 - `labs` (_boolean_) if your component is in `labs` to update links
+- `styleInputSettings` (_StyleInputSettings array_) the style options to display, in the appropriate format
+- `propInputSettings` (_PropInputSettings array_) the prop options to display, in the appropriate format
+
+**Note:** If the type of prop input you want to use isn't yet available in the `propInputSettings` options,
+you can instead slot in custom property settings by using `slot="settings"`, adding a button to apply the
+properties, and passing in a `customExampleUsage` (see `ia-snow-story.ts` for a sample implementation).
 
 *Slots*
 - `demo` put your component demo in here
-- `settings` put your component settings in here
 
 Here's an example:
 ```typescript
 import '@demo/story-template';
+
+// Style options to display
+const styleInputSettings: StyleInputSettings[] = [
+  {
+    label: 'Button BG color',
+    cssVariable: '--button-background-color',
+    defaultValue: 'blue',  // Should match the actual fallback value for the variable
+    inputType: 'color',
+  },
+];
+
+// Prop options to display
+const propInputSettings: PropInputSettings[] = [
+  {
+    label: 'Mode',
+    inputType: 'radio',
+    propertyName: 'mode', // Should match the name of the property from its @property() declaration
+    radioOptions: ['primary', 'secondary', 'danger'],
+    defaultValue: 'primary', // Should match the actual default value from the @property() declaration, if any
+  },
+]
 ...
 render() {
   return html`
-    <story-template elementTag="ia-button" .exampleUsage=${this.exampleUsage}>
+    <story-template 
+      elementTag="ia-button" 
+      elementClassName="IAButton" 
+      .styleInputData=${{settings: this.styleInputSettings}} 
+      .propInputData=${{settings: this.propInputSettings}}
+    >
       <div slot="demo">
-        <ia-button @click=${() => alert('Button clicked!')}
-          >Click Me</ia-button
-        >
-      </div>
-
-      <div slot="settings">
-        <table>
-          <tr>
-            <td>Color</td>
-            <td><input type="color" value="#007bff" id="color" /></td>
-          </tr>
-        </table>
-        <button @click=${this.apply}>Apply</button>
+        <ia-button @click=${() => alert('Button clicked!')}>
+          Click Me
+        </ia-button>
       </div>
     </story-template>
   `;
-}
-
-// return a string of your element's usage and it will
-// be displayed with syntax highlighting
-// can be dynamic
-private get exampleUsage(): string {
-  return `<ia-button @click=\${() => alert('Button clicked!')}>
-    Click Me
-  </ia-button>`;
-}
-
-private apply(): void {
-  // update component settings based on settings change
 }
 ```
 

@@ -112,4 +112,12 @@ describe('IA Status Indicator', () => {
     const indicatorTitle = el.shadowRoot?.querySelector('title');
     expect(indicatorTitle?.innerHTML).to.contain('Error');
   });
+
+  test('can render a placeholder instead if requested', async () => {
+    const el = await fixture<IAStatusIndicator>(
+      html`<ia-status-indicator .mode=${'ready'}></ia-status-indicator>`,
+    );
+    const placeholder = el.shadowRoot?.querySelector('.placeholder');
+    expect(placeholder).to.exist;
+  });
 });

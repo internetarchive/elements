@@ -25,7 +25,8 @@ export class IASnowStory extends LitElement {
     return html`
       <story-template
         elementTag="ia-snow"
-        .exampleUsage=${this.exampleUsage}
+        elementClassName="IASnow"
+        .customExampleUsage=${this.exampleUsage}
         labs
       >
         <div slot="demo">
