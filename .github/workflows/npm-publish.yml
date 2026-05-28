@@ -24,8 +24,17 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
-        timeout-minutes: 5
+        timeout-minutes: 10
+        run: |
+          for attempt in 1 2 3; do
+            echo "Playwright install attempt $attempt"
+            if timeout --signal=KILL 150 npx playwright install --with-deps chromium; then
+              exit 0
+            fi
+            echo "Attempt $attempt stalled or failed; retrying..."
+          done
+          echo "Playwright install failed after 3 attempts" >&2
+          exit 1
       - run: npm test
       - run: |
           if ${{ github.event.release.prerelease }}; then
