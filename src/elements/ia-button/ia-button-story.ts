@@ -21,6 +21,7 @@ const propInputSettings: PropInputSettings<IAButton>[] = [
       'warning',
       'disabled',
       'transparent',
+      'custom',
       'link',
       'danger-link',
     ],
@@ -51,14 +52,6 @@ const propInputSettings: PropInputSettings<IAButton>[] = [
     defaultValue: 'button',
     inputType: 'radio',
     radioOptions: ['button', 'submit', 'reset'],
-  },
-  {
-    label:
-      'Use custom color when button is active (set via --ia-button-custom-fill etc.)',
-    propertyName: 'useCustomActiveColor',
-    defaultValue: false,
-    inputType: 'radio',
-    radioOptions: [true, false],
   },
 ];
 
@@ -190,6 +183,42 @@ const styleInputSettings: StyleInputSettings[] = [
     inputType: 'color',
   },
   {
+    label: 'Text color (custom)',
+    cssVariable: '--ia-button-custom-text-color',
+    defaultValue: '#ffffff',
+    inputType: 'color',
+  },
+  {
+    label: 'Background color (custom)',
+    cssVariable: '--ia-button-custom-text-color',
+    defaultValue: '#194880',
+    inputType: 'color',
+  },
+  {
+    label: 'Border color (disabled)',
+    cssVariable: '--ia-theme-disabled-cta-border',
+    defaultValue: '#c5d1df',
+    inputType: 'color',
+  },
+  {
+    label: 'Text color (custom, on hover)',
+    cssVariable: '--ia-button-custom-active-text-color',
+    defaultValue: '#ffffff',
+    inputType: 'color',
+  },
+  {
+    label: 'Background color (custom, on hover)',
+    cssVariable: '--ia-button-custom-active-fill',
+    defaultValue: '#194880',
+    inputType: 'color',
+  },
+  {
+    label: 'Border color (custom, on hover)',
+    cssVariable: '--ia-button-custom-active-border',
+    defaultValue: '#c5d1df',
+    inputType: 'color',
+  },
+  {
     label: 'Link color',
     cssVariable: '--ia-theme-link-color',
     defaultValue: '#4b64ff',
@@ -199,25 +228,6 @@ const styleInputSettings: StyleInputSettings[] = [
     label: 'Danger color',
     cssVariable: '--ia-theme-color-danger',
     defaultValue: '#e51c23',
-    inputType: 'color',
-  },
-  {
-    label:
-      'Custom active text color (on hover/focus/etc., with useCustomActiveColor)',
-    cssVariable: '--ia-button-custom-active-text-color',
-    defaultValue: '#ffffff',
-    inputType: 'color',
-  },
-  {
-    label: 'Custom active background color',
-    cssVariable: '--ia-button-custom-active-fill',
-    defaultValue: '#194880',
-    inputType: 'color',
-  },
-  {
-    label: 'Custom active border color',
-    cssVariable: '--ia-button-custom-active-border',
-    defaultValue: '#c5d1df',
     inputType: 'color',
   },
 ];

@@ -33,6 +33,7 @@ export class IAButton extends LitElement {
     | 'warning'
     | 'disabled'
     | 'transparent'
+    | 'custom'
     | 'link'
     | 'danger-link' = 'primary';
 
@@ -51,15 +52,11 @@ export class IAButton extends LitElement {
     | 'submit'
     | 'reset' = 'button';
 
-  /* Whether to use a custom color (passed in via --ia-button-custom-fill etc.) when button is active */
-  @property({ type: Boolean }) useCustomActiveColor: boolean = false;
-
   render(): TemplateResult {
     return html`
       <button
         part="button"
-        class=${this.mode +
-        (this.useCustomActiveColor ? ' custom-active-color' : '')}
+        class=${this.mode}
         ?disabled=${this.loading || this.disabled}
       >
         ${this.loading ? this.loadingStateTemplate : html`<slot></slot>`}
@@ -218,6 +215,19 @@ export class IAButton extends LitElement {
             --ia-button-transition,
             all 0.1s ease 0s
           );
+
+          --ia-button-custom-text-color--: var(
+            --ia-button-custom-text-color,
+            var(--primary-cta-text-color--)
+          );
+          --ia-button-custom-fill--: var(
+            --ia-button-custom-fill,
+            var(--primary-cta-fill--)
+          );
+          --ia-button-custom-border--: var(
+            --ia-button-custom-border,
+            var(--primary-cta-border--)
+          );
           --ia-button-custom-active-text-color--: var(
             --ia-button-custom-active-text-color,
             var(--primary-cta-text-color--)
@@ -317,7 +327,13 @@ export class IAButton extends LitElement {
           border-color: transparent;
         }
 
-        button.custom-active-color:is(:hover, :focus, :active) {
+        button.custom {
+          color: var(--ia-button-custom-text-color--);
+          background-color: var(--ia-button-custom-fill--);
+          border-color: var(--ia-button-custom-border--);
+        }
+
+        button.custom:is(:hover, :focus, :active) {
           color: var(--ia-button-custom-active-text-color--);
           background-color: var(--ia-button-custom-active-fill--);
           border-color: var(--ia-button-custom-active-border--);
