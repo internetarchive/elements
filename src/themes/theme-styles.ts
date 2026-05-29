@@ -21,6 +21,7 @@ const themeStyles = css`
     --default-button-height: 2.25rem; /* 36px with 16px root font size */
     --default-button-width: fit-content;
     --default-button-border-width: 1px;
+    --default-button-border-radius: 0.25rem; /* 4px with 16px root font size */
     --default-font-size-standard: 0.875rem; /* 14px with 16px root font size */
     --default-font-size-lg: 2.25rem; /* 36px with 16px root font size */
 
@@ -85,6 +86,10 @@ const themeStyles = css`
     --button-border-width: var(
       --ia-theme-button-border-width,
       var(--default-button-border-width)
+    );
+    --button-border-radius: var(
+      --ia-theme-button-border-radius,
+      var(--default-button-border-radius)
     );
     --font-size-standard: var(
       --ia-theme-font-size-standard,

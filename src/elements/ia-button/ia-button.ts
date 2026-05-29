@@ -209,6 +209,7 @@ export class IAButton extends LitElement {
           --button-width--: var(--button-width);
           --button-height--: var(--button-height);
           --button-border-width--: var(--button-border-width);
+          --button-border-width--: var(--button-border-radius);
           --base-font-family--: var(--base-font-family);
 
           --ia-button-transition--: var(
@@ -252,12 +253,12 @@ export class IAButton extends LitElement {
           width: var(--button-width--);
           padding: var(--button-padding--);
           border-width: var(--button-border-width--);
+          border-radius: var(--button-border-radius--);
           transition: var(--ia-button-transition--);
           outline-color: var(--primary-cta-text-color--);
 
           cursor: pointer;
           line-height: normal;
-          border-radius: 0.4rem;
           border-style: 'solid';
           white-space: nowrap;
           appearance: auto;
