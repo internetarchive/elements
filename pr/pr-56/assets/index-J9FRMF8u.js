@@ -799,7 +799,7 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
           --button-width--: var(--button-width);
           --button-height--: var(--button-height);
           --button-border-width--: var(--button-border-width);
-          --button-border-width--: var(--button-border-radius);
+          --button-border-radius--: var(--button-border-radius);
           --base-font-family--: var(--base-font-family);
 
           --ia-button-transition--: var(
