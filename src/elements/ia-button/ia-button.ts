@@ -231,15 +231,15 @@ export class IAButton extends LitElement {
           );
           --ia-button-custom-active-text-color--: var(
             --ia-button-custom-active-text-color,
-            var(--primary-cta-text-color--)
+            var(--ia-button-custom-text-color--)
           );
           --ia-button-custom-active-fill--: var(
             --ia-button-custom-active-fill,
-            var(--primary-cta-fill--)
+            var(--ia-button-custom-fill--)
           );
           --ia-button-custom-active-border--: var(
             --ia-button-custom-active-border,
-            var(--primary-cta-border--)
+            var(--ia-button-custom-border--)
           );
 
           display: inline-block; /* keeps host sized to button */
