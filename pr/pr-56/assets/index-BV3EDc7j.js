@@ -118,6 +118,7 @@ hue-6-2: #c18401
     --default-button-height: 2.25rem; /* 36px with 16px root font size */
     --default-button-width: fit-content;
     --default-button-border-width: 1px;
+    --default-button-border-radius: 0.25rem; /* 4px with 16px root font size */
     --default-font-size-standard: 0.875rem; /* 14px with 16px root font size */
     --default-font-size-lg: 2.25rem; /* 36px with 16px root font size */
 
@@ -182,6 +183,10 @@ hue-6-2: #c18401
     --button-border-width: var(
       --ia-theme-button-border-width,
       var(--default-button-border-width)
+    );
+    --button-border-radius: var(
+      --ia-theme-button-border-radius,
+      var(--default-button-border-radius)
     );
     --font-size-standard: var(
       --ia-theme-font-size-standard,
@@ -794,6 +799,7 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
           --button-width--: var(--button-width);
           --button-height--: var(--button-height);
           --button-border-width--: var(--button-border-width);
+          --button-border-width--: var(--button-border-radius);
           --base-font-family--: var(--base-font-family);
 
           --ia-button-transition--: var(
@@ -837,12 +843,12 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
           width: var(--button-width--);
           padding: var(--button-padding--);
           border-width: var(--button-border-width--);
+          border-radius: var(--button-border-radius--);
           transition: var(--ia-button-transition--);
           outline-color: var(--primary-cta-text-color--);
 
           cursor: pointer;
           line-height: normal;
-          border-radius: 0.4rem;
           border-style: 'solid';
           white-space: nowrap;
           appearance: auto;
