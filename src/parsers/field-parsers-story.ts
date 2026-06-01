@@ -64,7 +64,7 @@ export class FieldParsersStory extends LitElement {
     const result = this.selected.parser.parseValue(this.rawValue);
     return html`
       <story-template
-        elementTag="field-parsers"
+        heading="Field Parsers"
         .customImport=${IMPORT_EXAMPLE}
         .customExampleUsage=${USAGE_EXAMPLE}
       >
