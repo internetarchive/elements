@@ -82,11 +82,4 @@ describe('ListParser', () => {
     const response = parser.parseValue('10,000 Maniacs; Boop, Beep, Boop');
     expect(response).toEqual(['10,000 Maniacs', 'Boop, Beep, Boop']);
   });
-
-  test('can parse period-separated lists', () => {
-    const stringParser = new StringParser();
-    const parser = new ListParser(stringParser);
-    const response = parser.parseValue('Beep. Boop. Snap');
-    expect(response).toEqual(['Beep', 'Boop', 'Snap']);
-  });
 });

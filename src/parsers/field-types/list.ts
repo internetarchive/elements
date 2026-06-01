@@ -6,7 +6,7 @@ import {
 export class ListParser<T> implements FieldParserInterface<T[]> {
   private parser: FieldParserInterface<T>;
 
-  private separators = [';', ',', '.'];
+  private separators = [';', ','];
 
   constructor(
     parser: FieldParserInterface<T>,
@@ -34,10 +34,10 @@ export class ListParser<T> implements FieldParserInterface<T[]> {
   }
 
   private parseListValues(rawValues: string[]): T[] {
-    const trimmed = rawValues.map(s => s.trim());
-    const parsed = trimmed.map(rawValue => this.parser.parseValue(rawValue));
+    const trimmed = rawValues.map((s) => s.trim());
+    const parsed = trimmed.map((rawValue) => this.parser.parseValue(rawValue));
     const result: T[] = [];
-    parsed.forEach(p => {
+    parsed.forEach((p) => {
       if (p !== undefined) result.push(p);
     });
     return result;
