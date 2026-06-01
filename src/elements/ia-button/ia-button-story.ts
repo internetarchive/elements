@@ -190,13 +190,13 @@ const styleInputSettings: StyleInputSettings[] = [
   },
   {
     label: 'Background color (custom)',
-    cssVariable: '--ia-button-custom-text-color',
+    cssVariable: '--ia-button-custom-fill',
     defaultValue: '#194880',
     inputType: 'color',
   },
   {
-    label: 'Border color (disabled)',
-    cssVariable: '--ia-theme-disabled-cta-border',
+    label: 'Border color (custom)',
+    cssVariable: '--ia-theme-custom-cta-border',
     defaultValue: '#c5d1df',
     inputType: 'color',
   },
