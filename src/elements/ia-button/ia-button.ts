@@ -61,7 +61,7 @@ export class IAButton extends LitElement {
       >
         ${this.loading ? this.loadingStateTemplate : html`<slot></slot>`}
       </button>
-      <slot name="hidden-btn"></slot>
+      <slot name="hidden-button"></slot>
     `;
   }
 
