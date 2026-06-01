@@ -1,6 +1,8 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
+import '@demo/story-template';
+
 import type { FieldParserInterface } from './field-parser-interface';
 import { BooleanParser } from './field-types/boolean';
 import { ByteParser } from './field-types/byte';
@@ -38,9 +40,15 @@ const PARSERS: ParserOption[] = [
   { label: 'string', parser: StringParser.shared, example: 'hello' },
 ];
 
+const IMPORT_EXAMPLE = `import { NumberParser } from '@internetarchive/elements/parsers/field-types/number';`;
+
+const USAGE_EXAMPLE = `const result = NumberParser.shared.parseValue('1234.5');
+// result === 1234.5`;
+
 /**
- * Interactive demo for the field-type parsers. Pick a parser, type a raw
- * value, and see the parsed output and its runtime type.
+ * Demo story for the field-type parsers. Renders inside the shared
+ * <story-template> chrome with an interactive playground in the demo slot:
+ * pick a parser, type a raw value, and see the parsed output and runtime type.
  */
 @customElement('field-parsers-story')
 export class FieldParsersStory extends LitElement {
@@ -55,40 +63,44 @@ export class FieldParsersStory extends LitElement {
   render() {
     const result = this.selected.parser.parseValue(this.rawValue);
     return html`
-      <h2>Field Parsers — Playground</h2>
-      <p>
-        Parse a raw metadata value with any field-type parser from
-        <code>@internetarchive/elements</code>.
-      </p>
-
-      <div class="controls">
-        <label>
-          Parser
-          <select @change=${this.onParserChange}>
-            ${PARSERS.map(
-              (p, i) =>
-                html`<option value=${i} ?selected=${i === this.selectedIndex}>
-                  ${p.label}
-                </option>`,
-            )}
-          </select>
-        </label>
-        <label>
-          Input
-          <input
-            .value=${this.rawValue}
-            @input=${this.onInput}
-            placeholder="raw value"
-          />
-        </label>
-        <button @click=${this.useExample}>Use example</button>
-      </div>
-
-      <div class="result ${result === undefined ? 'unparseable' : ''}">
-        <span class="arrow">Result →</span>
-        <code>${this.format(result)}</code>
-        <span class="type">${this.typeLabel(result)}</span>
-      </div>
+      <story-template
+        elementTag="field-parsers"
+        .customImport=${IMPORT_EXAMPLE}
+        .customExampleUsage=${USAGE_EXAMPLE}
+      >
+        <div slot="demo" class="playground">
+          <div class="controls">
+            <label>
+              Parser
+              <select @change=${this.onParserChange}>
+                ${PARSERS.map(
+                  (p, i) =>
+                    html`<option
+                      value=${i}
+                      ?selected=${i === this.selectedIndex}
+                    >
+                      ${p.label}
+                    </option>`,
+                )}
+              </select>
+            </label>
+            <label>
+              Input
+              <input
+                .value=${this.rawValue}
+                @input=${this.onInput}
+                placeholder="raw value"
+              />
+            </label>
+            <button @click=${this.useExample}>Use example</button>
+          </div>
+          <div class="result ${result === undefined ? 'unparseable' : ''}">
+            <span class="arrow">Result →</span>
+            <code>${this.format(result)}</code>
+            <span class="type">${this.typeLabel(result)}</span>
+          </div>
+        </div>
+      </story-template>
     `;
   }
 
@@ -120,10 +132,8 @@ export class FieldParsersStory extends LitElement {
   }
 
   static styles = css`
-    :host {
-      display: block;
+    .playground {
       font-family: system-ui, sans-serif;
-      max-width: 40rem;
     }
 
     .controls {
@@ -153,7 +163,7 @@ export class FieldParsersStory extends LitElement {
       align-items: center;
       gap: 8px;
       padding: 10px 12px;
-      background: #f0f0f0;
+      background: #fff;
       border: 1px solid #ccc;
       border-radius: 4px;
     }
