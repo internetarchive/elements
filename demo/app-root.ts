@@ -19,7 +19,17 @@ const storyEntries = Object.keys(storyModules)
     const parts = path.split('/');
     const filename = parts[parts.length - 1]; // e.g. "ia-button-story.ts"
     const tag = filename.replace(/-story\.ts$/, '');
-    return { tag, storyTag: `${tag}-story`, id: `elem-${tag}`, labs };
+    // Stories under src/elements or src/labs are custom elements; others
+    // (e.g. parsers) are plain modules and shouldn't be shown as `<tag>`.
+    const component =
+      path.includes('/src/elements/') || path.includes('/src/labs/');
+    return {
+      tag,
+      storyTag: `${tag}-story`,
+      id: `elem-${tag}`,
+      labs,
+      component,
+    };
   })
   .sort((a, b) => a.tag.localeCompare(b.tag));
 
@@ -41,7 +51,8 @@ export class AppRoot extends LitElement {
       <nav id="ia-sidebar">
         <h2>Production-Ready</h2>
         ${productionEntries.map(
-          (e) => html`<a href="#${e.id}">&lt;${e.tag}&gt;</a>`,
+          (e) =>
+            html`<a href="#${e.id}">${e.component ? `<${e.tag}>` : e.tag}</a>`,
         )}
         <h2>Labs 🧪</h2>
         ${labsEntries.map((e) => html`<a href="#${e.id}">&lt;${e.tag}&gt;</a>`)}
