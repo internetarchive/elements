@@ -265,6 +265,7 @@ export class IAButton extends LitElement {
           box-sizing: border-box;
           display: flex;
           align-items: center;
+          justify-content: center;
           vertical-align: middle;
           outline-offset: -4px;
           user-select: none;
