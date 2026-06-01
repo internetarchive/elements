@@ -206,6 +206,77 @@ render() {
 }
 ```
 
+### Styling
+
+For styling, our components use a series of rational CSS variable fallbacks to ensure:
+1. All components render out of the box with reasonable defaults for colors, sizing, etc.
+2. Customizable styles can be adjusted by the consumer by setting a CSS variable at the component or global level
+3. The available variables are easy to find in the component file and visible in the story
+
+#### Setting up styles
+
+1. In the component's CSS, include the elements-wide `themeStyles` defaults
+```
+import themeStyles from '@src/themes/theme-styles';
+...
+static get styles(): CSSResultGroup {
+    return [
+      themeStyles,
+      css`
+```
+2. Check the theme styles to see if an existing theme variable exists you can use as a default, i.e. for an error message color you could use `--color-danger` if no variable exists but the style you want seems fairly reusable, see [Creating a new theme style](#creating-a-new-theme-style) below. If the variable is _not_ reusable, see [Non-reusable styles](#non-reusable-styles) below.
+3. In the component, create a private CSS variable in the top-level `:host` section to make your chosen variable obvious to consumers, and then use this private variable wherever you need the value
+```
+css`
+  :host {
+      --color-danger--: var(--color-danger);
+   }
+
+   .error-msg {
+      color: var(--color-danger--);
+```
+4. In the component's story, add the variable you chose in its full `ia-theme-` form, with its default fallback value, to the story `styleInputData`
+```
+const styleInputSettings: StyleInputSettings[] = [
+  {
+    label: 'Error color',
+    cssVariable: '--ia-theme-color-danger',
+    defaultValue: '#e51c23',
+    inputType: 'color',
+  },
+```
+
+#### Creating a new theme style
+While working on a component, you may realize that a customizable style you need doesn't already have an associated variable in `theme-styles.ts`. If this happens, you can follow the following steps to add one:
+1. Select a rational default value for the style, and add it to the defaults section at the top of the file:
+```
+--default-font-size-xs: 0.625rem /* 10px with 16px root font size */
+```
+2. Name the variable and add it to the adjustable styles list with the following structure:
+```
+--font-size-xs: var(--ia-theme-font-size-xs, var(--default-font-size-xs));
+```
+3. Use the variable as needed in your component and its story, following the steps in the [Setting up styles](#setting-up-styles) section
+
+#### Non-reusable styles
+
+If you have a variable that you want to make customizable but you're sure is only applicable for this component and wouldn't be of use elsewhere, you can add it as a private variable to `:host`, setting an explicit fallback within the component and prefixing it with the component to avoid variable overlap.
+```
+--my-component-max-height--: var(--my-component-max-height, 250px);
+```
+
+#### Other styles
+
+For any styles that you won't be exposing to consumers via the story, you can proceed as usual, but we recommend adding a named `part` to areas of the component, such as nested elements, you imagine someone may want to further style directly.
+```
+<div class="indicator">
+  <ia-status-indicator
+    part="status-indicator"
+    .mode=${this.validationStatus}
+  ></ia-status-indicator>
+</div>
+```
+
 ## Component Inventory
 
 To kickstart our library, we are going to take inventory of what already exists
