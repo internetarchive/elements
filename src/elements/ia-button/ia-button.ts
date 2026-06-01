@@ -84,26 +84,14 @@ export class IAButton extends LitElement {
 
   /** Sets up or removes button type emulation as needed */
   private setButtonTypeEmulation(): void {
-    this.removeExistingTypeEmulation();
-    this.emulateButtonTypeBehavior();
-  }
+    const hiddenButton: HTMLInputElement | null = this.querySelector(
+      'input.hidden-button',
+    );
 
-  /**
-   * Removes all existing button behavior emulation
-   * to ensure any new button type takes precendence.
-   */
-  private removeExistingTypeEmulation(): void {
-    this.removeEventListener('click', this.handleComponentClick);
-    this.querySelector('.hidden-button')?.remove();
-  }
-
-  /**
-   * If the button type set to "submit" or "reset",
-   * adds extra behavior to ensure
-   * button emulates native button behavior.
-   * */
-  private emulateButtonTypeBehavior(): void {
-    if (this.type === 'button') return;
+    if (hiddenButton) {
+      hiddenButton.type = this.type;
+      return;
+    }
 
     this.addHiddenButton();
     this.addEventListener('click', this.handleComponentClick);
