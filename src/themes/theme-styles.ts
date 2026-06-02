@@ -17,6 +17,11 @@ const themeStyles = css`
     --default-combo-box-width: auto;
     --default-search-bar-width: auto;
     --default-search-bar-height: 30px;
+    --default-button-padding: 0 1.875rem; /* 0 30px with 16px root font size */
+    --default-button-height: 2.25rem; /* 36px with 16px root font size */
+    --default-button-width: fit-content;
+    --default-button-border-width: 1px;
+    --default-button-border-radius: 0.25rem; /* 4px with 16px root font size */
     --default-font-size-standard: 0.875rem; /* 14px with 16px root font size */
     --default-font-size-lg: 2.25rem; /* 36px with 16px root font size */
 
@@ -24,8 +29,15 @@ const themeStyles = css`
     --true-white: #fff;
     --off-white: #fbfbfd;
     --dark-gray: #2c2c2c;
+    --mid-gray: #333;
     --light-gray: #666;
+    --lighter-gray: #999;
+    --lightest-gray: #c5d1df;
     --classic-red: #e51c23;
+    --brick: #d43f3a;
+    --coral: #d9534f;
+    --dark-cantaloupe: #ec7939;
+    --cantaloupe: #ee8950;
     --mint-green: #31a481;
     --navy-blue: #194880;
     --bright-blue: #4b64ff;
@@ -62,6 +74,23 @@ const themeStyles = css`
       --ia-theme-combo-box-width,
       var(--default-combo-box-width)
     );
+    --button-padding: var(
+      --ia-theme-button-padding,
+      var(--default-button-padding)
+    );
+    --button-height: var(
+      --ia-theme-button-height,
+      var(--default-button-height)
+    );
+    --button-width: var(--ia-theme-button-width, var(--default-button-width));
+    --button-border-width: var(
+      --ia-theme-button-border-width,
+      var(--default-button-border-width)
+    );
+    --button-border-radius: var(
+      --ia-theme-button-border-radius,
+      var(--default-button-border-radius)
+    );
     --font-size-standard: var(
       --ia-theme-font-size-standard,
       var(--default-font-size-standard)
@@ -79,11 +108,59 @@ const themeStyles = css`
     );
 
     /* State colors */
+    /* Primary */
     --primary-cta-fill: var(--ia-theme-primary-cta-fill, var(--navy-blue));
     --primary-cta-text-color: var(
       --ia-theme-primary-cta-text-color,
       var(--true-white)
     );
+    --primary-cta-border: var(
+      --ia-theme-primary-cta-border,
+      var(--lightest-gray)
+    );
+
+    /* Secondary */
+    --secondary-cta-text-color: var(
+      --ia-theme-secondary-cta-text-color,
+      var(--true-white)
+    );
+    --secondary-cta-fill: var(--ia-theme-secondary-cta-fill, var(--mid-gray));
+    --secondary-cta-border: var(
+      --ia-theme-secondary-cta-border,
+      var(--lighter-gray)
+    );
+
+    /* Danger */
+    --danger-cta-text-color: var(
+      --ia-theme-danger-cta-text-color,
+      var(--true-white)
+    );
+    --danger-cta-fill: var(--ia-theme-danger-cta-fill, var(--coral));
+    --danger-cta-border: var(--ia-theme-danger-cta-border, var(--brick));
+
+    /* Warning */
+    --warning-cta-text-color: var(
+      --ia-theme-warning-cta-text-color,
+      var(--true-white)
+    );
+    --warning-cta-fill: var(--ia-theme-warning-cta-fill, var(--cantaloupe));
+    --warning-cta-border: var(
+      --ia-theme-warning-cta-border,
+      var(--dark-cantaloupe)
+    );
+
+    /* Disabled */
+    --disabled-cta-text-color: var(
+      --ia-theme-disabled-cta-text-color,
+      var(--true-white)
+    );
+    --disabled-cta-fill: var(--ia-theme-disabled-cta-fill, var(--light-gray));
+    --disabled-cta-border: var(
+      --ia-theme-disabled-cta-border,
+      var(--lighter-gray)
+    );
+
+    /* Standalone colors */
     --color-success: var(--ia-theme-color-success, var(--mint-green));
     --color-danger: var(--ia-theme-color-danger, var(--classic-red));
   }
