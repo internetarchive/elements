@@ -52,7 +52,7 @@ export class IAButton extends LitElement {
     | 'submit'
     | 'reset' = 'button';
 
-  /* An optional href to use. If provided, the button will be rendered as an a element instead of a button */
+  /* An optional href to wrap around the button */
   @property({ type: String }) href?: string;
 
   render(): TemplateResult {
@@ -75,7 +75,7 @@ export class IAButton extends LitElement {
     return html`
       <button
         part="button"
-        class=${'ia-button ' + this.mode}
+        class=${this.mode}
         ?disabled=${this.disabled || this.loading}
       >
         ${this.buttonTextTemplate}
@@ -250,7 +250,7 @@ export class IAButton extends LitElement {
           display: inline-block; /* keeps host sized to button */
         }
 
-        .ia-button {
+        button {
           font-family: var(--base-font-family--);
           font-size: var(--font-size-standard--);
           height: var(--button-height--);
@@ -281,8 +281,12 @@ export class IAButton extends LitElement {
           -o-user-select: none;
         }
 
-        .ia-button:disabled,
-        .ia-button.disabled {
+        a {
+          text-decoration: none;
+        }
+
+        button:disabled,
+        button.disabled {
           cursor: not-allowed;
           color: var(--disabled-cta-text-color--);
           background-color: var(--disabled-cta-fill--);
@@ -290,74 +294,74 @@ export class IAButton extends LitElement {
           opacity: 0.5;
         }
 
-        .ia-button:enabled:hover {
+        button:enabled:hover {
           opacity: 0.9;
         }
 
-        .ia-button:focus-visible {
+        button:focus-visible {
           opacity: 0.8;
           outline-style: double;
         }
 
-        .ia-button:active {
+        button:active {
           opacity: 0.7;
         }
 
-        .ia-button.primary {
+        button.primary {
           color: var(--primary-cta-text-color--);
           background-color: var(--primary-cta-fill--);
           border-color: var(--primary-cta-border--);
         }
 
-        .ia-button.secondary {
+        button.secondary {
           color: var(--secondary-cta-text-color--);
           background-color: var(--secondary-cta-fill--);
           border-color: var(--secondary-cta-border--);
         }
 
-        .ia-button.danger {
+        button.danger {
           color: var(--danger-cta-text-color--);
           background-color: var(--danger-cta-fill--);
           border-color: var(--danger-cta-border--);
         }
 
-        .ia-button.warning {
+        button.warning {
           color: var(--warning-cta-text-color--);
           background-color: var(--warning-cta-fill--);
           border-color: var(--warning-cta-border--);
         }
 
-        .ia-button.transparent {
+        button.transparent {
           color: inherit;
           border-width: 0;
           background-color: transparent;
           border-color: transparent;
         }
 
-        .ia-button.custom {
+        button.custom {
           color: var(--ia-button-custom-text-color--);
           background-color: var(--ia-button-custom-fill--);
           border-color: var(--ia-button-custom-border--);
         }
 
-        .ia-button.custom:enabled:is(:hover, :focus, :active) {
+        button.custom:enabled:is(:hover, :focus, :active) {
           color: var(--ia-button-custom-active-text-color--);
           background-color: var(--ia-button-custom-active-fill--);
           border-color: var(--ia-button-custom-active-border--);
         }
 
-        :host(.fit-content) .ia-button {
+        :host(.fit-content) button {
           padding: 0;
           height: fit-content;
         }
 
-        .ia-button.link:enabled:hover,
-        .ia-button.danger-link:enabled:hover {
+        button.link:enabled:hover,
+        button.danger-link:enabled:hover {
           text-decoration: underline;
         }
 
-        .ia-button.link,
-        .ia-button.danger-link {
+        button.link,
+        button.danger-link {
           margin: 0;
           border: 0;
           appearance: none;
@@ -367,11 +371,11 @@ export class IAButton extends LitElement {
           padding: 0;
         }
 
-        .ia-button.link {
+        button.link {
           color: var(--link-color--);
         }
 
-        .ia-button.danger-link {
+        button.danger-link {
           color: var(--color-danger--);
         }
 
