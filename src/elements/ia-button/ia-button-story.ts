@@ -53,6 +53,12 @@ const propInputSettings: PropInputSettings<IAButton>[] = [
     inputType: 'radio',
     radioOptions: ['button', 'submit', 'reset'],
   },
+  {
+    label: 'Link to attach to button',
+    propertyName: 'href',
+    defaultValue: '',
+    inputType: 'text',
+  },
 ];
 
 const styleInputSettings: StyleInputSettings[] = [

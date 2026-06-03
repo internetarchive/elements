@@ -6,12 +6,46 @@ import { IAButton } from './ia-button';
 import './ia-button';
 
 describe('IA button', () => {
-  test('renders a basic button', async () => {
+  test('renders a basic button by default', async () => {
     const el = await fixture<IAButton>(html`<ia-button>Submit</ia-button>`);
 
     const button = el.shadowRoot?.querySelector('button');
     expect(button).to.exist;
     expect(button?.disabled).to.equal(false);
+  });
+
+  test('renders a link instead of a button if href provided', async () => {
+    const el = await fixture<IAButton>(
+      html`<ia-button href="https://archive.org/foo">Submit</ia-button>`,
+    );
+
+    const button = el.shadowRoot?.querySelector('button');
+    const link = el.shadowRoot?.querySelector('a');
+    expect(button).not.to.exist;
+    expect(link).to.exist;
+    expect(link?.href).to.equal('https://archive.org/foo');
+  });
+
+  test('does not add the disabled class to the link by default', async () => {
+    const el = await fixture<IAButton>(
+      html`<ia-button href="https://archive.org/foo">Submit</ia-button>`,
+    );
+
+    const link = el.shadowRoot?.querySelector('a');
+    expect(link).to.exist;
+    expect(link?.classList.contains('disabled')).to.be.false;
+  });
+
+  test('adds the disabled class to the link if the component is disabled', async () => {
+    const el = await fixture<IAButton>(
+      html`<ia-button href="https://archive.org/foo" .disabled=${true}
+        >Submit</ia-button
+      >`,
+    );
+
+    const link = el.shadowRoot?.querySelector('a');
+    expect(link).to.exist;
+    expect(link?.classList.contains('disabled')).to.be.true;
   });
 
   test('displays slotted text within button', async () => {

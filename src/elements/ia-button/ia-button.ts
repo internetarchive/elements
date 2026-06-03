@@ -52,15 +52,32 @@ export class IAButton extends LitElement {
     | 'submit'
     | 'reset' = 'button';
 
+  /* An optional href to use. If provided, the button will be rendered as an a element instead of a button */
+  @property({ type: String }) href?: string;
+
   render(): TemplateResult {
     return html`
-      <button
-        part="button"
-        class=${this.mode}
-        ?disabled=${this.loading || this.disabled}
-      >
-        ${this.loading ? this.loadingStateTemplate : html`<slot></slot>`}
-      </button>
+      ${this.href
+        ? html`
+            <a
+              part="button"
+              href=${this.href}
+              class=${'ia-button ' +
+              this.mode +
+              (this.isDisabled ? ' disabled' : '')}
+            >
+              ${this.buttonTextTemplate}
+            </a>
+          `
+        : html`
+            <button
+              part="button"
+              class=${'ia-button ' + this.mode}
+              ?disabled=${this.isDisabled}
+            >
+              ${this.buttonTextTemplate}
+            </button>
+          `}
       <slot name="hidden-button"></slot>
     `;
   }
@@ -69,6 +86,11 @@ export class IAButton extends LitElement {
     if (changed.has('type')) {
       this.setButtonTypeEmulation();
     }
+  }
+
+  /* The text to render within the button */
+  private get buttonTextTemplate(): TemplateResult {
+    return this.loading ? this.loadingStateTemplate : html`<slot></slot>`;
   }
 
   /* Content to render while button is loading */
@@ -80,6 +102,11 @@ export class IAButton extends LitElement {
         )}
       </span>
     `;
+  }
+
+  /* Whether the button should be disabled */
+  private get isDisabled(): boolean {
+    return this.disabled || this.loading;
   }
 
   /** Sets up or removes button type emulation as needed */
@@ -233,7 +260,7 @@ export class IAButton extends LitElement {
           display: inline-block; /* keeps host sized to button */
         }
 
-        button {
+        .ia-button {
           font-family: var(--base-font-family--);
           font-size: var(--font-size-standard--);
           height: var(--button-height--);
@@ -265,7 +292,7 @@ export class IAButton extends LitElement {
         }
 
         button:disabled,
-        button.disabled {
+        .ia-button.disabled {
           cursor: not-allowed;
           color: var(--disabled-cta-text-color--);
           background-color: var(--disabled-cta-fill--);
@@ -286,61 +313,61 @@ export class IAButton extends LitElement {
           opacity: 0.7;
         }
 
-        button.primary {
+        .ia-button.primary {
           color: var(--primary-cta-text-color--);
           background-color: var(--primary-cta-fill--);
           border-color: var(--primary-cta-border--);
         }
 
-        button.secondary {
+        .ia-button.secondary {
           color: var(--secondary-cta-text-color--);
           background-color: var(--secondary-cta-fill--);
           border-color: var(--secondary-cta-border--);
         }
 
-        button.danger {
+        .ia-button.danger {
           color: var(--danger-cta-text-color--);
           background-color: var(--danger-cta-fill--);
           border-color: var(--danger-cta-border--);
         }
 
-        button.warning {
+        .ia-button.warning {
           color: var(--warning-cta-text-color--);
           background-color: var(--warning-cta-fill--);
           border-color: var(--warning-cta-border--);
         }
 
-        button.transparent {
+        .ia-button.transparent {
           color: inherit;
           border-width: 0;
           background-color: transparent;
           border-color: transparent;
         }
 
-        button.custom {
+        .ia-button.custom {
           color: var(--ia-button-custom-text-color--);
           background-color: var(--ia-button-custom-fill--);
           border-color: var(--ia-button-custom-border--);
         }
 
-        button.custom:enabled:is(:hover, :focus, :active) {
+        .ia-button.custom:enabled:is(:hover, :focus, :active) {
           color: var(--ia-button-custom-active-text-color--);
           background-color: var(--ia-button-custom-active-fill--);
           border-color: var(--ia-button-custom-active-border--);
         }
 
-        :host(.fit-content) button {
+        :host(.fit-content) .ia-button {
           padding: 0;
           height: fit-content;
         }
 
-        button.link:enabled:hover,
-        button.danger-link:enabled:hover {
+        .ia-button.link:enabled:hover,
+        .ia-button.danger-link:enabled:hover {
           text-decoration: underline;
         }
 
-        button.link,
-        button.danger-link {
+        .ia-button.link,
+        .ia-button.danger-link {
           margin: 0;
           border: 0;
           appearance: none;
@@ -350,11 +377,11 @@ export class IAButton extends LitElement {
           padding: 0;
         }
 
-        button.link {
+        .ia-button.link {
           color: var(--link-color--);
         }
 
-        button.danger-link {
+        .ia-button.danger-link {
           color: var(--color-danger--);
         }
 
