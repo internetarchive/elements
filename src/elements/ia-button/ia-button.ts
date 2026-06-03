@@ -58,26 +58,8 @@ export class IAButton extends LitElement {
   render(): TemplateResult {
     return html`
       ${this.href
-        ? html`
-            <a
-              part="button"
-              href=${this.href}
-              class=${'ia-button ' +
-              this.mode +
-              (this.isDisabled ? ' disabled' : '')}
-            >
-              ${this.buttonTextTemplate}
-            </a>
-          `
-        : html`
-            <button
-              part="button"
-              class=${'ia-button ' + this.mode}
-              ?disabled=${this.isDisabled}
-            >
-              ${this.buttonTextTemplate}
-            </button>
-          `}
+        ? html`<a href=${this.href}>${this.buttonTemplate}</a>`
+        : this.buttonTemplate}
       <slot name="hidden-button"></slot>
     `;
   }
@@ -86,6 +68,19 @@ export class IAButton extends LitElement {
     if (changed.has('type')) {
       this.setButtonTypeEmulation();
     }
+  }
+
+  /* The native button to render */
+  private get buttonTemplate(): TemplateResult {
+    return html`
+      <button
+        part="button"
+        class=${'ia-button ' + this.mode}
+        ?disabled=${this.isDisabled}
+      >
+        ${this.buttonTextTemplate}
+      </button>
+    `;
   }
 
   /* The text to render within the button */
