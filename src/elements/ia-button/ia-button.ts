@@ -76,7 +76,7 @@ export class IAButton extends LitElement {
       <button
         part="button"
         class=${'ia-button ' + this.mode}
-        ?disabled=${this.isDisabled}
+        ?disabled=${this.disabled || this.loading}
       >
         ${this.buttonTextTemplate}
       </button>
@@ -97,11 +97,6 @@ export class IAButton extends LitElement {
         )}
       </span>
     `;
-  }
-
-  /* Whether the button should be disabled */
-  private get isDisabled(): boolean {
-    return this.disabled || this.loading;
   }
 
   /** Sets up or removes button type emulation as needed */
@@ -286,7 +281,7 @@ export class IAButton extends LitElement {
           -o-user-select: none;
         }
 
-        button:disabled,
+        .ia-button:disabled,
         .ia-button.disabled {
           cursor: not-allowed;
           color: var(--disabled-cta-text-color--);
@@ -295,16 +290,16 @@ export class IAButton extends LitElement {
           opacity: 0.5;
         }
 
-        button:enabled:hover {
+        .ia-button:enabled:hover {
           opacity: 0.9;
         }
 
-        button:focus-visible {
+        .ia-button:focus-visible {
           opacity: 0.8;
           outline-style: double;
         }
 
-        button:active {
+        .ia-button:active {
           opacity: 0.7;
         }
 
