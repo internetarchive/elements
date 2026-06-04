@@ -59,6 +59,13 @@ const propInputSettings: PropInputSettings<IAButton>[] = [
     defaultValue: '',
     inputType: 'text',
   },
+  {
+    label: 'Open link in new tab',
+    propertyName: 'openLinksNewTab',
+    defaultValue: false,
+    inputType: 'radio',
+    radioOptions: [true, false],
+  },
 ];
 
 const styleInputSettings: StyleInputSettings[] = [

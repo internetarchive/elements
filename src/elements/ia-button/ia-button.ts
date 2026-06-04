@@ -55,10 +55,17 @@ export class IAButton extends LitElement {
   /* An optional href to wrap around the button */
   @property({ type: String }) href?: string;
 
+  /* Whether to add a target="_blank" to any wrapping link */
+  @property({ type: Boolean }) openLinksNewTab: boolean = false;
+
   render(): TemplateResult {
     return html`
       ${this.href
-        ? html`<a href=${this.href}>${this.buttonTemplate}</a>`
+        ? html`<a
+            href=${this.href}
+            target=${this.openLinksNewTab ? '_blank' : '_self'}
+            >${this.buttonTemplate}</a
+          >`
         : this.buttonTemplate}
       <slot name="hidden-button"></slot>
     `;
