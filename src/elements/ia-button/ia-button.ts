@@ -52,15 +52,21 @@ export class IAButton extends LitElement {
     | 'submit'
     | 'reset' = 'button';
 
+  /* An optional href to wrap around the button */
+  @property({ type: String }) href?: string;
+
+  /* Whether to add a target="_blank" to any wrapping link */
+  @property({ type: Boolean }) openLinksNewTab: boolean = false;
+
   render(): TemplateResult {
     return html`
-      <button
-        part="button"
-        class=${this.mode}
-        ?disabled=${this.loading || this.disabled}
-      >
-        ${this.loading ? this.loadingStateTemplate : html`<slot></slot>`}
-      </button>
+      ${this.href
+        ? html`<a
+            href=${this.href}
+            target=${this.openLinksNewTab ? '_blank' : '_self'}
+            >${this.buttonTemplate}</a
+          >`
+        : this.buttonTemplate}
       <slot name="hidden-button"></slot>
     `;
   }
@@ -69,6 +75,24 @@ export class IAButton extends LitElement {
     if (changed.has('type')) {
       this.setButtonTypeEmulation();
     }
+  }
+
+  /* The native button to render */
+  private get buttonTemplate(): TemplateResult {
+    return html`
+      <button
+        part="button"
+        class=${this.mode}
+        ?disabled=${this.disabled || this.loading}
+      >
+        ${this.buttonTextTemplate}
+      </button>
+    `;
+  }
+
+  /* The text to render within the button */
+  private get buttonTextTemplate(): TemplateResult {
+    return this.loading ? this.loadingStateTemplate : html`<slot></slot>`;
   }
 
   /* Content to render while button is loading */
@@ -262,6 +286,10 @@ export class IAButton extends LitElement {
           -moz-user-select: none;
           -ms-user-select: none;
           -o-user-select: none;
+        }
+
+        a {
+          text-decoration: none;
         }
 
         button:disabled,

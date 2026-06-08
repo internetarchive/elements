@@ -6,12 +6,44 @@ import { IAButton } from './ia-button';
 import './ia-button';
 
 describe('IA button', () => {
-  test('renders a basic button', async () => {
+  test('renders a basic button by default', async () => {
     const el = await fixture<IAButton>(html`<ia-button>Submit</ia-button>`);
 
     const button = el.shadowRoot?.querySelector('button');
     expect(button).to.exist;
     expect(button?.disabled).to.equal(false);
+  });
+
+  test('renders a link around the button if href provided', async () => {
+    const el = await fixture<IAButton>(
+      html`<ia-button href="https://archive.org/foo">Go</ia-button>`,
+    );
+
+    const link = el.shadowRoot?.querySelector('a');
+    expect(link).to.exist;
+    expect(link?.href).to.equal('https://archive.org/foo');
+  });
+
+  test('includes a target="_blank" if requested', async () => {
+    const el = await fixture<IAButton>(
+      html`<ia-button href="https://archive.org/foo" .openLinksNewTab=${true}>
+        Go
+      </ia-button>`,
+    );
+
+    const link = el.shadowRoot?.querySelector('a');
+    expect(link).to.exist;
+    expect(link?.target).to.equal('_blank');
+  });
+
+  test('uses target="_self" for links by default', async () => {
+    const el = await fixture<IAButton>(
+      html`<ia-button href="https://archive.org/foo">Go</ia-button>`,
+    );
+
+    const link = el.shadowRoot?.querySelector('a');
+    expect(link).to.exist;
+    expect(link?.target).to.equal('_self');
   });
 
   test('displays slotted text within button', async () => {
