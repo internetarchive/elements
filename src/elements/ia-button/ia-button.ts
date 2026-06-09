@@ -223,6 +223,7 @@ export class IAButton extends LitElement {
           --button-border-width--: var(--button-border-width);
           --button-border-radius--: var(--button-border-radius);
           --base-font-family--: var(--base-font-family);
+          --font-size-standard--: var(--font-size-standard);
 
           --ia-button-transition--: var(
             --ia-button-transition,
