@@ -272,7 +272,7 @@ export class IAButton extends LitElement {
 
           cursor: pointer;
           line-height: normal;
-          border-style: 'solid';
+          border-style: solid;
           white-space: nowrap;
           appearance: auto;
           box-sizing: border-box;
