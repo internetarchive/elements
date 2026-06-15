@@ -268,8 +268,8 @@ export class IAButton extends LitElement {
           border-width: var(--button-border-width--);
           border-radius: var(--button-border-radius--);
           transition: var(--ia-button-transition--);
-          outline-color: var(--primary-cta-text-color--);
 
+          outline-color: currentColor;
           cursor: pointer;
           line-height: normal;
           border-style: solid;
