@@ -807,6 +807,7 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
           --button-border-width--: var(--button-border-width);
           --button-border-radius--: var(--button-border-radius);
           --base-font-family--: var(--base-font-family);
+          --font-size-standard--: var(--font-size-standard);
 
           --ia-button-transition--: var(
             --ia-button-transition,
@@ -851,11 +852,11 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
           border-width: var(--button-border-width--);
           border-radius: var(--button-border-radius--);
           transition: var(--ia-button-transition--);
-          outline-color: var(--primary-cta-text-color--);
 
+          outline-color: currentColor;
           cursor: pointer;
           line-height: normal;
-          border-style: 'solid';
+          border-style: solid;
           white-space: nowrap;
           appearance: auto;
           box-sizing: border-box;
