@@ -31,6 +31,9 @@ export class StoryTemplate extends LitElement {
   /* Optional stringified properties to always include in the example usage */
   @property({ type: String }) defaultUsageProps?: string;
 
+  /* Optional slotted content to always include in the example usage */
+  @property({ type: String }) defaultSlottedContent?: string;
+
   @property({ type: Object }) styleInputData?: StyleInputData;
 
   @property({ type: Object }) propInputData?: PropInputData;
@@ -229,8 +232,12 @@ export class StoryTemplate extends LitElement {
       ? '  ' + this.stringifiedProps + '\n'
       : '';
     const hasProps = !!defaultProps || !!appliedProps;
+    const slottedContent =
+      this.defaultSlottedContent && hasProps
+        ? '\n ' + this.defaultSlottedContent + '\n'
+        : this.defaultSlottedContent;
 
-    return `<${this.elementTag}${hasProps ? '\n' : ''}${defaultProps}${appliedProps}></${this.elementTag}>`;
+    return `<${this.elementTag}${hasProps ? '\n' : ''}${defaultProps}${appliedProps}>${slottedContent ?? ''}</${this.elementTag}>`;
   }
 
   private get cssCode(): string {
