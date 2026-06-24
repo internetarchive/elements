@@ -24,6 +24,16 @@ export class IAStatusIndicatorStory extends LitElement {
             Make text ${this.textVisible ? 'sr-only' : 'visible'}
           </button>
         </div>
+        <div slot="usage-notes">
+          <p>
+            Used to make text available for screen readers but not visible on
+            the page.
+          </p>
+          <p>
+            To see the hidden text in this demo, you can use the Chrome
+            accessibility tree or your browser's equivalent.
+          </p>
+        </div>
       </story-template>
     `;
   }
