@@ -253,6 +253,7 @@ export class IAButtonStory extends LitElement {
         elementTag="ia-button"
         elementClassName="IAButton"
         .defaultUsageProps=${`@click=\${() => alert('Button clicked!')}`}
+        .defaultSlottedContent=${'Click Me'}
         .styleInputData=${{ settings: styleInputSettings }}
         .propInputData=${{ settings: propInputSettings }}
       >
