@@ -17,6 +17,7 @@ import type { LoadingStatus } from '@src/elements/ia-status-indicator/ia-status-
 
 import '@src/elements/ia-status-indicator/ia-status-indicator';
 import '@src/elements/ia-otp-input/ia-otp-input';
+import '@src/elements/ia-button/ia-button';
 
 /**
  * Custom events fired by the component
@@ -94,15 +95,16 @@ export class IAOTPForm extends LitElement {
           >${msg('Emailing...')}</span
         >`
       : html`
-          <button
-            class="new-code-btn link"
+          <ia-button
+            mode="link"
+            class="new-code-btn"
             part="new-code-button"
             .disabled=${this.validationStatus === 'loading' ||
             this.validationStatus === 'success'}
             @click=${this.handleNewCodeRequested}
           >
             ${msg('Email me another code')}
-          </button>
+          </ia-button>
         `;
   }
 
@@ -151,26 +153,6 @@ export class IAOTPForm extends LitElement {
           font-size: var(--font-size-standard--);
           color: var(--color-danger--);
           margin-bottom: -10px;
-        }
-
-        .new-code-btn {
-          font-family: inherit;
-          font-size: var(--font-size-standard--);
-          display: block;
-          width: fit-content;
-          margin-top: 10px;
-          border: 0;
-          padding: 0;
-          appearance: none;
-          background: none;
-          color: var(--link-color--);
-          text-decoration: none;
-          cursor: pointer;
-        }
-
-        .new-code-btn:hover,
-        .new-code-btn:focus {
-          text-decoration: underline;
         }
 
         .new-code-msg {
