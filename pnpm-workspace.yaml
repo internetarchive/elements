@@ -1,0 +1,18 @@
+nodeLinker: hoisted
+
+# Supply-chain cooldown (WEBDEV-8544): don't install a package version until it
+# has been published for at least this long, giving a compromised release time to
+# be detected and yanked before it reaches us. Value is in MINUTES — 20160 = 14 days.
+# pnpm enforces this when the lockfile is updated (pnpm add / pnpm update); CI's
+# `pnpm install --frozen-lockfile` just reproduces the vetted lockfile, so the gate
+# never blocks a build.
+#
+# @internetarchive/* is excluded: those are our own trusted packages and are
+# frequently republished — we want them available immediately.
+minimumReleaseAge: 20160
+minimumReleaseAgeExclude:
+  - '@internetarchive/*'
+# Acknowledge dependency build scripts (pnpm 11+ requires an explicit decision).
+# esbuild's postinstall places its platform binary; vite and vitest need it.
+allowBuilds:
+  esbuild: true

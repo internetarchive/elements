@@ -5,6 +5,11 @@
   "license": "AGPL-3.0-only",
   "types": "./dist/src/elements/index.d.ts",
   "type": "module",
+  "packageManager": "pnpm@11.12.0",
+  "engines": {
+    "node": ">=24",
+    "pnpm": ">=11"
+  },
   "publishConfig": {
     "access": "public"
   },
@@ -16,6 +21,7 @@
     "url": "https://github.com/internetarchive/elements/issues"
   },
   "scripts": {
+    "preinstall": "node support/only-pnpm.cjs",
     "dev": "wireit",
     "build": "wireit",
     "clean": "wireit",
@@ -51,7 +57,7 @@
     "highlight.js": "^11.11.1",
     "madge": "^8.0.0",
     "playwright": "^1.60.0",
-    "prettier": "^3.6.2",
+    "prettier": "3.6.2",
     "ts-lit-plugin": "^2.0.2",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3",
