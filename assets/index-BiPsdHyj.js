@@ -2441,14 +2441,15 @@ fill=""></path>
     `}willUpdate(o){o.has("validationStatus")&&this.OTPInput&&this.validationStatus==="error"&&(this.OTPInput.prefillValue=""),o.has("newCodeSending")&&this.newCodeSending&&this.OTPInput&&(this.OTPInput.prefillValue="")}get resendCodeButtonTemplate(){return this.newCodeSending?h`<span part="new-code-message" class="new-code-msg"
           >${B("Emailing...")}</span
         >`:h`
-          <button
-            class="new-code-btn link"
+          <ia-button
+            mode="link"
+            class="new-code-btn"
             part="new-code-button"
             .disabled=${this.validationStatus==="loading"||this.validationStatus==="success"}
             @click=${this.handleNewCodeRequested}
           >
             ${B("Email me another code")}
-          </button>
+          </ia-button>
         `}async handleNewCodeRequested(){this.dispatchEvent(new CustomEvent(rn.NewCodeRequested,{bubbles:!0,composed:!0})),this.OTPInput.prefillValue=""}static get styles(){return[F,P`
         :host {
           --font-size-standard--: var(--font-size-standard);
@@ -2480,26 +2481,6 @@ fill=""></path>
           font-size: var(--font-size-standard--);
           color: var(--color-danger--);
           margin-bottom: -10px;
-        }
-
-        .new-code-btn {
-          font-family: inherit;
-          font-size: var(--font-size-standard--);
-          display: block;
-          width: fit-content;
-          margin-top: 10px;
-          border: 0;
-          padding: 0;
-          appearance: none;
-          background: none;
-          color: var(--link-color--);
-          text-decoration: none;
-          cursor: pointer;
-        }
-
-        .new-code-btn:hover,
-        .new-code-btn:focus {
-          text-decoration: underline;
         }
 
         .new-code-msg {
