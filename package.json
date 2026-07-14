@@ -21,7 +21,6 @@
     "url": "https://github.com/internetarchive/elements/issues"
   },
   "scripts": {
-    "preinstall": "node support/only-pnpm.cjs",
     "dev": "wireit",
     "build": "wireit",
     "clean": "wireit",
