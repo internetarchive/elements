@@ -235,7 +235,6 @@ export class IAItemNavigatorStory extends LitElement {
         elementClassName="IAItemNavigator"
         .styleInputData=${this.styleInputData}
         .customExampleUsage=${this.exampleUsage}
-        labs
       >
         <div slot="demo">
           <div class="frame-wrapper">
