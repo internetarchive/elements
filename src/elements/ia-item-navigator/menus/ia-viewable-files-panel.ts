@@ -142,8 +142,10 @@ export class IAViewableFilesPanel extends LitElement {
           box-sizing: border-box;
           color: var(--item-navigator-text-color--);
           margin-top: 14px;
-          margin-bottom: 2rem;
+          margin-bottom: 2em;
           --active-border-width--: 2px;
+          /* 10px base (petabox scale); internal sizing is em against it. */
+          font-size: var(--item-navigator-base-font-size, 10px);
         }
 
         a {
@@ -154,7 +156,7 @@ export class IAViewableFilesPanel extends LitElement {
         ul {
           padding: 0;
           list-style: none;
-          margin: var(--active-border-width--) 0.5rem 1rem 0;
+          margin: var(--active-border-width--) 0.5em 1em 0;
         }
 
         ul > li:first-child .separator {
@@ -168,7 +170,7 @@ export class IAViewableFilesPanel extends LitElement {
 
         li .content {
           border: var(--active-border-width--) solid transparent;
-          padding: 0.2rem 0 0.4rem 0.2rem;
+          padding: 0.2em 0 0.4em 0.2em;
         }
 
         li .content.active {
@@ -202,7 +204,7 @@ export class IAViewableFilesPanel extends LitElement {
           border-radius: 20px;
           display: inline-block;
           margin-left: 5px;
-          font-size: 0.9rem;
+          font-size: 0.9em;
         }
 
         .pdf-label .sr-only {

@@ -240,16 +240,19 @@ export class IAMenuSlider extends LitElement {
           );
           --item-navigator-header-icon-width--: var(
             --item-navigator-header-icon-width,
-            2.4rem
+            2em
           );
           --item-navigator-header-icon-height--: var(
             --item-navigator-header-icon-height,
-            2.4rem
+            2em
           );
           --item-navigator-icon-fill-color--: var(
             --item-navigator-icon-fill-color,
             var(--true-white)
           );
+
+          /* 10px base (petabox scale); internal sizing is em against it. */
+          font-size: var(--item-navigator-base-font-size, 10px);
         }
 
         .main {
@@ -268,9 +271,9 @@ export class IAMenuSlider extends LitElement {
           left: 0;
           bottom: 0;
           width: ${sliderWidth};
-          padding: 0.5rem 0.5rem 0 0;
+          padding: 0.5em 0.5em 0 0;
           box-sizing: border-box;
-          font-size: 1.4rem;
+          font-size: 1.4em;
           color: var(--item-navigator-text-color--);
           background: var(--item-navigator-menu-slider-bg--);
           transform: translateX(calc(${sliderWidth} * -1));
@@ -281,7 +284,7 @@ export class IAMenuSlider extends LitElement {
         }
 
         header {
-          margin: 0 0 0.5rem 0;
+          margin: 0 0 0.5em 0;
         }
 
         header * {
@@ -315,6 +318,9 @@ export class IAMenuSlider extends LitElement {
         }
 
         button.close {
+          /* Reset to the base so the header icon (em) doesn't compound
+             against .menu's enlarged font-size. */
+          font-size: var(--item-navigator-base-font-size, 10px);
           min-width: 38px;
           min-height: 38px;
           display: flex;
@@ -343,9 +349,9 @@ export class IAMenuSlider extends LitElement {
           transform: translateX(calc(${sliderWidth} * -1));
           transition: transform ${transitionTiming} ease-out;
           background: var(--item-navigator-active-button-bg--);
-          border-right: 0.2rem solid;
+          border-right: 0.2em solid;
           border-color: var(--item-navigator-subpanel-border-color--);
-          padding: 0.5rem 0 0 0.5rem;
+          padding: 0.5em 0 0 0.5em;
           display: flex;
           flex-direction: column;
         }
@@ -362,7 +368,7 @@ export class IAMenuSlider extends LitElement {
         }
 
         .menu-list li {
-          margin-bottom: 0.2rem;
+          margin-bottom: 0.2em;
         }
 
         .content > section {

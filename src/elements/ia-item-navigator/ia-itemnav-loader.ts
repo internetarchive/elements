@@ -77,6 +77,9 @@ export class IAItemNavLoader extends LitElement {
             --item-navigator-text-color,
             var(--true-white)
           );
+
+          /* 10px base (petabox scale); internal sizing is em against it. */
+          font-size: var(--item-navigator-base-font-size, 10px);
         }
 
         .place-holder {

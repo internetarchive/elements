@@ -169,6 +169,9 @@ export class IASortFilesButton extends LitElement {
             --item-navigator-icon-fill-color,
             var(--true-white)
           );
+
+          /* 10px base (petabox scale); internal sizing is em against it. */
+          font-size: var(--item-navigator-base-font-size, 10px);
         }
 
         button.sort-by {

@@ -407,11 +407,11 @@ export class IAItemNavigator
           );
           --item-navigator-icon-width--: var(
             --item-navigator-icon-width,
-            2.4rem
+            2.4em
           );
           --item-navigator-icon-height--: var(
             --item-navigator-icon-height,
-            2.4rem
+            2.4em
           );
           --item-navigator-icon-stroke-color--: var(
             --item-navigator-icon-stroke-color,
@@ -421,6 +421,15 @@ export class IAItemNavigator
             --item-navigator-icon-fill-color,
             var(--true-white)
           );
+
+          /*
+           * The component's internal sizing is expressed in em against this
+           * base (10px matches petabox's base font size, which the upstream
+           * demo set on the document root). Anchoring it here makes the
+           * navigator self-contained — its scale no longer depends on the
+           * consumer's root font-size. Override to rescale everything.
+           */
+          font-size: var(--item-navigator-base-font-size, 10px);
         }
 
         :host,
@@ -486,6 +495,10 @@ export class IAItemNavigator
         }
 
         button {
+          /* Buttons don't inherit font-size from the UA stylesheet; inherit it
+             so em-sized icons resolve against the component's base, not the
+             browser's default button font-size. */
+          font: inherit;
           cursor: pointer;
           padding: 0;
           border: 0;
@@ -512,7 +525,7 @@ export class IAItemNavigator
         }
 
         nav .minimized button {
-          margin-bottom: 0.2rem;
+          margin-bottom: 0.2em;
           margin: auto;
           display: inline-flex;
           vertical-align: middle;

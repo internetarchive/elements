@@ -121,6 +121,9 @@ export class IAMenuButton extends LitElement {
             --item-navigator-icon-active-fill,
             var(--true-white)
           );
+
+          /* 10px base (petabox scale); internal sizing is em against it. */
+          font-size: var(--item-navigator-base-font-size, 10px);
         }
 
         a {
@@ -131,13 +134,15 @@ export class IAMenuButton extends LitElement {
         button.menu-item {
           -webkit-appearance: none;
           appearance: none;
+          /* Inherit font-size so the em-sized icon/label resolve against the
+             component base rather than the UA default button font-size. */
+          font: inherit;
         }
 
         .menu-item {
           display: inline-flex;
           width: 100%;
           padding: 0;
-          font-size: 1.6rem;
           text-align: left;
           background: transparent;
           align-items: center;
@@ -154,28 +159,29 @@ export class IAMenuButton extends LitElement {
         .label {
           display: var(--item-navigator-menu-button-label-display--);
           padding: 0;
+          font-size: 1.6em;
           font-weight: 400;
           color: var(--item-navigator-text-color--);
           text-align: left;
           vertical-align: middle;
-          margin-left: 1rem;
+          margin-left: 1em;
         }
 
         .menu-details {
           color: var(--item-navigator-text-color--);
           display: inline-block;
-          margin-left: 0.5rem;
+          margin-left: 0.5em;
           font-style: italic;
-          font-size: 1.5rem;
+          font-size: 1.5em;
         }
 
         .menu-item > .icon {
           position: relative;
           display: inline-flex;
           z-index: 2;
-          min-width: 4.2rem;
-          max-width: 4.2rem;
-          height: 4.2rem;
+          min-width: 4.2em;
+          max-width: 4.2em;
+          height: 4.2em;
           vertical-align: middle;
           align-items: center;
           justify-content: center;
@@ -188,7 +194,7 @@ export class IAMenuButton extends LitElement {
 
         .menu-item[aria-expanded='true'] .icon {
           background-color: var(--item-navigator-active-button-bg--);
-          border-radius: 1rem 0 0 1rem;
+          border-radius: 1em 0 0 1em;
         }
 
         .icon .fill-color {

@@ -254,7 +254,8 @@ export class IASharePanel extends LitElement {
           display: block;
           height: 100%;
           overflow-y: auto;
-          font-size: 1.4rem;
+          /* 10px base (petabox scale); internal sizing is em against it. */
+          font-size: var(--item-navigator-base-font-size, 10px);
           box-sizing: border-box;
         }
 
@@ -265,22 +266,22 @@ export class IASharePanel extends LitElement {
 
         h3 {
           padding: 0;
-          margin: 0 1rem 0 0;
-          font-size: 1.6rem;
+          margin: 0 1em 0 0;
+          font-size: 1.6em;
         }
 
         h4 {
-          font-size: 1.4rem;
+          font-size: 1.4em;
         }
 
         :host > div {
-          padding: 1rem 0;
+          padding: 1em 0;
         }
 
         .share-option {
           display: block;
-          padding: 0.5rem 0;
-          font-size: 1.6rem;
+          padding: 0.5em 0;
+          font-size: 1.6em;
           text-decoration: none;
           color: var(--item-navigator-share-link-color--);
           cursor: pointer;
@@ -294,8 +295,8 @@ export class IASharePanel extends LitElement {
 
         .share-option > * {
           display: inline-block;
-          padding: 0.2rem;
-          margin-right: 1rem;
+          padding: 0.2em;
+          margin-right: 1em;
           vertical-align: middle;
           border: 1px solid var(--item-navigator-share-icon-border--);
           border-radius: 7px;
@@ -303,8 +304,11 @@ export class IASharePanel extends LitElement {
         }
 
         .share-option .ia-icon {
-          width: 2rem;
-          height: 2rem;
+          /* Reset to the base so the icon (em) doesn't compound against the
+             share-option's enlarged font-size. */
+          font-size: var(--item-navigator-base-font-size, 10px);
+          width: 2em;
+          height: 2em;
         }
 
         .ia-icon .fill-color {
@@ -336,11 +340,11 @@ export class IASharePanel extends LitElement {
           display: block;
           width: 100%;
           height: 120px;
-          padding: 0.8rem 1rem;
+          padding: 0.8em 1em;
           box-sizing: border-box;
           resize: none;
           cursor: pointer;
-          font: normal 1.4rem var(--base-font-family);
+          font: normal 1.4em var(--base-font-family);
           color: var(--item-navigator-textarea-color--);
           background: var(--item-navigator-textarea-bg--);
         }
@@ -349,10 +353,10 @@ export class IASharePanel extends LitElement {
           position: absolute;
           bottom: 0;
           left: 0;
-          height: 3rem;
-          padding: 0.5rem 1rem;
+          height: 3em;
+          padding: 0.5em 1em;
           box-sizing: border-box;
-          font: normal 1.2rem/2rem var(--base-font-family);
+          font: normal 1.2em/2em var(--base-font-family);
           color: var(--item-navigator-textarea-bg--);
           background: var(--item-navigator-textarea-color--);
           opacity: 0;

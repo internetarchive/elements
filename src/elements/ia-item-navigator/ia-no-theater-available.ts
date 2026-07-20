@@ -62,6 +62,8 @@ export class IANoTheaterAvailable extends LitElement {
           );
           color: var(--item-navigator-text-color--);
           text-align: center;
+          /* 10px base (petabox scale); internal sizing is em against it. */
+          font-size: var(--item-navigator-base-font-size, 10px);
         }
 
         section {
@@ -71,7 +73,7 @@ export class IANoTheaterAvailable extends LitElement {
         }
 
         p {
-          font-size: 1.4rem;
+          font-size: 1.4em;
         }
 
         a {
@@ -80,13 +82,13 @@ export class IANoTheaterAvailable extends LitElement {
           min-height: 35px;
           cursor: pointer;
           line-height: normal;
-          border-radius: 0.4rem;
+          border-radius: 0.4em;
           text-align: center;
           vertical-align: middle;
-          font-size: 1.4rem;
+          font-size: 1.4em;
           font-family: var(--base-font-family);
           display: inline-block;
-          padding: 0.85rem 1.2rem;
+          padding: 0.85em 1.2em;
           border: 1px solid var(--lightest-gray);
           white-space: nowrap;
           appearance: auto;
