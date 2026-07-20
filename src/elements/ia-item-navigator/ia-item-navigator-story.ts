@@ -47,12 +47,7 @@ class DemoResizeObserver implements SharedResizeObserverInterface {
 
 /** A generic list-ish glyph for the "About" demo menu entry. */
 const demoIcon = html`
-  <svg
-    class="ia-icon"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-    style="width:100%;height:100%"
-  >
+  <svg class="ia-icon" viewBox="0 0 24 24" aria-hidden="true">
     <path class="fill-color" d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" />
   </svg>
 `;

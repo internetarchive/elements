@@ -121,6 +121,14 @@ export class IAMenuButton extends LitElement {
             --item-navigator-icon-active-fill,
             var(--true-white)
           );
+          --item-navigator-icon-width--: var(
+            --item-navigator-icon-width,
+            2.4em
+          );
+          --item-navigator-icon-height--: var(
+            --item-navigator-icon-height,
+            2.4em
+          );
 
           /* 10px base (petabox scale); internal sizing is em against it. */
           font-size: var(--item-navigator-base-font-size, 10px);
@@ -190,6 +198,13 @@ export class IAMenuButton extends LitElement {
         .menu-item > .icon > * {
           /* Prevent tooltip containing icon literal description */
           pointer-events: none;
+        }
+
+        /* Size the glyph within the icon box to match the shortcut-rail
+           icons, rather than letting the svg fill the whole box. */
+        .menu-item > .icon .ia-icon {
+          width: var(--item-navigator-icon-width--);
+          height: var(--item-navigator-icon-height--);
         }
 
         .menu-item[aria-expanded='true'] .icon {
