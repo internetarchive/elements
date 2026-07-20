@@ -4,7 +4,9 @@ import { customElement, state } from 'lit/decorators.js';
 import './ia-item-navigator';
 import './menus/ia-viewable-files-panel';
 import './menus/ia-sort-files-button';
+import './menus/ia-share-panel';
 import { viewableFilesIcon } from './menus/ia-viewable-files-panel';
+import { shareIcon } from './menus/ia-share-panel';
 import type { MenuProviderInterface } from './interfaces/menu-interfaces';
 import type { FileSortOption, ViewableFileInfo } from './menus/models';
 import type {
@@ -144,6 +146,20 @@ export class IAItemNavigatorStory extends LitElement {
             .fileList=${this.sortedFiles}
             .sortOrderBy=${this.sortOrderBy}
           ></ia-viewable-files-panel>
+        `,
+      },
+      {
+        ...shared,
+        id: 'share',
+        label: 'Share',
+        icon: shareIcon,
+        component: html`
+          <ia-share-panel
+            identifier="demo-item"
+            baseHost="archive.org"
+            type="item"
+            description="A Demonstration Item"
+          ></ia-share-panel>
         `,
       },
       {
