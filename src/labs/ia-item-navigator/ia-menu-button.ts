@@ -1,0 +1,204 @@
+import {
+  css,
+  html,
+  LitElement,
+  TemplateResult,
+  type CSSResultGroup,
+} from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import themeStyles from '@src/themes/theme-styles';
+
+/**
+ * A single entry in the item navigator's side menu. Renders either a button
+ * (default) or a link (when `href` is set) with an icon, label and optional
+ * detail text, and emits `menuTypeSelected` when activated.
+ */
+@customElement('ia-menu-button')
+export class IAMenuButton extends LitElement {
+  static shadowRootOptions = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
+  @property({ type: Object }) icon: TemplateResult | string = '';
+
+  @property({ type: String }) href = '';
+
+  @property({ type: String }) label = '';
+
+  @property({ type: Object }) menuDetails: TemplateResult | string = '';
+
+  @property({ type: String }) buttonId = '';
+
+  @property({ type: Boolean }) selected = false;
+
+  @property({ type: Boolean }) followable = false;
+
+  onClick(e: Event): void {
+    e.preventDefault();
+    this.dispatchMenuTypeSelectedEvent();
+  }
+
+  dispatchMenuTypeSelectedEvent(): void {
+    this.dispatchEvent(
+      new CustomEvent('menuTypeSelected', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          id: this.buttonId,
+        },
+      }),
+    );
+  }
+
+  get iconClass(): string {
+    return this.selected ? 'active' : '';
+  }
+
+  get menuItem(): TemplateResult {
+    return html`
+      <span
+        class="icon ${this.iconClass}"
+        aria-hidden="true"
+        title=${this.label}
+        >${this.icon}</span
+      >
+      <span class="label">${this.label}</span>
+      <span class="menu-details">${this.menuDetails}</span>
+    `;
+  }
+
+  get linkButton(): TemplateResult {
+    return html`
+      <a
+        href=${this.href}
+        class="menu-item"
+        aria-expanded=${this.selected}
+        @click=${this.followable ? undefined : this.onClick}
+        >${this.menuItem}</a
+      >
+    `;
+  }
+
+  get clickButton(): TemplateResult {
+    return html`
+      <button
+        class="menu-item"
+        aria-expanded=${this.selected}
+        @click=${this.onClick}
+      >
+        ${this.menuItem}
+      </button>
+    `;
+  }
+
+  render(): TemplateResult {
+    return this.href ? this.linkButton : this.clickButton;
+  }
+
+  static get styles(): CSSResultGroup {
+    return [
+      themeStyles,
+      css`
+        :host {
+          --item-navigator-text-color--: var(
+            --item-navigator-text-color,
+            var(--true-white)
+          );
+          --item-navigator-active-button-bg--: var(
+            --item-navigator-active-button-bg,
+            var(--mid-gray)
+          );
+          --item-navigator-menu-button-label-display--: var(
+            --item-navigator-menu-button-label-display,
+            none
+          );
+          --item-navigator-icon-inactive-fill--: var(
+            --item-navigator-icon-inactive-fill,
+            var(--lighter-gray)
+          );
+          --item-navigator-icon-active-fill--: var(
+            --item-navigator-icon-active-fill,
+            var(--true-white)
+          );
+        }
+
+        a {
+          display: inline-block;
+          text-decoration: none;
+        }
+
+        button.menu-item {
+          -webkit-appearance: none;
+          appearance: none;
+        }
+
+        .menu-item {
+          display: inline-flex;
+          width: 100%;
+          padding: 0;
+          font-size: 1.6rem;
+          text-align: left;
+          background: transparent;
+          align-items: center;
+          border: none;
+          cursor: pointer;
+          transition: background-color 0.2s;
+          border-radius: 6px;
+        }
+
+        .menu-item:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .label {
+          display: var(--item-navigator-menu-button-label-display--);
+          padding: 0;
+          font-weight: 400;
+          color: var(--item-navigator-text-color--);
+          text-align: left;
+          vertical-align: middle;
+          margin-left: 1rem;
+        }
+
+        .menu-details {
+          color: var(--item-navigator-text-color--);
+          display: inline-block;
+          margin-left: 0.5rem;
+          font-style: italic;
+          font-size: 1.5rem;
+        }
+
+        .menu-item > .icon {
+          position: relative;
+          display: inline-flex;
+          z-index: 2;
+          min-width: 4.2rem;
+          max-width: 4.2rem;
+          height: 4.2rem;
+          vertical-align: middle;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .menu-item > .icon > * {
+          /* Prevent tooltip containing icon literal description */
+          pointer-events: none;
+        }
+
+        .menu-item[aria-expanded='true'] .icon {
+          background-color: var(--item-navigator-active-button-bg--);
+          border-radius: 1rem 0 0 1rem;
+        }
+
+        .icon .fill-color {
+          fill: var(--item-navigator-icon-inactive-fill--);
+        }
+
+        .icon.active .fill-color {
+          fill: var(--item-navigator-icon-active-fill--);
+        }
+      `,
+    ];
+  }
+}
