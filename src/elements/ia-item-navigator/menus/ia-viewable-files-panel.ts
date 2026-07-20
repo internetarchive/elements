@@ -14,6 +14,7 @@ import type { FileSortOption, ViewableFileInfo } from './models';
 /** Icon for the viewable-files menu shortcut / menu entry. */
 export const viewableFilesIcon = html`
   <svg
+    class="ia-icon"
     viewBox="0 0 24 24"
     xmlns="http://www.w3.org/2000/svg"
     aria-labelledby="viewableFilesTitleID"

@@ -535,7 +535,8 @@ export class IAItemNavigator
           margin: auto;
         }
 
-        .toggle-menu .ia-icon {
+        .toggle-menu .ia-icon,
+        .shortcuts .ia-icon {
           width: ${iconWidth};
           height: ${iconHeight};
         }

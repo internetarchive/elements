@@ -1,4 +1,4 @@
-import { css, html, LitElement, type CSSResultGroup } from 'lit';
+import { css, html, LitElement, nothing, type CSSResultGroup } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import './ia-item-navigator';
@@ -7,7 +7,10 @@ import './menus/ia-sort-files-button';
 import './menus/ia-share-panel';
 import { viewableFilesIcon } from './menus/ia-viewable-files-panel';
 import { shareIcon } from './menus/ia-share-panel';
-import type { MenuProviderInterface } from './interfaces/menu-interfaces';
+import type {
+  MenuProviderInterface,
+  MenuShortcutInterface,
+} from './interfaces/menu-interfaces';
 import type { FileSortOption, ViewableFileInfo } from './menus/models';
 import type {
   SharedResizeObserverConfig,
@@ -42,12 +45,98 @@ class DemoResizeObserver implements SharedResizeObserverInterface {
   }
 }
 
-/** A generic list-ish glyph for demo menu entries. */
+/** A generic list-ish glyph for the "About" demo menu entry. */
 const demoIcon = html`
-  <svg viewBox="0 0 24 24" aria-hidden="true" style="width:100%;height:100%">
+  <svg
+    class="ia-icon"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    style="width:100%;height:100%"
+  >
     <path class="fill-color" d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" />
   </svg>
 `;
+
+/**
+ * A realistic multi-file item — the volumes of "The Master Book of American
+ * Folk Song" — mirroring the example from the upstream item-navigator demo.
+ * Includes a deliberately long title (to show wrapping) and PDF entries (to
+ * show the PDF flag).
+ */
+const DEMO_FILES: ViewableFileInfo[] = [
+  {
+    title: 'beyonce-cosmo-article.pdf',
+    file_prefix: 'beyonce-cosmo-article',
+    file_subprefix: 'beyonce-cosmo-article',
+    file_source: 'beyonce-cosmo-article.pdf',
+    url_path: '/details/demo-item/beyonce-cosmo-article.pdf',
+    image: '',
+    author: '',
+    orig_sort: 0,
+  },
+  {
+    title:
+      'Very cool title that is extra long so it wraps across several rows in the panel',
+    file_prefix: 'onestrandriverpdf',
+    file_subprefix: 'onestrandriverpdf',
+    file_source: 'onestrandriverpdf.pdf',
+    url_path: '/details/demo-item/onestrandriverpdf.pdf',
+    image: '',
+    author: '',
+    orig_sort: 1,
+  },
+  {
+    title: 'The Master Book of American Folk Song',
+    file_prefix: 'master-book',
+    file_subprefix: 'master-book',
+    file_source: '/01-The Master Book of American Folk Song_jp2.zip',
+    url_path: '/details/demo-item/master-book',
+    image: '',
+    author: 'Riley Shepard',
+    orig_sort: 2,
+  },
+  {
+    title:
+      'Encyclopedia of the Traditional Music and Folk Songs of the United States, Index A–M',
+    file_prefix: 'encyclopedia-a-m',
+    file_subprefix: 'encyclopedia-a-m',
+    file_source: '/02-Encyclopedia Index A through M_jp2.zip',
+    url_path: '/details/demo-item/encyclopedia-a-m',
+    image: '',
+    author: 'Riley Shepard',
+    orig_sort: 3,
+  },
+  {
+    title: 'Letters to Riley Shepard',
+    file_prefix: 'letters',
+    file_subprefix: 'letters',
+    file_source: '/04-Letters to Riley Shepard_jp2.zip',
+    url_path: '/details/demo-item/letters',
+    image: '',
+    author: 'Riley Shepard',
+    orig_sort: 4,
+  },
+  {
+    title: 'Master Book of American Folk Song Vol. 1',
+    file_prefix: 'vol-1',
+    file_subprefix: 'vol-1',
+    file_source: '/Master Book Vol. 1.pdf',
+    url_path: '/details/demo-item/vol-1',
+    image: '',
+    author: 'Riley Shepard',
+    orig_sort: 5,
+  },
+  {
+    title: 'Master Book of American Folk Song Vol. 2',
+    file_prefix: 'vol-2',
+    file_subprefix: 'vol-2',
+    file_source: '/Master Book Vol. 2.pdf',
+    url_path: '/details/demo-item/vol-2',
+    image: '',
+    author: 'Riley Shepard',
+    orig_sort: 6,
+  },
+];
 
 @customElement('ia-item-navigator-story')
 export class IAItemNavigatorStory extends LitElement {
@@ -55,44 +144,15 @@ export class IAItemNavigatorStory extends LitElement {
 
   @state() private viewAvailable = true;
 
+  @state() private headerOn = true;
+
+  @state() private fullscreen = false;
+
   @state() private sharedObserver = new DemoResizeObserver();
 
   @state() private sortOrderBy: FileSortOption = 'default';
 
-  private readonly demoFiles: ViewableFileInfo[] = [
-    {
-      title: 'Volume 1',
-      file_prefix: 'v1',
-      file_subprefix: 'v1',
-      url_path: '/details/demo-item/v1',
-      file_source: 'v1.pdf',
-      image: '',
-      author: '',
-      orig_sort: 0,
-    },
-    {
-      title: 'Volume 3',
-      file_prefix: 'v3',
-      file_subprefix: 'v3',
-      url_path: '/details/demo-item/v3',
-      file_source: 'v3.txt',
-      image: '',
-      author: '',
-      orig_sort: 2,
-    },
-    {
-      title: 'Volume 2',
-      file_prefix: 'v2',
-      file_subprefix: 'v2',
-      url_path: '/details/demo-item/v2',
-      file_source: 'v2.pdf',
-      image: '',
-      author: '',
-      orig_sort: 1,
-    },
-  ];
-
-  @state() private sortedFiles: ViewableFileInfo[] = [...this.demoFiles];
+  @state() private sortedFiles: ViewableFileInfo[] = [...DEMO_FILES];
 
   private handleFileListSorted(e: Event): void {
     const { sortType, sortedFiles } = (e as CustomEvent).detail;
@@ -104,7 +164,10 @@ export class IAItemNavigatorStory extends LitElement {
     // The navigator only reads `item?.metadata?.identifier`, so a plain object
     // stands in for a full MetadataResponse in the demo.
     return {
-      metadata: { identifier: 'demo-item', title: 'A Demonstration Item' },
+      metadata: {
+        identifier: 'demo-item',
+        title: 'The Master Book of American Folk Song',
+      },
     } as never;
   }
 
@@ -117,32 +180,19 @@ export class IAItemNavigatorStory extends LitElement {
     return [
       {
         ...shared,
-        id: 'contents',
-        label: 'Table of Contents',
-        icon: demoIcon,
-        component: html`
-          <ul>
-            <li>Chapter 1 — Introduction</li>
-            <li>Chapter 2 — Getting Started</li>
-            <li>Chapter 3 — In Practice</li>
-          </ul>
-        `,
-      },
-      {
-        ...shared,
         id: 'viewable-files',
-        label: 'Viewable Files',
+        label: `Viewable Files (${DEMO_FILES.length})`,
         icon: viewableFilesIcon,
         actionButton: html`
           <ia-sort-files-button
-            .fileListRaw=${this.demoFiles}
+            .fileListRaw=${DEMO_FILES}
             .sortOrderBy=${this.sortOrderBy}
           ></ia-sort-files-button>
         `,
         component: html`
           <ia-viewable-files-panel
             baseHost="archive.org"
-            subPrefix="v1"
+            subPrefix="master-book"
             .fileList=${this.sortedFiles}
             .sortOrderBy=${this.sortOrderBy}
           ></ia-viewable-files-panel>
@@ -151,14 +201,15 @@ export class IAItemNavigatorStory extends LitElement {
       {
         ...shared,
         id: 'share',
-        label: 'Share',
+        label: 'Share this item',
         icon: shareIcon,
         component: html`
           <ia-share-panel
             identifier="demo-item"
             baseHost="archive.org"
-            type="item"
-            description="A Demonstration Item"
+            type="book"
+            creator="Riley Shepard"
+            description="The Master Book of American Folk Song"
           ></ia-share-panel>
         `,
       },
@@ -169,11 +220,24 @@ export class IAItemNavigatorStory extends LitElement {
         icon: demoIcon,
         component: html`
           <p>
-            A demonstration of the item navigator shell. Each menu entry above
-            is a "provider" supplying its own panel body.
+            The item navigator is a shell: each menu entry here is a "provider"
+            supplying its own panel body. The theater on the right is slotted in
+            by the host.
           </p>
         `,
       },
+    ];
+  }
+
+  /** Minimized-rail shortcuts, mirroring the upstream demo. */
+  private get menuShortcuts(): MenuShortcutInterface[] {
+    return [
+      {
+        id: 'viewable-files',
+        label: 'Viewable Files',
+        icon: viewableFilesIcon,
+      },
+      { id: 'share', label: 'Share this item', icon: shareIcon },
     ];
   }
 
@@ -237,71 +301,107 @@ export class IAItemNavigatorStory extends LitElement {
         .customExampleUsage=${this.exampleUsage}
       >
         <div slot="demo">
-          <div class="frame-wrapper">
+          <div class="frame-wrapper ${this.fullscreen ? 'fullscreen' : ''}">
             <ia-item-navigator
               baseHost="archive.org"
               .item=${this.demoItem}
               .menuContents=${this.menuContents}
+              .menuShortcuts=${this.menuShortcuts}
               .sharedObserver=${this.sharedObserver}
+              .viewportInFullscreen=${this.fullscreen || null}
               ?loaded=${this.loaded}
               ?viewAvailable=${this.viewAvailable}
               @fileListSorted=${this.handleFileListSorted}
             >
-              <div slot="header" class="demo-header">Demo item header</div>
-              <div slot="main" class="demo-theater">
-                <p>
-                  Your theater (book reader, media player, …) slots in here.
-                </p>
-              </div>
+              ${this.headerTemplate} ${this.theaterTemplate}
             </ia-item-navigator>
           </div>
         </div>
 
         <div slot="settings">
           <table>
-            <tr>
-              <td>Loaded</td>
-              <td>
-                <input
-                  type="checkbox"
-                  id="loaded"
-                  ?checked=${this.loaded}
-                  @change=${(e: Event) =>
-                    (this.loaded = (e.target as HTMLInputElement).checked)}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>View available</td>
-              <td>
-                <input
-                  type="checkbox"
-                  id="view-available"
-                  ?checked=${this.viewAvailable}
-                  @change=${(e: Event) =>
-                    (this.viewAvailable = (
-                      e.target as HTMLInputElement
-                    ).checked)}
-                />
-              </td>
-            </tr>
+            ${this.toggleRow('Loaded', 'loaded')}
+            ${this.toggleRow('View available (theater)', 'viewAvailable')}
+            ${this.toggleRow('Header', 'headerOn')}
+            ${this.toggleRow('Fullscreen', 'fullscreen')}
           </table>
           <p class="hint">
-            Toggle "View available" off to show the no-theater placeholder.
-            Narrow the demo below 600px wide to see the drawer switch from shift
-            to overlay mode.
+            Turn "View available" off to show the no-theater placeholder. Open
+            "Viewable Files" and use the sort button in its header. Narrow the
+            demo below 600px to see the drawer switch from shift to overlay.
           </p>
         </div>
 
         <div slot="usage-notes">
           <p>
             The navigator is a shell: project a theater into
-            <code>slot="main"</code> and drive the drawer with the
-            <code>menuContents</code> provider array. It never renders a viewer
-            itself.
+            <code>slot="main"</code> and an optional bar into
+            <code>slot="header"</code>, then drive the drawer with the
+            <code>menuContents</code> provider array (and the minimized rail
+            with <code>menuShortcuts</code>). It never renders a viewer itself.
           </p>
         </div>
       </story-template>
+    `;
+  }
+
+  /** A row with a labelled checkbox bound to the given boolean state field. */
+  private toggleRow(
+    label: string,
+    field: 'loaded' | 'viewAvailable' | 'headerOn' | 'fullscreen',
+  ) {
+    return html`
+      <tr>
+        <td>${label}</td>
+        <td>
+          <input
+            type="checkbox"
+            ?checked=${this[field]}
+            @change=${(e: Event) => {
+              this[field] = (e.target as HTMLInputElement).checked;
+            }}
+          />
+        </td>
+      </tr>
+    `;
+  }
+
+  private get headerTemplate() {
+    if (!this.headerOn && !this.fullscreen) return nothing;
+    return html`
+      <div slot="header" class="demo-header">
+        <span class="brand">Internet Archive</span>
+        <a class="title" href="/details/demo-item"
+          >The Master Book of American Folk Song</a
+        >
+        ${this.fullscreen
+          ? html`<button
+              class="exit-fs"
+              @click=${() => {
+                this.fullscreen = false;
+              }}
+            >
+              Exit fullscreen
+            </button>`
+          : nothing}
+      </div>
+    `;
+  }
+
+  private get theaterTemplate() {
+    return html`
+      <div slot="main" class="demo-theater">
+        <div class="viewer-mock">
+          <div class="spine"></div>
+          <div class="page">
+            <p class="viewer-title">The Master Book of American Folk Song</p>
+            <p class="viewer-note">
+              Your theater (book reader, media player, image viewer, …) renders
+              here.
+            </p>
+          </div>
+        </div>
+      </div>
     `;
   }
 
@@ -310,6 +410,7 @@ export class IAItemNavigatorStory extends LitElement {
   baseHost="archive.org"
   .item=\${this.itemMetadata}
   .menuContents=\${this.menuProviders}
+  .menuShortcuts=\${this.menuShortcuts}
   .sharedObserver=\${this.sharedObserver}
   ?loaded=\${this.loaded}
 >
@@ -321,15 +422,36 @@ export class IAItemNavigatorStory extends LitElement {
   static get styles(): CSSResultGroup {
     return css`
       .frame-wrapper {
-        height: 420px;
+        height: 460px;
         border: 1px solid #ccc;
       }
 
       .demo-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
         background: #1a1a1a;
         color: #fff;
         padding: 8px 12px;
         font-size: 0.9rem;
+      }
+
+      .demo-header .brand {
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .demo-header .title {
+        color: #6cb2ff;
+        text-decoration: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .demo-header .exit-fs {
+        margin-left: auto;
+        cursor: pointer;
       }
 
       .demo-theater {
@@ -337,9 +459,41 @@ export class IAItemNavigatorStory extends LitElement {
         align-items: center;
         justify-content: center;
         height: 100%;
-        color: #fff;
-        text-align: center;
         padding: 1rem;
+        box-sizing: border-box;
+      }
+
+      .viewer-mock {
+        display: flex;
+        max-width: 320px;
+        width: 100%;
+        min-height: 220px;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+        background: #2b2b2b;
+      }
+
+      .viewer-mock .spine {
+        width: 14px;
+        background: linear-gradient(90deg, #111, #444);
+      }
+
+      .viewer-mock .page {
+        flex: 1;
+        padding: 1.5rem 1.25rem;
+        color: #eee;
+      }
+
+      .viewer-title {
+        margin: 0 0 0.75rem;
+        font-weight: 700;
+      }
+
+      .viewer-note {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #aaa;
       }
 
       .hint {
