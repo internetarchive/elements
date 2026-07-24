@@ -276,6 +276,15 @@ export class IAItemNavigator
     this.openMenu = id !== this.openMenu ? id : undefined;
   }
 
+  /**
+   * Clears the open channel when the slider closes its sub-panel, without
+   * closing the drawer. Keeps `openMenu` in sync with the slider so the same
+   * channel can be reopened afterwards.
+   */
+  closeSidePanel(): void {
+    this.openMenu = undefined;
+  }
+
   setMenuContents(e: SetSideMenuContentsEvent): void {
     const updatedContents = [...e.detail];
     this.menuContents = updatedContents;
@@ -321,14 +330,18 @@ export class IAItemNavigator
   get renderSideMenu(): TemplateResult {
     return html`
       <nav>
-        <div class="minimized ${classMap({ hidden: this.menuOpened })}">
+        <div
+          class="minimized ${classMap({ hidden: this.menuOpened })}"
+          part="minimized-menu"
+        >
           ${this.shortcuts} ${this.menuToggleButton}
         </div>
-        <div id="menu" class=${classMap({ hidden: !this.menuOpened })}>
+        <div id="menu" ?inert=${!this.menuOpened}>
           <ia-menu-slider
             .menus=${this.menuContents}
             .selectedMenu=${this.selectedMenuId}
             @menuTypeSelected=${this.setOpenMenu}
+            @menuPanelClosed=${this.closeSidePanel}
             @menuSliderClosed=${this.closeMenu}
             manuallyHandleClose
             open
@@ -576,6 +589,16 @@ export class IAItemNavigator
           transform: translateX(0);
           width: 100%;
           display: flex;
+          /*
+           * Ease the reader's size/position changes so the slotted theater
+           * glides in sync with the sliding drawer (shift mode) and settles
+           * smoothly on resize, rather than snapping. Overlay mode opts out
+           * below so the full-width theater tracks resizes instantly.
+           */
+          transition:
+            width ${transitionTiming} ease-out,
+            margin-left ${transitionTiming} ease-out,
+            transform ${transitionTiming} ease-out;
         }
 
         #reader > * {
@@ -597,7 +620,6 @@ export class IAItemNavigator
         .open.shift #reader {
           width: calc(100% - ${subnavWidth});
           margin-left: ${subnavWidth};
-          transition: ${transitionEffect};
         }
       `,
     ];

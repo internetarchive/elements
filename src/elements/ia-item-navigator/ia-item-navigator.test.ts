@@ -226,4 +226,60 @@ describe('IAItemNavigator', () => {
     expect(el.openMenu).to.equal('contents');
     expect(el.menuOpened).to.equal(true);
   });
+
+  test('closeSidePanel clears the open channel but leaves the drawer open', async () => {
+    const el = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator></ia-item-navigator>`,
+    );
+    el.menuContents = [provider('contents')];
+    el.openShortcut('contents');
+    await el.updateComplete;
+    expect(el.openMenu).to.equal('contents');
+    expect(el.menuOpened).to.equal(true);
+
+    el.closeSidePanel();
+    expect(el.openMenu).to.equal(undefined);
+    // The sub-panel closing must not close the drawer itself.
+    expect(el.menuOpened).to.equal(true);
+  });
+
+  test("the slider's menuPanelClosed event clears openMenu without closing the drawer", async () => {
+    const el = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator></ia-item-navigator>`,
+    );
+    el.menuContents = [provider('contents')];
+    el.openShortcut('contents');
+    await el.updateComplete;
+
+    const slider = el.shadowRoot?.querySelector('ia-menu-slider');
+    slider?.dispatchEvent(
+      new CustomEvent('menuPanelClosed', {
+        detail: { id: 'contents' },
+        bubbles: true,
+        composed: true,
+      }),
+    );
+    await el.updateComplete;
+
+    expect(el.openMenu).to.equal(undefined);
+    expect(el.menuOpened).to.equal(true);
+  });
+
+  test('a channel can be reopened after its sub-panel is closed', async () => {
+    const el = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator></ia-item-navigator>`,
+    );
+    el.menuContents = [provider('contents'), provider('share')];
+    el.openShortcut('share');
+    await el.updateComplete;
+
+    el.closeSidePanel();
+    await el.updateComplete;
+    expect(el.openMenu).to.equal(undefined);
+
+    // Reopening the same channel works because openMenu was cleared in sync.
+    el.openShortcut('share');
+    expect(el.openMenu).to.equal('share');
+    expect(el.menuOpened).to.equal(true);
+  });
 });

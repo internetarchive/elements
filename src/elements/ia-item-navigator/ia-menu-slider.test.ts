@@ -86,6 +86,30 @@ describe('IAMenuSlider', () => {
     expect(el.open).to.equal(false);
   });
 
+  test('closing the sub-panel emits menuPanelClosed and clears the selection, without closing the drawer', async () => {
+    const el = await sliderWith([provider('a'), provider('b')]);
+    el.selectedMenu = 'a';
+    await el.updateComplete;
+
+    const panelClosed = vi.fn();
+    const drawerClosed = vi.fn();
+    el.addEventListener('menuPanelClosed', panelClosed);
+    el.addEventListener('menuSliderClosed', drawerClosed);
+
+    const closeButton = el.shadowRoot?.querySelector(
+      '.content header button.close',
+    ) as HTMLButtonElement;
+    expect(closeButton).to.exist;
+    closeButton.click();
+    await el.updateComplete;
+
+    expect(el.selectedMenu).to.equal('');
+    expect(panelClosed).toHaveBeenCalledOnce();
+    expect(panelClosed.mock.calls[0][0].detail.id).to.equal('a');
+    // Closing the sub-panel is independent of the drawer's open/close.
+    expect(drawerClosed).not.toHaveBeenCalled();
+  });
+
   test('Escape closes the open panel first, then the drawer', async () => {
     const el = await sliderWith([provider('a')]);
     el.selectedMenu = 'a';

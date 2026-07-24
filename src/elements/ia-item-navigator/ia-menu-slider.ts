@@ -14,6 +14,7 @@ import { MenuProviderInterface } from './interfaces/menu-interfaces';
 
 const sliderEvents = {
   closeDrawer: 'menuSliderClosed',
+  closePanel: 'menuPanelClosed',
 };
 
 /**
@@ -78,6 +79,15 @@ export class IAMenuSlider extends LitElement {
     const menuId = this.selectedMenu;
     this.selectedMenu = '';
     this.selectedMenuAction = nothing;
+
+    // Notify the host so it can clear its own record of the open channel,
+    // keeping the sub-panel's open/close independent of — but consistent
+    // with — the drawer's open/close.
+    this.dispatchEvent(
+      new CustomEvent(sliderEvents.closePanel, {
+        detail: { id: menuId },
+      }),
+    );
 
     // Return focus to the menu button that was previously selected
     if (menuId) {
