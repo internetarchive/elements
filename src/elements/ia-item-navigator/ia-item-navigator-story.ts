@@ -58,79 +58,64 @@ const demoIcon = html`
  * Includes a deliberately long title (to show wrapping) and PDF entries (to
  * show the PDF flag).
  */
+const DEMO_ITEM_IDENTIFIER = 'masterbookofamericanfolksong00shep';
+
+/** Builds a viewable-file entry whose link resolves against the real item. */
+function demoFile(
+  subprefix: string,
+  title: string,
+  orig_sort: number,
+  { topLevel = false, pdf = false }: { topLevel?: boolean; pdf?: boolean } = {},
+): ViewableFileInfo {
+  const base = `/details/${DEMO_ITEM_IDENTIFIER}`;
+  return {
+    title,
+    file_prefix: subprefix,
+    file_subprefix: subprefix,
+    // file_source only drives the PDF flag; the link comes from url_path.
+    file_source: pdf ? `${subprefix}.pdf` : `/${subprefix}_jp2.zip`,
+    url_path: topLevel ? base : `${base}/${encodeURIComponent(subprefix)}`,
+    image: '',
+    author: 'Riley Shepard',
+    orig_sort,
+  };
+}
+
 const DEMO_FILES: ViewableFileInfo[] = [
-  {
-    title: 'beyonce-cosmo-article.pdf',
-    file_prefix: 'beyonce-cosmo-article',
-    file_subprefix: 'beyonce-cosmo-article',
-    file_source: 'beyonce-cosmo-article.pdf',
-    url_path: '/details/demo-item/beyonce-cosmo-article.pdf',
-    image: '',
-    author: '',
-    orig_sort: 0,
-  },
-  {
-    title:
-      'Very cool title that is extra long so it wraps across several rows in the panel',
-    file_prefix: 'onestrandriverpdf',
-    file_subprefix: 'onestrandriverpdf',
-    file_source: 'onestrandriverpdf.pdf',
-    url_path: '/details/demo-item/onestrandriverpdf.pdf',
-    image: '',
-    author: '',
-    orig_sort: 1,
-  },
-  {
-    title: 'The Master Book of American Folk Song',
-    file_prefix: 'master-book',
-    file_subprefix: 'master-book',
-    file_source: '/01-The Master Book of American Folk Song_jp2.zip',
-    url_path: '/details/demo-item/master-book',
-    image: '',
-    author: 'Riley Shepard',
-    orig_sort: 2,
-  },
-  {
-    title:
-      'Encyclopedia of the Traditional Music and Folk Songs of the United States, Index A–M',
-    file_prefix: 'encyclopedia-a-m',
-    file_subprefix: 'encyclopedia-a-m',
-    file_source: '/02-Encyclopedia Index A through M_jp2.zip',
-    url_path: '/details/demo-item/encyclopedia-a-m',
-    image: '',
-    author: 'Riley Shepard',
-    orig_sort: 3,
-  },
-  {
-    title: 'Letters to Riley Shepard',
-    file_prefix: 'letters',
-    file_subprefix: 'letters',
-    file_source: '/04-Letters to Riley Shepard_jp2.zip',
-    url_path: '/details/demo-item/letters',
-    image: '',
-    author: 'Riley Shepard',
-    orig_sort: 4,
-  },
-  {
-    title: 'Master Book of American Folk Song Vol. 1',
-    file_prefix: 'vol-1',
-    file_subprefix: 'vol-1',
-    file_source: '/Master Book Vol. 1.pdf',
-    url_path: '/details/demo-item/vol-1',
-    image: '',
-    author: 'Riley Shepard',
-    orig_sort: 5,
-  },
-  {
-    title: 'Master Book of American Folk Song Vol. 2',
-    file_prefix: 'vol-2',
-    file_subprefix: 'vol-2',
-    file_source: '/Master Book Vol. 2.pdf',
-    url_path: '/details/demo-item/vol-2',
-    image: '',
-    author: 'Riley Shepard',
-    orig_sort: 6,
-  },
+  demoFile(
+    '01-The Master Book of American Folk Song',
+    'The Master Book of American Folk Song',
+    0,
+    { topLevel: true },
+  ),
+  demoFile(
+    '02-Encyclopedia of the Traditional Music and Folk Songs of the United States Index A through M',
+    'Encyclopedia of the Traditional Music and Folk Songs of the United States, Index A through M',
+    1,
+  ),
+  demoFile(
+    '03-Encyclopedia of the Traditional Music and Folk Songs of the United States Index N through Z',
+    'Encyclopedia of the Traditional Music and Folk Songs of the United States, Index N through Z',
+    2,
+  ),
+  demoFile('04-Letters to Riley Shepard', 'Letters to Riley Shepard', 3),
+  demoFile(
+    'Master Book of American Folk Song Vol. 1',
+    'Master Book of American Folk Song Vol. 1',
+    4,
+    { pdf: true },
+  ),
+  demoFile(
+    'Master Book of American Folk Song Vol. 2',
+    'Master Book of American Folk Song Vol. 2',
+    5,
+    { pdf: true },
+  ),
+  demoFile(
+    'Master Book of American Folk Song Vol. 3',
+    'Master Book of American Folk Song Vol. 3',
+    6,
+  ),
 ];
 
 @customElement('ia-item-navigator-story')
@@ -142,6 +127,8 @@ export class IAItemNavigatorStory extends LitElement {
   @state() private headerOn = true;
 
   @state() private fullscreen = false;
+
+  @state() private animationsOn = true;
 
   @state() private sharedObserver = new DemoResizeObserver();
 
@@ -160,7 +147,7 @@ export class IAItemNavigatorStory extends LitElement {
     // stands in for a full MetadataResponse in the demo.
     return {
       metadata: {
-        identifier: 'demo-item',
+        identifier: DEMO_ITEM_IDENTIFIER,
         title: 'The Master Book of American Folk Song',
       },
     } as never;
@@ -187,7 +174,7 @@ export class IAItemNavigatorStory extends LitElement {
         component: html`
           <ia-viewable-files-panel
             baseHost="archive.org"
-            subPrefix="master-book"
+            subPrefix="01-The Master Book of American Folk Song"
             .fileList=${this.sortedFiles}
             .sortOrderBy=${this.sortOrderBy}
           ></ia-viewable-files-panel>
@@ -200,7 +187,7 @@ export class IAItemNavigatorStory extends LitElement {
         icon: shareIcon,
         component: html`
           <ia-share-panel
-            identifier="demo-item"
+            identifier=${DEMO_ITEM_IDENTIFIER}
             baseHost="archive.org"
             type="book"
             creator="Riley Shepard"
@@ -299,6 +286,9 @@ export class IAItemNavigatorStory extends LitElement {
           <div class="frame-wrapper ${this.fullscreen ? 'fullscreen' : ''}">
             <ia-item-navigator
               baseHost="archive.org"
+              style=${this.animationsOn
+                ? nothing
+                : '--item-navigator-animation-timing: 0ms'}
               .item=${this.demoItem}
               .menuContents=${this.menuContents}
               .menuShortcuts=${this.menuShortcuts}
@@ -319,6 +309,7 @@ export class IAItemNavigatorStory extends LitElement {
             ${this.toggleRow('View available (theater)', 'viewAvailable')}
             ${this.toggleRow('Header', 'headerOn')}
             ${this.toggleRow('Fullscreen', 'fullscreen')}
+            ${this.toggleRow('Animate', 'animationsOn')}
           </table>
           <p class="hint">
             Turn "View available" off to show the no-theater placeholder. Open
@@ -343,7 +334,12 @@ export class IAItemNavigatorStory extends LitElement {
   /** A row with a labelled checkbox bound to the given boolean state field. */
   private toggleRow(
     label: string,
-    field: 'loaded' | 'viewAvailable' | 'headerOn' | 'fullscreen',
+    field:
+      | 'loaded'
+      | 'viewAvailable'
+      | 'headerOn'
+      | 'fullscreen'
+      | 'animationsOn',
   ) {
     return html`
       <tr>
@@ -351,7 +347,7 @@ export class IAItemNavigatorStory extends LitElement {
         <td>
           <input
             type="checkbox"
-            ?checked=${this[field]}
+            .checked=${this[field]}
             @change=${(e: Event) => {
               this[field] = (e.target as HTMLInputElement).checked;
             }}
@@ -366,7 +362,7 @@ export class IAItemNavigatorStory extends LitElement {
     return html`
       <div slot="header" class="demo-header">
         <span class="brand">Internet Archive</span>
-        <a class="title" href="/details/demo-item"
+        <a class="title" href="/details/${DEMO_ITEM_IDENTIFIER}"
           >The Master Book of American Folk Song</a
         >
         ${this.fullscreen
@@ -419,6 +415,12 @@ export class IAItemNavigatorStory extends LitElement {
       .frame-wrapper {
         height: 460px;
         border: 1px solid #ccc;
+      }
+
+      /* Opt into menu-button labels (the component ships icon-only by
+         default), matching the upstream demo. */
+      ia-item-navigator {
+        --item-navigator-menu-button-label-display: block;
       }
 
       .demo-header {
