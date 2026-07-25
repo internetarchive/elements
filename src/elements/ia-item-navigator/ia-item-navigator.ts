@@ -485,6 +485,14 @@ export class IAItemNavigator
           left: 0;
           right: 0;
           z-index: 9;
+          /*
+           * Override the inherited height/min-height from the base #frame rule:
+           * on a fixed element an explicit height wins over top/bottom, so the
+           * inset (0 on all sides) can't fill the viewport unless height is
+           * released back to auto.
+           */
+          height: auto;
+          min-height: 0;
         }
 
         .loading-view {

@@ -42,4 +42,20 @@ describe('IANoTheaterAvailable', () => {
       true,
     );
   });
+
+  test('does not re-emit loadingStateUpdated on updates that leave the identifier unchanged', async () => {
+    const el = await fixture<IANoTheaterAvailable>(
+      html`<ia-no-theater-available
+        identifier="abc"
+      ></ia-no-theater-available>`,
+    );
+    const listener = vi.fn();
+    el.addEventListener('loadingStateUpdated', listener);
+
+    // An update with no identifier change must skip emitLoaded().
+    el.requestUpdate();
+    await el.updateComplete;
+
+    expect(listener).not.toHaveBeenCalled();
+  });
 });

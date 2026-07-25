@@ -6,7 +6,26 @@ import { IAItemNavigator } from './ia-item-navigator';
 import './ia-item-navigator';
 import type { IAMenuSlider } from './ia-menu-slider';
 import type { IANoTheaterAvailable } from './ia-no-theater-available';
-import type { MenuProviderInterface } from './interfaces/menu-interfaces';
+import type {
+  MenuProviderInterface,
+  MenuShortcutInterface,
+} from './interfaces/menu-interfaces';
+import type {
+  SharedResizeObserverConfig,
+  SharedResizeObserverInterface,
+} from './interfaces/service-interfaces';
+
+/** Records the target/handler pairs the navigator registers. */
+class MockResizeObserver implements SharedResizeObserverInterface {
+  added: SharedResizeObserverConfig[] = [];
+  removed: SharedResizeObserverConfig[] = [];
+  addObserver(config: SharedResizeObserverConfig): void {
+    this.added.push(config);
+  }
+  removeObserver(config: SharedResizeObserverConfig): void {
+    this.removed.push(config);
+  }
+}
 
 /** Builds a minimal, well-typed menu provider for tests. */
 function provider(
@@ -279,6 +298,177 @@ describe('IAItemNavigator', () => {
 
     // Reopening the same channel works because openMenu was cleared in sync.
     el.openShortcut('share');
+    expect(el.openMenu).to.equal('share');
+    expect(el.menuOpened).to.equal(true);
+  });
+
+  test('decodes a base64-encoded item attribute into a MetadataResponse', async () => {
+    const encoded = btoa(
+      JSON.stringify({ metadata: { identifier: 'encoded-item' } }),
+    );
+    const el = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator item=${encoded}></ia-item-navigator>`,
+    );
+    expect(el.item?.metadata?.identifier).to.equal('encoded-item');
+  });
+
+  test('passes a non-string item attribute value through unchanged', async () => {
+    // An empty attribute is not a base64 string, so the converter returns it
+    // as-is rather than decoding.
+    const el = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator item=""></ia-item-navigator>`,
+    );
+    expect(el.item?.metadata?.identifier).to.equal(undefined);
+  });
+
+  test('loadingStateUpdated defaults a missing loaded flag to false', async () => {
+    const el = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator loaded></ia-item-navigator>`,
+    );
+    expect(el.loaded).to.equal(true);
+    el.loadingStateUpdated(new CustomEvent('x', { detail: {} }) as never);
+    expect(el.loaded).to.equal(false);
+  });
+
+  test('re-dispatches slotChange for the main slot too', async () => {
+    const el = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator></ia-item-navigator>`,
+    );
+    const listener = vi.fn();
+    el.addEventListener('slotChange', listener);
+
+    const mainSlot = el.shadowRoot?.querySelector(
+      'slot[name="main"]',
+    ) as HTMLSlotElement;
+    mainSlot.dispatchEvent(new Event('slotchange'));
+
+    expect(listener).toHaveBeenCalledOnce();
+    expect(listener.mock.calls[0][0].detail.type).to.equal('main');
+  });
+
+  test('shows the fullscreen loader title while loading in fullscreen', async () => {
+    const el = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator></ia-item-navigator>`,
+    );
+    expect(el.loaderTitle).to.equal('');
+    el.viewportInFullscreen = true;
+    expect(el.loaderTitle).to.equal('Internet Archive');
+  });
+
+  test('registers with, updates, and detaches from the shared resize observer', async () => {
+    const el = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator></ia-item-navigator>`,
+    );
+    const observer = new MockResizeObserver();
+    el.sharedObserver = observer;
+    await el.updateComplete;
+
+    // Registers both the frame and the header slot.
+    expect(observer.added.length).to.equal(2);
+    const headerReg = observer.added.find(
+      (c) => c.target === el.shadowRoot?.querySelector('slot[name="header"]'),
+    );
+    expect(headerReg).to.exist;
+
+    // The header handler requests an update only when it has a measured height.
+    const spy = vi.spyOn(el, 'requestUpdate');
+    headerReg?.handler.handleResize({
+      contentRect: { height: 40 },
+    } as ResizeObserverEntry);
+    headerReg?.handler.handleResize({
+      contentRect: { height: 0 },
+    } as ResizeObserverEntry);
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    // Swapping observers detaches from the previous one.
+    const next = new MockResizeObserver();
+    el.sharedObserver = next;
+    await el.updateComplete;
+    expect(observer.removed.length).to.be.greaterThan(0);
+
+    // Disconnecting detaches from the observer.
+    el.remove();
+    expect(next.removed.length).to.be.greaterThan(0);
+  });
+
+  test('setMenuContents and setMenuShortcuts copy the incoming arrays', async () => {
+    const el = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator></ia-item-navigator>`,
+    );
+    const contents = [provider('a'), provider('b')];
+    el.setMenuContents(new CustomEvent('x', { detail: contents }) as never);
+    expect(el.menuContents).to.have.lengthOf(2);
+    expect(el.menuContents).to.not.equal(contents); // copied, not aliased
+
+    const shortcuts: MenuShortcutInterface[] = [
+      { id: 'a', label: 'A', icon: html`a` },
+    ];
+    el.setMenuShortcuts(new CustomEvent('x', { detail: shortcuts }) as never);
+    expect(el.menuShortcuts).to.have.lengthOf(1);
+    expect(el.menuShortcuts).to.not.equal(shortcuts);
+  });
+
+  test('manageSideMenuEvents ignores empty ids and handles open/toggle', async () => {
+    const el = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator></ia-item-navigator>`,
+    );
+
+    // No menuId → no-op.
+    el.manageSideMenuEvents(
+      new CustomEvent('x', { detail: { menuId: '', action: 'open' } }) as never,
+    );
+    expect(el.menuOpened).to.equal(false);
+
+    // action: 'open' → opens at that menu.
+    el.manageSideMenuEvents(
+      new CustomEvent('x', {
+        detail: { menuId: 'share', action: 'open' },
+      }) as never,
+    );
+    expect(el.openMenu).to.equal('share');
+    expect(el.menuOpened).to.equal(true);
+
+    // action: 'toggle' → sets menu and toggles the drawer (closed here).
+    el.manageSideMenuEvents(
+      new CustomEvent('x', {
+        detail: { menuId: 'about', action: 'toggle' },
+      }) as never,
+    );
+    expect(el.openMenu).to.equal('about');
+    expect(el.menuOpened).to.equal(false);
+
+    // An unrecognized action is a no-op (neither open nor toggle).
+    el.manageSideMenuEvents(
+      new CustomEvent('x', {
+        detail: { menuId: 'about', action: '' },
+      }) as never,
+    );
+    expect(el.openMenu).to.equal('about');
+    expect(el.menuOpened).to.equal(false);
+  });
+
+  test('renders shortcut buttons and passes through a fullscreen shortcut', async () => {
+    const el = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator></ia-item-navigator>`,
+    );
+    el.menuContents = [provider('share')];
+    el.menuShortcuts = [
+      { id: 'share', label: 'Share', icon: html`<span class="sc">S</span>` },
+      { id: 'fullscreen', label: 'FS', icon: html`<span class="fs">F</span>` },
+    ];
+    await el.updateComplete;
+
+    // The non-fullscreen shortcut becomes a button; fullscreen renders raw.
+    const shareShortcut = el.shadowRoot?.querySelector(
+      'button.shortcut.share',
+    ) as HTMLButtonElement;
+    expect(shareShortcut).to.exist;
+    expect(el.shadowRoot?.querySelector('button.shortcut.fullscreen')).to.not
+      .exist;
+    expect(el.shadowRoot?.querySelector('.fs')).to.exist;
+
+    // Clicking a shortcut opens the drawer at that channel.
+    shareShortcut.click();
     expect(el.openMenu).to.equal('share');
     expect(el.menuOpened).to.equal(true);
   });

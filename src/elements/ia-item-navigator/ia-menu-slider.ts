@@ -154,8 +154,12 @@ export class IAMenuSlider extends LitElement {
 
   get renderMenuHeader(): TemplateResult {
     const { label = '', menuDetails = '' } = this.selectedMenuDetails || {};
-    const headerClass = this.selectedMenuAction ? 'with-secondary-action' : '';
-    const actionBlock = this.selectedMenuAction
+    // `selectedMenuAction` defaults to Lit's `nothing` sentinel, which is
+    // truthy — so compare against it explicitly, otherwise the header would
+    // always get the secondary-action treatment (and an empty action span).
+    const hasAction = this.selectedMenuAction !== nothing;
+    const headerClass = hasAction ? 'with-secondary-action' : '';
+    const actionBlock = hasAction
       ? html`<span class="custom-action">${this.selectedMenuAction}</span>`
       : nothing;
     return html`

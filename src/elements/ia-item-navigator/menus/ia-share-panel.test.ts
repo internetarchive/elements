@@ -1,11 +1,19 @@
 import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
-import { describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { IASharePanel } from './ia-share-panel';
 import './ia-share-panel';
 
+/** Reaches the private copy handler for the edge-case paths. */
+type WithCopy = { copyToClipboard(e: MouseEvent): Promise<void> };
+
 describe('IASharePanel', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.useRealTimers();
+  });
+
   test('auto-populates the social sharing options', async () => {
     const el = await fixture<IASharePanel>(
       html`<ia-share-panel identifier="my-item"></ia-share-panel>`,
@@ -82,5 +90,58 @@ describe('IASharePanel', () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     expect(note.classList.contains('visible')).to.equal(true);
+  });
+
+  test('copy is a no-op when the clicked target has no embed code', async () => {
+    const el = await fixture<IASharePanel>(
+      html`<ia-share-panel identifier="my-item"></ia-share-panel>`,
+    );
+    const bare = document.createElement('div');
+    await expect(
+      (el as unknown as WithCopy).copyToClipboard({
+        currentTarget: bare,
+      } as unknown as MouseEvent),
+    ).resolves.toBeUndefined();
+  });
+
+  test('falls back to execCommand when the async clipboard rejects', async () => {
+    const el = await fixture<IASharePanel>(
+      html`<ia-share-panel identifier="my-item"></ia-share-panel>`,
+    );
+    await el.updateComplete;
+    const code = el.shadowRoot?.querySelector('.code') as HTMLElement;
+    const note = code.querySelector('small') as HTMLElement;
+
+    vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(
+      new Error('no async clipboard'),
+    );
+    const exec = vi.spyOn(document, 'execCommand').mockReturnValue(true);
+
+    await (el as unknown as WithCopy).copyToClipboard({
+      currentTarget: code,
+    } as unknown as MouseEvent);
+
+    expect(exec).toHaveBeenCalledWith('copy');
+    expect(note.classList.contains('visible')).to.equal(true);
+  });
+
+  test('clears the copied note after the timeout window', async () => {
+    const el = await fixture<IASharePanel>(
+      html`<ia-share-panel identifier="my-item"></ia-share-panel>`,
+    );
+    await el.updateComplete;
+    const code = el.shadowRoot?.querySelector('.code') as HTMLElement;
+    const note = code.querySelector('small') as HTMLElement;
+
+    vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue(undefined);
+    vi.useFakeTimers();
+
+    await (el as unknown as WithCopy).copyToClipboard({
+      currentTarget: code,
+    } as unknown as MouseEvent);
+    expect(note.classList.contains('visible')).to.equal(true);
+
+    vi.advanceTimersByTime(4000);
+    expect(note.classList.contains('visible')).to.equal(false);
   });
 });

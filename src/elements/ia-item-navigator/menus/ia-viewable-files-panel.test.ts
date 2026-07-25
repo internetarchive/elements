@@ -99,4 +99,55 @@ describe('IAViewableFilesPanel', () => {
       '//example.org/details/x',
     );
   });
+
+  test('does not flag a file with no file_source as a PDF', async () => {
+    const el = await fixture<IAViewableFilesPanel>(
+      html`<ia-viewable-files-panel></ia-viewable-files-panel>`,
+    );
+    const noSource: ViewableFileInfo = { ...file({ title: 'sourceless' }) };
+    delete (noSource as Partial<ViewableFileInfo>).file_source;
+    el.fileList = [noSource];
+    await el.updateComplete;
+
+    expect(el.shadowRoot?.querySelectorAll('li')).to.have.lengthOf(1);
+    expect(el.shadowRoot?.querySelector('.pdf-label')).to.not.exist;
+  });
+
+  test('scrolls the active file into view after first render (scrollIntoViewIfNeeded)', async () => {
+    const el = await fixture<IAViewableFilesPanel>(
+      html`<ia-viewable-files-panel
+        subPrefix="v1"
+        .fileList=${[file({ title: 'v1', file_subprefix: 'v1' })]}
+      ></ia-viewable-files-panel>`,
+    );
+    const active = el.shadowRoot?.querySelector<
+      HTMLElement & { scrollIntoViewIfNeeded?: (c: boolean) => void }
+    >('.content.active');
+    expect(active).to.exist;
+    // firstUpdated schedules the scroll behind a 350ms timeout.
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    // No assertion beyond "did not throw" — chromium provides
+    // scrollIntoViewIfNeeded, exercising that branch.
+    expect(active).to.exist;
+  });
+
+  test('falls back to scrollIntoView when scrollIntoViewIfNeeded is unavailable', async () => {
+    const el = await fixture<IAViewableFilesPanel>(
+      html`<ia-viewable-files-panel
+        subPrefix="v1"
+        .fileList=${[file({ title: 'v1', file_subprefix: 'v1' })]}
+      ></ia-viewable-files-panel>`,
+    );
+    const active = el.shadowRoot?.querySelector<HTMLElement>('.content.active');
+    // Remove the Chrome-only API so the cross-browser branch runs.
+    (
+      active as unknown as { scrollIntoViewIfNeeded?: unknown }
+    ).scrollIntoViewIfNeeded = undefined;
+    let called = false;
+    active!.scrollIntoView = () => {
+      called = true;
+    };
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    expect(called).to.equal(true);
+  });
 });

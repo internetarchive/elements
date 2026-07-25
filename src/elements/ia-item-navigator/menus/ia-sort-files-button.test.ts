@@ -74,6 +74,21 @@ describe('IASortFilesButton', () => {
     ).to.deep.equal(['Alpha', 'Beta', 'Gamma']);
   });
 
+  test('sorts titles in descending order', async () => {
+    const el = await fixture<IASortFilesButton>(
+      html`<ia-sort-files-button></ia-sort-files-button>`,
+    );
+    el.fileListRaw = [file('Beta', 1), file('Alpha', 0), file('Gamma', 2)];
+    await el.updateComplete;
+
+    el.sortVolumes('title_desc');
+    expect(el.fileListSorted.map((f) => f.title)).to.deep.equal([
+      'Gamma',
+      'Beta',
+      'Alpha',
+    ]);
+  });
+
   test('restores the original order when sorting back to default', async () => {
     const el = await fixture<IASortFilesButton>(
       html`<ia-sort-files-button></ia-sort-files-button>`,
@@ -99,5 +114,20 @@ describe('IASortFilesButton', () => {
 
     el.sortVolumes('title_asc');
     expect(raw.map((f) => f.title)).to.deep.equal(['Beta', 'Alpha']);
+  });
+
+  test('default sort treats a missing orig_sort as 0', async () => {
+    const el = await fixture<IASortFilesButton>(
+      html`<ia-sort-files-button></ia-sort-files-button>`,
+    );
+    const a: ViewableFileInfo = { ...file('A', 0) };
+    const b: ViewableFileInfo = { ...file('B', 0) };
+    delete a.orig_sort;
+    delete b.orig_sort;
+    el.fileListRaw = [a, b];
+    await el.updateComplete;
+
+    expect(() => el.sortVolumes('default')).to.not.throw();
+    expect(el.fileListSorted).to.have.lengthOf(2);
   });
 });
