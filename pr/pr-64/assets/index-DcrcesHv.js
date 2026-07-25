@@ -2571,13 +2571,13 @@ fill=""></path>
             .href=${i.href||""}
           ></ia-menu-button>
         </li>
-      `)}get renderMenuHeader(){const{label:i="",menuDetails:e=""}=this.selectedMenuDetails||{},t=this.selectedMenuAction?"with-secondary-action":"",o=this.selectedMenuAction?d`<span class="custom-action">${this.selectedMenuAction}</span>`:y;return d`
-      <header class=${t}>
+      `)}get renderMenuHeader(){const{label:i="",menuDetails:e=""}=this.selectedMenuDetails||{},t=this.selectedMenuAction!==y,o=t?"with-secondary-action":"",r=t?d`<span class="custom-action">${this.selectedMenuAction}</span>`:y;return d`
+      <header class=${o}>
         <div class="details">
           <h3>${i}</h3>
           <span class="extra-details">${e}</span>
         </div>
-        ${o}
+        ${r}
         <button
           class="close"
           aria-label="Close this menu"
@@ -3063,6 +3063,14 @@ fill=""></path>
           left: 0;
           right: 0;
           z-index: 9;
+          /*
+           * Override the inherited height/min-height from the base #frame rule:
+           * on a fixed element an explicit height wins over top/bottom, so the
+           * inset (0 on all sides) can't fill the viewport unless height is
+           * released back to auto.
+           */
+          height: auto;
+          min-height: 0;
         }
 
         .loading-view {
