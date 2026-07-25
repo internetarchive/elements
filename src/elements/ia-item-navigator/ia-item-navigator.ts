@@ -386,7 +386,10 @@ export class IAItemNavigator
       this.menuContents?.length || this.menuShortcuts?.length;
     const drawerState = this.menuOpened && hasMenuOrShortcuts ? 'open' : '';
     const fullscreenState = this.viewportInFullscreen ? 'fullscreen' : '';
-    return `${drawerState} ${fullscreenState} ${this.openMenuState}`;
+    // When the side menu renders, the minimized rail floats over the left edge;
+    // `has-menu` lets the reader reserve its width so the theater isn't covered.
+    const railState = this.shouldRenderMenu ? 'has-menu' : '';
+    return `${drawerState} ${fullscreenState} ${railState} ${this.openMenuState}`;
   }
 
   static get styles(): CSSResultGroup {
@@ -613,6 +616,18 @@ export class IAItemNavigator
           width: 100%;
           display: flex;
           flex: 1;
+        }
+
+        /*
+         * The minimized rail floats over the frame's left edge while the drawer
+         * is closed, so pad the theater content by its width to avoid overlap.
+         * This lives on the reader's content (not the reader box) and isn't
+         * transitioned, so it snaps away on open — letting the reader box track
+         * the drawer's edge exactly during the shift, rather than trailing it.
+         */
+        .has-menu:not(.open) #reader > * {
+          box-sizing: border-box;
+          padding-left: ${menuMargin};
         }
 
         .open.overlay #reader {
