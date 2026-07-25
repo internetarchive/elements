@@ -165,9 +165,9 @@ export class IASortFilesButton extends LitElement {
             --item-navigator-header-icon-height,
             18px
           );
-          --item-navigator-icon-fill-color--: var(
-            --item-navigator-icon-fill-color,
-            var(--true-white)
+          --item-navigator-icon-color--: var(
+            --item-navigator-icon-color,
+            var(--item-navigator-text-color, var(--true-white))
           );
 
           /* 10px base (petabox scale); internal sizing is em against it. */
@@ -179,7 +179,7 @@ export class IASortFilesButton extends LitElement {
           background-color: transparent;
           border: 0;
           cursor: pointer;
-          color: var(--item-navigator-icon-fill-color--);
+          color: var(--item-navigator-icon-color--);
           display: inline-flex;
         }
 

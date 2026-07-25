@@ -44,7 +44,7 @@ export class IAItemNavLoader extends LitElement {
     >
       <title id="item-loading">Currently loading viewer.</title>
       <desc>Please wait while we load theater.</desc>
-      <g fill="#333" fill-rule="evenodd" class="book-icon">
+      <g fill-rule="evenodd" class="book-icon">
         ${this.icon}
         <path
           class="ring"

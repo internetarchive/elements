@@ -429,13 +429,10 @@ export class IAItemNavigator
             --item-navigator-icon-height,
             2.4em
           );
-          --item-navigator-icon-stroke-color--: var(
-            --item-navigator-icon-stroke-color,
-            var(--true-white)
-          );
-          --item-navigator-icon-fill-color--: var(
-            --item-navigator-icon-fill-color,
-            var(--true-white)
+          /* Icons follow the adjustable text color by default. */
+          --item-navigator-icon-color--: var(
+            --item-navigator-icon-color,
+            var(--item-navigator-text-color, var(--true-white))
           );
 
           /*
@@ -565,7 +562,7 @@ export class IAItemNavigator
         }
 
         nav .minimized button.toggle-menu > * {
-          border: 2px solid var(--item-navigator-icon-stroke-color--);
+          border: 2px solid var(--item-navigator-icon-color--);
           border-radius: ${iconWidth};
           width: ${iconWidth};
           height: ${iconHeight};
@@ -579,7 +576,7 @@ export class IAItemNavigator
         }
 
         .ia-icon .fill-color {
-          fill: var(--item-navigator-icon-fill-color--);
+          fill: var(--item-navigator-icon-color--);
         }
 
         #menu {

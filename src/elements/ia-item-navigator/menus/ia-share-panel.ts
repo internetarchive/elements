@@ -226,28 +226,17 @@ export class IASharePanel extends LitElement {
             --item-navigator-text-color,
             var(--true-white)
           );
-          --item-navigator-share-link-color--: var(
-            --item-navigator-share-link-color,
-            var(--true-white)
-          );
-          --item-navigator-share-icon-border--: var(
-            --item-navigator-share-icon-border,
+          --item-navigator-border-color--: var(
+            --item-navigator-border-color,
             #4b4b4b
           );
-          --item-navigator-share-icon-bg--: var(
-            --item-navigator-share-icon-bg,
-            transparent
+          /* Icons follow the adjustable text color by default. */
+          --item-navigator-icon-color--: var(
+            --item-navigator-icon-color,
+            var(--item-navigator-text-color--)
           );
-          --item-navigator-icon-fill-color--: var(
-            --item-navigator-icon-fill-color,
-            var(--true-white)
-          );
-          --item-navigator-textarea-color--: var(
-            --item-navigator-textarea-color,
-            var(--true-white)
-          );
-          --item-navigator-textarea-bg--: var(
-            --item-navigator-textarea-bg,
+          --item-navigator-share-embed-bg--: var(
+            --item-navigator-share-embed-bg,
             #151515
           );
 
@@ -256,6 +245,7 @@ export class IASharePanel extends LitElement {
           overflow-y: auto;
           /* 10px base (petabox scale); internal sizing is em against it. */
           font-size: var(--item-navigator-base-font-size, 10px);
+          color: var(--item-navigator-text-color--);
           box-sizing: border-box;
         }
 
@@ -283,7 +273,7 @@ export class IASharePanel extends LitElement {
           padding: 0.5em 0;
           font-size: 1.6em;
           text-decoration: none;
-          color: var(--item-navigator-share-link-color--);
+          color: var(--item-navigator-text-color--);
           cursor: pointer;
           transition: background-color 0.2s;
           border-radius: 6px;
@@ -298,9 +288,8 @@ export class IASharePanel extends LitElement {
           padding: 0.2em;
           margin-right: 1em;
           vertical-align: middle;
-          border: 1px solid var(--item-navigator-share-icon-border--);
+          border: 1px solid var(--item-navigator-border-color--);
           border-radius: 7px;
-          background: var(--item-navigator-share-icon-bg--);
         }
 
         .share-option .ia-icon {
@@ -312,7 +301,7 @@ export class IASharePanel extends LitElement {
         }
 
         .ia-icon .fill-color {
-          fill: var(--item-navigator-icon-fill-color--);
+          fill: var(--item-navigator-icon-color--);
         }
 
         /* Hide the triangle that appears on details tags */
@@ -329,7 +318,7 @@ export class IASharePanel extends LitElement {
         }
 
         .embed a {
-          color: var(--item-navigator-share-link-color--);
+          color: var(--item-navigator-text-color--);
         }
 
         .code {
@@ -345,8 +334,8 @@ export class IASharePanel extends LitElement {
           resize: none;
           cursor: pointer;
           font: normal 1.4em var(--base-font-family);
-          color: var(--item-navigator-textarea-color--);
-          background: var(--item-navigator-textarea-bg--);
+          color: var(--item-navigator-text-color--);
+          background: var(--item-navigator-share-embed-bg--);
         }
 
         small {
@@ -357,8 +346,8 @@ export class IASharePanel extends LitElement {
           padding: 0.5em 1em;
           box-sizing: border-box;
           font: normal 1.2em/2em var(--base-font-family);
-          color: var(--item-navigator-textarea-bg--);
-          background: var(--item-navigator-textarea-color--);
+          color: var(--item-navigator-share-embed-bg--);
+          background: var(--item-navigator-text-color--);
           opacity: 0;
           transition: opacity 300ms linear;
         }

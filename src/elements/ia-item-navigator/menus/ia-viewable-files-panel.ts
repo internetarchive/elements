@@ -128,8 +128,8 @@ export class IAViewableFilesPanel extends LitElement {
             --item-navigator-text-color,
             var(--true-white)
           );
-          --item-navigator-separator-color--: var(
-            --item-navigator-separator-color,
+          --item-navigator-border-color--: var(
+            --item-navigator-border-color,
             #4b4b4b
           );
           --item-navigator-active-file-border-color--: var(
@@ -192,7 +192,7 @@ export class IAViewableFilesPanel extends LitElement {
         }
 
         .separator {
-          background-color: var(--item-navigator-separator-color--);
+          background-color: var(--item-navigator-border-color--);
           width: 98%;
           margin: 1px auto;
           height: 1px;

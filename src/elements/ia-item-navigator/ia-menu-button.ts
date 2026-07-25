@@ -113,13 +113,13 @@ export class IAMenuButton extends LitElement {
             --item-navigator-menu-button-label-display,
             none
           );
-          --item-navigator-icon-inactive-fill--: var(
-            --item-navigator-icon-inactive-fill,
+          --item-navigator-icon-inactive-color--: var(
+            --item-navigator-icon-inactive-color,
             var(--lighter-gray)
           );
-          --item-navigator-icon-active-fill--: var(
-            --item-navigator-icon-active-fill,
-            var(--true-white)
+          --item-navigator-icon-active-color--: var(
+            --item-navigator-icon-active-color,
+            var(--item-navigator-text-color--)
           );
           --item-navigator-icon-width--: var(
             --item-navigator-icon-width,
@@ -213,11 +213,11 @@ export class IAMenuButton extends LitElement {
         }
 
         .icon .fill-color {
-          fill: var(--item-navigator-icon-inactive-fill--);
+          fill: var(--item-navigator-icon-inactive-color--);
         }
 
         .icon.active .fill-color {
-          fill: var(--item-navigator-icon-active-fill--);
+          fill: var(--item-navigator-icon-active-color--);
         }
       `,
     ];

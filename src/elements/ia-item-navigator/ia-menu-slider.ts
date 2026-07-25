@@ -248,8 +248,8 @@ export class IAMenuSlider extends LitElement {
             --item-navigator-active-button-bg,
             var(--mid-gray)
           );
-          --item-navigator-subpanel-border-color--: var(
-            --item-navigator-subpanel-border-color,
+          --item-navigator-border-color--: var(
+            --item-navigator-border-color,
             #4b4b4b
           );
           --item-navigator-header-icon-width--: var(
@@ -260,9 +260,9 @@ export class IAMenuSlider extends LitElement {
             --item-navigator-header-icon-height,
             2em
           );
-          --item-navigator-icon-fill-color--: var(
-            --item-navigator-icon-fill-color,
-            var(--true-white)
+          --item-navigator-icon-color--: var(
+            --item-navigator-icon-color,
+            var(--item-navigator-text-color--)
           );
 
           /* 10px base (petabox scale); internal sizing is em against it. */
@@ -350,7 +350,7 @@ export class IAMenuSlider extends LitElement {
         }
 
         .ia-icon .fill-color {
-          fill: var(--item-navigator-icon-fill-color--);
+          fill: var(--item-navigator-icon-color--);
         }
 
         .content {
@@ -364,7 +364,7 @@ export class IAMenuSlider extends LitElement {
           transition: transform ${transitionTiming} ease-out;
           background: var(--item-navigator-active-button-bg--);
           border-right: 0.2em solid;
-          border-color: var(--item-navigator-subpanel-border-color--);
+          border-color: var(--item-navigator-border-color--);
           padding: 0.5em 0 0 0.5em;
           display: flex;
           flex-direction: column;

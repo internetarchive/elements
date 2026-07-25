@@ -52,70 +52,80 @@ const demoIcon = html`
   </svg>
 `;
 
-/**
- * A realistic multi-file item — the volumes of "The Master Book of American
- * Folk Song" — mirroring the example from the upstream item-navigator demo.
- * Includes a deliberately long title (to show wrapping) and PDF entries (to
- * show the PDF flag).
- */
-const DEMO_ITEM_IDENTIFIER = 'masterbookofamericanfolksong00shep';
+/** archive.org bases for embeddable item viewers and direct file downloads. */
+const EMBED_BASE = 'https://archive.org/embed';
+const DOWNLOAD_BASE = 'https://archive.org/download';
 
-/** Builds a viewable-file entry whose link resolves against the real item. */
+type DemoMediaType = 'image' | 'pdf' | 'video';
+
+/** A viewable file backed by a real, iframe-embeddable archive.org item. */
+interface DemoFile extends ViewableFileInfo {
+  identifier: string;
+  mediatype: DemoMediaType;
+  /** For PDFs, the direct file to load in the browser's native PDF viewer. */
+  pdfFile?: string;
+}
+
 function demoFile(
-  subprefix: string,
+  identifier: string,
   title: string,
+  mediatype: DemoMediaType,
   orig_sort: number,
-  { topLevel = false, pdf = false }: { topLevel?: boolean; pdf?: boolean } = {},
-): ViewableFileInfo {
-  const base = `/details/${DEMO_ITEM_IDENTIFIER}`;
+  pdfFile?: string,
+): DemoFile {
   return {
+    identifier,
+    mediatype,
+    pdfFile,
     title,
-    file_prefix: subprefix,
-    file_subprefix: subprefix,
-    // file_source only drives the PDF flag; the link comes from url_path.
-    file_source: pdf ? `${subprefix}.pdf` : `/${subprefix}_jp2.zip`,
-    url_path: topLevel ? base : `${base}/${encodeURIComponent(subprefix)}`,
+    file_prefix: identifier,
+    file_subprefix: identifier,
+    // file_source only drives the PDF flag in the panel.
+    file_source: mediatype === 'pdf' ? `${identifier}.pdf` : identifier,
+    url_path: `/details/${identifier}`,
     image: '',
-    author: 'Riley Shepard',
+    author: '',
     orig_sort,
   };
 }
 
-const DEMO_FILES: ViewableFileInfo[] = [
+/**
+ * A small gallery of real, public "cats" items from archive.org — three
+ * images, three PDFs and a video. Images and video embed the item viewer;
+ * PDFs load the file directly in the browser's native PDF viewer. Selecting
+ * one swaps the navigator's slotted theater.
+ */
+const DEMO_FILES: DemoFile[] = [
+  demoFile('0FK9vj7MBL', 'Monmon Japanese Cats Tattoo Designs', 'image', 0),
+  demoFile('Catsintherain', 'Cats in the Rain', 'image', 1),
   demoFile(
-    '01-The Master Book of American Folk Song',
-    'The Master Book of American Folk Song',
-    0,
-    { topLevel: true },
-  ),
-  demoFile(
-    '02-Encyclopedia of the Traditional Music and Folk Songs of the United States Index A through M',
-    'Encyclopedia of the Traditional Music and Folk Songs of the United States, Index A through M',
-    1,
-  ),
-  demoFile(
-    '03-Encyclopedia of the Traditional Music and Folk Songs of the United States Index N through Z',
-    'Encyclopedia of the Traditional Music and Folk Songs of the United States, Index N through Z',
+    'WithPriscillaTheCat1987',
+    'With Priscilla the Cat, 1987',
+    'image',
     2,
   ),
-  demoFile('04-Letters to Riley Shepard', 'Letters to Riley Shepard', 3),
   demoFile(
-    'Master Book of American Folk Song Vol. 1',
-    'Master Book of American Folk Song Vol. 1',
+    'TheBlackCat_339',
+    'The Black Cat',
+    'pdf',
+    3,
+    'TheBlackCatByEdgarAllanPoe.pdf',
+  ),
+  demoFile(
+    'catofbubastestal00hentiala',
+    'The Cat of Bubastes: A Tale of Ancient Egypt',
+    'pdf',
     4,
-    { pdf: true },
+    'catofbubastestal00hentiala.pdf',
   ),
   demoFile(
-    'Master Book of American Folk Song Vol. 2',
-    'Master Book of American Folk Song Vol. 2',
+    'lettersfromcatpu00jackiala',
+    'Letters from a Cat',
+    'pdf',
     5,
-    { pdf: true },
+    'lettersfromcatpu00jackiala.pdf',
   ),
-  demoFile(
-    'Master Book of American Folk Song Vol. 3',
-    'Master Book of American Folk Song Vol. 3',
-    6,
-  ),
+  demoFile('PrivateL1947', 'Private Life of a Cat (1947)', 'video', 6),
 ];
 
 @customElement('ia-item-navigator-story')
@@ -136,19 +146,52 @@ export class IAItemNavigatorStory extends LitElement {
 
   @state() private sortedFiles: ViewableFileInfo[] = [...DEMO_FILES];
 
+  @state() private selectedSubPrefix = DEMO_FILES[0].file_subprefix;
+
   private handleFileListSorted(e: Event): void {
     const { sortType, sortedFiles } = (e as CustomEvent).detail;
     this.sortOrderBy = sortType;
     this.sortedFiles = sortedFiles;
   }
 
+  private get selectedFile(): DemoFile {
+    return (
+      DEMO_FILES.find((f) => f.file_subprefix === this.selectedSubPrefix) ??
+      DEMO_FILES[0]
+    );
+  }
+
+  /** PDFs load the file directly; everything else uses the item embed viewer. */
+  private get theaterSrc(): string {
+    const file = this.selectedFile;
+    return file.mediatype === 'pdf' && file.pdfFile
+      ? `${DOWNLOAD_BASE}/${file.identifier}/${encodeURIComponent(file.pdfFile)}`
+      : `${EMBED_BASE}/${file.identifier}`;
+  }
+
+  /**
+   * Intercepts clicks on the viewable-files links so, instead of navigating
+   * away, the demo swaps the slotted theater to the chosen file — showing how
+   * a host drives the navigator's `main` slot dynamically.
+   */
+  private handleFileClick(e: Event): void {
+    const link = e
+      .composedPath()
+      .find((n): n is HTMLAnchorElement => n instanceof HTMLAnchorElement);
+    if (!link) return;
+    e.preventDefault();
+    const href = link.getAttribute('href');
+    const file = DEMO_FILES.find((f) => `//archive.org${f.url_path}` === href);
+    if (file) this.selectedSubPrefix = file.file_subprefix;
+  }
+
   private get demoItem() {
     // The navigator only reads `item?.metadata?.identifier`, so a plain object
-    // stands in for a full MetadataResponse in the demo.
+    // stands in for a full MetadataResponse — reflecting the selected item.
     return {
       metadata: {
-        identifier: DEMO_ITEM_IDENTIFIER,
-        title: 'The Master Book of American Folk Song',
+        identifier: this.selectedFile.identifier,
+        title: this.selectedFile.title,
       },
     } as never;
   }
@@ -174,9 +217,10 @@ export class IAItemNavigatorStory extends LitElement {
         component: html`
           <ia-viewable-files-panel
             baseHost="archive.org"
-            subPrefix="01-The Master Book of American Folk Song"
+            subPrefix=${this.selectedSubPrefix}
             .fileList=${this.sortedFiles}
             .sortOrderBy=${this.sortOrderBy}
+            @click=${(e: Event) => this.handleFileClick(e)}
           ></ia-viewable-files-panel>
         `,
       },
@@ -187,11 +231,10 @@ export class IAItemNavigatorStory extends LitElement {
         icon: shareIcon,
         component: html`
           <ia-share-panel
-            identifier=${DEMO_ITEM_IDENTIFIER}
+            identifier=${this.selectedFile.identifier}
             baseHost="archive.org"
-            type="book"
-            creator="Riley Shepard"
-            description="The Master Book of American Folk Song"
+            type="item"
+            .description=${this.selectedFile.title}
           ></ia-share-panel>
         `,
       },
@@ -226,6 +269,17 @@ export class IAItemNavigatorStory extends LitElement {
   private get styleInputData(): StyleInputData {
     return {
       settings: [
+        // Sizing / motion
+        {
+          label: 'Base font size',
+          cssVariable: '--item-navigator-base-font-size',
+          defaultValue: 10,
+          inputType: 'range',
+          min: 8,
+          max: 16,
+          step: 1,
+          unit: 'px',
+        },
         {
           label: 'Menu width',
           cssVariable: '--item-navigator-menu-width',
@@ -234,6 +288,16 @@ export class IAItemNavigatorStory extends LitElement {
           min: 200,
           max: 480,
           step: 10,
+          unit: 'px',
+        },
+        {
+          label: 'Shortcut rail width',
+          cssVariable: '--item-navigator-menu-margin',
+          defaultValue: 42,
+          inputType: 'range',
+          min: 30,
+          max: 64,
+          step: 2,
           unit: 'px',
         },
         {
@@ -246,16 +310,49 @@ export class IAItemNavigatorStory extends LitElement {
           step: 50,
           unit: 'ms',
         },
-        {
-          label: 'Theater background',
-          cssVariable: '--item-navigator-theater-bg-color',
-          defaultValue: '#000000',
-          inputType: 'color',
-        },
+        // Text + icons
         {
           label: 'Text color',
           cssVariable: '--item-navigator-text-color',
           defaultValue: '#ffffff',
+          inputType: 'color',
+        },
+        {
+          label: 'Icon color',
+          cssVariable: '--item-navigator-icon-color',
+          defaultValue: '#ffffff',
+          inputType: 'color',
+        },
+        {
+          label: 'Icon color · active',
+          cssVariable: '--item-navigator-icon-active-color',
+          defaultValue: '#ffffff',
+          inputType: 'color',
+        },
+        {
+          label: 'Icon color · inactive',
+          cssVariable: '--item-navigator-icon-inactive-color',
+          defaultValue: '#999999',
+          inputType: 'color',
+        },
+        // Borders / accents
+        {
+          label: 'Border color',
+          cssVariable: '--item-navigator-border-color',
+          defaultValue: '#4b4b4b',
+          inputType: 'color',
+        },
+        {
+          label: 'Active file border',
+          cssVariable: '--item-navigator-active-file-border-color',
+          defaultValue: '#538bc5',
+          inputType: 'color',
+        },
+        // Backgrounds
+        {
+          label: 'Theater background',
+          cssVariable: '--item-navigator-theater-bg-color',
+          defaultValue: '#000000',
           inputType: 'color',
         },
         {
@@ -268,6 +365,12 @@ export class IAItemNavigatorStory extends LitElement {
           label: 'Active panel background',
           cssVariable: '--item-navigator-active-button-bg',
           defaultValue: '#333333',
+          inputType: 'color',
+        },
+        {
+          label: 'Embed field background',
+          cssVariable: '--item-navigator-share-embed-bg',
+          defaultValue: '#151515',
           inputType: 'color',
         },
       ],
@@ -362,8 +465,11 @@ export class IAItemNavigatorStory extends LitElement {
     return html`
       <div slot="header" class="demo-header">
         <span class="brand">Internet Archive</span>
-        <a class="title" href="/details/${DEMO_ITEM_IDENTIFIER}"
-          >The Master Book of American Folk Song</a
+        <a
+          class="title"
+          href="https://archive.org/details/${this.selectedFile.identifier}"
+          target="_blank"
+          >${this.selectedFile.title}</a
         >
         ${this.fullscreen
           ? html`<button
@@ -380,18 +486,16 @@ export class IAItemNavigatorStory extends LitElement {
   }
 
   private get theaterTemplate() {
+    const file = this.selectedFile;
     return html`
       <div slot="main" class="demo-theater">
-        <div class="viewer-mock">
-          <div class="spine"></div>
-          <div class="page">
-            <p class="viewer-title">The Master Book of American Folk Song</p>
-            <p class="viewer-note">
-              Your theater (book reader, media player, image viewer, …) renders
-              here.
-            </p>
-          </div>
-        </div>
+        <iframe
+          class="theater-embed"
+          src=${this.theaterSrc}
+          title=${file.title}
+          allow="fullscreen"
+          allowfullscreen
+        ></iframe>
       </div>
     `;
   }
@@ -452,45 +556,15 @@ export class IAItemNavigatorStory extends LitElement {
       }
 
       .demo-theater {
-        display: flex;
-        align-items: center;
-        justify-content: center;
         height: 100%;
-        padding: 1rem;
-        box-sizing: border-box;
-      }
-
-      .viewer-mock {
-        display: flex;
-        max-width: 320px;
         width: 100%;
-        min-height: 220px;
-        border-radius: 4px;
-        overflow: hidden;
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-        background: #2b2b2b;
       }
 
-      .viewer-mock .spine {
-        width: 14px;
-        background: linear-gradient(90deg, #111, #444);
-      }
-
-      .viewer-mock .page {
-        flex: 1;
-        padding: 1.5rem 1.25rem;
-        color: #eee;
-      }
-
-      .viewer-title {
-        margin: 0 0 0.75rem;
-        font-weight: 700;
-      }
-
-      .viewer-note {
-        margin: 0;
-        font-size: 0.85rem;
-        color: #aaa;
+      .theater-embed {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        display: block;
       }
 
       .hint {
