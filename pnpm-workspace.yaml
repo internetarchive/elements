@@ -1,4 +1,7 @@
-nodeLinker: hoisted
+# Strict, symlinked node_modules: each package sees only its declared
+# dependencies, so an undeclared (phantom) import fails here rather than in a
+# consumer whose tree happens to hoist it.
+nodeLinker: isolated
 
 # Supply-chain cooldown (WEBDEV-8544): don't install a package version until it
 # has been published for at least this long, giving a compromised release time to
