@@ -3,8 +3,9 @@ name: App CI
 on:
   push:
     branches: [ main ]
+  # every pull request, whatever it targets, so a PR stacked on another
+  # branch still gets its tests run
   pull_request:
-    branches: [ main ]
 
 jobs:
   build:
