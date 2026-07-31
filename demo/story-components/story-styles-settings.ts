@@ -51,8 +51,34 @@ export class StoryStylesSettings extends LitElement {
           )}
         </table>
         <button @click=${this.applyStyles}>Apply</button>
+        <button @click=${this.resetStyles}>Reset</button>
       </div>
     `;
+  }
+
+  /**
+   * Restores every input to its default and clears the applied styles, so the
+   * demo component falls back to its own default styling.
+   */
+  private resetStyles(): void {
+    const defaults = new Map(
+      (this.styleInputData?.settings ?? []).map((s) => [s.cssVariable, s]),
+    );
+    this.styleInputs?.forEach((input) => {
+      const setting = defaults.get(input.dataset.variable ?? '');
+      if (!setting) return;
+      input.value = String(setting.defaultValue);
+      const output = this.renderRoot.querySelector<HTMLOutputElement>(
+        `output[for="${CSS.escape(input.id)}"]`,
+      );
+      if (output) {
+        output.textContent = `${setting.defaultValue}${setting.unit ?? ''}`;
+      }
+    });
+
+    this.dispatchEvent(
+      new CustomEvent('stylesApplied', { detail: { styles: '' } }),
+    );
   }
 
   /**
@@ -87,6 +113,9 @@ export class StoryStylesSettings extends LitElement {
                 >${input.defaultValue}${input.unit ?? ''}</output
               >`
             : nothing}
+          <code class="style-var" title=${input.cssVariable}
+            >${input.cssVariable}</code
+          >
         </td>
       </tr>
     `;
@@ -141,6 +170,15 @@ export class StoryStylesSettings extends LitElement {
         .style-readout {
           min-width: 3.5em;
           text-align: right;
+        }
+
+        /* The CSS custom property each control sets, shown to its right. */
+        .style-var {
+          margin-left: 0.75em;
+          font-family: monospace;
+          font-size: 0.72rem;
+          color: #767676;
+          white-space: nowrap;
         }
 
         input[type='range'] {

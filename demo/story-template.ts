@@ -271,12 +271,10 @@ export class StoryTemplate extends LitElement {
     if (slottedComponent) this.slottedDemoComponent = slottedComponent;
   }
 
-  /* Applies styles from the settings to the component and code demo */
+  /* Applies styles from the settings to the component and code demo; an empty
+     string clears them (Reset), reverting to the component's own defaults. */
   private handleStylesApplied(e: CustomEvent): void {
-    const stringifiedStyles = e.detail.styles;
-    if (!stringifiedStyles) return;
-
-    this.stringifiedStyles = stringifiedStyles;
+    this.stringifiedStyles = e.detail.styles || undefined;
   }
 
   /* Applies props from the settings to the component and code demo */
