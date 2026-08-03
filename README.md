@@ -87,6 +87,9 @@ Add to Jest config:
 
 ## Development
 
+Requires Node 24+ and pnpm 11+. `.npmrc` sets `engine-strict=true`, so an older
+Node or a different package manager fails the install rather than warning.
+
 ```zsh
 pnpm install
 pnpm run dev
