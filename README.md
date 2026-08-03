@@ -100,7 +100,7 @@ pnpm run dev
    1. `pnpm version prerelease --preid=<some_prefix>`
    2. If you use JIRA, recommend using the ticket number, ie `--preid=webdev-1234`
    3. This will also create a `git` tag
-2. Push the tag that was created in the `npm version` step
+2. Push the tag that was created in the `pnpm version` step
 3. Publish prerelease to npm:
    1. Go to the [Element release page](https://github.com/internetarchive/elements/releases)
    2. Tap `Draft a new release` button
