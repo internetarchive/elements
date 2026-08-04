@@ -1,12 +1,11 @@
 import type { TemplateResult } from 'lit';
-import {
-  Directive,
-  directive,
+import type {
   DirectiveParameters,
   DirectiveResult,
   Part,
   PartInfo,
 } from 'lit/directive.js';
+import { Directive, directive } from 'lit/directive.js';
 
 const resolved = new WeakSet();
 

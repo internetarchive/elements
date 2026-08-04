@@ -2,7 +2,7 @@ import { describe, expect, test, beforeEach, afterEach, vi } from 'vitest';
 import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
 import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-input';
-import { IADropdownSearchBar } from './ia-dropdown-search-bar';
+import type { IADropdownSearchBar } from './ia-dropdown-search-bar';
 import type { SearchRequestedDetail } from './models';
 
 import './ia-dropdown-search-bar';

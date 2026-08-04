@@ -1,7 +1,7 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { customElement, state, query } from 'lit/decorators.js';
-import { StyleInputSettings } from '@demo/story-components/story-styles-settings';
-import {
+import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
+import type {
   IAComboBoxBehavior,
   IAComboBoxFilterOption,
   IAComboBoxFilterPreset,

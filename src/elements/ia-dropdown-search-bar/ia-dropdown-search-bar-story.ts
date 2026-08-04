@@ -1,8 +1,8 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { customElement, state, query } from 'lit/decorators.js';
 import { map } from 'lit/directives/map.js';
-import { StyleInputSettings } from '@demo/story-components/story-styles-settings';
-import { SearchRequestedDetail } from './models';
+import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
+import type { SearchRequestedDetail } from './models';
 
 import '@demo/story-template';
 import './ia-dropdown-search-bar';

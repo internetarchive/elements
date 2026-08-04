@@ -2,7 +2,7 @@ import { fixture, oneEvent } from '@open-wc/testing-helpers';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { html } from 'lit';
 
-import { IAOTPInput } from './ia-otp-input';
+import type { IAOTPInput } from './ia-otp-input';
 import './ia-otp-input';
 
 describe('IA OTP Input', () => {
