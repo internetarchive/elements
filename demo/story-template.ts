@@ -28,6 +28,14 @@ export class StoryTemplate extends LitElement {
 
   @property({ type: String }) customExampleUsage?: string;
 
+  /* Overrides the derived import snippet — for non-component modules
+   * (parsers, services, models) whose import path isn't `<tag>/<tag>`. */
+  @property({ type: String }) customImport?: string;
+
+  /* Plain-text heading for non-component modules. When set, it's shown as-is
+   * instead of as an `<element-tag>`. */
+  @property({ type: String }) heading?: string;
+
   /* Optional stringified properties to always include in the example usage */
   @property({ type: String }) defaultUsageProps?: string;
 
@@ -65,7 +73,9 @@ export class StoryTemplate extends LitElement {
     return html`
       <div id="container">
         <h2>
-          <code>&lt;${this.elementTag}&gt;</code>
+          ${this.heading
+            ? this.heading
+            : html`<code>&lt;${this.elementTag}&gt;</code>`}
           ${when(
             this.labs,
             () =>
@@ -217,6 +227,7 @@ export class StoryTemplate extends LitElement {
   }
 
   private get importCode(): string {
+    if (this.customImport) return this.customImport;
     if (this.elementClassName) {
       return `import '${this.modulePath}';\nimport { ${this.elementClassName} } from '${this.modulePath}';`;
     } else {
