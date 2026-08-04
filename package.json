@@ -5,6 +5,11 @@
   "license": "AGPL-3.0-only",
   "types": "./dist/src/elements/index.d.ts",
   "type": "module",
+  "packageManager": "pnpm@11.13.0",
+  "engines": {
+    "node": ">=24",
+    "pnpm": ">=11"
+  },
   "publishConfig": {
     "access": "public"
   },
@@ -35,8 +40,11 @@
     "tslib": "^2.8.1"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "@eslint/js": "^9.39.1",
     "@open-wc/testing-helpers": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
+    "@typescript-eslint/parser": "^8.46.4",
     "@vitest/browser": "^4.0.8",
     "@vitest/browser-playwright": "^4.0.8",
     "@vitest/coverage-v8": "^4.0.8",
@@ -51,7 +59,7 @@
     "highlight.js": "^11.11.1",
     "madge": "^8.0.0",
     "playwright": "^1.60.0",
-    "prettier": "^3.6.2",
+    "prettier": "3.6.2",
     "ts-lit-plugin": "^2.0.2",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3",
