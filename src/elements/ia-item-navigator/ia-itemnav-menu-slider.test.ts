@@ -2,8 +2,8 @@ import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
 import { describe, expect, test, vi } from 'vitest';
 
-import { IAMenuSlider } from './ia-menu-slider';
-import './ia-menu-slider';
+import { IAItemNavMenuSlider } from './ia-itemnav-menu-slider';
+import './ia-itemnav-menu-slider';
 import type { MenuProviderInterface } from './interfaces/menu-interfaces';
 
 function provider(
@@ -24,21 +24,21 @@ function provider(
 
 async function sliderWith(
   menus: MenuProviderInterface[],
-): Promise<IAMenuSlider> {
-  const el = await fixture<IAMenuSlider>(
-    html`<ia-menu-slider open></ia-menu-slider>`,
+): Promise<IAItemNavMenuSlider> {
+  const el = await fixture<IAItemNavMenuSlider>(
+    html`<ia-itemnav-menu-slider open></ia-itemnav-menu-slider>`,
   );
   el.menus = menus;
   await el.updateComplete;
   return el;
 }
 
-describe('IAMenuSlider', () => {
+describe('IAItemNavMenuSlider', () => {
   test('renders one menu button per provider', async () => {
     const el = await sliderWith([provider('a'), provider('b'), provider('c')]);
-    expect(el.shadowRoot?.querySelectorAll('ia-menu-button')).to.have.lengthOf(
-      3,
-    );
+    expect(
+      el.shadowRoot?.querySelectorAll('ia-itemnav-menu-button'),
+    ).to.have.lengthOf(3);
   });
 
   test('renders a close button', async () => {
@@ -210,7 +210,7 @@ describe('IAMenuSlider', () => {
       }),
     ]);
 
-    const buttons = el.shadowRoot?.querySelectorAll('ia-menu-button');
+    const buttons = el.shadowRoot?.querySelectorAll('ia-itemnav-menu-button');
     expect(buttons).to.have.lengthOf(2);
     const linky = buttons?.[1] as HTMLElement & {
       href: string;

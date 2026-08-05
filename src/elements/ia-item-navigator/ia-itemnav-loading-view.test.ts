@@ -2,13 +2,13 @@ import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
 import { describe, expect, test } from 'vitest';
 
-import { IAItemNavLoader } from './ia-itemnav-loader';
-import './ia-itemnav-loader';
+import { IAItemNavLoadingView } from './ia-itemnav-loading-view';
+import './ia-itemnav-loading-view';
 
-describe('IAItemNavLoader', () => {
+describe('IAItemNavLoadingView', () => {
   test('renders the loading spinner', async () => {
-    const el = await fixture<IAItemNavLoader>(
-      html`<ia-itemnav-loader></ia-itemnav-loader>`,
+    const el = await fixture<IAItemNavLoadingView>(
+      html`<ia-itemnav-loading-view></ia-itemnav-loading-view>`,
     );
     expect(el.shadowRoot?.querySelector('svg .ring')).to.exist;
     expect(el.shadowRoot?.querySelector('h3')?.textContent).to.contain(
@@ -17,10 +17,10 @@ describe('IAItemNavLoader', () => {
   });
 
   test('shows the loader message when provided', async () => {
-    const el = await fixture<IAItemNavLoader>(
-      html`<ia-itemnav-loader
+    const el = await fixture<IAItemNavLoadingView>(
+      html`<ia-itemnav-loading-view
         loaderMessage="Internet Archive"
-      ></ia-itemnav-loader>`,
+      ></ia-itemnav-loading-view>`,
     );
     expect(el.shadowRoot?.querySelector('h2')?.textContent).to.contain(
       'Internet Archive',
@@ -28,8 +28,8 @@ describe('IAItemNavLoader', () => {
   });
 
   test('omits the message heading when there is no message', async () => {
-    const el = await fixture<IAItemNavLoader>(
-      html`<ia-itemnav-loader></ia-itemnav-loader>`,
+    const el = await fixture<IAItemNavLoadingView>(
+      html`<ia-itemnav-loading-view></ia-itemnav-loading-view>`,
     );
     expect(el.shadowRoot?.querySelector('h2')).to.not.exist;
   });

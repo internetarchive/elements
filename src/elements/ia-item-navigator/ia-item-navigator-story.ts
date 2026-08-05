@@ -2,11 +2,11 @@ import { css, html, LitElement, nothing, type CSSResultGroup } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
 import './ia-item-navigator';
-import './menus/ia-viewable-files-panel';
-import './menus/ia-sort-files-button';
-import './menus/ia-share-panel';
-import { viewableFilesIcon } from './menus/ia-viewable-files-panel';
-import { shareIcon } from './menus/ia-share-panel';
+import './menus/ia-itemnav-viewable-files-panel';
+import './menus/ia-itemnav-sort-files-button';
+import './menus/ia-itemnav-share-panel';
+import { viewableFilesIcon } from './menus/ia-itemnav-viewable-files-panel';
+import { shareIcon } from './menus/ia-itemnav-share-panel';
 import { maskedIcon } from './masked-icon';
 import listIconUrl from './menus/icons/list.svg';
 import type {
@@ -303,19 +303,19 @@ export class IAItemNavigatorStory extends LitElement {
         label: `Viewable Files (${DEMO_FILES.length})`,
         icon: viewableFilesIcon,
         actionButton: html`
-          <ia-sort-files-button
+          <ia-itemnav-sort-files-button
             .fileListRaw=${DEMO_FILES}
             .sortOrderBy=${this.sortOrderBy}
-          ></ia-sort-files-button>
+          ></ia-itemnav-sort-files-button>
         `,
         component: html`
-          <ia-viewable-files-panel
+          <ia-itemnav-viewable-files-panel
             baseHost="archive.org"
             subPrefix=${this.selectedSubPrefix}
             .fileList=${this.sortedFiles}
             .sortOrderBy=${this.sortOrderBy}
             @click=${(e: Event) => this.handleFileClick(e)}
-          ></ia-viewable-files-panel>
+          ></ia-itemnav-viewable-files-panel>
         `,
       },
       {
@@ -324,12 +324,12 @@ export class IAItemNavigatorStory extends LitElement {
         label: 'Share this item',
         icon: shareIcon,
         component: html`
-          <ia-share-panel
+          <ia-itemnav-share-panel
             identifier=${this.selectedFile.identifier}
             baseHost="archive.org"
             type="item"
             .description=${this.selectedFile.title}
-          ></ia-share-panel>
+          ></ia-itemnav-share-panel>
         `,
       },
       {

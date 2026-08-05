@@ -2,8 +2,8 @@ import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
 import { describe, expect, test, vi } from 'vitest';
 
-import { IASortFilesButton } from './ia-sort-files-button';
-import './ia-sort-files-button';
+import { IAItemNavSortFilesButton } from './ia-itemnav-sort-files-button';
+import './ia-itemnav-sort-files-button';
 import type { ViewableFileInfo } from './models';
 
 function file(title: string, origSort: number): ViewableFileInfo {
@@ -19,18 +19,18 @@ function file(title: string, origSort: number): ViewableFileInfo {
   };
 }
 
-describe('IASortFilesButton', () => {
+describe('IAItemNavSortFilesButton', () => {
   test('starts in the default (neutral) state', async () => {
-    const el = await fixture<IASortFilesButton>(
-      html`<ia-sort-files-button></ia-sort-files-button>`,
+    const el = await fixture<IAItemNavSortFilesButton>(
+      html`<ia-itemnav-sort-files-button></ia-itemnav-sort-files-button>`,
     );
     expect(el.sortOrderBy).to.equal('default');
     expect(el.shadowRoot?.querySelector('.sort-by.neutral-icon')).to.exist;
   });
 
   test('cycles default → ascending → descending → default on click', async () => {
-    const el = await fixture<IASortFilesButton>(
-      html`<ia-sort-files-button></ia-sort-files-button>`,
+    const el = await fixture<IAItemNavSortFilesButton>(
+      html`<ia-itemnav-sort-files-button></ia-itemnav-sort-files-button>`,
     );
 
     const clickButton = async () => {
@@ -54,8 +54,8 @@ describe('IASortFilesButton', () => {
   });
 
   test('sorts the file list and emits fileListSorted with the ordered files', async () => {
-    const el = await fixture<IASortFilesButton>(
-      html`<ia-sort-files-button></ia-sort-files-button>`,
+    const el = await fixture<IAItemNavSortFilesButton>(
+      html`<ia-itemnav-sort-files-button></ia-itemnav-sort-files-button>`,
     );
     el.fileListRaw = [file('Beta', 1), file('Alpha', 0), file('Gamma', 2)];
     await el.updateComplete;
@@ -75,8 +75,8 @@ describe('IASortFilesButton', () => {
   });
 
   test('sorts titles in descending order', async () => {
-    const el = await fixture<IASortFilesButton>(
-      html`<ia-sort-files-button></ia-sort-files-button>`,
+    const el = await fixture<IAItemNavSortFilesButton>(
+      html`<ia-itemnav-sort-files-button></ia-itemnav-sort-files-button>`,
     );
     el.fileListRaw = [file('Beta', 1), file('Alpha', 0), file('Gamma', 2)];
     await el.updateComplete;
@@ -90,8 +90,8 @@ describe('IASortFilesButton', () => {
   });
 
   test('restores the original order when sorting back to default', async () => {
-    const el = await fixture<IASortFilesButton>(
-      html`<ia-sort-files-button></ia-sort-files-button>`,
+    const el = await fixture<IAItemNavSortFilesButton>(
+      html`<ia-itemnav-sort-files-button></ia-itemnav-sort-files-button>`,
     );
     el.fileListRaw = [file('Beta', 1), file('Alpha', 0), file('Gamma', 2)];
     await el.updateComplete;
@@ -105,8 +105,8 @@ describe('IASortFilesButton', () => {
   });
 
   test('does not mutate the source list in place', async () => {
-    const el = await fixture<IASortFilesButton>(
-      html`<ia-sort-files-button></ia-sort-files-button>`,
+    const el = await fixture<IAItemNavSortFilesButton>(
+      html`<ia-itemnav-sort-files-button></ia-itemnav-sort-files-button>`,
     );
     const raw = [file('Beta', 1), file('Alpha', 0)];
     el.fileListRaw = raw;
@@ -117,8 +117,8 @@ describe('IASortFilesButton', () => {
   });
 
   test('default sort treats a missing orig_sort as 0', async () => {
-    const el = await fixture<IASortFilesButton>(
-      html`<ia-sort-files-button></ia-sort-files-button>`,
+    const el = await fixture<IAItemNavSortFilesButton>(
+      html`<ia-itemnav-sort-files-button></ia-itemnav-sort-files-button>`,
     );
     const a: ViewableFileInfo = { ...file('A', 0) };
     const b: ViewableFileInfo = { ...file('B', 0) };
@@ -132,10 +132,10 @@ describe('IASortFilesButton', () => {
   });
 
   test('paints the sort glyph with the themed icon color', async () => {
-    const el = await fixture<IASortFilesButton>(
-      html`<ia-sort-files-button
+    const el = await fixture<IAItemNavSortFilesButton>(
+      html`<ia-itemnav-sort-files-button
         style="--item-navigator-icon-color: rgb(0, 128, 64)"
-      ></ia-sort-files-button>`,
+      ></ia-itemnav-sort-files-button>`,
     );
     const icon = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
 
@@ -145,10 +145,10 @@ describe('IASortFilesButton', () => {
   });
 
   test('recolors every state of the sort toggle', async () => {
-    const el = await fixture<IASortFilesButton>(
-      html`<ia-sort-files-button
+    const el = await fixture<IAItemNavSortFilesButton>(
+      html`<ia-itemnav-sort-files-button
         style="--item-navigator-icon-color: rgb(200, 100, 50)"
-      ></ia-sort-files-button>`,
+      ></ia-itemnav-sort-files-button>`,
     );
 
     for (const state of ['title_asc', 'title_desc', 'default'] as const) {

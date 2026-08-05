@@ -2,8 +2,8 @@ import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
 import { describe, expect, test } from 'vitest';
 
-import { IAViewableFilesPanel } from './ia-viewable-files-panel';
-import './ia-viewable-files-panel';
+import { IAItemNavViewableFilesPanel } from './ia-itemnav-viewable-files-panel';
+import './ia-itemnav-viewable-files-panel';
 import type { ViewableFileInfo } from './models';
 
 function file(
@@ -20,17 +20,17 @@ function file(
   };
 }
 
-describe('IAViewableFilesPanel', () => {
+describe('IAItemNavViewableFilesPanel', () => {
   test('renders nothing when the file list is empty', async () => {
-    const el = await fixture<IAViewableFilesPanel>(
-      html`<ia-viewable-files-panel></ia-viewable-files-panel>`,
+    const el = await fixture<IAItemNavViewableFilesPanel>(
+      html`<ia-itemnav-viewable-files-panel></ia-itemnav-viewable-files-panel>`,
     );
     expect(el.shadowRoot?.querySelector('ul')).to.not.exist;
   });
 
   test('renders one entry per file with its title', async () => {
-    const el = await fixture<IAViewableFilesPanel>(
-      html`<ia-viewable-files-panel></ia-viewable-files-panel>`,
+    const el = await fixture<IAItemNavViewableFilesPanel>(
+      html`<ia-itemnav-viewable-files-panel></ia-itemnav-viewable-files-panel>`,
     );
     el.fileList = [file({ title: 'Volume 1' }), file({ title: 'Volume 2' })];
     await el.updateComplete;
@@ -41,8 +41,8 @@ describe('IAViewableFilesPanel', () => {
   });
 
   test('marks the entry matching the current subPrefix as active', async () => {
-    const el = await fixture<IAViewableFilesPanel>(
-      html`<ia-viewable-files-panel></ia-viewable-files-panel>`,
+    const el = await fixture<IAItemNavViewableFilesPanel>(
+      html`<ia-itemnav-viewable-files-panel></ia-itemnav-viewable-files-panel>`,
     );
     el.fileList = [
       file({ title: 'V1', file_subprefix: 'v1' }),
@@ -57,8 +57,8 @@ describe('IAViewableFilesPanel', () => {
   });
 
   test('flags PDF sources with a PDF label', async () => {
-    const el = await fixture<IAViewableFilesPanel>(
-      html`<ia-viewable-files-panel></ia-viewable-files-panel>`,
+    const el = await fixture<IAItemNavViewableFilesPanel>(
+      html`<ia-itemnav-viewable-files-panel></ia-itemnav-viewable-files-panel>`,
     );
     el.fileList = [
       file({ title: 'A book', file_source: 'book.pdf' }),
@@ -71,20 +71,20 @@ describe('IAViewableFilesPanel', () => {
   });
 
   test('builds file URLs against the base host', async () => {
-    const el = await fixture<IAViewableFilesPanel>(
-      html`<ia-viewable-files-panel
+    const el = await fixture<IAItemNavViewableFilesPanel>(
+      html`<ia-itemnav-viewable-files-panel
         baseHost="example.org"
-      ></ia-viewable-files-panel>`,
+      ></ia-itemnav-viewable-files-panel>`,
     );
     const url = el.fileUrl(file({ title: 'x', url_path: '/details/x' }));
     expect(url).to.equal('//example.org/details/x');
   });
 
   test('appends the sort order to URLs only when addSortToUrl is set', async () => {
-    const el = await fixture<IAViewableFilesPanel>(
-      html`<ia-viewable-files-panel
+    const el = await fixture<IAItemNavViewableFilesPanel>(
+      html`<ia-itemnav-viewable-files-panel
         baseHost="example.org"
-      ></ia-viewable-files-panel>`,
+      ></ia-itemnav-viewable-files-panel>`,
     );
     el.addSortToUrl = true;
     el.sortOrderBy = 'title_asc';
@@ -101,8 +101,8 @@ describe('IAViewableFilesPanel', () => {
   });
 
   test('does not flag a file with no file_source as a PDF', async () => {
-    const el = await fixture<IAViewableFilesPanel>(
-      html`<ia-viewable-files-panel></ia-viewable-files-panel>`,
+    const el = await fixture<IAItemNavViewableFilesPanel>(
+      html`<ia-itemnav-viewable-files-panel></ia-itemnav-viewable-files-panel>`,
     );
     const noSource: ViewableFileInfo = { ...file({ title: 'sourceless' }) };
     delete (noSource as Partial<ViewableFileInfo>).file_source;
@@ -114,11 +114,11 @@ describe('IAViewableFilesPanel', () => {
   });
 
   test('scrolls the active file into view after first render (scrollIntoViewIfNeeded)', async () => {
-    const el = await fixture<IAViewableFilesPanel>(
-      html`<ia-viewable-files-panel
+    const el = await fixture<IAItemNavViewableFilesPanel>(
+      html`<ia-itemnav-viewable-files-panel
         subPrefix="v1"
         .fileList=${[file({ title: 'v1', file_subprefix: 'v1' })]}
-      ></ia-viewable-files-panel>`,
+      ></ia-itemnav-viewable-files-panel>`,
     );
     const active = el.shadowRoot?.querySelector<
       HTMLElement & { scrollIntoViewIfNeeded?: (c: boolean) => void }
@@ -132,11 +132,11 @@ describe('IAViewableFilesPanel', () => {
   });
 
   test('falls back to scrollIntoView when scrollIntoViewIfNeeded is unavailable', async () => {
-    const el = await fixture<IAViewableFilesPanel>(
-      html`<ia-viewable-files-panel
+    const el = await fixture<IAItemNavViewableFilesPanel>(
+      html`<ia-itemnav-viewable-files-panel
         subPrefix="v1"
         .fileList=${[file({ title: 'v1', file_subprefix: 'v1' })]}
-      ></ia-viewable-files-panel>`,
+      ></ia-itemnav-viewable-files-panel>`,
     );
     const active = el.shadowRoot?.querySelector<HTMLElement>('.content.active');
     // Remove the Chrome-only API so the cross-browser branch runs.

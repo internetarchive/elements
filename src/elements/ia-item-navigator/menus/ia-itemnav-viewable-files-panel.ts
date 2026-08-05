@@ -20,10 +20,10 @@ export const viewableFilesIcon = maskedIcon(viewableFilesUrl);
  * The "viewable files" side panel: a scrollable list of the item's viewable
  * files/volumes, linking each to its page on the host and highlighting the one
  * matching the current `subPrefix`. Populated by the host via `fileList`
- * (typically re-ordered by an `ia-sort-files-button`).
+ * (typically re-ordered by an `ia-itemnav-sort-files-button`).
  */
-@customElement('ia-viewable-files-panel')
-export class IAViewableFilesPanel extends LitElement {
+@customElement('ia-itemnav-viewable-files-panel')
+export class IAItemNavViewableFilesPanel extends LitElement {
   @property({ type: String }) baseHost: string = 'archive.org';
 
   @property({ type: String }) sortOrderBy: FileSortOption = 'default';
@@ -206,5 +206,11 @@ export class IAViewableFilesPanel extends LitElement {
         }
       `,
     ];
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ia-itemnav-viewable-files-panel': IAItemNavViewableFilesPanel;
   }
 }

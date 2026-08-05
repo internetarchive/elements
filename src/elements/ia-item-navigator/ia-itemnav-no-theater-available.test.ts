@@ -2,13 +2,13 @@ import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
 import { describe, expect, test, vi } from 'vitest';
 
-import { IANoTheaterAvailable } from './ia-no-theater-available';
-import './ia-no-theater-available';
+import { IAItemNavNoTheaterAvailable } from './ia-itemnav-no-theater-available';
+import './ia-itemnav-no-theater-available';
 
-describe('IANoTheaterAvailable', () => {
+describe('IAItemNavNoTheaterAvailable', () => {
   test('renders the placeholder message', async () => {
-    const el = await fixture<IANoTheaterAvailable>(
-      html`<ia-no-theater-available></ia-no-theater-available>`,
+    const el = await fixture<IAItemNavNoTheaterAvailable>(
+      html`<ia-itemnav-no-theater-available></ia-itemnav-no-theater-available>`,
     );
     expect(el.shadowRoot?.querySelector('h2')?.textContent).to.contain(
       'NO PREVIEW AVAILABLE',
@@ -16,10 +16,10 @@ describe('IANoTheaterAvailable', () => {
   });
 
   test('links to the item download page', async () => {
-    const el = await fixture<IANoTheaterAvailable>(
-      html`<ia-no-theater-available
+    const el = await fixture<IAItemNavNoTheaterAvailable>(
+      html`<ia-itemnav-no-theater-available
         identifier="my-item"
-      ></ia-no-theater-available>`,
+      ></ia-itemnav-no-theater-available>`,
     );
     expect(el.downloadUrl).to.equal('/download/my-item');
     expect(el.shadowRoot?.querySelector('a')?.getAttribute('href')).to.equal(
@@ -28,8 +28,8 @@ describe('IANoTheaterAvailable', () => {
   });
 
   test('emits loadingStateUpdated once the identifier is set', async () => {
-    const el = await fixture<IANoTheaterAvailable>(
-      html`<ia-no-theater-available></ia-no-theater-available>`,
+    const el = await fixture<IAItemNavNoTheaterAvailable>(
+      html`<ia-itemnav-no-theater-available></ia-itemnav-no-theater-available>`,
     );
     const listener = vi.fn();
     el.addEventListener('loadingStateUpdated', listener);
@@ -44,10 +44,10 @@ describe('IANoTheaterAvailable', () => {
   });
 
   test('does not re-emit loadingStateUpdated on updates that leave the identifier unchanged', async () => {
-    const el = await fixture<IANoTheaterAvailable>(
-      html`<ia-no-theater-available
+    const el = await fixture<IAItemNavNoTheaterAvailable>(
+      html`<ia-itemnav-no-theater-available
         identifier="abc"
-      ></ia-no-theater-available>`,
+      ></ia-itemnav-no-theater-available>`,
     );
     const listener = vi.fn();
     el.addEventListener('loadingStateUpdated', listener);

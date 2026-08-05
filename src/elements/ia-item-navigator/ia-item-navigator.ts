@@ -13,10 +13,10 @@ import { MetadataResponse } from '@internetarchive/metadata-service';
 import themeStyles from '@src/themes/theme-styles';
 
 import { ellipsesIcon } from './icons';
-import './ia-menu-slider';
-import './ia-itemnav-loader';
-import './ia-no-theater-available';
-import type { IAMenuSlider } from './ia-menu-slider';
+import './ia-itemnav-menu-slider';
+import './ia-itemnav-loading-view';
+import './ia-itemnav-no-theater-available';
+import type { IAItemNavMenuSlider } from './ia-itemnav-menu-slider';
 
 import {
   ToggleSideMenuOpenEvent,
@@ -40,7 +40,7 @@ import {
 /**
  * A fullscreen-capable frame that hosts an Archive.org item's theater. The
  * consumer projects a header bar and the theater itself into the `header` and
- * `main` slots; a collapsible left drawer (`ia-menu-slider`) is driven by a
+ * `main` slots; a collapsible left drawer (`ia-itemnav-menu-slider`) is driven by a
  * data array of menu providers, and a minimized rail shows shortcut icons.
  *
  * The navigator is a shell — it does not know how to render any particular
@@ -94,7 +94,7 @@ export class IAItemNavigator
 
   @query('slot[name="header"]') private headerSlot!: HTMLSlotElement;
 
-  @query('ia-menu-slider') private menuSlider!: IAMenuSlider;
+  @query('ia-itemnav-menu-slider') private menuSlider!: IAItemNavMenuSlider;
 
   @query('button.toggle-menu') private toggleMenuButton!: HTMLButtonElement;
 
@@ -160,9 +160,9 @@ export class IAItemNavigator
     return html`
       <div class="loading-area">
         <div class="loading-view">
-          <ia-itemnav-loader
+          <ia-itemnav-loading-view
             .loaderMessage=${this.loaderTitle}
-          ></ia-itemnav-loader>
+          ></ia-itemnav-loading-view>
         </div>
       </div>
     `;
@@ -204,10 +204,10 @@ export class IAItemNavigator
   }
 
   get noTheaterView(): TemplateResult {
-    return html`<ia-no-theater-available
+    return html`<ia-itemnav-no-theater-available
       .identifier=${this.item?.metadata?.identifier}
       @loadingStateUpdated=${this.loadingStateUpdated}
-    ></ia-no-theater-available>`;
+    ></ia-itemnav-no-theater-available>`;
   }
 
   get renderViewport(): TemplateResult | typeof nothing {
@@ -252,7 +252,7 @@ export class IAItemNavigator
   toggleMenu(forceValue: boolean | undefined = undefined): void {
     this.menuOpened = forceValue !== undefined ? forceValue : !this.menuOpened;
     if (this.menuOpened) {
-      // Move focus to the <ia-menu-slider>
+      // Move focus to the <ia-itemnav-menu-slider>
       this.updateComplete.then(() => {
         const closeButton = this.menuSlider?.shadowRoot?.querySelector(
           'button.close',
@@ -337,7 +337,7 @@ export class IAItemNavigator
           ${this.shortcuts} ${this.menuToggleButton}
         </div>
         <div id="menu" ?inert=${!this.menuOpened}>
-          <ia-menu-slider
+          <ia-itemnav-menu-slider
             .menus=${this.menuContents}
             .selectedMenu=${this.selectedMenuId}
             @menuTypeSelected=${this.setOpenMenu}
@@ -345,7 +345,7 @@ export class IAItemNavigator
             @menuSliderClosed=${this.closeMenu}
             manuallyHandleClose
             open
-          ></ia-menu-slider>
+          ></ia-itemnav-menu-slider>
         </div>
       </nav>
     `;
@@ -506,7 +506,7 @@ export class IAItemNavigator
           width: 100%;
         }
 
-        ia-itemnav-loader {
+        ia-itemnav-loading-view {
           display: block;
           width: 100%;
         }
@@ -651,5 +651,11 @@ export class IAItemNavigator
         }
       `,
     ];
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ia-item-navigator': IAItemNavigator;
   }
 }

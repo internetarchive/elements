@@ -2,14 +2,14 @@ import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
 import { describe, expect, test, vi } from 'vitest';
 
-import { IAMenuButton } from './ia-menu-button';
-import './ia-menu-button';
+import { IAItemNavMenuButton } from './ia-itemnav-menu-button';
+import './ia-itemnav-menu-button';
 import { maskedIcon } from './masked-icon';
 
-describe('IAMenuButton', () => {
+describe('IAItemNavMenuButton', () => {
   test('renders a <button> by default', async () => {
-    const el = await fixture<IAMenuButton>(
-      html`<ia-menu-button label="Contents"></ia-menu-button>`,
+    const el = await fixture<IAItemNavMenuButton>(
+      html`<ia-itemnav-menu-button label="Contents"></ia-itemnav-menu-button>`,
     );
     expect(el.shadowRoot?.querySelector('button.menu-item')).to.exist;
     expect(el.shadowRoot?.querySelector('a')).to.not.exist;
@@ -19,8 +19,8 @@ describe('IAMenuButton', () => {
   });
 
   test('renders an <a> when an href is supplied', async () => {
-    const el = await fixture<IAMenuButton>(
-      html`<ia-menu-button href="/foo"></ia-menu-button>`,
+    const el = await fixture<IAItemNavMenuButton>(
+      html`<ia-itemnav-menu-button href="/foo"></ia-itemnav-menu-button>`,
     );
     const link = el.shadowRoot?.querySelector('a.menu-item');
     expect(link).to.exist;
@@ -28,8 +28,8 @@ describe('IAMenuButton', () => {
   });
 
   test('clicking emits a composed menuTypeSelected event carrying the id', async () => {
-    const el = await fixture<IAMenuButton>(
-      html`<ia-menu-button buttonId="share"></ia-menu-button>`,
+    const el = await fixture<IAItemNavMenuButton>(
+      html`<ia-itemnav-menu-button buttonId="share"></ia-itemnav-menu-button>`,
     );
     const listener = vi.fn();
     el.addEventListener('menuTypeSelected', listener);
@@ -46,8 +46,8 @@ describe('IAMenuButton', () => {
   });
 
   test('reflects selection through aria-expanded and the active icon class', async () => {
-    const el = await fixture<IAMenuButton>(
-      html`<ia-menu-button selected></ia-menu-button>`,
+    const el = await fixture<IAItemNavMenuButton>(
+      html`<ia-itemnav-menu-button selected></ia-itemnav-menu-button>`,
     );
     expect(el.iconClass).to.equal('active');
     expect(
@@ -56,12 +56,12 @@ describe('IAMenuButton', () => {
   });
 
   test('paints the icon with the inactive color until it is selected', async () => {
-    const el = await fixture<IAMenuButton>(
-      html`<ia-menu-button
+    const el = await fixture<IAItemNavMenuButton>(
+      html`<ia-itemnav-menu-button
         .icon=${maskedIcon('/glyph.svg')}
         style="--item-navigator-icon-inactive-color: rgb(9, 9, 9);
                --item-navigator-icon-active-color: rgb(7, 7, 7)"
-      ></ia-menu-button>`,
+      ></ia-itemnav-menu-button>`,
     );
     const icon = () => el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
 
@@ -73,8 +73,11 @@ describe('IAMenuButton', () => {
   });
 
   test('a followable link does not intercept the click', async () => {
-    const el = await fixture<IAMenuButton>(
-      html`<ia-menu-button href="/foo" followable></ia-menu-button>`,
+    const el = await fixture<IAItemNavMenuButton>(
+      html`<ia-itemnav-menu-button
+        href="/foo"
+        followable
+      ></ia-itemnav-menu-button>`,
     );
     const listener = vi.fn();
     el.addEventListener('menuTypeSelected', listener);

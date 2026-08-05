@@ -9,7 +9,7 @@ import {
 import { customElement, property, query } from 'lit/decorators.js';
 import themeStyles from '@src/themes/theme-styles';
 import { collapseSidebarIcon } from './icons';
-import './ia-menu-button';
+import './ia-itemnav-menu-button';
 import { MenuProviderInterface } from './interfaces/menu-interfaces';
 
 const sliderEvents = {
@@ -21,8 +21,8 @@ const sliderEvents = {
  * The sliding drawer that lists the navigator's menu providers and renders the
  * body of whichever provider is currently selected.
  */
-@customElement('ia-menu-slider')
-export class IAMenuSlider extends LitElement {
+@customElement('ia-itemnav-menu-slider')
+export class IAItemNavMenuSlider extends LitElement {
   @property({ type: Array }) menus: MenuProviderInterface[] = [];
 
   @property({ type: Boolean }) open = false;
@@ -95,7 +95,7 @@ export class IAMenuSlider extends LitElement {
         const menuIndex = this.menus.findIndex((menu) => menu.id === menuId);
         if (menuIndex !== -1) {
           const menuButton = this.menuList.querySelector(
-            `li:nth-child(${menuIndex + 1}) ia-menu-button`,
+            `li:nth-child(${menuIndex + 1}) ia-itemnav-menu-button`,
           ) as HTMLElement;
           menuButton?.focus();
         }
@@ -137,7 +137,7 @@ export class IAMenuSlider extends LitElement {
     return this.menus.map(
       (menu) => html`
         <li>
-          <ia-menu-button
+          <ia-itemnav-menu-button
             @menuTypeSelected=${this.setSelectedMenu}
             .icon=${menu.icon}
             .label=${menu.label}
@@ -146,7 +146,7 @@ export class IAMenuSlider extends LitElement {
             .selected=${menu.id === this.selectedMenu}
             .followable=${menu.followable || false}
             .href=${menu.href || ''}
-          ></ia-menu-button>
+          ></ia-itemnav-menu-button>
         </li>
       `,
     );
@@ -399,5 +399,11 @@ export class IAMenuSlider extends LitElement {
         }
       `,
     ];
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ia-itemnav-menu-slider': IAItemNavMenuSlider;
   }
 }

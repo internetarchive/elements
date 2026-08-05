@@ -137,6 +137,26 @@ src
 ```
 Export your component in `src/index.ts`
 
+### Naming
+Custom elements all share one global registry, and that registry is shared with every other script on the host page. Give each element a name specific enough that nothing else would plausibly want it.
+
+If a component is built from several elements, prefix its parts with the component's own name rather than naming them generically, and keep the file name matching the tag:
+```
+src
+- elements
+  - ia-foobar
+    - ia-foobar.ts // ia-foobar
+    - ia-foobar-list-item.ts // ia-foobar-list-item, not ia-list-item
+```
+Declare each element in `HTMLElementTagNameMap` so `querySelector` is typed and a mistyped tag in a template is caught at build time:
+```ts
+declare global {
+  interface HTMLElementTagNameMap {
+    'ia-foobar-list-item': IAFoobarListItem;
+  }
+}
+```
+
 ### Story
 To demo your component, we have a component catalog that you can add your demo to. Create a component in your component directory. Name it `COMPONENT-NAME-story.ts`, ie `ia-button-story.ts`.
 

@@ -34,8 +34,8 @@ export { shareIcon };
  * Sharing options are derived from the item identifier/metadata and rebuilt
  * whenever `sharingOptions` is reset to empty.
  */
-@customElement('ia-share-panel')
-export class IASharePanel extends LitElement {
+@customElement('ia-itemnav-share-panel')
+export class IAItemNavSharePanel extends LitElement {
   @property({ type: String }) baseHost = 'archive.org';
 
   @property({ type: String }) creator = '';
@@ -365,5 +365,11 @@ export class IASharePanel extends LitElement {
         }
       `,
     ];
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ia-itemnav-share-panel': IAItemNavSharePanel;
   }
 }

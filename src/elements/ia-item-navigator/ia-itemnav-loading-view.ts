@@ -15,8 +15,8 @@ import themeStyles from '@src/themes/theme-styles';
  * The spinning "loading viewer" placeholder shown inside the navigator frame
  * until the slotted theater reports that it has loaded.
  */
-@customElement('ia-itemnav-loader')
-export class IAItemNavLoader extends LitElement {
+@customElement('ia-itemnav-loading-view')
+export class IAItemNavLoadingView extends LitElement {
   @property({ type: String }) loaderMessage = '';
 
   get bookIconSvg(): SVGTemplateResult {
@@ -116,5 +116,11 @@ export class IAItemNavLoader extends LitElement {
         }
       `,
     ];
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ia-itemnav-loading-view': IAItemNavLoadingView;
   }
 }

@@ -4,8 +4,8 @@ import { describe, expect, test, vi } from 'vitest';
 
 import { IAItemNavigator } from './ia-item-navigator';
 import './ia-item-navigator';
-import type { IAMenuSlider } from './ia-menu-slider';
-import type { IANoTheaterAvailable } from './ia-no-theater-available';
+import type { IAItemNavMenuSlider } from './ia-itemnav-menu-slider';
+import type { IAItemNavNoTheaterAvailable } from './ia-itemnav-no-theater-available';
 import type {
   MenuProviderInterface,
   MenuShortcutInterface,
@@ -64,12 +64,13 @@ describe('IAItemNavigator', () => {
       html`<ia-item-navigator></ia-item-navigator>`,
     );
 
-    expect(el.shadowRoot?.querySelector('ia-itemnav-loader')).to.exist;
+    expect(el.shadowRoot?.querySelector('ia-itemnav-loading-view')).to.exist;
 
     el.loaded = true;
     await el.updateComplete;
 
-    expect(el.shadowRoot?.querySelector('ia-itemnav-loader')).to.not.exist;
+    expect(el.shadowRoot?.querySelector('ia-itemnav-loading-view')).to.not
+      .exist;
   });
 
   test('renders no side menu when there are no providers', async () => {
@@ -91,7 +92,7 @@ describe('IAItemNavigator', () => {
     expect(el.shouldRenderMenu).to.equal(true);
     expect(el.shadowRoot?.querySelector('nav')).to.exist;
     expect(el.shadowRoot?.querySelector('button.toggle-menu')).to.exist;
-    expect(el.shadowRoot?.querySelector('ia-menu-slider')).to.exist;
+    expect(el.shadowRoot?.querySelector('ia-itemnav-menu-slider')).to.exist;
   });
 
   test('toggleMenu / closeMenu drive the menuOpened state', async () => {
@@ -142,7 +143,9 @@ describe('IAItemNavigator', () => {
     el.openMenu = 'about';
     await el.updateComplete;
 
-    const slider = el.shadowRoot?.querySelector<IAMenuSlider>('ia-menu-slider');
+    const slider = el.shadowRoot?.querySelector<IAItemNavMenuSlider>(
+      'ia-itemnav-menu-slider',
+    );
     expect(slider).to.exist;
     expect(slider?.menus).to.have.lengthOf(2);
     expect(slider?.selectedMenu).to.equal('about');
@@ -157,9 +160,10 @@ describe('IAItemNavigator', () => {
     el.viewAvailable = false;
     await el.updateComplete;
 
-    const placeholder = el.shadowRoot?.querySelector<IANoTheaterAvailable>(
-      'ia-no-theater-available',
-    );
+    const placeholder =
+      el.shadowRoot?.querySelector<IAItemNavNoTheaterAvailable>(
+        'ia-itemnav-no-theater-available',
+      );
     expect(placeholder).to.exist;
     expect(placeholder?.identifier).to.equal('abc123');
   });
@@ -270,7 +274,7 @@ describe('IAItemNavigator', () => {
     el.openShortcut('contents');
     await el.updateComplete;
 
-    const slider = el.shadowRoot?.querySelector('ia-menu-slider');
+    const slider = el.shadowRoot?.querySelector('ia-itemnav-menu-slider');
     slider?.dispatchEvent(
       new CustomEvent('menuPanelClosed', {
         detail: { id: 'contents' },

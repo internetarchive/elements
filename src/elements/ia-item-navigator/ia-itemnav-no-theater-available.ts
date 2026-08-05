@@ -14,8 +14,8 @@ import themeStyles from '@src/themes/theme-styles';
  * i.e. the item has no files that can be experienced in the browser. Emits
  * `loadingStateUpdated` so the navigator hides its loading spinner.
  */
-@customElement('ia-no-theater-available')
-export class IANoTheaterAvailable extends LitElement {
+@customElement('ia-itemnav-no-theater-available')
+export class IAItemNavNoTheaterAvailable extends LitElement {
   @property({ type: String }) identifier?: string = '';
 
   emitLoaded(): void {
@@ -98,5 +98,11 @@ export class IANoTheaterAvailable extends LitElement {
         }
       `,
     ];
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ia-itemnav-no-theater-available': IAItemNavNoTheaterAvailable;
   }
 }

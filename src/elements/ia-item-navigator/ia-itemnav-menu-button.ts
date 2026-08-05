@@ -13,8 +13,8 @@ import themeStyles from '@src/themes/theme-styles';
  * (default) or a link (when `href` is set) with an icon, label and optional
  * detail text, and emits `menuTypeSelected` when activated.
  */
-@customElement('ia-menu-button')
-export class IAMenuButton extends LitElement {
+@customElement('ia-itemnav-menu-button')
+export class IAItemNavMenuButton extends LitElement {
   static shadowRootOptions = {
     ...LitElement.shadowRootOptions,
     delegatesFocus: true,
@@ -233,5 +233,11 @@ export class IAMenuButton extends LitElement {
         }
       `,
     ];
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ia-itemnav-menu-button': IAItemNavMenuButton;
   }
 }

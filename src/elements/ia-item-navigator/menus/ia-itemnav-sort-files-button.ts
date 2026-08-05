@@ -24,8 +24,8 @@ const sortNeutralIcon = maskedIcon(sortNeutralUrl);
  * default → title ascending → title descending → default, sorting the supplied
  * file list and emitting `fileListSorted` on each change.
  */
-@customElement('ia-sort-files-button')
-export class IASortFilesButton extends LitElement {
+@customElement('ia-itemnav-sort-files-button')
+export class IAItemNavSortFilesButton extends LitElement {
   @property({ type: Array }) fileListRaw: ViewableFileInfo[] = [];
 
   @property({ type: Array }) fileListSorted: ViewableFileInfo[] = [];
@@ -132,5 +132,11 @@ export class IASortFilesButton extends LitElement {
         }
       `,
     ];
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ia-itemnav-sort-files-button': IAItemNavSortFilesButton;
   }
 }

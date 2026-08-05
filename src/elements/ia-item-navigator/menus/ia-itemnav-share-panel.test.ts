@@ -2,21 +2,23 @@ import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { IASharePanel } from './ia-share-panel';
-import './ia-share-panel';
+import { IAItemNavSharePanel } from './ia-itemnav-share-panel';
+import './ia-itemnav-share-panel';
 
 /** Reaches the private copy handler for the edge-case paths. */
 type WithCopy = { copyToClipboard(e: MouseEvent): Promise<void> };
 
-describe('IASharePanel', () => {
+describe('IAItemNavSharePanel', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.useRealTimers();
   });
 
   test('auto-populates the social sharing options', async () => {
-    const el = await fixture<IASharePanel>(
-      html`<ia-share-panel identifier="my-item"></ia-share-panel>`,
+    const el = await fixture<IAItemNavSharePanel>(
+      html`<ia-itemnav-share-panel
+        identifier="my-item"
+      ></ia-itemnav-share-panel>`,
     );
     await el.updateComplete;
 
@@ -33,12 +35,12 @@ describe('IASharePanel', () => {
   });
 
   test('builds share URLs from the identifier, host and sub-prefix', async () => {
-    const el = await fixture<IASharePanel>(
-      html`<ia-share-panel
+    const el = await fixture<IAItemNavSharePanel>(
+      html`<ia-itemnav-share-panel
         identifier="my-item"
         baseHost="example.org"
         fileSubPrefix="vol1"
-      ></ia-share-panel>`,
+      ></ia-itemnav-share-panel>`,
     );
     await el.updateComplete;
 
@@ -49,11 +51,11 @@ describe('IASharePanel', () => {
   });
 
   test('exposes iframe and bbcode embed snippets and a help URL', async () => {
-    const el = await fixture<IASharePanel>(
-      html`<ia-share-panel
+    const el = await fixture<IAItemNavSharePanel>(
+      html`<ia-itemnav-share-panel
         identifier="my-item"
         baseHost="example.org"
-      ></ia-share-panel>`,
+      ></ia-itemnav-share-panel>`,
     );
     expect(el.iframeEmbed).to.contain(
       'src="https://example.org/embed/my-item"',
@@ -63,8 +65,8 @@ describe('IASharePanel', () => {
   });
 
   test('renders a header only when renderHeader is set', async () => {
-    const el = await fixture<IASharePanel>(
-      html`<ia-share-panel type="book"></ia-share-panel>`,
+    const el = await fixture<IAItemNavSharePanel>(
+      html`<ia-itemnav-share-panel type="book"></ia-itemnav-share-panel>`,
     );
     expect(el.shadowRoot?.querySelector('header')).to.not.exist;
 
@@ -76,8 +78,10 @@ describe('IASharePanel', () => {
   });
 
   test('flashes the "copied" note when an embed block is clicked', async () => {
-    const el = await fixture<IASharePanel>(
-      html`<ia-share-panel identifier="my-item"></ia-share-panel>`,
+    const el = await fixture<IAItemNavSharePanel>(
+      html`<ia-itemnav-share-panel
+        identifier="my-item"
+      ></ia-itemnav-share-panel>`,
     );
     await el.updateComplete;
 
@@ -93,8 +97,10 @@ describe('IASharePanel', () => {
   });
 
   test('copy is a no-op when the clicked target has no embed code', async () => {
-    const el = await fixture<IASharePanel>(
-      html`<ia-share-panel identifier="my-item"></ia-share-panel>`,
+    const el = await fixture<IAItemNavSharePanel>(
+      html`<ia-itemnav-share-panel
+        identifier="my-item"
+      ></ia-itemnav-share-panel>`,
     );
     const bare = document.createElement('div');
     await expect(
@@ -105,8 +111,10 @@ describe('IASharePanel', () => {
   });
 
   test('falls back to execCommand when the async clipboard rejects', async () => {
-    const el = await fixture<IASharePanel>(
-      html`<ia-share-panel identifier="my-item"></ia-share-panel>`,
+    const el = await fixture<IAItemNavSharePanel>(
+      html`<ia-itemnav-share-panel
+        identifier="my-item"
+      ></ia-itemnav-share-panel>`,
     );
     await el.updateComplete;
     const code = el.shadowRoot?.querySelector('.code') as HTMLElement;
@@ -126,8 +134,10 @@ describe('IASharePanel', () => {
   });
 
   test('clears the copied note after the timeout window', async () => {
-    const el = await fixture<IASharePanel>(
-      html`<ia-share-panel identifier="my-item"></ia-share-panel>`,
+    const el = await fixture<IAItemNavSharePanel>(
+      html`<ia-itemnav-share-panel
+        identifier="my-item"
+      ></ia-itemnav-share-panel>`,
     );
     await el.updateComplete;
     const code = el.shadowRoot?.querySelector('.code') as HTMLElement;
