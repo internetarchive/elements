@@ -469,6 +469,8 @@ export class IAItemNavigatorStory extends LitElement {
         },
       ],
       palettes: DEMO_PALETTES,
+      revertable: true,
+      showCssVariables: true,
     };
   }
 

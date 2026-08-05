@@ -191,7 +191,7 @@ describe('StoryStylesSettings', () => {
       expect(input.hasAttribute('step')).to.be.false;
     });
 
-    test('without palettes, randomizing recolors each color input independently', async () => {
+    test('leaves the panel untouched when a story opts into nothing', async () => {
       const el = await makeSettings({
         settings: [
           {
@@ -200,63 +200,30 @@ describe('StoryStylesSettings', () => {
             defaultValue: '#ffffff',
             inputType: 'color',
           },
-          {
-            label: 'Paper',
-            cssVariable: '--paper',
-            defaultValue: '#000000',
-            inputType: 'color',
-          },
-          { label: 'Width', cssVariable: '--width', defaultValue: '10px' },
         ],
       });
-      const applied = new Promise<CustomEvent>((resolve) => {
-        el.addEventListener('stylesApplied', (e) => resolve(e as CustomEvent), {
-          once: true,
-        });
-      });
 
-      randomizeButton(el).click();
-
-      // Both colors moved off their defaults...
-      expect(getInput(el, 'ink').value).to.not.equal('#ffffff');
-      expect(getInput(el, 'paper').value).to.not.equal('#000000');
-      // ...and each is a usable hex color.
-      expect(getInput(el, 'ink').value).to.match(/^#[0-9a-f]{6}$/);
-
-      // The non-color input is deliberately untouched.
-      expect(getInput(el, 'width').value).to.equal('10px');
-
-      // The new colors are applied, not just staged in the inputs.
-      const detail = (await applied).detail.styles as string;
-      expect(detail).to.contain(`--ink: ${getInput(el, 'ink').value}`);
-      expect(detail).to.contain('--width: 10px');
+      // Stories that ask for no extras must render exactly as before, so
+      // adding these controls for one component does not alter every demo.
+      const buttons = [
+        ...(el.shadowRoot?.querySelectorAll('button') ?? []),
+      ].map((b) => b.textContent?.trim());
+      expect(buttons).to.deep.equal(['Apply']);
+      expect(el.shadowRoot?.querySelector('.style-var')).to.not.exist;
+      expect(el.shadowRoot?.querySelector('.applied-palette')).to.not.exist;
     });
 
-    test('reverting after randomizing restores the defaults', async () => {
-      const el = await makeSettings({
+    test('shows the CSS variable only when the story asks for it', async () => {
+      const withVars = await makeSettings({
+        showCssVariables: true,
         settings: [
-          {
-            label: 'Ink',
-            cssVariable: '--ink',
-            defaultValue: '#ffffff',
-            inputType: 'color',
-          },
+          { label: 'Ink', cssVariable: '--ink', defaultValue: '#ffffff' },
         ],
       });
 
-      randomizeButton(el).click();
-      expect(getInput(el, 'ink').value).to.not.equal('#ffffff');
-
-      const reverted = new Promise<CustomEvent>((resolve) => {
-        el.addEventListener('stylesApplied', (e) => resolve(e as CustomEvent), {
-          once: true,
-        });
-      });
-      revertButton(el).click();
-
-      expect(getInput(el, 'ink').value).to.equal('#ffffff');
-      // An empty payload clears overrides, falling back to component defaults.
-      expect((await reverted).detail.styles).to.equal('');
+      expect(
+        withVars.shadowRoot?.querySelector('.style-var')?.textContent,
+      ).to.contain('--ink');
     });
 
     test('input without inputType defaults to type=text', async () => {
@@ -288,6 +255,7 @@ describe('StoryStylesSettings', () => {
     ];
 
     const paletteData: StyleInputData = {
+      revertable: true,
       settings: [
         {
           label: 'Ink',
@@ -404,16 +372,24 @@ describe('StoryStylesSettings', () => {
       expect(getInput(el, 'ink').value).to.equal('#ffffff');
     });
 
-    test('hides the randomize control when there is nothing to recolor', async () => {
-      const el = await makeSettings({
+    test('offers randomize only alongside palettes, and revert only on request', async () => {
+      const revertOnly = await makeSettings({
+        revertable: true,
         settings: [
-          { label: 'Width', cssVariable: '--width', defaultValue: '10px' },
+          {
+            label: 'Ink',
+            cssVariable: '--ink',
+            defaultValue: '#ffffff',
+            inputType: 'color',
+          },
         ],
       });
 
       const buttons = [
-        ...(el.shadowRoot?.querySelectorAll('button') ?? []),
+        ...(revertOnly.shadowRoot?.querySelectorAll('button') ?? []),
       ].map((b) => b.textContent?.trim());
+      // Color inputs alone are not enough — without themes there is nothing
+      // coherent to swap in.
       expect(buttons.some((b) => b?.includes('Randomize'))).to.be.false;
       expect(buttons.some((b) => b?.includes('Revert'))).to.be.true;
     });

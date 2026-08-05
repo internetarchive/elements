@@ -40,15 +40,20 @@ export type StylePalette = {
 
 export type StyleInputData = {
   settings: StyleInputSettings[];
-  palettes?: StylePalette[];
-};
 
-/** A random `#rrggbb` color, used when a story supplies no palettes. */
-function randomHexColor(): string {
-  return `#${Math.floor(Math.random() * 0xffffff)
-    .toString(16)
-    .padStart(6, '0')}`;
-}
+  /**
+   * Alternate themes. Supplying them adds a control that swaps between them,
+   * which is a quick way to check that every part of a component follows its
+   * color knobs.
+   */
+  palettes?: StylePalette[];
+
+  /** Adds a control that restores this story's default styling. */
+  revertable?: boolean;
+
+  /** Shows the CSS custom property each control sets, beside it. */
+  showCssVariables?: boolean;
+};
 
 /**
  * A template for displaying the style options.
@@ -83,12 +88,15 @@ export class StoryStylesSettings extends LitElement {
         </table>
         <button @click=${this.applyStyles}>Apply</button>
         ${when(
-          this.canRandomize,
+          this.styleInputData.palettes?.length,
           () => html`
             <button @click=${this.randomizeColors}>🎲 Randomize colors</button>
           `,
         )}
-        <button @click=${this.resetStyles}>Revert</button>
+        ${when(
+          this.styleInputData.revertable,
+          () => html`<button @click=${this.resetStyles}>Revert</button>`,
+        )}
         ${when(
           this.appliedPaletteName,
           () =>
@@ -101,31 +109,23 @@ export class StoryStylesSettings extends LitElement {
   }
 
   /**
-   * Recolors the component so a single click reveals any part of it that fails
-   * to pick up its color knobs — anything still wearing its old color stands
-   * out against the rest.
+   * Swaps in one of the story's themes, so a single click reveals any part of
+   * the component that fails to pick up its color knobs — anything still
+   * wearing its old color stands out against the rest.
    *
-   * With palettes, this swaps in one coordinated theme at a time: the pairings
-   * stay legible, and a whole-component color shift makes a stray element
-   * obvious. Without them, each color is randomized on its own. Non-color
-   * inputs (sizes, timings) are left alone either way so the layout holds
-   * still.
+   * A whole theme is applied at once rather than a color at a time, so the
+   * foreground/background pairings stay legible. Values the theme does not
+   * name (sizes, timings) are left alone so the layout holds still.
    */
   private randomizeColors(): void {
     const palette = this.nextPalette();
+    if (!palette) return;
 
-    if (palette) {
-      this.appliedPaletteName = palette.name;
-      this.styleInputs?.forEach((input) => {
-        const value = palette.values[input.dataset.variable ?? ''];
-        if (value) input.value = value;
-      });
-    } else {
-      this.styleInputs?.forEach((input) => {
-        if (input.type !== 'color') return;
-        input.value = randomHexColor();
-      });
-    }
+    this.appliedPaletteName = palette.name;
+    this.styleInputs?.forEach((input) => {
+      const value = palette.values[input.dataset.variable ?? ''];
+      if (value) input.value = value;
+    });
 
     this.applyStyles();
   }
@@ -143,14 +143,6 @@ export class StoryStylesSettings extends LitElement {
         ? palettes.filter((p) => p.name !== this.appliedPaletteName)
         : palettes;
     return candidates[Math.floor(Math.random() * candidates.length)];
-  }
-
-  /** Whether recoloring would do anything for this story. */
-  private get canRandomize(): boolean {
-    return (
-      !!this.styleInputData?.palettes?.length ||
-      (this.styleInputData?.settings ?? []).some((s) => s.inputType === 'color')
-    );
   }
 
   /**
@@ -206,9 +198,13 @@ export class StoryStylesSettings extends LitElement {
                 >${this.readoutFor(input)}</output
               >`
             : nothing}
-          <code class="style-var" title=${input.cssVariable}
-            >${input.cssVariable}</code
-          >
+          ${when(
+            this.styleInputData?.showCssVariables,
+            () =>
+              html`<code class="style-var" title=${input.cssVariable}
+                >${input.cssVariable}</code
+              >`,
+          )}
         </td>
       </tr>
     `;
