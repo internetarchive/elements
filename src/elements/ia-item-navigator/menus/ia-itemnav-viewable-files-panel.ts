@@ -103,8 +103,8 @@ export class IAItemNavViewableFilesPanel extends LitElement {
     `;
   }
 
-  render(): TemplateResult {
-    return html`${this.fileList.length ? this.fileListTemplate : nothing}`;
+  render(): TemplateResult | typeof nothing {
+    return this.fileList.length ? this.fileListTemplate : nothing;
   }
 
   static get styles(): CSSResultGroup {
