@@ -5,6 +5,7 @@ import { html } from 'lit';
 import type {
   StoryStylesSettings,
   StyleInputData,
+  StylePalette,
 } from './story-styles-settings';
 import './story-styles-settings';
 
@@ -90,6 +91,28 @@ describe('StoryStylesSettings', () => {
       expect(readout?.textContent).to.equal('200px');
     });
 
+    test('the panel still re-renders after the readout has updated', async () => {
+      const el = await makeSettings(rangeData);
+      const input = getInput(el, 'foos');
+
+      input.value = '200';
+      input.dispatchEvent(new Event('input'));
+      await el.updateComplete;
+
+      // Writing to the readout imperatively would eject Lit's markers, so
+      // every later re-render of the panel would throw.
+      el.requestUpdate();
+      await el.updateComplete;
+
+      expect(el.shadowRoot?.querySelectorAll('.style-input')).to.have.lengthOf(
+        1,
+      );
+      expect(
+        el.shadowRoot?.querySelector<HTMLOutputElement>('output.style-readout')
+          ?.textContent,
+      ).to.equal('200px');
+    });
+
     test('readout omits unit when unit is not provided', async () => {
       const el = await makeSettings({
         settings: [
@@ -168,7 +191,7 @@ describe('StoryStylesSettings', () => {
       expect(input.hasAttribute('step')).to.be.false;
     });
 
-    test('randomizing recolors every color input and applies the result', async () => {
+    test('without palettes, randomizing recolors each color input independently', async () => {
       const el = await makeSettings({
         settings: [
           {
@@ -249,6 +272,150 @@ describe('StoryStylesSettings', () => {
       const input = getInput(el, 'untyped');
 
       expect(input.type).to.equal('text');
+    });
+  });
+
+  describe('palettes', () => {
+    const PALETTES: StylePalette[] = [
+      {
+        name: 'Midnight',
+        values: { '--ink': '#e0e6ed', '--paper': '#1b263b' },
+      },
+      {
+        name: 'Forest',
+        values: { '--ink': '#e8f5e9', '--paper': '#14301a' },
+      },
+    ];
+
+    const paletteData: StyleInputData = {
+      settings: [
+        {
+          label: 'Ink',
+          cssVariable: '--ink',
+          defaultValue: '#ffffff',
+          inputType: 'color',
+        },
+        {
+          label: 'Paper',
+          cssVariable: '--paper',
+          defaultValue: '#000000',
+          inputType: 'color',
+        },
+        { label: 'Width', cssVariable: '--width', defaultValue: '10px' },
+      ],
+      palettes: PALETTES,
+    };
+
+    /** The palette whose values currently fill the inputs, if any. */
+    function activePalette(el: StoryStylesSettings): StylePalette | undefined {
+      return PALETTES.find(
+        (p) =>
+          getInput(el, 'ink').value === p.values['--ink'] &&
+          getInput(el, 'paper').value === p.values['--paper'],
+      );
+    }
+
+    test('applies one whole palette rather than unrelated colors', async () => {
+      const el = await makeSettings(paletteData);
+      const applied = new Promise<CustomEvent>((resolve) => {
+        el.addEventListener('stylesApplied', (e) => resolve(e as CustomEvent), {
+          once: true,
+        });
+      });
+
+      randomizeButton(el).click();
+
+      // Every color came from the same palette — that coordination is what
+      // keeps the foreground/background pairings legible.
+      const palette = activePalette(el);
+      expect(palette, 'inputs should match exactly one palette').to.exist;
+
+      // The non-color input is left alone so the layout holds still.
+      expect(getInput(el, 'width').value).to.equal('10px');
+
+      // The palette is applied, not just staged in the inputs.
+      const styles = (await applied).detail.styles as string;
+      expect(styles).to.contain(`--ink: ${palette?.values['--ink']}`);
+      expect(styles).to.contain(`--paper: ${palette?.values['--paper']}`);
+    });
+
+    test('names the theme it applied', async () => {
+      const el = await makeSettings(paletteData);
+
+      randomizeButton(el).click();
+      await el.updateComplete;
+
+      const readout =
+        el.shadowRoot?.querySelector('.applied-palette')?.textContent;
+      expect(readout).to.contain(activePalette(el)?.name);
+    });
+
+    test('never applies the same theme twice in a row', async () => {
+      const el = await makeSettings(paletteData);
+      let previous: string | undefined;
+
+      // Each click must visibly change something, otherwise the control looks
+      // broken.
+      for (let i = 0; i < 6; i++) {
+        randomizeButton(el).click();
+        await el.updateComplete;
+        const current = activePalette(el)?.name;
+        expect(current, `click ${i + 1} should apply a palette`).to.exist;
+        expect(
+          current,
+          `click ${i + 1} repeated the previous theme`,
+        ).to.not.equal(previous);
+        previous = current;
+      }
+    });
+
+    test('reverting clears both the colors and the theme name', async () => {
+      const el = await makeSettings(paletteData);
+
+      randomizeButton(el).click();
+      await el.updateComplete;
+      expect(el.shadowRoot?.querySelector('.applied-palette')).to.exist;
+
+      revertButton(el).click();
+      await el.updateComplete;
+
+      expect(getInput(el, 'ink').value).to.equal('#ffffff');
+      expect(getInput(el, 'paper').value).to.equal('#000000');
+      expect(el.shadowRoot?.querySelector('.applied-palette')).to.not.exist;
+    });
+
+    test('survives repeated randomize/revert cycles', async () => {
+      const el = await makeSettings(paletteData);
+
+      // Re-rendering must not disturb the settings rows. Interpolating <tr>
+      // straight into <table> lets the parser hoist them into an implicit
+      // tbody, ejecting Lit's markers and throwing on the next update.
+      for (let i = 0; i < 3; i++) {
+        randomizeButton(el).click();
+        await el.updateComplete;
+        revertButton(el).click();
+        await el.updateComplete;
+      }
+
+      expect(el.shadowRoot?.querySelectorAll('.style-input')).to.have.lengthOf(
+        3,
+      );
+      expect(el.shadowRoot?.querySelector('.applied-palette')).to.not.exist;
+      expect(getInput(el, 'ink').value).to.equal('#ffffff');
+    });
+
+    test('hides the randomize control when there is nothing to recolor', async () => {
+      const el = await makeSettings({
+        settings: [
+          { label: 'Width', cssVariable: '--width', defaultValue: '10px' },
+        ],
+      });
+
+      const buttons = [
+        ...(el.shadowRoot?.querySelectorAll('button') ?? []),
+      ].map((b) => b.textContent?.trim());
+      expect(buttons.some((b) => b?.includes('Randomize'))).to.be.false;
+      expect(buttons.some((b) => b?.includes('Revert'))).to.be.true;
     });
   });
 });

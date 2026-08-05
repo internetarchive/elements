@@ -6,9 +6,10 @@ import {
   type CSSResultGroup,
   type TemplateResult,
 } from 'lit';
-import { property, queryAll } from 'lit/decorators.js';
+import { property, queryAll, state } from 'lit/decorators.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { when } from 'lit/directives/when.js';
 
 import themeStyles from '@src/themes/theme-styles';
 import { labelToId } from '../story-utils';
@@ -26,11 +27,23 @@ export type StyleInputSettings = {
   unit?: string;
 };
 
-export type StyleInputData = {
-  settings: StyleInputSettings[];
+/**
+ * A named set of coordinated color values, keyed by CSS custom property.
+ * Supplying these lets the randomize control swap in a whole coherent theme
+ * instead of assigning each color independently — which keeps every
+ * foreground/background pairing legible.
+ */
+export type StylePalette = {
+  name: string;
+  values: Record<string, string>;
 };
 
-/** A random `#rrggbb` color, for the demo-only randomize control. */
+export type StyleInputData = {
+  settings: StyleInputSettings[];
+  palettes?: StylePalette[];
+};
+
+/** A random `#rrggbb` color, used when a story supplies no palettes. */
 function randomHexColor(): string {
   return `#${Math.floor(Math.random() * 0xffffff)
     .toString(16)
@@ -44,6 +57,12 @@ function randomHexColor(): string {
 export class StoryStylesSettings extends LitElement {
   @property({ type: Object }) styleInputData?: StyleInputData;
 
+  /** Name of the palette currently showing, if any. */
+  @state() private appliedPaletteName?: string;
+
+  /** Live range-slider readouts, keyed by CSS variable. */
+  @state() private rangeReadouts: Record<string, string> = {};
+
   @queryAll('.style-input')
   private styleInputs?: NodeListOf<HTMLInputElement>;
 
@@ -53,30 +72,85 @@ export class StoryStylesSettings extends LitElement {
     return html`
       <div class="settings-options">
         <table>
-          ${this.styleInputData.settings.map((input) =>
-            this.renderStyleRow(input),
-          )}
+          <!-- The tbody is explicit on purpose: rows interpolated straight
+               into <table> get hoisted into an implicit tbody by the parser,
+               which ejects Lit's marker nodes and breaks later re-renders. -->
+          <tbody>
+            ${this.styleInputData.settings.map((input) =>
+              this.renderStyleRow(input),
+            )}
+          </tbody>
         </table>
         <button @click=${this.applyStyles}>Apply</button>
-        <button @click=${this.randomizeColors}>🎲 Randomize colors</button>
+        ${when(
+          this.canRandomize,
+          () => html`
+            <button @click=${this.randomizeColors}>🎲 Randomize colors</button>
+          `,
+        )}
         <button @click=${this.resetStyles}>Revert</button>
+        ${when(
+          this.appliedPaletteName,
+          () =>
+            html`<span class="applied-palette"
+              >Theme: ${this.appliedPaletteName}</span
+            >`,
+        )}
       </div>
     `;
   }
 
   /**
-   * Assigns a random color to every color input and applies the result, so a
-   * single click reveals any part of the component that fails to pick up its
-   * color knobs. Non-color inputs (sizes, timings) are left alone so the
-   * layout stays readable.
+   * Recolors the component so a single click reveals any part of it that fails
+   * to pick up its color knobs — anything still wearing its old color stands
+   * out against the rest.
+   *
+   * With palettes, this swaps in one coordinated theme at a time: the pairings
+   * stay legible, and a whole-component color shift makes a stray element
+   * obvious. Without them, each color is randomized on its own. Non-color
+   * inputs (sizes, timings) are left alone either way so the layout holds
+   * still.
    */
   private randomizeColors(): void {
-    this.styleInputs?.forEach((input) => {
-      if (input.type !== 'color') return;
-      input.value = randomHexColor();
-    });
+    const palette = this.nextPalette();
+
+    if (palette) {
+      this.appliedPaletteName = palette.name;
+      this.styleInputs?.forEach((input) => {
+        const value = palette.values[input.dataset.variable ?? ''];
+        if (value) input.value = value;
+      });
+    } else {
+      this.styleInputs?.forEach((input) => {
+        if (input.type !== 'color') return;
+        input.value = randomHexColor();
+      });
+    }
 
     this.applyStyles();
+  }
+
+  /**
+   * Picks a palette other than the one already showing, so every click
+   * visibly changes something.
+   */
+  private nextPalette(): StylePalette | undefined {
+    const palettes = this.styleInputData?.palettes ?? [];
+    if (!palettes.length) return undefined;
+
+    const candidates =
+      palettes.length > 1
+        ? palettes.filter((p) => p.name !== this.appliedPaletteName)
+        : palettes;
+    return candidates[Math.floor(Math.random() * candidates.length)];
+  }
+
+  /** Whether recoloring would do anything for this story. */
+  private get canRandomize(): boolean {
+    return (
+      !!this.styleInputData?.palettes?.length ||
+      (this.styleInputData?.settings ?? []).some((s) => s.inputType === 'color')
+    );
   }
 
   /**
@@ -84,19 +158,15 @@ export class StoryStylesSettings extends LitElement {
    * demo component falls back to its own default styling.
    */
   private resetStyles(): void {
+    this.appliedPaletteName = undefined;
     const defaults = new Map(
       (this.styleInputData?.settings ?? []).map((s) => [s.cssVariable, s]),
     );
+    this.rangeReadouts = {};
     this.styleInputs?.forEach((input) => {
       const setting = defaults.get(input.dataset.variable ?? '');
       if (!setting) return;
       input.value = String(setting.defaultValue);
-      const output = this.renderRoot.querySelector<HTMLOutputElement>(
-        `output[for="${CSS.escape(input.id)}"]`,
-      );
-      if (output) {
-        output.textContent = `${setting.defaultValue}${setting.unit ?? ''}`;
-      }
     });
 
     this.dispatchEvent(
@@ -133,7 +203,7 @@ export class StoryStylesSettings extends LitElement {
           />
           ${input.inputType === 'range'
             ? html`<output class="style-readout" for=${inputId}
-                >${input.defaultValue}${input.unit ?? ''}</output
+                >${this.readoutFor(input)}</output
               >`
             : nothing}
           <code class="style-var" title=${input.cssVariable}
@@ -146,15 +216,29 @@ export class StoryStylesSettings extends LitElement {
 
   /**
    * Updates the live readout next to a range slider as it moves.
+   *
+   * This records the value in reactive state rather than writing to the
+   * `<output>` directly: that element holds Lit-rendered content, and
+   * overwriting its text would eject Lit's markers and break every later
+   * re-render of the panel.
    */
   private updateRangeReadout(e: Event): void {
     const input = e.currentTarget as HTMLInputElement;
-    const output = this.renderRoot.querySelector<HTMLOutputElement>(
-      `output[for="${CSS.escape(input.id)}"]`,
-    );
-    if (!output) return;
+    const variable = input.dataset.variable;
+    if (!variable) return;
     const unit = input.dataset.unit ?? '';
-    output.textContent = `${input.value}${unit}`;
+    this.rangeReadouts = {
+      ...this.rangeReadouts,
+      [variable]: `${input.value}${unit}`,
+    };
+  }
+
+  /** The text to show beside a range slider — live value, else its default. */
+  private readoutFor(input: StyleInputSettings): string {
+    return (
+      this.rangeReadouts[input.cssVariable] ??
+      `${input.defaultValue}${input.unit ?? ''}`
+    );
   }
 
   /**
@@ -206,6 +290,13 @@ export class StoryStylesSettings extends LitElement {
 
         input[type='range'] {
           margin: 5px;
+        }
+
+        /* Names the theme the randomize control just applied. */
+        .applied-palette {
+          margin-left: 0.75em;
+          font-size: 0.78rem;
+          color: #595959;
         }
       `,
     ];

@@ -18,7 +18,10 @@ import type {
   SharedResizeObserverConfig,
   SharedResizeObserverInterface,
 } from './interfaces/service-interfaces';
-import type { StyleInputData } from '@demo/story-components/story-styles-settings';
+import type {
+  StyleInputData,
+  StylePalette,
+} from '@demo/story-components/story-styles-settings';
 import '@demo/story-template';
 
 /**
@@ -49,6 +52,99 @@ class DemoResizeObserver implements SharedResizeObserverInterface {
 
 /** A generic list-ish glyph for the "About" demo menu entry. */
 const demoIcon = maskedIcon(listIconUrl);
+
+/**
+ * Alternate themes for the demo's randomize control.
+ *
+ * Each one recolors the whole navigator at once, which makes any element that
+ * fails to follow its color knob obvious — it keeps the old color while
+ * everything around it changes. They are supplied as coordinated sets rather
+ * than random colors so every pairing the component actually renders stays
+ * legible: text on the drawer, the open panel and the embed field; icons over
+ * the drawer and over the theater; active vs inactive icons; borders and the
+ * active-file accent. All clear WCAG AA — 4.5:1 for text, 3:1 for icons,
+ * borders and other non-text — with text landing at AAA throughout.
+ *
+ * The component's own defaults are deliberately absent: Revert already
+ * restores those.
+ */
+const DEMO_PALETTES: StylePalette[] = [
+  {
+    name: 'Midnight',
+    values: {
+      '--item-navigator-theater-bg-color': '#0d1b2a',
+      '--item-navigator-share-embed-bg': '#12233a',
+      '--item-navigator-menu-slider-bg': '#1b263b',
+      '--item-navigator-active-button-bg': '#2c3e50',
+      '--item-navigator-text-color': '#e0e6ed',
+      '--item-navigator-icon-color': '#e0e6ed',
+      '--item-navigator-icon-active-color': '#7fd8ff',
+      '--item-navigator-icon-inactive-color': '#9fb3c8',
+      '--item-navigator-border-color': '#5c7799',
+      '--item-navigator-active-file-border-color': '#4cc9f0',
+    },
+  },
+  {
+    name: 'Forest',
+    values: {
+      '--item-navigator-theater-bg-color': '#08160c',
+      '--item-navigator-share-embed-bg': '#0e2413',
+      '--item-navigator-menu-slider-bg': '#14301a',
+      '--item-navigator-active-button-bg': '#1f4a29',
+      '--item-navigator-text-color': '#e8f5e9',
+      '--item-navigator-icon-color': '#e8f5e9',
+      '--item-navigator-icon-active-color': '#7bd88f',
+      '--item-navigator-icon-inactive-color': '#9dbca4',
+      '--item-navigator-border-color': '#4d8259',
+      '--item-navigator-active-file-border-color': '#7bd88f',
+    },
+  },
+  {
+    name: 'Plum',
+    values: {
+      '--item-navigator-theater-bg-color': '#150c1a',
+      '--item-navigator-share-embed-bg': '#1f1226',
+      '--item-navigator-menu-slider-bg': '#2b1733',
+      '--item-navigator-active-button-bg': '#3d2147',
+      '--item-navigator-text-color': '#f3e8f7',
+      '--item-navigator-icon-color': '#f3e8f7',
+      '--item-navigator-icon-active-color': '#d9a6ff',
+      '--item-navigator-icon-inactive-color': '#b39ec0',
+      '--item-navigator-border-color': '#8a6398',
+      '--item-navigator-active-file-border-color': '#d09bff',
+    },
+  },
+  {
+    name: 'Solarized',
+    values: {
+      '--item-navigator-theater-bg-color': '#00212b',
+      '--item-navigator-share-embed-bg': '#002b36',
+      '--item-navigator-menu-slider-bg': '#073642',
+      '--item-navigator-active-button-bg': '#0b4553',
+      '--item-navigator-text-color': '#eee8d5',
+      '--item-navigator-icon-color': '#eee8d5',
+      '--item-navigator-icon-active-color': '#5fd3c8',
+      '--item-navigator-icon-inactive-color': '#93a1a1',
+      '--item-navigator-border-color': '#4d8fa1',
+      '--item-navigator-active-file-border-color': '#5fd3c8',
+    },
+  },
+  {
+    name: 'High Contrast',
+    values: {
+      '--item-navigator-theater-bg-color': '#000000',
+      '--item-navigator-share-embed-bg': '#000000',
+      '--item-navigator-menu-slider-bg': '#000000',
+      '--item-navigator-active-button-bg': '#1a1a1a',
+      '--item-navigator-text-color': '#ffffff',
+      '--item-navigator-icon-color': '#ffffff',
+      '--item-navigator-icon-active-color': '#ffff00',
+      '--item-navigator-icon-inactive-color': '#c0c0c0',
+      '--item-navigator-border-color': '#ffffff',
+      '--item-navigator-active-file-border-color': '#ffff00',
+    },
+  },
+];
 
 /** archive.org bases for embeddable item viewers and direct file downloads. */
 const EMBED_BASE = 'https://archive.org/embed';
@@ -372,6 +468,7 @@ export class IAItemNavigatorStory extends LitElement {
           inputType: 'color',
         },
       ],
+      palettes: DEMO_PALETTES,
     };
   }
 
