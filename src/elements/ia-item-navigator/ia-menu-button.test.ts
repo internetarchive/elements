@@ -4,6 +4,7 @@ import { describe, expect, test, vi } from 'vitest';
 
 import { IAMenuButton } from './ia-menu-button';
 import './ia-menu-button';
+import { maskedIcon } from './masked-icon';
 
 describe('IAMenuButton', () => {
   test('renders a <button> by default', async () => {
@@ -52,6 +53,23 @@ describe('IAMenuButton', () => {
     expect(
       el.shadowRoot?.querySelector('.menu-item')?.getAttribute('aria-expanded'),
     ).to.equal('true');
+  });
+
+  test('paints the icon with the inactive color until it is selected', async () => {
+    const el = await fixture<IAMenuButton>(
+      html`<ia-menu-button
+        .icon=${maskedIcon('/glyph.svg')}
+        style="--item-navigator-icon-inactive-color: rgb(9, 9, 9);
+               --item-navigator-icon-active-color: rgb(7, 7, 7)"
+      ></ia-menu-button>`,
+    );
+    const icon = () => el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
+
+    expect(getComputedStyle(icon()).backgroundColor).to.equal('rgb(9, 9, 9)');
+
+    el.selected = true;
+    await el.updateComplete;
+    expect(getComputedStyle(icon()).backgroundColor).to.equal('rgb(7, 7, 7)');
   });
 
   test('a followable link does not intercept the click', async () => {

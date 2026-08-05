@@ -30,6 +30,13 @@ export type StyleInputData = {
   settings: StyleInputSettings[];
 };
 
+/** A random `#rrggbb` color, for the demo-only randomize control. */
+function randomHexColor(): string {
+  return `#${Math.floor(Math.random() * 0xffffff)
+    .toString(16)
+    .padStart(6, '0')}`;
+}
+
 /**
  * A template for displaying the style options.
  */
@@ -51,9 +58,25 @@ export class StoryStylesSettings extends LitElement {
           )}
         </table>
         <button @click=${this.applyStyles}>Apply</button>
-        <button @click=${this.resetStyles}>Reset</button>
+        <button @click=${this.randomizeColors}>🎲 Randomize colors</button>
+        <button @click=${this.resetStyles}>Revert</button>
       </div>
     `;
+  }
+
+  /**
+   * Assigns a random color to every color input and applies the result, so a
+   * single click reveals any part of the component that fails to pick up its
+   * color knobs. Non-color inputs (sizes, timings) are left alone so the
+   * layout stays readable.
+   */
+  private randomizeColors(): void {
+    this.styleInputs?.forEach((input) => {
+      if (input.type !== 'color') return;
+      input.value = randomHexColor();
+    });
+
+    this.applyStyles();
   }
 
   /**

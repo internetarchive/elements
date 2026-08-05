@@ -212,6 +212,18 @@ export class IAMenuButton extends LitElement {
           border-radius: 1em 0 0 1em;
         }
 
+        /* Our glyphs are masked spans: the mask supplies the shape, these
+           supply the paint. */
+        .icon span.ia-icon {
+          background-color: var(--item-navigator-icon-inactive-color--);
+        }
+
+        .icon.active span.ia-icon {
+          background-color: var(--item-navigator-icon-active-color--);
+        }
+
+        /* Host-supplied icons may still be inline svg, so keep theming those
+           the original way. */
         .icon .fill-color {
           fill: var(--item-navigator-icon-inactive-color--);
         }

@@ -349,6 +349,14 @@ export class IAMenuSlider extends LitElement {
           height: var(--item-navigator-header-icon-height--);
         }
 
+        /* Our glyphs are masked spans: the mask supplies the shape, this
+           supplies the paint. */
+        span.ia-icon {
+          background-color: var(--item-navigator-icon-color--);
+        }
+
+        /* Host-supplied icons may still be inline svg, so keep theming those
+           the original way. */
         .ia-icon .fill-color {
           fill: var(--item-navigator-icon-color--);
         }

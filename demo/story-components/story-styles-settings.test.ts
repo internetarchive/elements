@@ -24,6 +24,18 @@ function getInput(el: StoryStylesSettings, id: string): HTMLInputElement {
   return input as HTMLInputElement;
 }
 
+/** Finds one of the panel's action buttons by its visible label. */
+function button(el: StoryStylesSettings, label: string): HTMLButtonElement {
+  const match = [...(el.shadowRoot?.querySelectorAll('button') ?? [])].find(
+    (b) => b.textContent?.includes(label),
+  );
+  expect(match, `button "${label}" should exist`).to.exist;
+  return match as HTMLButtonElement;
+}
+
+const randomizeButton = (el: StoryStylesSettings) => button(el, 'Randomize');
+const revertButton = (el: StoryStylesSettings) => button(el, 'Revert');
+
 describe('StoryStylesSettings', () => {
   describe('range inputs', () => {
     const rangeData: StyleInputData = {
@@ -154,6 +166,74 @@ describe('StoryStylesSettings', () => {
       expect(input.hasAttribute('min')).to.be.false;
       expect(input.hasAttribute('max')).to.be.false;
       expect(input.hasAttribute('step')).to.be.false;
+    });
+
+    test('randomizing recolors every color input and applies the result', async () => {
+      const el = await makeSettings({
+        settings: [
+          {
+            label: 'Ink',
+            cssVariable: '--ink',
+            defaultValue: '#ffffff',
+            inputType: 'color',
+          },
+          {
+            label: 'Paper',
+            cssVariable: '--paper',
+            defaultValue: '#000000',
+            inputType: 'color',
+          },
+          { label: 'Width', cssVariable: '--width', defaultValue: '10px' },
+        ],
+      });
+      const applied = new Promise<CustomEvent>((resolve) => {
+        el.addEventListener('stylesApplied', (e) => resolve(e as CustomEvent), {
+          once: true,
+        });
+      });
+
+      randomizeButton(el).click();
+
+      // Both colors moved off their defaults...
+      expect(getInput(el, 'ink').value).to.not.equal('#ffffff');
+      expect(getInput(el, 'paper').value).to.not.equal('#000000');
+      // ...and each is a usable hex color.
+      expect(getInput(el, 'ink').value).to.match(/^#[0-9a-f]{6}$/);
+
+      // The non-color input is deliberately untouched.
+      expect(getInput(el, 'width').value).to.equal('10px');
+
+      // The new colors are applied, not just staged in the inputs.
+      const detail = (await applied).detail.styles as string;
+      expect(detail).to.contain(`--ink: ${getInput(el, 'ink').value}`);
+      expect(detail).to.contain('--width: 10px');
+    });
+
+    test('reverting after randomizing restores the defaults', async () => {
+      const el = await makeSettings({
+        settings: [
+          {
+            label: 'Ink',
+            cssVariable: '--ink',
+            defaultValue: '#ffffff',
+            inputType: 'color',
+          },
+        ],
+      });
+
+      randomizeButton(el).click();
+      expect(getInput(el, 'ink').value).to.not.equal('#ffffff');
+
+      const reverted = new Promise<CustomEvent>((resolve) => {
+        el.addEventListener('stylesApplied', (e) => resolve(e as CustomEvent), {
+          once: true,
+        });
+      });
+      revertButton(el).click();
+
+      expect(getInput(el, 'ink').value).to.equal('#ffffff');
+      // An empty payload clears overrides, falling back to component defaults.
+      expect((await reverted).detail.styles).to.equal('');
     });
 
     test('input without inputType defaults to type=text', async () => {

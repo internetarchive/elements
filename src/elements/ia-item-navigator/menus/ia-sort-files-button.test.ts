@@ -130,4 +130,34 @@ describe('IASortFilesButton', () => {
     expect(() => el.sortVolumes('default')).to.not.throw();
     expect(el.fileListSorted).to.have.lengthOf(2);
   });
+
+  test('paints the sort glyph with the themed icon color', async () => {
+    const el = await fixture<IASortFilesButton>(
+      html`<ia-sort-files-button
+        style="--item-navigator-icon-color: rgb(0, 128, 64)"
+      ></ia-sort-files-button>`,
+    );
+    const icon = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
+
+    // The glyph is a masked span, so the theming knob drives background-color.
+    expect(icon.tagName).to.equal('SPAN');
+    expect(getComputedStyle(icon).backgroundColor).to.equal('rgb(0, 128, 64)');
+  });
+
+  test('recolors every state of the sort toggle', async () => {
+    const el = await fixture<IASortFilesButton>(
+      html`<ia-sort-files-button
+        style="--item-navigator-icon-color: rgb(200, 100, 50)"
+      ></ia-sort-files-button>`,
+    );
+
+    for (const state of ['title_asc', 'title_desc', 'default'] as const) {
+      el.sortVolumes(state);
+      await el.updateComplete;
+      const icon = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
+      expect(getComputedStyle(icon).backgroundColor, state).to.equal(
+        'rgb(200, 100, 50)',
+      );
+    }
+  });
 });

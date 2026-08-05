@@ -7,6 +7,8 @@ import './menus/ia-sort-files-button';
 import './menus/ia-share-panel';
 import { viewableFilesIcon } from './menus/ia-viewable-files-panel';
 import { shareIcon } from './menus/ia-share-panel';
+import { maskedIcon } from './masked-icon';
+import listIconUrl from './menus/icons/list.svg';
 import type {
   MenuProviderInterface,
   MenuShortcutInterface,
@@ -46,11 +48,7 @@ class DemoResizeObserver implements SharedResizeObserverInterface {
 }
 
 /** A generic list-ish glyph for the "About" demo menu entry. */
-const demoIcon = html`
-  <svg class="ia-icon" viewBox="0 0 24 24" aria-hidden="true">
-    <path class="fill-color" d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" />
-  </svg>
-`;
+const demoIcon = maskedIcon(listIconUrl);
 
 /** archive.org bases for embeddable item viewers and direct file downloads. */
 const EMBED_BASE = 'https://archive.org/embed';
