@@ -32,7 +32,6 @@ import {
   MenuId,
 } from './interfaces/menu-interfaces';
 import {
-  ModalManagerInterface,
   SharedResizeObserverInterface,
   SharedResizeObserverResizeHandlerInterface,
 } from './interfaces/service-interfaces';
@@ -79,8 +78,6 @@ export class IAItemNavigator
   @property({ type: Boolean, reflect: true }) menuOpened = false;
 
   @property({ type: String, reflect: true }) openMenu?: MenuId;
-
-  @property({ attribute: false }) modal?: ModalManagerInterface;
 
   @property({ attribute: false })
   sharedObserver?: SharedResizeObserverInterface;

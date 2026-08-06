@@ -4,10 +4,7 @@ import {
   MenuProviderInterface,
   MenuShortcutInterface,
 } from './menu-interfaces';
-import {
-  ModalManagerInterface,
-  SharedResizeObserverInterface,
-} from './service-interfaces';
+import { SharedResizeObserverInterface } from './service-interfaces';
 
 /**
  * The contract a theater host implements to feed menu providers and shortcuts
@@ -23,7 +20,6 @@ export interface CustomTheaterInterface extends LitElement {
   signedIn?: boolean | null;
 
   sharedObserver?: SharedResizeObserverInterface;
-  modal?: ModalManagerInterface;
 
   emitLoadingStatusUpdate: (loaded: boolean) => void;
 
