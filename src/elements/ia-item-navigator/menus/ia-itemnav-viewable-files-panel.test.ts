@@ -113,41 +113,87 @@ describe('IAItemNavViewableFilesPanel', () => {
     expect(el.shadowRoot?.querySelector('.pdf-label')).to.not.exist;
   });
 
-  test('scrolls the active file into view after first render (scrollIntoViewIfNeeded)', async () => {
-    const el = await fixture<IAItemNavViewableFilesPanel>(
-      html`<ia-itemnav-viewable-files-panel
-        subPrefix="v1"
-        .fileList=${[file({ title: 'v1', file_subprefix: 'v1' })]}
-      ></ia-itemnav-viewable-files-panel>`,
+  /** Renders the panel inside a short, scrolling box like the drawer's. */
+  async function scrollingPanel(
+    subPrefix: string,
+    count = 25,
+  ): Promise<{ el: IAItemNavViewableFilesPanel; box: HTMLElement }> {
+    const files = Array.from({ length: count }, (_, i) =>
+      file({ title: `v${i}`, file_subprefix: `v${i}` }),
     );
-    const active = el.shadowRoot?.querySelector<
-      HTMLElement & { scrollIntoViewIfNeeded?: (c: boolean) => void }
-    >('.content.active');
-    expect(active).to.exist;
-    // firstUpdated schedules the scroll behind a 350ms timeout.
-    await new Promise((resolve) => setTimeout(resolve, 400));
-    // No assertion beyond "did not throw" — chromium provides
-    // scrollIntoViewIfNeeded, exercising that branch.
-    expect(active).to.exist;
+    const box = await fixture<HTMLElement>(
+      html`<div style="height: 80px; overflow: auto">
+        <ia-itemnav-viewable-files-panel
+          .subPrefix=${subPrefix}
+          .fileList=${files}
+        ></ia-itemnav-viewable-files-panel>
+      </div>`,
+    );
+    const el = box.querySelector(
+      'ia-itemnav-viewable-files-panel',
+    ) as IAItemNavViewableFilesPanel;
+    await el.updateComplete;
+    return { el, box };
+  }
+
+  /** Whether the active row is actually within the scrolling box. */
+  function activeRowIsVisible(
+    el: IAItemNavViewableFilesPanel,
+    box: HTMLElement,
+  ): boolean {
+    const active = el.shadowRoot?.querySelector('.content.active');
+    if (!active) return false;
+    const row = active.getBoundingClientRect();
+    const view = box.getBoundingClientRect();
+    return row.top >= view.top - 1 && row.bottom <= view.bottom + 1;
+  }
+
+  test('brings the active file into view without waiting on a timer', async () => {
+    const { el, box } = await scrollingPanel('v20');
+
+    // No sleep: the row is in place as soon as the update completes.
+    expect(activeRowIsVisible(el, box), 'active row should be scrolled to').to
+      .be.true;
   });
 
-  test('falls back to scrollIntoView when scrollIntoViewIfNeeded is unavailable', async () => {
-    const el = await fixture<IAItemNavViewableFilesPanel>(
-      html`<ia-itemnav-viewable-files-panel
-        subPrefix="v1"
-        .fileList=${[file({ title: 'v1', file_subprefix: 'v1' })]}
-      ></ia-itemnav-viewable-files-panel>`,
+  test('follows the active file when the selection moves', async () => {
+    const { el, box } = await scrollingPanel('v0');
+    expect(activeRowIsVisible(el, box)).to.be.true;
+
+    el.subPrefix = 'v24';
+    await el.updateComplete;
+    await el.updateComplete;
+
+    expect(activeRowIsVisible(el, box), 'should follow the new selection').to.be
+      .true;
+  });
+
+  test('scrolls once the file list arrives, not only on first render', async () => {
+    // Hosts commonly build the panel first and hand it a list afterwards.
+    const box = await fixture<HTMLElement>(
+      html`<div style="height: 80px; overflow: auto">
+        <ia-itemnav-viewable-files-panel
+          .subPrefix=${'v20'}
+        ></ia-itemnav-viewable-files-panel>
+      </div>`,
     );
-    const active = el.shadowRoot?.querySelector<HTMLElement>('.content.active');
-    // Remove the Chrome-only API so the cross-browser branch runs.
-    (
-      active as unknown as { scrollIntoViewIfNeeded?: unknown }
-    ).scrollIntoViewIfNeeded = undefined;
-    let called = false;
-    active!.scrollIntoView = () => {
-      called = true;
-    };
-    await new Promise((resolve) => setTimeout(resolve, 400));
-    expect(called).to.equal(true);
+    const el = box.querySelector(
+      'ia-itemnav-viewable-files-panel',
+    ) as IAItemNavViewableFilesPanel;
+    await el.updateComplete;
+
+    el.fileList = Array.from({ length: 25 }, (_, i) =>
+      file({ title: `v${i}`, file_subprefix: `v${i}` }),
+    );
+    await el.updateComplete;
+    await el.updateComplete;
+
+    expect(activeRowIsVisible(el, box)).to.be.true;
+  });
+
+  test('leaves an already-visible row where it is', async () => {
+    const { el, box } = await scrollingPanel('v0');
+    expect(box.scrollTop).to.equal(0);
+    expect(activeRowIsVisible(el, box)).to.be.true;
   });
 });

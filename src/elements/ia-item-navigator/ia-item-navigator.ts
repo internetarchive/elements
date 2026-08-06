@@ -248,23 +248,30 @@ export class IAItemNavigator
 
   toggleMenu(forceValue: boolean | undefined = undefined): void {
     this.menuOpened = forceValue !== undefined ? forceValue : !this.menuOpened;
-    if (this.menuOpened) {
-      // Move focus to the <ia-itemnav-menu-slider>
-      this.updateComplete.then(() => {
-        const closeButton = this.menuSlider?.shadowRoot?.querySelector(
-          'button.close',
-        ) as HTMLElement;
-        closeButton?.focus();
-      });
-    } else {
-      // Move focus back to the menu toggle button
-      this.updateComplete.then(() => {
-        this.toggleMenuButton?.focus();
-      });
-    }
+    this.moveFocusForDrawer();
   }
 
+  /**
+   * Opening the drawer moves focus into it; closing hands focus back to the
+   * toggle. Without this, opening from the shortcut rail would leave focus on
+   * a button that is about to be hidden, dropping it to the document.
+   */
+  private moveFocusForDrawer(): void {
+    this.updateComplete.then(() => {
+      if (this.menuOpened) {
+        this.menuSlider?.focusDrawer();
+      } else {
+        this.toggleMenuButton?.focus();
+      }
+    });
+  }
+
+  /**
+   * Closing the drawer also closes whatever panel was open inside it, so the
+   * two can't disagree and a stale panel can't reappear on the next open.
+   */
   closeMenu(): void {
+    this.openMenu = undefined;
     this.toggleMenu(false);
   }
 
@@ -307,13 +314,15 @@ export class IAItemNavigator
   }
 
   get menuToggleButton(): TemplateResult {
+    const label = this.menuOpened ? 'Close side panel' : 'Open side panel';
     return html`
       <button
         class="toggle-menu"
         @click=${() => this.toggleMenu()}
-        title="Open side panel"
-        aria-label="Open side panel"
-        aria-expanded="false"
+        title=${label}
+        aria-label=${label}
+        aria-expanded=${this.menuOpened}
+        aria-controls="menu"
       >
         ${ellipsesIcon}
       </button>
@@ -326,22 +335,27 @@ export class IAItemNavigator
 
   get renderSideMenu(): TemplateResult {
     return html`
-      <nav>
+      <nav aria-label="Item navigation">
         <div
           class="minimized ${classMap({ hidden: this.menuOpened })}"
           part="minimized-menu"
         >
           ${this.shortcuts} ${this.menuToggleButton}
         </div>
-        <div id="menu" ?inert=${!this.menuOpened}>
+        <!-- Closed drawers are inert, so what is off-screen is also out of
+             the tab order and the accessibility tree. -->
+        <div
+          id="menu"
+          role="group"
+          aria-label="Item navigation menu"
+          ?inert=${!this.menuOpened}
+        >
           <ia-itemnav-menu-slider
             .menus=${this.menuContents}
             .selectedMenu=${this.selectedMenuId}
             @menuTypeSelected=${this.setOpenMenu}
             @menuPanelClosed=${this.closeSidePanel}
             @menuSliderClosed=${this.closeMenu}
-            manuallyHandleClose
-            open
           ></ia-itemnav-menu-slider>
         </div>
       </nav>
@@ -353,6 +367,9 @@ export class IAItemNavigator
   openShortcut(selectedMenuId: MenuId = ''): void {
     this.openMenu = selectedMenuId;
     this.menuOpened = true;
+    // The rail hides itself once the drawer opens, taking the focused
+    // shortcut with it, so focus has to be placed deliberately.
+    this.moveFocusForDrawer();
   }
 
   get shortcuts(): TemplateResult {
@@ -362,18 +379,22 @@ export class IAItemNavigator
       }
 
       return html`
-        <button
-          class="shortcut ${id}"
-          @click=${() => this.openShortcut(id)}
-          title=${label}
-          aria-label=${label}
-          aria-expanded="false"
-        >
-          ${icon}
-        </button>
+        <li>
+          <button
+            class="shortcut ${id}"
+            @click=${() => this.openShortcut(id)}
+            title=${label}
+            aria-label=${label}
+            aria-expanded=${this.menuOpened && this.openMenu === id}
+          >
+            ${icon}
+          </button>
+        </li>
       `;
     });
-    return html`<div class="shortcuts">${shortcuts}</div>`;
+    return html`<ul class="shortcuts" role="list">
+      ${shortcuts}
+    </ul>`;
   }
   /** End Menu Shortcuts */
 
@@ -564,6 +585,15 @@ export class IAItemNavigator
           width: ${iconWidth};
           height: ${iconHeight};
           margin: auto;
+        }
+
+        /* The rail is a list for assistive tech; strip the list chrome so it
+           still reads as a row of icons. */
+        .shortcuts,
+        .shortcuts li {
+          list-style: none;
+          padding: 0;
+          margin: 0;
         }
 
         .toggle-menu .ia-icon,
