@@ -3,6 +3,7 @@ import {
   html,
   LitElement,
   nothing,
+  type PropertyValues,
   TemplateResult,
   type CSSResultGroup,
 } from 'lit';
@@ -34,26 +35,34 @@ export class IAItemNavViewableFilesPanel extends LitElement {
 
   @property({ type: Boolean, reflect: true }) addSortToUrl = false;
 
-  firstUpdated(): void {
-    const activeFile =
-      this.shadowRoot?.querySelector<HTMLElement>('.content.active');
-    // allow for css animations to run before scrolling to active file
-    setTimeout(() => {
-      // `scrollIntoViewIfNeeded` only auto-scrolls when the element is out of
-      // view (Chrome, Safari); `scrollIntoView` is the cross-browser fallback.
-      const scrollable = activeFile as HTMLElement & {
-        scrollIntoViewIfNeeded?: (center: boolean) => void;
-      };
-      if (scrollable?.scrollIntoViewIfNeeded) {
-        scrollable.scrollIntoViewIfNeeded(true);
-      } else {
-        activeFile?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'nearest',
-        });
-      }
-    }, 350);
+  /**
+   * Keeps the active file in view whenever the list or the selection changes.
+   *
+   * Both are needed: hosts commonly build this panel once and hand it a
+   * `fileList` afterwards, and the selection can move while the panel stays
+   * open. Reacting to the change means there is nothing to wait on — the row
+   * exists by the time the update completes.
+   */
+  protected updated(changed: PropertyValues): void {
+    if (changed.has('fileList') || changed.has('subPrefix')) {
+      this.revealActiveFile();
+    }
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    // Hosts reuse this element across opens, and the scroll container it sits
+    // in may have been reset while it was away.
+    this.revealActiveFile();
+  }
+
+  private async revealActiveFile(): Promise<void> {
+    await this.updateComplete;
+    // `nearest` leaves an already-visible row alone, which is what the
+    // Chrome-only `scrollIntoViewIfNeeded` used to buy us.
+    this.shadowRoot
+      ?.querySelector<HTMLElement>('.content.active')
+      ?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }
 
   fileUrl(item: ViewableFileInfo): string {

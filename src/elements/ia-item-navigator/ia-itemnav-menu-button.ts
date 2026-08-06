@@ -6,6 +6,7 @@ import {
   type CSSResultGroup,
 } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import themeStyles from '@src/themes/theme-styles';
 
 /**
@@ -69,11 +70,14 @@ export class IAItemNavMenuButton extends LitElement {
   }
 
   get linkButton(): TemplateResult {
+    // A followable link really does navigate, so it is a link and nothing
+    // more; only the in-place variant is a disclosure.
     return html`
       <a
         href=${this.href}
         class="menu-item"
-        aria-expanded=${this.selected}
+        aria-label=${this.label}
+        aria-expanded=${ifDefined(this.followable ? undefined : this.selected)}
         @click=${this.followable ? undefined : this.onClick}
         >${this.menuItem}</a
       >
@@ -84,6 +88,7 @@ export class IAItemNavMenuButton extends LitElement {
     return html`
       <button
         class="menu-item"
+        aria-label=${this.label}
         aria-expanded=${this.selected}
         @click=${this.onClick}
       >
