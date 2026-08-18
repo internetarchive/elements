@@ -235,7 +235,10 @@ export class IADropdownSearchBar extends LitElement {
         --search-bar-width--: var(--search-bar-width, 300px);
         --search-bar-internal-padding--: var(--padding-sm, 5px);
         --clear-button-offset--: var(--clear-button-offset, 0);
-        --dropdown-z-index--: var(--dropdown-z-index, initial);
+        /* While it would be nice to fall back to ia-dropdown's own default here by making this var
+           fall back to "initial", older Safari versions don't support that keyword in a var() fallback.
+           So instead we just restate ia-dropdown's current default 2 here as the fallback. */
+        --dropdown-z-index--: var(--dropdown-z-index, 2);
       }
 
       #container {
