@@ -46,6 +46,15 @@ app-root {
   overflow-y: auto;
 }
 
+#ia-sidebar #ia-all-link {
+  font-weight: 600;
+  color: #213547;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid #ddd;
+  border-left-color: transparent;
+}
+
 #ia-sidebar h2 {
   font-size: 0.7rem;
   font-weight: 600;
@@ -89,6 +98,10 @@ app-root {
   min-width: 0;
 }
 
+#ia-content.ia-focused {
+  padding-bottom: 2rem;
+}
+
 .ia-anchor {
   scroll-margin-top: 16px;
 }
@@ -109,4 +122,10 @@ app-root {
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0.75rem 0 0.25rem;
+}
+
+.ia-story-message {
+  font-size: 0.9rem;
+  color: #767676;
+  margin: 0.5rem 0;
 }
