@@ -1,11 +1,5 @@
-import {
-  css,
-  html,
-  LitElement,
-  nothing,
-  TemplateResult,
-  type CSSResultGroup,
-} from 'lit';
+import type { TemplateResult } from 'lit';
+import { css, html, LitElement, nothing, type CSSResultGroup } from 'lit';
 import { property, queryAll } from 'lit/decorators.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { choose } from 'lit/directives/choose.js';

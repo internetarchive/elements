@@ -1,12 +1,5 @@
-import {
-  html,
-  LitElement,
-  TemplateResult,
-  CSSResultGroup,
-  css,
-  nothing,
-  PropertyValues,
-} from 'lit';
+import type { TemplateResult, CSSResultGroup, PropertyValues } from 'lit';
+import { html, LitElement, css, nothing } from 'lit';
 import { msg } from '@lit/localize';
 import { property, customElement, query } from 'lit/decorators.js';
 
