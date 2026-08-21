@@ -397,6 +397,14 @@ export class StoryTemplate extends LitElement {
           padding: 0.5em;
         }
 
+        .disclosure-arrow {
+          width: 12px;
+          height: 12px;
+          transform: rotate(-90deg);
+          transition: transform 0.2s ease-in-out;
+          filter: invert(0.5);
+        }
+
         .slot-container.hidden {
           display: none;
         }
