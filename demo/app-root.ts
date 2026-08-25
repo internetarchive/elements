@@ -178,19 +178,32 @@ export class AppRoot extends LitElement {
   }
 
   private _renderSidebar() {
+    const showingAll = !this._focused;
     const activeTag = this._focused ? this._focused.tag : this._activeTag;
-    const link = (entry: StoryEntry) => html`
-      <a
-        href="#${entry.id}"
-        class="${entry.tag === activeTag ? 'active' : ''}"
-        aria-current="${entry.tag === activeTag ? 'page' : 'false'}"
-        >&lt;${entry.tag}&gt;</a
-      >
-    `;
+    // `page` when the view really is that one element, `location` when the
+    // highlight only tracks where the all-elements list is scrolled to.
+    const currentKind = showingAll ? 'location' : 'page';
+    const link = (entry: StoryEntry) => {
+      const active = entry.tag === activeTag;
+      return html`
+        <a
+          href="#${entry.id}"
+          class="ia-elem-link ${active ? 'active' : ''}"
+          aria-current="${active ? currentKind : 'false'}"
+          >&lt;${entry.tag}&gt;</a
+        >
+      `;
+    };
 
     return html`
       <nav id="ia-sidebar">
-        <a id="ia-all-link" href="#">All elements</a>
+        <a
+          id="ia-all-link"
+          href="#"
+          class="${showingAll ? 'active' : ''}"
+          aria-current="${showingAll ? 'page' : 'false'}"
+          >Show All Elements</a
+        >
         <h2>Production-Ready</h2>
         ${productionEntries.map(link)}
         <h2>Labs 🧪</h2>

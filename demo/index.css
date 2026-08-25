@@ -46,13 +46,38 @@ app-root {
   overflow-y: auto;
 }
 
-#ia-sidebar #ia-all-link {
-  font-weight: 600;
+/* Styled as a button, since it swaps the whole view rather than jumping to an
+   anchor like the element links below it do. */
+#ia-all-link {
+  display: block;
+  margin: 0 1rem 1.5rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fff;
   color: #213547;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.6rem;
-  border-bottom: 1px solid #ddd;
-  border-left-color: transparent;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background 0.1s,
+    color 0.1s,
+    border-color 0.1s;
+}
+
+#ia-all-link:hover {
+  background: #f0f0f0;
+  border-color: #767676;
+  color: #213547;
+}
+
+/* Filled rather than the tinted treatment the element links use, so the view
+   you're in stays distinct from the scroll position within it. */
+#ia-all-link.active {
+  background: #194880;
+  border-color: #194880;
+  color: #fff;
 }
 
 #ia-sidebar h2 {
@@ -62,10 +87,14 @@ app-root {
   letter-spacing: 0.08em;
   color: #767676;
   padding: 0 1rem;
-  margin: 0 0 0.5rem;
+  margin: 1.5rem 0 0.5rem;
 }
 
-#ia-sidebar a {
+#ia-sidebar h2:first-of-type {
+  margin-top: 0;
+}
+
+#ia-sidebar .ia-elem-link {
   display: block;
   font-size: 0.82rem;
   font-weight: 400;
@@ -73,18 +102,21 @@ app-root {
   text-decoration: none;
   padding: 0.3rem 1rem;
   border-left: 3px solid transparent;
-  transition: background 0.1s, color 0.1s, border-color 0.1s;
+  transition:
+    background 0.1s,
+    color 0.1s,
+    border-color 0.1s;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-#ia-sidebar a:hover {
+#ia-sidebar .ia-elem-link:hover {
   background: #f0f0f0;
   color: #213547;
 }
 
-#ia-sidebar a.active {
+#ia-sidebar .ia-elem-link.active {
   color: #194880;
   border-left-color: #194880;
   background: #f0f4f9;

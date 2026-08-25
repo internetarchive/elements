@@ -44,6 +44,14 @@ describe('AppRoot', () => {
       expect(ids).to.include('elem-ia-button');
     });
 
+    test('highlights the all-elements button', async () => {
+      const el = await appRoot();
+
+      const allLink = el.querySelector('#ia-all-link') as HTMLElement;
+      expect(allLink.classList.contains('active')).to.be.true;
+      expect(allLink.getAttribute('aria-current')).to.equal('page');
+    });
+
     test('falls back to every element when the hash names an unknown one', async () => {
       setHash('#elem-not-a-real-element');
       const el = await appRoot();
@@ -82,9 +90,18 @@ describe('AppRoot', () => {
       setHash('#elem-ia-button');
       const el = await appRoot();
 
-      const active = el.querySelectorAll('#ia-sidebar a.active');
+      const active = el.querySelectorAll('#ia-sidebar .ia-elem-link.active');
       expect(active.length).to.equal(1);
       expect(active[0].getAttribute('href')).to.equal('#elem-ia-button');
+    });
+
+    test('does not highlight the all-elements button', async () => {
+      setHash('#elem-ia-button');
+      const el = await appRoot();
+
+      const allLink = el.querySelector('#ia-all-link') as HTMLElement;
+      expect(allLink.classList.contains('active')).to.be.false;
+      expect(allLink.getAttribute('aria-current')).to.equal('false');
     });
   });
 
