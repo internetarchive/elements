@@ -260,12 +260,9 @@ export class IAItemNavMenuSlider extends LitElement {
             --item-navigator-border-color,
             #4b4b4b
           );
-          --item-navigator-header-icon-width--: var(
-            --item-navigator-header-icon-width,
-            2em
-          );
-          --item-navigator-header-icon-height--: var(
-            --item-navigator-header-icon-height,
+          /* Every glyph is square, so one knob sizes both axes. */
+          --item-navigator-header-icon-size--: var(
+            --item-navigator-header-icon-size,
             2em
           );
           --item-navigator-icon-color--: var(
@@ -350,8 +347,8 @@ export class IAItemNavMenuSlider extends LitElement {
         }
 
         button.close .ia-icon {
-          width: var(--item-navigator-header-icon-width--);
-          height: var(--item-navigator-header-icon-height--);
+          width: var(--item-navigator-header-icon-size--);
+          height: var(--item-navigator-header-icon-size--);
         }
 
         /* Our glyphs are masked spans: the mask supplies the shape, this

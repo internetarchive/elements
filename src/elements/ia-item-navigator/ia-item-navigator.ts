@@ -416,8 +416,7 @@ export class IAItemNavigator
     const transitionEffect = css`transform ${transitionTiming} ease-out`;
     const menuMargin = css`var(--item-navigator-menu-margin--)`;
     const theaterBg = css`var(--item-navigator-theater-bg-color--)`;
-    const iconWidth = css`var(--item-navigator-icon-width--)`;
-    const iconHeight = css`var(--item-navigator-icon-height--)`;
+    const iconSize = css`var(--item-navigator-icon-size--)`;
 
     return [
       themeStyles,
@@ -439,14 +438,8 @@ export class IAItemNavigator
             --item-navigator-theater-bg-color,
             #000
           );
-          --item-navigator-icon-width--: var(
-            --item-navigator-icon-width,
-            2.4em
-          );
-          --item-navigator-icon-height--: var(
-            --item-navigator-icon-height,
-            2.4em
-          );
+          /* Every glyph is square, so one knob sizes both axes. */
+          --item-navigator-icon-size--: var(--item-navigator-icon-size, 2.4em);
           /* Icons follow the adjustable text color by default. */
           --item-navigator-icon-color--: var(
             --item-navigator-icon-color,
@@ -581,9 +574,9 @@ export class IAItemNavigator
 
         nav .minimized button.toggle-menu > * {
           border: 2px solid var(--item-navigator-icon-color--);
-          border-radius: ${iconWidth};
-          width: ${iconWidth};
-          height: ${iconHeight};
+          border-radius: ${iconSize};
+          width: ${iconSize};
+          height: ${iconSize};
           margin: auto;
         }
 
@@ -598,8 +591,8 @@ export class IAItemNavigator
 
         .toggle-menu .ia-icon,
         .shortcuts .ia-icon {
-          width: ${iconWidth};
-          height: ${iconHeight};
+          width: ${iconSize};
+          height: ${iconSize};
         }
 
         /* Our glyphs are masked spans: the mask supplies the shape, this

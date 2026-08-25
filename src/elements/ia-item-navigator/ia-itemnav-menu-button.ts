@@ -126,14 +126,8 @@ export class IAItemNavMenuButton extends LitElement {
             --item-navigator-icon-active-color,
             var(--item-navigator-text-color--)
           );
-          --item-navigator-icon-width--: var(
-            --item-navigator-icon-width,
-            2.4em
-          );
-          --item-navigator-icon-height--: var(
-            --item-navigator-icon-height,
-            2.4em
-          );
+          /* Every glyph is square, so one knob sizes both axes. */
+          --item-navigator-icon-size--: var(--item-navigator-icon-size, 2.4em);
 
           /* 10px base (petabox scale); internal sizing is em against it. */
           font-size: var(--item-navigator-base-font-size, 10px);
@@ -208,8 +202,8 @@ export class IAItemNavMenuButton extends LitElement {
         /* Size the glyph within the icon box to match the shortcut-rail
            icons, rather than letting the svg fill the whole box. */
         .menu-item > .icon .ia-icon {
-          width: var(--item-navigator-icon-width--);
-          height: var(--item-navigator-icon-height--);
+          width: var(--item-navigator-icon-size--);
+          height: var(--item-navigator-icon-size--);
         }
 
         .menu-item[aria-expanded='true'] .icon {

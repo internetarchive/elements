@@ -98,13 +98,11 @@ export class IAItemNavSortFilesButton extends LitElement {
       themeStyles,
       css`
         :host {
-          --item-navigator-header-icon-width--: var(
-            --item-navigator-header-icon-width,
-            18px
-          );
-          --item-navigator-header-icon-height--: var(
-            --item-navigator-header-icon-height,
-            18px
+          /* Every glyph is square, so one knob sizes both axes. Matches the
+             panel header's close button, which sits beside this one. */
+          --item-navigator-header-icon-size--: var(
+            --item-navigator-header-icon-size,
+            2em
           );
           --item-navigator-icon-color--: var(
             --item-navigator-icon-color,
@@ -121,13 +119,16 @@ export class IAItemNavSortFilesButton extends LitElement {
           border: 0;
           cursor: pointer;
           display: inline-flex;
+          /* Buttons don't inherit font-size, and the UA default would make the
+             em-sized glyph larger than the close button beside it. */
+          font: inherit;
         }
 
         /* The glyph is a masked span: the mask supplies the shape, this
            supplies the paint. */
         button.sort-by .ia-icon {
-          width: var(--item-navigator-header-icon-width--);
-          height: var(--item-navigator-header-icon-height--);
+          width: var(--item-navigator-header-icon-size--);
+          height: var(--item-navigator-header-icon-size--);
           background-color: var(--item-navigator-icon-color--);
         }
       `,
