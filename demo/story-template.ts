@@ -48,6 +48,9 @@ export class StoryTemplate extends LitElement {
 
   @property({ type: Boolean }) labs = false;
 
+  /* Whether the demo is showing this element on its own */
+  @state() private focused = false;
+
   /* Whether the Import, Usage & Settings section is expanded */
   @state() private detailsVisible = false;
 
@@ -71,13 +74,12 @@ export class StoryTemplate extends LitElement {
   private _copyTimeout?: ReturnType<typeof setTimeout>;
 
   willUpdate(changedProperties: PropertyValues) {
-    // Start expanded when the demo is showing this element on its own, since
-    // it is then the only thing on the page and nothing is buried under it.
-    // Only on the first read of elementTag, so a later render can't reopen a
-    // section the reader has closed.
     if (changedProperties.has('elementTag')) {
-      this.detailsVisible =
-        this.elementTag === tagFromHash(window.location.hash);
+      this.focused = this.elementTag === tagFromHash(window.location.hash);
+      // Start expanded when this is the only element on the page, since
+      // nothing is buried under it. Only on the first read of elementTag, so
+      // a later render can't reopen a section the reader has closed.
+      this.detailsVisible = this.focused;
     }
   }
 
@@ -116,7 +118,9 @@ export class StoryTemplate extends LitElement {
           id="details"
           class="${this.detailsVisible ? 'expanded' : 'collapsed'}"
         >
-          <div class="details-inner">${this.detailsTemplate}</div>
+          <div class="details-inner ${this.focused ? 'focused' : ''}">
+            ${this.detailsTemplate}
+          </div>
         </div>
       </div>
     `;
@@ -442,6 +446,13 @@ export class StoryTemplate extends LitElement {
         .details-inner syntax-highlighter {
           display: block;
           --syntax-max-height: 5.5rem;
+        }
+
+        /* One element on the page means nothing else is competing for the
+           height, so let the snippets run their full length rather than
+           scroll inside a short box. */
+        .details-inner.focused syntax-highlighter {
+          --syntax-max-height: none;
         }
 
         .labs-icon {

@@ -207,6 +207,32 @@ describe('StoryTemplate', () => {
       expect(detailsFor(el)?.classList.contains('collapsed')).to.be.true;
     });
 
+    const maxHeightFor = (el: StoryTemplate) => {
+      const highlighter = el.shadowRoot?.querySelector(
+        'syntax-highlighter',
+      ) as HTMLElement;
+      return getComputedStyle(highlighter)
+        .getPropertyValue('--syntax-max-height')
+        .trim();
+    };
+
+    test('lets the code snippets run full height when focused', async () => {
+      setHash('#elem-ia-button');
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+
+      expect(maxHeightFor(el)).to.equal('none');
+    });
+
+    test('keeps the code snippets capped when not focused', async () => {
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+
+      expect(maxHeightFor(el)).to.equal('5.5rem');
+    });
+
     test('leaves a section the reader closed alone on later renders', async () => {
       setHash('#elem-ia-button');
       const el = await fixture<StoryTemplate>(html`
