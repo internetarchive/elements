@@ -180,16 +180,19 @@ export class AppRoot extends LitElement {
   private _renderSidebar() {
     const showingAll = !this._focused;
     const activeTag = this._focused ? this._focused.tag : this._activeTag;
-    // `page` when the view really is that one element, `location` when the
-    // highlight only tracks where the all-elements list is scrolled to.
-    const currentKind = showingAll ? 'location' : 'page';
+    // The sidebar marks two different things, so they get different names and
+    // different styling: `current` is the element the view is actually
+    // showing, `in-view` is only where the all-elements list is scrolled to.
+    const [markClass, markAria] = showingAll
+      ? ['in-view', 'location']
+      : ['current', 'page'];
     const link = (entry: StoryEntry) => {
-      const active = entry.tag === activeTag;
+      const marked = entry.tag === activeTag;
       return html`
         <a
           href="#${entry.id}"
-          class="ia-elem-link ${active ? 'active' : ''}"
-          aria-current="${active ? currentKind : 'false'}"
+          class="ia-elem-link ${marked ? markClass : ''}"
+          aria-current="${marked ? markAria : 'false'}"
           >&lt;${entry.tag}&gt;</a
         >
       `;
@@ -200,7 +203,7 @@ export class AppRoot extends LitElement {
         <a
           id="ia-all-link"
           href="#"
-          class="${showingAll ? 'active' : ''}"
+          class="${showingAll ? 'current' : ''}"
           aria-current="${showingAll ? 'page' : 'false'}"
           >Show All Elements</a
         >

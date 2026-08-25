@@ -44,12 +44,28 @@ describe('AppRoot', () => {
       expect(ids).to.include('elem-ia-button');
     });
 
-    test('highlights the all-elements button', async () => {
+    test('marks the all-elements button as the current view', async () => {
       const el = await appRoot();
 
       const allLink = el.querySelector('#ia-all-link') as HTMLElement;
-      expect(allLink.classList.contains('active')).to.be.true;
+      expect(allLink.classList.contains('current')).to.be.true;
       expect(allLink.getAttribute('aria-current')).to.equal('page');
+    });
+
+    test('marks the scrolled-to element in-view rather than current', async () => {
+      const el = await appRoot();
+
+      await waitUntil(
+        () => el.querySelector('.ia-elem-link.in-view'),
+        'the scroll spy never marked an element',
+      );
+
+      const inView = el.querySelectorAll('.ia-elem-link.in-view');
+      expect(inView.length).to.equal(1);
+      expect(inView[0].getAttribute('aria-current')).to.equal('location');
+      // `current` stays reserved for the view you're on, which here is the
+      // all-elements button, so the two never wear the same treatment.
+      expect(el.querySelectorAll('.ia-elem-link.current').length).to.equal(0);
     });
 
     test('falls back to every element when the hash names an unknown one', async () => {
@@ -86,21 +102,24 @@ describe('AppRoot', () => {
       expect(customElements.get('ia-button-story')).to.exist;
     });
 
-    test('marks only the focused element active in the sidebar', async () => {
+    test('marks only the focused element as the current view', async () => {
       setHash('#elem-ia-button');
       const el = await appRoot();
 
-      const active = el.querySelectorAll('#ia-sidebar .ia-elem-link.active');
-      expect(active.length).to.equal(1);
-      expect(active[0].getAttribute('href')).to.equal('#elem-ia-button');
+      const current = el.querySelectorAll('#ia-sidebar .ia-elem-link.current');
+      expect(current.length).to.equal(1);
+      expect(current[0].getAttribute('href')).to.equal('#elem-ia-button');
+      expect(current[0].getAttribute('aria-current')).to.equal('page');
+      // Nothing is merely scrolled to when only one element is on the page.
+      expect(el.querySelectorAll('.ia-elem-link.in-view').length).to.equal(0);
     });
 
-    test('does not highlight the all-elements button', async () => {
+    test('does not mark the all-elements button', async () => {
       setHash('#elem-ia-button');
       const el = await appRoot();
 
       const allLink = el.querySelector('#ia-all-link') as HTMLElement;
-      expect(allLink.classList.contains('active')).to.be.false;
+      expect(allLink.classList.contains('current')).to.be.false;
       expect(allLink.getAttribute('aria-current')).to.equal('false');
     });
   });
