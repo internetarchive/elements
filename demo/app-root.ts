@@ -4,15 +4,14 @@ import { customElement, state } from 'lit/decorators.js';
 // Lit's html`` tag cannot render variable tag names directly.
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
+import { HASH_PREFIX, tagFromHash } from './element-hash';
+
 // Globbed without `eager`, so the keys give us the full element list at build
 // time while each module is only fetched when its story is displayed.
 const storyLoaders = import.meta.glob([
   '../src/elements/**/*-story.ts',
   '../src/labs/**/*-story.ts',
 ]);
-
-// Prefix for both the anchor ids and the URL hash, e.g. `#elem-ia-button`.
-const HASH_PREFIX = 'elem-';
 
 interface StoryEntry {
   /** The component's tag name, e.g. `ia-button`. */
@@ -54,8 +53,7 @@ const ALL_ENTRIES = [...productionEntries, ...labsEntries];
  * somewhere useful.
  */
 function entryFromHash(hash: string): StoryEntry | undefined {
-  if (!hash.startsWith(`#${HASH_PREFIX}`)) return undefined;
-  const tag = hash.slice(HASH_PREFIX.length + 1);
+  const tag = tagFromHash(hash);
   return storyEntries.find((e) => e.tag === tag);
 }
 

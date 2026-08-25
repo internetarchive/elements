@@ -5,6 +5,22 @@ import { html } from 'lit';
 import type { StoryTemplate } from './story-template';
 import './story-template';
 
+/**
+ * Sets the hash without firing hashchange, so a fixture created afterwards
+ * picks it up as its initial view.
+ */
+function setHash(hash: string) {
+  window.history.replaceState(null, '', hash);
+}
+
+function clearHash() {
+  window.history.replaceState(
+    null,
+    '',
+    window.location.pathname + window.location.search,
+  );
+}
+
 describe('StoryTemplate', () => {
   describe('importCode', () => {
     test('includes both side-effect and named import when elementClassName is provided', async () => {
@@ -153,6 +169,61 @@ describe('StoryTemplate', () => {
       await el.updateComplete;
       expect(details?.classList.contains('collapsed')).to.be.true;
       expect(details?.classList.contains('expanded')).to.be.false;
+    });
+  });
+
+  describe('Details in the focused view', () => {
+    afterEach(() => {
+      clearHash();
+    });
+
+    const detailsFor = (el: StoryTemplate) =>
+      el.shadowRoot?.querySelector('#details');
+
+    test('starts expanded when the hash focuses this element', async () => {
+      setHash('#elem-ia-button');
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+
+      expect(detailsFor(el)?.classList.contains('expanded')).to.be.true;
+    });
+
+    test('starts collapsed when the hash focuses a different element', async () => {
+      setHash('#elem-ia-combo-box');
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+
+      expect(detailsFor(el)?.classList.contains('collapsed')).to.be.true;
+    });
+
+    test('starts collapsed for a hash that names no element', async () => {
+      setHash('#some-other-anchor');
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+
+      expect(detailsFor(el)?.classList.contains('collapsed')).to.be.true;
+    });
+
+    test('leaves a section the reader closed alone on later renders', async () => {
+      setHash('#elem-ia-button');
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+      expect(detailsFor(el)?.classList.contains('expanded')).to.be.true;
+
+      const toggleBtn = el.shadowRoot?.querySelector(
+        '.details-toggle',
+      ) as HTMLButtonElement;
+      toggleBtn.click();
+      await el.updateComplete;
+      expect(detailsFor(el)?.classList.contains('collapsed')).to.be.true;
+
+      el.elementClassName = 'IAButton';
+      await el.updateComplete;
+      expect(detailsFor(el)?.classList.contains('collapsed')).to.be.true;
     });
   });
 

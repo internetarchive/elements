@@ -1,4 +1,10 @@
-import { css, html, LitElement, type CSSResultGroup } from 'lit';
+import {
+  css,
+  html,
+  LitElement,
+  type CSSResultGroup,
+  type PropertyValues,
+} from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { when } from 'lit/directives/when.js';
@@ -11,6 +17,8 @@ import type {
   AppliedProps,
   PropInputData,
 } from './story-components/story-prop-settings';
+
+import { tagFromHash } from './element-hash';
 
 import testTube from './test-tube.svg';
 
@@ -40,6 +48,7 @@ export class StoryTemplate extends LitElement {
 
   @property({ type: Boolean }) labs = false;
 
+  /* Whether the Import, Usage & Settings section is expanded */
   @state() private detailsVisible = false;
 
   /* Stringified styles applied for the demo component */
@@ -60,6 +69,17 @@ export class StoryTemplate extends LitElement {
   /* Tracks which copy button was last clicked, for feedback */
   @state() private copiedKey: 'import' | 'usage' | 'styling' | null = null;
   private _copyTimeout?: ReturnType<typeof setTimeout>;
+
+  willUpdate(changedProperties: PropertyValues) {
+    // Start expanded when the demo is showing this element on its own, since
+    // it is then the only thing on the page and nothing is buried under it.
+    // Only on the first read of elementTag, so a later render can't reopen a
+    // section the reader has closed.
+    if (changedProperties.has('elementTag')) {
+      this.detailsVisible =
+        this.elementTag === tagFromHash(window.location.hash);
+    }
+  }
 
   render() {
     return html`
