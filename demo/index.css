@@ -46,6 +46,32 @@ app-root {
   overflow-y: auto;
 }
 
+/* Styled as a button, since it swaps the whole view rather than jumping to an
+   anchor like the element links below it do. */
+#ia-all-link {
+  display: block;
+  margin: 0 1rem 1.5rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fff;
+  color: #213547;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background 0.1s,
+    color 0.1s,
+    border-color 0.1s;
+}
+
+#ia-all-link:hover {
+  background: #f0f0f0;
+  border-color: #767676;
+  color: #213547;
+}
+
 #ia-sidebar h2 {
   font-size: 0.7rem;
   font-weight: 600;
@@ -53,10 +79,14 @@ app-root {
   letter-spacing: 0.08em;
   color: #767676;
   padding: 0 1rem;
-  margin: 0 0 0.5rem;
+  margin: 1.5rem 0 0.5rem;
 }
 
-#ia-sidebar a {
+#ia-sidebar h2:first-of-type {
+  margin-top: 0;
+}
+
+#ia-sidebar .ia-elem-link {
   display: block;
   font-size: 0.82rem;
   font-weight: 400;
@@ -64,21 +94,37 @@ app-root {
   text-decoration: none;
   padding: 0.3rem 1rem;
   border-left: 3px solid transparent;
-  transition: background 0.1s, color 0.1s, border-color 0.1s;
+  transition:
+    background 0.1s,
+    color 0.1s,
+    border-color 0.1s;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-#ia-sidebar a:hover {
+#ia-sidebar .ia-elem-link:hover {
   background: #f0f0f0;
   color: #213547;
 }
 
-#ia-sidebar a.active {
+/* Where the all-elements list happens to be scrolled to. Tinted, so it reads
+   as a position marker rather than as the thing you're looking at. */
+#ia-sidebar .ia-elem-link.in-view {
   color: #194880;
   border-left-color: #194880;
   background: #f0f4f9;
+  font-weight: 600;
+}
+
+/* The view you're actually on, whether that's every element or just one. A
+   filled row means "this is the view" wherever it appears in the sidebar.
+   Last, so it wins the specificity tie against the :hover rules above. */
+#ia-all-link.current,
+#ia-sidebar .ia-elem-link.current {
+  color: #fff;
+  background: #194880;
+  border-color: #194880;
   font-weight: 600;
 }
 
@@ -87,6 +133,10 @@ app-root {
   padding: 0.75rem 1rem;
   padding-bottom: 100vh; /* lets scroll-spy activate on the last element */
   min-width: 0;
+}
+
+#ia-content.ia-focused {
+  padding-bottom: 2rem;
 }
 
 .ia-anchor {
@@ -109,4 +159,10 @@ app-root {
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0.75rem 0 0.25rem;
+}
+
+.ia-story-message {
+  font-size: 0.9rem;
+  color: #767676;
+  margin: 0.5rem 0;
 }
