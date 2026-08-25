@@ -110,7 +110,11 @@ export class IAItemNavSortFilesButton extends LitElement {
           );
 
           /* 10px base (petabox scale); internal sizing is em against it. */
-          font-size: var(--item-navigator-base-font-size, 10px);
+          --item-navigator-base-font-size--: var(
+            --item-navigator-base-font-size,
+            10px
+          );
+          font-size: var(--item-navigator-base-font-size--);
         }
 
         button.sort-by {

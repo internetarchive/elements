@@ -244,7 +244,11 @@ export class IAItemNavSharePanel extends LitElement {
           height: 100%;
           overflow-y: auto;
           /* 10px base (petabox scale); internal sizing is em against it. */
-          font-size: var(--item-navigator-base-font-size, 10px);
+          --item-navigator-base-font-size--: var(
+            --item-navigator-base-font-size,
+            10px
+          );
+          font-size: var(--item-navigator-base-font-size--);
           color: var(--item-navigator-text-color--);
           box-sizing: border-box;
         }
@@ -295,7 +299,7 @@ export class IAItemNavSharePanel extends LitElement {
         .share-option .ia-icon {
           /* Reset to the base so the icon (em) doesn't compound against the
              share-option's enlarged font-size. */
-          font-size: var(--item-navigator-base-font-size, 10px);
+          font-size: var(--item-navigator-base-font-size--);
           width: 2em;
           height: 2em;
         }

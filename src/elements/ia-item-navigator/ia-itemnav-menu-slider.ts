@@ -271,7 +271,11 @@ export class IAItemNavMenuSlider extends LitElement {
           );
 
           /* 10px base (petabox scale); internal sizing is em against it. */
-          font-size: var(--item-navigator-base-font-size, 10px);
+          --item-navigator-base-font-size--: var(
+            --item-navigator-base-font-size,
+            10px
+          );
+          font-size: var(--item-navigator-base-font-size--);
         }
 
         .main {
@@ -336,7 +340,7 @@ export class IAItemNavMenuSlider extends LitElement {
         button.close {
           /* Reset to the base so the header icon (em) doesn't compound
              against .menu's enlarged font-size. */
-          font-size: var(--item-navigator-base-font-size, 10px);
+          font-size: var(--item-navigator-base-font-size--);
           min-width: 38px;
           min-height: 38px;
           display: flex;

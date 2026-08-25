@@ -453,7 +453,11 @@ export class IAItemNavigator
            * navigator self-contained — its scale no longer depends on the
            * consumer's root font-size. Override to rescale everything.
            */
-          font-size: var(--item-navigator-base-font-size, 10px);
+          --item-navigator-base-font-size--: var(
+            --item-navigator-base-font-size,
+            10px
+          );
+          font-size: var(--item-navigator-base-font-size--);
         }
 
         :host,
