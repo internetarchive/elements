@@ -87,6 +87,14 @@ export class IAItemNavigator
 
   @state() openMenuState: 'overlay' | 'shift' = 'shift';
 
+  /**
+   * Set for the render where the drawer opens straight to a panel, so the
+   * panel holds still and rides in. Every other path clears it, rather
+   * than waiting for the drawer's `transitionend` — that never fires when
+   * animations are disabled, which would strand the flag on.
+   */
+  @state() private drawerEntering = false;
+
   @query('#frame') private frame!: HTMLDivElement;
 
   @query('slot[name="header"]') private headerSlot!: HTMLSlotElement;
@@ -247,6 +255,7 @@ export class IAItemNavigator
   }
 
   toggleMenu(forceValue: boolean | undefined = undefined): void {
+    this.drawerEntering = false;
     this.menuOpened = forceValue !== undefined ? forceValue : !this.menuOpened;
     this.moveFocusForDrawer();
   }
@@ -276,6 +285,7 @@ export class IAItemNavigator
   }
 
   setOpenMenu(e: ToggleSidePanelOpenEvent): void {
+    this.drawerEntering = false;
     const { id } = e.detail;
     this.openMenu = id !== this.openMenu ? id : undefined;
   }
@@ -286,6 +296,7 @@ export class IAItemNavigator
    * channel can be reopened afterwards.
    */
   closeSidePanel(): void {
+    this.drawerEntering = false;
     this.openMenu = undefined;
   }
 
@@ -365,6 +376,11 @@ export class IAItemNavigator
 
   /** Menu Shortcuts */
   openShortcut(selectedMenuId: MenuId = ''): void {
+    // Opening straight to a panel is one movement: the drawer carries the
+    // panel in, so the panel must not also slide (see `.drawer-entering`).
+    // Only when the drawer is actually closed — switching shortcuts while it
+    // is already open should still animate the panel across.
+    this.drawerEntering = !this.menuOpened;
     this.openMenu = selectedMenuId;
     this.menuOpened = true;
     // The rail hides itself once the drawer opens, taking the focused
@@ -407,7 +423,8 @@ export class IAItemNavigator
     // When the side menu renders, the minimized rail floats over the left edge;
     // `has-menu` lets the reader reserve its width so the theater isn't covered.
     const railState = this.shouldRenderMenu ? 'has-menu' : '';
-    return `${drawerState} ${fullscreenState} ${railState} ${this.openMenuState}`;
+    const enteringState = this.drawerEntering ? 'drawer-entering' : '';
+    return `${drawerState} ${fullscreenState} ${railState} ${enteringState} ${this.openMenuState}`;
   }
 
   static get styles(): CSSResultGroup {
@@ -661,6 +678,15 @@ export class IAItemNavigator
 
         .open.overlay #reader {
           transition: none;
+        }
+
+        /* Opening straight to a panel is one movement. The panel is nested in
+           #menu, so its own slide would compose with the drawer's transform
+           and send it twice the distance in the same time — arriving late and
+           travelling at double speed. Holding it still lets the drawer carry
+           it in. */
+        .drawer-entering #menu {
+          --item-navigator-panel-transition--: none;
         }
 
         .open #menu {

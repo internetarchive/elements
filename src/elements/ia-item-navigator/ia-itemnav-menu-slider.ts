@@ -375,7 +375,10 @@ export class IAItemNavMenuSlider extends LitElement {
           left: ${menuButtonWidth};
           z-index: 1;
           transform: translateX(calc(${sliderWidth} * -1));
-          transition: transform ${transitionTiming} ease-out;
+          transition: var(
+            --item-navigator-panel-transition--,
+            transform ${transitionTiming} ease-out
+          );
           background: var(--item-navigator-active-button-bg--);
           border-right: 0.2em solid;
           border-color: var(--item-navigator-border-color--);
