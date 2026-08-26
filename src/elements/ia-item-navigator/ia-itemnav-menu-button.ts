@@ -189,7 +189,6 @@ export class IAItemNavMenuButton extends LitElement {
         .menu-item > .icon {
           position: relative;
           display: inline-flex;
-          z-index: 2;
           min-width: 4.2em;
           max-width: 4.2em;
           height: 4.2em;
@@ -210,7 +209,12 @@ export class IAItemNavMenuButton extends LitElement {
           height: var(--item-navigator-icon-size--);
         }
 
+        /* The open entry's icon shares the panel's background and rounds into
+           it, so it has to sit above the panel to read as one shape. The rest
+           stay below: they have no background of their own, so the panel would
+           slide visibly behind them. */
         .menu-item[aria-expanded='true'] .icon {
+          z-index: 2;
           background-color: var(--item-navigator-active-button-bg--);
           border-radius: 1em 0 0 1em;
         }
