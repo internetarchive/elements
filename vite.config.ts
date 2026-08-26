@@ -16,7 +16,13 @@ export default defineConfig({
       enabled: true,
       instances: [{ browser: 'chromium' }],
       headless: true,
-      provider: playwright(),
+      provider: playwright({
+        launchOptions: {
+          // Media elements refuse to play without a user gesture by default,
+          // which no automated test can supply.
+          args: ['--autoplay-policy=no-user-gesture-required'],
+        },
+      }),
     },
     coverage: {
       exclude: ['dist/**/*'],
