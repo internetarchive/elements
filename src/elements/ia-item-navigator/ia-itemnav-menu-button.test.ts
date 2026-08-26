@@ -72,6 +72,25 @@ describe('IAItemNavMenuButton', () => {
     expect(getComputedStyle(icon()).backgroundColor).to.equal('rgb(7, 7, 7)');
   });
 
+  test("only the open entry's icon lifts above the panel", async () => {
+    const el = await fixture<IAItemNavMenuButton>(
+      html`<ia-itemnav-menu-button
+        .icon=${maskedIcon('/glyph.svg')}
+      ></ia-itemnav-menu-button>`,
+    );
+    const icon = () => el.shadowRoot?.querySelector('.icon') as HTMLElement;
+
+    // Closed entries have no background, so a panel sliding past them must
+    // pass in front rather than behind.
+    expect(getComputedStyle(icon()).zIndex).to.equal('auto');
+
+    el.selected = true;
+    await el.updateComplete;
+    // The open entry borrows the panel's background and rounds into it, so it
+    // has to sit above the panel for the two to read as one shape.
+    expect(getComputedStyle(icon()).zIndex).to.equal('2');
+  });
+
   test('a followable link does not intercept the click', async () => {
     const el = await fixture<IAItemNavMenuButton>(
       html`<ia-itemnav-menu-button

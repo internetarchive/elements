@@ -210,6 +210,84 @@ describe('IAItemNavMenuSlider', () => {
     expect(() => el.closePanel()).to.not.throw();
   });
 
+  describe('panel movement', () => {
+    const panelOf = (el: IAItemNavMenuSlider) =>
+      el.shadowRoot?.querySelector('.content') as HTMLElement;
+
+    /**
+     * Whether the panel is covering the menu list or parked off to its left.
+     * Read from the rendered box rather than the transform, so the assertion
+     * survives a change in how the movement is expressed.
+     */
+    const panelCoversMenu = (el: IAItemNavMenuSlider) => {
+      const panel = panelOf(el).getBoundingClientRect();
+      const list = (
+        el.shadowRoot?.querySelector('.menu-list') as HTMLElement
+      ).getBoundingClientRect();
+      return panel.left >= list.left;
+    };
+
+    /** Settles transforms instantly so positions can be read, not awaited. */
+    const withoutAnimation = async (menus: MenuProviderInterface[]) => {
+      const el = await sliderWith(menus);
+      el.style.setProperty('--item-navigator-animation-timing', '0ms');
+      await el.updateComplete;
+      return el;
+    };
+
+    test('the panel slides on the edges between empty and open', async () => {
+      const el = await withoutAnimation([provider('a')]);
+      const panel = panelOf(el);
+
+      expect(panelCoversMenu(el), 'closed panel should be off to the left').to
+        .be.false;
+
+      el.selectedMenu = 'a';
+      await el.updateComplete;
+      expect(panelCoversMenu(el), 'open panel should cover the menu').to.be
+        .true;
+
+      el.selectedMenu = '';
+      await el.updateComplete;
+      expect(panelCoversMenu(el), 'panel should slide back out').to.be.false;
+    });
+
+    test('switching between panels swaps contents without moving', async () => {
+      const el = await withoutAnimation([provider('a'), provider('b')]);
+      const panel = panelOf(el);
+
+      el.selectedMenu = 'a';
+      await el.updateComplete;
+      const settled = panelOf(el).getBoundingClientRect().left;
+      expect(panelCoversMenu(el)).to.be.true;
+
+      el.selectedMenu = 'b';
+      await el.updateComplete;
+
+      // The panel is already in place, so only its contents change — it keeps
+      // the open class and never re-runs the slide.
+      expect(panel.classList.contains('open')).to.be.true;
+      expect(panelOf(el).getBoundingClientRect().left).to.equal(settled);
+      expect(
+        el.shadowRoot?.querySelector('.selected-menu .panel-body')?.textContent,
+      ).to.contain('b body');
+    });
+
+    test('the host can suppress the slide so the panel rides in', async () => {
+      const el = await sliderWith([provider('a')]);
+      const panel = panelOf(el);
+
+      // Default: the panel animates itself.
+      expect(getComputedStyle(panel).transitionDuration).to.not.equal('0s');
+
+      // The navigator hands this down while the drawer is opening, so the
+      // panel holds still and the drawer carries it in.
+      el.style.setProperty('--item-navigator-panel-transition--', 'none');
+      await el.updateComplete;
+      expect(getComputedStyle(panel).transitionDuration).to.equal('0s');
+    });
+  });
+
   test('ignores non-Escape keydowns', async () => {
     const el = await sliderWith([provider('a')]);
     el.selectedMenu = 'a';

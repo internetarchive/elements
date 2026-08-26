@@ -250,6 +250,66 @@ describe('IAItemNavigator', () => {
     expect(el.menuOpened).to.equal(true);
   });
 
+  describe('opening straight to a panel', () => {
+    const navigatorWith = async (menus: string[]) => {
+      const el = await fixture<IAItemNavigator>(
+        html`<ia-item-navigator></ia-item-navigator>`,
+      );
+      el.menuContents = menus.map((id) => provider(id));
+      await el.updateComplete;
+      return el;
+    };
+
+    test('marks the drawer as entering so the panel rides in', async () => {
+      const el = await navigatorWith(['contents']);
+
+      el.openShortcut('contents');
+      await el.updateComplete;
+
+      // The panel is nested in the drawer, so sliding both would compound
+      // their transforms; the marker tells the panel to hold still.
+      expect(el.menuClass).to.contain('drawer-entering');
+    });
+
+    test('leaves the panel free to animate when the drawer is already open', async () => {
+      const el = await navigatorWith(['contents', 'share']);
+      el.openShortcut('contents');
+      await el.updateComplete;
+
+      // A second shortcut with the drawer already open is a panel change, not
+      // a drawer opening, so the panel should slide across as usual.
+      el.openShortcut('share');
+      await el.updateComplete;
+      expect(el.menuClass).to.not.contain('drawer-entering');
+    });
+
+    test.each([
+      [
+        'selecting another channel',
+        (el: IAItemNavigator) =>
+          el.setOpenMenu(
+            new CustomEvent('menuTypeSelected', {
+              detail: { id: 'share' },
+            }) as never,
+          ),
+      ],
+      ['closing the panel', (el: IAItemNavigator) => el.closeSidePanel()],
+      ['closing the drawer', (el: IAItemNavigator) => el.closeMenu()],
+    ])('%s clears the marker', async (_label, act) => {
+      const el = await navigatorWith(['contents', 'share']);
+      el.openShortcut('contents');
+      await el.updateComplete;
+      expect(el.menuClass).to.contain('drawer-entering');
+
+      // Nothing waits on the drawer's transitionend to clear this — a
+      // zero-duration transition never fires one, which would strand the
+      // marker on and suppress the panel's animation for good.
+      act(el);
+      await el.updateComplete;
+      expect(el.menuClass).to.not.contain('drawer-entering');
+    });
+  });
+
   test('closeSidePanel clears the open channel but leaves the drawer open', async () => {
     const el = await fixture<IAItemNavigator>(
       html`<ia-item-navigator></ia-item-navigator>`,
