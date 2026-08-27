@@ -237,7 +237,6 @@ describe('IAItemNavMenuSlider', () => {
 
     test('the panel slides on the edges between empty and open', async () => {
       const el = await withoutAnimation([provider('a')]);
-      const panel = panelOf(el);
 
       expect(panelCoversMenu(el), 'closed panel should be off to the left').to
         .be.false;
