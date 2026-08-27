@@ -150,7 +150,7 @@ const DEMO_PALETTES: StylePalette[] = [
 const EMBED_BASE = 'https://archive.org/embed';
 const DOWNLOAD_BASE = 'https://archive.org/download';
 
-type DemoMediaType = 'image' | 'pdf' | 'video';
+type DemoMediaType = 'image' | 'pdf' | 'video' | 'audio' | 'book';
 
 /** A viewable file backed by a real, iframe-embeddable archive.org item. */
 interface DemoFile extends ViewableFileInfo {
@@ -184,42 +184,32 @@ function demoFile(
 }
 
 /**
- * A small gallery of real, public "cats" items from archive.org — three
- * images, three PDFs and a video. Images and video embed the item viewer;
- * PDFs load the file directly in the browser's native PDF viewer. Selecting
- * one swaps the navigator's slotted theater.
+ * A handful of real, public Dolly Parton items — one per media type, so the
+ * demo shows the navigator hosting whatever a consumer slots into it.
+ * Selecting one swaps the slotted theater. PDFs load the file directly in the
+ * browser's own viewer; everything else embeds the archive.org player.
+ *
+ * The album and the book are lending items, so they embed as samples and
+ * preview pages rather than the whole work — which is what a consumer would
+ * hit in production too.
  */
 const DEMO_FILES: DemoFile[] = [
-  demoFile('0FK9vj7MBL', 'Monmon Japanese Cats Tattoo Designs', 'image', 0),
-  demoFile('Catsintherain', 'Cats in the Rain', 'image', 1),
   demoFile(
-    'WithPriscillaTheCat1987',
-    'With Priscilla the Cat, 1987',
+    'Dolly-Parton-Coat-Of-Many-Colors',
+    'Coat of Many Colors (album cover)',
     'image',
-    2,
+    0,
   ),
+  demoFile('9to-5and-odd-jobs', '9 to 5 and Odd Jobs', 'image', 1),
+  demoFile('musikladen-77', 'Musikladen Concert, 1977', 'video', 2),
   demoFile(
-    'TheBlackCat_339',
-    'The Black Cat',
-    'pdf',
+    'lp_rhinestone-original-soundtrack-record_various-dolly-parton-floyd-parton-kin-v',
+    'Rhinestone: Original Soundtrack Recording',
+    'audio',
     3,
-    'TheBlackCatByEdgarAllanPoe.pdf',
   ),
-  demoFile(
-    'catofbubastestal00hentiala',
-    'The Cat of Bubastes: A Tale of Ancient Egypt',
-    'pdf',
-    4,
-    'catofbubastestal00hentiala.pdf',
-  ),
-  demoFile(
-    'lettersfromcatpu00jackiala',
-    'Letters from a Cat',
-    'pdf',
-    5,
-    'lettersfromcatpu00jackiala.pdf',
-  ),
-  demoFile('PrivateL1947', 'Private Life of a Cat (1947)', 'video', 6),
+  demoFile('isbn_9780590899352', 'Coat of Many Colors', 'book', 4),
+  demoFile('sounds-78-03', 'Sounds, 3/78', 'pdf', 5, 'sounds-78-03.pdf'),
 ];
 
 @customElement('ia-item-navigator-story')
