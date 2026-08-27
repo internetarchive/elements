@@ -352,7 +352,7 @@ export class IAButton extends LitElement {
           border-color: var(--ia-button-custom-border--);
         }
 
-        button.custom:enabled:is(:hover, :focus, :active) {
+        button.custom:enabled:is(:hover, :focus, :active, .active) {
           color: var(--ia-button-custom-active-text-color--);
           background-color: var(--ia-button-custom-active-fill--);
           border-color: var(--ia-button-custom-active-border--);

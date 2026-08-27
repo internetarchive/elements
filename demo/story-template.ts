@@ -1,4 +1,10 @@
-import { css, html, LitElement, type CSSResultGroup } from 'lit';
+import {
+  css,
+  html,
+  LitElement,
+  type CSSResultGroup,
+  type PropertyValues,
+} from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { customElement } from 'lit/decorators/custom-element.js';
 import { when } from 'lit/directives/when.js';
@@ -11,6 +17,8 @@ import type {
   AppliedProps,
   PropInputData,
 } from './story-components/story-prop-settings';
+
+import { tagFromHash } from './element-hash';
 
 import testTube from './test-tube.svg';
 
@@ -40,6 +48,10 @@ export class StoryTemplate extends LitElement {
 
   @property({ type: Boolean }) labs = false;
 
+  /* Whether the demo is showing this element on its own */
+  @state() private focused = false;
+
+  /* Whether the Import, Usage & Settings section is expanded */
   @state() private detailsVisible = false;
 
   /* Stringified styles applied for the demo component */
@@ -60,6 +72,16 @@ export class StoryTemplate extends LitElement {
   /* Tracks which copy button was last clicked, for feedback */
   @state() private copiedKey: 'import' | 'usage' | 'styling' | null = null;
   private _copyTimeout?: ReturnType<typeof setTimeout>;
+
+  willUpdate(changedProperties: PropertyValues) {
+    if (changedProperties.has('elementTag')) {
+      this.focused = this.elementTag === tagFromHash(window.location.hash);
+      // Start expanded when this is the only element on the page, since
+      // nothing is buried under it. Only on the first read of elementTag, so
+      // a later render can't reopen a section the reader has closed.
+      this.detailsVisible = this.focused;
+    }
+  }
 
   render() {
     return html`
@@ -96,7 +118,9 @@ export class StoryTemplate extends LitElement {
           id="details"
           class="${this.detailsVisible ? 'expanded' : 'collapsed'}"
         >
-          <div class="details-inner">${this.detailsTemplate}</div>
+          <div class="details-inner ${this.focused ? 'focused' : ''}">
+            ${this.detailsTemplate}
+          </div>
         </div>
       </div>
     `;
@@ -420,6 +444,13 @@ export class StoryTemplate extends LitElement {
         .details-inner syntax-highlighter {
           display: block;
           --syntax-max-height: 5.5rem;
+        }
+
+        /* One element on the page means nothing else is competing for the
+           height, so let the snippets run their full length rather than
+           scroll inside a short box. */
+        .details-inner.focused syntax-highlighter {
+          --syntax-max-height: none;
         }
 
         .labs-icon {
