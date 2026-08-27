@@ -1,4 +1,4 @@
-import{A as h,d as f,r as c,n as p,t as $,i as x,o as D,b as r,_,f as I}from"./index-Cqcg3msk.js";const k=(t,e,a)=>(a.configurable=!0,a.enumerable=!0,Reflect.decorate&&typeof e!="object"&&Object.defineProperty(t,e,a),a);let z;function P(t){return(e,a)=>k(e,a,{get(){return(this.renderRoot??(z??=document.createDocumentFragment())).querySelectorAll(t)}})}function u(t,e,a){return t?e(t):a?.(t)}const g=t=>t??h,O=f`
+import{A as h,d as f,r as c,n as p,t as $,i as x,o as D,b as r,_ as I,f as _}from"./index-Bxzmo_XG.js";const k=(t,e,a)=>(a.configurable=!0,a.enumerable=!0,Reflect.decorate&&typeof e!="object"&&Object.defineProperty(t,e,a),a);let z;function P(t){return(e,a)=>k(e,a,{get(){return(this.renderRoot??(z??=document.createDocumentFragment())).querySelectorAll(t)}})}function u(t,e,a){return t?e(t):a?.(t)}const g=t=>t??h,O=f`
   pre {
     max-height: var(--syntax-max-height, none);
     overflow-y: auto;
@@ -95,7 +95,7 @@ hue-6-2: #c18401
   }
 `;var E=Object.defineProperty,U=Object.getOwnPropertyDescriptor,w=(t,e,a,o)=>{for(var s=o>1?void 0:o?U(e,a):e,i=t.length-1,n;i>=0;i--)(n=t[i])&&(s=(o?n(e,a,s):n(s))||s);return o&&s&&E(e,a,s),s};let m=class extends x{constructor(){super(...arguments),this.code="",this.language="auto",this.highlightedCode=""}willUpdate(t){(t.has("code")||t.has("language"))&&this.highlightCode()}render(){return r`
       <pre><code class="hljs">${D(this.highlightedCode)}</code></pre>
-    `}async highlightCode(){const e=(await _(()=>import("./index-BBc-AmEf.js"),[],import.meta.url)).default,a=this.code.trim();let o;this.language==="auto"?o=e.highlightAuto(a).value:o=e.highlight(a,{language:this.language}).value,this.highlightedCode=o}static get styles(){return[O]}};w([p({type:String})],m.prototype,"code",2);w([p({type:String})],m.prototype,"language",2);w([c()],m.prototype,"highlightedCode",2);m=w([$("syntax-highlighter")],m);const S=f`
+    `}async highlightCode(){const e=(await I(()=>import("./index-BBc-AmEf.js"),[],import.meta.url)).default,a=this.code.trim();let o;this.language==="auto"?o=e.highlightAuto(a).value:o=e.highlight(a,{language:this.language}).value,this.highlightedCode=o}static get styles(){return[O]}};w([p({type:String})],m.prototype,"code",2);w([p({type:String})],m.prototype,"language",2);w([c()],m.prototype,"highlightedCode",2);m=w([$("syntax-highlighter")],m);const S=f`
   :host {
     /*
     BASE STYLES
@@ -279,7 +279,9 @@ hue-6-2: #c18401
         <td>
           <label for=${e}>${t.label}</label>
         </td>
-        <td class="style-input-cell">
+        <td
+          class="style-input-cell ${t.presetsInline?"presets-inline":""}"
+        >
           <div class="style-input-row">
             <input
               id=${e}
@@ -363,6 +365,16 @@ hue-6-2: #c18401
           align-items: center;
         }
 
+        .style-input-cell.presets-inline {
+          flex-direction: row;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .style-input-cell.presets-inline .style-presets {
+          margin-top: 0;
+        }
+
         .style-readout {
           min-width: 3.5em;
           text-align: right;
@@ -426,7 +438,7 @@ hue-6-2: #c18401
           padding-top: 0.75em;
           font-size: var(--font-size-standard--, 1em);
         }
-      `]}};j([p({type:Object})],v.prototype,"propInputData",2);j([P(".prop-input")],v.prototype,"propInputs",2);v=j([$("story-props-settings")],v);var M=Object.defineProperty,q=Object.getOwnPropertyDescriptor,d=(t,e,a,o)=>{for(var s=o>1?void 0:o?q(e,a):e,i=t.length-1,n;i>=0;i--)(n=t[i])&&(s=(o?n(e,a,s):n(s))||s);return o&&s&&M(e,a,s),s};let l=class extends x{constructor(){super(...arguments),this.elementTag="",this.elementClassName="",this.labs=!1,this.focused=!1,this.detailsVisible=!1,this.shouldShowPropertySettings=!1,this.shouldShowUsageNotes=!1,this.copiedKey=null}willUpdate(t){t.has("elementTag")&&(this.focused=this.elementTag===I(window.location.hash),this.detailsVisible=this.focused)}render(){return r`
+      `]}};j([p({type:Object})],v.prototype,"propInputData",2);j([P(".prop-input")],v.prototype,"propInputs",2);v=j([$("story-props-settings")],v);var M=Object.defineProperty,q=Object.getOwnPropertyDescriptor,d=(t,e,a,o)=>{for(var s=o>1?void 0:o?q(e,a):e,i=t.length-1,n;i>=0;i--)(n=t[i])&&(s=(o?n(e,a,s):n(s))||s);return o&&s&&M(e,a,s),s};let l=class extends x{constructor(){super(...arguments),this.elementTag="",this.elementClassName="",this.labs=!1,this.focused=!1,this.detailsVisible=!1,this.shouldShowPropertySettings=!1,this.shouldShowUsageNotes=!1,this.copiedKey=null}willUpdate(t){t.has("elementTag")&&(this.focused=this.elementTag===_(window.location.hash),this.detailsVisible=this.focused)}render(){return r`
       <div id="container">
         <h2>
           <code>&lt;${this.elementTag}&gt;</code>
