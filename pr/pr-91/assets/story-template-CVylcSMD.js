@@ -1,4 +1,4 @@
-import{A as c,d as f,r as h,n as p,t as v,i as $,o as T,b as r,_ as D,f as _}from"./index-DAg32CvV.js";const I=(t,e,a)=>(a.configurable=!0,a.enumerable=!0,Reflect.decorate&&typeof e!="object"&&Object.defineProperty(t,e,a),a);let k;function P(t){return(e,a)=>I(e,a,{get(){return(this.renderRoot??(k??=document.createDocumentFragment())).querySelectorAll(t)}})}function u(t,e,a){return t?e(t):a?.(t)}const g=t=>t??c,O=f`
+import{A as c,d as y,r as h,n as p,t as $,i as x,o as T,b as r,_ as D,f as _}from"./index-JuWOfuuM.js";const I=(t,e,a)=>(a.configurable=!0,a.enumerable=!0,Reflect.decorate&&typeof e!="object"&&Object.defineProperty(t,e,a),a);let k;function P(t){return(e,a)=>I(e,a,{get(){return(this.renderRoot??(k??=document.createDocumentFragment())).querySelectorAll(t)}})}function u(t,e,a){return t?e(t):a?.(t)}const g=t=>t??c,O=y`
   pre {
     max-height: var(--syntax-max-height, none);
     overflow-y: auto;
@@ -93,9 +93,9 @@ hue-6-2: #c18401
   .hljs-link {
     text-decoration: underline;
   }
-`;var z=Object.defineProperty,U=Object.getOwnPropertyDescriptor,x=(t,e,a,o)=>{for(var s=o>1?void 0:o?U(e,a):e,l=t.length-1,d;l>=0;l--)(d=t[l])&&(s=(o?d(e,a,s):d(s))||s);return o&&s&&z(e,a,s),s};let m=class extends ${constructor(){super(...arguments),this.code="",this.language="auto",this.highlightedCode=""}willUpdate(t){(t.has("code")||t.has("language"))&&this.highlightCode()}render(){return r`
+`;var z=Object.defineProperty,E=Object.getOwnPropertyDescriptor,w=(t,e,a,o)=>{for(var s=o>1?void 0:o?E(e,a):e,l=t.length-1,d;l>=0;l--)(d=t[l])&&(s=(o?d(e,a,s):d(s))||s);return o&&s&&z(e,a,s),s};let m=class extends x{constructor(){super(...arguments),this.code="",this.language="auto",this.highlightedCode=""}willUpdate(t){(t.has("code")||t.has("language"))&&this.highlightCode()}render(){return r`
       <pre><code class="hljs">${T(this.highlightedCode)}</code></pre>
-    `}async highlightCode(){const e=(await D(()=>import("./index-BBc-AmEf.js"),[],import.meta.url)).default,a=this.code.trim();let o;this.language==="auto"?o=e.highlightAuto(a).value:o=e.highlight(a,{language:this.language}).value,this.highlightedCode=o}static get styles(){return[O]}};x([p({type:String})],m.prototype,"code",2);x([p({type:String})],m.prototype,"language",2);x([h()],m.prototype,"highlightedCode",2);m=x([v("syntax-highlighter")],m);const S=f`
+    `}async highlightCode(){const e=(await D(()=>import("./index-BBc-AmEf.js"),[],import.meta.url)).default,a=this.code.trim();let o;this.language==="auto"?o=e.highlightAuto(a).value:o=e.highlight(a,{language:this.language}).value,this.highlightedCode=o}static get styles(){return[O]}};w([p({type:String})],m.prototype,"code",2);w([p({type:String})],m.prototype,"language",2);w([h()],m.prototype,"highlightedCode",2);m=w([$("syntax-highlighter")],m);const S=y`
   :host {
     /*
     BASE STYLES
@@ -259,7 +259,7 @@ hue-6-2: #c18401
     --color-success: var(--ia-theme-color-success, var(--mint-green));
     --color-danger: var(--ia-theme-color-danger, var(--classic-red));
   }
-`,E="data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='UTF-8'?%3e%3csvg%20xmlns='http://www.w3.org/2000/svg'%20xmlns:xlink='http://www.w3.org/1999/xlink'%20width='36pt'%20height='36pt'%20viewBox='0%200%2036%2036'%20version='1.1'%3e%3cg%20id='surface35'%3e%3cpath%20style='%20stroke:none;fill-rule:nonzero;fill:rgb(0%25,0%25,0%25);fill-opacity:1;'%20d='M%2013.5%206.1875%20C%2012.878906%206.1875%2012.375%206.691406%2012.375%207.3125%20C%2012.375%207.933594%2012.878906%208.4375%2013.5%208.4375%20L%2014.0625%208.4375%20L%2014.0625%2013.523438%20C%2014.0625%2014.453125%2013.78125%2015.34375%2013.246094%2016.105469%20L%206.84375%2025.238281%20C%206.140625%2026.238281%206.054688%2027.535156%206.621094%2028.617188%20C%207.183594%2029.703125%208.292969%2030.375%209.515625%2030.375%20L%2026.484375%2030.375%20C%2027.707031%2030.375%2028.816406%2029.703125%2029.378906%2028.617188%20C%2029.941406%2027.535156%2029.859375%2026.238281%2029.15625%2025.238281%20L%2022.753906%2016.105469%20C%2022.21875%2015.34375%2021.9375%2014.453125%2021.9375%2013.523438%20L%2021.9375%208.4375%20L%2022.5%208.4375%20C%2023.121094%208.4375%2023.625%207.933594%2023.625%207.3125%20C%2023.625%206.691406%2023.121094%206.1875%2022.5%206.1875%20Z%20M%2016.3125%208.4375%20L%2019.6875%208.4375%20L%2019.6875%2013.523438%20C%2019.6875%2014.914062%2020.109375%2016.257812%2020.910156%2017.398438%20L%2020.941406%2017.4375%20L%2015.0625%2017.4375%20L%2015.089844%2017.398438%20C%2015.890625%2016.257812%2016.3125%2014.914062%2016.3125%2013.523438%20Z%20M%2015.1875%2020.8125%20C%2015.808594%2020.8125%2016.3125%2021.316406%2016.3125%2021.9375%20C%2016.3125%2022.558594%2015.808594%2023.0625%2015.1875%2023.0625%20C%2014.566406%2023.0625%2014.0625%2022.558594%2014.0625%2021.9375%20C%2014.0625%2021.316406%2014.566406%2020.8125%2015.1875%2020.8125%20Z%20M%2020.53125%2023.0625%20C%2021.617188%2023.0625%2022.5%2023.945312%2022.5%2025.03125%20C%2022.5%2026.117188%2021.617188%2027%2020.53125%2027%20C%2019.445312%2027%2018.5625%2026.117188%2018.5625%2025.03125%20C%2018.5625%2023.945312%2019.445312%2023.0625%2020.53125%2023.0625%20Z%20M%2020.53125%2023.0625%20'/%3e%3c/g%3e%3c/svg%3e";function w(t){return t.toLowerCase().split(" ").join("-")}var L=Object.defineProperty,A=Object.getOwnPropertyDescriptor,C=(t,e,a,o)=>{for(var s=o>1?void 0:o?A(e,a):e,l=t.length-1,d;l>=0;l--)(d=t[l])&&(s=(o?d(e,a,s):d(s))||s);return o&&s&&L(e,a,s),s};let y=class extends ${render(){return this.styleInputData?r`
+`,U="data:image/svg+xml,%3c?xml%20version='1.0'%20encoding='UTF-8'?%3e%3csvg%20xmlns='http://www.w3.org/2000/svg'%20xmlns:xlink='http://www.w3.org/1999/xlink'%20width='36pt'%20height='36pt'%20viewBox='0%200%2036%2036'%20version='1.1'%3e%3cg%20id='surface35'%3e%3cpath%20style='%20stroke:none;fill-rule:nonzero;fill:rgb(0%25,0%25,0%25);fill-opacity:1;'%20d='M%2013.5%206.1875%20C%2012.878906%206.1875%2012.375%206.691406%2012.375%207.3125%20C%2012.375%207.933594%2012.878906%208.4375%2013.5%208.4375%20L%2014.0625%208.4375%20L%2014.0625%2013.523438%20C%2014.0625%2014.453125%2013.78125%2015.34375%2013.246094%2016.105469%20L%206.84375%2025.238281%20C%206.140625%2026.238281%206.054688%2027.535156%206.621094%2028.617188%20C%207.183594%2029.703125%208.292969%2030.375%209.515625%2030.375%20L%2026.484375%2030.375%20C%2027.707031%2030.375%2028.816406%2029.703125%2029.378906%2028.617188%20C%2029.941406%2027.535156%2029.859375%2026.238281%2029.15625%2025.238281%20L%2022.753906%2016.105469%20C%2022.21875%2015.34375%2021.9375%2014.453125%2021.9375%2013.523438%20L%2021.9375%208.4375%20L%2022.5%208.4375%20C%2023.121094%208.4375%2023.625%207.933594%2023.625%207.3125%20C%2023.625%206.691406%2023.121094%206.1875%2022.5%206.1875%20Z%20M%2016.3125%208.4375%20L%2019.6875%208.4375%20L%2019.6875%2013.523438%20C%2019.6875%2014.914062%2020.109375%2016.257812%2020.910156%2017.398438%20L%2020.941406%2017.4375%20L%2015.0625%2017.4375%20L%2015.089844%2017.398438%20C%2015.890625%2016.257812%2016.3125%2014.914062%2016.3125%2013.523438%20Z%20M%2015.1875%2020.8125%20C%2015.808594%2020.8125%2016.3125%2021.316406%2016.3125%2021.9375%20C%2016.3125%2022.558594%2015.808594%2023.0625%2015.1875%2023.0625%20C%2014.566406%2023.0625%2014.0625%2022.558594%2014.0625%2021.9375%20C%2014.0625%2021.316406%2014.566406%2020.8125%2015.1875%2020.8125%20Z%20M%2020.53125%2023.0625%20C%2021.617188%2023.0625%2022.5%2023.945312%2022.5%2025.03125%20C%2022.5%2026.117188%2021.617188%2027%2020.53125%2027%20C%2019.445312%2027%2018.5625%2026.117188%2018.5625%2025.03125%20C%2018.5625%2023.945312%2019.445312%2023.0625%2020.53125%2023.0625%20Z%20M%2020.53125%2023.0625%20'/%3e%3c/g%3e%3c/svg%3e";function f(t){return t.toLowerCase().split(" ").join("-")}var L=Object.defineProperty,A=Object.getOwnPropertyDescriptor,C=(t,e,a,o)=>{for(var s=o>1?void 0:o?A(e,a):e,l=t.length-1,d;l>=0;l--)(d=t[l])&&(s=(o?d(e,a,s):d(s))||s);return o&&s&&L(e,a,s),s};let b=class extends x{render(){return this.styleInputData?r`
       <div class="settings-options">
         <table>
           ${this.styleInputData.settings.map((t,e)=>{const a=this.styleInputData?.settings[e-1],o=!!t.section&&t.section!==a?.section;return r`
@@ -269,29 +269,34 @@ hue-6-2: #c18401
               ${this.renderStyleRow(t)}
             `})}
         </table>
-        <button @click=${this.applyStyles}>Apply</button>
+        <div class="settings-actions">
+          <button @click=${this.applyStyles}>Apply</button>
+          <button @click=${this.resetStyles}>Reset</button>
+        </div>
       </div>
-    `:c}renderStyleRow(t){const e=w(t.label),a=t.inputType==="number"||t.inputType==="range";return r`
+    `:c}renderStyleRow(t){const e=f(t.label),a=t.inputType==="number"||t.inputType==="range";return r`
       <tr>
         <td>
           <label for=${e}>${t.label}</label>
         </td>
         <td class="style-input-cell">
-          <input
-            id=${e}
-            class="style-input"
-            type=${t.inputType??"text"}
-            min=${g(a?t.min:void 0)}
-            max=${g(a?t.max:void 0)}
-            step=${g(a?t.step:void 0)}
-            value=${t.defaultValue}
-            data-variable=${t.cssVariable}
-            data-unit=${g(t.unit)}
-            @input=${t.inputType==="range"?this.updateRangeReadout:void 0}
-          />
-          ${t.inputType==="range"?r`<output class="style-readout" for=${e}
-                >${t.defaultValue}${t.unit??""}</output
-              >`:c}
+          <div class="style-input-row">
+            <input
+              id=${e}
+              class="style-input"
+              type=${t.inputType??"text"}
+              min=${g(a?t.min:void 0)}
+              max=${g(a?t.max:void 0)}
+              step=${g(a?t.step:void 0)}
+              value=${t.defaultValue}
+              data-variable=${t.cssVariable}
+              data-unit=${g(t.unit)}
+              @input=${t.inputType==="range"?this.updateRangeReadout:void 0}
+            />
+            ${t.inputType==="range"?r`<output class="style-readout" for=${e}
+                  >${t.defaultValue}${t.unit??""}</output
+                >`:c}
+          </div>
           ${t.presets?this.renderPresets(e,t.presets):c}
         </td>
       </tr>
@@ -309,8 +314,8 @@ hue-6-2: #c18401
             </button>
           `)}
       </div>
-    `}applyPreset(t,e){const a=this.renderRoot.querySelector(`#${CSS.escape(t)}`);a&&(a.value=`${e.value}`,a.type==="range"&&a.dispatchEvent(new Event("input")),this.applyStyles())}updateRangeReadout(t){const e=t.currentTarget,a=this.renderRoot.querySelector(`output[for="${CSS.escape(e.id)}"]`);if(!a)return;const o=e.dataset.unit??"";a.textContent=`${e.value}${o}`}applyStyles(){const t=[];this.styleInputs?.forEach(e=>{if(!e.dataset.variable||!e.value)return;const a=e.dataset.unit??"";t.push(`${e.dataset.variable}: ${e.value}${a};`)}),this.dispatchEvent(new CustomEvent("stylesApplied",{detail:{styles:t.join(`
- `)}}))}static get styles(){return[S,f`
+    `}applyPreset(t,e){const a=this.renderRoot.querySelector(`#${CSS.escape(t)}`);a&&(a.value=`${e.value}`,a.type==="range"&&a.dispatchEvent(new Event("input")),this.applyStyles())}updateRangeReadout(t){const e=t.currentTarget,a=this.renderRoot.querySelector(`output[for="${CSS.escape(e.id)}"]`);if(!a)return;const o=e.dataset.unit??"";a.textContent=`${e.value}${o}`}resetStyles(){this.styleInputData?.settings.forEach(t=>{const e=this.renderRoot.querySelector(`#${CSS.escape(f(t.label))}`);e&&(e.value=`${t.defaultValue}`,e.type==="range"&&e.dispatchEvent(new Event("input")))}),this.applyStyles()}applyStyles(){const t=[];this.styleInputs?.forEach(e=>{if(!e.dataset.variable||!e.value)return;const a=e.dataset.unit??"";t.push(`${e.dataset.variable}: ${e.value}${a};`)}),this.dispatchEvent(new CustomEvent("stylesApplied",{detail:{styles:t.join(`
+ `)}}))}static get styles(){return[S,y`
         .settings-options {
           background-color: var(--primary-background-color);
           padding: 1em;
@@ -320,6 +325,11 @@ hue-6-2: #c18401
           text-align: left;
           padding-top: 0.75em;
           font-size: var(--font-size-standard--, 1em);
+        }
+
+        .settings-actions {
+          display: flex;
+          gap: 0.5rem;
         }
 
         .style-presets {
@@ -344,6 +354,12 @@ hue-6-2: #c18401
 
         .style-input-cell {
           display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .style-input-row {
+          display: flex;
           align-items: center;
         }
 
@@ -355,14 +371,14 @@ hue-6-2: #c18401
         input[type='range'] {
           margin: 5px;
         }
-      `]}};C([p({type:Object})],y.prototype,"styleInputData",2);C([P(".style-input")],y.prototype,"styleInputs",2);y=C([v("story-styles-settings")],y);const N=(t,e,a)=>{for(const o of e)if(o[0]===t)return(0,o[1])();return a?.()};var V=Object.defineProperty,R=Object.getOwnPropertyDescriptor,j=(t,e,a,o)=>{for(var s=o>1?void 0:o?R(e,a):e,l=t.length-1,d;l>=0;l--)(d=t[l])&&(s=(o?d(e,a,s):d(s))||s);return o&&s&&V(e,a,s),s};let b=class extends ${render(){return this.propInputData?r`
+      `]}};C([p({type:Object})],b.prototype,"styleInputData",2);C([P(".style-input")],b.prototype,"styleInputs",2);b=C([$("story-styles-settings")],b);const N=(t,e,a)=>{for(const o of e)if(o[0]===t)return(0,o[1])();return a?.()};var V=Object.defineProperty,R=Object.getOwnPropertyDescriptor,j=(t,e,a,o)=>{for(var s=o>1?void 0:o?R(e,a):e,l=t.length-1,d;l>=0;l--)(d=t[l])&&(s=(o?d(e,a,s):d(s))||s);return o&&s&&V(e,a,s),s};let v=class extends x{render(){return this.propInputData?r`
       <div class="settings-options">
         <table>
           ${this.propInputData.settings.map(t=>N(t.inputType,[["radio",()=>this.createRadioPropInput(t)]],()=>this.createDefaultPropInput(t))??c)}
         </table>
         <button @click=${this.applyProps}>Apply</button>
       </div>
-    `:c}createDefaultPropInput(t){const e=w(t.label);return r`
+    `:c}createDefaultPropInput(t){const e=f(t.label);return r`
       <tr>
         <td><label for=${e}>${t.label}</label></td>
         <td>
@@ -376,7 +392,7 @@ hue-6-2: #c18401
           />
         </td>
       </tr>
-    `}createRadioPropInput(t){if(t.inputType!=="radio"||!t.radioOptions)return c;const e=w(t.label);return r`
+    `}createRadioPropInput(t){if(t.inputType!=="radio"||!t.radioOptions)return c;const e=f(t.label);return r`
       <tr>
         <td><legend>${t.label}</legend></td>
         <td>
@@ -393,17 +409,17 @@ hue-6-2: #c18401
         </td>
       </tr>
     `}applyProps(){const t=[],e=[];this.propInputs?.forEach(a=>{if(!a.dataset.prop||!a.value||a.type==="radio"&&!a.checked)return;const o=a.dataset.prop;let s=a.value;switch(a.dataset.format){case"number":s=parseInt(s);break;case"boolean":s==="true"&&(s=!0),s==="false"&&(s=!1);break}const l=typeof s=="string"?`'${s}'`:s.toString();t.push(`.${o}=\${${l}}`),e.push({propName:o,value:s})}),this.dispatchEvent(new CustomEvent("propsApplied",{detail:{stringifiedProps:t.join(`
-  `),appliedProps:e}}))}static get styles(){return[S,f`
+  `),appliedProps:e}}))}static get styles(){return[S,y`
         .settings-options {
           background-color: var(--primary-background-color);
           padding: 1em;
         }
-      `]}};j([p({type:Object})],b.prototype,"propInputData",2);j([P(".prop-input")],b.prototype,"propInputs",2);b=j([v("story-props-settings")],b);var K=Object.defineProperty,M=Object.getOwnPropertyDescriptor,n=(t,e,a,o)=>{for(var s=o>1?void 0:o?M(e,a):e,l=t.length-1,d;l>=0;l--)(d=t[l])&&(s=(o?d(e,a,s):d(s))||s);return o&&s&&K(e,a,s),s};let i=class extends ${constructor(){super(...arguments),this.elementTag="",this.elementClassName="",this.labs=!1,this.focused=!1,this.detailsVisible=!1,this.shouldShowPropertySettings=!1,this.shouldShowUsageNotes=!1,this.copiedKey=null}willUpdate(t){t.has("elementTag")&&(this.focused=this.elementTag===_(window.location.hash),this.detailsVisible=this.focused)}render(){return r`
+      `]}};j([p({type:Object})],v.prototype,"propInputData",2);j([P(".prop-input")],v.prototype,"propInputs",2);v=j([$("story-props-settings")],v);var K=Object.defineProperty,M=Object.getOwnPropertyDescriptor,n=(t,e,a,o)=>{for(var s=o>1?void 0:o?M(e,a):e,l=t.length-1,d;l>=0;l--)(d=t[l])&&(s=(o?d(e,a,s):d(s))||s);return o&&s&&K(e,a,s),s};let i=class extends x{constructor(){super(...arguments),this.elementTag="",this.elementClassName="",this.labs=!1,this.focused=!1,this.detailsVisible=!1,this.shouldShowPropertySettings=!1,this.shouldShowUsageNotes=!1,this.copiedKey=null}willUpdate(t){t.has("elementTag")&&(this.focused=this.elementTag===_(window.location.hash),this.detailsVisible=this.focused)}render(){return r`
       <div id="container">
         <h2>
           <code>&lt;${this.elementTag}&gt;</code>
           ${u(this.labs,()=>r`<img
-                src=${E}
+                src=${U}
                 alt="Labs icon"
                 title="Labs"
                 class="labs-icon"
@@ -515,7 +531,7 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
 `:this.defaultSlottedContent;return`<${this.elementTag}${a?`
 `:""}${t}${e}>${o??""}</${this.elementTag}>`}get cssCode(){return this.stringifiedStyles?`${this.elementTag} {
  ${this.stringifiedStyles}
-}`:""}get modulePath(){return this.labs?`@internetarchive/elements/labs/${this.elementTag}/${this.elementTag}`:`@internetarchive/elements/${this.elementTag}/${this.elementTag}`}handleSettingsSlotChange(t){const e=t.target.assignedElements();this.shouldShowPropertySettings=e.length>0}handleUsageNotesSlotChange(t){const e=t.target.assignedElements();this.shouldShowUsageNotes=e.length>0}handleDemoComponentSlotted(t){const e=t.target.assignedElements()[0];e&&(this.slottedDemoComponent=e)}handleStylesApplied(t){const e=t.detail.styles;e&&(this.stringifiedStyles=e)}handlePropsApplied(t){const e=t.detail.stringifiedProps,a=t.detail.appliedProps;!e||!a||(this.stringifiedProps=e,a.forEach(o=>{this.slottedDemoComponent[o.propName]=o.value}))}static get styles(){return[S,f`
+}`:""}get modulePath(){return this.labs?`@internetarchive/elements/labs/${this.elementTag}/${this.elementTag}`:`@internetarchive/elements/${this.elementTag}/${this.elementTag}`}handleSettingsSlotChange(t){const e=t.target.assignedElements();this.shouldShowPropertySettings=e.length>0}handleUsageNotesSlotChange(t){const e=t.target.assignedElements();this.shouldShowUsageNotes=e.length>0}handleDemoComponentSlotted(t){const e=t.target.assignedElements()[0];e&&(this.slottedDemoComponent=e)}handleStylesApplied(t){const e=t.detail.styles;e&&(this.stringifiedStyles=e)}handlePropsApplied(t){const e=t.detail.stringifiedProps,a=t.detail.appliedProps;!e||!a||(this.stringifiedProps=e,a.forEach(o=>{this.slottedDemoComponent[o.propName]=o.value}))}static get styles(){return[S,y`
         #container {
           background: #f0f0f0;
           padding: 0 10px 10px;
@@ -657,4 +673,4 @@ import { ${this.elementClassName} } from '${this.modulePath}';`:`import '${this.
           height: 20px;
           vertical-align: middle;
         }
-      `]}disconnectedCallback(){super.disconnectedCallback(),clearTimeout(this._copyTimeout)}};n([p({type:String})],i.prototype,"elementTag",2);n([p({type:String})],i.prototype,"elementClassName",2);n([p({type:String})],i.prototype,"customExampleUsage",2);n([p({type:String})],i.prototype,"defaultUsageProps",2);n([p({type:String})],i.prototype,"defaultSlottedContent",2);n([p({type:Object})],i.prototype,"styleInputData",2);n([p({type:Object})],i.prototype,"propInputData",2);n([p({type:Boolean})],i.prototype,"labs",2);n([h()],i.prototype,"focused",2);n([h()],i.prototype,"detailsVisible",2);n([h()],i.prototype,"stringifiedStyles",2);n([h()],i.prototype,"stringifiedProps",2);n([h()],i.prototype,"shouldShowPropertySettings",2);n([h()],i.prototype,"shouldShowUsageNotes",2);n([h()],i.prototype,"slottedDemoComponent",2);n([h()],i.prototype,"copiedKey",2);i=n([v("story-template")],i);export{N as a,I as e,u as n,g as o,P as r,S as t};
+      `]}disconnectedCallback(){super.disconnectedCallback(),clearTimeout(this._copyTimeout)}};n([p({type:String})],i.prototype,"elementTag",2);n([p({type:String})],i.prototype,"elementClassName",2);n([p({type:String})],i.prototype,"customExampleUsage",2);n([p({type:String})],i.prototype,"defaultUsageProps",2);n([p({type:String})],i.prototype,"defaultSlottedContent",2);n([p({type:Object})],i.prototype,"styleInputData",2);n([p({type:Object})],i.prototype,"propInputData",2);n([p({type:Boolean})],i.prototype,"labs",2);n([h()],i.prototype,"focused",2);n([h()],i.prototype,"detailsVisible",2);n([h()],i.prototype,"stringifiedStyles",2);n([h()],i.prototype,"stringifiedProps",2);n([h()],i.prototype,"shouldShowPropertySettings",2);n([h()],i.prototype,"shouldShowUsageNotes",2);n([h()],i.prototype,"slottedDemoComponent",2);n([h()],i.prototype,"copiedKey",2);i=n([$("story-template")],i);export{N as a,I as e,u as n,g as o,P as r,S as t};
