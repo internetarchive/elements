@@ -265,7 +265,7 @@ export class IAScrubberBar extends LitElement {
         /*
           Centres the thumb on the track. The thumb is content-box, so its
           border adds 1px above and below the diameter, hence the extra -1px.
-          Works out to the -6px the default sizes have always used.
+          Comes out at -6px for the default track and thumb sizes.
         */
         --scrubber-thumb-top-margin--: var(
           --ia-theme-scrubber-thumb-top-margin,
@@ -299,9 +299,8 @@ export class IAScrubberBar extends LitElement {
 
         /*
           How far off the bottom the track sits. The fill and the section
-          markers both line up against this so they follow the track when its
-          height is themed. Works out to the 7px the default sizes have always
-          used.
+          markers both line up against this, so they follow the track when its
+          height is themed. Comes out at 7px for the default sizes.
         */
         --scrubber-track-offset--: calc(
           (var(--scrubber-bar-height--) - var(--scrubber-track-height--)) / 2 +

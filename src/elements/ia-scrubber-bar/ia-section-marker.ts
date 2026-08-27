@@ -62,11 +62,10 @@ export class IASectionMarker extends LitElement {
         padding-top: 10px;
         opacity: 1;
         /*
-          Hidden in every mode this component currently offers. The arrows have
-          never been shown: upstream set visibility hidden here and only ever
-          animated opacity in the mode rules below, which cannot bring a
-          hidden element back. Kept as-is so the migration doesn't make markers
-          that nobody has seen suddenly appear.
+          The arrows are hidden in every mode. The mode rules below vary only
+          opacity, which cannot reveal a hidden element, so nothing here brings
+          them back. Reveal them by dropping this line, not by touching the
+          mode rules.
         */
         visibility: hidden;
         transition:
