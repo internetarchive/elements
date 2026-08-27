@@ -26,7 +26,7 @@ async function sliderWith(
   menus: MenuProviderInterface[],
 ): Promise<IAItemNavMenuSlider> {
   const el = await fixture<IAItemNavMenuSlider>(
-    html`<ia-itemnav-menu-slider open></ia-itemnav-menu-slider>`,
+    html`<ia-itemnav-menu-slider></ia-itemnav-menu-slider>`,
   );
   el.menus = menus;
   await el.updateComplete;
@@ -46,18 +46,59 @@ describe('IAItemNavMenuSlider', () => {
     expect(el.shadowRoot?.querySelector('button.close')).to.exist;
   });
 
-  test('selecting a menu opens its panel; re-selecting it closes it', async () => {
+  test('reports the selection instead of deciding it', async () => {
     const el = await sliderWith([provider('a'), provider('b')]);
+    const selected = vi.fn();
+    el.addEventListener('menuTypeSelected', selected);
 
-    el.setSelectedMenu(new CustomEvent('x', { detail: { id: 'a' } }));
+    const menuButton = el.shadowRoot?.querySelector('ia-itemnav-menu-button');
+    (
+      menuButton?.shadowRoot?.querySelector('button') as HTMLButtonElement
+    ).click();
     await el.updateComplete;
-    expect(el.selectedMenu).to.equal('a');
-    expect(el.selectedMenuClass).to.equal('open');
 
-    el.setSelectedMenu(new CustomEvent('x', { detail: { id: 'a' } }));
-    await el.updateComplete;
+    // The navigator owns which panel is open, so there is only ever one copy
+    // of that state to keep straight.
+    expect(selected).toHaveBeenCalledOnce();
+    expect(selected.mock.calls[0][0].detail.id).to.equal('a');
     expect(el.selectedMenu).to.equal('');
-    expect(el.selectedMenuClass).to.equal('');
+  });
+
+  test('opens whichever panel the host selects', async () => {
+    const el = await sliderWith([provider('a'), provider('b')]);
+    el.selectedMenu = 'b';
+    await el.updateComplete;
+
+    expect(el.selectedMenuClass).to.equal('open');
+    expect(
+      el.shadowRoot?.querySelector('.selected-menu .panel-body')?.textContent,
+    ).to.contain('b body');
+  });
+
+  test('a closed panel is out of the tab order and the a11y tree', async () => {
+    const el = await sliderWith([provider('a')]);
+    const panel = el.shadowRoot?.querySelector('.content') as HTMLElement;
+
+    expect(panel.hasAttribute('inert'), 'closed panel should be inert').to.be
+      .true;
+
+    el.selectedMenu = 'a';
+    await el.updateComplete;
+    expect(panel.hasAttribute('inert'), 'open panel should be reachable').to.be
+      .false;
+  });
+
+  test('names the panel by its heading', async () => {
+    const el = await sliderWith([provider('a')]);
+    el.selectedMenu = 'a';
+    await el.updateComplete;
+
+    const panel = el.shadowRoot?.querySelector('.content') as HTMLElement;
+    const headingId = panel.getAttribute('aria-labelledby');
+    expect(headingId).to.exist;
+    expect(
+      el.shadowRoot?.querySelector(`#${headingId}`)?.textContent,
+    ).to.contain('a label');
   });
 
   test('renders the selected provider body', async () => {
@@ -69,24 +110,35 @@ describe('IAItemNavMenuSlider', () => {
     expect(body?.textContent).to.contain('b body');
   });
 
-  test('closeMenu emits menuSliderClosed; manuallyHandleClose keeps it open', async () => {
+  test('the drawer close button asks the host to close the drawer', async () => {
     const el = await sliderWith([provider('a')]);
-    el.manuallyHandleClose = true;
-    await el.updateComplete;
-
     const listener = vi.fn();
     el.addEventListener('menuSliderClosed', listener);
 
-    el.closeMenu();
-    expect(listener).toHaveBeenCalledOnce();
-    expect(el.open).to.equal(true); // left for the host to close
+    (
+      el.shadowRoot?.querySelector('.menu > button.close') as HTMLButtonElement
+    ).click();
 
-    el.manuallyHandleClose = false;
-    el.closeMenu();
-    expect(el.open).to.equal(false);
+    expect(listener).toHaveBeenCalledOnce();
   });
 
-  test('closing the sub-panel emits menuPanelClosed and clears the selection, without closing the drawer', async () => {
+  test('the two close buttons are named for what they close', async () => {
+    const el = await sliderWith([provider('a')]);
+    el.selectedMenu = 'a';
+    await el.updateComplete;
+
+    const drawerClose = el.shadowRoot?.querySelector('.menu > button.close');
+    const panelClose = el.shadowRoot?.querySelector(
+      '.content header button.close',
+    );
+
+    expect(drawerClose?.getAttribute('aria-label')).to.equal(
+      'Close navigation',
+    );
+    expect(panelClose?.getAttribute('aria-label')).to.equal('Close a label');
+  });
+
+  test('closing the sub-panel leaves the drawer alone', async () => {
     const el = await sliderWith([provider('a'), provider('b')]);
     el.selectedMenu = 'a';
     await el.updateComplete;
@@ -101,12 +153,9 @@ describe('IAItemNavMenuSlider', () => {
     ) as HTMLButtonElement;
     expect(closeButton).to.exist;
     closeButton.click();
-    await el.updateComplete;
 
-    expect(el.selectedMenu).to.equal('');
     expect(panelClosed).toHaveBeenCalledOnce();
     expect(panelClosed.mock.calls[0][0].detail.id).to.equal('a');
-    // Closing the sub-panel is independent of the drawer's open/close.
     expect(drawerClosed).not.toHaveBeenCalled();
   });
 
@@ -115,39 +164,127 @@ describe('IAItemNavMenuSlider', () => {
     el.selectedMenu = 'a';
     await el.updateComplete;
 
-    const closed = vi.fn();
-    el.addEventListener('menuSliderClosed', closed);
+    const panelClosed = vi.fn();
+    const drawerClosed = vi.fn();
+    el.addEventListener('menuPanelClosed', panelClosed);
+    el.addEventListener('menuSliderClosed', drawerClosed);
     const main = el.shadowRoot?.querySelector('.main') as HTMLElement;
 
-    // First Escape closes the panel, not the drawer.
+    // First Escape reaches for the panel, not the drawer.
     main.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-    await el.updateComplete;
-    expect(el.selectedMenu).to.equal('');
-    expect(closed).not.toHaveBeenCalled();
+    expect(panelClosed).toHaveBeenCalledOnce();
+    expect(drawerClosed).not.toHaveBeenCalled();
 
-    // Second Escape closes the drawer.
-    main.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-    expect(closed).toHaveBeenCalledOnce();
-  });
-
-  test('closePanel skips focus restoration when nothing was selected', async () => {
-    const el = await sliderWith([provider('a')]);
+    // Once the host has cleared the selection, Escape closes the drawer.
     el.selectedMenu = '';
     await el.updateComplete;
-    // menuId is empty → the focus-restore block is skipped, no throw.
-    expect(() => el.closePanel()).to.not.throw();
-    expect(el.selectedMenu).to.equal('');
+    main.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(drawerClosed).toHaveBeenCalledOnce();
   });
 
-  test('closePanel tolerates a previously-selected menu that is no longer present', async () => {
+  test('closing a panel hands focus back to the button that opened it', async () => {
     const el = await sliderWith([provider('a'), provider('b')]);
-    // A selected id that isn't in the current menus → findIndex returns -1.
-    el.selectedMenu = 'ghost';
+    el.selectedMenu = 'b';
     await el.updateComplete;
-    el.closePanel();
+
+    // The host clears the selection in response to menuPanelClosed.
+    el.selectedMenu = '';
     await el.updateComplete;
-    await el.updateComplete; // let the queued focus-restore microtask run
-    expect(el.selectedMenu).to.equal('');
+
+    const buttons = el.shadowRoot?.querySelectorAll('ia-itemnav-menu-button');
+    expect(el.shadowRoot?.activeElement).to.equal(buttons?.[1]);
+  });
+
+  test('opening a panel moves focus into it', async () => {
+    const el = await sliderWith([provider('a')]);
+    el.selectedMenu = 'a';
+    await el.updateComplete;
+
+    expect(el.shadowRoot?.activeElement).to.equal(
+      el.shadowRoot?.querySelector('.content'),
+    );
+  });
+
+  test('closePanel is safe when nothing is selected', async () => {
+    const el = await sliderWith([provider('a')]);
+    expect(() => el.closePanel()).to.not.throw();
+  });
+
+  describe('panel movement', () => {
+    const panelOf = (el: IAItemNavMenuSlider) =>
+      el.shadowRoot?.querySelector('.content') as HTMLElement;
+
+    /**
+     * Whether the panel is covering the menu list or parked off to its left.
+     * Read from the rendered box rather than the transform, so the assertion
+     * survives a change in how the movement is expressed.
+     */
+    const panelCoversMenu = (el: IAItemNavMenuSlider) => {
+      const panel = panelOf(el).getBoundingClientRect();
+      const list = (
+        el.shadowRoot?.querySelector('.menu-list') as HTMLElement
+      ).getBoundingClientRect();
+      return panel.left >= list.left;
+    };
+
+    /** Settles transforms instantly so positions can be read, not awaited. */
+    const withoutAnimation = async (menus: MenuProviderInterface[]) => {
+      const el = await sliderWith(menus);
+      el.style.setProperty('--item-navigator-animation-timing', '0ms');
+      await el.updateComplete;
+      return el;
+    };
+
+    test('the panel slides on the edges between empty and open', async () => {
+      const el = await withoutAnimation([provider('a')]);
+
+      expect(panelCoversMenu(el), 'closed panel should be off to the left').to
+        .be.false;
+
+      el.selectedMenu = 'a';
+      await el.updateComplete;
+      expect(panelCoversMenu(el), 'open panel should cover the menu').to.be
+        .true;
+
+      el.selectedMenu = '';
+      await el.updateComplete;
+      expect(panelCoversMenu(el), 'panel should slide back out').to.be.false;
+    });
+
+    test('switching between panels swaps contents without moving', async () => {
+      const el = await withoutAnimation([provider('a'), provider('b')]);
+      const panel = panelOf(el);
+
+      el.selectedMenu = 'a';
+      await el.updateComplete;
+      const settled = panelOf(el).getBoundingClientRect().left;
+      expect(panelCoversMenu(el)).to.be.true;
+
+      el.selectedMenu = 'b';
+      await el.updateComplete;
+
+      // The panel is already in place, so only its contents change — it keeps
+      // the open class and never re-runs the slide.
+      expect(panel.classList.contains('open')).to.be.true;
+      expect(panelOf(el).getBoundingClientRect().left).to.equal(settled);
+      expect(
+        el.shadowRoot?.querySelector('.selected-menu .panel-body')?.textContent,
+      ).to.contain('b body');
+    });
+
+    test('the host can suppress the slide so the panel rides in', async () => {
+      const el = await sliderWith([provider('a')]);
+      const panel = panelOf(el);
+
+      // Default: the panel animates itself.
+      expect(getComputedStyle(panel).transitionDuration).to.not.equal('0s');
+
+      // The navigator hands this down while the drawer is opening, so the
+      // panel holds still and the drawer carries it in.
+      el.style.setProperty('--item-navigator-panel-transition--', 'none');
+      await el.updateComplete;
+      expect(getComputedStyle(panel).transitionDuration).to.equal('0s');
+    });
   });
 
   test('ignores non-Escape keydowns', async () => {
@@ -190,14 +327,6 @@ describe('IAItemNavMenuSlider', () => {
     const header = el.shadowRoot?.querySelector('.content header');
     expect(header?.classList.contains('with-secondary-action')).to.equal(false);
     expect(header?.querySelector('.custom-action')).to.not.exist;
-  });
-
-  test('animateMenuOpen adds the animate class', async () => {
-    const el = await sliderWith([provider('a')]);
-    el.animateMenuOpen = true;
-    await el.updateComplete;
-    expect(el.sliderDetailsClass).to.contain('animate');
-    expect(el.shadowRoot?.querySelector('.menu.animate')).to.exist;
   });
 
   test('renders menu buttons with details, followable and href wired through', async () => {

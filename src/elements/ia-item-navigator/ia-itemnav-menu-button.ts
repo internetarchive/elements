@@ -6,6 +6,7 @@ import {
   type CSSResultGroup,
 } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import themeStyles from '@src/themes/theme-styles';
 
 /**
@@ -69,11 +70,14 @@ export class IAItemNavMenuButton extends LitElement {
   }
 
   get linkButton(): TemplateResult {
+    // A followable link really does navigate, so it is a link and nothing
+    // more; only the in-place variant is a disclosure.
     return html`
       <a
         href=${this.href}
         class="menu-item"
-        aria-expanded=${this.selected}
+        aria-label=${this.label}
+        aria-expanded=${ifDefined(this.followable ? undefined : this.selected)}
         @click=${this.followable ? undefined : this.onClick}
         >${this.menuItem}</a
       >
@@ -84,6 +88,7 @@ export class IAItemNavMenuButton extends LitElement {
     return html`
       <button
         class="menu-item"
+        aria-label=${this.label}
         aria-expanded=${this.selected}
         @click=${this.onClick}
       >
@@ -121,17 +126,15 @@ export class IAItemNavMenuButton extends LitElement {
             --item-navigator-icon-active-color,
             var(--item-navigator-text-color--)
           );
-          --item-navigator-icon-width--: var(
-            --item-navigator-icon-width,
-            2.4em
-          );
-          --item-navigator-icon-height--: var(
-            --item-navigator-icon-height,
-            2.4em
-          );
+          /* Every glyph is square, so one knob sizes both axes. */
+          --item-navigator-icon-size--: var(--item-navigator-icon-size, 2.4em);
 
           /* 10px base (petabox scale); internal sizing is em against it. */
-          font-size: var(--item-navigator-base-font-size, 10px);
+          --item-navigator-base-font-size--: var(
+            --item-navigator-base-font-size,
+            10px
+          );
+          font-size: var(--item-navigator-base-font-size--);
         }
 
         a {
@@ -186,7 +189,6 @@ export class IAItemNavMenuButton extends LitElement {
         .menu-item > .icon {
           position: relative;
           display: inline-flex;
-          z-index: 2;
           min-width: 4.2em;
           max-width: 4.2em;
           height: 4.2em;
@@ -203,11 +205,16 @@ export class IAItemNavMenuButton extends LitElement {
         /* Size the glyph within the icon box to match the shortcut-rail
            icons, rather than letting the svg fill the whole box. */
         .menu-item > .icon .ia-icon {
-          width: var(--item-navigator-icon-width--);
-          height: var(--item-navigator-icon-height--);
+          width: var(--item-navigator-icon-size--);
+          height: var(--item-navigator-icon-size--);
         }
 
+        /* The open entry's icon shares the panel's background and rounds into
+           it, so it has to sit above the panel to read as one shape. The rest
+           stay below: they have no background of their own, so the panel would
+           slide visibly behind them. */
         .menu-item[aria-expanded='true'] .icon {
+          z-index: 2;
           background-color: var(--item-navigator-active-button-bg--);
           border-radius: 1em 0 0 1em;
         }

@@ -3,6 +3,7 @@ import {
   html,
   LitElement,
   nothing,
+  type PropertyValues,
   TemplateResult,
   type CSSResultGroup,
 } from 'lit';
@@ -10,6 +11,7 @@ import { customElement, property, query } from 'lit/decorators.js';
 import themeStyles from '@src/themes/theme-styles';
 import { collapseSidebarIcon } from './icons';
 import './ia-itemnav-menu-button';
+import type { IAItemNavMenuButton } from './ia-itemnav-menu-button';
 import { MenuProviderInterface } from './interfaces/menu-interfaces';
 
 const sliderEvents = {
@@ -25,95 +27,100 @@ const sliderEvents = {
 export class IAItemNavMenuSlider extends LitElement {
   @property({ type: Array }) menus: MenuProviderInterface[] = [];
 
-  @property({ type: Boolean }) open = false;
-
-  @property({ type: Boolean }) manuallyHandleClose = false;
-
+  /**
+   * Which panel is open. The navigator owns this — the slider only reports
+   * what the user did and renders whatever comes back, so there is one copy
+   * of the state rather than two that have to agree.
+   */
   @property({ type: String }) selectedMenu = '';
 
   @property({ type: Object }) selectedMenuAction:
     | TemplateResult
     | typeof nothing = nothing;
 
-  @property({ type: Boolean }) animateMenuOpen = false;
+  @query('.content') private panel?: HTMLElement;
 
-  @query('.content.open button.close') contentCloseButton!: HTMLElement;
+  @query('.menu-list') private menuList?: HTMLUListElement;
 
-  @query('.menu-list') menuList!: HTMLUListElement;
+  @query('.menu > button.close') private drawerCloseButton?: HTMLElement;
 
-  updated(): void {
+  /** Focus should follow what the user did, not the first render. */
+  private isFirstRender = true;
+
+  protected updated(changed: PropertyValues): void {
     const actionButton = this.selectedMenuDetails?.actionButton || nothing;
-    const actionButtonHasChanged = actionButton !== this.selectedMenuAction;
-    if (actionButtonHasChanged) {
+    if (actionButton !== this.selectedMenuAction) {
       this.selectedMenuAction = actionButton;
     }
-  }
 
-  /**
-   * Event handler, captures state of selected menu
-   */
-  setSelectedMenu({ detail }: CustomEvent): void {
-    const { id } = detail;
-    this.selectedMenu = this.selectedMenu === id ? '' : id;
-    this.selectedMenuAction = this.selectedMenuDetails?.actionButton || nothing;
-    this.updateComplete.then(() => {
-      this.contentCloseButton?.focus();
-    });
-  }
-
-  /**
-   * closes menu drawer
-   */
-  closeMenu(): void {
-    if (!this.manuallyHandleClose) {
-      this.open = false;
+    if (!this.isFirstRender && changed.has('selectedMenu')) {
+      this.moveFocusForSelection(changed.get('selectedMenu') as string);
     }
-    const { closeDrawer } = sliderEvents;
-    const drawerClosed = new CustomEvent(closeDrawer, {
-      detail: this.selectedMenuDetails,
-    });
-    this.dispatchEvent(drawerClosed);
+    this.isFirstRender = false;
   }
 
-  closePanel(): void {
-    const menuId = this.selectedMenu;
-    this.selectedMenu = '';
-    this.selectedMenuAction = nothing;
+  /**
+   * Opening a panel moves focus into it, so it is announced by name; closing
+   * hands focus back to the button that opened it.
+   */
+  private moveFocusForSelection(previousMenu: string): void {
+    if (this.selectedMenu) {
+      this.panel?.focus();
+    } else if (previousMenu) {
+      this.menuButtonFor(previousMenu)?.focus();
+    }
+  }
 
-    // Notify the host so it can clear its own record of the open channel,
-    // keeping the sub-panel's open/close independent of — but consistent
-    // with — the drawer's open/close.
+  private menuButtonFor(menuId: string): IAItemNavMenuButton | undefined {
+    const buttons =
+      this.menuList?.querySelectorAll<IAItemNavMenuButton>(
+        'ia-itemnav-menu-button',
+      ) ?? [];
+    return [...buttons].find((button) => button.buttonId === menuId);
+  }
+
+  /**
+   * Moves focus into the drawer — the open panel if there is one, otherwise
+   * the first thing worth acting on. Exposed so the navigator doesn't have to
+   * reach through this component's shadow DOM to place focus.
+   */
+  focusDrawer(): void {
+    if (this.selectedMenu) {
+      this.panel?.focus();
+      return;
+    }
+    const firstMenuButton = this.menuList?.querySelector<HTMLElement>(
+      'ia-itemnav-menu-button',
+    );
+    (firstMenuButton ?? this.drawerCloseButton)?.focus();
+  }
+
+  /** Asks the navigator to close the whole drawer. */
+  closeMenu(): void {
     this.dispatchEvent(
-      new CustomEvent(sliderEvents.closePanel, {
-        detail: { id: menuId },
+      new CustomEvent(sliderEvents.closeDrawer, {
+        detail: this.selectedMenuDetails,
       }),
     );
-
-    // Return focus to the menu button that was previously selected
-    if (menuId) {
-      this.updateComplete.then(() => {
-        const menuIndex = this.menus.findIndex((menu) => menu.id === menuId);
-        if (menuIndex !== -1) {
-          const menuButton = this.menuList.querySelector(
-            `li:nth-child(${menuIndex + 1}) ia-itemnav-menu-button`,
-          ) as HTMLElement;
-          menuButton?.focus();
-        }
-      });
-    }
   }
 
-  /**
-   * Handle keyboard events, specifically ESC key to close menu details
-   */
+  /** Asks the navigator to close just the open panel. */
+  closePanel(): void {
+    this.dispatchEvent(
+      new CustomEvent(sliderEvents.closePanel, {
+        detail: { id: this.selectedMenu },
+      }),
+    );
+  }
+
+  /** Escape closes the panel first, then the drawer. */
   handleKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      if (this.selectedMenu) {
-        this.closePanel();
-      } else {
-        this.closeMenu();
-      }
+    if (event.key !== 'Escape') return;
+    event.preventDefault();
+    if (this.selectedMenu) {
+      this.closePanel();
+    } else {
+      this.closeMenu();
     }
   }
 
@@ -122,12 +129,6 @@ export class IAItemNavMenuSlider extends LitElement {
   }
 
   /* render */
-
-  get sliderDetailsClass(): string {
-    const animate = this.animateMenuOpen ? 'animate' : '';
-    const state = this.open ? 'open' : '';
-    return `${animate} ${state}`;
-  }
 
   get selectedMenuClass(): string {
     return this.selectedMenu ? 'open' : '';
@@ -138,7 +139,6 @@ export class IAItemNavMenuSlider extends LitElement {
       (menu) => html`
         <li>
           <ia-itemnav-menu-button
-            @menuTypeSelected=${this.setSelectedMenu}
             .icon=${menu.icon}
             .label=${menu.label}
             .menuDetails=${menu.menuDetails || ''}
@@ -162,17 +162,18 @@ export class IAItemNavMenuSlider extends LitElement {
     const actionBlock = hasAction
       ? html`<span class="custom-action">${this.selectedMenuAction}</span>`
       : nothing;
+    const closeLabel = label ? `Close ${label}` : 'Close this panel';
     return html`
       <header class=${headerClass}>
         <div class="details">
-          <h3>${label}</h3>
+          <h3 id="panel-title">${label}</h3>
           <span class="extra-details">${menuDetails}</span>
         </div>
         ${actionBlock}
         <button
           class="close"
-          aria-label="Close this menu"
-          title="Close this menu"
+          aria-label=${closeLabel}
+          title=${closeLabel}
           @click=${this.closePanel}
         >
           ${collapseSidebarIcon}
@@ -185,8 +186,8 @@ export class IAItemNavMenuSlider extends LitElement {
     return html`
       <button
         class="close"
-        aria-label="Close this menu"
-        title="Close this menu"
+        aria-label="Close navigation"
+        title="Close navigation"
         @click=${this.closeMenu}
       >
         ${collapseSidebarIcon}
@@ -196,16 +197,23 @@ export class IAItemNavMenuSlider extends LitElement {
 
   /** @inheritdoc */
   render(): TemplateResult {
+    const panelOpen = !!this.selectedMenu;
     return html`
       <div class="main" @keydown=${this.handleKeyDown}>
-        <div class="menu ${this.sliderDetailsClass}">
+        <div class="menu">
           ${this.closeButton}
-          <ul class="menu-list">
+          <ul class="menu-list" role="list">
             ${this.menuItems}
           </ul>
+          <!-- Closed panels are inert so the tab order and the accessibility
+               tree agree with what is on screen; the slide is a consequence
+               of the class, not something to wait on. -->
           <div
             class="content ${this.selectedMenuClass}"
-            @menuTypeSelected=${this.setSelectedMenu}
+            role="region"
+            aria-labelledby="panel-title"
+            tabindex="-1"
+            ?inert=${!panelOpen}
           >
             ${this.renderMenuHeader}
             <section>
@@ -252,12 +260,9 @@ export class IAItemNavMenuSlider extends LitElement {
             --item-navigator-border-color,
             #4b4b4b
           );
-          --item-navigator-header-icon-width--: var(
-            --item-navigator-header-icon-width,
-            2em
-          );
-          --item-navigator-header-icon-height--: var(
-            --item-navigator-header-icon-height,
+          /* Every glyph is square, so one knob sizes both axes. */
+          --item-navigator-header-icon-size--: var(
+            --item-navigator-header-icon-size,
             2em
           );
           --item-navigator-icon-color--: var(
@@ -266,7 +271,11 @@ export class IAItemNavMenuSlider extends LitElement {
           );
 
           /* 10px base (petabox scale); internal sizing is em against it. */
-          font-size: var(--item-navigator-base-font-size, 10px);
+          --item-navigator-base-font-size--: var(
+            --item-navigator-base-font-size,
+            10px
+          );
+          font-size: var(--item-navigator-base-font-size--);
         }
 
         .main {
@@ -275,10 +284,8 @@ export class IAItemNavMenuSlider extends LitElement {
           height: 100%;
         }
 
-        .animate {
-          transition: transform ${transitionTiming} ease-out;
-        }
-
+        /* The drawer's own slide is owned by the navigator's #menu; this just
+           fills it. */
         .menu {
           position: absolute;
           top: 0;
@@ -290,7 +297,6 @@ export class IAItemNavMenuSlider extends LitElement {
           font-size: 1.4em;
           color: var(--item-navigator-text-color--);
           background: var(--item-navigator-menu-slider-bg--);
-          transform: translateX(calc(${sliderWidth} * -1));
         }
 
         button {
@@ -334,7 +340,7 @@ export class IAItemNavMenuSlider extends LitElement {
         button.close {
           /* Reset to the base so the header icon (em) doesn't compound
              against .menu's enlarged font-size. */
-          font-size: var(--item-navigator-base-font-size, 10px);
+          font-size: var(--item-navigator-base-font-size--);
           min-width: 38px;
           min-height: 38px;
           display: flex;
@@ -345,8 +351,8 @@ export class IAItemNavMenuSlider extends LitElement {
         }
 
         button.close .ia-icon {
-          width: var(--item-navigator-header-icon-width--);
-          height: var(--item-navigator-header-icon-height--);
+          width: var(--item-navigator-header-icon-size--);
+          height: var(--item-navigator-header-icon-size--);
         }
 
         /* Our glyphs are masked spans: the mask supplies the shape, this
@@ -369,7 +375,10 @@ export class IAItemNavMenuSlider extends LitElement {
           left: ${menuButtonWidth};
           z-index: 1;
           transform: translateX(calc(${sliderWidth} * -1));
-          transition: transform ${transitionTiming} ease-out;
+          transition: var(
+            --item-navigator-panel-transition--,
+            transform ${transitionTiming} ease-out
+          );
           background: var(--item-navigator-active-button-bg--);
           border-right: 0.2em solid;
           border-color: var(--item-navigator-border-color--);
@@ -378,8 +387,12 @@ export class IAItemNavMenuSlider extends LitElement {
           flex-direction: column;
         }
 
-        .open {
+        .content.open {
           transform: translateX(0);
+        }
+
+        .content:focus {
+          outline: none;
         }
 
         .menu-list {

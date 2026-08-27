@@ -14,7 +14,6 @@ import themeStyles from '@src/themes/theme-styles';
 
 import { ellipsesIcon } from './icons';
 import './ia-itemnav-menu-slider';
-import './ia-itemnav-loading-view';
 import './ia-itemnav-no-theater-available';
 import type { IAItemNavMenuSlider } from './ia-itemnav-menu-slider';
 
@@ -82,10 +81,28 @@ export class IAItemNavigator
   @property({ attribute: false })
   sharedObserver?: SharedResizeObserverInterface;
 
+  /**
+   * Whether the slotted theater is ready. While false the reader stays
+   * hidden and the frame is empty.
+   *
+   * The navigator used to fill that gap with its own spinner, but a shell
+   * shouldn't decide what loading looks like — and its glyph and fullscreen
+   * caption were branding a consumer couldn't override. An indicator returns
+   * once WEBDEV-8951 moves the shared status indicators into elements, so the
+   * navigator can use that one instead of carrying its own.
+   */
   @property({ type: Boolean, reflect: true, attribute: true }) loaded: boolean =
     false;
 
   @state() openMenuState: 'overlay' | 'shift' = 'shift';
+
+  /**
+   * Set for the render where the drawer opens straight to a panel, so the
+   * panel holds still and rides in. Every other path clears it, rather
+   * than waiting for the drawer's `transitionend` — that never fires when
+   * animations are disabled, which would strand the flag on.
+   */
+  @state() private drawerEntering = false;
 
   @query('#frame') private frame!: HTMLDivElement;
 
@@ -149,22 +166,6 @@ export class IAItemNavigator
   }
   /** End shared observer */
 
-  get loaderTitle(): string {
-    return this.viewportInFullscreen ? 'Internet Archive' : '';
-  }
-
-  get loadingArea(): TemplateResult {
-    return html`
-      <div class="loading-area">
-        <div class="loading-view">
-          <ia-itemnav-loading-view
-            .loaderMessage=${this.loaderTitle}
-          ></ia-itemnav-loading-view>
-        </div>
-      </div>
-    `;
-  }
-
   slotChange(e: Event, type: 'header' | 'main'): void {
     const slottedContent = (
       e.target as HTMLSlotElement
@@ -194,7 +195,6 @@ export class IAItemNavigator
           <div id="reader" class=${displayReaderClass}>
             ${this.renderViewport}
           </div>
-          ${!this.loaded ? this.loadingArea : nothing}
         </div>
       </div>
     `;
@@ -247,28 +247,37 @@ export class IAItemNavigator
   }
 
   toggleMenu(forceValue: boolean | undefined = undefined): void {
+    this.drawerEntering = false;
     this.menuOpened = forceValue !== undefined ? forceValue : !this.menuOpened;
-    if (this.menuOpened) {
-      // Move focus to the <ia-itemnav-menu-slider>
-      this.updateComplete.then(() => {
-        const closeButton = this.menuSlider?.shadowRoot?.querySelector(
-          'button.close',
-        ) as HTMLElement;
-        closeButton?.focus();
-      });
-    } else {
-      // Move focus back to the menu toggle button
-      this.updateComplete.then(() => {
-        this.toggleMenuButton?.focus();
-      });
-    }
+    this.moveFocusForDrawer();
   }
 
+  /**
+   * Opening the drawer moves focus into it; closing hands focus back to the
+   * toggle. Without this, opening from the shortcut rail would leave focus on
+   * a button that is about to be hidden, dropping it to the document.
+   */
+  private moveFocusForDrawer(): void {
+    this.updateComplete.then(() => {
+      if (this.menuOpened) {
+        this.menuSlider?.focusDrawer();
+      } else {
+        this.toggleMenuButton?.focus();
+      }
+    });
+  }
+
+  /**
+   * Closing the drawer also closes whatever panel was open inside it, so the
+   * two can't disagree and a stale panel can't reappear on the next open.
+   */
   closeMenu(): void {
+    this.openMenu = undefined;
     this.toggleMenu(false);
   }
 
   setOpenMenu(e: ToggleSidePanelOpenEvent): void {
+    this.drawerEntering = false;
     const { id } = e.detail;
     this.openMenu = id !== this.openMenu ? id : undefined;
   }
@@ -279,6 +288,7 @@ export class IAItemNavigator
    * channel can be reopened afterwards.
    */
   closeSidePanel(): void {
+    this.drawerEntering = false;
     this.openMenu = undefined;
   }
 
@@ -307,13 +317,15 @@ export class IAItemNavigator
   }
 
   get menuToggleButton(): TemplateResult {
+    const label = this.menuOpened ? 'Close side panel' : 'Open side panel';
     return html`
       <button
         class="toggle-menu"
         @click=${() => this.toggleMenu()}
-        title="Open side panel"
-        aria-label="Open side panel"
-        aria-expanded="false"
+        title=${label}
+        aria-label=${label}
+        aria-expanded=${this.menuOpened}
+        aria-controls="menu"
       >
         ${ellipsesIcon}
       </button>
@@ -326,22 +338,27 @@ export class IAItemNavigator
 
   get renderSideMenu(): TemplateResult {
     return html`
-      <nav>
+      <nav aria-label="Item navigation">
         <div
           class="minimized ${classMap({ hidden: this.menuOpened })}"
           part="minimized-menu"
         >
           ${this.shortcuts} ${this.menuToggleButton}
         </div>
-        <div id="menu" ?inert=${!this.menuOpened}>
+        <!-- Closed drawers are inert, so what is off-screen is also out of
+             the tab order and the accessibility tree. -->
+        <div
+          id="menu"
+          role="group"
+          aria-label="Item navigation menu"
+          ?inert=${!this.menuOpened}
+        >
           <ia-itemnav-menu-slider
             .menus=${this.menuContents}
             .selectedMenu=${this.selectedMenuId}
             @menuTypeSelected=${this.setOpenMenu}
             @menuPanelClosed=${this.closeSidePanel}
             @menuSliderClosed=${this.closeMenu}
-            manuallyHandleClose
-            open
           ></ia-itemnav-menu-slider>
         </div>
       </nav>
@@ -351,8 +368,16 @@ export class IAItemNavigator
 
   /** Menu Shortcuts */
   openShortcut(selectedMenuId: MenuId = ''): void {
+    // Opening straight to a panel is one movement: the drawer carries the
+    // panel in, so the panel must not also slide (see `.drawer-entering`).
+    // Only when the drawer is actually closed — switching shortcuts while it
+    // is already open should still animate the panel across.
+    this.drawerEntering = !this.menuOpened;
     this.openMenu = selectedMenuId;
     this.menuOpened = true;
+    // The rail hides itself once the drawer opens, taking the focused
+    // shortcut with it, so focus has to be placed deliberately.
+    this.moveFocusForDrawer();
   }
 
   get shortcuts(): TemplateResult {
@@ -362,18 +387,22 @@ export class IAItemNavigator
       }
 
       return html`
-        <button
-          class="shortcut ${id}"
-          @click=${() => this.openShortcut(id)}
-          title=${label}
-          aria-label=${label}
-          aria-expanded="false"
-        >
-          ${icon}
-        </button>
+        <li>
+          <button
+            class="shortcut ${id}"
+            @click=${() => this.openShortcut(id)}
+            title=${label}
+            aria-label=${label}
+            aria-expanded=${this.menuOpened && this.openMenu === id}
+          >
+            ${icon}
+          </button>
+        </li>
       `;
     });
-    return html`<div class="shortcuts">${shortcuts}</div>`;
+    return html`<ul class="shortcuts" role="list">
+      ${shortcuts}
+    </ul>`;
   }
   /** End Menu Shortcuts */
 
@@ -386,7 +415,8 @@ export class IAItemNavigator
     // When the side menu renders, the minimized rail floats over the left edge;
     // `has-menu` lets the reader reserve its width so the theater isn't covered.
     const railState = this.shouldRenderMenu ? 'has-menu' : '';
-    return `${drawerState} ${fullscreenState} ${railState} ${this.openMenuState}`;
+    const enteringState = this.drawerEntering ? 'drawer-entering' : '';
+    return `${drawerState} ${fullscreenState} ${railState} ${enteringState} ${this.openMenuState}`;
   }
 
   static get styles(): CSSResultGroup {
@@ -395,8 +425,7 @@ export class IAItemNavigator
     const transitionEffect = css`transform ${transitionTiming} ease-out`;
     const menuMargin = css`var(--item-navigator-menu-margin--)`;
     const theaterBg = css`var(--item-navigator-theater-bg-color--)`;
-    const iconWidth = css`var(--item-navigator-icon-width--)`;
-    const iconHeight = css`var(--item-navigator-icon-height--)`;
+    const iconSize = css`var(--item-navigator-icon-size--)`;
 
     return [
       themeStyles,
@@ -418,14 +447,8 @@ export class IAItemNavigator
             --item-navigator-theater-bg-color,
             #000
           );
-          --item-navigator-icon-width--: var(
-            --item-navigator-icon-width,
-            2.4em
-          );
-          --item-navigator-icon-height--: var(
-            --item-navigator-icon-height,
-            2.4em
-          );
+          /* Every glyph is square, so one knob sizes both axes. */
+          --item-navigator-icon-size--: var(--item-navigator-icon-size, 2.4em);
           /* Icons follow the adjustable text color by default. */
           --item-navigator-icon-color--: var(
             --item-navigator-icon-color,
@@ -439,7 +462,11 @@ export class IAItemNavigator
            * navigator self-contained — its scale no longer depends on the
            * consumer's root font-size. Override to rescale everything.
            */
-          font-size: var(--item-navigator-base-font-size, 10px);
+          --item-navigator-base-font-size--: var(
+            --item-navigator-base-font-size,
+            10px
+          );
+          font-size: var(--item-navigator-base-font-size--);
         }
 
         :host,
@@ -451,9 +478,7 @@ export class IAItemNavigator
         }
 
         :host,
-        #frame,
-        .loading-area,
-        .loading-view {
+        #frame {
           min-height: inherit;
           height: inherit;
         }
@@ -490,22 +515,6 @@ export class IAItemNavigator
            */
           height: auto;
           min-height: 0;
-        }
-
-        .loading-view {
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .loading-area {
-          width: 100%;
-        }
-
-        ia-itemnav-loading-view {
-          display: block;
-          width: 100%;
         }
 
         .hidden {
@@ -560,16 +569,25 @@ export class IAItemNavigator
 
         nav .minimized button.toggle-menu > * {
           border: 2px solid var(--item-navigator-icon-color--);
-          border-radius: ${iconWidth};
-          width: ${iconWidth};
-          height: ${iconHeight};
+          border-radius: ${iconSize};
+          width: ${iconSize};
+          height: ${iconSize};
           margin: auto;
+        }
+
+        /* The rail is a list for assistive tech; strip the list chrome so it
+           still reads as a row of icons. */
+        .shortcuts,
+        .shortcuts li {
+          list-style: none;
+          padding: 0;
+          margin: 0;
         }
 
         .toggle-menu .ia-icon,
         .shortcuts .ia-icon {
-          width: ${iconWidth};
-          height: ${iconHeight};
+          width: ${iconSize};
+          height: ${iconSize};
         }
 
         /* Our glyphs are masked spans: the mask supplies the shape, this
@@ -634,6 +652,15 @@ export class IAItemNavigator
 
         .open.overlay #reader {
           transition: none;
+        }
+
+        /* Opening straight to a panel is one movement. The panel is nested in
+           #menu, so its own slide would compose with the drawer's transform
+           and send it twice the distance in the same time — arriving late and
+           travelling at double speed. Holding it still lets the drawer carry
+           it in. */
+        .drawer-entering #menu {
+          --item-navigator-panel-transition--: none;
         }
 
         .open #menu {
