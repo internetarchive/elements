@@ -12,6 +12,8 @@ npm i -S @internetarchive/elements
 
 ## Usage
 
+Import each element you use by its own path. There's no package-root import, so you only pull in what you actually need.
+
 ```typescript
 import "@internetarchive/elements/ia-button/ia-button";
 
@@ -141,7 +143,7 @@ src
     - ia-foobar.test.ts // the element's tests
     - ia-foobar-story.ts // an element that demos your element
 ```
-Export your component in `src/index.ts`
+There's no barrel file to update. Consumers import your component by its own path, ie `@internetarchive/elements/ia-foobar/ia-foobar`.
 
 ### Story
 To demo your component, we have a component catalog that you can add your demo to. Create a component in your component directory. Name it `COMPONENT-NAME-story.ts`, ie `ia-button-story.ts`.
