@@ -14,7 +14,6 @@ import themeStyles from '@src/themes/theme-styles';
 
 import { ellipsesIcon } from './icons';
 import './ia-itemnav-menu-slider';
-import './ia-itemnav-loading-view';
 import './ia-itemnav-no-theater-available';
 import type { IAItemNavMenuSlider } from './ia-itemnav-menu-slider';
 
@@ -82,6 +81,16 @@ export class IAItemNavigator
   @property({ attribute: false })
   sharedObserver?: SharedResizeObserverInterface;
 
+  /**
+   * Whether the slotted theater is ready. While false the reader stays
+   * hidden and the frame is empty.
+   *
+   * The navigator used to fill that gap with its own spinner, but a shell
+   * shouldn't decide what loading looks like — and its glyph and fullscreen
+   * caption were branding a consumer couldn't override. An indicator returns
+   * once WEBDEV-8951 moves the shared status indicators into elements, so the
+   * navigator can use that one instead of carrying its own.
+   */
   @property({ type: Boolean, reflect: true, attribute: true }) loaded: boolean =
     false;
 
@@ -157,22 +166,6 @@ export class IAItemNavigator
   }
   /** End shared observer */
 
-  get loaderTitle(): string {
-    return this.viewportInFullscreen ? 'Internet Archive' : '';
-  }
-
-  get loadingArea(): TemplateResult {
-    return html`
-      <div class="loading-area">
-        <div class="loading-view">
-          <ia-itemnav-loading-view
-            .loaderMessage=${this.loaderTitle}
-          ></ia-itemnav-loading-view>
-        </div>
-      </div>
-    `;
-  }
-
   slotChange(e: Event, type: 'header' | 'main'): void {
     const slottedContent = (
       e.target as HTMLSlotElement
@@ -202,7 +195,6 @@ export class IAItemNavigator
           <div id="reader" class=${displayReaderClass}>
             ${this.renderViewport}
           </div>
-          ${!this.loaded ? this.loadingArea : nothing}
         </div>
       </div>
     `;
@@ -486,9 +478,7 @@ export class IAItemNavigator
         }
 
         :host,
-        #frame,
-        .loading-area,
-        .loading-view {
+        #frame {
           min-height: inherit;
           height: inherit;
         }
@@ -525,22 +515,6 @@ export class IAItemNavigator
            */
           height: auto;
           min-height: 0;
-        }
-
-        .loading-view {
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .loading-area {
-          width: 100%;
-        }
-
-        ia-itemnav-loading-view {
-          display: block;
-          width: 100%;
         }
 
         .hidden {

@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
 import './ia-item-navigator';
-import './ia-itemnav-loading-view';
 import './ia-itemnav-menu-slider';
 import './ia-itemnav-menu-button';
 import './ia-itemnav-no-theater-available';
@@ -17,7 +16,6 @@ import './menus/ia-itemnav-sort-files-button';
  * than degrading.
  */
 const NAMESPACED_ELEMENTS = [
-  'ia-itemnav-loading-view',
   'ia-itemnav-menu-slider',
   'ia-itemnav-menu-button',
   'ia-itemnav-no-theater-available',

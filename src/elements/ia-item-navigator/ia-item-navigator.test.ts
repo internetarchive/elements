@@ -59,20 +59,6 @@ describe('IAItemNavigator', () => {
     expect(el.baseHost).to.equal('archive.org');
   });
 
-  test('shows the loading spinner until loaded, then hides it', async () => {
-    const el = await fixture<IAItemNavigator>(
-      html`<ia-item-navigator></ia-item-navigator>`,
-    );
-
-    expect(el.shadowRoot?.querySelector('ia-itemnav-loading-view')).to.exist;
-
-    el.loaded = true;
-    await el.updateComplete;
-
-    expect(el.shadowRoot?.querySelector('ia-itemnav-loading-view')).to.not
-      .exist;
-  });
-
   test('renders no side menu when there are no providers', async () => {
     const el = await fixture<IAItemNavigator>(
       html`<ia-item-navigator></ia-item-navigator>`,
@@ -408,15 +394,6 @@ describe('IAItemNavigator', () => {
 
     expect(listener).toHaveBeenCalledOnce();
     expect(listener.mock.calls[0][0].detail.type).to.equal('main');
-  });
-
-  test('shows the fullscreen loader title while loading in fullscreen', async () => {
-    const el = await fixture<IAItemNavigator>(
-      html`<ia-item-navigator></ia-item-navigator>`,
-    );
-    expect(el.loaderTitle).to.equal('');
-    el.viewportInFullscreen = true;
-    expect(el.loaderTitle).to.equal('Internet Archive');
   });
 
   test('registers with, updates, and detaches from the shared resize observer', async () => {
