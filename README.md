@@ -87,9 +87,15 @@ Add to Jest config:
 
 ## Development
 
+Requires Node 24+ and pnpm 11+. `engine-strict=true` in `.npmrc` makes an older
+Node fail the install instead of warning, but nothing hard-blocks `npm install`:
+npm ignores `engines.pnpm`, and there's deliberately no preinstall guard since it
+would run for consumers too. Use pnpm. `packageManager` and the committed
+`pnpm-lock.yaml` are what point you at it.
+
 ```zsh
-npm i
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 ## Versioning and Publishing
@@ -97,10 +103,10 @@ npm run dev
 ### Prerelease Version
 
 1. Create prerelease version on your branch:
-   1. `npm version prerelease --preid=<some_prefix>`
+   1. `pnpm version prerelease --preid=<some_prefix>`
    2. If you use JIRA, recommend using the ticket number, ie `--preid=webdev-1234`
    3. This will also create a `git` tag
-2. Push the tag that was created in the `npm version` step
+2. Push the tag that was created in the `pnpm version` step
 3. Publish prerelease to npm:
    1. Go to the [Element release page](https://github.com/internetarchive/elements/releases)
    2. Tap `Draft a new release` button
@@ -113,7 +119,7 @@ npm run dev
 
 1. Use [Semantic Versioning](https://semver.org) to determine release number
 2. On the `main` branch:
-   1. Run `npm version [major | minor | patch]`
+   1. Run `pnpm version [major | minor | patch]`
    2. `git push && git push --tags`
 3. Publish release to npm:
    1. Go to the [Element release page](https://github.com/internetarchive/elements/releases)

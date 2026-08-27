@@ -12,26 +12,27 @@ jobs:
 
     steps:
     - uses: actions/checkout@v6
+    - uses: pnpm/action-setup@v4
     - uses: actions/setup-node@v6
       with:
         node-version: 24
-        cache: npm
+        cache: pnpm
 
     - name: Install dependencies
-      run: npm ci
+      run: pnpm install --frozen-lockfile
 
     - name: Cache Playwright browsers
       uses: actions/cache@v4
       with:
         path: ~/.cache/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+        key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
 
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps chromium
+      run: pnpm exec playwright install --with-deps chromium
       timeout-minutes: 6
 
     - name: Run tests
-      run: npm run test
+      run: pnpm run test
 
     - uses: codecov/codecov-action@v5
       with:

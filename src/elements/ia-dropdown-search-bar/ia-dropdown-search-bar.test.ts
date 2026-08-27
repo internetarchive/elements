@@ -178,6 +178,35 @@ describe('IA Dropdown Search Bar', () => {
     });
   });
 
+  describe('dropdown z-index behavior', () => {
+    // Ensure that we pass an explicit --dropdownListZIndex value to the inner
+    // dropdown component, rather than relying on a CSS-wide keyword that old
+    // Safari may not support correctly in this context.
+    test('provides a concrete default z-index to the inner dropdown', async () => {
+      const dropdown = el.shadowRoot?.querySelector(
+        '#category-dropdown',
+      ) as HTMLElement;
+
+      const listZIndex = getComputedStyle(dropdown)
+        .getPropertyValue('--dropdownListZIndex')
+        .trim();
+      expect(listZIndex).to.equal('2');
+    });
+
+    test('passes a consumer-provided --dropdown-z-index to the inner dropdown', async () => {
+      el.style.setProperty('--dropdown-z-index', '30');
+
+      const dropdown = el.shadowRoot?.querySelector(
+        '#category-dropdown',
+      ) as HTMLElement;
+
+      const listZIndex = getComputedStyle(dropdown)
+        .getPropertyValue('--dropdownListZIndex')
+        .trim();
+      expect(listZIndex).to.equal('30');
+    });
+  });
+
   describe('search submission behavior', () => {
     test('emits searchRequested with query and category on submit', async () => {
       el.query = 'foo';

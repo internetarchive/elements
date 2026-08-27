@@ -22,10 +22,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: npm
+          cache: pnpm
 
       - name: Set up Git
         run: |
@@ -34,8 +35,8 @@ jobs:
 
       - name: Install and Build
         run: |
-          npm install
-          npm run ghpages:build
+          pnpm install --frozen-lockfile
+          pnpm run ghpages:build
 
       # Reference: https://github.com/rossjrw/pr-preview-action
       - name: Deploy preview
