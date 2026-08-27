@@ -3,8 +3,9 @@ name: App CI
 on:
   push:
     branches: [ main ]
+  # No branches filter here on purpose: it matches the PR's base branch, so
+  # filtering on main would skip any PR stacked on another PR's branch.
   pull_request:
-    branches: [ main ]
 
 jobs:
   build:
