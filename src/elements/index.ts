@@ -5,5 +5,8 @@ export * from './ia-combo-box/ia-combo-box';
 export * from './ia-dropdown-search-bar/ia-dropdown-search-bar';
 export * from './ia-playback-controls/ia-playback-controls';
 export * from './ia-playback-controls/models';
+export * from './ia-scrubber-bar/ia-scrubber-bar';
+export * from './ia-scrubber-bar/ia-section-marker';
+export * from './ia-scrubber-bar/models';
 export * from './ia-waveform-progress/ia-waveform-progress';
 export * from './ia-waveform-progress/models';
