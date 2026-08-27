@@ -86,6 +86,10 @@ export class AppRoot extends LitElement {
     window.addEventListener('hashchange', this._onHashChange, {
       signal: this._abortController.signal,
     });
+    // updated() owns the scroll spy, and disconnecting tore it down. An
+    // unchanged hash resolves to the same StoryEntry object, so the assignment
+    // above requests no update on its own, which would leave the spy dead.
+    this.requestUpdate();
   }
 
   disconnectedCallback() {
