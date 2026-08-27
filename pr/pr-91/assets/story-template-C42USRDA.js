@@ -1,4 +1,4 @@
-import{A as c,d as y,r as h,n as p,t as $,i as x,o as T,b as r,_ as D,f as _}from"./index-JuWOfuuM.js";const I=(t,e,a)=>(a.configurable=!0,a.enumerable=!0,Reflect.decorate&&typeof e!="object"&&Object.defineProperty(t,e,a),a);let k;function P(t){return(e,a)=>I(e,a,{get(){return(this.renderRoot??(k??=document.createDocumentFragment())).querySelectorAll(t)}})}function u(t,e,a){return t?e(t):a?.(t)}const g=t=>t??c,O=y`
+import{A as c,d as y,r as h,n as p,t as $,i as x,o as T,b as r,_ as D,f as _}from"./index-4KwqtJL5.js";const I=(t,e,a)=>(a.configurable=!0,a.enumerable=!0,Reflect.decorate&&typeof e!="object"&&Object.defineProperty(t,e,a),a);let k;function P(t){return(e,a)=>I(e,a,{get(){return(this.renderRoot??(k??=document.createDocumentFragment())).querySelectorAll(t)}})}function u(t,e,a){return t?e(t):a?.(t)}const g=t=>t??c,O=y`
   pre {
     max-height: var(--syntax-max-height, none);
     overflow-y: auto;
@@ -315,7 +315,7 @@ hue-6-2: #c18401
           `)}
       </div>
     `}applyPreset(t,e){const a=this.renderRoot.querySelector(`#${CSS.escape(t)}`);a&&(a.value=`${e.value}`,a.type==="range"&&a.dispatchEvent(new Event("input")),this.applyStyles())}updateRangeReadout(t){const e=t.currentTarget,a=this.renderRoot.querySelector(`output[for="${CSS.escape(e.id)}"]`);if(!a)return;const o=e.dataset.unit??"";a.textContent=`${e.value}${o}`}resetStyles(){this.styleInputData?.settings.forEach(t=>{const e=this.renderRoot.querySelector(`#${CSS.escape(f(t.label))}`);e&&(e.value=`${t.defaultValue}`,e.type==="range"&&e.dispatchEvent(new Event("input")))}),this.applyStyles()}applyStyles(){const t=[];this.styleInputs?.forEach(e=>{if(!e.dataset.variable||!e.value)return;const a=e.dataset.unit??"";t.push(`${e.dataset.variable}: ${e.value}${a};`)}),this.dispatchEvent(new CustomEvent("stylesApplied",{detail:{styles:t.join(`
- `)}}))}static get styles(){return[S,y`
+ `)},bubbles:!0,composed:!0}))}static get styles(){return[S,y`
         .settings-options {
           background-color: var(--primary-background-color);
           padding: 1em;
