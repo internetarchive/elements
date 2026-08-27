@@ -2,7 +2,6 @@ import {
   css,
   html,
   LitElement,
-  PropertyValues,
   TemplateResult,
   nothing,
   type CSSResultGroup,
@@ -29,10 +28,6 @@ import {
   MenuShortcutInterface,
   MenuId,
 } from './interfaces/menu-interfaces';
-import {
-  SharedResizeObserverInterface,
-  SharedResizeObserverResizeHandlerInterface,
-} from './interfaces/service-interfaces';
 
 /**
  * A fullscreen-capable frame that hosts an Archive.org item's theater. The
@@ -45,10 +40,7 @@ import {
  * consumer via `menuContents`.
  */
 @customElement('ia-item-navigator')
-export class IAItemNavigator
-  extends LitElement
-  implements SharedResizeObserverResizeHandlerInterface
-{
+export class IAItemNavigator extends LitElement {
   /** archive.org item identifier. */
   @property({ type: String }) identifier?: string;
 
@@ -69,9 +61,6 @@ export class IAItemNavigator
 
   @property({ type: String, reflect: true }) openMenu?: MenuId;
 
-  @property({ attribute: false })
-  sharedObserver?: SharedResizeObserverInterface;
-
   /**
    * Whether the slotted theater is ready. While false the reader stays
    * hidden and the frame is empty.
@@ -85,8 +74,6 @@ export class IAItemNavigator
   @property({ type: Boolean, reflect: true, attribute: true }) loaded: boolean =
     false;
 
-  @state() openMenuState: 'overlay' | 'shift' = 'shift';
-
   /**
    * Set for the render where the drawer opens straight to a panel, so the
    * panel holds still and rides in. Every other path clears it, rather
@@ -95,67 +82,9 @@ export class IAItemNavigator
    */
   @state() private drawerEntering = false;
 
-  @query('#frame') private frame!: HTMLDivElement;
-
-  @query('slot[name="header"]') private headerSlot!: HTMLSlotElement;
-
   @query('ia-itemnav-menu-slider') private menuSlider!: IAItemNavMenuSlider;
 
   @query('button.toggle-menu') private toggleMenuButton!: HTMLButtonElement;
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback();
-    this.removeResizeObserver();
-  }
-
-  updated(changed: PropertyValues): void {
-    if (changed.has('sharedObserver')) {
-      const oldObserver = changed.get(
-        'sharedObserver',
-      ) as SharedResizeObserverInterface;
-      oldObserver?.removeObserver(this.resizeObserverConfig);
-      this.setResizeObserver();
-    }
-  }
-
-  /** Shared observer */
-  handleResize(entry: ResizeObserverEntry): void {
-    const { width } = entry.contentRect;
-    if (width <= 600) {
-      this.openMenuState = 'overlay';
-      return;
-    }
-    this.openMenuState = 'shift';
-  }
-
-  private setResizeObserver(): void {
-    this.sharedObserver?.addObserver(this.resizeObserverConfig);
-    this.sharedObserver?.addObserver({
-      target: this.headerSlot,
-      handler: {
-        handleResize: ({ contentRect }) => {
-          if (contentRect.height) {
-            this.requestUpdate();
-          }
-        },
-      },
-    });
-  }
-
-  private removeResizeObserver(): void {
-    this.sharedObserver?.removeObserver(this.resizeObserverConfig);
-  }
-
-  get resizeObserverConfig(): {
-    handler: SharedResizeObserverResizeHandlerInterface;
-    target: Element;
-  } {
-    return {
-      handler: this,
-      target: this.frame,
-    };
-  }
-  /** End shared observer */
 
   slotChange(e: Event, type: 'header' | 'main'): void {
     const slottedContent = (
@@ -172,13 +101,10 @@ export class IAItemNavigator
 
   render(): TemplateResult {
     const displayReaderClass = this.loaded ? '' : 'hidden';
-    const headerHeight =
-      (this.headerSlot?.assignedNodes()[0] as HTMLElement)?.offsetHeight || 0;
     return html`
       <div id="frame" class=${this.menuClass}>
         <slot
           name="header"
-          style=${`height: ${headerHeight}px`}
           @slotchange=${(e: Event) => this.slotChange(e, 'header')}
         ></slot>
         <div class="menu-and-reader">
@@ -407,7 +333,7 @@ export class IAItemNavigator
     // `has-menu` lets the reader reserve its width so the theater isn't covered.
     const railState = this.shouldRenderMenu ? 'has-menu' : '';
     const enteringState = this.drawerEntering ? 'drawer-entering' : '';
-    return `${drawerState} ${fullscreenState} ${railState} ${enteringState} ${this.openMenuState}`;
+    return `${drawerState} ${fullscreenState} ${railState} ${enteringState}`;
   }
 
   static get styles(): CSSResultGroup {
@@ -489,6 +415,16 @@ export class IAItemNavigator
           color-scheme: dark;
           display: flex;
           flex-direction: column;
+          /*
+           * The overlay/shift breakpoint keys off the navigator's own width,
+           * not the viewport's, so the frame is the query container. This
+           * replaces a host-injected resize observer that set the class from
+           * JS: layout drives it now, so there is nothing to inject, register
+           * or tear down. The inline-size type contains width only, leaving the
+           * flex column's height behaviour alone.
+           */
+          container-type: inline-size;
+          container-name: navframe;
         }
 
         #frame.fullscreen {
@@ -641,10 +577,6 @@ export class IAItemNavigator
           padding-left: ${menuMargin};
         }
 
-        .open.overlay #reader {
-          transition: none;
-        }
-
         /* Opening straight to a panel is one movement. The panel is nested in
            #menu, so its own slide would compose with the drawer's transform
            and send it twice the distance in the same time — arriving late and
@@ -660,9 +592,23 @@ export class IAItemNavigator
           transition: ${transitionEffect};
         }
 
-        .open.shift #reader {
+        /* Shift: the drawer pushes the theater aside. */
+        .open #reader {
           width: calc(100% - ${subnavWidth});
           margin-left: ${subnavWidth};
+        }
+
+        /*
+         * Overlay: too narrow to give the drawer its own column, so it covers
+         * a full-width theater. The transition is dropped here so the theater
+         * tracks resizes instantly instead of easing behind them.
+         */
+        @container navframe (max-width: 600px) {
+          .open #reader {
+            width: 100%;
+            margin-left: 0;
+            transition: none;
+          }
         }
       `,
     ];

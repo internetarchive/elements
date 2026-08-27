@@ -10,23 +10,6 @@ import type {
   MenuProviderInterface,
   MenuShortcutInterface,
 } from './interfaces/menu-interfaces';
-import type {
-  SharedResizeObserverConfig,
-  SharedResizeObserverInterface,
-} from './interfaces/service-interfaces';
-
-/** Records the target/handler pairs the navigator registers. */
-class MockResizeObserver implements SharedResizeObserverInterface {
-  added: SharedResizeObserverConfig[] = [];
-  removed: SharedResizeObserverConfig[] = [];
-  addObserver(config: SharedResizeObserverConfig): void {
-    this.added.push(config);
-  }
-  removeObserver(config: SharedResizeObserverConfig): void {
-    this.removed.push(config);
-  }
-}
-
 /** Builds a minimal, well-typed menu provider for tests. */
 function provider(
   id: string,
@@ -55,7 +38,6 @@ describe('IAItemNavigator', () => {
     expect(el.viewAvailable).to.equal(true);
     expect(el.loaded).to.equal(false);
     expect(el.menuOpened).to.equal(false);
-    expect(el.openMenuState).to.equal('shift');
     expect(el.baseHost).to.equal('archive.org');
   });
 
@@ -200,16 +182,62 @@ describe('IAItemNavigator', () => {
     expect(el.viewportInFullscreen).to.equal(null);
   });
 
-  test('handleResize switches between overlay and shift at 600px', async () => {
+  test('gives the drawer its own column above 600px and overlays below it', async () => {
+    // A container query drives this, so it has to be measured in real layout
+    // rather than by poking a method. Animation off so the computed values are
+    // the settled ones, not a frame mid-transition.
     const el = await fixture<IAItemNavigator>(
-      html`<ia-item-navigator></ia-item-navigator>`,
+      html`<ia-item-navigator
+        style="display: block; width: 900px; --item-navigator-animation-timing: 0ms;"
+        .menuContents=${[provider('files')]}
+      ></ia-item-navigator>`,
     );
+    el.menuOpened = true;
+    await el.updateComplete;
 
-    el.handleResize({ contentRect: { width: 500 } } as ResizeObserverEntry);
-    expect(el.openMenuState).to.equal('overlay');
+    const reader = el.shadowRoot?.querySelector('#reader') as HTMLElement;
 
-    el.handleResize({ contentRect: { width: 900 } } as ResizeObserverEntry);
-    expect(el.openMenuState).to.equal('shift');
+    // Wide: the reader is inset by the drawer's width, so they sit side by side.
+    reader.getBoundingClientRect();
+    expect(getComputedStyle(reader).marginLeft).to.equal('320px');
+
+    // Narrow: no room for a column, so the drawer covers a full-width reader.
+    el.style.width = '400px';
+    reader.getBoundingClientRect();
+    expect(getComputedStyle(reader).marginLeft).to.equal('0px');
+
+    // And back, to show the query tracks the frame rather than latching.
+    el.style.width = '900px';
+    reader.getBoundingClientRect();
+    expect(getComputedStyle(reader).marginLeft).to.equal('320px');
+  });
+
+  test('the breakpoint follows the component width, not the viewport', async () => {
+    // Two navigators in one document share a viewport, so any difference
+    // between them can only come from their own widths — which is what a
+    // container query buys over a media query.
+    const wide = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator
+        style="display: block; width: 900px; --item-navigator-animation-timing: 0ms;"
+        .menuContents=${[provider('files')]}
+      ></ia-item-navigator>`,
+    );
+    const narrow = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator
+        style="display: block; width: 380px; --item-navigator-animation-timing: 0ms;"
+        .menuContents=${[provider('files')]}
+      ></ia-item-navigator>`,
+    );
+    wide.menuOpened = true;
+    narrow.menuOpened = true;
+    await Promise.all([wide.updateComplete, narrow.updateComplete]);
+
+    const readerOf = (el: IAItemNavigator) =>
+      el.shadowRoot?.querySelector('#reader') as HTMLElement;
+
+    readerOf(wide).getBoundingClientRect();
+    expect(getComputedStyle(readerOf(wide)).marginLeft).to.equal('320px');
+    expect(getComputedStyle(readerOf(narrow)).marginLeft).to.equal('0px');
   });
 
   test('setOpenMenu toggles the selected panel on repeat selection', async () => {
@@ -384,40 +412,54 @@ describe('IAItemNavigator', () => {
     expect(listener.mock.calls[0][0].detail.type).to.equal('main');
   });
 
-  test('registers with, updates, and detaches from the shared resize observer', async () => {
+  test('the header slot tracks its content, margins included', async () => {
+    // The navigator used to measure the slotted header and write the height
+    // back as an inline style. `offsetHeight` excludes margins, so a header
+    // with vertical margins was under-sized and its bottom margin overlapped
+    // the reader. The slot sizes itself now, so the margin is part of the box.
     const el = await fixture<IAItemNavigator>(
-      html`<ia-item-navigator></ia-item-navigator>`,
+      html`<ia-item-navigator loaded>
+        <div slot="header">
+          <div style="height: 15px; margin: 12px 0">header</div>
+        </div>
+        <div slot="main">theater</div>
+      </ia-item-navigator>`,
     );
-    const observer = new MockResizeObserver();
-    el.sharedObserver = observer;
     await el.updateComplete;
 
-    // Registers both the frame and the header slot.
-    expect(observer.added.length).to.equal(2);
-    const headerReg = observer.added.find(
-      (c) => c.target === el.shadowRoot?.querySelector('slot[name="header"]'),
+    const slot = el.shadowRoot?.querySelector(
+      'slot[name="header"]',
+    ) as HTMLElement;
+    const reader = el.shadowRoot?.querySelector('#reader') as HTMLElement;
+
+    // 15px of content plus 12px top and bottom margin.
+    expect(Math.round(slot.getBoundingClientRect().height)).to.equal(39);
+
+    // Nothing carries an imposed height any more.
+    expect(slot.getAttribute('style')).to.equal(null);
+
+    // And the header no longer bleeds into the theater below it.
+    const headerBottom = slot.getBoundingClientRect().bottom;
+    expect(headerBottom).to.be.at.most(reader.getBoundingClientRect().top);
+  });
+
+  test('the header slot follows a header that changes height', async () => {
+    const el = await fixture<IAItemNavigator>(
+      html`<ia-item-navigator>
+        <div slot="header"><div id="hdr" style="height: 20px">header</div></div>
+      </ia-item-navigator>`,
     );
-    expect(headerReg).to.exist;
-
-    // The header handler requests an update only when it has a measured height.
-    const spy = vi.spyOn(el, 'requestUpdate');
-    headerReg?.handler.handleResize({
-      contentRect: { height: 40 },
-    } as ResizeObserverEntry);
-    headerReg?.handler.handleResize({
-      contentRect: { height: 0 },
-    } as ResizeObserverEntry);
-    expect(spy).toHaveBeenCalledTimes(1);
-
-    // Swapping observers detaches from the previous one.
-    const next = new MockResizeObserver();
-    el.sharedObserver = next;
     await el.updateComplete;
-    expect(observer.removed.length).to.be.greaterThan(0);
 
-    // Disconnecting detaches from the observer.
-    el.remove();
-    expect(next.removed.length).to.be.greaterThan(0);
+    const slot = el.shadowRoot?.querySelector(
+      'slot[name="header"]',
+    ) as HTMLElement;
+    expect(Math.round(slot.getBoundingClientRect().height)).to.equal(20);
+
+    // No observer, no re-render — the slot is sized by its content.
+    const inner = el.querySelector('#hdr') as HTMLElement;
+    inner.style.height = '60px';
+    expect(Math.round(slot.getBoundingClientRect().height)).to.equal(60);
   });
 
   test('setMenuContents and setMenuShortcuts copy the incoming arrays', async () => {

@@ -15,40 +15,10 @@ import type {
 } from './interfaces/menu-interfaces';
 import type { FileSortOption, ViewableFileInfo } from './menus/models';
 import type {
-  SharedResizeObserverConfig,
-  SharedResizeObserverInterface,
-} from './interfaces/service-interfaces';
-import type {
   StyleInputData,
   StylePalette,
 } from '@demo/story-components/story-styles-settings';
 import '@demo/story-template';
-
-/**
- * A tiny adapter that satisfies the navigator's `SharedResizeObserverInterface`
- * using a single native `ResizeObserver`, so the demo can show the responsive
- * overlay/shift behavior without depending on
- * `@internetarchive/shared-resize-observer`.
- */
-class DemoResizeObserver implements SharedResizeObserverInterface {
-  private handlers = new Map<Element, SharedResizeObserverConfig>();
-
-  private observer = new ResizeObserver((entries) => {
-    for (const entry of entries) {
-      this.handlers.get(entry.target)?.handler.handleResize(entry);
-    }
-  });
-
-  addObserver(config: SharedResizeObserverConfig): void {
-    this.handlers.set(config.target, config);
-    this.observer.observe(config.target);
-  }
-
-  removeObserver(config: SharedResizeObserverConfig): void {
-    this.handlers.delete(config.target);
-    this.observer.unobserve(config.target);
-  }
-}
 
 /** A generic list-ish glyph for the "About" demo menu entry. */
 const demoIcon = maskedIcon(listIconUrl);
@@ -223,8 +193,6 @@ export class IAItemNavigatorStory extends LitElement {
   @state() private fullscreen = false;
 
   @state() private animationsOn = true;
-
-  @state() private sharedObserver = new DemoResizeObserver();
 
   @state() private sortOrderBy: FileSortOption = 'default';
 
@@ -476,7 +444,6 @@ export class IAItemNavigatorStory extends LitElement {
               identifier=${this.demoIdentifier}
               .menuContents=${this.menuContents}
               .menuShortcuts=${this.menuShortcuts}
-              .sharedObserver=${this.sharedObserver}
               .viewportInFullscreen=${this.fullscreen || null}
               ?loaded=${this.loaded}
               ?viewAvailable=${this.viewAvailable}
@@ -587,7 +554,6 @@ export class IAItemNavigatorStory extends LitElement {
   identifier="\${this.identifier}"
   .menuContents=\${this.menuProviders}
   .menuShortcuts=\${this.menuShortcuts}
-  .sharedObserver=\${this.sharedObserver}
   ?loaded=\${this.loaded}
 >
   <div slot="header">…your header…</div>
