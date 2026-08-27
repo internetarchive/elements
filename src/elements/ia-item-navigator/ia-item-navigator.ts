@@ -9,7 +9,6 @@ import {
 } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { MetadataResponse } from '@internetarchive/metadata-service';
 import themeStyles from '@src/themes/theme-styles';
 
 import { ellipsesIcon } from './icons';
@@ -50,16 +49,8 @@ export class IAItemNavigator
   extends LitElement
   implements SharedResizeObserverResizeHandlerInterface
 {
-  @property({
-    type: Object,
-    converter: (value: string | MetadataResponse | null): MetadataResponse => {
-      if (value && typeof value === 'string') {
-        return new MetadataResponse(JSON.parse(atob(value)));
-      }
-      return value as MetadataResponse;
-    },
-  })
-  item?: MetadataResponse;
+  /** archive.org item identifier. */
+  @property({ type: String }) identifier?: string;
 
   @property({ type: Boolean, reflect: true }) viewAvailable: boolean = true;
 
@@ -202,7 +193,7 @@ export class IAItemNavigator
 
   get noTheaterView(): TemplateResult {
     return html`<ia-itemnav-no-theater-available
-      .identifier=${this.item?.metadata?.identifier}
+      .identifier=${this.identifier}
       @loadingStateUpdated=${this.loadingStateUpdated}
     ></ia-itemnav-no-theater-available>`;
   }

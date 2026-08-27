@@ -269,20 +269,14 @@ export class IAItemNavigatorStory extends LitElement {
     if (file) this.selectedSubPrefix = file.file_subprefix;
   }
 
-  private get demoItem() {
-    // The navigator only reads `item?.metadata?.identifier`, so a plain object
-    // stands in for a full MetadataResponse — reflecting the selected item.
-    return {
-      metadata: {
-        identifier: this.selectedFile.identifier,
-        title: this.selectedFile.title,
-      },
-    } as never;
+  /** The archive.org identifier of whichever demo file is selected. */
+  private get demoIdentifier(): string {
+    return this.selectedFile.identifier;
   }
 
   private get menuContents(): MenuProviderInterface[] {
     const shared = {
-      item: this.demoItem,
+      identifier: this.demoIdentifier,
       baseHost: 'archive.org',
       subPrefix: '',
     };
@@ -479,7 +473,7 @@ export class IAItemNavigatorStory extends LitElement {
               style=${this.animationsOn
                 ? nothing
                 : '--item-navigator-animation-timing: 0ms'}
-              .item=${this.demoItem}
+              identifier=${this.demoIdentifier}
               .menuContents=${this.menuContents}
               .menuShortcuts=${this.menuShortcuts}
               .sharedObserver=${this.sharedObserver}
@@ -590,7 +584,7 @@ export class IAItemNavigatorStory extends LitElement {
   private get exampleUsage(): string {
     return `<ia-item-navigator
   baseHost="archive.org"
-  .item=\${this.itemMetadata}
+  identifier="\${this.identifier}"
   .menuContents=\${this.menuProviders}
   .menuShortcuts=\${this.menuShortcuts}
   .sharedObserver=\${this.sharedObserver}

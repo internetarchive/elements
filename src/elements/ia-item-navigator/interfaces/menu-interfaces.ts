@@ -1,5 +1,4 @@
 import { TemplateResult } from 'lit';
-import { MetadataResponse } from '@internetarchive/metadata-service';
 
 export type MenuId = string;
 export interface MenuShortcutInterface {
@@ -17,7 +16,8 @@ export interface MenuDetailsInterface extends MenuShortcutInterface {
 }
 
 export interface MenuProviderInterface extends MenuDetailsInterface {
-  item: MetadataResponse;
+  /** archive.org item identifier. */
+  identifier: string;
   baseHost: string;
   subPrefix: string;
   updated?: unknown;

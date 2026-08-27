@@ -14,7 +14,7 @@ function provider(
     id,
     label: `${id} label`,
     icon: html`<span class="test-icon">${id}</span>`,
-    item: { metadata: { identifier: 'test-item' } } as never,
+    identifier: 'test-item',
     baseHost: 'archive.org',
     subPrefix: '',
     component: html`<div class="panel-body">${id} body</div>`,

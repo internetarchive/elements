@@ -36,7 +36,7 @@ function provider(
     id,
     label: `${id} label`,
     icon: html`<span class="test-icon">${id}</span>`,
-    item: { metadata: { identifier: 'test-item' } } as never,
+    identifier: 'test-item',
     baseHost: 'archive.org',
     subPrefix: '',
     component: html`<div class="panel-body">${id} body</div>`,
@@ -139,9 +139,7 @@ describe('IAItemNavigator', () => {
 
   test('shows the no-theater placeholder when the view is unavailable', async () => {
     const el = await fixture<IAItemNavigator>(
-      html`<ia-item-navigator
-        .item=${{ metadata: { identifier: 'abc123' } } as never}
-      ></ia-item-navigator>`,
+      html`<ia-item-navigator identifier="abc123"></ia-item-navigator>`,
     );
     el.viewAvailable = false;
     await el.updateComplete;
@@ -352,23 +350,13 @@ describe('IAItemNavigator', () => {
     expect(el.menuOpened).to.equal(true);
   });
 
-  test('decodes a base64-encoded item attribute into a MetadataResponse', async () => {
-    const encoded = btoa(
-      JSON.stringify({ metadata: { identifier: 'encoded-item' } }),
-    );
+  test('takes the identifier straight from the attribute', async () => {
+    // A plain string needs no converter, which is why the attribute and the
+    // property agree without one.
     const el = await fixture<IAItemNavigator>(
-      html`<ia-item-navigator item=${encoded}></ia-item-navigator>`,
+      html`<ia-item-navigator identifier="an-item"></ia-item-navigator>`,
     );
-    expect(el.item?.metadata?.identifier).to.equal('encoded-item');
-  });
-
-  test('passes a non-string item attribute value through unchanged', async () => {
-    // An empty attribute is not a base64 string, so the converter returns it
-    // as-is rather than decoding.
-    const el = await fixture<IAItemNavigator>(
-      html`<ia-item-navigator item=""></ia-item-navigator>`,
-    );
-    expect(el.item?.metadata?.identifier).to.equal(undefined);
+    expect(el.identifier).to.equal('an-item');
   });
 
   test('loadingStateUpdated defaults a missing loaded flag to false', async () => {

@@ -14,9 +14,6 @@ importers:
       '@internetarchive/ia-dropdown':
         specifier: ^2.2.0
         version: 2.2.0
-      '@internetarchive/metadata-service':
-        specifier: ^1.0.6
-        version: 1.1.0
       '@lit/localize':
         specifier: ^0.12.2
         version: 0.12.2
@@ -361,29 +358,14 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@internetarchive/field-parsers@0.1.4':
-    resolution: {integrity: sha512-J5nhMsIU91eXnfoApa6SE0PffPbwK1Cd3YTLX/HjgayzMbXVkQvfebfVKSaoPmzHRRttbtY3Sg9FjviCwBq6qg==}
-
-  '@internetarchive/field-parsers@1.2.0':
-    resolution: {integrity: sha512-qldfCN0w5QDeKzZG80h54hxQ9oyQ10uulazMy451846BHeklqTb3sNLzqyUWzSiqr/vopvQlCHITaGrPtkUlrw==}
-
   '@internetarchive/ia-clearable-text-input@1.1.1':
     resolution: {integrity: sha512-l3Z6gKfSRURvicHlAjL3V+q/yESYSev34fswfG7ESIiWuF7UuWDKjlLOyY3gFch8eAfqS5AQ6KurRw5JWGD4RA==}
 
   '@internetarchive/ia-dropdown@2.2.0':
     resolution: {integrity: sha512-h1vF1qLmjbPcRVkYz3kv1HzNHhucaM+IorVzvUejgYhIYRxrBjCswpOpMXeoR16UE4pyDVc/mtkKq/QFaVinRw==}
 
-  '@internetarchive/iaux-item-metadata@1.5.0':
-    resolution: {integrity: sha512-p1wK181a2qrHsSaL+yc6WG3JNbNlD+8g3wFKIIKzbT9ipfmsYnqjOlc8JlQT5OcXXMq4EYYCw21Agi//n9gaTw==}
-
   '@internetarchive/icon-close@1.4.1':
     resolution: {integrity: sha512-nN1rGfScGssGFpfEew4azsrsMyUJtkDWqUDlckJi31PtyQnbZqUmZ07UO3Aw+wZIo3cU1MHxb5VxDy3Rmr8QGA==}
-
-  '@internetarchive/metadata-service@1.1.0':
-    resolution: {integrity: sha512-H0LMymCBigtMlPJumbjjd4H3llwqqVFW4nUPhh6kMg9FsO0qRXKm5w8iz6e/fcukz3eM8jWb+UDzG7moEX+vag==}
-
-  '@internetarchive/result-type@0.0.1':
-    resolution: {integrity: sha512-sWahff5oP1xAK1CwAu1/5GTG2RXsdx/sQKn4SSOWH0r0vU2QoX9kAom/jSXeBsmgK0IjTc+9Ty9407SMORi+nQ==}
 
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
@@ -2326,9 +2308,6 @@ packages:
     resolution: {integrity: sha512-phPGCwqr2+Qo0fwniCE8e4pKnGu/yFb5nD5Y8bf0EEeiI5GklnACYA9GFy/DrAeRrKHXvHn+1SUsOWgJp6RO+g==}
     engines: {node: '>= 0.4'}
 
-  typescript-memoize@1.1.1:
-    resolution: {integrity: sha512-GQ90TcKpIH4XxYTI2F98yEQYZgjNMOGPpOgdjIBhaLaWji5HPWlRnZ4AeA1hfBxtY7bCGDJsqDDHk/KaHOl5bA==}
-
   typescript@5.2.2:
     resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
     engines: {node: '>=14.17'}
@@ -2697,10 +2676,6 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@internetarchive/field-parsers@0.1.4': {}
-
-  '@internetarchive/field-parsers@1.2.0': {}
-
   '@internetarchive/ia-clearable-text-input@1.1.1':
     dependencies:
       '@internetarchive/icon-close': 1.4.1
@@ -2710,23 +2685,9 @@ snapshots:
     dependencies:
       lit: 2.8.0
 
-  '@internetarchive/iaux-item-metadata@1.5.0':
-    dependencies:
-      '@internetarchive/field-parsers': 1.2.0
-      typescript-memoize: 1.1.1
-
   '@internetarchive/icon-close@1.4.1':
     dependencies:
       lit: 3.3.3
-
-  '@internetarchive/metadata-service@1.1.0':
-    dependencies:
-      '@internetarchive/field-parsers': 0.1.4
-      '@internetarchive/iaux-item-metadata': 1.5.0
-      '@internetarchive/result-type': 0.0.1
-      typescript-memoize: 1.1.1
-
-  '@internetarchive/result-type@0.0.1': {}
 
   '@jridgewell/resolve-uri@3.1.2': {}
 
@@ -4948,8 +4909,6 @@ snapshots:
       is-typed-array: 1.1.15
       possible-typed-array-names: 1.1.0
       reflect.getprototypeof: 1.0.10
-
-  typescript-memoize@1.1.1: {}
 
   typescript@5.2.2: {}
 
