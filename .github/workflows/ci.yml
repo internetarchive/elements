@@ -3,8 +3,10 @@ name: App CI
 on:
   push:
     branches: [ main ]
+  # Deliberately unfiltered. A branch filter here matches the PR's base, not
+  # its head, so filtering on main skips every PR in a stack, where each one
+  # is based on the PR below it rather than on main.
   pull_request:
-    branches: [ main ]
 
 jobs:
   lint:
