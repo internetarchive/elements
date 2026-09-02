@@ -84,7 +84,8 @@ describe('StoryTemplate', () => {
       `);
 
       // Only import + usage highlighters; styling section is absent when cssCode is empty
-      const highlighters = el.shadowRoot?.querySelectorAll('syntax-highlighter');
+      const highlighters =
+        el.shadowRoot?.querySelectorAll('syntax-highlighter');
       expect(highlighters?.length).to.equal(2);
     });
 
@@ -96,13 +97,12 @@ describe('StoryTemplate', () => {
       (el as any).stringifiedStyles = 'color: red;';
       await el.updateComplete;
 
-      const highlighters = el.shadowRoot?.querySelectorAll('syntax-highlighter');
+      const highlighters =
+        el.shadowRoot?.querySelectorAll('syntax-highlighter');
       expect(highlighters?.length).to.equal(3);
 
       const stylingHighlighter = highlighters?.[2] as any;
-      expect(stylingHighlighter.code).to.equal(
-        'ia-button {\n color: red;\n}',
-      );
+      expect(stylingHighlighter.code).to.equal('ia-button {\n color: red;\n}');
     });
 
     test('has no trailing whitespace on any line', async () => {
@@ -113,7 +113,8 @@ describe('StoryTemplate', () => {
       (el as any).stringifiedStyles = '--my-var: blue;';
       await el.updateComplete;
 
-      const highlighters = el.shadowRoot?.querySelectorAll('syntax-highlighter');
+      const highlighters =
+        el.shadowRoot?.querySelectorAll('syntax-highlighter');
       const code: string = (highlighters?.[2] as any).code;
       for (const line of code.split('\n')) {
         expect(line).to.equal(line.trimEnd());
