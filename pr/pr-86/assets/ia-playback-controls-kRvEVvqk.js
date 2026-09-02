@@ -1,4 +1,4 @@
-import{w as t,n as h,t as g,i as m,b as y,a as w}from"./index-Dn3nSsUP.js";import{m as e,s as v}from"./runtime-CCgtQBty.js";const s={playing:"playing",paused:"paused"},k=t`
+import{w as t,n as h,t as g,i as m,b as y,a as w}from"./index-BSy7dZ9k.js";import{m as e,s as v}from"./runtime-CCgtQBty.js";const s={playing:"playing",paused:"paused"},k=t`
 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20">
   <g fill="none" fill-rule="evenodd" transform="translate(1)">
     <polygon fill="currentColor" points="7 3 16 17 -2 17" transform="rotate(90 7 10)" />
@@ -13,7 +13,7 @@ import{w as t,n as h,t as g,i as m,b as y,a as w}from"./index-Dn3nSsUP.js";impor
     fill-rule="evenodd"
   />
 </svg>
-`,P=t`
+`,x=t`
 <svg height="60" viewBox="0 0 60 60" width="60" xmlns="http://www.w3.org/2000/svg">
   <path
     d="m34.5 18 12.5 25h-25z"
@@ -22,7 +22,7 @@ import{w as t,n as h,t as g,i as m,b as y,a as w}from"./index-Dn3nSsUP.js";impor
     transform="matrix(0 1 -1 0 65 -4)"
   />
 </svg>
-`,x=t`
+`,P=t`
 <svg xmlns="http://www.w3.org/2000/svg" width="23" height="17" viewBox="0 0 23 17">
   <g fill="none" fill-rule="evenodd" stroke="currentColor" transform="translate(1 1)">
     <g stroke-linecap="round" transform="translate(2 2.522)">
@@ -148,7 +148,7 @@ import{w as t,n as h,t as g,i as m,b as y,a as w}from"./index-Dn3nSsUP.js";impor
               aria-label=${this.playbackRateLabel}
               @click=${this.handlePlaybackRateChange}
             >
-              ${x}
+              ${P}
             </button>
           </div>
           <div class="vertical-button-value" aria-hidden="true">
@@ -216,7 +216,7 @@ import{w as t,n as h,t as g,i as m,b as y,a as w}from"./index-Dn3nSsUP.js";impor
           </div>
         </div>
       </div>
-    `}get isPlaying(){return this.playbackMode===s.playing}get volumePercent(){return Math.round(this.volume*100)}get playbackRateLabel(){return e(v`Playback speed, currently ${this.playbackRate}`)}get volumeLabel(){return e(v`Volume, currently ${this.volumePercent} percent`)}get playPauseButtonIcon(){return this.isPlaying?f:P}get volumeButtonIcon(){return this.volume<=0?R:this.volume>=1?M:E}handlePlaybackRateChange(){this.playbackRate=this.playbackRate>=b?j:Math.min(this.playbackRate+S,b),this.dispatchEvent(new CustomEvent(n.PlaybackRateChange,{detail:{playbackRate:this.playbackRate}}))}handleVolumeChange(){this.volume=this.volume>=1?0:Math.min(this.volume+_,1),this.dispatchEvent(new CustomEvent(n.VolumeChange,{detail:{volume:this.volume}}))}handleBackButton(){this.dispatchEvent(new Event(n.BackButtonPressed))}handleForwardButton(){this.dispatchEvent(new Event(n.ForwardButtonPressed))}handlePrevSectionButton(){this.dispatchEvent(new Event(n.PrevSectionButtonPressed))}handleNextSectionButton(){this.dispatchEvent(new Event(n.NextSectionButtonPressed))}handlePlayPauseButton(){this.playbackMode=this.isPlaying?s.paused:s.playing,this.dispatchEvent(new Event(n.PlayPauseButtonPressed))}static get styles(){return w`
+    `}get isPlaying(){return this.playbackMode===s.playing}get volumePercent(){return Math.round(this.volume*100)}get playbackRateLabel(){return e(v`Playback speed, currently ${this.playbackRate}`)}get volumeLabel(){return e(v`Volume, currently ${this.volumePercent} percent`)}get playPauseButtonIcon(){return this.isPlaying?f:x}get volumeButtonIcon(){return this.volume<=0?R:this.volume>=1?M:E}handlePlaybackRateChange(){this.playbackRate=this.playbackRate>=b?j:Math.min(this.playbackRate+S,b),this.dispatchEvent(new CustomEvent(n.PlaybackRateChange,{detail:{playbackRate:this.playbackRate}}))}handleVolumeChange(){this.volume=this.volume>=1?0:Math.min(this.volume+_,1),this.dispatchEvent(new CustomEvent(n.VolumeChange,{detail:{volume:this.volume}}))}handleBackButton(){this.dispatchEvent(new Event(n.BackButtonPressed))}handleForwardButton(){this.dispatchEvent(new Event(n.ForwardButtonPressed))}handlePrevSectionButton(){this.dispatchEvent(new Event(n.PrevSectionButtonPressed))}handleNextSectionButton(){this.dispatchEvent(new Event(n.NextSectionButtonPressed))}handlePlayPauseButton(){this.playbackMode=this.isPlaying?s.paused:s.playing,this.dispatchEvent(new Event(n.PlayPauseButtonPressed))}static get styles(){return w`
       :host {
         --playback-controls-icon-color--: var(
           --ia-theme-playback-controls-icon-color,
@@ -295,6 +295,9 @@ import{w as t,n as h,t as g,i as m,b as y,a as w}from"./index-Dn3nSsUP.js";impor
         border: none;
         margin: 0;
         padding: 0;
+        /* Buttons don't inherit color from their parent, so the icons'
+           currentColor needs it passed down explicitly. */
+        color: inherit;
       }
 
       button {
