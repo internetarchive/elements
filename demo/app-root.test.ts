@@ -27,12 +27,24 @@ function anchorIds(el: AppRoot): string[] {
   );
 }
 
+/** The sidebar link the scroll spy currently marks, by href. */
+function inViewHref(el: AppRoot): string | null {
+  const marked = el.querySelector('.ia-elem-link.in-view');
+  return marked ? marked.getAttribute('href') : null;
+}
+
+function scrollToAnchor(el: AppRoot, id: string) {
+  el.querySelector(`#${id}`)?.scrollIntoView();
+}
+
 const appRoot = () => fixture<AppRoot>(html`<app-root></app-root>`);
 
 describe('AppRoot', () => {
   afterEach(() => {
     fixtureCleanup();
     clearHash();
+    // Tests that scroll would otherwise leave the next one part-way down.
+    window.scrollTo({ top: 0 });
   });
 
   describe('all-elements view', () => {
@@ -157,6 +169,59 @@ describe('AppRoot', () => {
         'hash navigation stopped working after reconnecting',
       );
       expect(anchorIds(el)).to.deep.equal(['elem-ia-button']);
+    });
+
+    test('keeps the scroll spy working after reconnecting with no hash change', async () => {
+      const el = await appRoot();
+      const parent = el.parentElement as HTMLElement;
+      const ids = anchorIds(el);
+      const firstId = ids[0];
+      await waitUntil(
+        () => inViewHref(el) === `#${firstId}`,
+        'the scroll spy never marked the first element',
+      );
+
+      // Every story has to have settled before the disconnect below. Each one
+      // requests an update as it lands, and any still in flight would rebuild
+      // the scroll spy on its own, hiding whether reconnecting rebuilt it.
+      // A story that fails to import keeps a message too, so this waits on the
+      // console as much as on the clock. The timeout covers loading all eight
+      // modules cold, which is what happens when this test runs on its own.
+      await waitUntil(
+        () => el.querySelectorAll('.ia-story-message').length === 0,
+        'the stories never all settled; check the console for one that failed to import',
+        { timeout: 5000 },
+      );
+      await el.updateComplete;
+
+      // Loaded stories are also what make the page taller than the viewport.
+      // Without that, scrolling is a no-op and the assertions below would
+      // blame the scroll spy for a page that simply never moved.
+      await waitUntil(
+        () => document.documentElement.scrollHeight > window.innerHeight,
+        'the page never grew tall enough to scroll',
+      );
+
+      // Move the highlight off the first element, so a spy that comes back
+      // dead is distinguishable from one that never had to do anything. How
+      // far down the last anchor gets depends on the page height, so this only
+      // asserts the highlight moved, not where it landed.
+      scrollToAnchor(el, ids[ids.length - 1]);
+      expect(window.scrollY, 'the page did not scroll').to.be.greaterThan(0);
+      await waitUntil(
+        () => inViewHref(el) !== `#${firstId}`,
+        'the scroll spy never followed the scroll away from the first element',
+      );
+
+      parent.removeChild(el);
+      parent.appendChild(el);
+      await el.updateComplete;
+
+      window.scrollTo({ top: 0 });
+      await waitUntil(
+        () => inViewHref(el) === `#${firstId}`,
+        'the scroll spy stopped following the scroll after reconnecting',
+      );
     });
 
     test('picks up a hash that changed while it was detached', async () => {
