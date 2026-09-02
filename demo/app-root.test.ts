@@ -176,16 +176,12 @@ describe('AppRoot', () => {
       const parent = el.parentElement as HTMLElement;
       const ids = anchorIds(el);
       const firstId = ids[0];
-      await waitUntil(
-        () => inViewHref(el) === `#${firstId}`,
-        'the scroll spy never marked the first element',
-      );
 
       // Every story has to have settled before the disconnect below. Each one
       // requests an update as it lands, and any still in flight would rebuild
       // the scroll spy on its own, hiding whether reconnecting rebuilt it.
       // A story that fails to import keeps a message too, so this waits on the
-      // console as much as on the clock. The timeout covers loading all eight
+      // console as much as on the clock. The timeout covers loading all the
       // modules cold, which is what happens when this test runs on its own.
       await waitUntil(
         () => el.querySelectorAll('.ia-story-message').length === 0,
@@ -200,6 +196,15 @@ describe('AppRoot', () => {
       await waitUntil(
         () => document.documentElement.scrollHeight > window.innerHeight,
         'the page never grew tall enough to scroll',
+      );
+
+      // The otp-input story puts focus in its first field as it loads, which
+      // scrolls the page down to it. Start from the top instead, so the spy
+      // has the first element to mark.
+      window.scrollTo({ top: 0 });
+      await waitUntil(
+        () => inViewHref(el) === `#${firstId}`,
+        'the scroll spy never marked the first element',
       );
 
       // Move the highlight off the first element, so a spy that comes back
