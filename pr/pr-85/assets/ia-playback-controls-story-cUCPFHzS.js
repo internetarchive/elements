@@ -1,4 +1,4 @@
-import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-CR3hPZ-t.js";import{m as l,s as g}from"./runtime-CCgtQBty.js";import"./story-template-mOanrmOU.js";const d={playing:"playing",paused:"paused"},x=a`
+import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-CzFvv98W.js";import{m as l,s as m}from"./runtime-CCgtQBty.js";import"./story-template-Chg83JRx.js";const d={playing:"playing",paused:"paused"},x=a`
 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20">
   <g fill="none" fill-rule="evenodd" transform="translate(1)">
     <polygon fill="currentColor" points="7 3 16 17 -2 17" transform="rotate(90 7 10)" />
@@ -138,7 +138,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-CR3hPZ-t.js
     />
   </g>
 </svg>
-`;var L=Object.defineProperty,T=Object.getOwnPropertyDescriptor,h=(o,e,n,r)=>{for(var t=r>1?void 0:r?T(e,n):e,s=o.length-1,i;s>=0;s--)(i=o[s])&&(t=(r?i(e,n,t):i(t))||t);return r&&t&&L(e,n,t),t};const c={PlaybackRateChange:"playbackRateChange",VolumeChange:"volumeChange",BackButtonPressed:"back-button-pressed",ForwardButtonPressed:"forward-button-pressed",PlayPauseButtonPressed:"play-pause-button-pressed",PrevSectionButtonPressed:"prev-section-button-pressed",NextSectionButtonPressed:"next-section-button-pressed"},j=.25,N=.5,m=2,A=.25;let p=class extends f{constructor(){super(...arguments),this.playbackMode=d.paused,this.playbackRate=1,this.volume=1}render(){return u`
+`;var L=Object.defineProperty,T=Object.getOwnPropertyDescriptor,h=(o,e,n,r)=>{for(var t=r>1?void 0:r?T(e,n):e,s=o.length-1,i;s>=0;s--)(i=o[s])&&(t=(r?i(e,n,t):i(t))||t);return r&&t&&L(e,n,t),t};const c={PlaybackRateChange:"playbackRateChange",VolumeChange:"volumeChange",BackButtonPressed:"back-button-pressed",ForwardButtonPressed:"forward-button-pressed",PlayPauseButtonPressed:"play-pause-button-pressed",PrevSectionButtonPressed:"prev-section-button-pressed",NextSectionButtonPressed:"next-section-button-pressed"},j=.25,N=.5,g=2,A=.25;let p=class extends f{constructor(){super(...arguments),this.playbackMode=d.paused,this.playbackRate=1,this.volume=1}render(){return u`
       <div class="container">
         <div class="vertical-button-stack playback-speed">
           <div class="vertical-button-container">
@@ -216,7 +216,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-CR3hPZ-t.js
           </div>
         </div>
       </div>
-    `}get isPlaying(){return this.playbackMode===d.playing}get volumePercent(){return Math.round(this.volume*100)}get playbackRateLabel(){return l(g`Playback speed, currently ${this.playbackRate}`)}get volumeLabel(){return l(g`Volume, currently ${this.volumePercent} percent`)}get playPauseButtonIcon(){return this.isPlaying?C:$}get volumeButtonIcon(){return this.volume<=0?_:this.volume>=1?S:R}handlePlaybackRateChange(){this.playbackRate=this.playbackRate>=m?N:Math.min(this.playbackRate+j,m),this.dispatchEvent(new CustomEvent(c.PlaybackRateChange,{detail:{playbackRate:this.playbackRate}}))}handleVolumeChange(){this.volume=this.volume>=1?0:Math.min(this.volume+A,1),this.dispatchEvent(new CustomEvent(c.VolumeChange,{detail:{volume:this.volume}}))}handleBackButton(){this.dispatchEvent(new Event(c.BackButtonPressed))}handleForwardButton(){this.dispatchEvent(new Event(c.ForwardButtonPressed))}handlePrevSectionButton(){this.dispatchEvent(new Event(c.PrevSectionButtonPressed))}handleNextSectionButton(){this.dispatchEvent(new Event(c.NextSectionButtonPressed))}handlePlayPauseButton(){this.playbackMode=this.isPlaying?d.paused:d.playing,this.dispatchEvent(new Event(c.PlayPauseButtonPressed))}static get styles(){return k`
+    `}get isPlaying(){return this.playbackMode===d.playing}get volumePercent(){return Math.round(this.volume*100)}get playbackRateLabel(){return l(m`Playback speed, currently ${this.playbackRate}`)}get volumeLabel(){return l(m`Volume, currently ${this.volumePercent} percent`)}get playPauseButtonIcon(){return this.isPlaying?C:$}get volumeButtonIcon(){return this.volume<=0?_:this.volume>=1?S:R}handlePlaybackRateChange(){this.playbackRate=this.playbackRate>=g?N:Math.min(this.playbackRate+j,g),this.dispatchEvent(new CustomEvent(c.PlaybackRateChange,{detail:{playbackRate:this.playbackRate}}))}handleVolumeChange(){this.volume=this.volume>=1?0:Math.min(this.volume+A,1),this.dispatchEvent(new CustomEvent(c.VolumeChange,{detail:{volume:this.volume}}))}handleBackButton(){this.dispatchEvent(new Event(c.BackButtonPressed))}handleForwardButton(){this.dispatchEvent(new Event(c.ForwardButtonPressed))}handlePrevSectionButton(){this.dispatchEvent(new Event(c.PrevSectionButtonPressed))}handleNextSectionButton(){this.dispatchEvent(new Event(c.NextSectionButtonPressed))}handlePlayPauseButton(){this.playbackMode=this.isPlaying?d.paused:d.playing,this.dispatchEvent(new Event(c.PlayPauseButtonPressed))}static get styles(){return k`
       :host {
         --playback-controls-icon-color--: var(
           --ia-theme-playback-controls-icon-color,
@@ -295,6 +295,9 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-CR3hPZ-t.js
         border: none;
         margin: 0;
         padding: 0;
+        /* Buttons don't inherit color from their parent, so the icons'
+           currentColor needs it passed down explicitly. */
+        color: inherit;
       }
 
       button {
