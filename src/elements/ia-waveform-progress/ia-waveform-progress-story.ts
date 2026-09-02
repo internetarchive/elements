@@ -68,7 +68,7 @@ const propInputSettings: PropInputSettings<IAWaveformProgress>[] = [
   {
     label: 'Interactive',
     propertyName: 'interactive',
-    defaultValue: false,
+    defaultValue: true,
     inputType: 'radio',
     radioOptions: [true, false],
   },
