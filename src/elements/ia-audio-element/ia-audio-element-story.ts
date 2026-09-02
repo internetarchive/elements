@@ -28,7 +28,7 @@ const propInputSettings: PropInputSettings<IAAudioElement>[] = [
   {
     label: 'Show native controls',
     propertyName: 'showControls',
-    defaultValue: false,
+    defaultValue: true,
     inputType: 'radio',
     radioOptions: [true, false],
   },
