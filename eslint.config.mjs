@@ -42,7 +42,7 @@ export default [
     },
   },
   {
-    ignores: ['**/*.js', '**/*.mjs', '**/*.d.ts'],
+    ignores: ['**/*.js', '**/*.mjs', '**/*.d.ts', '.claude/', '.wireit/'],
   },
   {
     files: ['**/*.test.ts'],
