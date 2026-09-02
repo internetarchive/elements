@@ -321,6 +321,9 @@ export class IAPlaybackControls extends LitElement {
         border: none;
         margin: 0;
         padding: 0;
+        /* Buttons don't inherit color from their parent, so the icons'
+           currentColor needs it passed down explicitly. */
+        color: inherit;
       }
 
       button {
