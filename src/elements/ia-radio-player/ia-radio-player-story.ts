@@ -20,6 +20,12 @@ import '@demo/story-template';
 /** Seconds each transcript line covers. */
 const SECONDS_PER_ENTRY = 6;
 
+/** Seconds between plucked notes in the generated demo track. */
+const NOTE_SECONDS = 1.5;
+
+/** Semitones from the root, a minor pentatonic, for the demo track's notes. */
+const PENTATONIC = [0, 3, 5, 7, 10];
+
 /** Lines of a fictional broadcast, with music breaks marked. */
 const LINES: [text: string, isMusic: boolean][] = [
   ['Good evening, and welcome to the programme.', false],
@@ -56,10 +62,12 @@ const TRANSCRIPT = new TranscriptConfig(
 /**
  * Builds a playable track so the demo works without fetching anything.
  *
- * A quiet tone that steps down in pitch every few seconds, so it is obvious by
- * ear that playback is running and that scrubbing moved somewhere else. Served
- * as a blob rather than a data URI, since a minute of audio makes for a very
- * long string.
+ * Quiet plucked notes, one every {@link NOTE_SECONDS}, walking down a
+ * pentatonic scale as the track runs. The pitch says where you are, so it is
+ * obvious by ear that playback is running and that scrubbing moved somewhere
+ * else, and the gap between notes keeps it off the ear for a whole minute.
+ * Served as a blob rather than a data URI, since a minute of audio makes for a
+ * very long string.
  */
 function toneTrackUrl(seconds = TOTAL_SECONDS): string {
   const sampleRate = 8000;
@@ -92,11 +100,27 @@ function toneTrackUrl(seconds = TOTAL_SECONDS): string {
 
   for (let i = 0; i < sampleCount; i += 1) {
     const secondsIn = i / sampleRate;
-    const frequency = 220 - Math.floor(secondsIn / SECONDS_PER_ENTRY) * 8;
-    const amplitude = 12; // quiet, so it doesn't startle anyone
-    const sample =
-      128 +
-      Math.round(Math.sin(2 * Math.PI * frequency * secondsIn) * amplitude);
+
+    const noteIndex = Math.floor(secondsIn / NOTE_SECONDS);
+    const secondsIntoNote = secondsIn - noteIndex * NOTE_SECONDS;
+
+    // Down one semitone per transcript entry, so two places in the track never
+    // sound alike, over a pentatonic scale so consecutive notes sit together.
+    const degree = PENTATONIC[noteIndex % PENTATONIC.length];
+    const drop = Math.floor(secondsIn / SECONDS_PER_ENTRY);
+    const frequency = 220 * 2 ** ((degree - drop) / 12);
+
+    // Struck and left to ring, rather than a tone that never stops.
+    const envelope = Math.exp(-3.2 * secondsIntoNote);
+    // A touch of the second harmonic, which is what stops it sounding like the
+    // bare sine it would otherwise be.
+    const wave =
+      (Math.sin(2 * Math.PI * frequency * secondsIn) +
+        0.35 * Math.sin(4 * Math.PI * frequency * secondsIn)) /
+      1.35;
+
+    const amplitude = 14; // quiet, so it doesn't startle anyone
+    const sample = 128 + Math.round(wave * envelope * amplitude);
     view.setUint8(headerLength + i, sample);
   }
 
@@ -240,10 +264,10 @@ export class IARadioPlayerStory extends LitElement {
             logic itself, it just coordinates the pieces.
           </p>
           <p>
-            The audio here is a quiet generated tone that steps down in pitch
-            every few seconds, so you can hear that playback is running and that
-            scrubbing moved somewhere else. The waveform and the logo are drawn
-            rather than fetched, so the demo needs no network.
+            The audio here is a run of quiet generated notes that walk down in
+            pitch as the track goes on, so you can hear that playback is running
+            and that scrubbing moved somewhere else. The waveform and the logo
+            are drawn rather than fetched, so the demo needs no network.
           </p>
           <p>
             Searching is wired to a

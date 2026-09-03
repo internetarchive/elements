@@ -533,6 +533,18 @@ export class IARadioPlayer extends LitElement {
     if (value === undefined) return;
 
     this.searchTerm = value;
+
+    // An empty box has nothing to show results for. The counter already hides
+    // itself on an empty term, so without dropping the results too the
+    // transcript keeps its outlines and offers no way to step between them.
+    if (value.length === 0) {
+      this.searchResultsTranscript = undefined;
+      // Abandons whatever is in flight, so its results can't land afterwards.
+      this.latestSearchId += 1;
+      this.isSearching = false;
+      this.resetSearchResultPosition();
+    }
+
     this.emitSearchTermChanged(value);
   }
 
