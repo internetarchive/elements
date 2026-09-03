@@ -511,7 +511,10 @@ export class IATranscriptView extends LitElement {
         left: 0;
         width: 100%;
         height: 0;
-        z-index: -1;
+        /* Purely a guide. It sits over the top and bottom of the scroll area,
+           so without this it would swallow the wheel and the entry clicks
+           there, breaking the scrolling it exists to help you look at. */
+        pointer-events: none;
       }
 
       .context-overlay.top {
