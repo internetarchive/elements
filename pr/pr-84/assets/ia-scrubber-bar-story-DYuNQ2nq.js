@@ -1,4 +1,4 @@
-import{w,n as h,t as v,i as f,b as p,a as k,r as l}from"./index-Dnt48UXz.js";import{m as $}from"./runtime-CCgtQBty.js";import"./story-template-DmDNqT2-.js";const d={left:"left",right:"right",neither:"neither"},S=w`
+import{w,n as h,t as v,i as f,b as p,a as k,r as u}from"./index-Bpi7JUlY.js";import{m as $}from"./runtime-CCgtQBty.js";import"./story-template-CYWOjSQS.js";const b={left:"left",right:"right",neither:"neither"},S=w`
 <svg height="10" viewBox="0 0 8 10" width="8" xmlns="http://www.w3.org/2000/svg">
   <path
     d="m4 1 5 8h-10z"
@@ -16,7 +16,7 @@ import{w,n as h,t as v,i as f,b as p,a as k,r as l}from"./index-Dnt48UXz.js";imp
     transform="matrix(0 -1 1 0 -1 9)"
   />
 </svg>
-`;var M=Object.defineProperty,E=Object.getOwnPropertyDescriptor,x=(e,r,i,a)=>{for(var t=a>1?void 0:a?E(r,i):r,s=e.length-1,o;s>=0;s--)(o=e[s])&&(t=(a?o(r,i,t):o(t))||t);return a&&t&&M(r,i,t),t};let g=class extends f{constructor(){super(...arguments),this.markerMode=d.neither}render(){return p`
+`;var M=Object.defineProperty,E=Object.getOwnPropertyDescriptor,x=(e,r,i,a)=>{for(var t=a>1?void 0:a?E(r,i):r,s=e.length-1,o;s>=0;s--)(o=e[s])&&(t=(a?o(r,i,t):o(t))||t);return a&&t&&M(r,i,t),t};let g=class extends f{constructor(){super(...arguments),this.markerMode=b.neither}render(){return p`
       <div class="container mode-${this.markerMode}">
         <div class="left-arrow arrow">${S}</div>
         <div class="center-divider"></div>
@@ -25,13 +25,19 @@ import{w,n as h,t as v,i as f,b as p,a as k,r as l}from"./index-Dnt48UXz.js";imp
     `}static get styles(){return k`
       :host {
         --section-marker-color--: var(--ia-theme-scrubber-marker-color, #fff);
+        /*
+          Relative to the marker, which the scrubber sizes to the track, so a
+          collapsed divider is exactly as tall as the track it sits on and an
+          expanded one stands proportionally above it. A fixed pixel height
+          here only lines up at one track height.
+        */
         --section-marker-height-collapsed--: var(
           --ia-theme-scrubber-marker-height-collapsed,
-          10px
+          100%
         );
         --section-marker-height-expanded--: var(
           --ia-theme-scrubber-marker-height-expanded,
-          25px
+          250%
         );
         --section-marker-animation-speed--: 0.1s;
 
@@ -119,7 +125,7 @@ import{w,n as h,t as v,i as f,b as p,a as k,r as l}from"./index-Dnt48UXz.js";imp
           @change=${this.handleSlide}
         />
       </div>
-    `}updated(e){this.userIsInteracting||!e.has("value")||(this.currentValue=this.value)}get surroundingMarkers(){if(!this.expandSectionMarkers)return{};const e=this.sortedMarkers;return{lower:e.filter(r=>r<=this.currentValue).pop(),upper:e.find(r=>r>this.currentValue)}}get sortedMarkers(){return[...this.sectionMarkerPercentages].sort((e,r)=>e-r)}markerModeFor(e,r){return e===r.upper?d.left:e===r.lower?d.right:d.neither}handleSlide(e){this.currentValue=parseFloat(e.target.value),this.dispatchEvent(new CustomEvent(m.ValueChange,{detail:{value:this.currentValue}}))}interactionStarted(){this.userIsInteracting=!0,this.dispatchEvent(new Event(m.UserInteractionStarted))}handleKeyDown(e){!y.has(e.key)||this.userIsInteracting||this.interactionStarted()}handleKeyUp(e){y.has(e.key)&&this.interactionEnded()}handleBlur(){this.userIsInteracting&&this.interactionEnded()}interactionEnded(){this.userIsInteracting=!1,this.dispatchEvent(new Event(m.UserInteractionEnded))}static get styles(){return k`
+    `}updated(e){this.userIsInteracting||!e.has("value")||(this.currentValue=this.value)}get surroundingMarkers(){if(!this.expandSectionMarkers)return{};const e=this.sortedMarkers;return{lower:e.filter(r=>r<=this.currentValue).pop(),upper:e.find(r=>r>this.currentValue)}}get sortedMarkers(){return[...this.sectionMarkerPercentages].sort((e,r)=>e-r)}markerModeFor(e,r){return e===r.upper?b.left:e===r.lower?b.right:b.neither}handleSlide(e){this.currentValue=parseFloat(e.target.value),this.dispatchEvent(new CustomEvent(m.ValueChange,{detail:{value:this.currentValue}}))}interactionStarted(){this.userIsInteracting=!0,this.dispatchEvent(new Event(m.UserInteractionStarted))}handleKeyDown(e){!y.has(e.key)||this.userIsInteracting||this.interactionStarted()}handleKeyUp(e){y.has(e.key)&&this.interactionEnded()}handleBlur(){this.userIsInteracting&&this.interactionEnded()}interactionEnded(){this.userIsInteracting=!1,this.dispatchEvent(new Event(m.UserInteractionEnded))}static get styles(){return k`
       :host {
         --scrubber-bar-height--: var(--ia-theme-scrubber-bar-height, 20px);
         --scrubber-marker-inset--: var(--ia-theme-scrubber-marker-inset, 10px);
@@ -278,12 +284,12 @@ import{w,n as h,t as v,i as f,b as p,a as k,r as l}from"./index-Dnt48UXz.js";imp
         height: var(--scrubber-track-height--);
         border-radius: var(--scrubber-track-border-radius--);
       }
-    `}};c([h({type:Number})],n.prototype,"value",2);c([h({type:Number})],n.prototype,"min",2);c([h({type:Number})],n.prototype,"max",2);c([h({type:Number})],n.prototype,"step",2);c([h({type:Array})],n.prototype,"sectionMarkerPercentages",2);c([h({type:Boolean})],n.prototype,"expandSectionMarkers",2);c([h({type:String})],n.prototype,"label",2);c([l()],n.prototype,"currentValue",2);n=c([v("ia-scrubber-bar")],n);var P=Object.defineProperty,_=Object.getOwnPropertyDescriptor,b=(e,r,i,a)=>{for(var t=a>1?void 0:a?_(r,i):r,s=e.length-1,o;s>=0;s--)(o=e[s])&&(t=(a?o(r,i,t):o(t))||t);return a&&t&&P(r,i,t),t};const C=[8,22,37,55,78,91],O=[{label:"Played colour",cssVariable:"--ia-theme-scrubber-track-fill-color",defaultValue:"#3272b6",inputType:"color"},{label:"Thumb colour",cssVariable:"--ia-theme-scrubber-thumb-color",defaultValue:"#ffffff",inputType:"color"},{label:"Marker colour",cssVariable:"--ia-theme-scrubber-marker-color",defaultValue:"#ffffff",inputType:"color"},{label:"Thumb size",cssVariable:"--ia-theme-scrubber-thumb-diameter",defaultValue:20,inputType:"range",min:8,max:40,step:1,unit:"px"},{label:"Track height",cssVariable:"--ia-theme-scrubber-track-height",defaultValue:10,inputType:"range",min:2,max:20,step:1,unit:"px"}],D=[{label:"Expand section markers",propertyName:"expandSectionMarkers",defaultValue:!0,inputType:"radio",radioOptions:[!0,!1]}];let u=class extends f{constructor(){super(...arguments),this.value=30,this.showMarkers=!0,this.interacting=!1,this.simulating=!1}disconnectedCallback(){super.disconnectedCallback(),this.stopSimulation()}render(){return p`
+    `}};c([h({type:Number})],n.prototype,"value",2);c([h({type:Number})],n.prototype,"min",2);c([h({type:Number})],n.prototype,"max",2);c([h({type:Number})],n.prototype,"step",2);c([h({type:Array})],n.prototype,"sectionMarkerPercentages",2);c([h({type:Boolean})],n.prototype,"expandSectionMarkers",2);c([h({type:String})],n.prototype,"label",2);c([u()],n.prototype,"currentValue",2);n=c([v("ia-scrubber-bar")],n);var P=Object.defineProperty,_=Object.getOwnPropertyDescriptor,d=(e,r,i,a)=>{for(var t=a>1?void 0:a?_(r,i):r,s=e.length-1,o;s>=0;s--)(o=e[s])&&(t=(a?o(r,i,t):o(t))||t);return a&&t&&P(r,i,t),t};const C=[8,22,37,55,78,91],O=[{label:"Played colour",cssVariable:"--ia-theme-scrubber-track-fill-color",defaultValue:"#3272b6",inputType:"color"},{label:"Thumb colour",cssVariable:"--ia-theme-scrubber-thumb-color",defaultValue:"#ffffff",inputType:"color"},{label:"Marker colour",cssVariable:"--ia-theme-scrubber-marker-color",defaultValue:"#ffffff",inputType:"color"},{label:"Thumb size",cssVariable:"--ia-theme-scrubber-thumb-diameter",defaultValue:20,inputType:"range",min:8,max:40,step:1,unit:"px"},{label:"Track height",cssVariable:"--ia-theme-scrubber-track-height",defaultValue:10,inputType:"range",min:2,max:20,step:1,unit:"px"}],A=[{label:"Expand section markers",propertyName:"expandSectionMarkers",defaultValue:!0,inputType:"radio",radioOptions:[!0,!1]}];let l=class extends f{constructor(){super(...arguments),this.value=30,this.showMarkers=!0,this.interacting=!1,this.simulating=!1}disconnectedCallback(){super.disconnectedCallback(),this.stopSimulation()}render(){return p`
       <story-template
         elementTag="ia-scrubber-bar"
         elementClassName="IAScrubberBar"
         .styleInputData=${{settings:O}}
-        .propInputData=${{settings:D}}
+        .propInputData=${{settings:A}}
         .defaultUsageProps=${".value=${30}\n  .sectionMarkerPercentages=${[8, 22, 37]}"}
       >
         <ia-scrubber-bar
@@ -379,4 +385,4 @@ import{w,n as h,t as v,i as f,b as p,a as k,r as l}from"./index-Dnt48UXz.js";imp
       .readout {
         font-size: 0.9em;
       }
-    `}};b([l()],u.prototype,"value",2);b([l()],u.prototype,"showMarkers",2);b([l()],u.prototype,"interacting",2);b([l()],u.prototype,"lastEmitted",2);b([l()],u.prototype,"simulating",2);u=b([v("ia-scrubber-bar-story")],u);export{u as IAScrubberBarStory};
+    `}};d([u()],l.prototype,"value",2);d([u()],l.prototype,"showMarkers",2);d([u()],l.prototype,"interacting",2);d([u()],l.prototype,"lastEmitted",2);d([u()],l.prototype,"simulating",2);l=d([v("ia-scrubber-bar-story")],l);export{l as IAScrubberBarStory};
