@@ -1,4 +1,4 @@
-import{w as m,n as s,t as g,i as v,b as d,a as f,r as w}from"./index-oDBj0m0q.js";import{m as y}from"./runtime-CCgtQBty.js";const b={left:"left",right:"right",neither:"neither"},x=m`
+import{w as m,n as o,t as v,i as g,b as d,a as f,r as w}from"./index-BrfvWStf.js";import{m as y}from"./runtime-CCgtQBty.js";const b={left:"left",right:"right",neither:"neither"},x=m`
 <svg height="10" viewBox="0 0 8 10" width="8" xmlns="http://www.w3.org/2000/svg">
   <path
     d="m4 1 5 8h-10z"
@@ -16,7 +16,7 @@ import{w as m,n as s,t as g,i as v,b as d,a as f,r as w}from"./index-oDBj0m0q.js
     transform="matrix(0 -1 1 0 -1 9)"
   />
 </svg>
-`;var S=Object.defineProperty,I=Object.getOwnPropertyDescriptor,k=(r,e,n,i)=>{for(var t=i>1?void 0:i?I(e,n):e,c=r.length-1,h;c>=0;c--)(h=r[c])&&(t=(i?h(e,n,t):h(t))||t);return i&&t&&S(e,n,t),t};let l=class extends v{constructor(){super(...arguments),this.markerMode=b.neither}render(){return d`
+`;var S=Object.defineProperty,I=Object.getOwnPropertyDescriptor,k=(e,r,n,i)=>{for(var t=i>1?void 0:i?I(r,n):r,h=e.length-1,c;h>=0;h--)(c=e[h])&&(t=(i?c(r,n,t):c(t))||t);return i&&t&&S(r,n,t),t};let l=class extends g{constructor(){super(...arguments),this.markerMode=b.neither}render(){return d`
       <div class="container mode-${this.markerMode}">
         <div class="left-arrow arrow">${x}</div>
         <div class="center-divider"></div>
@@ -25,13 +25,19 @@ import{w as m,n as s,t as g,i as v,b as d,a as f,r as w}from"./index-oDBj0m0q.js
     `}static get styles(){return f`
       :host {
         --section-marker-color--: var(--ia-theme-scrubber-marker-color, #fff);
+        /*
+          Relative to the marker, which the scrubber sizes to the track, so a
+          collapsed divider is exactly as tall as the track it sits on and an
+          expanded one stands proportionally above it. A fixed pixel height
+          here only lines up at one track height.
+        */
         --section-marker-height-collapsed--: var(
           --ia-theme-scrubber-marker-height-collapsed,
-          10px
+          100%
         );
         --section-marker-height-expanded--: var(
           --ia-theme-scrubber-marker-height-expanded,
-          25px
+          250%
         );
         --section-marker-animation-speed--: 0.1s;
 
@@ -85,16 +91,16 @@ import{w as m,n as s,t as g,i as v,b as d,a as f,r as w}from"./index-oDBj0m0q.js
         align-self: flex-end;
         transition: height var(--section-marker-animation-speed--) ease-out;
       }
-    `}};k([s({type:String})],l.prototype,"markerMode",2);l=k([g("ia-section-marker")],l);var M=Object.defineProperty,E=Object.getOwnPropertyDescriptor,o=(r,e,n,i)=>{for(var t=i>1?void 0:i?E(e,n):e,c=r.length-1,h;c>=0;c--)(h=r[c])&&(t=(i?h(e,n,t):h(t))||t);return i&&t&&M(e,n,t),t};const u={ValueChange:"valuechange",UserInteractionStarted:"userInteractionStarted",UserInteractionEnded:"userInteractionEnded"},p=new Set(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Home","End","PageUp","PageDown"]);let a=class extends v{constructor(){super(...arguments),this.value=0,this.min=0,this.max=100,this.step=.1,this.sectionMarkerPercentages=[],this.expandSectionMarkers=!1,this.label=y("Playback position"),this.currentValue=0,this.userIsInteracting=!1}get percentage(){const r=this.max-this.min;return r===0?0:(this.currentValue-this.min)/r*100}render(){const r=this.surroundingMarkers;return d`
+    `}};k([o({type:String})],l.prototype,"markerMode",2);l=k([v("ia-section-marker")],l);var M=Object.defineProperty,E=Object.getOwnPropertyDescriptor,s=(e,r,n,i)=>{for(var t=i>1?void 0:i?E(r,n):r,h=e.length-1,c;h>=0;h--)(c=e[h])&&(t=(i?c(r,n,t):c(t))||t);return i&&t&&M(r,n,t),t};const u={ValueChange:"valuechange",UserInteractionStarted:"userInteractionStarted",UserInteractionEnded:"userInteractionEnded"},p=new Set(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Home","End","PageUp","PageDown"]);let a=class extends g{constructor(){super(...arguments),this.value=0,this.min=0,this.max=100,this.step=.1,this.sectionMarkerPercentages=[],this.expandSectionMarkers=!1,this.label=y("Playback position"),this.currentValue=0,this.userIsInteracting=!1}get percentage(){const e=this.max-this.min;return e===0?0:(this.currentValue-this.min)/e*100}render(){const e=this.surroundingMarkers;return d`
       <div class="container" style="--fill-percent--: ${this.percentage}%">
         <div class="color-fill"></div>
 
         <div class="marker-container">
-          ${this.sectionMarkerPercentages.map(e=>d`
+          ${this.sectionMarkerPercentages.map(r=>d`
               <ia-section-marker
-                data-location=${e}
-                style="left: ${e}%"
-                .markerMode=${this.markerModeFor(e,r)}
+                data-location=${r}
+                style="left: ${r}%"
+                .markerMode=${this.markerModeFor(r,e)}
               ></ia-section-marker>
             `)}
         </div>
@@ -119,7 +125,7 @@ import{w as m,n as s,t as g,i as v,b as d,a as f,r as w}from"./index-oDBj0m0q.js
           @change=${this.handleSlide}
         />
       </div>
-    `}updated(r){this.userIsInteracting||!r.has("value")||(this.currentValue=this.value)}get surroundingMarkers(){if(!this.expandSectionMarkers)return{};const r=this.sortedMarkers;return{lower:r.filter(e=>e<=this.currentValue).pop(),upper:r.find(e=>e>this.currentValue)}}get sortedMarkers(){return[...this.sectionMarkerPercentages].sort((r,e)=>r-e)}markerModeFor(r,e){return r===e.upper?b.left:r===e.lower?b.right:b.neither}handleSlide(r){this.currentValue=parseFloat(r.target.value),this.dispatchEvent(new CustomEvent(u.ValueChange,{detail:{value:this.currentValue}}))}interactionStarted(){this.userIsInteracting=!0,this.dispatchEvent(new Event(u.UserInteractionStarted))}handleKeyDown(r){!p.has(r.key)||this.userIsInteracting||this.interactionStarted()}handleKeyUp(r){p.has(r.key)&&this.interactionEnded()}handleBlur(){this.userIsInteracting&&this.interactionEnded()}interactionEnded(){this.userIsInteracting=!1,this.dispatchEvent(new Event(u.UserInteractionEnded))}static get styles(){return f`
+    `}updated(e){this.userIsInteracting||!e.has("value")||(this.currentValue=this.value)}get surroundingMarkers(){if(!this.expandSectionMarkers)return{};const e=this.sortedMarkers;return{lower:e.filter(r=>r<=this.currentValue).pop(),upper:e.find(r=>r>this.currentValue)}}get sortedMarkers(){return[...this.sectionMarkerPercentages].sort((e,r)=>e-r)}markerModeFor(e,r){return e===r.upper?b.left:e===r.lower?b.right:b.neither}handleSlide(e){this.currentValue=parseFloat(e.target.value),this.dispatchEvent(new CustomEvent(u.ValueChange,{detail:{value:this.currentValue}}))}interactionStarted(){this.userIsInteracting=!0,this.dispatchEvent(new Event(u.UserInteractionStarted))}handleKeyDown(e){!p.has(e.key)||this.userIsInteracting||this.interactionStarted()}handleKeyUp(e){p.has(e.key)&&this.interactionEnded()}handleBlur(){this.userIsInteracting&&this.interactionEnded()}interactionEnded(){this.userIsInteracting=!1,this.dispatchEvent(new Event(u.UserInteractionEnded))}static get styles(){return f`
       :host {
         --scrubber-bar-height--: var(--ia-theme-scrubber-bar-height, 20px);
         --scrubber-marker-inset--: var(--ia-theme-scrubber-marker-inset, 10px);
@@ -278,4 +284,4 @@ import{w as m,n as s,t as g,i as v,b as d,a as f,r as w}from"./index-oDBj0m0q.js
         height: var(--scrubber-track-height--);
         border-radius: var(--scrubber-track-border-radius--);
       }
-    `}};o([s({type:Number})],a.prototype,"value",2);o([s({type:Number})],a.prototype,"min",2);o([s({type:Number})],a.prototype,"max",2);o([s({type:Number})],a.prototype,"step",2);o([s({type:Array})],a.prototype,"sectionMarkerPercentages",2);o([s({type:Boolean})],a.prototype,"expandSectionMarkers",2);o([s({type:String})],a.prototype,"label",2);o([w()],a.prototype,"currentValue",2);a=o([g("ia-scrubber-bar")],a);
+    `}};s([o({type:Number})],a.prototype,"value",2);s([o({type:Number})],a.prototype,"min",2);s([o({type:Number})],a.prototype,"max",2);s([o({type:Number})],a.prototype,"step",2);s([o({type:Array})],a.prototype,"sectionMarkerPercentages",2);s([o({type:Boolean})],a.prototype,"expandSectionMarkers",2);s([o({type:String})],a.prototype,"label",2);s([w()],a.prototype,"currentValue",2);a=s([v("ia-scrubber-bar")],a);
