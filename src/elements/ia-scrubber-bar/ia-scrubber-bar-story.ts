@@ -55,7 +55,7 @@ const propInputSettings: PropInputSettings<IAScrubberBar>[] = [
   {
     label: 'Expand section markers',
     propertyName: 'expandSectionMarkers',
-    defaultValue: false,
+    defaultValue: true,
     inputType: 'radio',
     radioOptions: [true, false],
   },
