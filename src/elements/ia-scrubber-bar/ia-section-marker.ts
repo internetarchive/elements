@@ -39,13 +39,19 @@ export class IASectionMarker extends LitElement {
     return css`
       :host {
         --section-marker-color--: var(--ia-theme-scrubber-marker-color, #fff);
+        /*
+          Relative to the marker, which the scrubber sizes to the track, so a
+          collapsed divider is exactly as tall as the track it sits on and an
+          expanded one stands proportionally above it. A fixed pixel height
+          here only lines up at one track height.
+        */
         --section-marker-height-collapsed--: var(
           --ia-theme-scrubber-marker-height-collapsed,
-          10px
+          100%
         );
         --section-marker-height-expanded--: var(
           --ia-theme-scrubber-marker-height-expanded,
-          25px
+          250%
         );
         --section-marker-animation-speed--: 0.1s;
 

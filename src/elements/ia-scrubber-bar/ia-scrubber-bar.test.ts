@@ -344,4 +344,20 @@ describe('IA Section Marker', () => {
     const container = el.shadowRoot?.querySelector('.container');
     expect(container?.classList.contains('mode-left')).to.be.true;
   });
+
+  test('sizes the divider to the marker, so it tracks the track height', async () => {
+    // The scrubber sizes each marker to the track, so a collapsed divider that
+    // fills its marker is exactly as tall as the track it sits on. A fixed
+    // pixel height only lines up at one track height.
+    // The scrubber positions its markers absolutely, which is what gives them
+    // a height to fill; a bare marker is inline and would ignore one.
+    const el = await fixture<IASectionMarker>(
+      html`<ia-section-marker
+        style="display: block; height: 24px"
+      ></ia-section-marker>`,
+    );
+
+    const divider = el.shadowRoot?.querySelector('.center-divider');
+    expect(getComputedStyle(divider as Element).height).to.equal('24px');
+  });
 });
