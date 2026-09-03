@@ -3,7 +3,6 @@
   "version": "0.2.12",
   "description": "A web component library from the Internet Archive.",
   "license": "AGPL-3.0-only",
-  "types": "./dist/src/elements/index.d.ts",
   "type": "module",
   "packageManager": "pnpm@11.22.0",
   "engines": {
@@ -27,6 +26,7 @@
     "lint": "wireit",
     "format": "wireit",
     "circular": "wireit",
+    "package-check": "wireit",
     "prepare": "wireit",
     "test": "wireit",
     "ghpages:build": "wireit"
@@ -60,6 +60,7 @@
     "madge": "^8.0.0",
     "playwright": "^1.60.0",
     "prettier": "3.6.2",
+    "publint": "^0.3.23",
     "ts-lit-plugin": "^2.0.2",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3",
@@ -68,7 +69,6 @@
     "wireit": "^0.14.12"
   },
   "exports": {
-    ".": "./dist/src/index.js",
     "./*": "./dist/src/elements/*.js",
     "./labs/*": "./dist/src/labs/*.js"
   },
@@ -97,6 +97,12 @@
     },
     "circular": {
       "command": "madge --circular --extensions ts ."
+    },
+    "package-check": {
+      "command": "publint && node scripts/check-exports.mjs",
+      "dependencies": [
+        "build"
+      ]
     },
     "clean": {
       "command": "rm -rf dist"

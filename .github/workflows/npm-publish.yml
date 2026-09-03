@@ -28,6 +28,8 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
         timeout-minutes: 6
       - run: pnpm test
+      - name: Check package exports
+        run: pnpm run package-check
       # Publish with npm (not pnpm) so npm provenance / trusted publishing works.
       - run: |
           if ${{ github.event.release.prerelease }}; then
