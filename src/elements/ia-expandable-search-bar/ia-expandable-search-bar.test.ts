@@ -164,12 +164,30 @@ describe('IA Expandable Search Bar', () => {
   test('emits `enterKeyPressed` when Enter is pressed', async () => {
     const el = await searchBarFixture('foo');
 
-    setTimeout(() =>
-      inputIn(el).dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' })),
-    );
+    setTimeout(() => {
+      const input = inputIn(el);
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      input.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }));
+    });
 
     const { detail } = await oneEvent(el, 'enterKeyPressed');
     expect(detail.value).to.equal('foo');
+  });
+
+  test('ignores an Enter keyup that never went down on the input', async () => {
+    const el = await searchBarFixture('foo');
+
+    let emitted = false;
+    el.addEventListener('enterKeyPressed', () => {
+      emitted = true;
+    });
+
+    // Selecting a quick search with the keyboard hands focus back to the input
+    // between keydown and keyup, so the input sees a keyup on its own.
+    inputIn(el).dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }));
+    await el.updateComplete;
+
+    expect(emitted).to.be.false;
   });
 
   test('toggles open and closed when the disclosure is clicked', async () => {
