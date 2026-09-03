@@ -69,6 +69,7 @@ export class IAExpandableSearchBar extends LitElement {
             placeholder=${this.placeholder}
             .value=${this.searchTerm}
             @input=${this.handleInput}
+            @keydown=${this.handleKeyDown}
             @keyup=${this.handleKeyUp}
           />
 
@@ -139,8 +140,21 @@ export class IAExpandableSearchBar extends LitElement {
     );
   }
 
+  /**
+   * Whether the Enter now coming up is the same one that went down on the
+   * input. Selecting a quick search with the keyboard hands focus back to the
+   * input mid-keystroke, so its keyup lands here without a matching keydown.
+   */
+  private enterWentDownOnInput = false;
+
+  private handleKeyDown(e: KeyboardEvent): void {
+    if (e.key === 'Enter') this.enterWentDownOnInput = true;
+  }
+
   private handleKeyUp(e: KeyboardEvent): void {
     if (e.key !== 'Enter') return;
+    if (!this.enterWentDownOnInput) return;
+    this.enterWentDownOnInput = false;
 
     this.dispatchEvent(
       new CustomEvent<{ value: string }>(Events.EnterKeyPressed, {
@@ -171,6 +185,7 @@ export class IAExpandableSearchBar extends LitElement {
     // Closing the list hides the entry that was just activated. Focus has to
     // go somewhere first, or the browser drops it to the body and a keyboard
     // user lands back at the top of the page.
+    this.enterWentDownOnInput = false;
     this.searchInput?.focus();
     this.isOpen = false;
   }
