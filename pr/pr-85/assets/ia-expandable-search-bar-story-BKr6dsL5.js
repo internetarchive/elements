@@ -1,4 +1,4 @@
-import{w as g,n as h,t as m,i as v,b as l,a as f,r as x}from"./index-CFIc9tQb.js";import{e as w}from"./query-BT7CBlPN.js";import{m as d}from"./runtime-CCgtQBty.js";import"./story-template-ITlv8vFM.js";const S=g`
+import{w as g,n as h,t as m,i as v,b as l,a as f,r as w}from"./index-Dnt48UXz.js";import{e as x}from"./query-iaVQ2XdW.js";import{m as d}from"./runtime-CCgtQBty.js";import"./story-template-DmDNqT2-.js";const S=g`
 <svg
   height="12"
   viewBox="0 0 12 12"
@@ -47,21 +47,21 @@ import{w as g,n as h,t as m,i as v,b as l,a as f,r as x}from"./index-CFIc9tQb.js
     fill="currentColor"
   />
 </svg>
-`;var T=Object.defineProperty,E=Object.getOwnPropertyDescriptor,y=(r,e,t,s)=>{for(var a=s>1?void 0:s?E(e,t):e,i=r.length-1,c;i>=0;i--)(c=r[i])&&(a=(s?c(e,t,a):c(a))||a);return s&&a&&T(e,t,a),a};const I={SearchTermSelected:"searchTermSelected"};let p=class extends v{constructor(){super(...arguments),this.quickSearches=[]}render(){return l`
+`;var T=Object.defineProperty,I=Object.getOwnPropertyDescriptor,y=(e,r,t,s)=>{for(var a=s>1?void 0:s?I(r,t):r,i=e.length-1,c;i>=0;i--)(c=e[i])&&(a=(s?c(r,t,a):c(a))||a);return s&&a&&T(r,t,a),a};const E={SearchTermSelected:"searchTermSelected"};let p=class extends v{constructor(){super(...arguments),this.quickSearches=[]}render(){return l`
       <ul>
-        ${this.quickSearches.map((r,e)=>l`
+        ${this.quickSearches.map((e,r)=>l`
             <li>
               <button
                 type="button"
-                data-quick-search-index=${e}
+                data-quick-search-index=${r}
                 @click=${this.selectQuickSearch}
               >
-                ${r.displayText}
+                ${e.displayText}
               </button>
             </li>
           `)}
       </ul>
-    `}selectQuickSearch(r){const{quickSearchIndex:e}=r.currentTarget.dataset;if(e===void 0)return;const t=this.quickSearches[parseInt(e,10)];t&&this.dispatchEvent(new CustomEvent(I.SearchTermSelected,{detail:{searchEntry:t},bubbles:!0,composed:!0}))}static get styles(){return f`
+    `}selectQuickSearch(e){const{quickSearchIndex:r}=e.currentTarget.dataset;if(r===void 0)return;const t=this.quickSearches[parseInt(r,10)];t&&this.dispatchEvent(new CustomEvent(E.SearchTermSelected,{detail:{searchEntry:t},bubbles:!0,composed:!0}))}static get styles(){return f`
       :host {
         --quick-search-list-padding--: var(
           --ia-theme-quick-search-list-padding,
@@ -110,7 +110,7 @@ import{w as g,n as h,t as m,i as v,b as l,a as f,r as x}from"./index-CFIc9tQb.js
         text-decoration: var(--quick-search-link-decoration--);
         cursor: pointer;
       }
-    `}};y([h({type:Array})],p.prototype,"quickSearches",2);p=y([m("ia-quick-search")],p);var z=Object.defineProperty,O=Object.getOwnPropertyDescriptor,n=(r,e,t,s)=>{for(var a=s>1?void 0:s?O(e,t):e,i=r.length-1,c;i>=0;i--)(c=r[i])&&(a=(s?c(e,t,a):c(a))||a);return s&&a&&z(e,t,a),a};const u={InputChange:"inputchange",EnterKeyPressed:"enterKeyPressed",SearchCleared:"searchCleared",QuickSearchSelected:"quickSearchSelected"};let o=class extends v{constructor(){super(...arguments),this.isOpen=!1,this.showsDisclosure=!1,this.searchTerm="",this.quickSearches=[],this.placeholder=d("Search"),this.label=d("Search")}render(){return l`
+    `}};y([h({type:Array})],p.prototype,"quickSearches",2);p=y([m("ia-quick-search")],p);var O=Object.defineProperty,z=Object.getOwnPropertyDescriptor,n=(e,r,t,s)=>{for(var a=s>1?void 0:s?z(r,t):r,i=e.length-1,c;i>=0;i--)(c=e[i])&&(a=(s?c(r,t,a):c(a))||a);return s&&a&&O(r,t,a),a};const u={InputChange:"inputchange",EnterKeyPressed:"enterKeyPressed",SearchCleared:"searchCleared",QuickSearchSelected:"quickSearchSelected"};let o=class extends v{constructor(){super(...arguments),this.isOpen=!1,this.showsDisclosure=!1,this.searchTerm="",this.quickSearches=[],this.placeholder=d("Search"),this.label=d("Search"),this.enterWentDownOnInput=!1}render(){return l`
       <div
         class="container ${this.isOpen?"is-open":""} ${this.showsDisclosure?"shows-disclosure":""}"
       >
@@ -124,6 +124,7 @@ import{w as g,n as h,t as m,i as v,b as l,a as f,r as x}from"./index-CFIc9tQb.js
             placeholder=${this.placeholder}
             .value=${this.searchTerm}
             @input=${this.handleInput}
+            @keydown=${this.handleKeyDown}
             @keyup=${this.handleKeyUp}
           />
 
@@ -158,7 +159,7 @@ import{w as g,n as h,t as m,i as v,b as l,a as f,r as x}from"./index-CFIc9tQb.js
           ></ia-quick-search>
         </div>
       </div>
-    `}updated(r){!r.has("searchTerm")||!this.searchInput||(this.searchInput.value=this.searchTerm)}handleInput(){this.searchInput&&(this.searchTerm=this.searchInput.value,this.dispatchEvent(new CustomEvent(u.InputChange,{detail:{value:this.searchTerm}})))}handleKeyUp(r){r.key==="Enter"&&this.dispatchEvent(new CustomEvent(u.EnterKeyPressed,{detail:{value:this.searchTerm}}))}clearSearch(){this.searchTerm="",this.searchInput?.focus(),this.dispatchEvent(new Event(u.SearchCleared))}quickSearchSelected(r){const e=r.detail.searchEntry;this.searchTerm=e.displayText,this.dispatchEvent(new CustomEvent(u.QuickSearchSelected,{detail:{quickSearchEntry:e}})),this.searchInput?.focus(),this.isOpen=!1}toggleDisclosure(){this.isOpen=!this.isOpen}static get styles(){return f`
+    `}updated(e){!e.has("searchTerm")||!this.searchInput||(this.searchInput.value=this.searchTerm)}handleInput(){this.searchInput&&(this.searchTerm=this.searchInput.value,this.dispatchEvent(new CustomEvent(u.InputChange,{detail:{value:this.searchTerm}})))}handleKeyDown(e){e.key==="Enter"&&(this.enterWentDownOnInput=!0)}handleKeyUp(e){e.key==="Enter"&&this.enterWentDownOnInput&&(this.enterWentDownOnInput=!1,this.dispatchEvent(new CustomEvent(u.EnterKeyPressed,{detail:{value:this.searchTerm}})))}clearSearch(){this.searchTerm="",this.searchInput?.focus(),this.dispatchEvent(new Event(u.SearchCleared))}quickSearchSelected(e){const r=e.detail.searchEntry;this.searchTerm=r.displayText,this.dispatchEvent(new CustomEvent(u.QuickSearchSelected,{detail:{quickSearchEntry:r}})),this.enterWentDownOnInput=!1,this.searchInput?.focus(),this.isOpen=!1}toggleDisclosure(){this.isOpen=!this.isOpen}static get styles(){return f`
       :host {
         --search-bar-background-color--: var(
           --ia-theme-search-bar-background-color,
@@ -322,11 +323,11 @@ import{w as g,n as h,t as m,i as v,b as l,a as f,r as x}from"./index-CFIc9tQb.js
         color: inherit;
         cursor: pointer;
       }
-    `}};n([h({type:Boolean})],o.prototype,"isOpen",2);n([h({type:Boolean})],o.prototype,"showsDisclosure",2);n([h({type:String})],o.prototype,"searchTerm",2);n([h({type:Array})],o.prototype,"quickSearches",2);n([h({type:String})],o.prototype,"placeholder",2);n([h({type:String})],o.prototype,"label",2);n([w("#search-input")],o.prototype,"searchInput",2);o=n([m("ia-expandable-search-bar")],o);var _=Object.defineProperty,C=Object.getOwnPropertyDescriptor,k=(r,e,t,s)=>{for(var a=s>1?void 0:s?C(e,t):e,i=r.length-1,c;i>=0;i--)(c=r[i])&&(a=(s?c(e,t,a):c(a))||a);return s&&a&&_(e,t,a),a};const P=[{displayText:"grateful dead",data:{collection:"etree"}},{displayText:"apollo 11",data:{collection:"nasa"}},{displayText:"old time radio",data:{collection:"oldtimeradio"}},{displayText:"prelinger archives",data:{collection:"prelinger"}},{displayText:"internet arcade",data:{collection:"internetarcade"}}],D=[{label:"Background",cssVariable:"--ia-theme-search-bar-background-color",defaultValue:"#000000",inputType:"color"},{label:"Text colour",cssVariable:"--ia-theme-search-bar-text-color",defaultValue:"#ffffff",inputType:"color"},{label:"Quick search link colour",cssVariable:"--ia-theme-quick-search-link-color",defaultValue:"#4484ca",inputType:"color"},{label:"Font size",cssVariable:"--ia-theme-search-bar-font-size",defaultValue:1,inputType:"range",min:.75,max:2,step:.05,unit:"em"},{label:"Quick search max height",cssVariable:"--ia-theme-search-bar-max-expansion-height",defaultValue:150,inputType:"range",min:40,max:300,step:10,unit:"px"}],V=[{label:"Shows disclosure",propertyName:"showsDisclosure",defaultValue:!0,inputType:"radio",radioOptions:[!0,!1]},{label:"Placeholder",propertyName:"placeholder",defaultValue:"Search"}],j=6;let b=class extends v{constructor(){super(...arguments),this.log=[]}render(){return l`
+    `}};n([h({type:Boolean})],o.prototype,"isOpen",2);n([h({type:Boolean})],o.prototype,"showsDisclosure",2);n([h({type:String})],o.prototype,"searchTerm",2);n([h({type:Array})],o.prototype,"quickSearches",2);n([h({type:String})],o.prototype,"placeholder",2);n([h({type:String})],o.prototype,"label",2);n([x("#search-input")],o.prototype,"searchInput",2);o=n([m("ia-expandable-search-bar")],o);var D=Object.defineProperty,_=Object.getOwnPropertyDescriptor,k=(e,r,t,s)=>{for(var a=s>1?void 0:s?_(r,t):r,i=e.length-1,c;i>=0;i--)(c=e[i])&&(a=(s?c(r,t,a):c(a))||a);return s&&a&&D(r,t,a),a};const C=[{displayText:"grateful dead",data:{collection:"etree"}},{displayText:"apollo 11",data:{collection:"nasa"}},{displayText:"old time radio",data:{collection:"oldtimeradio"}},{displayText:"prelinger archives",data:{collection:"prelinger"}},{displayText:"internet arcade",data:{collection:"internetarcade"}}],P=[{label:"Background",cssVariable:"--ia-theme-search-bar-background-color",defaultValue:"#000000",inputType:"color"},{label:"Text colour",cssVariable:"--ia-theme-search-bar-text-color",defaultValue:"#ffffff",inputType:"color"},{label:"Quick search link colour",cssVariable:"--ia-theme-quick-search-link-color",defaultValue:"#4484ca",inputType:"color"},{label:"Font size",cssVariable:"--ia-theme-search-bar-font-size",defaultValue:1,inputType:"range",min:.75,max:2,step:.05,unit:"em"},{label:"Quick search max height",cssVariable:"--ia-theme-search-bar-max-expansion-height",defaultValue:150,inputType:"range",min:40,max:300,step:10,unit:"px"}],V=[{label:"Shows disclosure",propertyName:"showsDisclosure",defaultValue:!0,inputType:"radio",radioOptions:[!0,!1]},{label:"Placeholder",propertyName:"placeholder",defaultValue:"Search"}],j=6;let b=class extends v{constructor(){super(...arguments),this.log=[]}render(){return l`
       <story-template
         elementTag="ia-expandable-search-bar"
         elementClassName="IAExpandableSearchBar"
-        .styleInputData=${{settings:D}}
+        .styleInputData=${{settings:P}}
         .propInputData=${{settings:V}}
         .defaultUsageProps=${'.quickSearches=${[{ displayText: "grateful dead" }]}'}
       >
@@ -334,7 +335,7 @@ import{w as g,n as h,t as m,i as v,b as l,a as f,r as x}from"./index-CFIc9tQb.js
           slot="demo"
           class="search-bar"
           showsDisclosure
-          .quickSearches=${P}
+          .quickSearches=${C}
           @inputchange=${this.record}
           @enterKeyPressed=${this.record}
           @searchCleared=${this.record}
@@ -350,7 +351,7 @@ import{w as g,n as h,t as m,i as v,b as l,a as f,r as x}from"./index-CFIc9tQb.js
                 Type in the bar, press Enter, or open the chevron and pick a
                 suggestion.
               </p>`:l`<ol class="log">
-                ${this.log.map(r=>l`<li><code>${r}</code></li>`)}
+                ${this.log.map(e=>l`<li><code>${e}</code></li>`)}
               </ol>`}
         </div>
 
@@ -374,7 +375,7 @@ import{w as g,n as h,t as m,i as v,b as l,a as f,r as x}from"./index-CFIc9tQb.js
           </p>
         </div>
       </story-template>
-    `}record(r){const{detail:e}=r,t=e?` ${JSON.stringify(e)}`:"";this.log=[`${r.type}${t}`,...this.log].slice(0,j)}static get styles(){return f`
+    `}record(e){const{detail:r}=e,t=r?` ${JSON.stringify(r)}`:"";this.log=[`${e.type}${t}`,...this.log].slice(0,j)}static get styles(){return f`
       .search-bar {
         display: block;
         background-color: #151515;
@@ -406,4 +407,4 @@ import{w as g,n as h,t as m,i as v,b as l,a as f,r as x}from"./index-CFIc9tQb.js
         font-size: 0.9em;
         font-style: italic;
       }
-    `}};k([x()],b.prototype,"log",2);b=k([m("ia-expandable-search-bar-story")],b);export{b as IAExpandableSearchBarStory};
+    `}};k([w()],b.prototype,"log",2);b=k([m("ia-expandable-search-bar-story")],b);export{b as IAExpandableSearchBarStory};
