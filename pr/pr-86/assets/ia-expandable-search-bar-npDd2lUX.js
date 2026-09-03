@@ -1,4 +1,4 @@
-import{w as b,n as h,t as v,i as g,b as u,a as m}from"./index-3p_iekfK.js";import{e as k}from"./query-x5bTgDQb.js";import{m as l}from"./runtime-CCgtQBty.js";const y=b`
+import{w as b,n as h,t as v,i as g,b as u,a as f}from"./index-oDBj0m0q.js";import{e as k}from"./query-BVqEoZUt.js";import{m as l}from"./runtime-CCgtQBty.js";const y=b`
 <svg
   height="12"
   viewBox="0 0 12 12"
@@ -47,21 +47,21 @@ import{w as b,n as h,t as v,i as g,b as u,a as m}from"./index-3p_iekfK.js";impor
     fill="currentColor"
   />
 </svg>
-`;var S=Object.defineProperty,q=Object.getOwnPropertyDescriptor,f=(r,e,s,t)=>{for(var a=t>1?void 0:t?q(e,s):e,n=r.length-1,o;n>=0;n--)(o=r[n])&&(a=(t?o(e,s,a):o(a))||a);return t&&a&&S(e,s,a),a};const $={SearchTermSelected:"searchTermSelected"};let p=class extends g{constructor(){super(...arguments),this.quickSearches=[]}render(){return u`
+`;var S=Object.defineProperty,q=Object.getOwnPropertyDescriptor,m=(e,r,s,t)=>{for(var a=t>1?void 0:t?q(r,s):r,n=e.length-1,o;n>=0;n--)(o=e[n])&&(a=(t?o(r,s,a):o(a))||a);return t&&a&&S(r,s,a),a};const $={SearchTermSelected:"searchTermSelected"};let p=class extends g{constructor(){super(...arguments),this.quickSearches=[]}render(){return u`
       <ul>
-        ${this.quickSearches.map((r,e)=>u`
+        ${this.quickSearches.map((e,r)=>u`
             <li>
               <button
                 type="button"
-                data-quick-search-index=${e}
+                data-quick-search-index=${r}
                 @click=${this.selectQuickSearch}
               >
-                ${r.displayText}
+                ${e.displayText}
               </button>
             </li>
           `)}
       </ul>
-    `}selectQuickSearch(r){const{quickSearchIndex:e}=r.currentTarget.dataset;if(e===void 0)return;const s=this.quickSearches[parseInt(e,10)];s&&this.dispatchEvent(new CustomEvent($.SearchTermSelected,{detail:{searchEntry:s},bubbles:!0,composed:!0}))}static get styles(){return m`
+    `}selectQuickSearch(e){const{quickSearchIndex:r}=e.currentTarget.dataset;if(r===void 0)return;const s=this.quickSearches[parseInt(r,10)];s&&this.dispatchEvent(new CustomEvent($.SearchTermSelected,{detail:{searchEntry:s},bubbles:!0,composed:!0}))}static get styles(){return f`
       :host {
         --quick-search-list-padding--: var(
           --ia-theme-quick-search-list-padding,
@@ -110,7 +110,7 @@ import{w as b,n as h,t as v,i as g,b as u,a as m}from"./index-3p_iekfK.js";impor
         text-decoration: var(--quick-search-link-decoration--);
         cursor: pointer;
       }
-    `}};f([h({type:Array})],p.prototype,"quickSearches",2);p=f([v("ia-quick-search")],p);var z=Object.defineProperty,E=Object.getOwnPropertyDescriptor,c=(r,e,s,t)=>{for(var a=t>1?void 0:t?E(e,s):e,n=r.length-1,o;n>=0;n--)(o=r[n])&&(a=(t?o(e,s,a):o(a))||a);return t&&a&&z(e,s,a),a};const d={InputChange:"inputchange",EnterKeyPressed:"enterKeyPressed",SearchCleared:"searchCleared",QuickSearchSelected:"quickSearchSelected"};let i=class extends g{constructor(){super(...arguments),this.isOpen=!1,this.showsDisclosure=!1,this.searchTerm="",this.quickSearches=[],this.placeholder=l("Search"),this.label=l("Search")}render(){return u`
+    `}};m([h({type:Array})],p.prototype,"quickSearches",2);p=m([v("ia-quick-search")],p);var I=Object.defineProperty,z=Object.getOwnPropertyDescriptor,c=(e,r,s,t)=>{for(var a=t>1?void 0:t?z(r,s):r,n=e.length-1,o;n>=0;n--)(o=e[n])&&(a=(t?o(r,s,a):o(a))||a);return t&&a&&I(r,s,a),a};const d={InputChange:"inputchange",EnterKeyPressed:"enterKeyPressed",SearchCleared:"searchCleared",QuickSearchSelected:"quickSearchSelected"};let i=class extends g{constructor(){super(...arguments),this.isOpen=!1,this.showsDisclosure=!1,this.searchTerm="",this.quickSearches=[],this.placeholder=l("Search"),this.label=l("Search"),this.enterWentDownOnInput=!1}render(){return u`
       <div
         class="container ${this.isOpen?"is-open":""} ${this.showsDisclosure?"shows-disclosure":""}"
       >
@@ -124,6 +124,7 @@ import{w as b,n as h,t as v,i as g,b as u,a as m}from"./index-3p_iekfK.js";impor
             placeholder=${this.placeholder}
             .value=${this.searchTerm}
             @input=${this.handleInput}
+            @keydown=${this.handleKeyDown}
             @keyup=${this.handleKeyUp}
           />
 
@@ -158,7 +159,7 @@ import{w as b,n as h,t as v,i as g,b as u,a as m}from"./index-3p_iekfK.js";impor
           ></ia-quick-search>
         </div>
       </div>
-    `}updated(r){!r.has("searchTerm")||!this.searchInput||(this.searchInput.value=this.searchTerm)}handleInput(){this.searchInput&&(this.searchTerm=this.searchInput.value,this.dispatchEvent(new CustomEvent(d.InputChange,{detail:{value:this.searchTerm}})))}handleKeyUp(r){r.key==="Enter"&&this.dispatchEvent(new CustomEvent(d.EnterKeyPressed,{detail:{value:this.searchTerm}}))}clearSearch(){this.searchTerm="",this.searchInput?.focus(),this.dispatchEvent(new Event(d.SearchCleared))}quickSearchSelected(r){const e=r.detail.searchEntry;this.searchTerm=e.displayText,this.dispatchEvent(new CustomEvent(d.QuickSearchSelected,{detail:{quickSearchEntry:e}})),this.searchInput?.focus(),this.isOpen=!1}toggleDisclosure(){this.isOpen=!this.isOpen}static get styles(){return m`
+    `}updated(e){!e.has("searchTerm")||!this.searchInput||(this.searchInput.value=this.searchTerm)}handleInput(){this.searchInput&&(this.searchTerm=this.searchInput.value,this.dispatchEvent(new CustomEvent(d.InputChange,{detail:{value:this.searchTerm}})))}handleKeyDown(e){e.key==="Enter"&&(this.enterWentDownOnInput=!0)}handleKeyUp(e){e.key==="Enter"&&this.enterWentDownOnInput&&(this.enterWentDownOnInput=!1,this.dispatchEvent(new CustomEvent(d.EnterKeyPressed,{detail:{value:this.searchTerm}})))}clearSearch(){this.searchTerm="",this.searchInput?.focus(),this.dispatchEvent(new Event(d.SearchCleared))}quickSearchSelected(e){const r=e.detail.searchEntry;this.searchTerm=r.displayText,this.dispatchEvent(new CustomEvent(d.QuickSearchSelected,{detail:{quickSearchEntry:r}})),this.enterWentDownOnInput=!1,this.searchInput?.focus(),this.isOpen=!1}toggleDisclosure(){this.isOpen=!this.isOpen}static get styles(){return f`
       :host {
         --search-bar-background-color--: var(
           --ia-theme-search-bar-background-color,

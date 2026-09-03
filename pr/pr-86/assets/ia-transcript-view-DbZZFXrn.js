@@ -1,4 +1,4 @@
-import{m as y}from"./runtime-CCgtQBty.js";import{n as a,t as f,i as b,b as d,r as T,A as x,a as g}from"./index-3p_iekfK.js";import{e as S}from"./query-x5bTgDQb.js";import{o as C}from"./story-template-mgY936eY.js";class D{constructor(e,i,o,r,s,n){this.id=e,this.start=i,this.end=o,this.rawText=r,this.isMusic=s,this.searchMatchIndex=n}get displayText(){return this.isMusic?y("[Transcript unavailable]"):this.rawText}}class z{constructor(e){this.entries=[],this.entries=e}get searchResults(){return this.entries.filter(e=>e.searchMatchIndex!==void 0)}}function E(t){if(typeof t!="number"||!Number.isFinite(t))return"";const e=Math.max(0,Math.floor(t)),i=Math.floor(e/3600),o=Math.floor(e/60)%60,r=e%60,s=String(r).padStart(2,"0");if(i===0)return`${o}:${s}`;const n=String(o).padStart(2,"0");return`${i}:${n}:${s}`}var w=Object.defineProperty,I=Object.getOwnPropertyDescriptor,u=(t,e,i,o)=>{for(var r=o>1?void 0:o?I(e,i):e,s=t.length-1,n;s>=0;s--)(n=t[s])&&(r=(o?n(e,i,r):n(r))||r);return o&&r&&w(e,i,r),r};let h=class extends b{constructor(){super(...arguments),this.isActive=!1,this.isSelected=!1,this.isClickable=!1,this.isSearchResult=!1,this.isMusicEntry=!1}render(){return d`${this.entry?.displayText??""}`}};u([a({type:Object})],h.prototype,"entry",2);u([a({type:Boolean,reflect:!0})],h.prototype,"isActive",2);u([a({type:Boolean,reflect:!0})],h.prototype,"isSelected",2);u([a({type:Boolean,reflect:!0})],h.prototype,"isClickable",2);u([a({type:Boolean,reflect:!0})],h.prototype,"isSearchResult",2);u([a({type:Boolean,reflect:!0})],h.prototype,"isMusicEntry",2);h=u([f("ia-transcript-entry")],h);var $=Object.defineProperty,R=Object.getOwnPropertyDescriptor,l=(t,e,i,o)=>{for(var r=o>1?void 0:o?R(e,i):e,s=t.length-1,n;s>=0;s--)(n=t[s])&&(r=(o?n(e,i,r):n(r))||r);return o&&r&&$(e,i,r),r};const m={TranscriptEntrySelected:"transcriptEntrySelected",CurrentEntriesUpdated:"currentEntriesUpdated",AutoScrollChanged:"autoScrollChanged"},A=1;let c=class extends b{constructor(){super(...arguments),this.currentTime=0,this.topContextHeight=50,this.bottomContextHeight=50,this.autoScroll=!0,this.selectedSearchResultIndex=0,this.showContextZones=!1,this.scrollTimerDelay=15e3,this.timeScrollTop=0,this.currentEntries=[]}disconnectedCallback(){super.disconnectedCallback(),clearTimeout(this.scrollResumeTimerId),this.cancelScrollAnimation()}render(){return d`
+import{m as y}from"./runtime-CCgtQBty.js";import{n as a,t as f,i as b,b as d,r as T,A as x,a as g}from"./index-oDBj0m0q.js";import{e as S}from"./query-BVqEoZUt.js";import{o as w}from"./story-template-4ORzXmPL.js";class D{constructor(e,i,o,r,s,n){this.id=e,this.start=i,this.end=o,this.rawText=r,this.isMusic=s,this.searchMatchIndex=n}get displayText(){return this.isMusic?y("[Transcript unavailable]"):this.rawText}}class k{constructor(e){this.entries=[],this.entries=e}get searchResults(){return this.entries.filter(e=>e.searchMatchIndex!==void 0)}}function C(t){if(typeof t!="number"||!Number.isFinite(t))return"";const e=Math.max(0,Math.floor(t)),i=Math.floor(e/3600),o=Math.floor(e/60)%60,r=e%60,s=String(r).padStart(2,"0");if(i===0)return`${o}:${s}`;const n=String(o).padStart(2,"0");return`${i}:${n}:${s}`}var E=Object.defineProperty,I=Object.getOwnPropertyDescriptor,u=(t,e,i,o)=>{for(var r=o>1?void 0:o?I(e,i):e,s=t.length-1,n;s>=0;s--)(n=t[s])&&(r=(o?n(e,i,r):n(r))||r);return o&&r&&E(e,i,r),r};let h=class extends b{constructor(){super(...arguments),this.isActive=!1,this.isSelected=!1,this.isClickable=!1,this.isSearchResult=!1,this.isMusicEntry=!1}render(){return d`${this.entry?.displayText??""}`}};u([a({type:Object})],h.prototype,"entry",2);u([a({type:Boolean,reflect:!0})],h.prototype,"isActive",2);u([a({type:Boolean,reflect:!0})],h.prototype,"isSelected",2);u([a({type:Boolean,reflect:!0})],h.prototype,"isClickable",2);u([a({type:Boolean,reflect:!0})],h.prototype,"isSearchResult",2);u([a({type:Boolean,reflect:!0})],h.prototype,"isMusicEntry",2);h=u([f("ia-transcript-entry")],h);var $=Object.defineProperty,R=Object.getOwnPropertyDescriptor,l=(t,e,i,o)=>{for(var r=o>1?void 0:o?R(e,i):e,s=t.length-1,n;s>=0;s--)(n=t[s])&&(r=(o?n(e,i,r):n(r))||r);return o&&r&&$(e,i,r),r};const m={TranscriptEntrySelected:"transcriptEntrySelected",CurrentEntriesUpdated:"currentEntriesUpdated",AutoScrollChanged:"autoScrollChanged"},A=1;let c=class extends b{constructor(){super(...arguments),this.currentTime=0,this.topContextHeight=50,this.bottomContextHeight=50,this.autoScroll=!0,this.selectedSearchResultIndex=0,this.showContextZones=!1,this.scrollTimerDelay=15e3,this.timeScrollTop=0,this.currentEntries=[]}disconnectedCallback(){super.disconnectedCallback(),clearTimeout(this.scrollResumeTimerId),this.cancelScrollAnimation()}render(){return d`
       <div class="container">
         ${this.showContextZones?this.contextZoneTemplates:x}
 
@@ -25,7 +25,7 @@ import{m as y}from"./runtime-CCgtQBty.js";import{n as a,t as f,i as b,b as d,r a
       </button>
     `}get timeDisplayTemplate(){return d`
       <div class="time-display" style="top: ${this.timeScrollTop}px">
-        ${E(this.currentTime)}
+        ${C(this.currentTime)}
       </div>
     `}transcriptEntryTemplate(t){const e=this.currentEntries.some(i=>i.id===t.id);return d`
       <ia-transcript-entry
@@ -35,7 +35,7 @@ import{m as y}from"./runtime-CCgtQBty.js";import{n as a,t as f,i as b,b as d,r a
         ?isSearchResult=${t.searchMatchIndex!==void 0}
         ?isMusicEntry=${t.isMusic}
         isClickable
-        data-search-result-index=${C(t.searchMatchIndex)}
+        data-search-result-index=${w(t.searchMatchIndex)}
         data-identifier=${t.id}
         @click=${this.transcriptEntrySelected}
       ></ia-transcript-entry>
@@ -155,7 +155,10 @@ import{m as y}from"./runtime-CCgtQBty.js";import{n as a,t as f,i as b,b as d,r a
         left: 0;
         width: 100%;
         height: 0;
-        z-index: -1;
+        /* Purely a guide. It sits over the top and bottom of the scroll area,
+           so without this it would swallow the wheel and the entry clicks
+           there, breaking the scrolling it exists to help you look at. */
+        pointer-events: none;
       }
 
       .context-overlay.top {
@@ -244,4 +247,4 @@ import{m as y}from"./runtime-CCgtQBty.js";import{n as a,t as f,i as b,b as d,r a
       ia-transcript-entry[issearchresult][isselected]:after {
         border: 2px solid var(--transcript-search-result-active-border-color--);
       }
-    `}};l([a({type:Object})],c.prototype,"config",2);l([a({type:Number})],c.prototype,"currentTime",2);l([a({type:Number})],c.prototype,"topContextHeight",2);l([a({type:Number})],c.prototype,"bottomContextHeight",2);l([a({type:Boolean})],c.prototype,"autoScroll",2);l([a({type:Number})],c.prototype,"selectedSearchResultIndex",2);l([a({type:Boolean})],c.prototype,"showContextZones",2);l([a({type:Number})],c.prototype,"scrollTimerDelay",2);l([T()],c.prototype,"timeScrollTop",2);l([T()],c.prototype,"currentEntries",2);l([S("#scroll-container")],c.prototype,"scrollView",2);c=l([f("ia-transcript-view")],c);export{z as T,D as a,E as f};
+    `}};l([a({type:Object})],c.prototype,"config",2);l([a({type:Number})],c.prototype,"currentTime",2);l([a({type:Number})],c.prototype,"topContextHeight",2);l([a({type:Number})],c.prototype,"bottomContextHeight",2);l([a({type:Boolean})],c.prototype,"autoScroll",2);l([a({type:Number})],c.prototype,"selectedSearchResultIndex",2);l([a({type:Boolean})],c.prototype,"showContextZones",2);l([a({type:Number})],c.prototype,"scrollTimerDelay",2);l([T()],c.prototype,"timeScrollTop",2);l([T()],c.prototype,"currentEntries",2);l([S("#scroll-container")],c.prototype,"scrollView",2);c=l([f("ia-transcript-view")],c);export{k as T,D as a,C as f};
