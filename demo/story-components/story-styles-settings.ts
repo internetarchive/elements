@@ -16,6 +16,17 @@ import { labelToId } from '../story-utils';
 
 export type StyleInputType = 'color' | 'text' | 'number' | 'range';
 
+/**
+ * A one-click value for a style input, for surfacing the values real consumers
+ * use rather than making someone type them.
+ */
+export type StyleInputPreset = {
+  label: string;
+  value: string | number;
+  /* Optional hint, shown as the button's tooltip */
+  note?: string;
+};
+
 export type StyleInputSettings = {
   label: string;
   cssVariable: string;
@@ -25,6 +36,11 @@ export type StyleInputSettings = {
   max?: number;
   step?: number;
   unit?: string;
+  presets?: StyleInputPreset[];
+  /* Sits the presets beside the input instead of beneath it */
+  presetsInline?: boolean;
+  /* Groups consecutive inputs under a shared heading */
+  section?: string;
 };
 
 /**
@@ -81,9 +97,21 @@ export class StoryStylesSettings extends LitElement {
                into <table> get hoisted into an implicit tbody by the parser,
                which ejects Lit's marker nodes and breaks later re-renders. -->
           <tbody>
-            ${this.styleInputData.settings.map((input) =>
-              this.renderStyleRow(input),
-            )}
+            ${this.styleInputData.settings.map((input, index) => {
+              const previous = this.styleInputData?.settings[index - 1];
+              const startsSection =
+                !!input.section && input.section !== previous?.section;
+              return html`
+                ${startsSection
+                  ? html`<tr>
+                      <th class="style-section" colspan="2">
+                        ${input.section}
+                      </th>
+                    </tr>`
+                  : nothing}
+                ${this.renderStyleRow(input)}
+              `;
+            })}
           </tbody>
         </table>
         <button @click=${this.applyStyles}>Apply</button>
@@ -162,7 +190,11 @@ export class StoryStylesSettings extends LitElement {
     });
 
     this.dispatchEvent(
-      new CustomEvent('stylesApplied', { detail: { styles: '' } }),
+      new CustomEvent('stylesApplied', {
+        detail: { styles: '' },
+        bubbles: true,
+        composed: true,
+      }),
     );
   }
 
@@ -178,33 +210,42 @@ export class StoryStylesSettings extends LitElement {
         <td>
           <label for=${inputId}>${input.label}</label>
         </td>
-        <td class="style-input-cell">
-          <input
-            id=${inputId}
-            class="style-input"
-            type=${input.inputType ?? 'text'}
-            min=${ifDefined(isNumeric ? input.min : undefined)}
-            max=${ifDefined(isNumeric ? input.max : undefined)}
-            step=${ifDefined(isNumeric ? input.step : undefined)}
-            value=${input.defaultValue}
-            data-variable=${input.cssVariable}
-            data-unit=${ifDefined(input.unit)}
-            @input=${input.inputType === 'range'
-              ? this.updateRangeReadout
-              : undefined}
-          />
-          ${input.inputType === 'range'
-            ? html`<output class="style-readout" for=${inputId}
-                >${this.readoutFor(input)}</output
-              >`
+        <td
+          class="style-input-cell ${input.presetsInline
+            ? 'presets-inline'
+            : ''}"
+        >
+          <div class="style-input-row">
+            <input
+              id=${inputId}
+              class="style-input"
+              type=${input.inputType ?? 'text'}
+              min=${ifDefined(isNumeric ? input.min : undefined)}
+              max=${ifDefined(isNumeric ? input.max : undefined)}
+              step=${ifDefined(isNumeric ? input.step : undefined)}
+              value=${input.defaultValue}
+              data-variable=${input.cssVariable}
+              data-unit=${ifDefined(input.unit)}
+              @input=${input.inputType === 'range'
+                ? this.updateRangeReadout
+                : undefined}
+            />
+            ${input.inputType === 'range'
+              ? html`<output class="style-readout" for=${inputId}
+                  >${this.readoutFor(input)}</output
+                >`
+              : nothing}
+            ${when(
+              this.styleInputData?.showCssVariables,
+              () =>
+                html`<code class="style-var" title=${input.cssVariable}
+                  >${input.cssVariable}</code
+                >`,
+            )}
+          </div>
+          ${input.presets
+            ? this.renderPresets(inputId, input.presets)
             : nothing}
-          ${when(
-            this.styleInputData?.showCssVariables,
-            () =>
-              html`<code class="style-var" title=${input.cssVariable}
-                >${input.cssVariable}</code
-              >`,
-          )}
         </td>
       </tr>
     `;
@@ -230,6 +271,46 @@ export class StoryStylesSettings extends LitElement {
   }
 
   /** The text to show beside a range slider — live value, else its default. */
+  /**
+   * Renders the preset buttons for a style input. Choosing one fills the input
+   * and applies immediately, so it takes one click rather than two.
+   */
+  private renderPresets(
+    inputId: string,
+    presets: StyleInputPreset[],
+  ): TemplateResult {
+    return html`
+      <div class="style-presets">
+        ${presets.map(
+          (preset) => html`
+            <button
+              type="button"
+              class="style-preset"
+              title=${ifDefined(preset.note)}
+              @click=${() => this.applyPreset(inputId, preset)}
+            >
+              ${preset.label}
+              <small>${preset.value}</small>
+            </button>
+          `,
+        )}
+      </div>
+    `;
+  }
+
+  private applyPreset(inputId: string, preset: StyleInputPreset): void {
+    const input = this.renderRoot.querySelector<HTMLInputElement>(
+      `#${CSS.escape(inputId)}`,
+    );
+    if (!input) return;
+
+    input.value = `${preset.value}`;
+    if (input.type === 'range') {
+      input.dispatchEvent(new Event('input'));
+    }
+    this.applyStyles();
+  }
+
   private readoutFor(input: StyleInputSettings): string {
     return (
       this.rangeReadouts[input.cssVariable] ??
@@ -252,6 +333,9 @@ export class StoryStylesSettings extends LitElement {
     this.dispatchEvent(
       new CustomEvent('stylesApplied', {
         detail: { styles: appliedStyles.join('\n ') },
+        // Crosses the shadow boundary so a story can react to its own vars
+        bubbles: true,
+        composed: true,
       }),
     );
   }
@@ -267,7 +351,49 @@ export class StoryStylesSettings extends LitElement {
 
         .style-input-cell {
           display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .style-input-cell.presets-inline {
+          flex-direction: row;
           align-items: center;
+          gap: 0.5rem;
+        }
+
+        .style-input-cell.presets-inline .style-presets {
+          margin-top: 0;
+        }
+
+        .style-section {
+          text-align: left;
+          padding-top: 0.75em;
+          font-size: var(--font-size-standard--, 1em);
+        }
+
+        .style-input-row {
+          display: flex;
+          align-items: center;
+        }
+
+        .style-presets {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.3rem;
+          margin-top: 0.35rem;
+        }
+
+        .style-preset {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.1rem;
+          padding: 0.25rem 0.4rem;
+          cursor: pointer;
+        }
+
+        .style-preset small {
+          opacity: 0.7;
         }
 
         .style-readout {
