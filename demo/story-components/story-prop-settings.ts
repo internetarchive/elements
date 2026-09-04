@@ -19,6 +19,14 @@ export type PropInputSettings<T> = {
   defaultValue: string | boolean | number;
   inputType?: 'text' | 'radio' | 'number';
   radioOptions?: string[] | boolean[];
+  /*
+   * Whether the property reflects to an attribute. Reflecting props are shown
+   * in the usage example as attributes, since that is how they are most
+   * naturally written in markup.
+   */
+  reflects?: boolean;
+  /* Groups consecutive inputs under a shared heading */
+  section?: string;
 };
 
 export type PropInputData = {
@@ -46,14 +54,23 @@ export class StoryPropsSettings extends LitElement {
     return html`
       <div class="settings-options">
         <table>
-          ${this.propInputData.settings.map(
-            (input) =>
-              choose(
+          ${this.propInputData.settings.map((input, index) => {
+            const previous = this.propInputData?.settings[index - 1];
+            const startsSection =
+              !!input.section && input.section !== previous?.section;
+            return html`
+              ${startsSection
+                ? html`<tr>
+                    <th class="prop-section" colspan="2">${input.section}</th>
+                  </tr>`
+                : nothing}
+              ${choose(
                 input.inputType,
                 [['radio', () => this.createRadioPropInput(input)]],
                 () => this.createDefaultPropInput(input),
-              ) ?? nothing,
-          )}
+              ) ?? nothing}
+            `;
+          })}
         </table>
         <button @click=${this.applyProps}>Apply</button>
       </div>
@@ -105,6 +122,7 @@ export class StoryPropsSettings extends LitElement {
                   data-prop=${settings.propertyName}
                   data-format=${typeof settings.defaultValue}
                   ?checked=${settings.defaultValue === option}
+                  @change=${this.applyProps}
                 /><label for="${inputId}-${option}"> ${option} </label>`,
           )}
         </td>
@@ -138,10 +156,17 @@ export class StoryPropsSettings extends LitElement {
           break;
       }
 
-      const stringifiedValue =
-        typeof value === 'string' ? `'${value}'` : value.toString();
-      stringifiedProps.push(`.${propName}=\${${stringifiedValue}}`);
+      // Always apply, so switching back to a default really resets the demo.
       appliedProps.push({ propName, value });
+
+      // But leave defaults out of the example — consumers only need to pass
+      // what they are actually changing.
+      const setting = this.propInputData?.settings.find(
+        (candidate) => candidate.propertyName === propName,
+      );
+      if (setting && value === setting.defaultValue) return;
+
+      stringifiedProps.push(this.stringifyProp(propName, value, setting));
     });
 
     this.dispatchEvent(
@@ -154,6 +179,28 @@ export class StoryPropsSettings extends LitElement {
     );
   }
 
+  /**
+   * Renders one prop for the usage example. Reflecting props are written as
+   * attributes -- Lit lowercases the property name for the attribute unless
+   * told otherwise -- and everything else as a property binding.
+   */
+  private stringifyProp(
+    propName: string,
+    value: string | boolean | number,
+    setting?: PropInputSettings<any>,
+  ): string {
+    if (!setting?.reflects) {
+      const stringified =
+        typeof value === 'string' ? `'${value}'` : value.toString();
+      return `.${propName}=\${${stringified}}`;
+    }
+
+    const attribute = propName.toLowerCase();
+    // A reflected boolean is present or absent, never ="false"
+    if (typeof value === 'boolean') return attribute;
+    return `${attribute}="${value}"`;
+  }
+
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
@@ -161,6 +208,12 @@ export class StoryPropsSettings extends LitElement {
         .settings-options {
           background-color: var(--primary-background-color);
           padding: 1em;
+        }
+
+        .prop-section {
+          text-align: left;
+          padding-top: 0.75em;
+          font-size: var(--font-size-standard--, 1em);
         }
       `,
     ];

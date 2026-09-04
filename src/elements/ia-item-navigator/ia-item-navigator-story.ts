@@ -7,7 +7,7 @@ import './menus/ia-itemnav-sort-files-button';
 import './menus/ia-itemnav-share-panel';
 import { viewableFilesIcon } from './menus/ia-itemnav-viewable-files-panel';
 import { shareIcon } from './menus/ia-itemnav-share-panel';
-import { maskedIcon } from './masked-icon';
+import { maskedIcon } from '@src/util/masked-icon';
 import listIconUrl from './menus/icons/list.svg';
 import type {
   MenuProviderInterface,

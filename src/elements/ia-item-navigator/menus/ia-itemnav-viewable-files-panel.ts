@@ -10,7 +10,7 @@ import {
 import { customElement, property } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat.js';
 import themeStyles from '@src/themes/theme-styles';
-import { maskedIcon } from '../masked-icon';
+import { maskedIcon } from '@src/util/masked-icon';
 import viewableFilesUrl from './icons/viewable-files.svg';
 import type { FileSortOption, ViewableFileInfo } from './models';
 
