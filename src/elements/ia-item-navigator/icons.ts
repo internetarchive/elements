@@ -1,4 +1,4 @@
-import { maskedIcon } from './masked-icon';
+import { maskedIcon } from '@src/util/masked-icon';
 
 import ellipsesUrl from './icons/ellipses.svg';
 import collapseSidebarUrl from './icons/collapse-sidebar.svg';

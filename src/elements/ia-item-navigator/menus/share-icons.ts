@@ -1,5 +1,5 @@
 import { type TemplateResult } from 'lit';
-import { maskedIcon } from '../masked-icon';
+import { maskedIcon } from '@src/util/masked-icon';
 
 import shareUrl from './icons/share.svg';
 import twitterUrl from './icons/twitter.svg';
