@@ -26,15 +26,7 @@ import tvIcon from './tv.svg';
 import videoIcon from './video.svg';
 import webIcon from './web.svg';
 
-/**
- * The states this indicator renders a real indicator for.
- *
- * Any other value renders the invisible placeholder instead, which reserves the
- * indicator's width without drawing anything. That fallback is relied upon by
- * consumers with an idle/pre-validation state (see `ia-otp-form`), which keeps
- * their layout from shifting when the indicator appears.
- */
-export type LoadingStatus = 'loading' | 'success' | 'error';
+export type LoadingStatus = 'ready' | 'loading' | 'success' | 'error';
 
 /**
  * The mediatype glyphs this element ships. These are *icon* names, which do not
@@ -99,20 +91,18 @@ export class IAStatusIndicator extends LitElement {
   @state() private hasSlottedIcon = false;
 
   render(): TemplateResult {
-    return html`${choose(
-      this.mode,
-      [
-        ['loading', () => this.loadingIndicatorTemplate],
-        ['success', () => this.successIndicatorTemplate],
-        ['error', () => this.errorIndicatorTemplate],
-      ],
-      // Anything unrecognised (e.g. an idle 'ready' state) reserves space
-      // without drawing. See the note on LoadingStatus.
-      () => this.placeholderTemplate,
-    )}`;
+    return html`${choose(this.mode, [
+      ['ready', () => this.placeholderTemplate],
+      ['loading', () => this.loadingIndicatorTemplate],
+      ['success', () => this.successIndicatorTemplate],
+      ['error', () => this.errorIndicatorTemplate],
+    ])}`;
   }
 
-  /** A placeholder that reserves the indicator's space without drawing */
+  /**
+   * The `ready` state: reserves the indicator's space without drawing, so a
+   * consumer's layout doesn't shift once the indicator appears.
+   */
   private get placeholderTemplate(): TemplateResult {
     return html`<div class="placeholder"></div>`;
   }

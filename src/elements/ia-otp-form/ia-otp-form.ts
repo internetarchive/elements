@@ -32,16 +32,9 @@ const Events = {
  */
 @customElement('ia-otp-form')
 export class IAOTPForm extends LitElement {
-  /*
-   * The state of the validation process.
-   *
-   * 'ready' is this form's idle state and is deliberately outside
-   * `LoadingStatus`: ia-status-indicator renders its space-reserving
-   * placeholder for it, which keeps the input row from shifting once
-   * validation starts.
-   */
+  /* The state of the validation process */
   @property({ type: String })
-  validationStatus: LoadingStatus | 'ready' = 'ready';
+  validationStatus: LoadingStatus = 'ready';
 
   /* Whether to display a loading indicator instead of the button text */
   @property({ type: Boolean })

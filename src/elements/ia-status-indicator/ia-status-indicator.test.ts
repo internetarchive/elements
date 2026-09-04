@@ -2,11 +2,7 @@ import { fixture } from '@open-wc/testing-helpers';
 import { describe, expect, test } from 'vitest';
 import { html } from 'lit';
 
-import type {
-  LoadingStatus,
-  MediaTypeIcon,
-  IAStatusIndicator,
-} from './ia-status-indicator';
+import type { MediaTypeIcon, IAStatusIndicator } from './ia-status-indicator';
 import './ia-status-indicator';
 
 /** slotchange lands after the initial render, so give it a turn of the loop */
@@ -332,12 +328,9 @@ describe('IA Status Indicator', () => {
     expect(el.shadowRoot?.querySelector('.ia-icon')).to.not.exist;
   });
 
-  test('renders a space-reserving placeholder for an unrecognised mode', async () => {
+  test('can render a placeholder instead if requested', async () => {
     const el = await fixture<IAStatusIndicator>(
-      // ia-otp-form relies on this for its idle 'ready' state
-      html`<ia-status-indicator
-        .mode=${'ready' as LoadingStatus}
-      ></ia-status-indicator>`,
+      html`<ia-status-indicator .mode=${'ready'}></ia-status-indicator>`,
     );
 
     expect(el.shadowRoot?.querySelector('.placeholder')).to.exist;

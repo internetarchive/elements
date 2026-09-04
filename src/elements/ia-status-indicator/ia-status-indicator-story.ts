@@ -57,7 +57,7 @@ const propInputSettings: PropInputSettings<IAStatusIndicator>[] = [
     reflects: true,
     defaultValue: 'loading',
     inputType: 'radio',
-    radioOptions: ['loading', 'success', 'error'],
+    radioOptions: ['ready', 'loading', 'success', 'error'],
   },
   {
     label: 'Mediatype icon',
