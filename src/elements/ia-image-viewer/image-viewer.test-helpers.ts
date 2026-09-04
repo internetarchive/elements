@@ -1,5 +1,6 @@
 import type { ImageViewerImage } from './models';
 import type { IAImageViewer } from './ia-image-viewer';
+import type { IAImageViewerControls } from './ia-imgview-controls';
 import type { IAImageViewerSlide } from './ia-imgview-slide';
 
 /** A numbered set of images, `photo1.jpg` through `photoN.jpg`. */
@@ -12,7 +13,21 @@ export function makeImages(count: number): ImageViewerImage[] {
 
 /** The slide elements currently in the viewer's track. */
 export function slideElements(el: IAImageViewer): IAImageViewerSlide[] {
-  return Array.from(el.shadowRoot?.querySelectorAll('ia-imgview-slide') ?? []);
+  return Array.from(
+    el.shadowRoot?.querySelectorAll<IAImageViewerSlide>('ia-imgview-slide') ??
+      [],
+  );
+}
+
+/** The nav controls, if the viewer is showing more than one image. */
+export function controlsElement(
+  el: IAImageViewer,
+): IAImageViewerControls | null {
+  return (
+    el.shadowRoot?.querySelector<IAImageViewerControls>(
+      'ia-imgview-controls',
+    ) ?? null
+  );
 }
 
 /** Every match across the slides, each of which has its own shadow root. */
@@ -38,7 +53,7 @@ export function queryControls<T extends Element>(
   el: IAImageViewer,
   selector: string,
 ): T | null {
-  const controls = el.shadowRoot?.querySelector('ia-imgview-controls');
+  const controls = controlsElement(el);
   return controls?.shadowRoot?.querySelector<T>(selector) ?? null;
 }
 
@@ -46,7 +61,7 @@ export function queryControlsAll<T extends Element>(
   el: IAImageViewer,
   selector: string,
 ): T[] {
-  const controls = el.shadowRoot?.querySelector('ia-imgview-controls');
+  const controls = controlsElement(el);
   return Array.from(controls?.shadowRoot?.querySelectorAll<T>(selector) ?? []);
 }
 
@@ -57,7 +72,7 @@ export function queryControlsAll<T extends Element>(
  */
 export async function settle(el: IAImageViewer): Promise<void> {
   await el.updateComplete;
-  const controls = el.shadowRoot?.querySelector('ia-imgview-controls');
+  const controls = controlsElement(el);
   await Promise.all([
     ...slideElements(el).map((slide) => slide.updateComplete),
     controls?.updateComplete,

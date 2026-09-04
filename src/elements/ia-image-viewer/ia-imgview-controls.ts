@@ -154,9 +154,3 @@ export class IAImageViewerControls extends LitElement {
     ];
   }
 }
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'ia-imgview-controls': IAImageViewerControls;
-  }
-}

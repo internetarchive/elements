@@ -289,7 +289,9 @@ export class IAImageViewer extends LitElement {
   }
 
   private createDragSlide(image: ImageViewerImage): IAImageViewerSlide {
-    const slide = document.createElement('ia-imgview-slide');
+    const slide = document.createElement(
+      'ia-imgview-slide',
+    ) as IAImageViewerSlide;
     slide.image = image;
     slide.dataset.dragSlide = '';
     return slide;
@@ -562,11 +564,5 @@ export class IAImageViewer extends LitElement {
         }
       `,
     ];
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'ia-image-viewer': IAImageViewer;
   }
 }

@@ -227,9 +227,3 @@ export class IAImageViewerSlide extends LitElement {
     ];
   }
 }
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'ia-imgview-slide': IAImageViewerSlide;
-  }
-}
