@@ -48,8 +48,10 @@ The workflow bumps nothing. It checks out the released commit and publishes
 whatever `package.json` says, so the tag name and the version have to agree.
 
 Always bump with `pnpm version`, which edits `package.json`, commits, and creates
-the matching tag in one step. The tag gets a `v` prefix from npm's default
-`tag-version-prefix`. Never hand-write a tag.
+the matching tag in one step. The commit message is the bare version (`0.2.13`)
+while the tag carries a `v` prefix (`v0.2.13`) from npm's default
+`tag-version-prefix`, so the prefix comes from npm, not from the commit. Never
+hand-write a tag.
 
 ### Prerelease, from a feature branch
 
