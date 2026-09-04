@@ -63,16 +63,6 @@ export class IAImageViewerStory extends LitElement {
     return {
       settings: [
         {
-          label: 'Height',
-          cssVariable: '--image-viewer-height',
-          defaultValue: 400,
-          inputType: 'range',
-          min: 200,
-          max: 700,
-          step: 10,
-          unit: 'px',
-        },
-        {
           label: 'Text color',
           cssVariable: '--image-viewer-text-color',
           defaultValue: '#ffffff',
@@ -166,6 +156,11 @@ export class IAImageViewerStory extends LitElement {
             <code>imageActivated</code> is cancelable, so a host that wants a
             lightbox instead can call <code>preventDefault()</code> on it.
           </p>
+          <p>
+            Size it with ordinary CSS —
+            <code>ia-image-viewer { height: 400px }</code>. It fills the box it
+            is given, so there is no height custom property to set.
+          </p>
         </div>
       </story-template>
     `;
@@ -173,9 +168,10 @@ export class IAImageViewerStory extends LitElement {
 
   static get styles(): CSSResultGroup {
     return css`
+      /* The viewer fills whatever box it's given, so the demo gives it one. */
       .stage {
         background: #222;
-        --image-viewer-height: 400px;
+        height: 400px;
       }
 
       .event-log {

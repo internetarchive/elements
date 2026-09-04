@@ -65,18 +65,6 @@ export class IAImageViewerControls extends LitElement {
             --image-viewer-text-color,
             var(--true-white)
           );
-          --imgview-controls-btn-width--: var(
-            --image-viewer-nav-button-width,
-            40px
-          );
-          --imgview-controls-btn-width-wide--: var(
-            --image-viewer-nav-button-width-wide,
-            60px
-          );
-          --imgview-controls-focus-color--: var(
-            --image-viewer-focus-outline-color,
-            rgba(255, 255, 255, 0.8)
-          );
 
           display: flex;
           align-items: center;
@@ -86,7 +74,7 @@ export class IAImageViewerControls extends LitElement {
         }
 
         .nav-btn {
-          width: var(--imgview-controls-btn-width--);
+          width: 40px;
           background: transparent;
           color: var(--imgview-controls-text-color--);
           border: none;
@@ -105,7 +93,7 @@ export class IAImageViewerControls extends LitElement {
         }
 
         .nav-btn:focus-visible {
-          outline: 2px solid var(--imgview-controls-focus-color--);
+          outline: 2px solid rgba(255, 255, 255, 0.8);
           outline-offset: -2px;
         }
 
@@ -133,7 +121,7 @@ export class IAImageViewerControls extends LitElement {
             position: absolute;
             top: 0;
             bottom: 0;
-            width: var(--imgview-controls-btn-width-wide--);
+            width: 60px;
             font-size: 60px;
             z-index: 1;
           }

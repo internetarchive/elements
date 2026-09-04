@@ -458,8 +458,6 @@ export class IAImageViewer extends LitElement {
       themeStyles,
       css`
         :host {
-          --image-viewer-height--: var(--image-viewer-height, 100%);
-          --image-viewer-max-width--: var(--image-viewer-max-width, none);
           --image-viewer-slide-duration--: var(
             --image-viewer-slide-duration,
             500ms
@@ -468,7 +466,6 @@ export class IAImageViewer extends LitElement {
             --image-viewer-glow-color,
             rgba(255, 255, 255, 0.25)
           );
-          --image-viewer-glow-width--: var(--image-viewer-glow-width, 100px);
           /*
            * The breakpoint the controls query against. Named so the query in
            * ia-imgview-controls resolves to this host rather than to whatever
@@ -476,9 +473,13 @@ export class IAImageViewer extends LitElement {
            */
           container: image-viewer / inline-size;
 
+          /*
+           * Size and placement are the host's business, set with ordinary CSS
+           * on the element. These are only defaults for a host that sets
+           * neither; a rule in the outer tree beats them.
+           */
           display: block;
-          height: var(--image-viewer-height--);
-          max-width: var(--image-viewer-max-width--);
+          height: 100%;
           margin: 0 auto;
         }
 
@@ -508,7 +509,7 @@ export class IAImageViewer extends LitElement {
           position: absolute;
           top: 0;
           bottom: 0;
-          width: var(--image-viewer-glow-width--);
+          width: 100px;
           pointer-events: none;
           z-index: 2;
           animation: glow-fade 700ms ease-out both;
