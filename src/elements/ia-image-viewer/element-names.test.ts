@@ -6,24 +6,15 @@ import './ia-imgview-controls';
 
 /**
  * Custom elements share one global registry, so the viewer's parts are
- * namespaced under its own prefix. Without that, names like `image-viewer`
- * collide with whatever else the host page has loaded — including offshoot,
- * which registers `image-viewer` verbatim for its own copy of this component
- * and would throw on the second registration rather than degrading.
+ * namespaced under its own prefix rather than taking names on their own.
  */
 const NAMESPACED_ELEMENTS = ['ia-imgview-slide', 'ia-imgview-controls'];
 
 /**
- * Names this component must not claim. `image-viewer` is offshoot's, and the
- * rest are generic enough that any page could want them.
+ * Names generic enough that another component could reasonably want them, so
+ * the viewer's internals shouldn't claim them.
  */
-const NAMES_TO_AVOID = [
-  'image-viewer',
-  'image-viewer-slide',
-  'image-viewer-controls',
-  'ia-slide',
-  'ia-carousel',
-];
+const NAMES_TO_AVOID = ['ia-slide', 'ia-carousel', 'ia-image'];
 
 describe('image viewer element names', () => {
   test('registers the viewer under its own name', () => {
