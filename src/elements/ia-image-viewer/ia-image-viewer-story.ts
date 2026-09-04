@@ -41,11 +41,22 @@ export class IAImageViewerStory extends LitElement {
 
   @state() private lastEvent = '';
 
+  /**
+   * The three lists are built once rather than per render, so toggling a
+   * setting is the only thing that changes what the viewer is handed. Building
+   * them in the getter would hand over a new array every time the event log
+   * updates.
+   */
+  private static readonly IMAGE_SETS = {
+    default: DEMO_IMAGES,
+    withBroken: [DEMO_IMAGES[0], BROKEN_IMAGE, ...DEMO_IMAGES.slice(1)],
+    single: [DEMO_IMAGES[0]],
+  };
+
   private get images(): ImageViewerImage[] {
-    if (this.singleImage) return [DEMO_IMAGES[0]];
-    return this.includeBroken
-      ? [DEMO_IMAGES[0], BROKEN_IMAGE, ...DEMO_IMAGES.slice(1)]
-      : DEMO_IMAGES;
+    const sets = IAImageViewerStory.IMAGE_SETS;
+    if (this.singleImage) return sets.single;
+    return this.includeBroken ? sets.withBroken : sets.default;
   }
 
   private get styleInputData(): StyleInputData {

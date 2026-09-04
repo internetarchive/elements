@@ -101,10 +101,8 @@ export class IAImageViewer extends LitElement {
 
   protected willUpdate(changed: PropertyValues): void {
     if (changed.has('images') || changed.has('currentImageName')) {
-      const requested = this.currentImageName
-        ? this.images.findIndex((i) => i.name === this.currentImageName)
-        : -1;
-      this.currentIndex = requested >= 0 ? requested : 0;
+      const previous = changed.get('images') as ImageViewerImage[] | undefined;
+      this.currentIndex = this.indexToShow(changed, previous);
 
       this.animating = false;
       this.slideGeneration = 0;
@@ -114,6 +112,40 @@ export class IAImageViewer extends LitElement {
       this.reportedFailures.clear();
       this.preloadAdjacentImages();
     }
+  }
+
+  /**
+   * Where to land when the images or the requested name change.
+   *
+   * A new `currentImageName` is the host asking for a particular image, so it
+   * wins. A new `images` array on its own isn't: a host that builds its list
+   * in a getter hands over a fresh array on every render, which says nothing
+   * about the images having changed. So the viewer holds its place by name and
+   * only goes back to the start when the image it was showing is really gone.
+   */
+  private indexToShow(
+    changed: PropertyValues,
+    previousImages: ImageViewerImage[] | undefined,
+  ): number {
+    if (changed.has('currentImageName') && this.currentImageName) {
+      const requested = this.images.findIndex(
+        (image) => image.name === this.currentImageName,
+      );
+      if (requested >= 0) return requested;
+    }
+
+    const showing = previousImages?.[this.currentIndex]?.name;
+    if (showing) {
+      const stillThere = this.images.findIndex(
+        (image) => image.name === showing,
+      );
+      if (stillThere >= 0) return stillThere;
+    }
+
+    const named = this.currentImageName
+      ? this.images.findIndex((image) => image.name === this.currentImageName)
+      : -1;
+    return named >= 0 ? named : 0;
   }
 
   render(): TemplateResult | typeof nothing {

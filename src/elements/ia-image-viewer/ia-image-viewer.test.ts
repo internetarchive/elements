@@ -328,6 +328,60 @@ describe('IAImageViewer', () => {
     });
   });
 
+  describe('re-supplying the image list', () => {
+    test('stays put when the same images arrive as a new array', async () => {
+      const el = await viewerWith(3);
+      await navigateAndSettle(el, queryControls(el, '.next')!);
+      expect(counterText(el)).toBe('2 / 3');
+
+      // A host that builds its list in a getter hands over a fresh array on
+      // every render, which says nothing about the images having changed.
+      el.images = makeImages(3);
+      await settle(el);
+
+      expect(counterText(el)).toBe('2 / 3');
+      expect(currentSrc(el)).toContain('photo2.jpg');
+    });
+
+    test('stays put when the list grows around the current image', async () => {
+      const el = await viewerWith(3);
+      await navigateAndSettle(el, queryControls(el, '.next')!);
+
+      el.images = [
+        ...makeImages(3),
+        { name: 'extra.jpg', url: 'https://example.test/extra.jpg' },
+      ];
+      await settle(el);
+
+      expect(currentSrc(el)).toContain('photo2.jpg');
+      expect(counterText(el)).toBe('2 / 4');
+    });
+
+    test('goes back to the start when the current image is gone', async () => {
+      const el = await viewerWith(3);
+      await navigateAndSettle(el, queryControls(el, '.next')!);
+
+      el.images = [
+        { name: 'other1.jpg', url: 'https://example.test/other1.jpg' },
+        { name: 'other2.jpg', url: 'https://example.test/other2.jpg' },
+      ];
+      await settle(el);
+
+      expect(currentSrc(el)).toContain('other1.jpg');
+      expect(counterText(el)).toBe('1 / 2');
+    });
+
+    test('an explicit currentImageName still wins', async () => {
+      const el = await viewerWith(3);
+      await navigateAndSettle(el, queryControls(el, '.next')!);
+
+      el.currentImageName = 'photo3.jpg';
+      await settle(el);
+
+      expect(currentSrc(el)).toContain('photo3.jpg');
+    });
+  });
+
   describe('currentImageName', () => {
     test('starts on the named image', async () => {
       const el = await viewerWith(3, { currentImageName: 'photo3.jpg' });
