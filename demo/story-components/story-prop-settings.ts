@@ -19,12 +19,6 @@ export type PropInputSettings<T> = {
   defaultValue: string | boolean | number;
   inputType?: 'text' | 'radio' | 'number';
   radioOptions?: string[] | boolean[];
-  /*
-   * Whether the property reflects to an attribute. Reflecting props are shown
-   * in the usage example as attributes, since that is how they are most
-   * naturally written in markup.
-   */
-  reflects?: boolean;
   /* Groups consecutive inputs under a shared heading */
   section?: string;
 };
@@ -166,7 +160,9 @@ export class StoryPropsSettings extends LitElement {
       );
       if (setting && value === setting.defaultValue) return;
 
-      stringifiedProps.push(this.stringifyProp(propName, value, setting));
+      const stringifiedValue =
+        typeof value === 'string' ? `'${value}'` : value.toString();
+      stringifiedProps.push(`.${propName}=\${${stringifiedValue}}`);
     });
 
     this.dispatchEvent(
@@ -177,28 +173,6 @@ export class StoryPropsSettings extends LitElement {
         },
       }),
     );
-  }
-
-  /**
-   * Renders one prop for the usage example. Reflecting props are written as
-   * attributes -- Lit lowercases the property name for the attribute unless
-   * told otherwise -- and everything else as a property binding.
-   */
-  private stringifyProp(
-    propName: string,
-    value: string | boolean | number,
-    setting?: PropInputSettings<any>,
-  ): string {
-    if (!setting?.reflects) {
-      const stringified =
-        typeof value === 'string' ? `'${value}'` : value.toString();
-      return `.${propName}=\${${stringified}}`;
-    }
-
-    const attribute = propName.toLowerCase();
-    // A reflected boolean is present or absent, never ="false"
-    if (typeof value === 'boolean') return attribute;
-    return `${attribute}="${value}"`;
   }
 
   static get styles(): CSSResultGroup {

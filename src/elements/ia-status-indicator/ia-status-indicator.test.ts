@@ -336,24 +336,4 @@ describe('IA Status Indicator', () => {
     expect(el.shadowRoot?.querySelector('.placeholder')).to.exist;
     expect(el.shadowRoot?.querySelector('.loading-indicator')).to.not.exist;
   });
-
-  test('reflects mode and mediatype to attributes', async () => {
-    const el = await fixture<IAStatusIndicator>(
-      html`<ia-status-indicator
-        .mode=${'success'}
-        .mediatype=${'audio'}
-      ></ia-status-indicator>`,
-    );
-
-    expect(el.getAttribute('mode')).to.equal('success');
-    expect(el.getAttribute('mediatype')).to.equal('audio');
-  });
-
-  test('reflects hideDots to an attribute', async () => {
-    const el = await fixture<IAStatusIndicator>(
-      html`<ia-status-indicator .hideDots=${true}></ia-status-indicator>`,
-    );
-
-    expect(el.hasAttribute('hidedots')).to.equal(true);
-  });
 });

@@ -79,13 +79,13 @@ export class IAStatusIndicator extends LitElement {
   @property({ type: String }) errorTitle = msg('Error');
 
   /* The state of the indicator that should be shown */
-  @property({ type: String, reflect: true }) mode: LoadingStatus = 'loading';
+  @property({ type: String }) mode: LoadingStatus = 'loading';
 
   /* An optional mediatype glyph to render in the middle of the loading ring */
-  @property({ type: String, reflect: true }) mediatype?: MediaTypeIcon;
+  @property({ type: String }) mediatype?: MediaTypeIcon;
 
   /* Renders a bare ring, with no dots in the middle. Ignored when a center icon is present. */
-  @property({ type: Boolean, reflect: true }) hideDots = false;
+  @property({ type: Boolean }) hideDots = false;
 
   /* Whether a consumer has slotted their own center icon */
   @state() private hasSlottedIcon = false;

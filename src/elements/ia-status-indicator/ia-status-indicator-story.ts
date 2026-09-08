@@ -54,7 +54,6 @@ const propInputSettings: PropInputSettings<IAStatusIndicator>[] = [
   {
     label: 'Mode',
     propertyName: 'mode',
-    reflects: true,
     defaultValue: 'loading',
     inputType: 'radio',
     radioOptions: ['ready', 'loading', 'success', 'error'],
@@ -62,7 +61,6 @@ const propInputSettings: PropInputSettings<IAStatusIndicator>[] = [
   {
     label: 'Mediatype icon',
     propertyName: 'mediatype',
-    reflects: true,
     defaultValue: 'none',
     inputType: 'radio',
     // 'none' is a sentinel: the settings panel skips empty values, and the
@@ -84,7 +82,6 @@ const propInputSettings: PropInputSettings<IAStatusIndicator>[] = [
   {
     label: 'Hide dots (bare ring)',
     propertyName: 'hideDots',
-    reflects: true,
     // A boolean defaultValue makes the settings panel coerce 'true'/'false'
     // back into real booleans before assigning them.
     defaultValue: false,
