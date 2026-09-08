@@ -15,16 +15,16 @@ import { choose } from 'lit/directives/choose.js';
 import themeStyles from '@src/themes/theme-styles';
 import { maskedIcon } from '@src/util/masked-icon';
 
-import audioIcon from './audio.svg';
-import collectionIcon from './collection.svg';
-import etreeIcon from './etree.svg';
-import imagesIcon from './images.svg';
-import searchIcon from './search.svg';
-import softwareIcon from './software.svg';
-import textsIcon from './texts.svg';
-import tvIcon from './tv.svg';
-import videoIcon from './video.svg';
-import webIcon from './web.svg';
+import audioIcon from './icons/audio.svg';
+import collectionIcon from './icons/collection.svg';
+import etreeIcon from './icons/etree.svg';
+import imagesIcon from './icons/images.svg';
+import searchIcon from './icons/search.svg';
+import softwareIcon from './icons/software.svg';
+import textsIcon from './icons/texts.svg';
+import tvIcon from './icons/tv.svg';
+import videoIcon from './icons/video.svg';
+import webIcon from './icons/web.svg';
 
 export type LoadingStatus = 'ready' | 'loading' | 'success' | 'error';
 
