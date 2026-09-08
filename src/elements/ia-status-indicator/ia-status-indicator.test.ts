@@ -336,4 +336,87 @@ describe('IA Status Indicator', () => {
     expect(el.shadowRoot?.querySelector('.placeholder')).to.exist;
     expect(el.shadowRoot?.querySelector('.loading-indicator')).to.not.exist;
   });
+
+  describe('rendered appearance', () => {
+    /** A sized indicator showing a glyph, so geometry is measurable. */
+    async function sized(width: string, mediatype: MediaTypeIcon = 'texts') {
+      const el = await fixture<IAStatusIndicator>(
+        html`<ia-status-indicator
+          .mediatype=${mediatype}
+          style="--ia-theme-icon-width: ${width}"
+        ></ia-status-indicator>`,
+      );
+      const glyph = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
+      expect(glyph, 'a mediatype glyph should be rendering').to.exist;
+      return { el, glyph };
+    }
+
+    test('centres the glyph in the ring', async () => {
+      const { el, glyph } = await sized('200px');
+
+      const host = el.getBoundingClientRect();
+      const ink = glyph.getBoundingClientRect();
+
+      expect(
+        Math.abs(ink.left + ink.width / 2 - (host.left + host.width / 2)),
+        'glyph is off-centre horizontally',
+      ).to.be.lessThan(1);
+      expect(
+        Math.abs(ink.top + ink.height / 2 - (host.top + host.height / 2)),
+        'glyph is off-centre vertically',
+      ).to.be.lessThan(1);
+    });
+
+    test('keeps the glyph inside the ring', async () => {
+      const { el, glyph } = await sized('200px');
+
+      const host = el.getBoundingClientRect();
+      const ink = glyph.getBoundingClientRect();
+
+      // Half the host leaves the ring's stroke clear on every side. A glyph
+      // that grew past this would start colliding with the ring it sits in.
+      expect(
+        ink.width,
+        `glyph is ${ink.width}px wide in a ${host.width}px indicator`,
+      ).to.be.lessThan(host.width / 2 + 1);
+      expect(ink.left, 'glyph overflows the ring on the left').to.be.at.least(
+        host.left,
+      );
+      expect(ink.right, 'glyph overflows the ring on the right').to.be.at.most(
+        host.right,
+      );
+    });
+
+    test('paints the glyph the same colour as the ring', async () => {
+      const el = await fixture<IAStatusIndicator>(
+        html`<ia-status-indicator
+          .mediatype=${'texts'}
+          style="--ia-theme-icon-width: 200px; --ia-theme-primary-text-color: rgb(12, 34, 56)"
+        ></ia-status-indicator>`,
+      );
+
+      const glyph = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
+      const ring = el.shadowRoot?.querySelector('.loading-ring') as SVGElement;
+
+      // The glyph is monochrome with the ring by design -- offshoot's
+      // per-mediatype brand colours are deliberately not carried over.
+      expect(getComputedStyle(glyph).backgroundColor).to.equal(
+        'rgb(12, 34, 56)',
+      );
+      expect(getComputedStyle(ring).fill).to.equal('rgb(12, 34, 56)');
+    });
+
+    test('scales the glyph with the indicator width', async () => {
+      const small = await sized('100px');
+      const large = await sized('200px');
+
+      const smallInk = small.glyph.getBoundingClientRect().width;
+      const largeInk = large.glyph.getBoundingClientRect().width;
+
+      expect(
+        largeInk / smallInk,
+        `glyph went from ${smallInk}px to ${largeInk}px when the indicator doubled`,
+      ).to.be.closeTo(2, 0.05);
+    });
+  });
 });
