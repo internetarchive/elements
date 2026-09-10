@@ -119,6 +119,7 @@ export class IATopNav extends LitElement {
           --activeColor: var(--white);
           --activeButtonBg: var(--grey20);
           --iconFill: var(--grey60);
+          --desktopSearchIconFill: var(--grey20);
 
           --mediaMenuBg: var(--grey13);
           --mediaLabelDesktopColor: var(--grey60);

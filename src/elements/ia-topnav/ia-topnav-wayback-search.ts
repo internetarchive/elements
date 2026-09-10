@@ -102,9 +102,9 @@ export class IATopNavWaybackSearch extends LitElement {
             #fff
           );
           /*
-         * Follows the topnav's icon color unless a host overrides it. The
-         * fallback matters: petabox scopes its own value to a bare
-         * ia-wayback-search selector, which never reaches this nested copy.
+         * The topnav declares this alongside its other color knobs, so the
+         * desktop glyph is darker than the mobile one. The fallback covers
+         * mounting this search outside a topnav.
          */
           --topnav-wayback-desktop-icon-fill--: var(
             --desktopSearchIconFill,
