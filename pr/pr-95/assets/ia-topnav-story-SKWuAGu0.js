@@ -1,4 +1,4 @@
-import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4cQrU1.js";import{e as _}from"./query-CI66nfuA.js";import{t as v,o as re,r as ge}from"./story-template-CXRRvpbp.js";const y={eventCategory:"TopNav",waybackPagesArchived:"1 trillion"};function J(t="___USERID___",e="https://archive.org",n="",o="",i="",r=""){return n&&(y.waybackPagesArchived=n),{audio:{heading:"Internet Archive Audio",iconLinks:[{icon:`${e}/services/img/etree`,title:"Live Music Archive",url:`${e}/details/etree`},{icon:`${e}/services/img/librivoxaudio`,title:"Librivox Free Audio",url:`${e}/details/librivoxaudio`}],featuredLinks:[{title:"All Audio",url:`${e}/details/audio`},{title:"Grateful Dead",url:`${e}/details/GratefulDead`},{title:"Netlabels",url:`${e}/details/netlabels`},{title:"Old Time Radio",url:`${e}/details/oldtimeradio`},{title:"78 RPMs and Cylinder Recordings",url:`${e}/details/78rpm`}],links:[{title:"Audio Books & Poetry",url:`${e}/details/audio_bookspoetry`},{title:"Computers, Technology and Science",url:`${e}/details/audio_tech`},{title:"Music, Arts & Culture",url:`${e}/details/audio_music`},{title:"News & Public Affairs",url:`${e}/details/audio_news`},{title:"Spirituality & Religion",url:`${e}/details/audio_religion`},{title:"Podcasts",url:`${e}/details/podcasts`},{title:"Radio News Archive",url:`${e}/details/radio`}],mobileAppsLinks:[],browserExtensionsLinks:[],archiveItLinks:[]},images:{heading:"Images",iconLinks:[{icon:`${e}/services/img/metropolitanmuseumofart-gallery`,title:"Metropolitan Museum",url:`${e}/details/metropolitanmuseumofart-gallery`},{icon:`${e}/services/img/clevelandart`,title:"Cleveland Museum of Art",url:`${e}/details/clevelandart`}],featuredLinks:[{title:"All Images",url:`${e}/details/image`},{title:"Flickr Commons",url:`${e}/details/flickrcommons`},{title:"Occupy Wall Street Flickr",url:`${e}/details/flickr-ows`},{title:"Cover Art",url:`${e}/details/coverartarchive`},{title:"USGS Maps",url:`${e}/details/maps_usgs`}],links:[{title:"NASA Images",url:`${e}/details/nasa`},{title:"Solar System Collection",url:`${e}/details/solarsystemcollection`},{title:"Ames Research Center",url:`${e}/details/amesresearchcenterimagelibrary`}],mobileAppsLinks:[],browserExtensionsLinks:[],archiveItLinks:[]},more:{links:[{title:"About",url:`${e}/about/`},{title:"Blog",url:"https://blog.archive.org"},{title:"Events",url:`${e}/events`},{title:"Projects",url:`${e}/projects/`},{title:"Help",url:`${e}/about/faqs.php`},{title:"Donate",url:`${e}/donate?origin=iawww-TopNavDonateButton`},{title:"Contact",url:`${e}/about/contact`},{title:"Jobs",url:`${e}/about/jobs`},{title:"Volunteer",url:`${e}/about/volunteer-positions`}],heading:"",iconLinks:[],featuredLinks:[],mobileAppsLinks:[],browserExtensionsLinks:[],archiveItLinks:[]},software:{heading:"Software",iconLinks:[{icon:`${e}/services/img/internetarcade`,title:"Internet Arcade",url:`${e}/details/internetarcade`},{icon:`${e}/services/img/consolelivingroom`,title:"Console Living Room",url:`${e}/details/consolelivingroom`}],featuredLinks:[{title:"All Software",url:`${e}/details/software`},{title:"Old School Emulation",url:`${e}/details/tosec`},{title:"MS-DOS Games",url:`${e}/details/softwarelibrary_msdos_games`},{title:"Historical Software",url:`${e}/details/historicalsoftware`},{title:"Classic PC Games",url:`${e}/details/classicpcgames`},{title:"Software Library",url:`${e}/details/softwarelibrary`}],links:[{title:"Kodi Archive and Support File",url:`${e}/details/kodi_archive`},{title:"Vintage Software",url:`${e}/details/vintagesoftware`},{title:"APK",url:`${e}/details/apkarchive`},{title:"MS-DOS",url:`${e}/details/softwarelibrary_msdos`},{title:"CD-ROM Software",url:`${e}/details/cd-roms`},{title:"CD-ROM Software Library",url:`${e}/details/cdromsoftware`},{title:"Software Sites",url:`${e}/details/softwaresites`},{title:"Tucows Software Library",url:`${e}/details/tucows`},{title:"Shareware CD-ROMs",url:`${e}/details/cdbbsarchive`},{title:"Software Capsules Compilation",url:`${e}/details/softwarecapsules`},{title:"CD-ROM Images",url:`${e}/details/cdromimages`},{title:"ZX Spectrum",url:`${e}/details/softwarelibrary_zx_spectrum`},{title:"DOOM Level CD",url:`${e}/details/doom-cds`}],mobileAppsLinks:[],browserExtensionsLinks:[],archiveItLinks:[]},texts:{heading:"Texts",iconLinks:[{title:"Open Library",icon:`${e}/images/widgetOL.png`,url:"https://openlibrary.org/"},{title:"American Libraries",icon:`${e}/services/img/americana`,url:`${e}/details/americana`}],featuredLinks:[{title:"All Texts",url:`${e}/details/texts`},{title:"Smithsonian Libraries",url:`${e}/details/smithsonian`},{title:"FEDLINK (US)",url:`${e}/details/fedlink`},{title:"Genealogy",url:`${e}/details/genealogy`},{title:"Lincoln Collection",url:`${e}/details/lincolncollection`}],links:[{title:"American Libraries",url:`${e}/details/americana`},{title:"Canadian Libraries",url:`${e}/details/toronto`},{title:"Universal Library",url:`${e}/details/universallibrary`},{title:"Project Gutenberg",url:`${e}/details/gutenberg`},{title:"Children's Library",url:`${e}/details/iacl`},{title:"Biodiversity Heritage Library",url:`${e}/details/biodiversity`},{title:"Books by Language",url:`${e}/details/booksbylanguage`},{title:"Folkscanomy",url:`${e}/details/folkscanomy`},{title:"Government Documents",url:`${e}/details/government-documents`}],mobileAppsLinks:[],browserExtensionsLinks:[],archiveItLinks:[]},web:{mobileAppsLinks:[{url:"https://apps.apple.com/us/app/wayback-machine/id1201888313",title:"Wayback Machine (iOS)",external:!0},{url:"https://play.google.com/store/apps/details?id=com.internetarchive.waybackmachine",title:"Wayback Machine (Android)",external:!0}],browserExtensionsLinks:[{url:"https://chrome.google.com/webstore/detail/wayback-machine/fpnmgdkabkmnadcjpehmlllkndpkmiak",title:"Chrome",external:!0},{url:"https://addons.mozilla.org/en-US/firefox/addon/wayback-machine_new/",title:"Firefox",external:!0},{url:"https://apps.apple.com/us/app/wayback-machine/id1472432422?mt=12",title:"Safari",external:!0},{url:"https://microsoftedge.microsoft.com/addons/detail/wayback-machine/kjmickeoogghaimmomagaghnogelpcpn?hl=en-US",title:"Edge",external:!0}],archiveItLinks:[{url:"https://www.archive-it.org/explore",title:"Explore the Collections",external:!0},{url:"https://www.archive-it.org/blog/learn-more/",title:"Learn More",external:!0},{url:"https://www.archive-it.org/contact-us",title:"Build Collections",external:!0}],heading:"",iconLinks:[],featuredLinks:[],links:[]},video:{heading:"Video",iconLinks:[{icon:`${e}/services/img/tv`,title:"TV News",url:`${e}/details/tv`},{icon:`${e}/services/img/911`,title:"Understanding 9/11",url:`${e}/details/911`}],featuredLinks:[{title:"All Video",url:`${e}/details/movies`},{title:"Prelinger Archives",url:`${e}/details/prelinger`},{title:"Democracy Now!",url:`${e}/details/democracy_now_vid`},{title:"Occupy Wall Street",url:`${e}/details/occupywallstreet`},{title:"TV NSA Clip Library",url:`${e}/details/nsa`}],links:[{title:"Animation & Cartoons",url:`${e}/details/animationandcartoons`},{title:"Arts & Music",url:`${e}/details/artsandmusicvideos`},{title:"Computers & Technology",url:`${e}/details/computersandtechvideos`},{title:"Cultural & Academic Films",url:`${e}/details/culturalandacademicfilms`},{title:"Ephemeral Films",url:`${e}/details/ephemera`},{title:"Movies",url:`${e}/details/moviesandfilms`},{title:"News & Public Affairs",url:`${e}/details/newsandpublicaffairs`},{title:"Spirituality & Religion",url:`${e}/details/spiritualityandreligion`},{title:"Sports Videos",url:`${e}/details/sports`},{title:"Television",url:`${e}/details/television`},{title:"Videogame Videos",url:`${e}/details/gamevideos`},{title:"Vlogs",url:`${e}/details/vlogs`},{title:"Youth Media",url:`${e}/details/youth_media`}],mobileAppsLinks:[],browserExtensionsLinks:[],archiveItLinks:[]},user:[{url:`${e}/upload`,title:"Upload files",analyticsEvent:"UserUpload",class:"mobile-upload"},{url:`${e}/details/@${t}`,title:"My uploads",analyticsEvent:"UserLibrary"},{url:`${e}/details/@${t}/loans`,title:"My loans",analyticsEvent:"UserLoans"},{url:`${e}/details/@${t}/favorites`,title:"My favorites",analyticsEvent:"UserFavorites"},{url:`${e}/details/@${t}/lists`,title:"My lists",analyticsEvent:"UserLists"},{url:`${e}/details/@${t}/collections`,title:"My collections",analyticsEvent:"UserCollections"},{url:`${e}/details/@${t}/web-archive`,title:"My web archives",analyticsEvent:"UserWebArchive"},{url:`${e}/account/settings`,title:"Account settings",analyticsEvent:"UserSettings"},{url:"https://help.archive.org",title:"Get help",analyticsEvent:"UserHelp"},{url:`${e}/logout`,title:"Log out",analyticsEvent:"UserLogOut"}],userAdmin:[{title:"ADMINS:"},{title:"item:"},{url:`${e}/editxml/${o}`,title:"edit xml",analyticsEvent:"AdminUserEditXML"},{url:`${e}/edit.php?redir=1&identifier=${o}`,title:"edit files",analyticsEvent:"AdminUserEditFiles"},{url:`${e}/download/${o}/`,title:"download",analyticsEvent:"AdminUserDownload"},{url:`${e}/metadata/${o}/`,title:"metadata",analyticsEvent:"AdminUserMetadata"},{url:`https://catalogd.archive.org/history/${o}`,title:"history",analyticsEvent:"AdminUserHistory"},{url:`${e}/manage/${o}`,title:"manage",analyticsEvent:"AdminUserManager"},{url:`${e}/manage/${o}#make_dark`,title:"curate",analyticsEvent:"AdminUserCurate"},{url:`${e}/manage/${o}#modify_xml`,title:"modify xml",analyticsEvent:"AdminUserModifyXML"}],userAdminFlags:[{url:`${e}/services/flags/admin.php?identifier=${o}`,title:"manage flags",analyticsEvent:"AdminUserManageFlags"}],userAdminBiblio:r?[{url:`${r}&ignored=${o}`,title:"biblio",analyticsEvent:"AdminUserBiblio"},{url:`${e}/bookview.php?mode=debug&identifier=${o}`,title:"bookview",analyticsEvent:"AdminUserBookView"},{url:`${e}/download/${o}/format=Single Page Processed JP2 ZIP`,title:"jp2 zip",analyticsEvent:"AdminUserJP2Zip"}]:[],userAdminUploader:i?[{title:"uploader:"},{title:i},{url:`https://catalogd.archive.org/control/useradmin.php?email=${encodeURIComponent(i)}`,title:"user admin",analyticsEvent:"AdminUserUserAdmin"},{url:`https://catalogd.archive.org/control/setadmin.php?user=${encodeURIComponent(i)}&ignore=${o}`,title:"user privs",analyticsEvent:"AdminUserUserPrivs"}]:[],signedOut:[{url:`${e}/signup`,title:"Sign up for free",analyticsEvent:"AvatarMenu-Signup"},{url:`${e}/login`,title:"Log in",analyticsEvent:"AvatarMenu-Login"}]}}class k extends O{trackClick(e){const n=e.currentTarget?.dataset?.eventClickTracking;n!==void 0&&this.dispatchEvent(new CustomEvent("trackClick",{bubbles:!0,composed:!0,detail:{event:n}}))}trackSubmit(e){const n=e.currentTarget?.dataset?.eventSubmitTracking;n!==void 0&&this.dispatchEvent(new CustomEvent("trackSubmit",{bubbles:!0,composed:!0,detail:{event:n}}))}}const ve=l`
+import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-CyuTrjll.js";import{e as P}from"./query-DU7S-ZpD.js";import{t as v,o as re,r as ge}from"./story-template-AVsmxBuI.js";const y={eventCategory:"TopNav",waybackPagesArchived:"1 trillion"};function J(t="___USERID___",e="https://archive.org",n="",o="",i="",r=""){return n&&(y.waybackPagesArchived=n),{audio:{heading:"Internet Archive Audio",iconLinks:[{icon:`${e}/services/img/etree`,title:"Live Music Archive",url:`${e}/details/etree`},{icon:`${e}/services/img/librivoxaudio`,title:"Librivox Free Audio",url:`${e}/details/librivoxaudio`}],featuredLinks:[{title:"All Audio",url:`${e}/details/audio`},{title:"Grateful Dead",url:`${e}/details/GratefulDead`},{title:"Netlabels",url:`${e}/details/netlabels`},{title:"Old Time Radio",url:`${e}/details/oldtimeradio`},{title:"78 RPMs and Cylinder Recordings",url:`${e}/details/78rpm`}],links:[{title:"Audio Books & Poetry",url:`${e}/details/audio_bookspoetry`},{title:"Computers, Technology and Science",url:`${e}/details/audio_tech`},{title:"Music, Arts & Culture",url:`${e}/details/audio_music`},{title:"News & Public Affairs",url:`${e}/details/audio_news`},{title:"Spirituality & Religion",url:`${e}/details/audio_religion`},{title:"Podcasts",url:`${e}/details/podcasts`},{title:"Radio News Archive",url:`${e}/details/radio`}],mobileAppsLinks:[],browserExtensionsLinks:[],archiveItLinks:[]},images:{heading:"Images",iconLinks:[{icon:`${e}/services/img/metropolitanmuseumofart-gallery`,title:"Metropolitan Museum",url:`${e}/details/metropolitanmuseumofart-gallery`},{icon:`${e}/services/img/clevelandart`,title:"Cleveland Museum of Art",url:`${e}/details/clevelandart`}],featuredLinks:[{title:"All Images",url:`${e}/details/image`},{title:"Flickr Commons",url:`${e}/details/flickrcommons`},{title:"Occupy Wall Street Flickr",url:`${e}/details/flickr-ows`},{title:"Cover Art",url:`${e}/details/coverartarchive`},{title:"USGS Maps",url:`${e}/details/maps_usgs`}],links:[{title:"NASA Images",url:`${e}/details/nasa`},{title:"Solar System Collection",url:`${e}/details/solarsystemcollection`},{title:"Ames Research Center",url:`${e}/details/amesresearchcenterimagelibrary`}],mobileAppsLinks:[],browserExtensionsLinks:[],archiveItLinks:[]},more:{links:[{title:"About",url:`${e}/about/`},{title:"Blog",url:"https://blog.archive.org"},{title:"Events",url:`${e}/events`},{title:"Projects",url:`${e}/projects/`},{title:"Help",url:`${e}/about/faqs.php`},{title:"Donate",url:`${e}/donate?origin=iawww-TopNavDonateButton`},{title:"Contact",url:`${e}/about/contact`},{title:"Jobs",url:`${e}/about/jobs`},{title:"Volunteer",url:`${e}/about/volunteer-positions`}],heading:"",iconLinks:[],featuredLinks:[],mobileAppsLinks:[],browserExtensionsLinks:[],archiveItLinks:[]},software:{heading:"Software",iconLinks:[{icon:`${e}/services/img/internetarcade`,title:"Internet Arcade",url:`${e}/details/internetarcade`},{icon:`${e}/services/img/consolelivingroom`,title:"Console Living Room",url:`${e}/details/consolelivingroom`}],featuredLinks:[{title:"All Software",url:`${e}/details/software`},{title:"Old School Emulation",url:`${e}/details/tosec`},{title:"MS-DOS Games",url:`${e}/details/softwarelibrary_msdos_games`},{title:"Historical Software",url:`${e}/details/historicalsoftware`},{title:"Classic PC Games",url:`${e}/details/classicpcgames`},{title:"Software Library",url:`${e}/details/softwarelibrary`}],links:[{title:"Kodi Archive and Support File",url:`${e}/details/kodi_archive`},{title:"Vintage Software",url:`${e}/details/vintagesoftware`},{title:"APK",url:`${e}/details/apkarchive`},{title:"MS-DOS",url:`${e}/details/softwarelibrary_msdos`},{title:"CD-ROM Software",url:`${e}/details/cd-roms`},{title:"CD-ROM Software Library",url:`${e}/details/cdromsoftware`},{title:"Software Sites",url:`${e}/details/softwaresites`},{title:"Tucows Software Library",url:`${e}/details/tucows`},{title:"Shareware CD-ROMs",url:`${e}/details/cdbbsarchive`},{title:"Software Capsules Compilation",url:`${e}/details/softwarecapsules`},{title:"CD-ROM Images",url:`${e}/details/cdromimages`},{title:"ZX Spectrum",url:`${e}/details/softwarelibrary_zx_spectrum`},{title:"DOOM Level CD",url:`${e}/details/doom-cds`}],mobileAppsLinks:[],browserExtensionsLinks:[],archiveItLinks:[]},texts:{heading:"Texts",iconLinks:[{title:"Open Library",icon:`${e}/images/widgetOL.png`,url:"https://openlibrary.org/"},{title:"American Libraries",icon:`${e}/services/img/americana`,url:`${e}/details/americana`}],featuredLinks:[{title:"All Texts",url:`${e}/details/texts`},{title:"Smithsonian Libraries",url:`${e}/details/smithsonian`},{title:"FEDLINK (US)",url:`${e}/details/fedlink`},{title:"Genealogy",url:`${e}/details/genealogy`},{title:"Lincoln Collection",url:`${e}/details/lincolncollection`}],links:[{title:"American Libraries",url:`${e}/details/americana`},{title:"Canadian Libraries",url:`${e}/details/toronto`},{title:"Universal Library",url:`${e}/details/universallibrary`},{title:"Project Gutenberg",url:`${e}/details/gutenberg`},{title:"Children's Library",url:`${e}/details/iacl`},{title:"Biodiversity Heritage Library",url:`${e}/details/biodiversity`},{title:"Books by Language",url:`${e}/details/booksbylanguage`},{title:"Folkscanomy",url:`${e}/details/folkscanomy`},{title:"Government Documents",url:`${e}/details/government-documents`}],mobileAppsLinks:[],browserExtensionsLinks:[],archiveItLinks:[]},web:{mobileAppsLinks:[{url:"https://apps.apple.com/us/app/wayback-machine/id1201888313",title:"Wayback Machine (iOS)",external:!0},{url:"https://play.google.com/store/apps/details?id=com.internetarchive.waybackmachine",title:"Wayback Machine (Android)",external:!0}],browserExtensionsLinks:[{url:"https://chrome.google.com/webstore/detail/wayback-machine/fpnmgdkabkmnadcjpehmlllkndpkmiak",title:"Chrome",external:!0},{url:"https://addons.mozilla.org/en-US/firefox/addon/wayback-machine_new/",title:"Firefox",external:!0},{url:"https://apps.apple.com/us/app/wayback-machine/id1472432422?mt=12",title:"Safari",external:!0},{url:"https://microsoftedge.microsoft.com/addons/detail/wayback-machine/kjmickeoogghaimmomagaghnogelpcpn?hl=en-US",title:"Edge",external:!0}],archiveItLinks:[{url:"https://www.archive-it.org/explore",title:"Explore the Collections",external:!0},{url:"https://www.archive-it.org/blog/learn-more/",title:"Learn More",external:!0},{url:"https://www.archive-it.org/contact-us",title:"Build Collections",external:!0}],heading:"",iconLinks:[],featuredLinks:[],links:[]},video:{heading:"Video",iconLinks:[{icon:`${e}/services/img/tv`,title:"TV News",url:`${e}/details/tv`},{icon:`${e}/services/img/911`,title:"Understanding 9/11",url:`${e}/details/911`}],featuredLinks:[{title:"All Video",url:`${e}/details/movies`},{title:"Prelinger Archives",url:`${e}/details/prelinger`},{title:"Democracy Now!",url:`${e}/details/democracy_now_vid`},{title:"Occupy Wall Street",url:`${e}/details/occupywallstreet`},{title:"TV NSA Clip Library",url:`${e}/details/nsa`}],links:[{title:"Animation & Cartoons",url:`${e}/details/animationandcartoons`},{title:"Arts & Music",url:`${e}/details/artsandmusicvideos`},{title:"Computers & Technology",url:`${e}/details/computersandtechvideos`},{title:"Cultural & Academic Films",url:`${e}/details/culturalandacademicfilms`},{title:"Ephemeral Films",url:`${e}/details/ephemera`},{title:"Movies",url:`${e}/details/moviesandfilms`},{title:"News & Public Affairs",url:`${e}/details/newsandpublicaffairs`},{title:"Spirituality & Religion",url:`${e}/details/spiritualityandreligion`},{title:"Sports Videos",url:`${e}/details/sports`},{title:"Television",url:`${e}/details/television`},{title:"Videogame Videos",url:`${e}/details/gamevideos`},{title:"Vlogs",url:`${e}/details/vlogs`},{title:"Youth Media",url:`${e}/details/youth_media`}],mobileAppsLinks:[],browserExtensionsLinks:[],archiveItLinks:[]},user:[{url:`${e}/upload`,title:"Upload files",analyticsEvent:"UserUpload",class:"mobile-upload"},{url:`${e}/details/@${t}`,title:"My uploads",analyticsEvent:"UserLibrary"},{url:`${e}/details/@${t}/loans`,title:"My loans",analyticsEvent:"UserLoans"},{url:`${e}/details/@${t}/favorites`,title:"My favorites",analyticsEvent:"UserFavorites"},{url:`${e}/details/@${t}/lists`,title:"My lists",analyticsEvent:"UserLists"},{url:`${e}/details/@${t}/collections`,title:"My collections",analyticsEvent:"UserCollections"},{url:`${e}/details/@${t}/web-archive`,title:"My web archives",analyticsEvent:"UserWebArchive"},{url:`${e}/account/settings`,title:"Account settings",analyticsEvent:"UserSettings"},{url:"https://help.archive.org",title:"Get help",analyticsEvent:"UserHelp"},{url:`${e}/logout`,title:"Log out",analyticsEvent:"UserLogOut"}],userAdmin:[{title:"ADMINS:"},{title:"item:"},{url:`${e}/editxml/${o}`,title:"edit xml",analyticsEvent:"AdminUserEditXML"},{url:`${e}/edit.php?redir=1&identifier=${o}`,title:"edit files",analyticsEvent:"AdminUserEditFiles"},{url:`${e}/download/${o}/`,title:"download",analyticsEvent:"AdminUserDownload"},{url:`${e}/metadata/${o}/`,title:"metadata",analyticsEvent:"AdminUserMetadata"},{url:`https://catalogd.archive.org/history/${o}`,title:"history",analyticsEvent:"AdminUserHistory"},{url:`${e}/manage/${o}`,title:"manage",analyticsEvent:"AdminUserManager"},{url:`${e}/manage/${o}#make_dark`,title:"curate",analyticsEvent:"AdminUserCurate"},{url:`${e}/manage/${o}#modify_xml`,title:"modify xml",analyticsEvent:"AdminUserModifyXML"}],userAdminFlags:[{url:`${e}/services/flags/admin.php?identifier=${o}`,title:"manage flags",analyticsEvent:"AdminUserManageFlags"}],userAdminBiblio:r?[{url:`${r}&ignored=${o}`,title:"biblio",analyticsEvent:"AdminUserBiblio"},{url:`${e}/bookview.php?mode=debug&identifier=${o}`,title:"bookview",analyticsEvent:"AdminUserBookView"},{url:`${e}/download/${o}/format=Single Page Processed JP2 ZIP`,title:"jp2 zip",analyticsEvent:"AdminUserJP2Zip"}]:[],userAdminUploader:i?[{title:"uploader:"},{title:i},{url:`https://catalogd.archive.org/control/useradmin.php?email=${encodeURIComponent(i)}`,title:"user admin",analyticsEvent:"AdminUserUserAdmin"},{url:`https://catalogd.archive.org/control/setadmin.php?user=${encodeURIComponent(i)}&ignore=${o}`,title:"user privs",analyticsEvent:"AdminUserUserPrivs"}]:[],signedOut:[{url:`${e}/signup`,title:"Sign up for free",analyticsEvent:"AvatarMenu-Signup"},{url:`${e}/login`,title:"Log in",analyticsEvent:"AvatarMenu-Login"}]}}class k extends O{trackClick(e){const n=e.currentTarget?.dataset?.eventClickTracking;n!==void 0&&this.dispatchEvent(new CustomEvent("trackClick",{bubbles:!0,composed:!0,detail:{event:n}}))}trackSubmit(e){const n=e.currentTarget?.dataset?.eventSubmitTracking;n!==void 0&&this.dispatchEvent(new CustomEvent("trackSubmit",{bubbles:!0,composed:!0,detail:{event:n}}))}}const ve=l`
   <svg
     width="40px"
     height="40px"
@@ -257,7 +257,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
       fill-rule="evenodd"
     />
   </svg>
-`,$={audio:ve,close:fe,donate:ye,donateUnpadded:be,ellipses:we,iaLogo:$e,images:ke,search:ae,software:xe,texts:Le,upload:Se,uploadUnpadded:Me,user:Ie,video:Ce,web:De},f=(t="",e)=>/^https?:/.test(t)?t:`${e}${t}`;var Oe=Object.defineProperty,Ae=Object.getOwnPropertyDescriptor,ee=(t,e,n,o)=>{for(var i=o>1?void 0:o?Ae(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&Oe(e,n,i),i};let j=class extends k{constructor(){super(...arguments),this.baseHost="",this.menuItems=[]}static get styles(){return[v,h`
+`,$={audio:ve,close:fe,donate:ye,donateUnpadded:be,ellipses:we,iaLogo:$e,images:ke,search:ae,software:xe,texts:Le,upload:Se,uploadUnpadded:Me,user:Ie,video:Ce,web:De},f=(t="",e)=>/^https?:/.test(t)?t:`${e}${t}`;var Oe=Object.defineProperty,Ae=Object.getOwnPropertyDescriptor,ee=(t,e,n,o)=>{for(var i=o>1?void 0:o?Ae(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&Oe(e,n,i),i};let F=class extends k{constructor(){super(...arguments),this.baseHost="",this.menuItems=[]}static get styles(){return[v,h`
         ul {
           position: relative;
           z-index: 3;
@@ -297,14 +297,14 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
               <a
                 class="${t.title.toLowerCase()}"
                 .href="${f(t.url,this.baseHost)}"
-                >${t.title}${j.iconFor(t.title)}</a
+                >${t.title}${F.iconFor(t.title)}</a
               >
             </li>
           `):w}static iconFor(t){const e={Donate:$.donate};return e[t]?e[t]:l``}render(){return l`
       <ul>
         ${this.listItems}
       </ul>
-    `}};ee([a({type:String})],j.prototype,"baseHost",2);ee([a({type:Array})],j.prototype,"menuItems",2);j=ee([g("ia-topnav-desktop-subnav")],j);function Q(t){return t?"true":"false"}const p=890;class se{constructor(e,n){this.elementsContainer=e,this.menuOption=n,this.focusableElements=this.getFocusableElements(),this.focusedIndex=0,n!=="search"&&this.focusableElements[this.focusedIndex]?.focus(),this.handleKeyDown=this.handleKeyDown.bind(this)}getFocusableElements(){const e="a[href], button, input, [tabindex]",n=i=>!i.hasAttribute("disabled")&&i.getAttribute("aria-hidden")!=="true"&&i.getAttribute("tabindex")!=="-1";let o;if(this.menuOption==="web"){const i=this.elementsContainer.querySelector("ia-topnav-wayback-slider")?.shadowRoot,r=i?.querySelector("ia-topnav-wayback-search"),s=Array.from(r?.shadowRoot?.querySelectorAll(e)??[]),Y=Array.from(i?.querySelectorAll(e)??[]),ue=i?.querySelector("ia-topnav-save-page-form"),pe=Array.from(ue?.shadowRoot?.querySelectorAll(e)??[]);o=[...s,...Y,...pe]}else o=this.elementsContainer.querySelectorAll(e);return Array.from(o??[]).filter(n)}handleKeyDown(e){const n=e.composedPath()[0];if(n instanceof HTMLInputElement||n instanceof HTMLTextAreaElement||n.isContentEditable)return;const{key:o}=e;["ArrowDown","ArrowRight","ArrowUp","ArrowLeft"].includes(o)?(this.handleArrowKey(o),e.preventDefault()):o==="Tab"&&this.handleTabKey(e)}handleArrowKey(e){["ArrowDown","ArrowRight"].includes(e)?this.focusNext():this.focusPrevious()}handleTabKey(e){const n=e.shiftKey;this.emitFocusToOtherMenuItems(n),this.focusableElements[this.focusedIndex]?.blur(),["search"].includes(this.menuOption)||e.preventDefault()}focusPrevious(){this.focusableElements.length!==0&&(this.focusedIndex=(this.focusedIndex-1+this.focusableElements.length)%this.focusableElements.length,this.focusableElements[this.focusedIndex]?.focus())}focusNext(){this.focusableElements.length!==0&&(this.focusedIndex=(this.focusedIndex+1)%this.focusableElements.length,this.focusableElements[this.focusedIndex]?.focus())}emitFocusToOtherMenuItems(e=!1){this.elementsContainer.dispatchEvent(new CustomEvent("focusToOtherMenuItem",{bubbles:!0,composed:!0,detail:{mediatype:this.menuOption,moveTo:e?"prev":"next"}}))}}var Te=Object.defineProperty,R=(t,e,n,o)=>{for(var i=void 0,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=s(e,n,i)||i);return i&&Te(e,n,i),i};const B=class H extends k{constructor(){super(...arguments),this.baseHost="",this.config=y,this.menuItems=[],this.animated=!1,this.open=!1}static get styles(){return[v,h`
+    `}};ee([a({type:String})],F.prototype,"baseHost",2);ee([a({type:Array})],F.prototype,"menuItems",2);F=ee([g("ia-topnav-desktop-subnav")],F);function Q(t){return t?"true":"false"}const p=890;class se{constructor(e,n){this.elementsContainer=e,this.menuOption=n,this.focusableElements=this.getFocusableElements(),this.focusedIndex=0,n!=="search"&&this.focusableElements[this.focusedIndex]?.focus(),this.handleKeyDown=this.handleKeyDown.bind(this)}getFocusableElements(){const e="a[href], button, input, [tabindex]",n=i=>!i.hasAttribute("disabled")&&i.getAttribute("aria-hidden")!=="true"&&i.getAttribute("tabindex")!=="-1";let o;if(this.menuOption==="web"){const i=this.elementsContainer.querySelector("ia-topnav-wayback-slider")?.shadowRoot,r=i?.querySelector("ia-topnav-wayback-search"),s=Array.from(r?.shadowRoot?.querySelectorAll(e)??[]),Y=Array.from(i?.querySelectorAll(e)??[]),ue=i?.querySelector("ia-topnav-save-page-form"),pe=Array.from(ue?.shadowRoot?.querySelectorAll(e)??[]);o=[...s,...Y,...pe]}else o=this.elementsContainer.querySelectorAll(e);return Array.from(o??[]).filter(n)}handleKeyDown(e){const n=e.composedPath()[0];if(n instanceof HTMLInputElement||n instanceof HTMLTextAreaElement||n.isContentEditable)return;const{key:o}=e;["ArrowDown","ArrowRight","ArrowUp","ArrowLeft"].includes(o)?(this.handleArrowKey(o),e.preventDefault()):o==="Tab"&&this.handleTabKey(e)}handleArrowKey(e){["ArrowDown","ArrowRight"].includes(e)?this.focusNext():this.focusPrevious()}handleTabKey(e){const n=e.shiftKey;this.emitFocusToOtherMenuItems(n),this.focusableElements[this.focusedIndex]?.blur(),["search"].includes(this.menuOption)||e.preventDefault()}focusPrevious(){this.focusableElements.length!==0&&(this.focusedIndex=(this.focusedIndex-1+this.focusableElements.length)%this.focusableElements.length,this.focusableElements[this.focusedIndex]?.focus())}focusNext(){this.focusableElements.length!==0&&(this.focusedIndex=(this.focusedIndex+1)%this.focusableElements.length,this.focusableElements[this.focusedIndex]?.focus())}emitFocusToOtherMenuItems(e=!1){this.elementsContainer.dispatchEvent(new CustomEvent("focusToOtherMenuItem",{bubbles:!0,composed:!0,detail:{mediatype:this.menuOption,moveTo:e?"prev":"next"}}))}}var Te=Object.defineProperty,R=(t,e,n,o)=>{for(var i=void 0,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=s(e,n,i)||i);return i&&Te(e,n,i),i};const _=class H extends k{constructor(){super(...arguments),this.baseHost="",this.config=y,this.menuItems=[],this.animated=!1,this.open=!1}static get styles(){return[v,h`
         :host {
           /*
            * Where the menu parks when closed. Nothing sets it today, so the
@@ -512,7 +512,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
           </ul>
         </nav>
       </div>
-    `}};R([a({type:String})],B.prototype,"baseHost");R([a({type:Object})],B.prototype,"config");R([a({type:Array})],B.prototype,"menuItems");R([a({type:Boolean})],B.prototype,"animated");R([a({type:Boolean})],B.prototype,"open");let le=B;const Ee=l`
+    `}};R([a({type:String})],_.prototype,"baseHost");R([a({type:Object})],_.prototype,"config");R([a({type:Array})],_.prototype,"menuItems");R([a({type:Boolean})],_.prototype,"animated");R([a({type:Boolean})],_.prototype,"open");let le=_;const Ee=l`
   <svg
     height="55"
     viewBox="0 0 205 55"
@@ -545,7 +545,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
     clip-path: inset(50%) !important;
     user-select: none !important;
   }
-`;var ze=Object.defineProperty,Pe=Object.getOwnPropertyDescriptor,G=(t,e,n,o)=>{for(var i=o>1?void 0:o?Pe(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&ze(e,n,i),i};let E=class extends O{constructor(){super(...arguments),this.queryHandler={performQuery:t=>window.location.href=`https://web.archive.org/web/*/${t}`},this.waybackPagesArchived="916 billion"}render(){return l`
+`;var ze=Object.defineProperty,Pe=Object.getOwnPropertyDescriptor,G=(t,e,n,o)=>{for(var i=o>1?void 0:o?Pe(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&ze(e,n,i),i};let j=class extends O{constructor(){super(...arguments),this.queryHandler={performQuery:t=>window.location.href=`https://web.archive.org/web/*/${t}`},this.waybackPagesArchived="916 billion"}render(){return l`
       <form method="post" @submit=${this.handleSubmit}>
         <p>
           Search the history of more than ${this.waybackPagesArchived}
@@ -577,184 +577,183 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
           </div>
         </fieldset>
       </form>
-    `}handleSubmit(t){t.preventDefault();const e=this.urlInput.value;this.emitWaybackSearchSubmitted(e),this.queryHandler.performQuery(e)}emitWaybackSearchSubmitted(t){this.dispatchEvent(new CustomEvent("waybackSearchSubmitted",{detail:{query:t}}))}emitWaybackMachineStatsLinkClicked(){this.dispatchEvent(new CustomEvent("waybackMachineStatsLinkClicked"))}emitWaybackMachineLogoLinkClicked(){this.dispatchEvent(new CustomEvent("waybackMachineLogoLink"))}};E.styles=[v,ce,h`
-      :host {
-        --topnav-wayback-input-text-color--: var(
-          --ia-theme-secondary-text-color,
-          #666
-        );
-        --topnav-wayback-input-bg--: var(
-          --ia-theme-secondary-background-color,
-          #fff
-        );
-        /*
-         * The desktop icon had no fallback when this lived in its own package
-         * and nothing has ever set it, so the fill resolved to invalid and the
-         * glyph painted black against the dark nav. It follows the topnav's
-         * icon color now.
+    `}handleSubmit(t){t.preventDefault();const e=this.urlInput.value;this.emitWaybackSearchSubmitted(e),this.queryHandler.performQuery(e)}emitWaybackSearchSubmitted(t){this.dispatchEvent(new CustomEvent("waybackSearchSubmitted",{detail:{query:t}}))}emitWaybackMachineStatsLinkClicked(){this.dispatchEvent(new CustomEvent("waybackMachineStatsLinkClicked"))}emitWaybackMachineLogoLinkClicked(){this.dispatchEvent(new CustomEvent("waybackMachineLogoLink"))}static get styles(){return[v,ce,h`
+        :host {
+          --topnav-wayback-input-text-color--: var(
+            --ia-theme-secondary-text-color,
+            #666
+          );
+          --topnav-wayback-input-bg--: var(
+            --ia-theme-secondary-background-color,
+            #fff
+          );
+          /*
+         * Follows the topnav's icon color unless a host overrides it. The
+         * fallback matters: petabox scopes its own value to a bare
+         * ia-wayback-search selector, which never reaches this nested copy.
          */
-        --topnav-wayback-desktop-icon-fill--: var(
-          --desktopSearchIconFill,
-          var(--iconFill)
-        );
+          --topnav-wayback-desktop-icon-fill--: var(
+            --desktopSearchIconFill,
+            var(--iconFill)
+          );
 
-        font: normal 1.2rem/1.5 var(--themeFontFamily);
-      }
+          font: normal 1.2rem/1.5 var(--themeFontFamily);
+        }
 
-      form {
-        max-width: 600px;
-      }
-
-      p {
-        margin-top: 0;
-        font-weight: 200;
-      }
-
-      a {
-        font-weight: 500;
-        text-decoration: none;
-        color: var(--activeColor);
-      }
-
-      fieldset {
-        padding: 0.7rem 2rem;
-        margin: 1.5rem 0;
-        box-sizing: border-box;
-        text-align: center;
-        border: none;
-        border-radius: 7px;
-        background-color: #fcf5e6;
-        box-shadow: 3px 3px 0 0 #c3ad97;
-      }
-
-      fieldset a {
-        font-size: 0;
-      }
-
-      img {
-        width: 100%;
-        max-width: 215px;
-        max-height: 60px;
-        margin-bottom: 1.3rem;
-        vertical-align: middle;
-      }
-
-      input {
-        display: block;
-        width: 100%;
-        height: 3rem;
-        padding: 0.5rem 1rem 0.5rem 3rem;
-        font: normal 1.2rem/1.5 var(--themeFontFamily);
-        color: var(--topnav-wayback-input-text-color--);
-        box-sizing: border-box;
-        border: 1px solid var(--grey80);
-        border-radius: 2rem;
-        background: var(--topnav-wayback-input-bg--);
-      }
-
-      input:focus {
-        border-color: #66afe9;
-        outline: none;
-      }
-
-      .search-field {
-        position: relative;
-        overflow: hidden;
-      }
-
-      .search-field svg {
-        position: absolute;
-        top: 3px;
-        left: 3px;
-        width: 2.4rem;
-        height: 2.4rem;
-      }
-
-      .search-field .fill-color {
-        fill: var(--iconFill);
-      }
-
-      @media (min-width: ${p}px) {
         form {
-          margin: 0 auto;
+          max-width: 600px;
         }
 
         p {
-          margin-bottom: 3rem;
+          margin-top: 0;
+          font-weight: 200;
+        }
+
+        a {
+          font-weight: 500;
+          text-decoration: none;
+          color: var(--activeColor);
+        }
+
+        fieldset {
+          padding: 0.7rem 2rem;
+          margin: 1.5rem 0;
+          box-sizing: border-box;
+          text-align: center;
+          border: none;
+          border-radius: 7px;
+          background-color: #fcf5e6;
+          box-shadow: 3px 3px 0 0 #c3ad97;
+        }
+
+        fieldset a {
+          font-size: 0;
+        }
+
+        img {
+          width: 100%;
+          max-width: 215px;
+          max-height: 60px;
+          margin-bottom: 1.3rem;
+          vertical-align: middle;
+        }
+
+        input {
+          display: block;
+          width: 100%;
+          height: 3rem;
+          padding: 0.5rem 1rem 0.5rem 3rem;
+          font: normal 1.2rem/1.5 var(--themeFontFamily);
+          color: var(--topnav-wayback-input-text-color--);
+          box-sizing: border-box;
+          border: 1px solid var(--grey80);
+          border-radius: 2rem;
+          background: var(--topnav-wayback-input-bg--);
+        }
+
+        input:focus {
+          border-color: #66afe9;
+          outline: none;
+        }
+
+        .search-field {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .search-field svg {
+          position: absolute;
+          top: 3px;
+          left: 3px;
+          width: 2.4rem;
+          height: 2.4rem;
+        }
+
+        .search-field .fill-color {
+          fill: var(--iconFill);
+        }
+
+        @media (min-width: ${p}px) {
+          form {
+            margin: 0 auto;
+          }
+
+          p {
+            margin-bottom: 3rem;
+            font-size: 1.6rem;
+            text-align: center;
+          }
+
+          img {
+            margin: 0;
+          }
+
+          fieldset {
+            margin: 0 auto;
+          }
+
+          fieldset a,
+          .search-field {
+            display: inline-block;
+            width: 49%;
+            vertical-align: middle;
+          }
+
+          fieldset a {
+            text-align: center;
+          }
+
+          .search-field svg {
+            top: 2px;
+          }
+
+          .search-field .fill-color {
+            fill: var(--topnav-wayback-desktop-icon-fill--);
+          }
+        }
+      `,h`
+        p {
+          margin-bottom: 1rem;
           font-size: 1.6rem;
           text-align: center;
         }
 
-        img {
-          margin: 0;
-        }
-
         fieldset {
-          margin: 0 auto;
+          padding: 0.5rem;
+          border-radius: 5px;
+          box-shadow: none;
         }
 
-        fieldset a,
-        .search-field {
-          display: inline-block;
-          width: 49%;
-          vertical-align: middle;
+        input {
+          padding-left: 3rem;
+          margin-top: 0.3rem;
+          font-size: 1.4rem;
+          border-color: #bca38e;
+          background: #fff;
         }
 
-        fieldset a {
-          text-align: center;
+        input::placeholder,
+        input::-webkit-input-placeholder {
+          color: #8e8e8e;
         }
 
         .search-field svg {
-          top: 2px;
+          top: 50%;
+          transform: translateY(-50%);
         }
 
-        .search-field .fill-color {
-          fill: var(--topnav-wayback-desktop-icon-fill--);
+        @media (min-width: ${p}px) {
+          fieldset a,
+          .search-field {
+            display: block;
+            width: auto;
+          }
+
+          fieldset a {
+            margin: 0 1.5rem;
+          }
         }
-      }
-    `,h`
-      p {
-        margin-bottom: 1rem;
-        font-size: 1.6rem;
-        text-align: center;
-      }
-
-      fieldset {
-        padding: 0.5rem;
-        border-radius: 5px;
-        box-shadow: none;
-      }
-
-      input {
-        padding-left: 3rem;
-        margin-top: 0.3rem;
-        font-size: 1.4rem;
-        border-color: #bca38e;
-        background: #fff;
-      }
-
-      input::placeholder,
-      input::-webkit-input-placeholder {
-        color: #8e8e8e;
-      }
-
-      .search-field svg {
-        top: 50%;
-        transform: translateY(-50%);
-      }
-
-      @media (min-width: ${p}px) {
-        fieldset a,
-        .search-field {
-          display: block;
-          width: auto;
-        }
-
-        fieldset a {
-          margin: 0 1.5rem;
-        }
-      }
-    `];G([a({type:Object})],E.prototype,"queryHandler",2);G([a({type:String})],E.prototype,"waybackPagesArchived",2);G([_("#url")],E.prototype,"urlInput",2);E=G([g("ia-topnav-wayback-search")],E);var _e=Object.defineProperty,Be=Object.getOwnPropertyDescriptor,te=(t,e,n,o)=>{for(var i=o>1?void 0:o?Be(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&_e(e,n,i),i};let W=class extends k{constructor(){super(...arguments),this.config=y,this.inputValid=!0}static get styles(){return[v,h`
+      `]}};G([a({type:Object})],j.prototype,"queryHandler",2);G([a({type:String})],j.prototype,"waybackPagesArchived",2);G([P("#url")],j.prototype,"urlInput",2);j=G([g("ia-topnav-wayback-search")],j);var _e=Object.defineProperty,Be=Object.getOwnPropertyDescriptor,te=(t,e,n,o)=>{for(var i=o>1?void 0:o?Be(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&_e(e,n,i),i};let W=class extends k{constructor(){super(...arguments),this.config=y,this.inputValid=!0}static get styles(){return[v,h`
         div {
           display: grid;
           grid-template-columns: 1fr auto;
@@ -829,7 +828,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
         </div>
         <p class=${this.errorClass}>Please enter a valid web address</p>
       </form>
-    `}};te([a({type:Object})],W.prototype,"config",2);te([I()],W.prototype,"inputValid",2);W=te([g("ia-topnav-save-page-form")],W);const Ne={performQuery(t){window.location.href=`https://web.archive.org/web/*/${t}`}},z=t=>{const e=t.split(" "),n=e.pop(),o=`${n?.substr(0,1).toUpperCase()}${n?.substr(1)}`;return e.length?z(`${e.join(" ")}${o}`):o},de=h`
+    `}};te([a({type:Object})],W.prototype,"config",2);te([I()],W.prototype,"inputValid",2);W=te([g("ia-topnav-save-page-form")],W);const Ne={performQuery(t){window.location.href=`https://web.archive.org/web/*/${t}`}},E=t=>{const e=t.split(" "),n=e.pop(),o=`${n?.substr(0,1).toUpperCase()}${n?.substr(1)}`;return e.length?E(`${e.join(" ")}${o}`):o},de=h`
   h4 {
     font-size: 1.6rem;
   }
@@ -874,7 +873,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
       text-overflow: ellipsis;
     }
   }
-`;var Fe=Object.defineProperty,je=Object.getOwnPropertyDescriptor,N=(t,e,n,o)=>{for(var i=o>1?void 0:o?je(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&Fe(e,n,i),i};let C=class extends k{constructor(){super(...arguments),this.archiveItLinks=[],this.baseHost="",this.browserExtensionsLinks=[],this.config=y,this.mobileAppsLinks=[]}static get styles(){return[v,de,h`
+`;var Fe=Object.defineProperty,je=Object.getOwnPropertyDescriptor,B=(t,e,n,o)=>{for(var i=o>1?void 0:o?je(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&Fe(e,n,i),i};let C=class extends k{constructor(){super(...arguments),this.archiveItLinks=[],this.baseHost="",this.browserExtensionsLinks=[],this.config=y,this.mobileAppsLinks=[]}static get styles(){return[v,de,h`
         @media (min-width: ${p}px) {
           :host {
             display: block;
@@ -909,7 +908,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
             rel=${n.external?"noreferrer noopener":""}
             >${n.title}</a
           >
-        </li>`)}analyticsEvent(t){return`${this.config?.eventCategory}|${z(t)}`}render(){return l`
+        </li>`)}analyticsEvent(t){return`${this.config?.eventCategory}|${E(t)}`}render(){return l`
       <div class="grid">
         <ia-topnav-wayback-search
           .waybackPagesArchived=${this.config.waybackPagesArchived??""}
@@ -937,7 +936,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
           .config=${this.config}
         ></ia-topnav-save-page-form>
       </div>
-    `}};N([a({type:Array})],C.prototype,"archiveItLinks",2);N([a({type:String})],C.prototype,"baseHost",2);N([a({type:Array})],C.prototype,"browserExtensionsLinks",2);N([a({type:Object})],C.prototype,"config",2);N([a({type:Array})],C.prototype,"mobileAppsLinks",2);C=N([g("ia-topnav-wayback-slider")],C);var Ue=Object.defineProperty,Re=Object.getOwnPropertyDescriptor,X=(t,e,n,o)=>{for(var i=o>1?void 0:o?Re(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&Ue(e,n,i),i};let U=class extends k{constructor(){super(...arguments),this.baseHost="",this.config=y,this.menuItems=[]}static get styles(){return[v,h`
+    `}};B([a({type:Array})],C.prototype,"archiveItLinks",2);B([a({type:String})],C.prototype,"baseHost",2);B([a({type:Array})],C.prototype,"browserExtensionsLinks",2);B([a({type:Object})],C.prototype,"config",2);B([a({type:Array})],C.prototype,"mobileAppsLinks",2);C=B([g("ia-topnav-wayback-slider")],C);var Ue=Object.defineProperty,Re=Object.getOwnPropertyDescriptor,X=(t,e,n,o)=>{for(var i=o>1?void 0:o?Re(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&Ue(e,n,i),i};let U=class extends k{constructor(){super(...arguments),this.baseHost="",this.config=y,this.menuItems=[]}static get styles(){return[v,h`
         ul {
           padding: 0;
           margin: -1rem 0 0 0;
@@ -949,7 +948,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
           text-decoration: none;
           color: var(--activeColor);
         }
-      `]}analyticsEvent(t){return`${this.config.eventCategory}|NavMore${z(t)}`}render(){return l`
+      `]}analyticsEvent(t){return`${this.config.eventCategory}|NavMore${E(t)}`}render(){return l`
       <ul>
         ${this.menuItems.map(t=>l`<li>
               <a
@@ -1112,7 +1111,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
             -ms-grid-column: 3;
           }
         }
-      `]}shouldUpdate(){return this.menuItems&&(this.links=this.menuItems),!0}static get defaultLinks(){return{heading:"",iconLinks:[],featuredLinks:[],links:[],mobileAppsLinks:[],browserExtensionsLinks:[],archiveItLinks:[]}}analyticsEvent(t){return`${this.config?.eventCategory}|${z(t)}${z(this.menu)}`}get iconLinks(){return this.links.iconLinks.map(t=>l`
+      `]}shouldUpdate(){return this.menuItems&&(this.links=this.menuItems),!0}static get defaultLinks(){return{heading:"",iconLinks:[],featuredLinks:[],links:[],mobileAppsLinks:[],browserExtensionsLinks:[],archiveItLinks:[]}}analyticsEvent(t){return`${this.config?.eventCategory}|${E(t)}${E(this.menu)}`}get iconLinks(){return this.links.iconLinks.map(t=>l`
         <a
           .href="${f(t.url,this.baseHost)}"
           @click=${this.trackClick}
@@ -1154,7 +1153,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
           ${this.renderLinks(this.links.links)}
         </ul>
       </div>
-    `):l``}};q([a({type:String})],L.prototype,"baseHost",2);q([a({type:Object})],L.prototype,"config",2);q([a({type:String})],L.prototype,"menu",2);q([a({type:Object})],L.prototype,"menuItems",2);L=q([g("ia-topnav-media-subnav")],L);var We=Object.defineProperty,Ve=Object.getOwnPropertyDescriptor,F=(t,e,n,o)=>{for(var i=o>1?void 0:o?Ve(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&We(e,n,i),i};let D=class extends O{constructor(){super(...arguments),this.baseHost="",this.config=y,this.mediaSliderOpen=!1,this.menus=J(),this.selectedMenuOption="texts"}static get styles(){return[v,h`
+    `):l``}};q([a({type:String})],L.prototype,"baseHost",2);q([a({type:Object})],L.prototype,"config",2);q([a({type:String})],L.prototype,"menu",2);q([a({type:Object})],L.prototype,"menuItems",2);L=q([g("ia-topnav-media-subnav")],L);var We=Object.defineProperty,Ve=Object.getOwnPropertyDescriptor,N=(t,e,n,o)=>{for(var i=o>1?void 0:o?Ve(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&We(e,n,i),i};let D=class extends O{constructor(){super(...arguments),this.baseHost="",this.config=y,this.mediaSliderOpen=!1,this.menus=J(),this.selectedMenuOption="texts"}static get styles(){return[v,h`
         .media-slider-container {
           position: relative;
         }
@@ -1290,7 +1289,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
           </div>
         </div>
       </div>
-    `}};F([a({type:String})],D.prototype,"baseHost",2);F([a({type:Object})],D.prototype,"config",2);F([a({type:Boolean})],D.prototype,"mediaSliderOpen",2);F([a({type:Object})],D.prototype,"menus",2);F([a({type:String})],D.prototype,"selectedMenuOption",2);D=F([g("ia-topnav-media-slider")],D);var Ze=Object.defineProperty,he=(t,e,n,o)=>{for(var i=void 0,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=s(e,n,i)||i);return i&&Ze(e,n,i),i};class ie extends O{constructor(){super(...arguments),this.active=!1,this.fill="fff"}}he([a({type:Boolean})],ie.prototype,"active");he([a({type:String})],ie.prototype,"fill");var Ge=Object.getOwnPropertyDescriptor,Xe=(t,e,n,o)=>{for(var i=o>1?void 0:o?Ge(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=s(i)||i);return i};let V=class extends ie{static get styles(){return h`
+    `}};N([a({type:String})],D.prototype,"baseHost",2);N([a({type:Object})],D.prototype,"config",2);N([a({type:Boolean})],D.prototype,"mediaSliderOpen",2);N([a({type:Object})],D.prototype,"menus",2);N([a({type:String})],D.prototype,"selectedMenuOption",2);D=N([g("ia-topnav-media-slider")],D);var Ze=Object.defineProperty,he=(t,e,n,o)=>{for(var i=void 0,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=s(e,n,i)||i);return i&&Ze(e,n,i),i};class ie extends O{constructor(){super(...arguments),this.active=!1,this.fill="fff"}}he([a({type:Boolean})],ie.prototype,"active");he([a({type:String})],ie.prototype,"fill");var Ge=Object.getOwnPropertyDescriptor,Xe=(t,e,n,o)=>{for(var i=o>1?void 0:o?Ge(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=s(i)||i);return i};let V=class extends ie{static get styles(){return h`
       svg {
         display: block;
         height: 4rem;
@@ -1316,7 +1315,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
           fill-rule="evenodd"
         />
       </svg>
-    `}static get opened(){return $.close}render(){return this.active?V.opened:V.closed}};V=Xe([g("ia-topnav-icon-hamburger")],V);var Ye=Object.defineProperty,Je=Object.getOwnPropertyDescriptor,K=(t,e,n,o)=>{for(var i=o>1?void 0:o?Je(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&Ye(e,n,i),i};let P=class extends k{constructor(){super(...arguments),this.baseHost="",this.config=y,this.openMenu=""}static get styles(){return[v,h`
+    `}static get opened(){return $.close}render(){return this.active?V.opened:V.closed}};V=Xe([g("ia-topnav-icon-hamburger")],V);var Ye=Object.defineProperty,Je=Object.getOwnPropertyDescriptor,K=(t,e,n,o)=>{for(var i=o>1?void 0:o?Je(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&Ye(e,n,i),i};let z=class extends k{constructor(){super(...arguments),this.baseHost="",this.config=y,this.openMenu=""}static get styles(){return[v,h`
         .logged-out-menu {
           background: inherit;
           border: none;
@@ -1420,7 +1419,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
           <a href="${this.loginPath}">Log in</a>
         </span>
       </div>
-    `}};K([a({type:String})],P.prototype,"baseHost",2);K([a({type:Object})],P.prototype,"config",2);K([a({type:String})],P.prototype,"openMenu",2);K([_("button.logged-out-menu")],P.prototype,"toggleButton",2);P=K([g("ia-topnav-login-button")],P);var Qe=Object.defineProperty,He=Object.getOwnPropertyDescriptor,x=(t,e,n,o)=>{for(var i=o>1?void 0:o?He(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&Qe(e,n,i),i};let b=class extends k{constructor(){super(...arguments),this.config=y,this.icon="",this.href="",this.label="",this.mediatype="",this.openMenu="",this.selected=!1,this.followable=!1}static get styles(){return[v,h`
+    `}};K([a({type:String})],z.prototype,"baseHost",2);K([a({type:Object})],z.prototype,"config",2);K([a({type:String})],z.prototype,"openMenu",2);K([P("button.logged-out-menu")],z.prototype,"toggleButton",2);z=K([g("ia-topnav-login-button")],z);var Qe=Object.defineProperty,He=Object.getOwnPropertyDescriptor,x=(t,e,n,o)=>{for(var i=o>1?void 0:o?He(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&Qe(e,n,i),i};let b=class extends k{constructor(){super(...arguments),this.config=y,this.icon="",this.href="",this.label="",this.mediatype="",this.openMenu="",this.selected=!1,this.followable=!1}static get styles(){return[v,h`
         a {
           display: inline-block;
           text-decoration: none;
@@ -1573,7 +1572,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
             display: none;
           }
         }
-      `]}static get icons(){return $}onClick(t){this.trackClick(t),t.preventDefault(),this.openMenu!=="media"&&this.dispatchMenuToggledEvent(),this.dispatchMediaTypeSelectedEvent()}dispatchMenuToggledEvent(){this.dispatchEvent(new CustomEvent("menuToggled",{bubbles:!0,composed:!0,detail:{menuName:"media"}}))}dispatchMediaTypeSelectedEvent(){this.dispatchEvent(new CustomEvent("mediaTypeSelected",{bubbles:!0,composed:!0,detail:{mediatype:this.mediatype}}))}get buttonClass(){return this.selected?"selected":""}get tooltipPrefix(){return this.selected?"Collapse":"Expand"}get iconClass(){return this.selected?"active":""}get analyticsEvent(){return`${this.config.eventCategory}|NavMenu${z(this.mediatype)}`}get menuItem(){return l`
+      `]}static get icons(){return $}onClick(t){this.trackClick(t),t.preventDefault(),this.openMenu!=="media"&&this.dispatchMenuToggledEvent(),this.dispatchMediaTypeSelectedEvent()}dispatchMenuToggledEvent(){this.dispatchEvent(new CustomEvent("menuToggled",{bubbles:!0,composed:!0,detail:{menuName:"media"}}))}dispatchMediaTypeSelectedEvent(){this.dispatchEvent(new CustomEvent("mediaTypeSelected",{bubbles:!0,composed:!0,detail:{mediatype:this.mediatype}}))}get buttonClass(){return this.selected?"selected":""}get tooltipPrefix(){return this.selected?"Collapse":"Expand"}get iconClass(){return this.selected?"active":""}get analyticsEvent(){return`${this.config.eventCategory}|NavMenu${E(this.mediatype)}`}get menuItem(){return l`
       <span class="icon ${this.iconClass}">
         ${b.icons[this.icon]}
       </span>
@@ -2126,7 +2125,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
           ${this.uploadButtonTemplate} ${this.searchMenu}
         </div>
       </nav>
-    `}};m([a({type:String})],u.prototype,"mediaBaseHost",2);m([a({type:String})],u.prototype,"baseHost",2);m([a({type:Boolean})],u.prototype,"hideSearch",2);m([a({type:Object})],u.prototype,"config",2);m([a({type:String})],u.prototype,"openMenu",2);m([a({type:String})],u.prototype,"screenName",2);m([a({type:String})],u.prototype,"secondIdentitySlotMode",2);m([a({type:String})],u.prototype,"selectedMenuOption",2);m([a({type:Boolean})],u.prototype,"signedOutMenuOpen",2);m([a({type:Boolean})],u.prototype,"userMenuOpen",2);m([a({type:Boolean})],u.prototype,"mediaMenuAnimate",2);m([a({type:String})],u.prototype,"username",2);m([a({type:String})],u.prototype,"userProfileImagePath",2);m([a({type:Object})],u.prototype,"currentTab",2);m([_("button.user-menu")],u.prototype,"userMenuButton",2);m([_("ia-topnav-login-button")],u.prototype,"loginButton",2);u=m([g("ia-topnav-primary-nav")],u);var at=Object.getOwnPropertyDescriptor,st=(t,e,n,o)=>{for(var i=o>1?void 0:o?at(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=s(i)||i);return i};let oe=class extends le{};oe=st([g("ia-topnav-signed-out-dropdown")],oe);var lt=Object.defineProperty,ct=Object.getOwnPropertyDescriptor,ne=(t,e,n,o)=>{for(var i=o>1?void 0:o?ct(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&lt(e,n,i),i};let Z=class extends le{constructor(){super(...arguments),this.username="",this.screenName=""}render(){return l`
+    `}};m([a({type:String})],u.prototype,"mediaBaseHost",2);m([a({type:String})],u.prototype,"baseHost",2);m([a({type:Boolean})],u.prototype,"hideSearch",2);m([a({type:Object})],u.prototype,"config",2);m([a({type:String})],u.prototype,"openMenu",2);m([a({type:String})],u.prototype,"screenName",2);m([a({type:String})],u.prototype,"secondIdentitySlotMode",2);m([a({type:String})],u.prototype,"selectedMenuOption",2);m([a({type:Boolean})],u.prototype,"signedOutMenuOpen",2);m([a({type:Boolean})],u.prototype,"userMenuOpen",2);m([a({type:Boolean})],u.prototype,"mediaMenuAnimate",2);m([a({type:String})],u.prototype,"username",2);m([a({type:String})],u.prototype,"userProfileImagePath",2);m([a({type:Object})],u.prototype,"currentTab",2);m([P("button.user-menu")],u.prototype,"userMenuButton",2);m([P("ia-topnav-login-button")],u.prototype,"loginButton",2);u=m([g("ia-topnav-primary-nav")],u);var at=Object.getOwnPropertyDescriptor,st=(t,e,n,o)=>{for(var i=o>1?void 0:o?at(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=s(i)||i);return i};let oe=class extends le{};oe=st([g("ia-topnav-signed-out-dropdown")],oe);var lt=Object.defineProperty,ct=Object.getOwnPropertyDescriptor,ne=(t,e,n,o)=>{for(var i=o>1?void 0:o?ct(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&lt(e,n,i),i};let Z=class extends le{constructor(){super(...arguments),this.username="",this.screenName=""}render(){return l`
       <div class="nav-container">
         <nav
           class="${this.menuClass}"
@@ -2287,7 +2286,7 @@ import{i as O,b as l,n as a,t as g,d as h,A as w,r as I,w as me}from"./index-Bt4
         class="${this.closeLayerClass}"
         @click=${this.closeMenus}
       ></div>
-    `}};d([a({type:Boolean})],c.prototype,"localLinks",2);d([a({type:String})],c.prototype,"waybackPagesArchived",2);d([a({type:String})],c.prototype,"baseHost",2);d([a({type:String})],c.prototype,"mediaBaseHost",2);d([a({type:Boolean})],c.prototype,"admin",2);d([a({type:Boolean})],c.prototype,"canManageFlags",2);d([a({type:Object})],c.prototype,"config",2);d([a({type:Boolean})],c.prototype,"hideSearch",2);d([a({type:String})],c.prototype,"itemIdentifier",2);d([a({type:String})],c.prototype,"uploader",2);d([a({type:String})],c.prototype,"biblio",2);d([a({type:Boolean})],c.prototype,"mediaSliderOpen",2);d([a({type:String})],c.prototype,"openMenu",2);d([a({type:String})],c.prototype,"screenName",2);d([a({type:String})],c.prototype,"selectedMenuOption",2);d([a({type:String})],c.prototype,"username",2);d([a({type:String})],c.prototype,"userProfileImagePath",2);d([a({type:String})],c.prototype,"secondIdentitySlotMode",2);d([a({type:Object})],c.prototype,"currentTab",2);d([_("ia-topnav-primary-nav")],c.prototype,"primaryNav",2);d([_("ia-topnav-user-menu, ia-topnav-signed-out-dropdown")],c.prototype,"accountDropdown",2);d([I()],c.prototype,"menus",2);c=d([g("ia-topnav")],c);var ut=Object.defineProperty,pt=Object.getOwnPropertyDescriptor,T=(t,e,n,o)=>{for(var i=o>1?void 0:o?pt(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&ut(e,n,i),i};const mt="goody",gt="uploader@archive.org",vt="https://openlibrary.org/search/inside?q=";let M=class extends O{constructor(){super(...arguments),this.signedIn=!1,this.onAnItem=!1,this.admin=!1,this.canManageFlags=!1,this.hideSearch=!1,this.lastEvent=""}get propInputData(){return{settings:[{label:"Wayback pages archived",propertyName:"waybackPagesArchived",defaultValue:"916 billion"}]}}onAnalyticsClick(t){this.lastEvent=`analyticsClick → ${t.detail?.event??""}`}onAnalyticsSubmit(t){this.lastEvent=`analyticsSubmit → ${t.detail?.event??""}`}toggleRow(t,e){return l`
+    `}};d([a({type:Boolean})],c.prototype,"localLinks",2);d([a({type:String})],c.prototype,"waybackPagesArchived",2);d([a({type:String})],c.prototype,"baseHost",2);d([a({type:String})],c.prototype,"mediaBaseHost",2);d([a({type:Boolean})],c.prototype,"admin",2);d([a({type:Boolean})],c.prototype,"canManageFlags",2);d([a({type:Object})],c.prototype,"config",2);d([a({type:Boolean})],c.prototype,"hideSearch",2);d([a({type:String})],c.prototype,"itemIdentifier",2);d([a({type:String})],c.prototype,"uploader",2);d([a({type:String})],c.prototype,"biblio",2);d([a({type:Boolean})],c.prototype,"mediaSliderOpen",2);d([a({type:String})],c.prototype,"openMenu",2);d([a({type:String})],c.prototype,"screenName",2);d([a({type:String})],c.prototype,"selectedMenuOption",2);d([a({type:String})],c.prototype,"username",2);d([a({type:String})],c.prototype,"userProfileImagePath",2);d([a({type:String})],c.prototype,"secondIdentitySlotMode",2);d([a({type:Object})],c.prototype,"currentTab",2);d([P("ia-topnav-primary-nav")],c.prototype,"primaryNav",2);d([P("ia-topnav-user-menu, ia-topnav-signed-out-dropdown")],c.prototype,"accountDropdown",2);d([I()],c.prototype,"menus",2);c=d([g("ia-topnav")],c);var ut=Object.defineProperty,pt=Object.getOwnPropertyDescriptor,T=(t,e,n,o)=>{for(var i=o>1?void 0:o?pt(e,n):e,r=t.length-1,s;r>=0;r--)(s=t[r])&&(i=(o?s(e,n,i):s(i))||i);return o&&i&&ut(e,n,i),i};const mt="goody",gt="uploader@archive.org",vt="https://openlibrary.org/search/inside?q=";let M=class extends O{constructor(){super(...arguments),this.signedIn=!1,this.onAnItem=!1,this.admin=!1,this.canManageFlags=!1,this.hideSearch=!1,this.lastEvent=""}get propInputData(){return{settings:[{label:"Wayback pages archived",propertyName:"waybackPagesArchived",defaultValue:"916 billion"}]}}onAnalyticsClick(t){this.lastEvent=`analyticsClick → ${t.detail?.event??""}`}onAnalyticsSubmit(t){this.lastEvent=`analyticsSubmit → ${t.detail?.event??""}`}toggleRow(t,e){return l`
       <tr>
         <td>${t}</td>
         <td>
