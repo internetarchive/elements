@@ -295,19 +295,19 @@ export class StoryTemplate extends LitElement {
     if (slottedComponent) this.slottedDemoComponent = slottedComponent;
   }
 
-  /* Applies styles from the settings to the component and code demo */
+  /* Applies styles from the settings to the component and code demo; an empty
+     string clears them (Reset), reverting to the component's own defaults. */
   private handleStylesApplied(e: CustomEvent): void {
-    const stringifiedStyles = e.detail.styles;
-    if (!stringifiedStyles) return;
-
-    this.stringifiedStyles = stringifiedStyles;
+    this.stringifiedStyles = e.detail.styles || undefined;
   }
 
   /* Applies props from the settings to the component and code demo */
   private handlePropsApplied(e: CustomEvent): void {
     const stringifiedProps = e.detail.stringifiedProps;
     const appliedProps: AppliedProps = e.detail.appliedProps;
-    if (!stringifiedProps || !appliedProps) return;
+    // An empty string is meaningful: every prop is at its default, so the
+    // example should show none of them.
+    if (typeof stringifiedProps !== 'string' || !appliedProps) return;
 
     this.stringifiedProps = stringifiedProps;
     appliedProps.forEach((prop) => {
