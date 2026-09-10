@@ -102,13 +102,15 @@ export class IATopNavWaybackSearch extends LitElement {
             #fff
           );
           /*
-         * The topnav declares this alongside its other color knobs, so the
-         * desktop glyph is darker than the mobile one. The fallback covers
-         * mounting this search outside a topnav.
-         */
+           * Darker than the mobile glyph, which follows --iconFill. The topnav
+           * declares this alongside its other color knobs. The literal covers
+           * mounting this search on its own, where none of those greys exist,
+           * and it has to be a literal because fill inherits: an unresolved
+           * value paints black rather than falling through to another rule.
+           */
           --topnav-wayback-desktop-icon-fill--: var(
             --desktopSearchIconFill,
-            var(--iconFill)
+            #333
           );
 
           font: normal 1.2rem/1.5 var(--themeFontFamily);
