@@ -1,5 +1,5 @@
 import { fixture } from '@open-wc/testing-helpers';
-import { html } from 'lit';
+import { html, type LitElement } from 'lit';
 
 import './ia-topnav-media-slider';
 import { buildTopNavMenus } from './data/menus';
@@ -49,10 +49,14 @@ describe('<ia-topnav-media-slider>', () => {
 
   test('renders the Wayback component when web menu selected', async () => {
     const mediaSlider = await fixture(component(false, 'web'));
-    const waybackSearch = mediaSlider.shadowRoot
+    const waybackSlider = mediaSlider.shadowRoot
       ?.querySelector('ia-topnav-media-subnav[menu=web]')
-      ?.shadowRoot?.querySelector('ia-topnav-wayback-search');
-    expect(waybackSearch).to.not.be.undefined;
+      ?.shadowRoot?.querySelector('ia-topnav-wayback-slider');
+    expect(waybackSlider).to.exist;
+
+    await (waybackSlider as LitElement)?.updateComplete;
+    expect(waybackSlider?.shadowRoot?.querySelector('ia-topnav-wayback-search'))
+      .to.exist;
   });
 
   test('renders the more links component when more menu selected', async () => {
@@ -60,6 +64,6 @@ describe('<ia-topnav-media-slider>', () => {
     const moreSlider = mediaSlider.shadowRoot
       ?.querySelector('ia-topnav-media-subnav[menu=more]')
       ?.shadowRoot?.querySelector('ia-topnav-more-slider');
-    expect(moreSlider).to.not.be.undefined;
+    expect(moreSlider).to.exist;
   });
 });
