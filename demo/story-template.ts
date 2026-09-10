@@ -305,7 +305,9 @@ export class StoryTemplate extends LitElement {
   private handlePropsApplied(e: CustomEvent): void {
     const stringifiedProps = e.detail.stringifiedProps;
     const appliedProps: AppliedProps = e.detail.appliedProps;
-    if (!stringifiedProps || !appliedProps) return;
+    // An empty string is meaningful: every prop is at its default, so the
+    // example should show none of them.
+    if (typeof stringifiedProps !== 'string' || !appliedProps) return;
 
     this.stringifiedProps = stringifiedProps;
     appliedProps.forEach((prop) => {

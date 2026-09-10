@@ -4,7 +4,7 @@ import { describe, expect, test, vi } from 'vitest';
 
 import { IAItemNavMenuButton } from './ia-itemnav-menu-button';
 import './ia-itemnav-menu-button';
-import { maskedIcon } from './masked-icon';
+import { maskedIcon } from '@src/util/masked-icon';
 
 describe('IAItemNavMenuButton', () => {
   test('renders a <button> by default', async () => {
