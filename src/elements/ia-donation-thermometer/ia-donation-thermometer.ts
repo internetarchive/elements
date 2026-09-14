@@ -32,7 +32,7 @@ export class IADonationThermometer extends LitElement {
   );
 
   @property({ type: String }) goalReachedMessage = msg(
-    "We've reached our goal!",
+    'We’ve reached our goal!',
   );
 
   /** The accessible name of the progress bar, for screen readers. */

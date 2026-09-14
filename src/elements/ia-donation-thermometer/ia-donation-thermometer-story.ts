@@ -121,7 +121,7 @@ const propInputSettings: PropInputSettings<IADonationThermometer>[] = [
     section: 'Goal messages',
     label: 'Goal reached',
     propertyName: 'goalReachedMessage',
-    defaultValue: "We've reached our goal!",
+    defaultValue: 'We’ve reached our goal!',
   },
 ];
 
