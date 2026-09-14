@@ -9,5 +9,8 @@ export * from './ia-item-navigator/menus/ia-itemnav-sort-files-button';
 export * from './ia-item-navigator/menus/ia-itemnav-share-panel';
 export * from './ia-playback-controls/ia-playback-controls';
 export * from './ia-playback-controls/models';
+export * from './ia-scrubber-bar/ia-scrubber-bar';
+export * from './ia-scrubber-bar/ia-section-marker';
+export * from './ia-scrubber-bar/models';
 export * from './ia-waveform-progress/ia-waveform-progress';
 export * from './ia-waveform-progress/models';
