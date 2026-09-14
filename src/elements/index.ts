@@ -7,3 +7,5 @@ export * from './ia-item-navigator/ia-item-navigator';
 export * from './ia-item-navigator/menus/ia-itemnav-viewable-files-panel';
 export * from './ia-item-navigator/menus/ia-itemnav-sort-files-button';
 export * from './ia-item-navigator/menus/ia-itemnav-share-panel';
+export * from './ia-waveform-progress/ia-waveform-progress';
+export * from './ia-waveform-progress/models';
