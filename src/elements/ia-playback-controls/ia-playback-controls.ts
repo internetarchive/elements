@@ -148,9 +148,21 @@ export class IAPlaybackControls extends LitElement {
     return this.playbackMode === PlaybackMode.playing;
   }
 
+  /**
+   * The volume held to the 0 to 1 range the controls can represent.
+   *
+   * `volume` is a public property, so it can arrive out of range or as
+   * something that isn't a number at all. Everything that displays, announces
+   * or steps the volume reads it through here, so an impossible value never
+   * reaches the screen reader.
+   */
+  private get clampedVolume(): number {
+    return Math.min(Math.max(this.volume || 0, 0), 1);
+  }
+
   /** The volume as a whole number, for display and for screen readers */
   private get volumePercent(): number {
-    return Math.round(this.volume * 100);
+    return Math.round(this.clampedVolume * 100);
   }
 
   /**
@@ -180,8 +192,8 @@ export class IAPlaybackControls extends LitElement {
   }
 
   private get volumeButtonIcon(): TemplateResult {
-    if (this.volume <= 0) return volumeMuteIcon;
-    if (this.volume >= 1) return volumeFullIcon;
+    if (this.clampedVolume <= 0) return volumeMuteIcon;
+    if (this.clampedVolume >= 1) return volumeFullIcon;
     return volumeMediumIcon;
   }
 
@@ -189,15 +201,19 @@ export class IAPlaybackControls extends LitElement {
    * Steps the playback rate up, wrapping back to the slowest once it reaches
    * the fastest.
    *
-   * The comparison is `>=` rather than `===`, and the step is clamped, so a
-   * rate set from outside that doesn't land on a step boundary still stays
-   * inside the range instead of overshooting it or climbing forever.
+   * The rate is clamped on the way in as well as the way out, so a rate set
+   * from outside the range lands back on the documented steps rather than
+   * drifting off the grid, overshooting the top, or climbing forever.
    */
   private handlePlaybackRateChange(): void {
+    const current = Math.max(
+      this.playbackRate || MIN_PLAYBACK_RATE,
+      MIN_PLAYBACK_RATE,
+    );
     this.playbackRate =
-      this.playbackRate >= MAX_PLAYBACK_RATE
+      current >= MAX_PLAYBACK_RATE
         ? MIN_PLAYBACK_RATE
-        : Math.min(this.playbackRate + PLAYBACK_RATE_STEP, MAX_PLAYBACK_RATE);
+        : Math.min(current + PLAYBACK_RATE_STEP, MAX_PLAYBACK_RATE);
 
     this.dispatchEvent(
       new CustomEvent<{ playbackRate: number }>(Events.PlaybackRateChange, {
@@ -208,7 +224,8 @@ export class IAPlaybackControls extends LitElement {
 
   /** Steps the volume up, wrapping round to muted once it passes full. */
   private handleVolumeChange(): void {
-    this.volume = this.volume >= 1 ? 0 : Math.min(this.volume + VOLUME_STEP, 1);
+    const current = this.clampedVolume;
+    this.volume = current >= 1 ? 0 : Math.min(current + VOLUME_STEP, 1);
 
     this.dispatchEvent(
       new CustomEvent<{ volume: number }>(Events.VolumeChange, {
@@ -299,6 +316,10 @@ export class IAPlaybackControls extends LitElement {
 
       #play-pause-btn {
         border-radius: 50%;
+        /* Buttons are border-box, so the UA's default padding would eat into
+           the icon's content box and shrink the glyph relative to the circle
+           by a different amount at every diameter. */
+        padding: 0;
         height: var(--playback-controls-play-button-diameter--);
         width: var(--playback-controls-play-button-diameter--);
         border: none;

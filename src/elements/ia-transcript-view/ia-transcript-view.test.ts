@@ -50,6 +50,17 @@ async function scrollableFixture(): Promise<IATranscriptView> {
   );
 }
 
+/**
+ * Wheels over the transcript in `deltaY`'s direction, the way a real wheel
+ * gesture arrives. Negative scrolls up, positive scrolls down.
+ */
+function wheel(el: IATranscriptView, deltaY: number): void {
+  const container = el.shadowRoot?.querySelector('.scroll-container');
+  if (!container) throw new Error('no scroll container');
+
+  container.dispatchEvent(new WheelEvent('wheel', { deltaY }));
+}
+
 function entriesIn(el: IATranscriptView): IATranscriptEntry[] {
   return [
     ...(el.shadowRoot?.querySelectorAll<IATranscriptEntry>(
@@ -211,14 +222,10 @@ describe('IA Transcript View', () => {
   });
 
   test('disables autoscroll on a manual scroll and restores it after the delay', async () => {
-    const el = await fixture<IATranscriptView>(
-      html`<ia-transcript-view .config=${sampleConfig()}></ia-transcript-view>`,
-    );
+    const el = await scrollableFixture();
     el.scrollTimerDelay = 50;
 
-    el.shadowRoot
-      ?.querySelector('.scroll-container')
-      ?.dispatchEvent(new MouseEvent('wheel'));
+    wheel(el, 100);
 
     expect(el.autoScroll).to.be.false;
 
@@ -227,6 +234,29 @@ describe('IA Transcript View', () => {
     });
 
     expect(el.autoScroll).to.be.true;
+  });
+
+  test('leaves autoscroll alone when the wheel scrolls nothing', async () => {
+    const el = await scrollableFixture();
+    el.autoScroll = true;
+    await elementUpdated(el);
+
+    // A wheel-up at the top of the transcript: the gesture happens, the
+    // transcript does not move.
+    wheel(el, -100);
+
+    expect(el.autoScroll).to.be.true;
+  });
+
+  test('gives the auto-scroll button an explicit type', async () => {
+    const el = await fixture<IATranscriptView>(
+      html`<ia-transcript-view .config=${sampleConfig()}></ia-transcript-view>`,
+    );
+
+    // Without this it defaults to submit, and this element is headed for
+    // pages where it can land inside a form.
+    const button = el.shadowRoot?.querySelector('.auto-scroll-button');
+    expect(button?.getAttribute('type')).to.equal('button');
   });
 
   test('tracks the entry being spoken as time moves', async () => {
