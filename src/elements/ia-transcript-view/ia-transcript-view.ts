@@ -132,6 +132,7 @@ export class IATranscriptView extends LitElement {
   private get autoScrollButtonTemplate(): TemplateResult {
     return html`
       <button
+        type="button"
         class="auto-scroll-button ${this.autoScroll ? 'hidden' : ''}"
         @click=${this.enableAutoScroll}
       >
@@ -281,14 +282,31 @@ export class IATranscriptView extends LitElement {
   /**
    * Steps auto-scroll aside when the listener scrolls by hand, and arranges to
    * pick it back up once they've left it alone for a while.
+   *
+   * A wheel that the transcript cannot act on, such as a wheel-up when it is
+   * already at the top, is ignored: the listener sees nothing move, so taking
+   * auto-scroll away from them reads as the page misbehaving.
    */
-  private didScroll(): void {
+  private didScroll(event: Event): void {
+    if (event instanceof WheelEvent && !this.canScrollBy(event.deltaY)) return;
+
     this.autoScroll = false;
 
     clearTimeout(this.scrollResumeTimerId);
     this.scrollResumeTimerId = setTimeout(() => {
       this.autoScroll = true;
     }, this.scrollTimerDelay);
+  }
+
+  /** Whether the transcript has anywhere left to go in `deltaY`'s direction. */
+  private canScrollBy(deltaY: number): boolean {
+    const { scrollView } = this;
+    if (!scrollView) return false;
+
+    const { scrollTop, scrollHeight, clientHeight } = scrollView;
+    if (deltaY < 0) return scrollTop > 0;
+    if (deltaY > 0) return Math.ceil(scrollTop + clientHeight) < scrollHeight;
+    return false;
   }
 
   private enableAutoScroll(): void {
