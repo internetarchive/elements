@@ -221,31 +221,43 @@ export class IADonationThermometer extends LitElement {
       themeStyles,
       css`
         :host {
-          --thermometer-height--: var(--ia-donation-thermometer-height, 20px);
-          --fill-color--: var(--ia-donation-thermometer-fill-color, #23765d);
-          --track-color--: var(--ia-donation-thermometer-track-color, #b8f5e2);
-          --border--: var(
+          --donation-thermometer-height--: var(
+            --ia-donation-thermometer-height,
+            20px
+          );
+          --donation-thermometer-fill-color--: var(
+            --ia-donation-thermometer-fill-color,
+            #23765d
+          );
+          --donation-thermometer-track-color--: var(
+            --ia-donation-thermometer-track-color,
+            #b8f5e2
+          );
+          --donation-thermometer-border--: var(
             --ia-donation-thermometer-border,
-            1px solid var(--fill-color--)
+            1px solid var(--donation-thermometer-fill-color--)
           );
           /* Large enough to round any height into a pill */
-          --border-radius--: var(
+          --donation-thermometer-border-radius--: var(
             --ia-donation-thermometer-border-radius,
             9999px
           );
-          --value-on-fill-color--: var(
+          --donation-thermometer-value-on-fill-color--: var(
             --ia-donation-thermometer-value-on-fill-color,
             var(--true-white)
           );
-          --value-on-track-color--: var(
+          --donation-thermometer-value-on-track-color--: var(
             --ia-donation-thermometer-value-on-track-color,
-            var(--fill-color--)
+            var(--donation-thermometer-fill-color--)
           );
-          --goal-color--: var(--primary-text-color);
-          --goal-padding--: var(--ia-donation-thermometer-goal-padding, 0 10px);
+          --donation-thermometer-goal-color--: var(--primary-text-color);
+          --donation-thermometer-goal-padding--: var(
+            --ia-donation-thermometer-goal-padding,
+            0 10px
+          );
 
           display: block;
-          height: var(--thermometer-height--);
+          height: var(--donation-thermometer-height--);
         }
 
         .container {
@@ -264,18 +276,18 @@ export class IADonationThermometer extends LitElement {
         }
 
         .thermometer-background {
-          background-color: var(--track-color--);
+          background-color: var(--donation-thermometer-track-color--);
           padding: 0;
           height: 100%;
-          border-radius: var(--border-radius--);
-          border: var(--border--);
+          border-radius: var(--donation-thermometer-border-radius--);
+          border: var(--donation-thermometer-border--);
           overflow: hidden;
           display: flex;
           align-items: center;
         }
 
         .thermometer-fill {
-          background-color: var(--fill-color--);
+          background-color: var(--donation-thermometer-fill-color--);
           text-align: right;
           height: 100%;
           display: flex;
@@ -289,21 +301,21 @@ export class IADonationThermometer extends LitElement {
         }
 
         .value-left .thermometer-value {
-          color: var(--value-on-fill-color--);
+          color: var(--donation-thermometer-value-on-fill-color--);
           padding: 0 0.5rem 0 1rem;
         }
 
         .value-right .thermometer-value {
-          color: var(--value-on-track-color--);
+          color: var(--donation-thermometer-value-on-track-color--);
           padding: 0 1rem 0 0.5rem;
         }
 
         .donate-goal {
           text-align: left;
-          padding: var(--goal-padding--);
+          padding: var(--donation-thermometer-goal-padding--);
           text-transform: uppercase;
           font-weight: bold;
-          color: var(--goal-color--);
+          color: var(--donation-thermometer-goal-color--);
         }
       `,
     ];
