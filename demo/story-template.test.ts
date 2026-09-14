@@ -61,6 +61,30 @@ describe('StoryTemplate', () => {
       );
     });
 
+    test('uses importPath for an element nested inside another component', async () => {
+      const el = await fixture<StoryTemplate>(html`
+        <story-template
+          elementTag="ia-donation-section"
+          elementClassName="IADonationSection"
+          importPath="ia-donation-form/form-elements/ia-donation-section"
+        ></story-template>
+      `);
+
+      const importHighlighter = el.shadowRoot?.querySelectorAll(
+        'syntax-highlighter',
+      )[0] as any;
+      expect(importHighlighter).to.exist;
+
+      const code: string = importHighlighter.code;
+      expect(code).to.include(
+        "import '@internetarchive/elements/ia-donation-form/form-elements/ia-donation-section';",
+      );
+      expect(code).to.include(
+        "import { IADonationSection } from '@internetarchive/elements/ia-donation-form/form-elements/ia-donation-section';",
+      );
+      expect(code).to.not.include('ia-donation-section/ia-donation-section');
+    });
+
     test('has no leading or trailing whitespace', async () => {
       const el = await fixture<StoryTemplate>(html`
         <story-template
