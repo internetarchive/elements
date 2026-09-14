@@ -1,11 +1,11 @@
-import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js";import{m as l,s as m}from"./runtime-CCgtQBty.js";import"./story-template-BwtK6Ril.js";const d={playing:"playing",paused:"paused"},x=a`
+import{w as a,n as m,t as f,i as k,b as u,a as w,r as P}from"./index-ikP0tIjk.js";import{m as l,s as g}from"./runtime-CCgtQBty.js";import"./story-template-CcIzkZYG.js";const p={playing:"playing",paused:"paused"},C=a`
 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20">
   <g fill="none" fill-rule="evenodd" transform="translate(1)">
     <polygon fill="currentColor" points="7 3 16 17 -2 17" transform="rotate(90 7 10)" />
     <line x1="15" x2="15" y1="20" stroke="currentColor" stroke-width="2" />
   </g>
 </svg>
-`,C=a`
+`,$=a`
 <svg height="60" viewBox="0 0 60 60" width="60" xmlns="http://www.w3.org/2000/svg">
   <path
     d="m32 18h6v25h-6zm-10 0h6v25h-6z"
@@ -13,7 +13,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
     fill-rule="evenodd"
   />
 </svg>
-`,$=a`
+`,B=a`
 <svg height="60" viewBox="0 0 60 60" width="60" xmlns="http://www.w3.org/2000/svg">
   <path
     d="m34.5 18 12.5 25h-25z"
@@ -22,7 +22,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
     transform="matrix(0 1 -1 0 65 -4)"
   />
 </svg>
-`,B=a`
+`,M=a`
 <svg xmlns="http://www.w3.org/2000/svg" width="23" height="17" viewBox="0 0 23 17">
   <g fill="none" fill-rule="evenodd" stroke="currentColor" transform="translate(1 1)">
     <g stroke-linecap="round" transform="translate(2 2.522)">
@@ -41,14 +41,14 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
     />
   </g>
 </svg>
-`,M=a`
+`,E=a`
 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20">
   <g fill="none" fill-rule="evenodd" transform="translate(1 1)">
     <polygon fill="currentColor" points="9 2 18 16 0 16" transform="rotate(-90 9 9)" />
     <line x1=".5" x2=".5" y1="18" stroke="currentColor" stroke-width="2" />
   </g>
 </svg>
-`,E=a`
+`,I=a`
 <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
   <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
     <polyline
@@ -67,7 +67,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
     </text>
   </g>
 </svg>
-`,I=a`
+`,S=a`
 <svg height="20" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg">
   <g fill="none" fill-rule="evenodd" transform="matrix(-1 0 0 1 20 0)">
     <path
@@ -87,7 +87,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
     </g>
   </g>
 </svg>
-`,S=a`
+`,_=a`
 <svg height="22" viewBox="0 0 22 22" width="22" xmlns="http://www.w3.org/2000/svg">
   <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-width="2">
     <path
@@ -112,7 +112,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
     <path d="m10 3.5-4 3.81h-5v8.38h5l4 3.81z" fill="currentColor" stroke-linejoin="round" />
   </g>
 </svg>
-`,_=a`
+`,V=a`
 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
   <g fill="none" fill-rule="evenodd">
     <path
@@ -138,7 +138,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
     />
   </g>
 </svg>
-`;var L=Object.defineProperty,T=Object.getOwnPropertyDescriptor,h=(o,e,n,r)=>{for(var t=r>1?void 0:r?T(e,n):e,s=o.length-1,i;s>=0;s--)(i=o[s])&&(t=(r?i(e,n,t):i(t))||t);return r&&t&&L(e,n,t),t};const c={PlaybackRateChange:"playbackRateChange",VolumeChange:"volumeChange",BackButtonPressed:"back-button-pressed",ForwardButtonPressed:"forward-button-pressed",PlayPauseButtonPressed:"play-pause-button-pressed",PrevSectionButtonPressed:"prev-section-button-pressed",NextSectionButtonPressed:"next-section-button-pressed"},j=.25,N=.5,g=2,A=.25;let p=class extends f{constructor(){super(...arguments),this.playbackMode=d.paused,this.playbackRate=1,this.volume=1}render(){return u`
+`;var L=Object.defineProperty,T=Object.getOwnPropertyDescriptor,h=(t,o,n,r)=>{for(var e=r>1?void 0:r?T(o,n):o,s=t.length-1,i;s>=0;s--)(i=t[s])&&(e=(r?i(o,n,e):i(e))||e);return r&&e&&L(o,n,e),e};const c={PlaybackRateChange:"playbackRateChange",VolumeChange:"volumeChange",BackButtonPressed:"back-button-pressed",ForwardButtonPressed:"forward-button-pressed",PlayPauseButtonPressed:"play-pause-button-pressed",PrevSectionButtonPressed:"prev-section-button-pressed",NextSectionButtonPressed:"next-section-button-pressed"},j=.25,b=.5,y=2,A=.25;let d=class extends k{constructor(){super(...arguments),this.playbackMode=p.paused,this.playbackRate=1,this.volume=1}render(){return u`
       <div class="container">
         <div class="vertical-button-stack playback-speed">
           <div class="vertical-button-container">
@@ -148,7 +148,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
               aria-label=${this.playbackRateLabel}
               @click=${this.handlePlaybackRateChange}
             >
-              ${B}
+              ${M}
             </button>
           </div>
           <div class="vertical-button-value" aria-hidden="true">
@@ -162,7 +162,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
           aria-label=${l("Previous section")}
           @click=${this.handlePrevSectionButton}
         >
-          ${M}
+          ${E}
         </button>
 
         <button
@@ -171,7 +171,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
           aria-label=${l("Skip back ten seconds")}
           @click=${this.handleBackButton}
         >
-          ${E}
+          ${I}
         </button>
 
         <button
@@ -188,7 +188,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
           aria-label=${l("Skip ahead ten seconds")}
           @click=${this.handleForwardButton}
         >
-          ${I}
+          ${S}
         </button>
 
         <button
@@ -197,7 +197,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
           aria-label=${l("Next section")}
           @click=${this.handleNextSectionButton}
         >
-          ${x}
+          ${C}
         </button>
 
         <div class="vertical-button-stack volume">
@@ -216,7 +216,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
           </div>
         </div>
       </div>
-    `}get isPlaying(){return this.playbackMode===d.playing}get volumePercent(){return Math.round(this.volume*100)}get playbackRateLabel(){return l(m`Playback speed, currently ${this.playbackRate}`)}get volumeLabel(){return l(m`Volume, currently ${this.volumePercent} percent`)}get playPauseButtonIcon(){return this.isPlaying?C:$}get volumeButtonIcon(){return this.volume<=0?_:this.volume>=1?S:R}handlePlaybackRateChange(){this.playbackRate=this.playbackRate>=g?N:Math.min(this.playbackRate+j,g),this.dispatchEvent(new CustomEvent(c.PlaybackRateChange,{detail:{playbackRate:this.playbackRate}}))}handleVolumeChange(){this.volume=this.volume>=1?0:Math.min(this.volume+A,1),this.dispatchEvent(new CustomEvent(c.VolumeChange,{detail:{volume:this.volume}}))}handleBackButton(){this.dispatchEvent(new Event(c.BackButtonPressed))}handleForwardButton(){this.dispatchEvent(new Event(c.ForwardButtonPressed))}handlePrevSectionButton(){this.dispatchEvent(new Event(c.PrevSectionButtonPressed))}handleNextSectionButton(){this.dispatchEvent(new Event(c.NextSectionButtonPressed))}handlePlayPauseButton(){this.playbackMode=this.isPlaying?d.paused:d.playing,this.dispatchEvent(new Event(c.PlayPauseButtonPressed))}static get styles(){return k`
+    `}get isPlaying(){return this.playbackMode===p.playing}get clampedVolume(){return Math.min(Math.max(this.volume||0,0),1)}get volumePercent(){return Math.round(this.clampedVolume*100)}get playbackRateLabel(){return l(g`Playback speed, currently ${this.playbackRate}`)}get volumeLabel(){return l(g`Volume, currently ${this.volumePercent} percent`)}get playPauseButtonIcon(){return this.isPlaying?$:B}get volumeButtonIcon(){return this.clampedVolume<=0?V:this.clampedVolume>=1?_:R}handlePlaybackRateChange(){const t=Math.max(this.playbackRate||b,b);this.playbackRate=t>=y?b:Math.min(t+j,y),this.dispatchEvent(new CustomEvent(c.PlaybackRateChange,{detail:{playbackRate:this.playbackRate}}))}handleVolumeChange(){const t=this.clampedVolume;this.volume=t>=1?0:Math.min(t+A,1),this.dispatchEvent(new CustomEvent(c.VolumeChange,{detail:{volume:this.volume}}))}handleBackButton(){this.dispatchEvent(new Event(c.BackButtonPressed))}handleForwardButton(){this.dispatchEvent(new Event(c.ForwardButtonPressed))}handlePrevSectionButton(){this.dispatchEvent(new Event(c.PrevSectionButtonPressed))}handleNextSectionButton(){this.dispatchEvent(new Event(c.NextSectionButtonPressed))}handlePlayPauseButton(){this.playbackMode=this.isPlaying?p.paused:p.playing,this.dispatchEvent(new Event(c.PlayPauseButtonPressed))}static get styles(){return w`
       :host {
         --playback-controls-icon-color--: var(
           --ia-theme-playback-controls-icon-color,
@@ -273,6 +273,10 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
 
       #play-pause-btn {
         border-radius: 50%;
+        /* Buttons are border-box, so the UA's default padding would eat into
+           the icon's content box and shrink the glyph relative to the circle
+           by a different amount at every diameter. */
+        padding: 0;
         height: var(--playback-controls-play-button-diameter--);
         width: var(--playback-controls-play-button-diameter--);
         border: none;
@@ -307,7 +311,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
       .jump-btn:active {
         opacity: 0.75;
       }
-    `}};h([b({type:String})],p.prototype,"playbackMode",2);h([b({type:Number})],p.prototype,"playbackRate",2);h([b({type:Number})],p.prototype,"volume",2);p=h([y("ia-playback-controls")],p);var V=Object.defineProperty,z=Object.getOwnPropertyDescriptor,w=(o,e,n,r)=>{for(var t=r>1?void 0:r?z(e,n):e,s=o.length-1,i;s>=0;s--)(i=o[s])&&(t=(r?i(e,n,t):i(t))||t);return r&&t&&V(e,n,t),t};const O=[{label:"Icon colour",cssVariable:"--ia-theme-playback-controls-icon-color",defaultValue:"#ffffff",inputType:"color"},{label:"Play button colour",cssVariable:"--ia-theme-playback-controls-play-button-color",defaultValue:"#ffffff",inputType:"color"},{label:"Play icon colour",cssVariable:"--ia-theme-playback-controls-play-icon-color",defaultValue:"#333333",inputType:"color"},{label:"Play button size",cssVariable:"--ia-theme-playback-controls-play-button-diameter",defaultValue:4,inputType:"range",min:2,max:8,step:.5,unit:"rem"}],D=[{label:"Playback mode",propertyName:"playbackMode",defaultValue:"paused",inputType:"radio",radioOptions:["paused","playing"]}],F=8;let v=class extends f{constructor(){super(...arguments),this.log=[]}render(){return u`
+    `}};h([m({type:String})],d.prototype,"playbackMode",2);h([m({type:Number})],d.prototype,"playbackRate",2);h([m({type:Number})],d.prototype,"volume",2);d=h([f("ia-playback-controls")],d);var N=Object.defineProperty,z=Object.getOwnPropertyDescriptor,x=(t,o,n,r)=>{for(var e=r>1?void 0:r?z(o,n):o,s=t.length-1,i;s>=0;s--)(i=t[s])&&(e=(r?i(o,n,e):i(e))||e);return r&&e&&N(o,n,e),e};const O=[{label:"Icon colour",cssVariable:"--ia-theme-playback-controls-icon-color",defaultValue:"#ffffff",inputType:"color"},{label:"Play button colour",cssVariable:"--ia-theme-playback-controls-play-button-color",defaultValue:"#ffffff",inputType:"color"},{label:"Play icon colour",cssVariable:"--ia-theme-playback-controls-play-icon-color",defaultValue:"#333333",inputType:"color"},{label:"Play button size",cssVariable:"--ia-theme-playback-controls-play-button-diameter",defaultValue:4,inputType:"range",min:2,max:8,step:.5,unit:"rem"}],D=[{label:"Playback mode",propertyName:"playbackMode",defaultValue:"paused",inputType:"radio",radioOptions:["paused","playing"]}],F=8;let v=class extends k{constructor(){super(...arguments),this.log=[]}render(){return u`
       <story-template
         elementTag="ia-playback-controls"
         elementClassName="IAPlaybackControls"
@@ -332,7 +336,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
             <button @click=${()=>this.log=[]}>Clear</button>
           </div>
           ${this.log.length===0?u`<p class="empty">Press a control to see what it emits.</p>`:u`<ol class="log">
-                ${this.log.map(o=>u`<li><code>${o}</code></li>`)}
+                ${this.log.map(t=>u`<li><code>${t}</code></li>`)}
               </ol>`}
         </div>
 
@@ -356,7 +360,7 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
           </p>
         </div>
       </story-template>
-    `}record(o){const e=o.detail,n=e?` ${JSON.stringify(e)}`:"";this.log=[`${o.type}${n}`,...this.log].slice(0,F)}static get styles(){return k`
+    `}record(t){const o=t.detail,n=o?` ${JSON.stringify(o)}`:"";this.log=[`${t.type}${n}`,...this.log].slice(0,F)}static get styles(){return w`
       .controls {
         background-color: #151515;
         padding: 1rem 0.5rem;
@@ -384,4 +388,4 @@ import{w as a,n as b,t as y,i as f,b as u,a as k,r as P}from"./index-BZvU9TQO.js
         font-size: 0.9em;
         font-style: italic;
       }
-    `}};w([P()],v.prototype,"log",2);v=w([y("ia-playback-controls-story")],v);export{v as IAPlaybackControlsStory};
+    `}};x([P()],v.prototype,"log",2);v=x([f("ia-playback-controls-story")],v);export{v as IAPlaybackControlsStory};
