@@ -26,6 +26,8 @@ export * from './ia-radio-player/search/transcript-index';
 export * from './ia-scrubber-bar/ia-scrubber-bar';
 export * from './ia-scrubber-bar/ia-section-marker';
 export * from './ia-scrubber-bar/models';
+export * from './ia-topnav/ia-topnav';
+export * from './ia-topnav/models';
 export * from './ia-transcript-view/duration-formatter';
 export * from './ia-transcript-view/ia-transcript-entry';
 export * from './ia-transcript-view/ia-transcript-view';
