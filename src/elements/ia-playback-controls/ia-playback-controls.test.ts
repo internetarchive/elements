@@ -110,6 +110,16 @@ describe('IA Playback Controls', () => {
     expect(el.playbackRate).to.equal(2);
   });
 
+  test('steps a below-minimum playback rate back onto the grid', async () => {
+    const el = await fixture<IAPlaybackControls>(
+      html`<ia-playback-controls playbackRate="0.1"></ia-playback-controls>`,
+    );
+
+    click(el, 'playback-rate-btn');
+
+    expect(el.playbackRate).to.equal(0.75);
+  });
+
   test('reports the new playback rate on the event', async () => {
     const el = await controlsFixture();
 
@@ -145,6 +155,33 @@ describe('IA Playback Controls', () => {
     click(el, 'volume-control-btn');
 
     expect(el.volume).to.equal(1);
+  });
+
+  test('steps a negative volume back into range', async () => {
+    const el = await fixture<IAPlaybackControls>(
+      html`<ia-playback-controls volume="-1"></ia-playback-controls>`,
+    );
+
+    click(el, 'volume-control-btn');
+
+    expect(el.volume).to.equal(0.25);
+  });
+
+  test('never announces a volume outside 0 to 100 percent', async () => {
+    const negative = await fixture<IAPlaybackControls>(
+      html`<ia-playback-controls volume="-1"></ia-playback-controls>`,
+    );
+    const nonNumeric = await fixture<IAPlaybackControls>(
+      html`<ia-playback-controls volume="loud"></ia-playback-controls>`,
+    );
+
+    for (const el of [negative, nonNumeric]) {
+      const name = buttonIn(el, 'volume-control-btn').getAttribute(
+        'aria-label',
+      );
+      expect(name).to.equal('Volume, currently 0 percent');
+      expect(el.shadowRoot?.textContent).to.include('0%');
+    }
   });
 
   test('reports the new volume on the event', async () => {
