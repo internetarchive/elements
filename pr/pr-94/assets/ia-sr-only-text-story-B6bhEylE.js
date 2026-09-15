@@ -1,8 +1,8 @@
-import{t as m,i as x,b as a,d as u,r as b}from"./index-DNSscagx.js";import{t as d}from"./story-template-hcZl2d2E.js";var h=Object.getOwnPropertyDescriptor,y=(o,e,n,r)=>{for(var t=r>1?void 0:r?h(e,n):e,s=o.length-1,i;s>=0;s--)(i=o[s])&&(t=i(t)||t);return t};let p=class extends x{render(){return a`
+import{t as m,i as x,b as a,a as u,r as b}from"./index-x0OY74PZ.js";import{t as h}from"./story-template-pQIXLzze.js";var y=Object.getOwnPropertyDescriptor,d=(o,e,n,r)=>{for(var t=r>1?void 0:r?y(e,n):e,s=o.length-1,i;s>=0;s--)(i=o[s])&&(t=i(t)||t);return t};let p=class extends x{render(){return a`
       <span class="sr-only">
         <slot></slot>
       </span>
-    `}static get styles(){return[d,u`
+    `}static get styles(){return[h,u`
         .sr-only {
           position: absolute !important;
           width: 1px !important;
@@ -17,7 +17,7 @@ import{t as m,i as x,b as a,d as u,r as b}from"./index-DNSscagx.js";import{t as 
           clip-path: inset(50%) !important;
           user-select: none !important;
         }
-      `]}};p=y([m("ia-sr-only-text")],p);var v=Object.defineProperty,f=Object.getOwnPropertyDescriptor,c=(o,e,n,r)=>{for(var t=r>1?void 0:r?f(e,n):e,s=o.length-1,i;s>=0;s--)(i=o[s])&&(t=(r?i(e,n,t):i(t))||t);return r&&t&&v(e,n,t),t};let l=class extends x{constructor(){super(...arguments),this.textVisible=!1}render(){return a`
+      `]}};p=d([m("ia-sr-only-text")],p);var v=Object.defineProperty,f=Object.getOwnPropertyDescriptor,c=(o,e,n,r)=>{for(var t=r>1?void 0:r?f(e,n):e,s=o.length-1,i;s>=0;s--)(i=o[s])&&(t=(r?i(e,n,t):i(t))||t);return r&&t&&v(e,n,t),t};let l=class extends x{constructor(){super(...arguments),this.textVisible=!1}render(){return a`
       <story-template
         elementTag="ia-sr-only-text"
         elementClassName="IASrOnlyText"
