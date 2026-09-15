@@ -19,6 +19,8 @@ export type PropInputSettings<T> = {
   defaultValue: string | boolean | number;
   inputType?: 'text' | 'radio' | 'number';
   radioOptions?: string[] | boolean[];
+  /* Groups consecutive inputs under a shared heading */
+  section?: string;
 };
 
 export type PropInputData = {
@@ -46,14 +48,23 @@ export class StoryPropsSettings extends LitElement {
     return html`
       <div class="settings-options">
         <table>
-          ${this.propInputData.settings.map(
-            (input) =>
-              choose(
+          ${this.propInputData.settings.map((input, index) => {
+            const previous = this.propInputData?.settings[index - 1];
+            const startsSection =
+              !!input.section && input.section !== previous?.section;
+            return html`
+              ${startsSection
+                ? html`<tr>
+                    <th class="prop-section" colspan="2">${input.section}</th>
+                  </tr>`
+                : nothing}
+              ${choose(
                 input.inputType,
                 [['radio', () => this.createRadioPropInput(input)]],
                 () => this.createDefaultPropInput(input),
-              ) ?? nothing,
-          )}
+              ) ?? nothing}
+            `;
+          })}
         </table>
         <button @click=${this.applyProps}>Apply</button>
       </div>
@@ -105,6 +116,7 @@ export class StoryPropsSettings extends LitElement {
                   data-prop=${settings.propertyName}
                   data-format=${typeof settings.defaultValue}
                   ?checked=${settings.defaultValue === option}
+                  @change=${this.applyProps}
                 /><label for="${inputId}-${option}"> ${option} </label>`,
           )}
         </td>
@@ -138,10 +150,19 @@ export class StoryPropsSettings extends LitElement {
           break;
       }
 
+      // Always apply, so switching back to a default really resets the demo.
+      appliedProps.push({ propName, value });
+
+      // But leave defaults out of the example — consumers only need to pass
+      // what they are actually changing.
+      const setting = this.propInputData?.settings.find(
+        (candidate) => candidate.propertyName === propName,
+      );
+      if (setting && value === setting.defaultValue) return;
+
       const stringifiedValue =
         typeof value === 'string' ? `'${value}'` : value.toString();
       stringifiedProps.push(`.${propName}=\${${stringifiedValue}}`);
-      appliedProps.push({ propName, value });
     });
 
     this.dispatchEvent(
@@ -161,6 +182,12 @@ export class StoryPropsSettings extends LitElement {
         .settings-options {
           background-color: var(--primary-background-color);
           padding: 1em;
+        }
+
+        .prop-section {
+          text-align: left;
+          padding-top: 0.75em;
+          font-size: var(--font-size-standard--, 1em);
         }
       `,
     ];

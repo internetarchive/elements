@@ -7,7 +7,7 @@ import {
 } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import themeStyles from '@src/themes/theme-styles';
-import { maskedIcon } from '../masked-icon';
+import { maskedIcon } from '@src/util/masked-icon';
 import sortAscUrl from './icons/sort-asc.svg';
 import sortDescUrl from './icons/sort-desc.svg';
 import sortNeutralUrl from './icons/sort-neutral.svg';
