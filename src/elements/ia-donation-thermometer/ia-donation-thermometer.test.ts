@@ -19,9 +19,10 @@ async function settleLayout(el: IADonationThermometer): Promise<void> {
 /** Renders the thermometer at a known width so the fill sizes are predictable. */
 async function sizedFixture(
   template: TemplateResult,
+  width = 300,
 ): Promise<IADonationThermometer> {
   const wrapper = await fixture<HTMLDivElement>(
-    html`<div style="width: 300px">${template}</div>`,
+    html`<div style="width: ${width}px">${template}</div>`,
   );
   const el = wrapper.querySelector<IADonationThermometer>(
     'ia-donation-thermometer',
@@ -36,6 +37,17 @@ function background(el: IADonationThermometer): HTMLDivElement {
 
 function fill(el: IADonationThermometer): HTMLDivElement {
   return el.shadowRoot!.querySelector('.thermometer-fill')!;
+}
+
+function progressbar(el: IADonationThermometer): HTMLDivElement {
+  return el.shadowRoot!.querySelector('[role="progressbar"]')!;
+}
+
+/** The painted fill as a fraction of the track it is clipped to. */
+function fillFraction(el: IADonationThermometer): number {
+  const clip = el.shadowRoot!.querySelector('.thermometer-clip')!;
+  const width = clip.getBoundingClientRect().width;
+  return width === 0 ? 0 : fill(el).getBoundingClientRect().width / width;
 }
 
 function goalMessage(el: IADonationThermometer): HTMLDivElement | null {
@@ -64,7 +76,7 @@ describe('IADonationThermometer', () => {
       ></ia-donation-thermometer>`,
     );
 
-    const bar = el.shadowRoot!.querySelector('[role="progressbar"]')!;
+    const bar = progressbar(el);
     expect(bar.getAttribute('aria-label')).to.equal('Donation progress');
     expect(bar.getAttribute('aria-valuemin')).to.equal('0');
     expect(bar.getAttribute('aria-valuemax')).to.equal('1000000');
@@ -79,7 +91,7 @@ describe('IADonationThermometer', () => {
       ></ia-donation-thermometer>`,
     );
 
-    const bar = el.shadowRoot!.querySelector('[role="progressbar"]')!;
+    const bar = progressbar(el);
     expect(bar.getAttribute('aria-label')).to.equal('End of year goal');
   });
 
@@ -103,7 +115,7 @@ describe('IADonationThermometer', () => {
       ></ia-donation-thermometer>`,
     );
 
-    expect(fill(el).style.width).to.equal('25%');
+    expect(fillFraction(el)).to.be.closeTo(0.25, 0.01);
   });
 
   test('caps the fill at 100% once the goal is passed', async () => {
@@ -114,7 +126,7 @@ describe('IADonationThermometer', () => {
       ></ia-donation-thermometer>`,
     );
 
-    expect(fill(el).style.width).to.equal('100%');
+    expect(fillFraction(el)).to.be.closeTo(1, 0.01);
   });
 
   test('can hide the goal', async () => {
@@ -194,7 +206,9 @@ describe('IADonationThermometer', () => {
     );
 
     expect(background(el).classList.contains('value-right')).to.be.true;
-    expect(currentValue(el)?.parentElement).to.equal(background(el));
+    expect(currentValue(el)?.getBoundingClientRect().left).to.equal(
+      fill(el).getBoundingClientRect().right,
+    );
   });
 
   test('shows the current value on the left if there is room', async () => {
@@ -206,7 +220,9 @@ describe('IADonationThermometer', () => {
     );
 
     expect(background(el).classList.contains('value-left')).to.be.true;
-    expect(currentValue(el)?.parentElement).to.equal(fill(el));
+    expect(currentValue(el)?.getBoundingClientRect().right).to.equal(
+      fill(el).getBoundingClientRect().right,
+    );
   });
 
   test('moves the value across as the fill grows and shrinks', async () => {
@@ -246,6 +262,167 @@ describe('IADonationThermometer', () => {
     el.style.fontSize = '80px';
     await settleLayout(el);
     expect(background(el).classList.contains('value-right')).to.be.true;
+  });
+
+  test('keeps the value label as a single node as it changes sides', async () => {
+    const el = await sizedFixture(
+      html`<ia-donation-thermometer
+        .goalAmount=${1_000_000}
+        .currentAmount=${1_000}
+      ></ia-donation-thermometer>`,
+    );
+    const label = currentValue(el);
+    expect(background(el).classList.contains('value-right')).to.be.true;
+
+    el.currentAmount = 750_000;
+    await settleLayout(el);
+
+    expect(background(el).classList.contains('value-left')).to.be.true;
+    expect(currentValue(el)).to.equal(label);
+  });
+
+  test('keeps the label out of the fill width', async () => {
+    const el = await sizedFixture(
+      html`<ia-donation-thermometer
+        .goalAmount=${1_000_000}
+        .currentAmount=${1_000}
+      ></ia-donation-thermometer>`,
+    );
+
+    expect(fillFraction(el)).to.be.closeTo(0.001, 0.002);
+    expect(currentValue(el)?.getBoundingClientRect().width).to.be.above(
+      fill(el).getBoundingClientRect().width,
+    );
+  });
+
+  test('keeps the value label unclipped on a narrow track', async () => {
+    const el = await sizedFixture(
+      html`<ia-donation-thermometer
+        .goalAmount=${1_000_000}
+        .currentAmount=${500_000}
+      ></ia-donation-thermometer>`,
+      200,
+    );
+    expect(background(el).classList.contains('value-right')).to.be.true;
+
+    // The label runs past the end of the track at this width, so it has to sit
+    // outside the layer that clips the fill.
+    const label = currentValue(el);
+    const clip = el.shadowRoot!.querySelector('.thermometer-clip')!;
+
+    expect(label?.getBoundingClientRect().right).to.be.above(
+      background(el).getBoundingClientRect().right,
+    );
+    expect(clip.contains(label)).to.be.false;
+    expect(getComputedStyle(background(el)).overflow).to.equal('visible');
+  });
+
+  test('paints the bar at its declared height', async () => {
+    const el = await sizedFixture(
+      html`<ia-donation-thermometer
+        style="--ia-donation-thermometer-height: 40px"
+      ></ia-donation-thermometer>`,
+    );
+
+    expect(background(el).getBoundingClientRect().height).to.be.closeTo(
+      40,
+      0.5,
+    );
+  });
+
+  test('keeps the goal text out of the progressbar', async () => {
+    const el = await fixture<IADonationThermometer>(
+      html`<ia-donation-thermometer
+        .goalMessageMode=${'message'}
+      ></ia-donation-thermometer>`,
+    );
+
+    const bar = progressbar(el);
+    expect(goalMessage(el)).to.exist;
+    expect(bar).to.equal(background(el));
+    expect(bar.contains(goalMessage(el))).to.be.false;
+  });
+
+  test('clamps the reported progress to the goal', async () => {
+    const el = await fixture<IADonationThermometer>(
+      html`<ia-donation-thermometer
+        .currentAmount=${1_500_000}
+        .goalAmount=${1_000_000}
+      ></ia-donation-thermometer>`,
+    );
+
+    const bar = progressbar(el);
+    expect(bar.getAttribute('aria-valuenow')).to.equal('1000000');
+    expect(bar.getAttribute('aria-valuetext')).to.equal('$1.5MM');
+  });
+
+  test('reports no progress against a zero goal', async () => {
+    const el = await fixture<IADonationThermometer>(
+      html`<ia-donation-thermometer
+        .currentAmount=${0}
+        .goalAmount=${0}
+      ></ia-donation-thermometer>`,
+    );
+
+    const bar = progressbar(el);
+    expect(fillFraction(el)).to.equal(0);
+    expect(bar.getAttribute('aria-valuenow')).to.equal('0');
+  });
+
+  test('empties the fill for a negative amount', async () => {
+    const el = await fixture<IADonationThermometer>(
+      html`<ia-donation-thermometer
+        .currentAmount=${-500_000}
+        .goalAmount=${1_000_000}
+      ></ia-donation-thermometer>`,
+    );
+
+    const bar = progressbar(el);
+    expect(fillFraction(el)).to.equal(0);
+    expect(bar.getAttribute('aria-valuenow')).to.equal('0');
+  });
+
+  test('empties the fill for an amount that is not a number', async () => {
+    const el = await fixture<IADonationThermometer>(
+      html`<ia-donation-thermometer
+        .currentAmount=${NaN}
+        .goalAmount=${1_000_000}
+      ></ia-donation-thermometer>`,
+    );
+
+    const bar = progressbar(el);
+    expect(fillFraction(el)).to.equal(0);
+    expect(bar.getAttribute('aria-valuenow')).to.equal('0');
+    expect(bar.getAttribute('aria-valuetext')).to.equal('$0');
+    expect(currentValue(el)?.textContent?.trim()).to.equal('$0');
+  });
+
+  test('reports a goal that is not a number as no range', async () => {
+    const el = await fixture<IADonationThermometer>(
+      html`<ia-donation-thermometer
+        .currentAmount=${500_000}
+        .goalAmount=${NaN}
+      ></ia-donation-thermometer>`,
+    );
+
+    const bar = progressbar(el);
+    expect(fillFraction(el)).to.equal(0);
+    expect(bar.getAttribute('aria-valuemax')).to.equal('0');
+    expect(bar.getAttribute('aria-valuenow')).to.equal('0');
+  });
+
+  test('reports a negative goal as no range', async () => {
+    const el = await fixture<IADonationThermometer>(
+      html`<ia-donation-thermometer
+        .currentAmount=${500_000}
+        .goalAmount=${-1_000}
+      ></ia-donation-thermometer>`,
+    );
+
+    const bar = progressbar(el);
+    expect(fillFraction(el)).to.equal(0);
+    expect(bar.getAttribute('aria-valuemax')).to.equal('0');
+    expect(bar.getAttribute('aria-valuenow')).to.equal('0');
   });
 
   test('keeps tracking sizes after being moved in the page', async () => {

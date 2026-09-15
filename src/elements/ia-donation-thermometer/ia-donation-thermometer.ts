@@ -46,7 +46,7 @@ export class IADonationThermometer extends LitElement {
 
   @query('.thermometer-value') private thermometerValue?: HTMLDivElement;
 
-  @query('.thermometer-fill') private thermometerFill!: HTMLDivElement;
+  @query('.thermometer-fill') private thermometerFill?: HTMLDivElement;
 
   @state() private thermometerValueWidth = 0;
 
@@ -59,44 +59,38 @@ export class IADonationThermometer extends LitElement {
   private resizeObserver?: ResizeObserver;
 
   /**
-   * The value label renders in a different spot on each side of the fill, so
-   * the observed element is tracked to re-observe the replacement.
+   * The observed nodes are tracked so each is observed exactly once. Calling
+   * `observe` on an already-observed target re-reports its size, which costs a
+   * notification on every render. Lit also discards the value label when
+   * `currentAmountMode` turns it off, so a replacement has to be picked up.
    */
+  private observedFillElement: Element | null = null;
+
   private observedValueElement: Element | null = null;
 
   render(): TemplateResult {
     return html`
-      <div
-        class="container"
-        role="progressbar"
-        aria-label=${this.label}
-        aria-valuemin="0"
-        aria-valuemax="${this.goalAmount}"
-        aria-valuenow="${this.currentAmount}"
-        aria-valuetext="${this.currentAmountDisplayValue}"
-      >
-        <div class="thermometer-message-container">
-          <div class="thermometer-container">
-            <div
-              class="thermometer-background ${this.thermometerValuePosition}"
-            >
-              <div
-                class="thermometer-fill"
-                style="width: ${this.percentComplete}%"
-              >
-                ${this.thermometerValuePosition === 'value-left'
-                  ? this.thermometerValueTemplate
-                  : nothing}
-              </div>
-              ${this.thermometerValuePosition === 'value-right'
-                ? this.thermometerValueTemplate
-                : nothing}
+      <div class="thermometer-message-container">
+        <div class="thermometer-container">
+          <div
+            class="thermometer-background ${this.thermometerValuePosition}"
+            style="--fill-end--: ${this.percentComplete}%"
+            role="progressbar"
+            aria-label="${this.label}"
+            aria-valuemin="0"
+            aria-valuemax="${this.progressMax}"
+            aria-valuenow="${this.progressValue}"
+            aria-valuetext="${this.currentAmountDisplayValue}"
+          >
+            <div class="thermometer-clip">
+              <div class="thermometer-fill"></div>
             </div>
+            ${this.thermometerValueTemplate}
           </div>
-          ${this.goalMessageMode !== 'off'
-            ? html`<div class="donate-goal">${this.currentGoalMessage}</div>`
-            : nothing}
         </div>
+        ${this.goalMessageMode !== 'off'
+          ? html`<div class="donate-goal">${this.currentGoalMessage}</div>`
+          : nothing}
       </div>
     `;
   }
@@ -110,9 +104,10 @@ export class IADonationThermometer extends LitElement {
   }
 
   /**
-   * Which side of the fill the value label sits on. It goes inside the fill
-   * when the fill is wider than the label plus a little breathing room, and
-   * outside to the right otherwise.
+   * Which side of the fill's end the value label sits on, as a class name for
+   * the CSS that places it. The label sits over the fill when the fill is
+   * wider than the label plus a little breathing room, and just past the
+   * fill's right edge otherwise.
    */
   private get thermometerValuePosition(): 'value-left' | 'value-right' {
     const buffer = 10;
@@ -135,6 +130,7 @@ export class IADonationThermometer extends LitElement {
     super.disconnectedCallback();
     this.resizeObserver?.disconnect();
     this.resizeObserver = undefined;
+    this.observedFillElement = null;
     this.observedValueElement = null;
   }
 
@@ -142,27 +138,43 @@ export class IADonationThermometer extends LitElement {
     this.observeParts();
   }
 
-  /** Observes the fill once and follows the value label as it moves. */
+  /** Observes the fill and the value label, picking up either if it is replaced. */
   private observeParts(): void {
     const observer = this.resizeObserver;
     if (!observer) return;
 
-    if (this.thermometerFill) observer.observe(this.thermometerFill);
+    this.observedFillElement = this.observeInPlaceOf(
+      observer,
+      this.observedFillElement,
+      this.thermometerFill ?? null,
+    );
+    this.observedValueElement = this.observeInPlaceOf(
+      observer,
+      this.observedValueElement,
+      this.thermometerValue ?? null,
+    );
+  }
 
-    const valueElement = this.thermometerValue ?? null;
-    if (valueElement === this.observedValueElement) return;
-
-    if (this.observedValueElement)
-      observer.unobserve(this.observedValueElement);
-    if (valueElement) observer.observe(valueElement);
-    this.observedValueElement = valueElement;
+  /**
+   * Swaps `observed` for `current` on the observer and returns whichever is
+   * now being watched. A target that hasn't changed is left alone.
+   */
+  private observeInPlaceOf(
+    observer: ResizeObserver,
+    observed: Element | null,
+    current: Element | null,
+  ): Element | null {
+    if (current === observed) return observed;
+    if (observed) observer.unobserve(observed);
+    if (current) observer.observe(current);
+    return current;
   }
 
   private handleResize(entries: ResizeObserverEntry[]): void {
     for (const entry of entries) {
       const width =
         entry.borderBoxSize?.[0]?.inlineSize ?? entry.contentRect.width;
-      if (entry.target === this.thermometerFill) {
+      if (entry.target === this.observedFillElement) {
         this.thermometerFillWidth = width;
       } else if (entry.target === this.observedValueElement) {
         this.thermometerValueWidth = width;
@@ -190,7 +202,7 @@ export class IADonationThermometer extends LitElement {
    * number.
    */
   private formatNumber(number: number): string {
-    if (number === 0) return '$0';
+    if (!Number.isFinite(number) || number === 0) return '$0';
     const suffix = 'MM';
     const divisor = 1_000_000;
     const result = number / divisor;
@@ -212,8 +224,37 @@ export class IADonationThermometer extends LitElement {
     }
   }
 
+  /**
+   * The goal the bar measures against. A goal that isn't a positive, finite
+   * number leaves the bar empty, since there is no range to report progress
+   * against. Named clear of `ariaValueMax`, which `HTMLElement` declares as a
+   * public string.
+   */
+  private get progressMax(): number {
+    return Number.isFinite(this.goalAmount) && this.goalAmount > 0
+      ? this.goalAmount
+      : 0;
+  }
+
+  /**
+   * The progress reported to screen readers, clamped into the
+   * `aria-valuemin`/`aria-valuemax` range the spec requires.
+   * `aria-valuetext` carries the amount as it is displayed.
+   */
+  private get progressValue(): number {
+    if (!Number.isFinite(this.currentAmount)) return 0;
+    return Math.min(Math.max(this.currentAmount, 0), this.progressMax);
+  }
+
+  /**
+   * How much of the bar is filled, as a percentage, clamped to `0`-`100`. An
+   * amount or goal that can't produce a usable percentage empties the bar.
+   */
   private get percentComplete(): number {
-    return Math.min((this.currentAmount / this.goalAmount) * 100, 100);
+    const goal = this.progressMax;
+    if (goal === 0 || !Number.isFinite(this.currentAmount)) return 0;
+    const percent = (this.currentAmount / goal) * 100;
+    return Math.min(Math.max(percent, 0), 100);
   }
 
   static get styles(): CSSResultGroup {
@@ -260,10 +301,6 @@ export class IADonationThermometer extends LitElement {
           height: var(--donation-thermometer-height--);
         }
 
-        .container {
-          height: 100%;
-        }
-
         .thermometer-message-container {
           height: 100%;
           display: flex;
@@ -276,31 +313,63 @@ export class IADonationThermometer extends LitElement {
         }
 
         .thermometer-background {
+          box-sizing: border-box;
+          position: relative;
           background-color: var(--donation-thermometer-track-color--);
-          padding: 0;
           height: 100%;
           border-radius: var(--donation-thermometer-border-radius--);
           border: var(--donation-thermometer-border--);
+        }
+
+        /*
+         * Clips the square-ended fill to the rounded track. It covers only the
+         * fill, so the label is never cut off by it.
+         */
+        .thermometer-clip {
+          position: absolute;
+          inset: 0;
           overflow: hidden;
-          display: flex;
-          align-items: center;
+          border-radius: var(--donation-thermometer-border-radius--);
         }
 
         .thermometer-fill {
           background-color: var(--donation-thermometer-fill-color--);
-          text-align: right;
           height: 100%;
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
+          /*
+           * The fallback matters: without it a missing --fill-end-- makes the
+           * declaration invalid, width resolves to auto, and the bar paints as
+           * a fully funded fundraiser.
+           */
+          width: var(--fill-end--, 0%);
         }
 
+        /*
+         * The label is placed by offset from the end of the fill, so it is one
+         * node in one position in the DOM whichever side it shows on, and it
+         * never counts towards the width of the fill it is measured against.
+         */
         .thermometer-value {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: var(--fill-end--, 0%);
+          /*
+           * Without this, the left offset caps the shrink-to-fit width of a
+           * translated label and it collapses to its padding.
+           */
+          width: max-content;
+          display: flex;
+          align-items: center;
           font-weight: bold;
           white-space: nowrap;
         }
 
+        /*
+         * Both paddings total 1.5rem, so changing sides leaves the label the
+         * same width and cannot feed back into the side it is placed on.
+         */
         .value-left .thermometer-value {
+          transform: translateX(-100%);
           color: var(--donation-thermometer-value-on-fill-color--);
           padding: 0 0.5rem 0 1rem;
         }
