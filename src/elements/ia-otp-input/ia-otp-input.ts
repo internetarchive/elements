@@ -155,6 +155,8 @@ export class IAOTPInput extends LitElement {
    * Submits the result if enough characters are filled.
    */
   private fillInputs(value: string) {
+    if (typeof value !== 'string') value = String(value ?? '');
+
     if (value === '') this.clearInputs();
 
     const charsToFill = value
