@@ -21,9 +21,6 @@ export class IATranscriptEntry extends LitElement {
   /** Whether this is the search result currently being looked at */
   @property({ type: Boolean, reflect: true }) isSelected = false;
 
-  /** Whether clicking this entry does anything */
-  @property({ type: Boolean, reflect: true }) isClickable = false;
-
   /** Whether this entry matched the current search */
   @property({ type: Boolean, reflect: true }) isSearchResult = false;
 
