@@ -5,7 +5,8 @@ import {
   type CSSResultGroup,
   TemplateResult,
 } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import themeStyles from '@src/themes/theme-styles';
 import { maskedIcon } from '@src/util/masked-icon';
 import sortAscUrl from './icons/sort-asc.svg';

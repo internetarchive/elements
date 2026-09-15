@@ -1,5 +1,6 @@
 import { html, LitElement, type TemplateResult } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import type { AudioSource } from './models';
 
