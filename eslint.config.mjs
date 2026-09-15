@@ -39,6 +39,26 @@ export default [
       '@typescript-eslint/no-unsafe-function-type': 'warn',
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
+
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'lit/decorators.js',
+              importNames: ['customElement'],
+              message:
+                "Import customElement from '@src/util/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
+            },
+            {
+              name: 'lit/decorators/custom-element.js',
+              importNames: ['customElement'],
+              message:
+                "Import customElement from '@src/util/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
+            },
+          ],
+        },
+      ],
     },
   },
   {

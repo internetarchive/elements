@@ -6,7 +6,8 @@ import {
   type PropertyValues,
   type TemplateResult,
 } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import { msg } from '@lit/localize';
 
 import type { QuickSearchEntry } from './models';

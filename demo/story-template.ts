@@ -6,7 +6,7 @@ import {
   type PropertyValues,
 } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { customElement } from 'lit/decorators/custom-element.js';
+import { customElement } from '@src/util/custom-element';
 import { when } from 'lit/directives/when.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
