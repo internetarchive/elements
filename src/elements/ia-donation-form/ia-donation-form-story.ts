@@ -234,9 +234,16 @@ export class IADonationFormStory extends LitElement {
           z-index: 10;
         }
 
+        /* The modal manager covers the page whenever it is in the DOM, so
+           only show it while a modal is open */
         ia-donation-form-story modal-manager {
+          display: none;
           --modalBottomMargin: 10px;
           --modalWidth: 320px;
+        }
+
+        ia-donation-form-story modal-manager[mode='open'] {
+          display: block;
         }
 
         ia-donation-form-story .dev-tools h4 {
