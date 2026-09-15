@@ -82,23 +82,31 @@ The consumer pins the exact version, never a range:
 prerelease and nothing else. A final is what `latest` points at, so it comes from
 merged, reviewed code or not at all.
 
-The version bump is its own PR, titled after the version (`v0.2.12 (#74)`). Once
-that has merged:
+The version bump is its own PR, titled after the version (`v0.2.12 (#74)`), so
+`package.json` already carries the new number by the time it lands on `main`.
+Don't run `pnpm version` on `main`: that would bump a second time and push an
+unreviewed commit. Once the bump PR has merged, tag its squash commit and cut the
+release from that tag:
 
 ```zsh
 git checkout main && git pull
-pnpm version [major | minor | patch]
-git push && git push --tags
+git tag v0.2.13 && git push origin v0.2.13
 gh release create v0.2.13 --latest --generate-notes --title v0.2.13
 ```
+
+Publishing the release is what triggers `npm-publish.yml`, so nothing gets run
+by hand after this.
 
 ### Gotchas
 
 - **A failing test blocks the publish.** `pnpm test` runs first. If the GitHub
   release exists but npm never gained the version, read the workflow run before
   cutting anything new.
-- **Push the tag before `gh release create`.** `--generate-notes` and the release
-  itself both resolve the tag server-side.
+- **Tag explicitly, then push the tag, before `gh release create`.** `gh` will
+  create a missing tag itself, but at whatever `main` is on the server at that
+  moment. Tagging locally pins the release to the commit you actually checked
+  out, and `--generate-notes` resolves the tag server-side so it has to be pushed
+  first.
 - **A version can never be republished.** npm rejects a duplicate, so a botched
   publish needs a new version number rather than a retry.
 - **`canary` and `rc` dist-tags are stale.** They point at old prereleases from
