@@ -8,6 +8,7 @@ import {
 import { customElement, property } from 'lit/decorators.js';
 import { msg, str } from '@lit/localize';
 
+import { formatPlaybackRate } from './playback-rate-formatter';
 import { PlaybackMode } from './models';
 
 import nextSectionIcon from './assets/next-section';
@@ -34,11 +35,22 @@ const Events = {
   NextSectionButtonPressed: 'next-section-button-pressed',
 };
 
+/** The rate the controls start at, and the fallback for an unusable one */
+const DEFAULT_PLAYBACK_RATE = 1;
+
 /** How much one press of the speed button moves the playback rate */
 const PLAYBACK_RATE_STEP = 0.25;
 
-/** The rate the speed button wraps back around to once it passes the top */
+/**
+ * The slowest rate the speed button offers, and the one it wraps back around
+ * to once it passes the top.
+ */
 const MIN_PLAYBACK_RATE = 0.5;
+
+/**
+ * The fastest rate the speed button offers. Pressing it here is what sends the
+ * rate back round to the slowest.
+ */
 const MAX_PLAYBACK_RATE = 2;
 
 /** How much one press of the volume button moves the volume */
@@ -57,7 +69,7 @@ export class IAPlaybackControls extends LitElement {
   @property({ type: String }) playbackMode: PlaybackMode = PlaybackMode.paused;
 
   /** Playback speed multiplier, where 1 is normal speed */
-  @property({ type: Number }) playbackRate = 1;
+  @property({ type: Number }) playbackRate = DEFAULT_PLAYBACK_RATE;
 
   /** Playback volume, from 0 (muted) to 1 (full) */
   @property({ type: Number }) volume = 1;
@@ -77,7 +89,7 @@ export class IAPlaybackControls extends LitElement {
             </button>
           </div>
           <div class="vertical-button-value" aria-hidden="true">
-            ${this.playbackRate}x
+            ${this.formattedPlaybackRate}x
           </div>
         </div>
 
@@ -174,7 +186,25 @@ export class IAPlaybackControls extends LitElement {
    * label beside the button carries the "x".
    */
   private get playbackRateLabel(): string {
-    return msg(str`Playback speed, currently ${this.playbackRate}`);
+    return msg(str`Playback speed, currently ${this.formattedPlaybackRate}`);
+  }
+
+  /**
+   * The playback rate written for the reader's locale, so the quarter steps
+   * use whatever decimal separator they expect rather than always a point.
+   *
+   * `playbackRate` is a public property, so it can arrive as something that
+   * isn't a usable number. Everything that displays or announces the rate
+   * reads it through here, so `NaN` never reaches the screen reader. Rates
+   * outside the range the button steps through are shown as they are: they
+   * are still rates a media element will play at.
+   */
+  private get formattedPlaybackRate(): string {
+    const rate = Number.isFinite(this.playbackRate)
+      ? this.playbackRate
+      : DEFAULT_PLAYBACK_RATE;
+
+    return formatPlaybackRate(rate);
   }
 
   /**
