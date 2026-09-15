@@ -181,8 +181,8 @@ const propInputSettings: PropInputSettings<IADonationFormController>[] = [
  * page renders every story at once and shouldn't reach out to any of them on
  * its own.
  */
-@customElement('ia-donation-form-story')
-export class IADonationFormStory extends LitElement {
+@customElement('ia-donation-form-controller-story')
+export class IADonationFormControllerStory extends LitElement {
   @state() private sandboxConnected = false;
 
   @state() private lastAnalyticsEvent = '';
@@ -224,56 +224,56 @@ export class IADonationFormStory extends LitElement {
     const connected = this.sandboxConnected;
     return html`
       <style>
-        ia-donation-form-story ia-donation-form-controller {
+        ia-donation-form-controller-story ia-donation-form-controller {
           display: block;
           max-width: 34rem;
         }
 
-        ia-donation-form-story #recaptcha {
+        ia-donation-form-controller-story #recaptcha {
           position: absolute;
           z-index: 10;
         }
 
         /* The modal manager covers the page whenever it is in the DOM, so
            only show it while a modal is open */
-        ia-donation-form-story modal-manager {
+        ia-donation-form-controller-story modal-manager {
           display: none;
           --modalBottomMargin: 10px;
           --modalWidth: 320px;
         }
 
-        ia-donation-form-story modal-manager[mode='open'] {
+        ia-donation-form-controller-story modal-manager[mode='open'] {
           display: block;
         }
 
-        ia-donation-form-story .dev-tools h4 {
+        ia-donation-form-controller-story .dev-tools h4 {
           margin: 0 0 0.25rem;
         }
 
-        ia-donation-form-story .dev-tools .row {
+        ia-donation-form-controller-story .dev-tools .row {
           display: flex;
           flex-wrap: wrap;
           gap: 0.5rem;
           margin-bottom: 0.75rem;
         }
 
-        ia-donation-form-story .dev-tools dl {
+        ia-donation-form-controller-story .dev-tools dl {
           margin: 0;
           display: grid;
           grid-template-columns: max-content 1fr;
           gap: 0.25rem 1rem;
         }
 
-        ia-donation-form-story .dev-tools dt {
+        ia-donation-form-controller-story .dev-tools dt {
           font-family: monospace;
         }
 
-        ia-donation-form-story .dev-tools dd {
+        ia-donation-form-controller-story .dev-tools dd {
           margin: 0;
           word-break: break-word;
         }
 
-        ia-donation-form-story .note {
+        ia-donation-form-controller-story .note {
           margin: 0.75rem 0 0;
           font-size: 0.85em;
           opacity: 0.8;
