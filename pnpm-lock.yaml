@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@internetarchive/analytics-manager':
+        specifier: ^0.1.5
+        version: 0.1.5
       '@internetarchive/ia-clearable-text-input':
         specifier: ^1.1.1
         version: 1.1.1
@@ -17,6 +20,9 @@ importers:
       '@internetarchive/lazy-loader-service':
         specifier: ^0.2.0
         version: 0.2.0
+      '@internetarchive/modal-manager':
+        specifier: ^2.0.6
+        version: 2.0.6
       '@internetarchive/promised-singleton':
         specifier: 0.3.0-alpha.1
         version: 0.3.0-alpha.1
@@ -385,6 +391,12 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
+  '@internetarchive/analytics-manager@0.1.5':
+    resolution: {integrity: sha512-6p/EB1ls6x0+xU5WyDcpLU7N4Q1VGW4cNgVV52AUw3nmXJPFZsUM7l7iFGjjJvxWK7TpxU10Z8svAzfdpOQUaA==}
+
+  '@internetarchive/ia-activity-indicator@1.0.0':
+    resolution: {integrity: sha512-vBwWGDBb/vzB+jxwLFeOjzmwXWD+UjAqvQFTszwQ31hEMBBY0U+jgSgMDznt/3pb1e8ZcqtzsHRTvpKkzhoZsg==}
+
   '@internetarchive/ia-clearable-text-input@1.1.1':
     resolution: {integrity: sha512-l3Z6gKfSRURvicHlAjL3V+q/yESYSev34fswfG7ESIiWuF7UuWDKjlLOyY3gFch8eAfqS5AQ6KurRw5JWGD4RA==}
 
@@ -394,8 +406,14 @@ packages:
   '@internetarchive/icon-close@1.4.1':
     resolution: {integrity: sha512-nN1rGfScGssGFpfEew4azsrsMyUJtkDWqUDlckJi31PtyQnbZqUmZ07UO3Aw+wZIo3cU1MHxb5VxDy3Rmr8QGA==}
 
+  '@internetarchive/icon-user@1.4.1':
+    resolution: {integrity: sha512-xRlpX954+lLKjC++A+jpIutptHCmVMwLZI/WqOoAQoKfnCNKKvJ6Wcdq4bM/qUDt44Oj2VgP/gM6hSdWyljzEA==}
+
   '@internetarchive/lazy-loader-service@0.2.0':
     resolution: {integrity: sha512-SI/ADWnIhdtuAbxkeOItb0xOqco+ueVtwEAdEb0D60sFngUCUpBr/EXeIeh+ykXveO9pmd5J0ZVpgEfKdbhE+g==}
+
+  '@internetarchive/modal-manager@2.0.6':
+    resolution: {integrity: sha512-PDEXz005tgjhKxrJLnd1sn8wn3DceEQqDluDhcn8+gxxhFKX714jyicKlbgvHzQOLtJYTdJjnNdmiyziF7ZIVA==}
 
   '@internetarchive/promised-singleton@0.3.0-alpha.1':
     resolution: {integrity: sha512-o4cUSkTDrWXn7lP1tuMrJ8xxCoD8pCKVgdvv7gtlnCJsCpsFcBr3aTFkMF3O0G+Dm5VZ/Jmsw7pINKRXm226Lg==}
@@ -2294,6 +2312,10 @@ packages:
     resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
     engines: {node: '>=6'}
 
+  throttle-debounce@5.0.2:
+    resolution: {integrity: sha512-B71/4oyj61iNH0KeCamLuE2rmKuTO5byTOSVwECM5FA7TiAiAW+UqTKZ9ERueC4qvgSttUhdmq1mXC3kJqGX7A==}
+    engines: {node: '>=12.22'}
+
   tinybench@2.9.0:
     resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
 
@@ -2736,6 +2758,12 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
+  '@internetarchive/analytics-manager@0.1.5': {}
+
+  '@internetarchive/ia-activity-indicator@1.0.0':
+    dependencies:
+      lit: 3.3.3
+
   '@internetarchive/ia-clearable-text-input@1.1.1':
     dependencies:
       '@internetarchive/icon-close': 1.4.1
@@ -2749,9 +2777,21 @@ snapshots:
     dependencies:
       lit: 3.3.3
 
+  '@internetarchive/icon-user@1.4.1':
+    dependencies:
+      lit: 3.3.3
+
   '@internetarchive/lazy-loader-service@0.2.0':
     dependencies:
       nanoevents: 6.0.2
+
+  '@internetarchive/modal-manager@2.0.6':
+    dependencies:
+      '@internetarchive/ia-activity-indicator': 1.0.0
+      '@internetarchive/icon-close': 1.4.1
+      '@internetarchive/icon-user': 1.4.1
+      lit: 3.3.3
+      throttle-debounce: 5.0.2
 
   '@internetarchive/promised-singleton@0.3.0-alpha.1': {}
 
@@ -4897,6 +4937,8 @@ snapshots:
   supports-preserve-symlinks-flag@1.0.0: {}
 
   tapable@2.3.3: {}
+
+  throttle-debounce@5.0.2: {}
 
   tinybench@2.9.0: {}
 
