@@ -163,7 +163,6 @@ export class IATranscriptView extends LitElement {
         ?isSelected=${entry.searchMatchIndex === this.selectedSearchResultIndex}
         ?isSearchResult=${entry.searchMatchIndex !== undefined}
         ?isMusicEntry=${entry.isMusic}
-        isClickable
         data-search-result-index=${ifDefined(entry.searchMatchIndex)}
         data-identifier=${entry.id}
         @click=${this.transcriptEntrySelected}

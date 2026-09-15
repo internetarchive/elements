@@ -89,9 +89,51 @@ const styleInputSettings: StyleInputSettings[] = [
     inputType: 'color',
   },
   {
+    label: 'Hover text colour',
+    cssVariable: '--ia-theme-transcript-hover-text-color',
+    defaultValue: '#c0c0c0',
+    inputType: 'color',
+  },
+  {
+    label: 'Music text colour',
+    cssVariable: '--ia-theme-transcript-music-normal-text-color',
+    defaultValue: '#808080',
+    inputType: 'color',
+  },
+  {
+    label: 'Active music text colour',
+    cssVariable: '--ia-theme-transcript-music-active-text-color',
+    defaultValue: '#ffffff',
+    inputType: 'color',
+  },
+  {
+    label: 'Hover music text colour',
+    cssVariable: '--ia-theme-transcript-music-hover-text-color',
+    defaultValue: '#c0c0c0',
+    inputType: 'color',
+  },
+  {
     label: 'Selected result border',
     cssVariable: '--ia-theme-transcript-search-result-active-border-color',
     defaultValue: '#008000',
+    inputType: 'color',
+  },
+  {
+    label: 'Unselected result border',
+    cssVariable: '--ia-theme-transcript-search-result-inactive-border-color',
+    defaultValue: '#808080',
+    inputType: 'color',
+  },
+  {
+    label: 'Scroll button colour',
+    cssVariable: '--ia-theme-transcript-auto-scroll-button-color',
+    defaultValue: '#000000',
+    inputType: 'color',
+  },
+  {
+    label: 'Scroll button background',
+    cssVariable: '--ia-theme-transcript-auto-scroll-button-background',
+    defaultValue: '#ffffff',
     inputType: 'color',
   },
   {
