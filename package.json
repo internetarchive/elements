@@ -34,10 +34,18 @@
   "dependencies": {
     "@internetarchive/ia-clearable-text-input": "^1.1.1",
     "@internetarchive/ia-dropdown": "^2.2.0",
+    "@internetarchive/lazy-loader-service": "^0.2.0",
+    "@internetarchive/promised-singleton": "0.3.0-alpha.1",
     "@lit/localize": "^0.12.2",
+    "@types/applepayjs": "^14.0.9",
+    "@types/braintree-web": "^3.143.0",
+    "@types/googlepay": "^0.7.12",
+    "@types/grecaptcha": "^3.0.9",
+    "@types/paypal-checkout-components": "^4.0.8",
     "currency.js": "^2.0.4",
     "lit": "^2.8.0 || ^3.3.2",
     "magic-snowflakes": "^7.0.2",
+    "nanoevents": "^9.1.0",
     "tslib": "^2.8.1"
   },
   "devDependencies": {
