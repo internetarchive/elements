@@ -7,7 +7,7 @@ import {
   type TemplateResult,
 } from 'lit';
 import { property, queryAll, state } from 'lit/decorators.js';
-import { customElement } from 'lit/decorators/custom-element.js';
+import { customElement } from '@src/util/custom-element';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { when } from 'lit/directives/when.js';
 

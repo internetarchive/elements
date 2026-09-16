@@ -26,6 +26,27 @@ jobs:
     - name: Lint
       run: pnpm run lint
 
+  # Its own job so a type error is reported as one, rather than surfacing under
+  # lint or tests. Neither of those checks types: vitest transpiles without
+  # checking, and eslint isn't type-aware here, so without this a type error
+  # reaches `pnpm build` at publish time.
+  typecheck:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v6
+    - uses: pnpm/action-setup@v4
+    - uses: actions/setup-node@v6
+      with:
+        node-version: 24
+        cache: pnpm
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Typecheck
+      run: pnpm run typecheck
+
   build:
     runs-on: ubuntu-latest
 

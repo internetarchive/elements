@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/elements",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A web component library from the Internet Archive.",
   "license": "AGPL-3.0-only",
   "types": "./dist/src/elements/index.d.ts",
@@ -25,6 +25,7 @@
     "build": "wireit",
     "clean": "wireit",
     "lint": "wireit",
+    "typecheck": "wireit",
     "format": "wireit",
     "circular": "wireit",
     "prepare": "wireit",
@@ -114,6 +115,15 @@
       "dependencies": [
         "build"
       ]
+    },
+    "typecheck": {
+      "command": "tsc --noEmit",
+      "files": [
+        "src/**/*.ts",
+        "demo/**/*.ts",
+        "tsconfig.json"
+      ],
+      "output": []
     },
     "test": {
       "command": "vitest",

@@ -6,7 +6,8 @@ import {
   type PropertyValues,
   type TemplateResult,
 } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import { msg, str } from '@lit/localize';
 
 import nextResultIcon from './assets/next-result';
