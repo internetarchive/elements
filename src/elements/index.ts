@@ -3,6 +3,7 @@ export * from './ia-audio-element/models';
 export * from './ia-button/ia-button';
 export * from './ia-combo-box/ia-combo-box';
 export * from './ia-donation-form/currency-validator';
+export * from './ia-donation-form/form-elements/ia-donation-edit-donation';
 export * from './ia-donation-form/form-elements/ia-donation-section';
 export * from './ia-donation-form/models/donation-payment-info';
 export * from './ia-donation-form/models/donation-request';
