@@ -1,5 +1,5 @@
 import { LitElement } from 'lit';
-import { describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { customElement } from './custom-element';
 
@@ -83,5 +83,53 @@ describe('customElement', () => {
     expect(customElements.get(claimed)).to.not.equal(Loser);
     // The real failure mode: a throw here would abort the rest of the module.
     expect(customElements.get(fresh)).to.equal(AfterTheSkip);
+  });
+
+  describe('when it skips a tag', () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    test('names the tag in a warning, so an older copy winning is visible', () => {
+      const tag = nextTag();
+
+      @customElement(tag)
+      class FirstCopy extends LitElement {}
+      expect(FirstCopy).to.exist;
+
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      @customElement(tag)
+      class SecondCopy extends LitElement {}
+      expect(SecondCopy).to.exist;
+
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn.mock.calls[0][0]).to.contain(tag);
+    });
+
+    test('warns when an unrelated element holds the tag, not just a copy', () => {
+      const tag = nextTag();
+      class Unrelated extends HTMLElement {}
+      customElements.define(tag, Unrelated);
+
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      @customElement(tag)
+      class Ours extends LitElement {}
+      expect(Ours).to.exist;
+
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn.mock.calls[0][0]).to.contain(tag);
+    });
+
+    test('stays quiet when the tag is free', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      @customElement(nextTag())
+      class OnlyCopy extends LitElement {}
+      expect(OnlyCopy).to.exist;
+
+      expect(warn).to.not.toHaveBeenCalled();
+    });
   });
 });

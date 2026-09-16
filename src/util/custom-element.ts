@@ -20,6 +20,14 @@ type CustomElementClass = Omit<typeof HTMLElement, 'new'>;
  * the module finish. The copies are interchangeable: they are built from the
  * same source, and nothing narrows a shared element by class identity.
  *
+ * A skip is also how a page ends up on an element it did not mean to use:
+ * load two versions of the package together, or let a host page claim one of
+ * these tag names, and whichever registered first is what the page gets,
+ * which looks like the expected element's behaviour going missing. Nothing
+ * here can tell that apart from a matched-version duplicate, since two builds
+ * of the same element differ in nothing observable at this point, so a skip
+ * warns and leaves the reader to tell the cases apart.
+ *
  * ```ts
  * @customElement('ia-example')
  * class IAExample extends LitElement {}
@@ -33,7 +41,12 @@ export function customElement(tagName: string) {
     context?: ClassDecoratorContext<new () => HTMLElement>,
   ): void => {
     const define = (): void => {
-      if (customElements.get(tagName)) return;
+      if (customElements.get(tagName)) {
+        console.warn(
+          `[elements] <${tagName}> is already registered, so this definition was skipped and whatever registered first stays in use. Harmless when a page loads two element subpaths that share a component. Otherwise look for a second copy of the package, or an unrelated element using the same name.`,
+        );
+        return;
+      }
       customElements.define(tagName, classOrTarget as CustomElementConstructor);
     };
 
