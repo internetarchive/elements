@@ -8,10 +8,15 @@ Node 24+ and pnpm 11+. Use pnpm, never npm or yarn.
 
 ```zsh
 pnpm install
-pnpm run dev     # demo at the vite dev server
-pnpm run test    # vitest in real chromium
-pnpm run lint    # eslint + prettier --check, and CI enforces it
+pnpm run dev        # demo at the vite dev server
+pnpm run test       # vitest in real chromium
+pnpm run lint       # eslint + prettier --check
+pnpm run typecheck  # tsc --noEmit
 ```
+
+CI runs `lint`, `typecheck` and `test` as separate jobs. Nothing but `typecheck`
+checks types: vitest transpiles without checking and eslint isn't type-aware
+here, so run it before pushing rather than finding out from the PR.
 
 ## Publishing
 
@@ -113,9 +118,9 @@ by hand after this.
   manual publishes. The workflow only ever writes `alpha` and `latest`. Don't add
   more dist-tags.
 - **Every final release must be tagged.** The tag is the only durable pointer from
-  an npm version back to its source commit. `0.2.12` is the cautionary case: it is
-  the current `latest` with no tag, no GitHub release, and no provenance, because
-  it was published by hand.
+  an npm version back to its source commit. `0.2.12` is the cautionary case: it
+  sits on npm with no tag, no GitHub release, and no provenance, because it was
+  published by hand. There is no way to attach any of those to it after the fact.
 
 ## Worktrees
 
