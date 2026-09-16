@@ -25,6 +25,7 @@
     "build": "wireit",
     "clean": "wireit",
     "lint": "wireit",
+    "typecheck": "wireit",
     "format": "wireit",
     "circular": "wireit",
     "prepare": "wireit",
@@ -114,6 +115,15 @@
       "dependencies": [
         "build"
       ]
+    },
+    "typecheck": {
+      "command": "tsc --noEmit",
+      "files": [
+        "src/**/*.ts",
+        "demo/**/*.ts",
+        "tsconfig.json"
+      ],
+      "output": []
     },
     "test": {
       "command": "vitest",
