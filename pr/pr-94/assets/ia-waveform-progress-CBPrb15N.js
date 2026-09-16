@@ -1,9 +1,9 @@
-import{r as h,n as c,t as p,i as f,A as m,b as s,a as u}from"./index-x0OY74PZ.js";import{e as v}from"./query-BUGyfRE2.js";var g=Object.defineProperty,w=Object.getOwnPropertyDescriptor,a=(e,i,o,n)=>{for(var t=n>1?void 0:n?w(i,o):i,l=e.length-1,d;l>=0;l--)(d=e[l])&&(t=(n?d(i,o,t):d(t))||t);return n&&t&&g(i,o,t),t};const y={ValueChange:"valuechange"};let r=class extends f{constructor(){super(...arguments),this.percentComplete=0,this.waveformUrl="",this.interactive=!1,this.zonesOfSilence=[],this.displayedPercent=0,this.userIsInteracting=!1}render(){return s`
+import{r as h,n as c,c as p,i as m,A as f,b as s,a as u}from"./index-CJHQVnEZ.js";import{e as v}from"./query-B3ap-nDl.js";var g=Object.defineProperty,w=Object.getOwnPropertyDescriptor,a=(e,i,o,n)=>{for(var t=n>1?void 0:n?w(i,o):i,l=e.length-1,d;l>=0;l--)(d=e[l])&&(t=(n?d(i,o,t):d(t))||t);return n&&t&&g(i,o,t),t};const y={ValueChange:"valuechange"};let r=class extends m{constructor(){super(...arguments),this.percentComplete=0,this.waveformUrl="",this.interactive=!1,this.zonesOfSilence=[],this.displayedPercent=0,this.userIsInteracting=!1}render(){return s`
       <div class="container">
         <div id="fill" style="width: ${this.displayedPercent}%"></div>
         <img class="waveform-image" src=${this.waveformUrl} alt="" />
         ${this.zonesOfSilenceTemplate}
-        ${this.interactive?this.interactionCoverTemplate:m}
+        ${this.interactive?this.interactionCoverTemplate:f}
       </div>
     `}get zonesOfSilenceTemplate(){return s`
       ${this.zonesOfSilence.map(e=>s`

@@ -1,4 +1,4 @@
-import{b as a}from"./index-x0OY74PZ.js";const s=e=>a`
+import{b as a}from"./index-CJHQVnEZ.js";const s=e=>a`
   <span
     class="ia-icon"
     aria-hidden="true"

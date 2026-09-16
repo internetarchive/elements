@@ -1,4 +1,4 @@
-import{w as t,n as v,t as m,i as y,b as w,a as k}from"./index-x0OY74PZ.js";import{m as o,s as b}from"./runtime-CCgtQBty.js";const i={playing:"playing",paused:"paused"},f=t`
+import{w as t,n as v,c as g,i as y,b as w,a as k}from"./index-CJHQVnEZ.js";import{m as o,s as b}from"./runtime-CCgtQBty.js";const i={playing:"playing",paused:"paused"},f=t`
 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20">
   <g fill="none" fill-rule="evenodd" transform="translate(1)">
     <polygon fill="currentColor" points="7 3 16 17 -2 17" transform="rotate(90 7 10)" />
@@ -138,7 +138,7 @@ import{w as t,n as v,t as m,i as y,b as w,a as k}from"./index-x0OY74PZ.js";impor
     />
   </g>
 </svg>
-`;var I=Object.defineProperty,S=Object.getOwnPropertyDescriptor,c=(e,l,u,s)=>{for(var n=s>1?void 0:s?S(l,u):l,d=e.length-1,h;d>=0;d--)(h=e[d])&&(n=(s?h(l,u,n):h(n))||n);return s&&n&&I(l,u,n),n};const a={PlaybackRateChange:"playbackRateChange",VolumeChange:"volumeChange",BackButtonPressed:"back-button-pressed",ForwardButtonPressed:"forward-button-pressed",PlayPauseButtonPressed:"play-pause-button-pressed",PrevSectionButtonPressed:"prev-section-button-pressed",NextSectionButtonPressed:"next-section-button-pressed"},j=.25,p=.5,g=2,A=.25;let r=class extends y{constructor(){super(...arguments),this.playbackMode=i.paused,this.playbackRate=1,this.volume=1}render(){return w`
+`;var I=Object.defineProperty,S=Object.getOwnPropertyDescriptor,c=(e,l,u,s)=>{for(var n=s>1?void 0:s?S(l,u):l,d=e.length-1,h;d>=0;d--)(h=e[d])&&(n=(s?h(l,u,n):h(n))||n);return s&&n&&I(l,u,n),n};const a={PlaybackRateChange:"playbackRateChange",VolumeChange:"volumeChange",BackButtonPressed:"back-button-pressed",ForwardButtonPressed:"forward-button-pressed",PlayPauseButtonPressed:"play-pause-button-pressed",PrevSectionButtonPressed:"prev-section-button-pressed",NextSectionButtonPressed:"next-section-button-pressed"},j=.25,p=.5,m=2,A=.25;let r=class extends y{constructor(){super(...arguments),this.playbackMode=i.paused,this.playbackRate=1,this.volume=1}render(){return w`
       <div class="container">
         <div class="vertical-button-stack playback-speed">
           <div class="vertical-button-container">
@@ -216,7 +216,7 @@ import{w as t,n as v,t as m,i as y,b as w,a as k}from"./index-x0OY74PZ.js";impor
           </div>
         </div>
       </div>
-    `}get isPlaying(){return this.playbackMode===i.playing}get clampedVolume(){return Math.min(Math.max(this.volume||0,0),1)}get volumePercent(){return Math.round(this.clampedVolume*100)}get playbackRateLabel(){return o(b`Playback speed, currently ${this.playbackRate}`)}get volumeLabel(){return o(b`Volume, currently ${this.volumePercent} percent`)}get playPauseButtonIcon(){return this.isPlaying?x:P}get volumeButtonIcon(){return this.clampedVolume<=0?R:this.clampedVolume>=1?E:L}handlePlaybackRateChange(){const e=Math.max(this.playbackRate||p,p);this.playbackRate=e>=g?p:Math.min(e+j,g),this.dispatchEvent(new CustomEvent(a.PlaybackRateChange,{detail:{playbackRate:this.playbackRate}}))}handleVolumeChange(){const e=this.clampedVolume;this.volume=e>=1?0:Math.min(e+A,1),this.dispatchEvent(new CustomEvent(a.VolumeChange,{detail:{volume:this.volume}}))}handleBackButton(){this.dispatchEvent(new Event(a.BackButtonPressed))}handleForwardButton(){this.dispatchEvent(new Event(a.ForwardButtonPressed))}handlePrevSectionButton(){this.dispatchEvent(new Event(a.PrevSectionButtonPressed))}handleNextSectionButton(){this.dispatchEvent(new Event(a.NextSectionButtonPressed))}handlePlayPauseButton(){this.playbackMode=this.isPlaying?i.paused:i.playing,this.dispatchEvent(new Event(a.PlayPauseButtonPressed))}static get styles(){return k`
+    `}get isPlaying(){return this.playbackMode===i.playing}get clampedVolume(){return Math.min(Math.max(this.volume||0,0),1)}get volumePercent(){return Math.round(this.clampedVolume*100)}get playbackRateLabel(){return o(b`Playback speed, currently ${this.playbackRate}`)}get volumeLabel(){return o(b`Volume, currently ${this.volumePercent} percent`)}get playPauseButtonIcon(){return this.isPlaying?x:P}get volumeButtonIcon(){return this.clampedVolume<=0?R:this.clampedVolume>=1?E:L}handlePlaybackRateChange(){const e=Math.max(this.playbackRate||p,p);this.playbackRate=e>=m?p:Math.min(e+j,m),this.dispatchEvent(new CustomEvent(a.PlaybackRateChange,{detail:{playbackRate:this.playbackRate}}))}handleVolumeChange(){const e=this.clampedVolume;this.volume=e>=1?0:Math.min(e+A,1),this.dispatchEvent(new CustomEvent(a.VolumeChange,{detail:{volume:this.volume}}))}handleBackButton(){this.dispatchEvent(new Event(a.BackButtonPressed))}handleForwardButton(){this.dispatchEvent(new Event(a.ForwardButtonPressed))}handlePrevSectionButton(){this.dispatchEvent(new Event(a.PrevSectionButtonPressed))}handleNextSectionButton(){this.dispatchEvent(new Event(a.NextSectionButtonPressed))}handlePlayPauseButton(){this.playbackMode=this.isPlaying?i.paused:i.playing,this.dispatchEvent(new Event(a.PlayPauseButtonPressed))}static get styles(){return k`
       :host {
         --playback-controls-icon-color--: var(
           --ia-theme-playback-controls-icon-color,
@@ -311,4 +311,4 @@ import{w as t,n as v,t as m,i as y,b as w,a as k}from"./index-x0OY74PZ.js";impor
       .jump-btn:active {
         opacity: 0.75;
       }
-    `}};c([v({type:String})],r.prototype,"playbackMode",2);c([v({type:Number})],r.prototype,"playbackRate",2);c([v({type:Number})],r.prototype,"volume",2);r=c([m("ia-playback-controls")],r);export{i as P};
+    `}};c([v({type:String})],r.prototype,"playbackMode",2);c([v({type:Number})],r.prototype,"playbackRate",2);c([v({type:Number})],r.prototype,"volume",2);r=c([g("ia-playback-controls")],r);export{i as P};
