@@ -1,4 +1,4 @@
-import{w as m,n as o,t as v,i as g,b as d,a as f,r as w}from"./index-x0OY74PZ.js";import{m as y}from"./runtime-CCgtQBty.js";const b={left:"left",right:"right",neither:"neither"},x=m`
+import{w as m,n as o,c as v,i as g,b as d,a as f,r as w}from"./index-CJHQVnEZ.js";import{m as y}from"./runtime-CCgtQBty.js";const b={left:"left",right:"right",neither:"neither"},x=m`
 <svg height="10" viewBox="0 0 8 10" width="8" xmlns="http://www.w3.org/2000/svg">
   <path
     d="m4 1 5 8h-10z"
@@ -91,7 +91,7 @@ import{w as m,n as o,t as v,i as g,b as d,a as f,r as w}from"./index-x0OY74PZ.js
         align-self: flex-end;
         transition: height var(--section-marker-animation-speed--) ease-out;
       }
-    `}};k([o({type:String})],l.prototype,"markerMode",2);l=k([v("ia-section-marker")],l);var M=Object.defineProperty,E=Object.getOwnPropertyDescriptor,s=(e,r,n,i)=>{for(var t=i>1?void 0:i?E(r,n):r,h=e.length-1,c;h>=0;h--)(c=e[h])&&(t=(i?c(r,n,t):c(t))||t);return i&&t&&M(r,n,t),t};const u={ValueChange:"valuechange",UserInteractionStarted:"userInteractionStarted",UserInteractionEnded:"userInteractionEnded"},p=new Set(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Home","End","PageUp","PageDown"]);let a=class extends g{constructor(){super(...arguments),this.value=0,this.min=0,this.max=100,this.step=.1,this.sectionMarkerPercentages=[],this.expandSectionMarkers=!1,this.label=y("Playback position"),this.currentValue=0,this.userIsInteracting=!1}get percentage(){const e=this.max-this.min;return e===0?0:(this.currentValue-this.min)/e*100}render(){const e=this.surroundingMarkers;return d`
+    `}};k([o({type:String})],l.prototype,"markerMode",2);l=k([v("ia-section-marker")],l);var E=Object.defineProperty,M=Object.getOwnPropertyDescriptor,s=(e,r,n,i)=>{for(var t=i>1?void 0:i?M(r,n):r,h=e.length-1,c;h>=0;h--)(c=e[h])&&(t=(i?c(r,n,t):c(t))||t);return i&&t&&E(r,n,t),t};const u={ValueChange:"valuechange",UserInteractionStarted:"userInteractionStarted",UserInteractionEnded:"userInteractionEnded"},p=new Set(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Home","End","PageUp","PageDown"]);let a=class extends g{constructor(){super(...arguments),this.value=0,this.min=0,this.max=100,this.step=.1,this.sectionMarkerPercentages=[],this.expandSectionMarkers=!1,this.label=y("Playback position"),this.currentValue=0,this.userIsInteracting=!1}get percentage(){const e=this.max-this.min;return e===0?0:(this.currentValue-this.min)/e*100}render(){const e=this.surroundingMarkers;return d`
       <div class="container" style="--fill-percent--: ${this.percentage}%">
         <div class="color-fill"></div>
 

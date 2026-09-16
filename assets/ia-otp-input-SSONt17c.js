@@ -1,4 +1,4 @@
-import{n as l,t as f,i as c,b as p,a as d}from"./index-x0OY74PZ.js";import{r as m,t as b}from"./story-template-pQIXLzze.js";var g=Object.defineProperty,v=Object.getOwnPropertyDescriptor,a=(t,e,i,s)=>{for(var r=s>1?void 0:s?v(e,i):e,o=t.length-1,u;o>=0;o--)(u=t[o])&&(r=(s?u(e,i,r):u(r))||r);return s&&r&&g(e,i,r),r};const y={CodeSubmitted:"codeSubmitted"},h=/^[0-9]+$/,w=/^[a-zA-Z0-9]+$/;let n=class extends c{constructor(){super(...arguments),this.disabled=!1,this.numChars=6,this.numericOnly=!0,this.allowedChars=h}render(){return p`
+import{n as l,c,i as f,b as p,a as d}from"./index-CJHQVnEZ.js";import{r as m,t as b}from"./story-template-Dxbw_Kcm.js";var g=Object.defineProperty,v=Object.getOwnPropertyDescriptor,a=(t,e,i,s)=>{for(var r=s>1?void 0:s?v(e,i):e,o=t.length-1,u;o>=0;o--)(u=t[o])&&(r=(s?u(e,i,r):u(r))||r);return s&&r&&g(e,i,r),r};const y={CodeSubmitted:"codeSubmitted"},h=/^[0-9]+$/,w=/^[a-zA-Z0-9]+$/;let n=class extends f{constructor(){super(...arguments),this.disabled=!1,this.numChars=6,this.numericOnly=!0,this.allowedChars=h}render(){return p`
       ${[...Array(this.numChars).keys()].map(t=>p`<input
             id="OTP-input-${t}"
             part="input"
@@ -33,4 +33,4 @@ import{n as l,t as f,i as c,b as p,a as d}from"./index-x0OY74PZ.js";import{r as 
           text-transform: uppercase;
           padding: 0;
         }
-      `]}};a([l({type:String})],n.prototype,"prefillValue",2);a([l({type:Boolean})],n.prototype,"disabled",2);a([l({type:Number})],n.prototype,"numChars",2);a([l({type:Boolean})],n.prototype,"numericOnly",2);a([l({type:Object})],n.prototype,"allowedChars",2);a([m("input")],n.prototype,"inputs",2);n=a([f("ia-otp-input")],n);
+      `]}};a([l({type:String})],n.prototype,"prefillValue",2);a([l({type:Boolean})],n.prototype,"disabled",2);a([l({type:Number})],n.prototype,"numChars",2);a([l({type:Boolean})],n.prototype,"numericOnly",2);a([l({type:Object})],n.prototype,"allowedChars",2);a([m("input")],n.prototype,"inputs",2);n=a([c("ia-otp-input")],n);
