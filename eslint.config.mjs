@@ -1,4 +1,5 @@
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import esX from 'eslint-plugin-es-x';
 import html from 'eslint-plugin-html';
 import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
@@ -19,6 +20,7 @@ export default [
   {
     plugins: {
       '@typescript-eslint': typescriptEslint,
+      'es-x': esX,
       html,
     },
 
@@ -36,6 +38,14 @@ export default [
     },
 
     rules: {
+      // Regex syntax newer than the browser floor is a parse error, not a
+      // degraded feature: the engine rejects the whole module, so every page
+      // importing a component from this package renders blank. The floor is
+      // Safari 16.4, so these three stay banned even though `tsc` accepts
+      // them all.
+      'es-x/no-regexp-lookbehind-assertions': 'error',
+      'es-x/no-regexp-v-flag': 'error',
+      'es-x/no-regexp-modifiers': 'error',
       '@typescript-eslint/no-unsafe-function-type': 'warn',
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
