@@ -1,5 +1,5 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
-import { state } from 'lit/decorators.js';
+import { query, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 
 import { Review } from '@internetarchive/metadata-service';
@@ -126,6 +126,8 @@ const MAX_LOG_ENTRIES = 6;
 export class IAReviewsStory extends LitElement {
   @state() private log: string[] = [];
 
+  @query('ia-reviews') private reviews?: IAReviews;
+
   render() {
     return html`
       <story-template
@@ -145,6 +147,12 @@ export class IAReviewsStory extends LitElement {
           .fetchHandler=${demoFetchHandler}
           @newReviewAdded=${this.record}
         ></ia-reviews>
+
+        <div slot="demo" class="panel">
+          <button class="add-review" @click=${this.openReviewForm}>
+            Add review
+          </button>
+        </div>
 
         <div slot="demo" class="panel">
           <div class="log-header">
@@ -174,6 +182,13 @@ export class IAReviewsStory extends LitElement {
             use, hand it a <code>recaptchaManager</code> and the real handler.
           </p>
           <p>
+            The component only shows a "write a review" link when an item has no
+            reviews yet. With reviews present, a host page supplies its own
+            button and opens the form by setting <code>displayReviewForm</code>
+            on the element, which is what the "Add review" button above does and
+            what offshoot and the legacy Details page both do.
+          </p>
+          <p>
             <code>newReviewAdded</code> is the only event that leaves the
             component. The form's <code>reviewUpdated</code> and
             <code>reviewEditCanceled</code> are handled inside
@@ -190,6 +205,15 @@ export class IAReviewsStory extends LitElement {
     `;
   }
 
+  /**
+   * Opens the review form the way a host page does, by setting
+   * `displayReviewForm` on the element. The component only offers its own way
+   * in when an item has no reviews yet.
+   */
+  private openReviewForm(): void {
+    if (this.reviews) this.reviews.displayReviewForm = true;
+  }
+
   private record(e: Event): void {
     const { detail } = e as CustomEvent;
     const suffix = detail ? ` ${JSON.stringify(detail)}` : '';
@@ -200,6 +224,11 @@ export class IAReviewsStory extends LitElement {
     return css`
       .panel {
         margin-top: 1em;
+      }
+
+      .add-review {
+        font: inherit;
+        padding: 0.3em 0.8em;
       }
 
       .log-header {
