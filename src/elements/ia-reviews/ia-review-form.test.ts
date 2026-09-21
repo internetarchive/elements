@@ -560,4 +560,15 @@ describe('IAReviewForm', () => {
     const loadingIndicator = submitBtn?.querySelector('.loading-indicator');
     expect(loadingIndicator).not.to.exist;
   });
+  test('star images fill their button rather than taking the svg default', async () => {
+    const el = await fixture<IAReviewForm>(
+      html`<ia-review-form></ia-review-form>`,
+    );
+
+    const star = el.shadowRoot?.querySelector(
+      '.star-unselected',
+    ) as HTMLImageElement;
+    const { width, height } = star.getBoundingClientRect();
+    expect(`${Math.round(width)}x${Math.round(height)}`).to.equal('30x30');
+  });
 });

@@ -13,14 +13,14 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 import { Review } from '@internetarchive/metadata-service';
 
-import starBasic from './assets/star-basic';
+import starBasic from './assets/star-basic.svg';
 import { truncateScreenname } from './utils/truncate-screenname';
 import sanitizeReviewBody from './utils/sanitize-review-body';
 import friendlyTruncate from './utils/friendly-truncate';
 import linkUrlsInText from './utils/link-urls-in-text';
 import collapseSpace from './utils/collapse-space';
 
-import deleteIcon from './assets/delete-icon';
+import deleteIcon from './assets/delete-icon.svg';
 
 /**
  * Renders a single IA review
@@ -75,7 +75,12 @@ export class IAReview extends LitElement {
                     title="Delete this review"
                     @click=${this.deleteReview}
                   >
-                    ${deleteIcon}
+                    <img
+                      class="delete-icon"
+                      src=${deleteIcon}
+                      alt=""
+                      aria-hidden="true"
+                    />
                   </button>
                 `
               : nothing}
@@ -179,9 +184,17 @@ export class IAReview extends LitElement {
         class="review-stars"
         title="${msg(`${this.review.stars} out of 5 stars`)}"
       >
-        ${new Array(Number(this.review.stars))
-          .fill(null)
-          .map(() => html`<div class="review-star">${starBasic}</div>`)}
+        ${new Array(Number(this.review.stars)).fill(null).map(
+          () =>
+            html`<div class="review-star">
+              <img
+                class="star-basic"
+                src=${starBasic}
+                alt=""
+                aria-hidden="true"
+              />
+            </div>`,
+        )}
       </div>
       -
     `;
@@ -302,6 +315,11 @@ export class IAReview extends LitElement {
       .review-star {
         width: 1rem;
         display: inline-block;
+      }
+
+      .star-basic {
+        display: block;
+        width: 100%;
       }
 
       .simple-link,

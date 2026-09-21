@@ -24,8 +24,8 @@ import '@internetarchive/ia-activity-indicator';
 import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
 import { Review } from '@internetarchive/metadata-service';
 
-import starSelected from './assets/star-selected';
-import starUnselected from './assets/star-unselected';
+import starSelected from './assets/star-selected.svg';
+import starUnselected from './assets/star-unselected.svg';
 
 import './ia-review';
 
@@ -371,7 +371,19 @@ export class IAReviewForm extends LitElement {
         title=${isSelected ? msg('Clear rating') : ratingLabel}
         @click=${(e: Event) => this.handleStarClicked(e, num)}
       >
-        ${num <= this.currentStars ? starSelected : starUnselected}
+        ${num <= this.currentStars
+          ? html`<img
+              class="star-selected"
+              src=${starSelected}
+              alt=""
+              aria-hidden="true"
+            />`
+          : html`<img
+              class="star-unselected"
+              src=${starUnselected}
+              alt=""
+              aria-hidden="true"
+            />`}
       </button>
     `;
   }
@@ -674,6 +686,13 @@ export class IAReviewForm extends LitElement {
           all: unset;
           height: 30px;
           width: 30px;
+        }
+
+        .star-selected,
+        .star-unselected {
+          display: block;
+          width: 100%;
+          height: 100%;
         }
 
         .star:hover {

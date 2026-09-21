@@ -489,4 +489,21 @@ describe('IAReview', () => {
     expect(anchor).to.exist;
     expect(anchor?.hasAttribute('onmouseover')).to.be.false;
   });
+  test('sizes the delete icon rather than letting the svg default win', async () => {
+    const el = await fixture<IAReview>(
+      html`<ia-review
+        .review=${mockReview}
+        identifier="foo"
+        ?canDelete=${true}
+      ></ia-review>`,
+    );
+
+    // An <img> holding an svg with no intrinsic size falls back to 300x150,
+    // so the rule that constrains it is worth pinning.
+    const icon = el.shadowRoot?.querySelector(
+      '.delete-icon',
+    ) as HTMLImageElement;
+    const { width, height } = icon.getBoundingClientRect();
+    expect(`${Math.round(width)}x${Math.round(height)}`).to.equal('20x20');
+  });
 });
