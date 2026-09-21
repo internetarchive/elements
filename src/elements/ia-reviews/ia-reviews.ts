@@ -1,6 +1,5 @@
 import {
   css,
-  CSSResult,
   CSSResultGroup,
   html,
   HTMLTemplateResult,
@@ -18,7 +17,8 @@ import {
   FetchHandlerInterface,
   IaFetchHandler,
 } from '@internetarchive/fetch-handler';
-import { iaButtonStyles } from '@internetarchive/ia-styles';
+
+import '@src/elements/ia-button/ia-button';
 
 import './ia-review';
 import './ia-review-form';
@@ -173,11 +173,12 @@ export class IAReviews extends LitElement {
         ${msg('There are no reviews yet.')}
         ${msg(html`
           Be the first one to
-          <button
-            class="ia-button link no-reviews-btn"
+          <ia-button
+            mode="link"
+            class="no-reviews-btn"
             @click=${this.addEditReview}
           >
-            write a review</button
+            write a review</ia-button
           >.
         `)}
       </div>
@@ -191,11 +192,14 @@ export class IAReviews extends LitElement {
         ${this.reviewsCount === 1
           ? msg('There is 1 review for this item.')
           : msg(`There are ${this.reviewsCount} reviews for this item.`)}
-        <button
-          class="ia-button link display-reviews-btn"
+        <ia-button
+          mode="link"
+          class="display-reviews-btn"
           @click=${() => (this.displayReviews = true)}
         >
-          ${msg(`Display ${this.reviewsCount === 1 ? 'review' : 'reviews'}`)}</button
+          ${msg(
+            `Display ${this.reviewsCount === 1 ? 'review' : 'reviews'}`,
+          )}</ia-button
         >.
       </div>
     `;
@@ -306,10 +310,6 @@ export class IAReviews extends LitElement {
 
   static get styles(): CSSResultGroup {
     return [
-      // ia-styles is built against lit 2, so its CSSResult is a nominally
-      // different type from lit 3's. They differ only by a private field and
-      // are the same object at runtime.
-      iaButtonStyles as unknown as CSSResult,
       css`
         :host {
           font-family: var(
@@ -348,9 +348,16 @@ export class IAReviews extends LitElement {
           font-weight: 200;
         }
 
-        .message .ia-button {
+        .message ia-button {
           display: inline;
           vertical-align: baseline;
+        }
+
+        /* The button inside ia-button is a flex box, which would break these
+           out of the sentence they sit in. */
+        .message ia-button::part(button) {
+          display: inline;
+          min-height: 0;
           padding: 0;
           font-weight: 600;
         }

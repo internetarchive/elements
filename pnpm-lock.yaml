@@ -17,9 +17,6 @@ importers:
       '@internetarchive/ia-dropdown':
         specifier: ^2.2.0
         version: 2.2.0
-      '@internetarchive/ia-styles':
-        specifier: ^1.0.0
-        version: 1.0.0
       '@internetarchive/metadata-service':
         specifier: ^1.0.4
         version: 1.1.0
@@ -396,9 +393,6 @@ packages:
 
   '@internetarchive/ia-dropdown@2.2.0':
     resolution: {integrity: sha512-h1vF1qLmjbPcRVkYz3kv1HzNHhucaM+IorVzvUejgYhIYRxrBjCswpOpMXeoR16UE4pyDVc/mtkKq/QFaVinRw==}
-
-  '@internetarchive/ia-styles@1.0.0':
-    resolution: {integrity: sha512-7xvfROl5sUasM3cB+bCwOrO/Qyy08Tk50V7NAGgPKjmHr8LBUk4Q/Qj/ExKcoaiROQE3JlVy9TDANEl8WSLJCw==}
 
   '@internetarchive/iaux-item-metadata@1.5.0':
     resolution: {integrity: sha512-p1wK181a2qrHsSaL+yc6WG3JNbNlD+8g3wFKIIKzbT9ipfmsYnqjOlc8JlQT5OcXXMq4EYYCw21Agi//n9gaTw==}
@@ -2759,10 +2753,6 @@ snapshots:
       lit: 2.8.0
 
   '@internetarchive/ia-dropdown@2.2.0':
-    dependencies:
-      lit: 2.8.0
-
-  '@internetarchive/ia-styles@1.0.0':
     dependencies:
       lit: 2.8.0
 

@@ -5,7 +5,6 @@ import {
   nothing,
   HTMLTemplateResult,
   PropertyValues,
-  CSSResult,
   CSSResultGroup,
 } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
@@ -15,12 +14,11 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 import DOMPurify from 'dompurify';
 
-import { iaButtonStyles } from '@internetarchive/ia-styles';
 import type {
   RecaptchaManagerInterface,
   RecaptchaWidgetInterface,
 } from '@internetarchive/recaptcha-manager';
-import '@src/elements/ia-status-indicator/ia-status-indicator';
+import '@src/elements/ia-button/ia-button';
 import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
 import { Review } from '@internetarchive/metadata-service';
 
@@ -329,28 +327,23 @@ export class IAReviewForm extends LitElement {
   /** Buttons to render at bottom of form */
   private get actionButtonsTemplate(): HTMLTemplateResult {
     return html`<div class="action-btns">
-      <button
-        type="button"
-        class="ia-button dark"
+      <ia-button
+        mode="secondary"
+        class="cancel-btn"
         data-testid="cancel-btn"
         @click=${this.cancelReviewEdit}
       >
         ${msg('Cancel')}
-      </button>
-      <button
+      </ia-button>
+      <ia-button
+        mode="primary"
         type="submit"
-        class="ia-button primary"
-        name="submit"
-        ?disabled=${!this.formCanSubmit || this.submissionInProgress}
+        class="submit-btn"
+        .disabled=${!this.formCanSubmit}
+        .loading=${this.submissionInProgress}
       >
-        ${this.submissionInProgress
-          ? html`
-              <span class="loading-indicator" alt="Loading indicator">
-                <ia-status-indicator hideDots></ia-status-indicator>
-              </span>
-            `
-          : msg('Submit review')}
-      </button>
+        ${msg('Submit review')}
+      </ia-button>
     </div>`;
   }
 
@@ -608,10 +601,6 @@ export class IAReviewForm extends LitElement {
 
   static get styles(): CSSResultGroup {
     return [
-      // ia-styles is built against lit 2, so its CSSResult is a nominally
-      // different type from lit 3's. They differ only by a private field and
-      // are the same object at runtime.
-      iaButtonStyles as unknown as CSSResult,
       css`
         .form-heading {
           display: flex;
@@ -740,15 +729,6 @@ export class IAReviewForm extends LitElement {
           flex-direction: column;
           justify-content: center;
           background-color: var(--container-bg-color, #fbfbfd);
-        }
-
-        .loading-indicator {
-          display: block;
-          width: 20px;
-          height: 20px;
-          margin-top: 2px;
-          --ia-theme-icon-width: 20px;
-          --ia-theme-primary-text-color: #fff;
         }
 
         .recaptcha-disclaimer {

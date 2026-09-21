@@ -1,4 +1,4 @@
-import { elementUpdated, fixture } from '@open-wc/testing-helpers';
+import { fixture } from '@open-wc/testing-helpers';
 import { describe, expect, test } from 'vitest';
 import axe from 'axe-core';
 import { html } from 'lit';
@@ -92,8 +92,10 @@ describe('IAReviewForm', () => {
       'You must be logged in to write reviews.',
     );
 
-    const submitBtn = el.shadowRoot?.querySelector('button[type="submit"]');
-    expect(submitBtn?.getAttribute('disabled')).to.exist;
+    const submitBtn = el.shadowRoot?.querySelector(
+      'ia-button.submit-btn',
+    ) as HTMLElement & { disabled: boolean };
+    expect(submitBtn.disabled).to.be.true;
   });
 
   test('does not replace the form inputs if no unrecoverable errors are passed in', async () => {
@@ -107,8 +109,9 @@ describe('IAReviewForm', () => {
     const errorDiv = el.shadowRoot?.querySelector('.unrecoverable-error');
     expect(errorDiv).not.to.exist;
 
-    const submitBtn = el.shadowRoot?.querySelector('button[type="submit"]');
-    expect(submitBtn?.getAttribute('disabled')).not.to.exist;
+    const submitBtn = el.shadowRoot?.querySelector('ia-button.submit-btn');
+    expect((submitBtn as HTMLElement & { disabled: boolean }).disabled).to.be
+      .false;
   });
 
   test('adds an error div if a recoverable error is passed in, and does not disable submission', async () => {
@@ -128,8 +131,9 @@ describe('IAReviewForm', () => {
       'Something went wrong on our end. Please try again',
     );
 
-    const submitBtn = el.shadowRoot?.querySelector('button[type="submit"]');
-    expect(submitBtn?.getAttribute('disabled')).not.to.exist;
+    const submitBtn = el.shadowRoot?.querySelector('ia-button.submit-btn');
+    expect((submitBtn as HTMLElement & { disabled: boolean }).disabled).to.be
+      .false;
   });
 
   test('permits safe HTML in error messages', async () => {
@@ -339,8 +343,8 @@ describe('IAReviewForm', () => {
     );
 
     const submitBtn = el.shadowRoot?.querySelector(
-      'button[name="submit"]',
-    ) as HTMLButtonElement;
+      'ia-button.submit-btn',
+    ) as HTMLElement;
 
     submitBtn?.click();
 
@@ -367,8 +371,8 @@ describe('IAReviewForm', () => {
     );
 
     const submitBtn = el.shadowRoot?.querySelector(
-      'button[name="submit"]',
-    ) as HTMLButtonElement;
+      'ia-button.submit-btn',
+    ) as HTMLElement;
 
     submitBtn?.click();
 
@@ -392,8 +396,8 @@ describe('IAReviewForm', () => {
     );
 
     const submitBtn = el.shadowRoot?.querySelector(
-      'button[name="submit"]',
-    ) as HTMLButtonElement;
+      'ia-button.submit-btn',
+    ) as HTMLElement;
 
     submitBtn?.click();
 
@@ -447,8 +451,9 @@ describe('IAReviewForm', () => {
     const subjectInputBox = el.shadowRoot?.getElementById('subject-input');
     expect(subjectInputBox?.className).to.contain('error');
 
-    const submitBtn = el.shadowRoot?.querySelector('button[type="submit"');
-    expect(submitBtn?.getAttribute('disabled')).to.exist;
+    const submitBtn = el.shadowRoot?.querySelector('ia-button.submit-btn');
+    expect((submitBtn as HTMLElement & { disabled: boolean }).disabled).to.be
+      .true;
   });
 
   test('does not show the error states if the subject is not too long', async () => {
@@ -462,8 +467,9 @@ describe('IAReviewForm', () => {
     const subjectInputBox = el.shadowRoot?.getElementById('subject-input');
     expect(subjectInputBox?.className).not.to.contain('error');
 
-    const submitBtn = el.shadowRoot?.querySelector('button[type="submit"');
-    expect(submitBtn?.getAttribute('disabled')).not.to.exist;
+    const submitBtn = el.shadowRoot?.querySelector('ia-button.submit-btn');
+    expect((submitBtn as HTMLElement & { disabled: boolean }).disabled).to.be
+      .false;
   });
 
   test('displays a character counter for the body if max length specified', async () => {
@@ -511,8 +517,10 @@ describe('IAReviewForm', () => {
     const errorMsg = bodyInputBox?.querySelector('.input-error');
     expect(errorMsg).to.exist;
 
-    const submitBtn = el.shadowRoot?.querySelector('button[type="submit"]');
-    expect(submitBtn?.getAttribute('disabled')).to.exist;
+    const submitBtn = el.shadowRoot?.querySelector(
+      'ia-button.submit-btn',
+    ) as HTMLElement & { disabled: boolean };
+    expect(submitBtn.disabled).to.be.true;
   });
 
   test('does not show the error states if the body is not too long', async () => {
@@ -526,8 +534,9 @@ describe('IAReviewForm', () => {
     const bodyInputBox = el.shadowRoot?.getElementById('body-input');
     expect(bodyInputBox?.className).not.to.contain('error');
 
-    const submitBtn = el.shadowRoot?.querySelector('button[type="submit"');
-    expect(submitBtn?.getAttribute('disabled')).not.to.exist;
+    const submitBtn = el.shadowRoot?.querySelector('ia-button.submit-btn');
+    expect((submitBtn as HTMLElement & { disabled: boolean }).disabled).to.be
+      .false;
   });
 
   test('shows a loading indicator and disables the button if submission is in progress', async () => {
@@ -540,12 +549,15 @@ describe('IAReviewForm', () => {
 
     await el.updateComplete;
 
-    const submitBtn = el.shadowRoot?.querySelector('button[type="submit"]');
+    const submitBtn = el.shadowRoot?.querySelector(
+      'ia-button.submit-btn',
+    ) as HTMLElement & { disabled: boolean; loading: boolean };
     expect(submitBtn).to.exist;
 
-    const loadingIndicator = submitBtn?.querySelector('.loading-indicator');
-    expect(loadingIndicator).to.exist;
-    expect(submitBtn?.getAttribute('disabled')).to.exist;
+    // ia-button renders the spinner itself once loading is set.
+    expect(submitBtn.loading).to.be.true;
+    expect((submitBtn as HTMLElement & { disabled: boolean }).disabled).to.be
+      .true;
   });
 
   test('does not show a loading indicator or disable submission by default', async () => {
@@ -556,7 +568,7 @@ describe('IAReviewForm', () => {
       ></ia-review-form>`,
     );
 
-    const submitBtn = el.shadowRoot?.querySelector('button[type="submit"]');
+    const submitBtn = el.shadowRoot?.querySelector('ia-button.submit-btn');
     const loadingIndicator = submitBtn?.querySelector('.loading-indicator');
     expect(loadingIndicator).not.to.exist;
   });
@@ -570,20 +582,5 @@ describe('IAReviewForm', () => {
     ) as HTMLImageElement;
     const { width, height } = star.getBoundingClientRect();
     expect(`${Math.round(width)}x${Math.round(height)}`).to.equal('30x30');
-  });
-  test('shows a sized status indicator while a submission is in flight', async () => {
-    const el = await fixture<IAReviewForm>(
-      html`<ia-review-form></ia-review-form>`,
-    );
-    (el as unknown as { submissionInProgress: boolean }).submissionInProgress =
-      true;
-    await elementUpdated(el);
-
-    const indicator = el.shadowRoot?.querySelector('ia-status-indicator');
-    expect(indicator).to.exist;
-    const { width, height } = (
-      indicator as HTMLElement
-    ).getBoundingClientRect();
-    expect(`${Math.round(width)}x${Math.round(height)}`).to.equal('20x20');
   });
 });
