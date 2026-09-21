@@ -17,7 +17,7 @@ const REVIEWS: Review[] = [
     stars: 5,
     reviewtitle: 'Better than I expected',
     reviewbody:
-      'Came for one track and stayed for the whole set. The recording is clean all the way through, which is more than you can say for most of these.',
+      'Came for one track and stayed for the whole set. The recording is clean all the way through, which is more than you can say for most of these. Long enough to run past the truncation limit, so the More and Less controls have something to do.',
     reviewer: 'Ada Fielding',
     reviewer_itemname: '@ada-fielding',
     reviewdate: '2026-08-14',
