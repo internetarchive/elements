@@ -30,6 +30,9 @@ export default defineConfig({
       enabled: true,
     },
     watch: false,
-    exclude: ['node_modules', 'dist'],
+    // Recursive patterns, so a build or an install nested anywhere under the
+    // repo is skipped and not just the top-level one. `.claude` holds the
+    // worktrees, whose tests belong to whatever branch is checked out there.
+    exclude: ['**/node_modules/**', '**/dist/**', '.claude/**'],
   },
 });
