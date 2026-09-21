@@ -123,6 +123,12 @@ export class IAHistogramDateRangeStory extends LitElement {
 
   static get styles(): CSSResultGroup {
     return css`
+      /* The element's 35px default clips a 4-digit year at this page's
+       * inherited font size. */
+      ia-histogram-date-range {
+        --histogramDateRangeInputWidth: 48px;
+      }
+
       .readout {
         font-size: 0.9em;
       }
