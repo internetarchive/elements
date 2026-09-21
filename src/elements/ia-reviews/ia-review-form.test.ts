@@ -1,4 +1,4 @@
-import { fixture } from '@open-wc/testing-helpers';
+import { elementUpdated, fixture } from '@open-wc/testing-helpers';
 import { describe, expect, test } from 'vitest';
 import axe from 'axe-core';
 import { html } from 'lit';
@@ -570,5 +570,20 @@ describe('IAReviewForm', () => {
     ) as HTMLImageElement;
     const { width, height } = star.getBoundingClientRect();
     expect(`${Math.round(width)}x${Math.round(height)}`).to.equal('30x30');
+  });
+  test('shows a sized status indicator while a submission is in flight', async () => {
+    const el = await fixture<IAReviewForm>(
+      html`<ia-review-form></ia-review-form>`,
+    );
+    (el as unknown as { submissionInProgress: boolean }).submissionInProgress =
+      true;
+    await elementUpdated(el);
+
+    const indicator = el.shadowRoot?.querySelector('ia-status-indicator');
+    expect(indicator).to.exist;
+    const { width, height } = (
+      indicator as HTMLElement
+    ).getBoundingClientRect();
+    expect(`${Math.round(width)}x${Math.round(height)}`).to.equal('20x20');
   });
 });

@@ -11,9 +11,6 @@ importers:
       '@internetarchive/fetch-handler':
         specifier: ^1.4.0
         version: 1.4.0
-      '@internetarchive/ia-activity-indicator':
-        specifier: ^0.0.6
-        version: 0.0.6
       '@internetarchive/ia-clearable-text-input':
         specifier: ^1.1.1
         version: 1.1.1
@@ -393,9 +390,6 @@ packages:
 
   '@internetarchive/field-parsers@1.2.0':
     resolution: {integrity: sha512-qldfCN0w5QDeKzZG80h54hxQ9oyQ10uulazMy451846BHeklqTb3sNLzqyUWzSiqr/vopvQlCHITaGrPtkUlrw==}
-
-  '@internetarchive/ia-activity-indicator@0.0.6':
-    resolution: {integrity: sha512-Llut9sdsmmVqgxASqSlCqoiXSNb4M7xWY3/O7QUh3NnuR7WMfAcYBqNRDsLve7t/VkbVVBOVyeVAROnjvYHGNQ==}
 
   '@internetarchive/ia-clearable-text-input@1.1.1':
     resolution: {integrity: sha512-l3Z6gKfSRURvicHlAjL3V+q/yESYSev34fswfG7ESIiWuF7UuWDKjlLOyY3gFch8eAfqS5AQ6KurRw5JWGD4RA==}
@@ -2758,10 +2752,6 @@ snapshots:
   '@internetarchive/field-parsers@0.1.4': {}
 
   '@internetarchive/field-parsers@1.2.0': {}
-
-  '@internetarchive/ia-activity-indicator@0.0.6':
-    dependencies:
-      lit: 2.8.0
 
   '@internetarchive/ia-clearable-text-input@1.1.1':
     dependencies:

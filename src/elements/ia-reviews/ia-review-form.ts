@@ -20,7 +20,7 @@ import type {
   RecaptchaManagerInterface,
   RecaptchaWidgetInterface,
 } from '@internetarchive/recaptcha-manager';
-import '@internetarchive/ia-activity-indicator';
+import '@src/elements/ia-status-indicator/ia-status-indicator';
 import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
 import { Review } from '@internetarchive/metadata-service';
 
@@ -346,7 +346,7 @@ export class IAReviewForm extends LitElement {
         ${this.submissionInProgress
           ? html`
               <span class="loading-indicator" alt="Loading indicator">
-                <ia-activity-indicator></ia-activity-indicator>
+                <ia-status-indicator hideDots></ia-status-indicator>
               </span>
             `
           : msg('Submit review')}
@@ -747,8 +747,8 @@ export class IAReviewForm extends LitElement {
           width: 20px;
           height: 20px;
           margin-top: 2px;
-          --activityIndicatorLoadingRingColor: #fff;
-          --activityIndicatorLoadingDotColor: #fff;
+          --ia-theme-icon-width: 20px;
+          --ia-theme-primary-text-color: #fff;
         }
 
         .recaptcha-disclaimer {
