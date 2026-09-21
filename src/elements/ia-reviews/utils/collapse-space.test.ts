@@ -49,4 +49,9 @@ describe('collapseSpace', () => {
       collapseSpace('I am a test\r\n\r\n\n\n<br></br><br />Yes I am.'),
     ).to.equal('I am a test<br />Yes I am.');
   });
+  test('leaves pipes in the text alone', () => {
+    // A pipe is an ordinary character in a review body, not whitespace.
+    expect(collapseSpace('Rated 8|10 overall')).to.equal('Rated 8|10 overall');
+    expect(collapseSpace('a|b')).to.equal('a|b');
+  });
 });
