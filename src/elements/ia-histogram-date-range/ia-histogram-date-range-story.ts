@@ -79,7 +79,7 @@ export class IAHistogramDateRangeStory extends LitElement {
         elementClassName="IAHistogramDateRange"
         .styleInputData=${{ settings: styleInputSettings }}
         .propInputData=${{ settings: propInputSettings }}
-        .defaultUsageProps=${'.bins=${bins}\n  minDate="1975"\n  maxDate="2025"\n  binSnapping="year"'}
+        .defaultUsageProps=${'.bins=${bins}\n  minDate="1975"\n  maxDate="2025"'}
       >
         <ia-histogram-date-range
           slot="demo"
