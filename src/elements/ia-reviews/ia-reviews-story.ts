@@ -85,7 +85,7 @@ const propInputSettings: PropInputSettings<IAReviews>[] = [
   {
     label: 'Submitter screenname',
     propertyName: 'submitterScreenname',
-    defaultValue: 'Ada Fielding',
+    defaultValue: 'Demo User',
   },
   {
     label: 'Max subject length',
@@ -142,7 +142,7 @@ export class IAReviewsStory extends LitElement {
           identifier="nasa"
           displayReviewsByDefault
           bypassRecaptcha
-          submitterScreenname="Ada Fielding"
+          submitterScreenname="Demo User"
           .reviews=${REVIEWS}
           .fetchHandler=${demoFetchHandler}
           @newReviewAdded=${this.record}
