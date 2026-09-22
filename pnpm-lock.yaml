@@ -17,6 +17,9 @@ importers:
       '@lit/localize':
         specifier: ^0.12.2
         version: 0.12.2
+      currency.js:
+        specifier: ^2.0.4
+        version: 2.0.4
       lit:
         specifier: ^2.8.0 || ^3.3.2
         version: 3.3.3
@@ -939,6 +942,10 @@ packages:
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
+
+  currency.js@2.0.4:
+    resolution: {integrity: sha512-6/OplJYgJ0RUlli74d93HJ/OsKVBi8lB1+Z6eJYS1YZzBuIp4qKKHpJ7ad+GvTlWmLR/hLJOWTykN5Nm8NJ7+w==}
+    engines: {node: '>=4'}
 
   data-view-buffer@1.0.2:
     resolution: {integrity: sha512-EmKO5V3OLXh1rtK2wgXRansaK1/mtVdTUEiEI0W8RkvgT05kfxaH29PliLnpLP73yYO6142Q72QNa8Wx/A5CqQ==}
@@ -3299,6 +3306,8 @@ snapshots:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  currency.js@2.0.4: {}
 
   data-view-buffer@1.0.2:
     dependencies:

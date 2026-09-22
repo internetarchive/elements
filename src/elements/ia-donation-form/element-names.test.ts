@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 
 import './form-elements/ia-donation-section';
+import './form-elements/ia-donation-edit-donation';
 
 /**
  * Custom elements share one global registry, so the donation form's parts are
@@ -8,9 +9,12 @@ import './form-elements/ia-donation-section';
  * register their tags verbatim, and consumers keep loading them during the
  * migration, so none of those names can be claimed here.
  */
-const NAMESPACED_ELEMENTS = ['ia-donation-section'];
+const NAMESPACED_ELEMENTS = [
+  'ia-donation-section',
+  'ia-donation-edit-donation',
+];
 
-const NAMES_TO_AVOID = ['donation-form-section'];
+const NAMES_TO_AVOID = ['donation-form-section', 'donation-form-edit-donation'];
 
 describe('donation form element names', () => {
   test.each(NAMESPACED_ELEMENTS)('registers %s', (tag) => {
