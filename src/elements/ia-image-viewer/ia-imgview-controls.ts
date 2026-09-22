@@ -17,10 +17,17 @@ import themeStyles from '@src/themes/theme-styles';
  * Past the wide breakpoint the buttons position themselves over the image
  * area, which lives in the viewer's shadow root. That works because an
  * absolutely positioned element finds its containing block through the flat
- * tree, so the viewer's frame is still the reference as long as this element's
- * own host box stays unpositioned. The breakpoint queries the `image-viewer`
- * container by name, so it tracks the viewer's width rather than whichever
- * container a consumer happens to have further up the tree.
+ * tree, so the viewer's frame is still the reference as long as this host
+ * stays unpositioned. The breakpoint itself queries this host's own
+ * (unnamed) container from `.controls`, a genuine descendant inside this
+ * element's own shadow root, rather than a named container on the
+ * `ia-image-viewer` ancestor — Safari doesn't reliably resolve a named
+ * container query across a shadow-tree boundary, so querying across from
+ * here left the wide layout permanently off in Safari. `:host` stays full
+ * width the whole time; once the buttons come out of flow, `.controls` only
+ * has the counter left to lay out, so switching its `justify-content` to
+ * `center` puts the counter in the middle of the image without needing
+ * anything to shrink-wrap.
  */
 @customElement('ia-imgview-controls')
 export class IAImageViewerControls extends LitElement {
@@ -31,21 +38,25 @@ export class IAImageViewerControls extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <button
-        class="nav-btn prev"
-        aria-label=${msg('Previous image')}
-        @click=${this.onPrevious}
-      >
-        &#8249;
-      </button>
-      <div class="counter">${this.currentIndex + 1} / ${this.totalImages}</div>
-      <button
-        class="nav-btn next"
-        aria-label=${msg('Next image')}
-        @click=${this.onNext}
-      >
-        &#8250;
-      </button>
+      <div class="controls">
+        <button
+          class="nav-btn prev"
+          aria-label=${msg('Previous image')}
+          @click=${this.onPrevious}
+        >
+          &#8249;
+        </button>
+        <div class="counter">
+          ${this.currentIndex + 1} / ${this.totalImages}
+        </div>
+        <button
+          class="nav-btn next"
+          aria-label=${msg('Next image')}
+          @click=${this.onNext}
+        >
+          &#8250;
+        </button>
+      </div>
     `;
   }
 
@@ -67,6 +78,12 @@ export class IAImageViewerControls extends LitElement {
             var(--true-white)
           );
 
+          display: block;
+          width: 100%;
+          container-type: inline-size;
+        }
+
+        .controls {
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -111,10 +128,9 @@ export class IAImageViewerControls extends LitElement {
           }
         }
 
-        @container image-viewer (min-width: 890px) {
-          :host {
-            position: static;
-            width: auto;
+        @container (min-width: 890px) {
+          .controls {
+            justify-content: center;
             margin-top: 0;
           }
 
