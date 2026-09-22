@@ -10,3 +10,12 @@
  *  - `year`: Same as `month`, but snapping to year boundaries instead of months.
  */
 export type BinSnappingInterval = 'none' | 'month' | 'year';
+
+/** Named bar scaling behaviors the element implements itself. */
+export type BarScalingPreset = 'linear' | 'logarithmic';
+
+/** Maps a bin's value to the relative height its bar should be drawn at. */
+export type BarScalingFunction = (binValue: number) => number;
+
+/** How bar heights relate to bin values: a preset name, or a function. */
+export type BarScalingOption = BarScalingPreset | BarScalingFunction;

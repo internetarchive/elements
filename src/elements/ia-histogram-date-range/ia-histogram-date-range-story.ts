@@ -63,6 +63,19 @@ const propInputSettings: PropInputSettings<IAHistogramDateRange>[] = [
     radioOptions: [true, false],
   },
   {
+    label: 'Bar scaling',
+    propertyName: 'barScaling',
+    defaultValue: 'logarithmic',
+    inputType: 'radio',
+    radioOptions: ['logarithmic', 'linear'],
+  },
+  {
+    label: 'Tooltip label',
+    propertyName: 'tooltipLabel',
+    defaultValue: 'item',
+    inputType: 'text',
+  },
+  {
     // Applied after loading: loading's setter also sets disabled, so
     // ordering this one later is what lets it override that (and lets it be
     // toggled independently in the demo — the two dimensions are coupled in
@@ -142,13 +155,6 @@ export class IAHistogramDateRangeStory extends LitElement {
         --histogramDateRangeTooltipFontSize: 11px;
         --histogramDateRangeInputFontSize: 12px;
         line-height: normal;
-
-        /* The tooltip sits above the histogram, which puts it over the story
-         * template's DEMO heading. That heading is the one thing on the page
-         * carrying a z-index, so give the element a stacking context of its
-         * own to keep the tooltip readable. */
-        position: relative;
-        z-index: 2;
       }
 
       .readout {

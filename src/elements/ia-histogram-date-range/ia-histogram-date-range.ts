@@ -12,43 +12,20 @@ import {
   SVGTemplateResult,
   TemplateResult,
 } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { property, state, query } from 'lit/decorators.js';
 import { live } from 'lit/directives/live.js';
 import { classMap } from 'lit/directives/class-map.js';
+import { styleMap } from 'lit/directives/style-map.js';
 import { customElement } from '@src/util/custom-element';
-import type { BinSnappingInterval } from './models';
+import type {
+  BarScalingFunction,
+  BarScalingOption,
+  BarScalingPreset,
+  BinSnappingInterval,
+} from './models';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(fixFirstCenturyYears);
-
-// these values can be overridden via the component's HTML (camelCased) attributes
-const WIDTH = 180;
-const HEIGHT = 40;
-const SLIDER_WIDTH = 10;
-const TOOLTIP_WIDTH = 125;
-const TOOLTIP_HEIGHT = 30;
-const DATE_FORMAT = 'YYYY';
-const MISSING_DATA = 'no data';
-const UPDATE_DEBOUNCE_DELAY_MS = 0;
-
-// this constant is not set up to be overridden
-const SLIDER_CORNER_SIZE = 4;
-
-// these CSS custom props can be overridden from the HTML that is invoking this component
-const sliderColor = css`var(--histogramDateRangeSliderColor, #4B65FE)`;
-const selectedRangeColor = css`var(--histogramDateRangeSelectedRangeColor, #DBE0FF)`;
-const barIncludedFill = css`var(--histogramDateRangeBarIncludedFill, #2C2C2C)`;
-const activityIndicatorColor = css`var(--histogramDateRangeActivityIndicator, #2C2C2C)`;
-const barExcludedFill = css`var(--histogramDateRangeBarExcludedFill, #CCCCCC)`;
-const inputRowMargin = css`var(--histogramDateRangeInputRowMargin, 0)`;
-const inputBorder = css`var(--histogramDateRangeInputBorder, 0.5px solid #2C2C2C)`;
-const inputWidth = css`var(--histogramDateRangeInputWidth, 35px)`;
-const inputFontSize = css`var(--histogramDateRangeInputFontSize, 1.2rem)`;
-const inputFontFamily = css`var(--histogramDateRangeInputFontFamily, sans-serif)`;
-const tooltipBackgroundColor = css`var(--histogramDateRangeTooltipBackgroundColor, #2C2C2C)`;
-const tooltipTextColor = css`var(--histogramDateRangeTooltipTextColor, #FFFFFF)`;
-const tooltipFontSize = css`var(--histogramDateRangeTooltipFontSize, 1.1rem)`;
-const tooltipFontFamily = css`var(--histogramDateRangeTooltipFontFamily, sans-serif)`;
 
 type SliderId = 'slider-min' | 'slider-max';
 
@@ -65,6 +42,44 @@ interface BarDataset extends DOMStringMap {
   binStart: string;
   binEnd: string;
 }
+
+// these values can be overridden via the component's HTML (camelCased) attributes
+const WIDTH = 180;
+const HEIGHT = 40;
+const SLIDER_WIDTH = 10;
+const TOOLTIP_WIDTH = 125;
+const TOOLTIP_HEIGHT = 30;
+const DATE_FORMAT = 'YYYY';
+const MISSING_DATA = 'no data';
+const UPDATE_DEBOUNCE_DELAY_MS = 0;
+const TOOLTIP_LABEL = 'item';
+
+// this constant is not set up to be overridden
+const SLIDER_CORNER_SIZE = 4;
+
+/**
+ * Map from bar scaling preset options to the corresponding function they represent
+ */
+const BAR_SCALING_PRESET_FNS: Record<BarScalingPreset, BarScalingFunction> = {
+  linear: (binValue: number) => binValue,
+  logarithmic: (binValue: number) => Math.log1p(binValue),
+};
+
+// these CSS custom props can be overridden from the HTML that is invoking this component
+const sliderColor = css`var(--histogramDateRangeSliderColor, #4B65FE)`;
+const selectedRangeColor = css`var(--histogramDateRangeSelectedRangeColor, #DBE0FF)`;
+const barIncludedFill = css`var(--histogramDateRangeBarIncludedFill, #2C2C2C)`;
+const activityIndicatorColor = css`var(--histogramDateRangeActivityIndicator, #2C2C2C)`;
+const barExcludedFill = css`var(--histogramDateRangeBarExcludedFill, #CCCCCC)`;
+const inputRowMargin = css`var(--histogramDateRangeInputRowMargin, 0)`;
+const inputBorder = css`var(--histogramDateRangeInputBorder, 0.5px solid #2C2C2C)`;
+const inputWidth = css`var(--histogramDateRangeInputWidth, 35px)`;
+const inputFontSize = css`var(--histogramDateRangeInputFontSize, 1.2rem)`;
+const inputFontFamily = css`var(--histogramDateRangeInputFontFamily, sans-serif)`;
+const tooltipBackgroundColor = css`var(--histogramDateRangeTooltipBackgroundColor, #2C2C2C)`;
+const tooltipTextColor = css`var(--histogramDateRangeTooltipTextColor, #FFFFFF)`;
+const tooltipFontSize = css`var(--histogramDateRangeTooltipFontSize, 1.1rem)`;
+const tooltipFontFamily = css`var(--histogramDateRangeTooltipFontFamily, sans-serif)`;
 
 @customElement('ia-histogram-date-range')
 export class IAHistogramDateRange extends LitElement {
@@ -84,15 +99,50 @@ export class IAHistogramDateRange extends LitElement {
   /** If true, update events will not be canceled by the date inputs receiving focus */
   @property({ type: Boolean }) updateWhileFocused = false;
 
+  /**
+   * What interval bins should be snapped to for determining their time ranges.
+   *  - `none` (default): Bins should each represent an identical duration of time,
+   *     without regard for the actual dates represented.
+   *  - `month`: Bins should each represent one or more full, non-overlapping months.
+   *     The bin ranges will be "snapped" to the nearest month boundaries, which can
+   *     result in bins that represent different amounts of time, particularly if the
+   *     provided bins do not evenly divide the provided date range, or if the months
+   *     represented are of different lengths.
+   *  - `year`: Same as `month`, but snapping to year boundaries instead of months.
+   */
   @property({ type: String }) binSnapping: BinSnappingInterval = 'none';
 
+  /**
+   * What label to use on tooltips to identify the type of data being represented.
+   * Defaults to `'item(s)'`.
+   */
+  @property({ type: String }) tooltipLabel = TOOLTIP_LABEL;
+
+  /**
+   * A function or preset value indicating how the height of each bar relates to its
+   * corresponding bin value. Current presets available are 'logarithmic' and 'linear',
+   * but a custom function may be provided instead if other behavior is desired.
+   *
+   * The default scaling (`'logarithmic'`) uses the logarithm of each bin value, yielding
+   * more prominent bars for smaller values. This ensures that even when the difference
+   * between the min & max values is large, small values are unlikely to completely disappear
+   * visually. However, the cost is that bars have less noticeable variation among values of
+   * a similar magnitude, and their heights are not a direct representation of the bin values.
+   *
+   * The `'linear'` preset option instead sizes the bars in linear proportion to their bin
+   * values.
+   */
+  @property({ type: String }) barScaling: BarScalingOption = 'logarithmic';
+
   // internal reactive properties not exposed as attributes
-  @state() private _tooltipOffset = 0;
+  @state() private _tooltipOffsetX = 0;
+  @state() private _tooltipOffsetY = 0;
   @state() private _tooltipContent?: TemplateResult;
-  @state() private _tooltipVisible = false;
   @state() private _tooltipDateFormat?: string;
   @state() private _isDragging = false;
   @state() private _isLoading = false;
+
+  @query('#tooltip') private _tooltip!: HTMLDivElement;
 
   // non-reactive properties (changes don't auto-trigger re-rendering)
   private _minSelectedDate = '';
@@ -108,27 +158,33 @@ export class IAHistogramDateRange extends LitElement {
   private _previousDateRange = '';
   private _updateDeferredWhileFocused = false;
 
+  updated(): void {
+    // The UA only hides a closed popover where showPopover() exists. Without
+    // it the tooltip would sit on the page whenever it isn't being shown, so
+    // hide it the one way that works either way. Not just on first render:
+    // the tooltip isn't in the DOM at all until there's data to draw.
+    if (this._tooltip && !this._tooltipContent) {
+      this._tooltip.hidden = true;
+    }
+  }
+
   disconnectedCallback(): void {
     this.removeListeners();
     super.disconnectedCallback();
   }
 
   willUpdate(changedProps: PropertyValues): void {
-    // check for changes that would affect bin data calculations. Note:
-    // minSelectedDate/maxSelectedDate deliberately aren't in this list even
-    // though handleDataUpdate() defaults them from minDate/maxDate — the
-    // recalculation here (histWidth/minDateMS/maxDateMS/binWidth/histData)
-    // doesn't depend on either, and refreshing _previousDateRange as a side
-    // effect of a date being picked would make beginEmitUpdateProcess's
-    // "did anything change" check always see no change, since it compares
-    // against a value this same pick had just overwritten.
+    // check for changes that would affect bin data calculations
     if (
       changedProps.has('bins') ||
       changedProps.has('minDate') ||
       changedProps.has('maxDate') ||
+      changedProps.has('minSelectedDate') ||
+      changedProps.has('maxSelectedDate') ||
       changedProps.has('width') ||
       changedProps.has('height') ||
-      changedProps.has('binSnapping')
+      changedProps.has('binSnapping') ||
+      changedProps.has('barScaling')
     ) {
       this.handleDataUpdate();
     }
@@ -156,7 +212,6 @@ export class IAHistogramDateRange extends LitElement {
       ) + this.snapEndOffset;
 
     this._binWidth = this._histWidth / this._numBins;
-    this._previousDateRange = this.currentDateRangeString;
     this._histData = this.calculateHistData();
     this.minSelectedDate = this.minSelectedDate
       ? this.minSelectedDate
@@ -227,13 +282,25 @@ export class IAHistogramDateRange extends LitElement {
     }
   }
 
+  /**
+   * Function to scale bin values, whether from a preset or a provided custom function.
+   */
+  private get barScalingFunction(): BarScalingFunction {
+    if (typeof this.barScaling === 'string') {
+      return BAR_SCALING_PRESET_FNS[this.barScaling];
+    }
+
+    return this.barScaling;
+  }
+
   private calculateHistData(): HistogramItem[] {
     const { bins, height, dateRangeMS, _numBins, _minDateMS } = this;
     const minValue = Math.min(...this.bins);
     const maxValue = Math.max(...this.bins);
     // if there is no difference between the min and max values, use a range of
     // 1 because log scaling will fail if the range is 0
-    const valueRange = minValue === maxValue ? 1 : Math.log1p(maxValue);
+    const valueRange =
+      minValue === maxValue ? 1 : this.barScalingFunction(maxValue);
     const valueScale = height / valueRange;
     const dateScale = dateRangeMS / _numBins;
 
@@ -256,9 +323,8 @@ export class IAHistogramDateRange extends LitElement {
 
       return {
         value: v,
-        // use log scaling for the height of the bar to prevent tall bars from
-        // making the smaller ones too small to see
-        height: Math.floor(Math.log1p(v) * valueScale),
+        // apply the configured scaling function to the bin value before determining bar height
+        height: Math.floor(this.barScalingFunction(v) * valueScale),
         binStart,
         binEnd,
         tooltip,
@@ -403,25 +469,43 @@ export class IAHistogramDateRange extends LitElement {
     if (this._isDragging || this.disabled) {
       return;
     }
+
     const target = e.currentTarget as SVGRectElement;
     const x = target.x.baseVal.value + this.sliderWidth / 2;
     const dataset = target.dataset as BarDataset;
-    const itemsText = `item${dataset.numItems !== '1' ? 's' : ''}`;
+    const itemsText = `${this.tooltipLabel}${
+      dataset.numItems !== '1' ? 's' : ''
+    }`;
     const formattedNumItems = Number(dataset.numItems).toLocaleString();
 
-    this._tooltipOffset =
-      x + (this._binWidth - this.sliderWidth - this.tooltipWidth) / 2;
+    const tooltipPadding = 2;
+    const bufferHeight = 9;
+    const heightAboveHistogram = bufferHeight + this.tooltipHeight;
+    const histogramBounds = this.getBoundingClientRect();
+    const barX = histogramBounds.x + x;
+    const histogramY = histogramBounds.y;
+
+    // Center the tooltip horizontally along the bar
+    this._tooltipOffsetX =
+      barX -
+      tooltipPadding +
+      (this._binWidth - this.sliderWidth - this.tooltipWidth) / 2 +
+      window.scrollX;
+    // Place the tooltip (with arrow) just above the top of the histogram bars
+    this._tooltipOffsetY = histogramY - heightAboveHistogram + window.scrollY;
 
     this._tooltipContent = html`
       ${formattedNumItems} ${itemsText}<br />
       ${dataset.tooltip}
     `;
-    this._tooltipVisible = true;
+    this._tooltip.hidden = false;
+    this._tooltip.showPopover?.();
   }
 
   private hideTooltip(): void {
     this._tooltipContent = undefined;
-    this._tooltipVisible = false;
+    this._tooltip.hidden = true;
+    this._tooltip.hidePopover?.();
   }
 
   // use arrow functions (rather than standard JS class instance methods) so
@@ -809,20 +893,28 @@ export class IAHistogramDateRange extends LitElement {
 
       const bar = svg`
         <rect
+          class="bar-pointer-target"
+          x=${x}
+          y="0"
+          width=${barWidth}
+          height=${this.height}
+          @pointerenter=${this.showTooltip}
+          @pointerleave=${this.hideTooltip}
+          @click=${this.handleBarClick}
+          fill="transparent"
+          data-num-items=${data.value}
+          data-bin-start=${data.binStart}
+          data-bin-end=${data.binEnd}
+          data-tooltip=${data.tooltip}
+        />
+        <rect
           class="bar"
           style=${barStyle}
           x=${x}
           y=${this.height - barHeight}
           width=${barWidth}
           height=${barHeight}
-          @pointerenter=${this.showTooltip}
-          @pointerleave=${this.hideTooltip}
-          @click=${this.handleBarClick}
           fill=${barFill}
-          data-num-items=${data.value}
-          data-bin-start=${data.binStart}
-          data-bin-end=${data.binEnd}
-          data-tooltip=${data.tooltip}
         />`;
       x += xScale;
       return bar;
@@ -904,21 +996,33 @@ export class IAHistogramDateRange extends LitElement {
   }
 
   get tooltipTemplate(): TemplateResult {
+    const styles = styleMap({
+      width: `${this.tooltipWidth}px`,
+      height: `${this.tooltipHeight}px`,
+      top: `${this._tooltipOffsetY}px`,
+      left: `${this._tooltipOffsetX}px`,
+    });
+
     return html`
-      <style>
-        #tooltip {
-          width: ${this.tooltipWidth}px;
-          height: ${this.tooltipHeight}px;
-          top: ${-9 - this.tooltipHeight}px;
-          left: ${this._tooltipOffset}px;
-          display: ${this._tooltipVisible ? 'block' : 'none'};
-        }
-        #tooltip:after {
-          left: ${this.tooltipWidth / 2}px;
-        }
-      </style>
-      <div id="tooltip">${this._tooltipContent}</div>
+      <div id="tooltip" style=${styles} popover>${this._tooltipContent}</div>
     `;
+  }
+
+  private get histogramAccessibilityTemplate(): TemplateResult {
+    let rangeText: string = '';
+    if (this.minSelectedDate && this.maxSelectedDate) {
+      rangeText = ` from ${this.minSelectedDate} to ${this.maxSelectedDate}`;
+    } else if (this.minSelectedDate) {
+      rangeText = ` from ${this.minSelectedDate}`;
+    } else if (this.maxSelectedDate) {
+      rangeText = ` up to ${this.maxSelectedDate}`;
+    }
+
+    const titleText = `Filter results for dates${rangeText}`;
+    const descText = `This histogram shows the distribution of dates${rangeText}`;
+
+    return html`<title id="histogram-title">${titleText}</title
+      ><desc id="histogram-desc">${descText}</desc>`;
   }
 
   private get noDataTemplate(): TemplateResult {
@@ -966,7 +1070,8 @@ export class IAHistogramDateRange extends LitElement {
       -ms-user-select: none; /* Internet Explorer/Edge */
       user-select: none; /* current Chrome, Edge, Opera and Firefox */
     }
-    .bar {
+    .bar,
+    .bar-pointer-target {
       /* create a transparent border around the hist bars to prevent "gaps" and
       flickering when moving around between bars. this also helps with handling
       clicks on the bars, preventing users from being able to click in between
@@ -975,11 +1080,15 @@ export class IAHistogramDateRange extends LitElement {
       /* ensure transparent stroke wide enough to cover gap between bars */
       stroke-width: 2px;
     }
-    .bar:hover {
+    .bar {
+      /* ensure the bar's pointer target receives events, not the bar itself */
+      pointer-events: none;
+    }
+    .bar-pointer-target:hover + .bar {
       /* highlight currently hovered bar */
       fill-opacity: 0.7;
     }
-    .disabled .bar:hover {
+    .disabled .bar-pointer-target:hover + .bar {
       /* ensure no visual hover interaction when disabled */
       fill-opacity: 1;
     }
@@ -987,6 +1096,8 @@ export class IAHistogramDateRange extends LitElement {
     #tooltip {
       position: absolute;
       background: ${tooltipBackgroundColor};
+      margin: 0;
+      border: 0;
       color: ${tooltipTextColor};
       text-align: center;
       border-radius: 3px;
@@ -995,12 +1106,14 @@ export class IAHistogramDateRange extends LitElement {
       font-family: ${tooltipFontFamily};
       touch-action: none;
       pointer-events: none;
+      overflow: visible;
     }
     #tooltip:after {
       content: '';
       position: absolute;
       margin-left: -5px;
       top: 100%;
+      left: 50%;
       /* arrow */
       border: 5px solid ${tooltipTextColor};
       border-color: ${tooltipBackgroundColor} transparent transparent
@@ -1072,9 +1185,10 @@ export class IAHistogramDateRange extends LitElement {
           <svg
             width="${this.width}"
             height="${this.height}"
+            aria-labelledby="histogram-title histogram-desc"
             @pointerleave="${this.drop}"
           >
-            ${this.selectedRangeTemplate}
+            ${this.histogramAccessibilityTemplate} ${this.selectedRangeTemplate}
             <svg id="histogram">${this.histogramTemplate}</svg>
             ${this.minSliderTemplate} ${this.maxSliderTemplate}
           </svg>

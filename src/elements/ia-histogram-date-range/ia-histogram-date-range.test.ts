@@ -53,7 +53,7 @@ async function createCustomElementInHTMLContainer(): Promise<IAHistogramDateRang
 }
 
 describe('IAHistogramDateRange', () => {
-  test('shows scaled histogram bars when provided with data', async () => {
+  test('shows log-scaled histogram bars when provided with data', async () => {
     const el = await createCustomElementInHTMLContainer();
     const bars = el.shadowRoot?.querySelectorAll(
       '.bar',
@@ -61,6 +61,32 @@ describe('IAHistogramDateRange', () => {
     const heights = Array.from(bars).map((b) => b.height.baseVal.value);
 
     expect(heights).toEqual([38, 7, 50]);
+  });
+
+  test('uses linear bar height scaling when specified', async () => {
+    const el = await createCustomElementInHTMLContainer();
+    el.barScaling = 'linear';
+    await el.updateComplete;
+
+    const bars = el.shadowRoot?.querySelectorAll(
+      '.bar',
+    ) as unknown as SVGRectElement[];
+    const heights = Array.from(bars).map((b) => b.height.baseVal.value);
+
+    expect(heights).toEqual([16, 0, 50]);
+  });
+
+  test('uses custom bar height scaling when specified', async () => {
+    const el = await createCustomElementInHTMLContainer();
+    el.barScaling = (x: number) => Math.sqrt(x);
+    await el.updateComplete;
+
+    const bars = el.shadowRoot?.querySelectorAll(
+      '.bar',
+    ) as unknown as SVGRectElement[];
+    const heights = Array.from(bars).map((b) => b.height.baseVal.value);
+
+    expect(heights).toEqual([28, 5, 50]);
   });
 
   test('changes the position of the sliders and standardizes date format when dates are entered', async () => {
@@ -480,7 +506,7 @@ describe('IAHistogramDateRange', () => {
     el.bins = [1000000, 1, 100];
     await aTimeout(10);
     const bars = el.shadowRoot?.querySelectorAll(
-      '.bar',
+      '.bar-pointer-target',
     ) as unknown as SVGRectElement[];
     const tooltip = el.shadowRoot?.querySelector('#tooltip') as HTMLDivElement;
     expect(tooltip.innerText).toBe('');
@@ -505,10 +531,41 @@ describe('IAHistogramDateRange', () => {
     expect(tooltip.innerText).toMatch(/^1 item\n4\/23\/1940 - 8\/13\/1980/);
   });
 
+  test('uses provided tooltip label', async () => {
+    const el = await createCustomElementInHTMLContainer();
+    el.bins = [1000000, 1, 100];
+    el.tooltipLabel = 'foobar';
+    await aTimeout(10);
+    const bars = el.shadowRoot?.querySelectorAll(
+      '.bar-pointer-target',
+    ) as unknown as SVGRectElement[];
+    const tooltip = el.shadowRoot?.querySelector('#tooltip') as HTMLDivElement;
+    expect(tooltip.innerText).toBe('');
+
+    // hover
+    bars[0].dispatchEvent(new PointerEvent('pointerenter'));
+    await el.updateComplete;
+    expect(tooltip.innerText).toMatch(
+      /^1,000,000 foobars\n1\/1\/1900 - 4\/23\/1940/,
+    );
+    expect(getComputedStyle(tooltip).display).toBe('block');
+
+    // leave
+    bars[0].dispatchEvent(new PointerEvent('pointerleave'));
+    await el.updateComplete;
+    expect(getComputedStyle(tooltip).display).toBe('none');
+    expect(tooltip.innerText).toBe('');
+
+    // ensure singular item is not pluralized
+    bars[1].dispatchEvent(new PointerEvent('pointerenter'));
+    await el.updateComplete;
+    expect(tooltip.innerText).toMatch(/^1 foobar\n4\/23\/1940 - 8\/13\/1980/);
+  });
+
   test('does not show tooltip while dragging', async () => {
     const el = await createCustomElementInHTMLContainer();
     const bars = el.shadowRoot?.querySelectorAll(
-      '.bar',
+      '.bar-pointer-target',
     ) as unknown as SVGRectElement[];
     const tooltip = el.shadowRoot?.querySelector('#tooltip') as HTMLDivElement;
     expect(tooltip.innerText).toBe('');
@@ -561,7 +618,7 @@ describe('IAHistogramDateRange', () => {
     `);
 
     const leftBarToClick = Array.from(
-      el.shadowRoot?.querySelectorAll('.bar') as NodeList,
+      el.shadowRoot?.querySelectorAll('.bar-pointer-target') as NodeList,
     )[1]; // click on second bar to the left
 
     leftBarToClick.dispatchEvent(new Event('click'));
@@ -569,7 +626,7 @@ describe('IAHistogramDateRange', () => {
     expect(el.minSelectedDate).toBe('1910'); // range was extended to left
 
     const rightBarToClick = Array.from(
-      el.shadowRoot?.querySelectorAll('.bar') as NodeList,
+      el.shadowRoot?.querySelectorAll('.bar-pointer-target') as NodeList,
     )[8]; // click on second bar from the right
 
     rightBarToClick.dispatchEvent(new Event('click'));
@@ -593,14 +650,14 @@ describe('IAHistogramDateRange', () => {
     ///////////////////////////////////////////////
 
     const leftBarToClick = Array.from(
-      el.shadowRoot?.querySelectorAll('.bar') as NodeList,
+      el.shadowRoot?.querySelectorAll('.bar-pointer-target') as NodeList,
     )[3]; // click on fourth bar to the left
 
     leftBarToClick.dispatchEvent(new Event('click'));
     expect(el.minSelectedDate).toBe('1932'); // range was extended to the right
 
     const rightBarToClick = Array.from(
-      el.shadowRoot?.querySelectorAll('.bar') as NodeList,
+      el.shadowRoot?.querySelectorAll('.bar-pointer-target') as NodeList,
     )[8]; // click on second bar from the right
 
     rightBarToClick.dispatchEvent(new Event('click'));
@@ -708,7 +765,7 @@ describe('IAHistogramDateRange', () => {
       ></ia-histogram-date-range>
     `);
     const bars = el.shadowRoot?.querySelectorAll(
-      '.bar',
+      '.bar-pointer-target',
     ) as unknown as SVGRectElement[];
     const tooltips = Array.from(bars).map((b) => b.dataset.tooltip);
     expect(tooltips).toEqual([
@@ -736,7 +793,7 @@ describe('IAHistogramDateRange', () => {
     `);
 
     const bars = el.shadowRoot?.querySelectorAll(
-      '.bar',
+      '.bar-pointer-target',
     ) as unknown as SVGRectElement[];
     const tooltips = Array.from(bars).map((b) => b.dataset.tooltip);
     expect(tooltips).toEqual([
@@ -785,7 +842,7 @@ describe('IAHistogramDateRange', () => {
       ></ia-histogram-date-range>
     `);
     const bars = el.shadowRoot?.querySelectorAll(
-      '.bar',
+      '.bar-pointer-target',
     ) as unknown as SVGRectElement[];
     const tooltips = Array.from(bars).map((b) => b.dataset.tooltip);
     expect(tooltips).toEqual([
@@ -814,7 +871,7 @@ describe('IAHistogramDateRange', () => {
     `);
 
     const bars = el.shadowRoot?.querySelectorAll(
-      '.bar',
+      '.bar-pointer-target',
     ) as unknown as SVGRectElement[];
     const tooltips = Array.from(bars).map((b) => b.dataset.tooltip);
     expect(tooltips).toEqual(['20', '21', '22', '23', '24', '25']);
@@ -831,7 +888,7 @@ describe('IAHistogramDateRange', () => {
       ></ia-histogram-date-range>
     `);
     const bars = el.shadowRoot?.querySelectorAll(
-      '.bar',
+      '.bar-pointer-target',
     ) as unknown as SVGRectElement[];
     const tooltips = Array.from(bars).map((b) => b.dataset.tooltip);
     expect(tooltips).toEqual(['2001', '2002', '2003', '2004', '2005']);
@@ -848,7 +905,7 @@ describe('IAHistogramDateRange', () => {
     `);
 
     const bars = el.shadowRoot?.querySelectorAll(
-      '.bar',
+      '.bar-pointer-target',
     ) as unknown as SVGRectElement[];
     let tooltips = Array.from(bars).map((b) => b.dataset.tooltip);
     expect(tooltips).toEqual(['2001', '2002', '2003', '2004', '2005']); // default YYYY date format
@@ -957,5 +1014,63 @@ describe('IAHistogramDateRange', () => {
       '#date-max',
     ) as HTMLInputElement;
     expect(maxDateInput.value).toBe('2019');
+  });
+
+  test('SVG accessibility - dynamic title for min and max date', async () => {
+    const el = await fixture<IAHistogramDateRange>(html`
+      <ia-histogram-date-range
+        minDate="1900"
+        maxDate="2020"
+        .bins=${[33, 1, 100]}
+      >
+      </ia-histogram-date-range>
+    `);
+    const svg = el.shadowRoot?.querySelector('svg') as SVGElement;
+    expect(svg.querySelector('title')?.textContent).toBe(
+      'Filter results for dates from 1900 to 2020',
+    );
+  });
+
+  test('SVG accessibility - dynamic title for min date only', async () => {
+    const el = await fixture<IAHistogramDateRange>(html`
+      <ia-histogram-date-range minDate="1900" .bins=${[33, 1, 100]}>
+      </ia-histogram-date-range>
+    `);
+    const svg = el.shadowRoot?.querySelector('svg') as SVGElement;
+    expect(svg.querySelector('title')?.textContent).toBe(
+      'Filter results for dates from 1900',
+    );
+  });
+
+  test('SVG accessibility - dynamic title for max date only', async () => {
+    const el = await fixture<IAHistogramDateRange>(html`
+      <ia-histogram-date-range maxDate="2020" .bins=${[33, 1, 100]}>
+      </ia-histogram-date-range>
+    `);
+    const svg = el.shadowRoot?.querySelector('svg') as SVGElement;
+    expect(svg.querySelector('title')?.textContent).toBe(
+      'Filter results for dates up to 2020',
+    );
+  });
+
+  test('SVG accessibility - dynamic title with no dates', async () => {
+    const el = await fixture<IAHistogramDateRange>(html`
+      <ia-histogram-date-range .bins=${[33, 1, 100]}></ia-histogram-date-range>
+    `);
+    const svg = el.shadowRoot?.querySelector('svg') as SVGElement;
+    expect(svg.querySelector('title')?.textContent).toBe(
+      'Filter results for dates',
+    );
+  });
+
+  test('SVG accessibility - dynamic desc', async () => {
+    const el = await fixture<IAHistogramDateRange>(html`
+      <ia-histogram-date-range maxDate="2020" .bins=${[33, 1, 100]}>
+      </ia-histogram-date-range>
+    `);
+    const svg = el.shadowRoot?.querySelector('svg') as SVGElement;
+    expect(svg.querySelector('desc')?.textContent).toBe(
+      'This histogram shows the distribution of dates up to 2020',
+    );
   });
 });
