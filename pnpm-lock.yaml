@@ -14,9 +14,30 @@ importers:
       '@internetarchive/ia-dropdown':
         specifier: ^2.2.0
         version: 2.2.0
+      '@internetarchive/lazy-loader-service':
+        specifier: ^0.2.0
+        version: 0.2.0
+      '@internetarchive/promised-singleton':
+        specifier: 0.3.0-alpha.1
+        version: 0.3.0-alpha.1
       '@lit/localize':
         specifier: ^0.12.2
         version: 0.12.2
+      '@types/applepayjs':
+        specifier: ^14.0.9
+        version: 14.0.9
+      '@types/braintree-web':
+        specifier: ^3.143.0
+        version: 3.143.0
+      '@types/googlepay':
+        specifier: ^0.7.12
+        version: 0.7.12
+      '@types/grecaptcha':
+        specifier: ^3.0.9
+        version: 3.0.9
+      '@types/paypal-checkout-components':
+        specifier: ^4.0.8
+        version: 4.0.8
       currency.js:
         specifier: ^2.0.4
         version: 2.0.4
@@ -26,6 +47,9 @@ importers:
       magic-snowflakes:
         specifier: ^7.0.2
         version: 7.0.2
+      nanoevents:
+        specifier: ^9.1.0
+        version: 9.1.0
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -370,6 +394,12 @@ packages:
   '@internetarchive/icon-close@1.4.1':
     resolution: {integrity: sha512-nN1rGfScGssGFpfEew4azsrsMyUJtkDWqUDlckJi31PtyQnbZqUmZ07UO3Aw+wZIo3cU1MHxb5VxDy3Rmr8QGA==}
 
+  '@internetarchive/lazy-loader-service@0.2.0':
+    resolution: {integrity: sha512-SI/ADWnIhdtuAbxkeOItb0xOqco+ueVtwEAdEb0D60sFngUCUpBr/EXeIeh+ykXveO9pmd5J0ZVpgEfKdbhE+g==}
+
+  '@internetarchive/promised-singleton@0.3.0-alpha.1':
+    resolution: {integrity: sha512-o4cUSkTDrWXn7lP1tuMrJ8xxCoD8pCKVgdvv7gtlnCJsCpsFcBr3aTFkMF3O0G+Dm5VZ/Jmsw7pINKRXm226Lg==}
+
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
     engines: {node: '>=6.0.0'}
@@ -579,6 +609,12 @@ packages:
     resolution: {integrity: sha512-w071DSzP94YfN6XiWhOxnLpYT3uqtxJBDYdh6Jdjzt+Ce6DNspJsPQgpC7rbts/B8tEkq0LHoYuIF/O5Jh5rPg==}
     engines: {node: '>=18'}
 
+  '@types/applepayjs@14.0.9':
+    resolution: {integrity: sha512-xEprYbb0TEP/XIiDPbVnTYpDai8fTFpsQfVSfTd81Is2GOMUy7ie019eyX6Mz2ECxfjoUVKaiGSL577roIeHCg==}
+
+  '@types/braintree-web@3.143.0':
+    resolution: {integrity: sha512-coLPuEWUj6oLPoYH/peCAwTpzdQ6QwWiL3NvWMQI19yoAsJlGlBZtT+pIS375X8GH5SzNwYvoxu43sH14lVfmQ==}
+
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
 
@@ -587,6 +623,12 @@ packages:
 
   '@types/estree@1.0.9':
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
+
+  '@types/googlepay@0.7.12':
+    resolution: {integrity: sha512-fZ6NfTyw3qd7v8Rmp0DCpwwG3cT0Rm2pbUkVakl6KcYexreOuYL3vC/ECCn2slpRZcJ492LgMZ9/V2Dd3Io/hg==}
+
+  '@types/grecaptcha@3.0.9':
+    resolution: {integrity: sha512-fFxMtjAvXXMYTzDFK5NpcVB7WHnrHVLl00QzEGpuFxSAC789io6M+vjcn+g5FTEamIJtJr/IHkCDsqvJxeWDyw==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -599,6 +641,9 @@ packages:
 
   '@types/parse5@2.2.34':
     resolution: {integrity: sha512-p3qOvaRsRpFyEmaS36RtLzpdxZZnmxGuT1GMgzkTtTJVFuEw7KFjGK83MFODpJExgX1bEzy9r0NYjMC3IMfi7w==}
+
+  '@types/paypal-checkout-components@4.0.8':
+    resolution: {integrity: sha512-Z3IWbFPGdgL3O+Bg+TyVmMT8S3uGBsBjw3a8uRNR4OlYWa9m895djENErJMYU8itoki9rtcQMzoHOSFn8NFb1A==}
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -1804,6 +1849,14 @@ packages:
     resolution: {integrity: sha512-BzQguy9W9NJgoVn2mRWzbFrFWWztGCcng2QI9+41frfk+Athwgx3qhqhvStz7ExeUUu7Kzw427sNzHpEZNINog==}
     engines: {node: '>=16.0.0'}
 
+  nanoevents@6.0.2:
+    resolution: {integrity: sha512-FRS2otuFcPPYDPYViNWQ42+1iZqbXydinkRHTHFxrF4a1CpBfmydR9zkI44WSXAXCyPrkcGtPk5CnpW6Y3lFKQ==}
+    engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
+
+  nanoevents@9.1.0:
+    resolution: {integrity: sha512-Jd0fILWG44a9luj8v5kED4WI+zfkkgwKyRQKItTtlPfEsh7Lznfi1kr8/iZ+XAIss4Qq5GqRB0qtWbaz9ceO/A==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+
   nanoid@3.3.16:
     resolution: {integrity: sha512-bzlKTyNJ7+LdGIIwy8ijFpIqEQIvafahV7eYykJ8Cvh42EdJeODoJ6gUJXpQJvej1BddH8OqTXZNE/KfbWAu8Q==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -2696,6 +2749,12 @@ snapshots:
     dependencies:
       lit: 3.3.3
 
+  '@internetarchive/lazy-loader-service@0.2.0':
+    dependencies:
+      nanoevents: 6.0.2
+
+  '@internetarchive/promised-singleton@0.3.0-alpha.1': {}
+
   '@jridgewell/resolve-uri@3.1.2': {}
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
@@ -2844,6 +2903,13 @@ snapshots:
       '@ts-graphviz/ast': 2.0.7
       '@ts-graphviz/common': 2.1.5
 
+  '@types/applepayjs@14.0.9': {}
+
+  '@types/braintree-web@3.143.0':
+    dependencies:
+      '@types/googlepay': 0.7.12
+      '@types/paypal-checkout-components': 4.0.8
+
   '@types/chai@5.2.3':
     dependencies:
       '@types/deep-eql': 4.0.2
@@ -2852,6 +2918,10 @@ snapshots:
   '@types/deep-eql@4.0.2': {}
 
   '@types/estree@1.0.9': {}
+
+  '@types/googlepay@0.7.12': {}
+
+  '@types/grecaptcha@3.0.9': {}
 
   '@types/json-schema@7.0.15': {}
 
@@ -2864,6 +2934,8 @@ snapshots:
   '@types/parse5@2.2.34':
     dependencies:
       '@types/node': 26.1.1
+
+  '@types/paypal-checkout-components@4.0.8': {}
 
   '@types/trusted-types@2.0.7': {}
 
@@ -4318,6 +4390,10 @@ snapshots:
   ms@2.1.3: {}
 
   mylas@2.1.14: {}
+
+  nanoevents@6.0.2: {}
+
+  nanoevents@9.1.0: {}
 
   nanoid@3.3.16: {}
 
