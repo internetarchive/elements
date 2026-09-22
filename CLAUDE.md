@@ -124,19 +124,20 @@ by hand after this.
 
 ## Migrating a package in
 
-Port from the version consumers actually install, never from whatever the local
-reference checkout happens to be on. Those checkouts are read-only copies nobody
-pulls, so a stale one is the default:
+Port from the version consumers actually install, never from whatever a local
+clone of the source repo happens to be on. Those clones are reference copies
+nobody pulls, so a stale one is the default. Ask the registry instead:
 
 ```zsh
-npm view @internetarchive/<pkg> version          # what `latest` resolves to
-cd ~/Projects/IA/iaux/iaux-<pkg> && git fetch --tags && git tag | tail
-grep '<pkg>' ~/Projects/IA/iaux/iaux-collection-browser/package.json
+npm view @internetarchive/<pkg> version                        # what `latest` is
+npm view @internetarchive/collection-browser dependencies      # what a consumer pins
 ```
 
 Check the consumers too, not just `latest` — one of them may pin something newer.
-If the local tags still lag the registry, diff against the published tarball
-instead (`npm pack @internetarchive/<pkg>@<version>`).
+Then work from the source for that exact version: either the matching tag in a
+freshly fetched clone (`git fetch --tags`), or, if the clone's tags lag the
+registry, the published tarball (`npm pack @internetarchive/<pkg>@<version>`),
+which needs no clone at all.
 
 Re-derive the element from the upstream source and re-apply the elements-specific
 changes on top (tag and class rename, `customElement` from `@src/util/custom-element`,
