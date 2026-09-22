@@ -203,6 +203,61 @@ describe('IAHistogramDateRange', () => {
     expect(updateEventFired).toBe(false);
   });
 
+  test('emits the update deferred by an input focus once focus leaves the inputs', async () => {
+    const el = await createCustomElementInHTMLContainer();
+
+    const updateEventPromise = oneEvent(el, 'histogramDateRangeUpdated');
+
+    const minDateInput = el.shadowRoot?.querySelector(
+      '#date-min',
+    ) as HTMLInputElement;
+    const maxDateInput = el.shadowRoot?.querySelector(
+      '#date-max',
+    ) as HTMLInputElement;
+
+    // type a new min date and tab over to the max date input, which holds back
+    // the update while focus is still on one of the inputs
+    minDateInput.focus();
+    minDateInput.value = '1950';
+    maxDateInput.focus();
+    await el.updateComplete;
+    await aTimeout(0);
+
+    // tab back out again without touching the max date
+    maxDateInput.blur();
+
+    const { detail } = await updateEventPromise;
+    expect(detail.minDate).toBe('1/1/1950');
+    expect(detail.maxDate).toBe('12/4/2020');
+  });
+
+  test('does not emit for a focus and blur that change nothing', async () => {
+    const el = await createCustomElementInHTMLContainer();
+
+    const minDateInput = el.shadowRoot?.querySelector(
+      '#date-min',
+    ) as HTMLInputElement;
+
+    // get one update emitted, so there is a spent timer lying around
+    const updateEventPromise = oneEvent(el, 'histogramDateRangeUpdated');
+    minDateInput.value = '1950';
+    minDateInput.dispatchEvent(new Event('blur'));
+    await updateEventPromise;
+
+    // move the selection from outside the component, as a consumer restoring
+    // a range would, then just click into a date input and back out
+    let eventCount = 0;
+    el.addEventListener('histogramDateRangeUpdated', () => (eventCount += 1));
+    el.minSelectedDate = '1960';
+    await el.updateComplete;
+
+    minDateInput.focus();
+    minDateInput.blur();
+    await aTimeout(0);
+
+    expect(eventCount).toBe(0);
+  });
+
   test('handles invalid date inputs', async () => {
     const el = await createCustomElementInHTMLContainer();
 

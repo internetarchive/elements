@@ -106,6 +106,7 @@ export class IAHistogramDateRange extends LitElement {
   private _histData: HistogramItem[] = [];
   private _emitUpdatedEventTimer?: ReturnType<typeof setTimeout>;
   private _previousDateRange = '';
+  private _updateDeferredWhileFocused = false;
 
   disconnectedCallback(): void {
     this.removeListeners();
@@ -531,7 +532,10 @@ export class IAHistogramDateRange extends LitElement {
    */
   private beginEmitUpdateProcess(): void {
     this.cancelPendingUpdateEvent();
+    this._updateDeferredWhileFocused = false;
     this._emitUpdatedEventTimer = setTimeout(() => {
+      // the timer has run, so there is no longer a pending event to cancel
+      this._emitUpdatedEventTimer = undefined;
       if (this.currentDateRangeString === this._previousDateRange) {
         // don't emit duplicate event if no change since last emitted event
         return;
@@ -549,12 +553,14 @@ export class IAHistogramDateRange extends LitElement {
     }, this.updateDelay);
   }
 
-  private cancelPendingUpdateEvent(): void {
+  /** @returns whether there was a pending update event to cancel */
+  private cancelPendingUpdateEvent(): boolean {
     if (this._emitUpdatedEventTimer === undefined) {
-      return;
+      return false;
     }
     clearTimeout(this._emitUpdatedEventTimer);
     this._emitUpdatedEventTimer = undefined;
+    return true;
   }
 
   /**
@@ -605,22 +611,32 @@ export class IAHistogramDateRange extends LitElement {
 
   private handleInputFocus(): void {
     if (!this.updateWhileFocused) {
-      this.cancelPendingUpdateEvent();
+      // Tabbing from one date input to the other lands focus here in between
+      // the first input's blur and any chance for its update to be emitted.
+      // Remember that so the second input's blur can pick it back up, rather
+      // than the typed date never being reported at all.
+      this._updateDeferredWhileFocused = this.cancelPendingUpdateEvent();
     }
   }
 
   private handleMinDateInput(e: Event): void {
     const target = e.currentTarget as HTMLInputElement;
-    if (target.value !== this.minSelectedDate) {
+    const isChanged = target.value !== this.minSelectedDate;
+    if (isChanged) {
       this.minSelectedDate = target.value;
+    }
+    if (isChanged || this._updateDeferredWhileFocused) {
       this.beginEmitUpdateProcess();
     }
   }
 
   private handleMaxDateInput(e: Event): void {
     const target = e.currentTarget as HTMLInputElement;
-    if (target.value !== this.maxSelectedDate) {
+    const isChanged = target.value !== this.maxSelectedDate;
+    if (isChanged) {
       this.maxSelectedDate = target.value;
+    }
+    if (isChanged || this._updateDeferredWhileFocused) {
       this.beginEmitUpdateProcess();
     }
   }
