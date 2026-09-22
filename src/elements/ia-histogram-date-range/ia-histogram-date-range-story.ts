@@ -123,10 +123,16 @@ export class IAHistogramDateRangeStory extends LitElement {
 
   static get styles(): CSSResultGroup {
     return css`
-      /* The element's 35px default clips a 4-digit year at this page's
-       * inherited font size. */
+      /* The element sizes its tooltip and date inputs in fixed pixels but
+       * their text in rem, and inherits its line height from the page, so the
+       * two only line up where 1rem is 10px and lines are tight, as they are
+       * on archive.org. This page inherits the browser's 16px default and a
+       * 1.5 line height, which together overflow the tooltip and clip a
+       * 4-digit year, so pin the text to what that geometry expects. */
       ia-histogram-date-range {
-        --histogramDateRangeInputWidth: 48px;
+        --histogramDateRangeTooltipFontSize: 11px;
+        --histogramDateRangeInputFontSize: 12px;
+        line-height: normal;
       }
 
       .readout {
