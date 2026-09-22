@@ -13,27 +13,36 @@ const BINS = [3, 8, 15, 40, 90, 130, 175, 140, 95, 60, 30, 12, 4];
 
 const styleInputSettings: StyleInputSettings[] = [
   {
-    label: 'Slider colour',
+    label: 'Slider color',
     cssVariable: '--histogramDateRangeSliderColor',
     defaultValue: '#4b65fe',
     inputType: 'color',
   },
   {
-    label: 'Selected range colour',
+    label: 'Selected range color',
     cssVariable: '--histogramDateRangeSelectedRangeColor',
     defaultValue: '#dbe0ff',
     inputType: 'color',
   },
   {
-    label: 'Included bar colour',
+    label: 'Included bar color',
     cssVariable: '--histogramDateRangeBarIncludedFill',
     defaultValue: '#2c2c2c',
     inputType: 'color',
   },
   {
-    label: 'Excluded bar colour',
+    label: 'Excluded bar color',
     cssVariable: '--histogramDateRangeBarExcludedFill',
     defaultValue: '#cccccc',
+    inputType: 'color',
+  },
+  {
+    // Shares the bars' default color and renders on top of the tallest of
+    // them, so recoloring one or the other is the only way to see the
+    // loading state.
+    label: 'Spinner color',
+    cssVariable: '--histogramDateRangeActivityIndicator',
+    defaultValue: '#2c2c2c',
     inputType: 'color',
   },
 ];
