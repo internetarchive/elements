@@ -419,4 +419,134 @@ describe('IA Status Indicator', () => {
       ).to.be.closeTo(2, 0.05);
     });
   });
+
+  describe('fading between modes', () => {
+    /** Long enough for the fade to be well under way but nowhere near done */
+    const MID_FADE_MS = 60;
+
+    const layers = (el: IAStatusIndicator) =>
+      Array.from(el.shadowRoot?.querySelectorAll('.layer') ?? []).map((l) => ({
+        outgoing: l.classList.contains('outgoing'),
+        opacity: Number(getComputedStyle(l).opacity),
+      }));
+
+    async function mounted(mode: string): Promise<IAStatusIndicator> {
+      const el = await fixture<IAStatusIndicator>(
+        html`<ia-status-indicator mode=${mode}></ia-status-indicator>`,
+      );
+      await settle(el);
+      // the element is allowed to animate only after its first render
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      return el;
+    }
+
+    test('does not fade in when it first appears', async () => {
+      const el = await fixture<IAStatusIndicator>(
+        html`<ia-status-indicator mode="loading"></ia-status-indicator>`,
+      );
+      await settle(el);
+
+      expect(layers(el)).to.eql([{ outgoing: false, opacity: 1 }]);
+    });
+
+    test('crossfades the old mode out as the new one comes in', async () => {
+      const el = await mounted('loading');
+      expect(layers(el)).to.eql([{ outgoing: false, opacity: 1 }]);
+
+      el.mode = 'success';
+      await el.updateComplete;
+      await new Promise((resolve) => setTimeout(resolve, MID_FADE_MS));
+
+      const [outgoing, incoming] = layers(el);
+      expect(outgoing.outgoing, 'the old mode is still on screen').to.be.true;
+      expect(outgoing.opacity).to.be.within(0.05, 0.95);
+      expect(incoming.outgoing).to.be.false;
+      expect(incoming.opacity).to.be.within(0.05, 0.95);
+      expect(
+        outgoing.opacity + incoming.opacity,
+        'one fades out as the other fades in',
+      ).to.be.closeTo(1, 0.15);
+    });
+
+    test('drops the old mode once the fade is over', async () => {
+      const el = await mounted('loading');
+
+      el.mode = 'success';
+      await el.updateComplete;
+      await new Promise((resolve) => setTimeout(resolve, 400));
+
+      expect(layers(el)).to.eql([{ outgoing: false, opacity: 1 }]);
+      expect(
+        el.shadowRoot?.querySelectorAll('svg title').length,
+        'only the current mode leaves a title behind',
+      ).to.equal(1);
+    });
+
+    test('draws nothing for a mode it does not recognise', async () => {
+      const el = await fixture<IAStatusIndicator>(
+        html`<ia-status-indicator mode="nonsense"></ia-status-indicator>`,
+      );
+      await settle(el);
+
+      // `mode` is a public string attribute, so this has to degrade rather
+      // than take the element out. It draws nothing, and crucially render()
+      // still completes, so the element is alive and recovers when set to a
+      // real mode.
+      expect(el.shadowRoot?.querySelector('.layers')).to.exist;
+      expect(el.shadowRoot?.querySelector('.layer')).to.not.exist;
+      expect(el.shadowRoot?.querySelector('svg')).to.not.exist;
+
+      el.mode = 'success';
+      await settle(el);
+      expect(el.shadowRoot?.querySelector('.success-icon')).to.exist;
+    });
+
+    test('reverses a fade without snapping', async () => {
+      const el = await mounted('loading');
+
+      el.mode = 'success';
+      await el.updateComplete;
+      await new Promise((resolve) => setTimeout(resolve, MID_FADE_MS));
+      el.mode = 'loading';
+      await el.updateComplete;
+
+      // going back mid-fade must not reorder the keyed layers, which would
+      // cancel both transitions and snap them to their end values
+      const opacities = layers(el).map((l) => l.opacity);
+      expect(
+        Math.max(...opacities),
+        'a layer is still part way through its fade',
+      ).to.be.within(0.05, 0.95);
+    });
+
+    test('does not strand the outgoing layer when disconnected mid-fade', async () => {
+      const el = await mounted('loading');
+      const parent = el.parentNode as Node;
+
+      el.mode = 'success';
+      await el.updateComplete;
+      expect(layers(el)).to.have.lengthOf(2);
+
+      el.remove();
+      parent.appendChild(el);
+      await el.updateComplete;
+
+      // the timer that would have cleared it is gone, and nothing reschedules
+      expect(layers(el)).to.have.lengthOf(1);
+      expect(el.shadowRoot?.querySelectorAll('svg title')).to.have.lengthOf(1);
+    });
+
+    test('keeps only the current mode when set back and forth quickly', async () => {
+      const el = await mounted('loading');
+
+      el.mode = 'success';
+      await el.updateComplete;
+      el.mode = 'error';
+      await el.updateComplete;
+      await new Promise((resolve) => setTimeout(resolve, 400));
+
+      expect(layers(el)).to.eql([{ outgoing: false, opacity: 1 }]);
+      expect(el.shadowRoot?.querySelector('.error-icon')).to.exist;
+    });
+  });
 });

@@ -1,17 +1,19 @@
 import {
   css,
+  unsafeCSS,
   CSSResultGroup,
   html,
   LitElement,
   nothing,
+  PropertyValues,
   svg,
   SVGTemplateResult,
   TemplateResult,
 } from 'lit';
 import { property, state } from 'lit/decorators.js';
+import { repeat } from 'lit/directives/repeat.js';
 import { customElement } from '@src/util/custom-element';
 import { msg } from '@lit/localize';
-import { choose } from 'lit/directives/choose.js';
 
 import themeStyles from '@src/themes/theme-styles';
 import { maskedIcon } from '@src/util/masked-icon';
@@ -26,6 +28,12 @@ import textsIcon from './icons/texts.svg';
 import tvIcon from './icons/tv.svg';
 import videoIcon from './icons/video.svg';
 import webIcon from './icons/web.svg';
+
+/** How long a mode change takes to fade. Drives both the CSS and the timer. */
+const FADE_DURATION_MS = 250;
+
+/** Fixed running order for the layers. See the note in render(). */
+const LAYER_ORDER: LoadingStatus[] = ['ready', 'loading', 'success', 'error'];
 
 export type LoadingStatus = 'ready' | 'loading' | 'success' | 'error';
 
@@ -91,13 +99,96 @@ export class IAStatusIndicator extends LitElement {
   /* Whether a consumer has slotted their own center icon */
   @state() private hasSlottedIcon = false;
 
+  /* The mode being faded out, if a change is currently in flight */
+  @state() private _outgoingMode?: LoadingStatus;
+
+  /* Set once the first render is done, so the element doesn't fade in on mount */
+  @state() private _canAnimate = false;
+
+  private _fadeTimer?: ReturnType<typeof setTimeout>;
+
   render(): TemplateResult {
-    return html`${choose(this.mode, [
-      ['ready', () => this.placeholderTemplate],
-      ['loading', () => this.loadingIndicatorTemplate],
-      ['success', () => this.successIndicatorTemplate],
-      ['error', () => this.errorIndicatorTemplate],
-    ])}`;
+    // Always in the same running order, so reversing a fade part way through
+    // is an insert and a remove rather than a reorder. Reordering keyed nodes
+    // moves them, which cancels the transitions they're in the middle of.
+    const modes = LAYER_ORDER.filter(
+      (mode) => mode === this.mode || mode === this._outgoingMode,
+    );
+
+    // Keyed on the mode so lit gives each one its own element. Reusing a
+    // single element across modes would swap the artwork inside a node that
+    // never leaves full opacity, and nothing would fade.
+    return html`
+      <div class="layers ${this._canAnimate ? 'animate' : ''}">
+        ${repeat(
+          modes,
+          (mode) => mode,
+          (mode) => this.layerTemplate(mode, mode === this.mode),
+        )}
+      </div>
+    `;
+  }
+
+  /**
+   * One mode's artwork, stacked in the same cell as the other layer so that a
+   * mode change fades between them. At rest only the active layer exists; the
+   * one being faded out is dropped as soon as the transition is over, so the
+   * shadow tree holds a single mode's markup and a single `<title>`.
+   */
+  private layerTemplate(
+    mode: LoadingStatus,
+    isActive: boolean,
+  ): TemplateResult {
+    // `mode` is a public string attribute, so a consumer can hand us anything.
+    // An unrecognised one draws nothing, the same as it always has.
+    const content =
+      {
+        ready: () => this.placeholderTemplate,
+        loading: () => this.loadingIndicatorTemplate,
+        success: () => this.successIndicatorTemplate,
+        error: () => this.errorIndicatorTemplate,
+      }[mode]?.() ?? nothing;
+
+    return html`<div
+      class="layer ${isActive ? 'active' : 'outgoing'}"
+      aria-hidden=${isActive ? nothing : 'true'}
+    >
+      ${content}
+    </div>`;
+  }
+
+  willUpdate(changedProps: PropertyValues): void {
+    if (!changedProps.has('mode')) return;
+    // Hold on to the mode we're leaving so both can be on screen together for
+    // the length of the fade.
+    const previous = changedProps.get('mode') as LoadingStatus | undefined;
+    if (previous === undefined || previous === this.mode) return;
+
+    this._outgoingMode = previous;
+    clearTimeout(this._fadeTimer);
+    this._fadeTimer = setTimeout(() => {
+      this._outgoingMode = undefined;
+    }, FADE_DURATION_MS);
+  }
+
+  firstUpdated(): void {
+    // Fading applies to mode changes, not to the element appearing. Waiting a
+    // frame is what makes that true: enabling it inline would put the
+    // transition in the element's very first computed style, and it would
+    // fade up from nothing on mount.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        this._canAnimate = true;
+      });
+    });
+  }
+
+  disconnectedCallback(): void {
+    clearTimeout(this._fadeTimer);
+    // Nothing reschedules this timer, so leaving the mode set would strand the
+    // outgoing layer on reconnect.
+    this._outgoingMode = undefined;
+    super.disconnectedCallback();
   }
 
   /**
@@ -284,6 +375,52 @@ export class IAStatusIndicator extends LitElement {
 
           display: inline-block;
           width: var(--indicator-width--);
+        }
+
+        /* Every mode occupies the same cell, so the element keeps one size */
+        .layers {
+          display: grid;
+        }
+
+        .layer {
+          grid-area: 1 / 1;
+          opacity: 0;
+        }
+
+        .animate .layer {
+          transition: opacity ${unsafeCSS(FADE_DURATION_MS)}ms ease-out;
+        }
+
+        .layer.active {
+          opacity: 1;
+        }
+
+        /*
+         * A freshly inserted element has no previous value to transition from,
+         * so without this the incoming layer would appear at full opacity
+         * while only the outgoing one faded. Browsers without @starting-style
+         * skip the fade in rather than breaking.
+         */
+        @starting-style {
+          .animate .layer.active {
+            opacity: 0;
+          }
+        }
+
+        .layer.outgoing {
+          opacity: 0;
+        }
+
+        /* A ring on its way out would otherwise keep animating unseen */
+        .layer.outgoing .loading-ring,
+        .layer.outgoing .loading-dots > * {
+          animation-play-state: paused;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .animate .layer {
+            transition: none;
+          }
         }
 
         .placeholder {
