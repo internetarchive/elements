@@ -25,7 +25,10 @@ export default defineConfig({
       }),
     },
     coverage: {
-      exclude: ['dist/**/*'],
+      // Stories are demo scaffolding, not shipped code. A demo test loads one
+      // to drive the element it wraps, which would otherwise pull the story
+      // into the report and skew the numbers for the element itself.
+      exclude: ['dist/**/*', '**/*-story.ts'],
       reporter: ['lcov', 'text-summary', 'html'],
       enabled: true,
     },
