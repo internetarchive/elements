@@ -133,6 +133,13 @@ export class IAHistogramDateRangeStory extends LitElement {
         --histogramDateRangeTooltipFontSize: 11px;
         --histogramDateRangeInputFontSize: 12px;
         line-height: normal;
+
+        /* The tooltip sits above the histogram, which puts it over the story
+         * template's DEMO heading. That heading is the one thing on the page
+         * carrying a z-index, so give the element a stacking context of its
+         * own to keep the tooltip readable. */
+        position: relative;
+        z-index: 2;
       }
 
       .readout {
