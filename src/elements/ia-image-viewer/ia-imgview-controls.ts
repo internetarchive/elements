@@ -124,6 +124,10 @@ export class IAImageViewerControls extends LitElement {
         }
 
         @container (min-width: 890px) {
+          :host {
+            width: auto;
+          }
+
           .controls {
             position: static;
             width: auto;
