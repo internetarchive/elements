@@ -18,11 +18,16 @@ import themeStyles from '@src/themes/theme-styles';
  * area, which lives in the viewer's shadow root. That works because an
  * absolutely positioned element finds its containing block through the flat
  * tree, so the viewer's frame is still the reference as long as this host
- * stays unpositioned. The breakpoint itself queries `.controls`, a plain
- * descendant inside this element's own shadow root, rather than a named
- * container on the `ia-image-viewer` ancestor — Safari doesn't reliably
- * resolve a named container query across a shadow-tree boundary, so querying
- * across from here left the wide layout permanently off in Safari.
+ * stays unpositioned. The breakpoint itself queries this host's own
+ * (unnamed) container from `.controls`, a genuine descendant inside this
+ * element's own shadow root, rather than a named container on the
+ * `ia-image-viewer` ancestor — Safari doesn't reliably resolve a named
+ * container query across a shadow-tree boundary, so querying across from
+ * here left the wide layout permanently off in Safari. `:host` stays full
+ * width the whole time; once the buttons come out of flow, `.controls` only
+ * has the counter left to lay out, so switching its `justify-content` to
+ * `center` puts the counter in the middle of the image without needing
+ * anything to shrink-wrap.
  */
 @customElement('ia-imgview-controls')
 export class IAImageViewerControls extends LitElement {
@@ -75,6 +80,7 @@ export class IAImageViewerControls extends LitElement {
 
           display: block;
           width: 100%;
+          container-type: inline-size;
         }
 
         .controls {
@@ -83,7 +89,6 @@ export class IAImageViewerControls extends LitElement {
           justify-content: space-between;
           width: 100%;
           margin-top: 0.8rem;
-          container-type: inline-size;
         }
 
         .nav-btn {
@@ -124,13 +129,8 @@ export class IAImageViewerControls extends LitElement {
         }
 
         @container (min-width: 890px) {
-          :host {
-            width: auto;
-          }
-
           .controls {
-            position: static;
-            width: auto;
+            justify-content: center;
             margin-top: 0;
           }
 
