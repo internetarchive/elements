@@ -17,10 +17,12 @@ import themeStyles from '@src/themes/theme-styles';
  * Past the wide breakpoint the buttons position themselves over the image
  * area, which lives in the viewer's shadow root. That works because an
  * absolutely positioned element finds its containing block through the flat
- * tree, so the viewer's frame is still the reference as long as this element's
- * own host box stays unpositioned. The breakpoint queries the `image-viewer`
- * container by name, so it tracks the viewer's width rather than whichever
- * container a consumer happens to have further up the tree.
+ * tree, so the viewer's frame is still the reference as long as this host
+ * stays unpositioned. The breakpoint itself queries `.controls`, a plain
+ * descendant inside this element's own shadow root, rather than a named
+ * container on the `ia-image-viewer` ancestor — Safari doesn't reliably
+ * resolve a named container query across a shadow-tree boundary, so querying
+ * across from here left the wide layout permanently off in Safari.
  */
 @customElement('ia-imgview-controls')
 export class IAImageViewerControls extends LitElement {
@@ -31,21 +33,25 @@ export class IAImageViewerControls extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <button
-        class="nav-btn prev"
-        aria-label=${msg('Previous image')}
-        @click=${this.onPrevious}
-      >
-        &#8249;
-      </button>
-      <div class="counter">${this.currentIndex + 1} / ${this.totalImages}</div>
-      <button
-        class="nav-btn next"
-        aria-label=${msg('Next image')}
-        @click=${this.onNext}
-      >
-        &#8250;
-      </button>
+      <div class="controls">
+        <button
+          class="nav-btn prev"
+          aria-label=${msg('Previous image')}
+          @click=${this.onPrevious}
+        >
+          &#8249;
+        </button>
+        <div class="counter">
+          ${this.currentIndex + 1} / ${this.totalImages}
+        </div>
+        <button
+          class="nav-btn next"
+          aria-label=${msg('Next image')}
+          @click=${this.onNext}
+        >
+          &#8250;
+        </button>
+      </div>
     `;
   }
 
@@ -67,11 +73,17 @@ export class IAImageViewerControls extends LitElement {
             var(--true-white)
           );
 
+          display: block;
+          width: 100%;
+        }
+
+        .controls {
           display: flex;
           align-items: center;
           justify-content: space-between;
           width: 100%;
           margin-top: 0.8rem;
+          container-type: inline-size;
         }
 
         .nav-btn {
@@ -111,8 +123,8 @@ export class IAImageViewerControls extends LitElement {
           }
         }
 
-        @container image-viewer (min-width: 890px) {
-          :host {
+        @container (min-width: 890px) {
+          .controls {
             position: static;
             width: auto;
             margin-top: 0;
