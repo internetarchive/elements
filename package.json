@@ -33,9 +33,11 @@
     "ghpages:build": "wireit"
   },
   "dependencies": {
+    "@internetarchive/analytics-manager": "^0.1.5",
     "@internetarchive/ia-clearable-text-input": "^1.1.1",
     "@internetarchive/ia-dropdown": "^2.2.0",
     "@internetarchive/lazy-loader-service": "^0.2.0",
+    "@internetarchive/modal-manager": "^2.0.6",
     "@internetarchive/promised-singleton": "0.3.0-alpha.1",
     "@lit/localize": "^0.12.2",
     "@types/applepayjs": "^14.0.9",
