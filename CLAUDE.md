@@ -4,7 +4,7 @@ A web component library from the Internet Archive, published as
 `@internetarchive/elements`. See [README.md](README.md) for installation, usage,
 adding a component, styling, and the component inventory.
 
-Node 24+ and pnpm 11+. Use pnpm, never npm or yarn.
+Node 24+ and pnpm 12+. Use pnpm, never npm or yarn.
 
 ```zsh
 pnpm install
