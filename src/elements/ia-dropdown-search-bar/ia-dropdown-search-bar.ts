@@ -7,7 +7,8 @@ import {
   PropertyValues,
   TemplateResult,
 } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-input';
 import type { IaDropdown, optionInterface } from '@internetarchive/ia-dropdown';
 import type { SearchCategory, SearchRequestedDetail } from './models';
