@@ -25,11 +25,17 @@ export default defineConfig({
       }),
     },
     coverage: {
-      exclude: ['dist/**/*'],
+      // Stories are demo scaffolding, not shipped code. A demo test loads one
+      // to drive the element it wraps, which would otherwise pull the story
+      // into the report and skew the numbers for the element itself.
+      exclude: ['dist/**/*', '**/*-story.ts'],
       reporter: ['lcov', 'text-summary', 'html'],
       enabled: true,
     },
     watch: false,
-    exclude: ['node_modules', 'dist'],
+    // Recursive patterns, so a build or an install nested anywhere under the
+    // repo is skipped and not just the top-level one. `.claude` holds the
+    // worktrees, whose tests belong to whatever branch is checked out there.
+    exclude: ['**/node_modules/**', '**/dist/**', '.claude/**'],
   },
 });

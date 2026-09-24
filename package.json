@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/elements",
-  "version": "0.3.0",
+  "version": "1.1.1",
   "description": "A web component library from the Internet Archive.",
   "license": "AGPL-3.0-only",
   "types": "./dist/src/elements/index.d.ts",
@@ -25,6 +25,7 @@
     "build": "wireit",
     "clean": "wireit",
     "lint": "wireit",
+    "typecheck": "wireit",
     "format": "wireit",
     "circular": "wireit",
     "prepare": "wireit",
@@ -35,6 +36,7 @@
     "@internetarchive/ia-clearable-text-input": "^1.1.1",
     "@internetarchive/ia-dropdown": "^2.2.0",
     "@lit/localize": "^0.12.2",
+    "dayjs": "^1.11.23",
     "lit": "^2.8.0 || ^3.3.2",
     "magic-snowflakes": "^7.0.2",
     "tslib": "^2.8.1"
@@ -114,6 +116,15 @@
       "dependencies": [
         "build"
       ]
+    },
+    "typecheck": {
+      "command": "tsc --noEmit",
+      "files": [
+        "src/**/*.ts",
+        "demo/**/*.ts",
+        "tsconfig.json"
+      ],
+      "output": []
     },
     "test": {
       "command": "vitest",
