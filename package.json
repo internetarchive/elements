@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/elements",
-  "version": "0.4.2-webdev-9107.0",
+  "version": "1.1.1",
   "description": "A web component library from the Internet Archive.",
   "license": "AGPL-3.0-only",
   "types": "./dist/src/elements/index.d.ts",
@@ -39,6 +39,7 @@
     "@internetarchive/metadata-service": "^1.0.4",
     "@internetarchive/recaptcha-manager": "^1.0.0",
     "@lit/localize": "^0.12.2",
+    "dayjs": "^1.11.23",
     "dompurify": "^3.2.5",
     "lit": "^2.8.0 || ^3.3.2",
     "magic-snowflakes": "^7.0.2",

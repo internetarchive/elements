@@ -38,10 +38,10 @@ curl -s https://registry.npmjs.org/@internetarchive%2Felements/<version> \
 
 That is the entire mechanism, and it is the part most easily gotten wrong:
 
-| How the release is published | What the workflow runs | dist-tag |
-| --- | --- | --- |
-| Set as a pre-release | `npm publish --provenance --tag alpha` | `alpha` |
-| Set as the latest release | `npm publish --provenance` | `latest` |
+| How the release is published | What the workflow runs                 | dist-tag |
+| ---------------------------- | -------------------------------------- | -------- |
+| Set as a pre-release         | `npm publish --provenance --tag alpha` | `alpha`  |
+| Set as the latest release    | `npm publish --provenance`             | `latest` |
 
 `latest` is what every unpinned or caret install resolves to. Publishing a
 release without the prerelease flag set puts that code in front of every
@@ -121,6 +121,43 @@ by hand after this.
   an npm version back to its source commit. `0.2.12` is the cautionary case: it
   sits on npm with no tag, no GitHub release, and no provenance, because it was
   published by hand. There is no way to attach any of those to it after the fact.
+
+## Migrating a package in
+
+Port from the version consumers actually install, never from whatever a local
+clone of the source repo happens to be on. Those clones are reference copies
+nobody pulls, so a stale one is the default. Ask the registry instead:
+
+```zsh
+npm view @internetarchive/<pkg> version                        # what `latest` is
+npm view @internetarchive/collection-browser dependencies      # what a consumer pins
+```
+
+Check the consumers too, not just `latest` — one of them may pin something newer.
+Then work from the source for that exact version: either the matching tag in a
+freshly fetched clone (`git fetch --tags`), or, if the clone's tags lag the
+registry, the published tarball (`npm pack @internetarchive/<pkg>@<version>`),
+which needs no clone at all.
+
+Re-derive the element from the upstream source and re-apply the elements-specific
+changes on top (tag and class rename, `customElement` from `@src/util/custom-element`,
+shared types into `models.ts`, elements' own `ia-status-indicator` in place of a
+standalone one). Hand-patching an older copy forward loses things quietly. Where
+upstream has already fixed a bug you also hit, take upstream's fix: that's what the
+consumers are tested against.
+
+**Record the source version in the ticket**, e.g. "ported from
+`histogram-date-range@1.4.2`". A reviewer can check a number that's written down
+and can't check one that isn't.
+
+Then prove it before calling the migration done: publish a prerelease, install it
+in the real consumer, and typecheck there. That is what catches a missing export.
+
+WEBDEV-9121 is the cautionary case. It ported `histogram-date-range` 1.3.1 from a
+stale checkout while collection-browser depended on `^1.4.2`, dropping five upstream
+commits including two props the consumer uses. It also re-fixed a bug upstream had
+already fixed, and added a workaround upstream had already made unnecessary. None of
+it surfaced until the alpha was installed in collection-browser.
 
 ## Worktrees
 
