@@ -1,7 +1,7 @@
 import { html, css } from 'lit';
 import Icon from './assets/img/icon';
 import icons from './assets/img/icons';
-import { customElement } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 @customElement('ia-topnav-icon-hamburger')
 export class HamBurger extends Icon {

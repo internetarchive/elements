@@ -1,6 +1,7 @@
 import { html } from 'lit';
 import DropdownMenu from './dropdown-menu';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 @customElement('ia-topnav-user-menu')
 export default class UserMenu extends DropdownMenu {

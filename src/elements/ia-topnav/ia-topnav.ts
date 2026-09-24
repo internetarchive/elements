@@ -6,7 +6,8 @@ import {
   html,
   nothing,
 } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
+import { property, query, state } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import { buildTopNavMenus, defaultTopNavConfig } from './data/menus';
 import './ia-topnav-desktop-subnav';

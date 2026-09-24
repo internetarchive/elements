@@ -1,5 +1,6 @@
 import { CSSResultGroup, LitElement, PropertyValues, css, html } from 'lit';
-import { customElement, property, queryAll } from 'lit/decorators.js';
+import { property, queryAll } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import { defaultTopNavConfig } from './data/menus';
 import formatUrl from './lib/format-url';

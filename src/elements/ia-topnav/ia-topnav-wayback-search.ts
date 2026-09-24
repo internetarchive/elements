@@ -1,5 +1,6 @@
 import { css, CSSResultGroup, LitElement, html } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import searchIcon from './assets/img/icon-search';
 import logo from './assets/img/wayback-logo';

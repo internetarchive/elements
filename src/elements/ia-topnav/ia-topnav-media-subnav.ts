@@ -6,7 +6,8 @@ import './ia-topnav-wayback-slider';
 import './ia-topnav-more-slider';
 import toSentenceCase from './lib/t-sentence-case';
 import formatUrl from './lib/format-url';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import {
   IATopNavConfig,
   IATopNavLink,

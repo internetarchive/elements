@@ -1,7 +1,8 @@
 import { CSSResultGroup, LitElement, PropertyValues, css, html } from 'lit';
 import './ia-topnav-media-subnav';
 import KeyboardNavigation from './lib/keyboard-navigation';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import {
   IATopNavConfig,
   IATopNavMenuConfig,

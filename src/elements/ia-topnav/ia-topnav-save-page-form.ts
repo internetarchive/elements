@@ -1,6 +1,7 @@
 import { CSSResultGroup, css, html } from 'lit';
 import TrackedElement from './tracked-element';
-import { customElement, property, state } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';

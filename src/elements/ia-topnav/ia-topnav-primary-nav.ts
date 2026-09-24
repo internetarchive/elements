@@ -7,7 +7,8 @@ import type { LoginButton } from './ia-topnav-login-button';
 import './ia-topnav-media-menu';
 import logoWordmarkStacked from './assets/img/wordmark-stacked';
 import formatUrl from './lib/format-url';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import {
   IATopNavConfig,
   IATopNavSecondIdentitySlotMode,

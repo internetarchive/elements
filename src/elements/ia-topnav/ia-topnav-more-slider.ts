@@ -1,5 +1,6 @@
 import { CSSResultGroup, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import TrackedElement from './tracked-element';
 import toSentenceCase from './lib/t-sentence-case';
