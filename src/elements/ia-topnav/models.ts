@@ -1,0 +1,70 @@
+/**
+ * The pixel width at which ia-topnav switches from mobile to desktop layout.
+ * Desktop styles apply at `min-width: TOPNAV_MOBILE_BREAKPOINT px`.
+ * Mobile styles apply at `max-width: (TOPNAV_MOBILE_BREAKPOINT - 1) px`.
+ *
+ * Exported so that host applications can derive their own media queries from
+ * this value rather than hard-coding it independently.
+ */
+export const TOPNAV_MOBILE_BREAKPOINT = 890;
+
+export interface IATopNavConfig {
+  /**
+   * Google Analytics event category
+   */
+  eventCategory?: string;
+
+  /**
+   * Copy to display for number of pages archived at the top of the Wayback search form
+   *
+   * ie. "425 billion"
+   */
+  waybackPagesArchived?: string;
+
+  /**
+   * Map from dropdown item ids to any callout text that should be applied beside them
+   */
+  callouts?: Record<string, string>;
+}
+
+export interface IATopNavLink {
+  title: string;
+
+  url?: string;
+
+  class?: string;
+
+  icon?: string;
+
+  analyticsEvent?: string;
+
+  external?: boolean;
+}
+
+export interface IATopNavMediaMenu {
+  heading: string;
+  iconLinks: IATopNavLink[];
+  featuredLinks: IATopNavLink[];
+  links: IATopNavLink[];
+  mobileAppsLinks: IATopNavLink[];
+  browserExtensionsLinks: IATopNavLink[];
+  archiveItLinks: IATopNavLink[];
+}
+
+export interface IATopNavMenuConfig {
+  audio: IATopNavMediaMenu;
+  images: IATopNavMediaMenu;
+  more: IATopNavMediaMenu;
+  signedOut: IATopNavLink[];
+  software: IATopNavMediaMenu;
+  texts: IATopNavMediaMenu;
+  user: IATopNavLink[];
+  userAdmin: IATopNavLink[];
+  userAdminFlags: IATopNavLink[];
+  userAdminBiblio: IATopNavLink[];
+  userAdminUploader: IATopNavLink[];
+  video: IATopNavMediaMenu;
+  web: IATopNavMediaMenu;
+}
+
+export type IATopNavSecondIdentitySlotMode = 'allow' | '';
