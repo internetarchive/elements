@@ -7,7 +7,8 @@ import {
   type PropertyValues,
   type TemplateResult,
 } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
+import { property, query, state } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import { classMap } from 'lit/directives/class-map.js';
 import { keyed } from 'lit/directives/keyed.js';
 import { msg, str } from '@lit/localize';
@@ -466,13 +467,6 @@ export class IAImageViewer extends LitElement {
             --image-viewer-glow-color,
             rgba(255, 255, 255, 0.25)
           );
-          /*
-           * The breakpoint the controls query against. Named so the query in
-           * ia-imgview-controls resolves to this host rather than to whatever
-           * container the consumer happens to have further up.
-           */
-          container: image-viewer / inline-size;
-
           /*
            * Size and placement are the host's business, set with ordinary CSS
            * on the element. These are only defaults for a host that sets

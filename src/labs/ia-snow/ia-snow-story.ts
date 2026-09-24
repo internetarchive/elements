@@ -1,5 +1,6 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
-import { customElement, query, state } from 'lit/decorators.js';
+import { query, state } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import './ia-snow';
 import type { SnowflakesParams } from 'magic-snowflakes';

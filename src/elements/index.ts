@@ -7,6 +7,8 @@ export * from './ia-dropdown-search-bar/ia-dropdown-search-bar';
 export * from './ia-expandable-search-bar/ia-expandable-search-bar';
 export * from './ia-expandable-search-bar/ia-quick-search';
 export * from './ia-expandable-search-bar/models';
+export * from './ia-histogram-date-range/ia-histogram-date-range';
+export * from './ia-histogram-date-range/models';
 export * from './ia-image-viewer/ia-image-viewer';
 export * from './ia-item-navigator/ia-item-navigator';
 export * from './ia-item-navigator/menus/ia-itemnav-viewable-files-panel';
