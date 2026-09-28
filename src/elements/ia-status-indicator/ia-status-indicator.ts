@@ -457,6 +457,12 @@ export class IAStatusIndicator extends LitElement {
           background-color: var(--loading-icon-color--);
         }
 
+        /* Block, so the svg isn't padded out by the line box it would sit in */
+        .success-indicator,
+        .error-indicator {
+          display: block;
+        }
+
         .success-icon {
           fill: var(--success-icon-color--);
         }

@@ -420,6 +420,20 @@ describe('IA Status Indicator', () => {
     });
   });
 
+  (['ready', 'loading', 'success', 'error'] as const).forEach((mode) => {
+    test(`keeps a square footprint in ${mode} mode`, async () => {
+      const el = await fixture<IAStatusIndicator>(
+        html`<ia-status-indicator
+          mode=${mode}
+          style="--ia-theme-icon-width: 20px"
+        ></ia-status-indicator>`,
+      );
+
+      const { width, height } = el.getBoundingClientRect();
+      expect({ width, height }).to.eql({ width: 20, height: 20 });
+    });
+  });
+
   describe('fading between modes', () => {
     /** Long enough for the fade to be well under way but nowhere near done */
     const MID_FADE_MS = 60;
