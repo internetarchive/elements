@@ -424,11 +424,14 @@ describe('IA Status Indicator', () => {
     /** Long enough for the fade to be well under way but nowhere near done */
     const MID_FADE_MS = 60;
 
+    /** The layers drawing something. The rest sit empty until they're needed. */
     const layers = (el: IAStatusIndicator) =>
-      Array.from(el.shadowRoot?.querySelectorAll('.layer') ?? []).map((l) => ({
-        outgoing: l.classList.contains('outgoing'),
-        opacity: Number(getComputedStyle(l).opacity),
-      }));
+      Array.from(el.shadowRoot?.querySelectorAll('.layer') ?? [])
+        .filter((l) => l.childElementCount > 0)
+        .map((l) => ({
+          outgoing: l.classList.contains('outgoing'),
+          opacity: Number(getComputedStyle(l).opacity),
+        }));
 
     async function mounted(mode: string): Promise<IAStatusIndicator> {
       const el = await fixture<IAStatusIndicator>(
@@ -493,7 +496,7 @@ describe('IA Status Indicator', () => {
       // still completes, so the element is alive and recovers when set to a
       // real mode.
       expect(el.shadowRoot?.querySelector('.layers')).to.exist;
-      expect(el.shadowRoot?.querySelector('.layer')).to.not.exist;
+      expect(el.shadowRoot?.querySelector('.layer.active')).to.not.exist;
       expect(el.shadowRoot?.querySelector('svg')).to.not.exist;
 
       el.mode = 'success';
@@ -510,8 +513,8 @@ describe('IA Status Indicator', () => {
       el.mode = 'loading';
       await el.updateComplete;
 
-      // going back mid-fade must not reorder the keyed layers, which would
-      // cancel both transitions and snap them to their end values
+      // going back mid-fade turns both fades around from where they got to,
+      // rather than snapping them to their end values
       const opacities = layers(el).map((l) => l.opacity);
       expect(
         Math.max(...opacities),
@@ -534,6 +537,30 @@ describe('IA Status Indicator', () => {
       // the timer that would have cleared it is gone, and nothing reschedules
       expect(layers(el)).to.have.lengthOf(1);
       expect(el.shadowRoot?.querySelectorAll('svg title')).to.have.lengthOf(1);
+    });
+
+    test('switching to a third mode mid-fade does not blink', async () => {
+      const el = await mounted('loading');
+
+      el.mode = 'success';
+      await el.updateComplete;
+      await new Promise((resolve) => setTimeout(resolve, MID_FADE_MS));
+      const successLayer = el.shadowRoot?.querySelector('.success-indicator')
+        ?.parentElement as HTMLElement;
+      const before = Number(getComputedStyle(successLayer).opacity);
+
+      el.mode = 'error';
+      await el.updateComplete;
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      // the half faded in layer fades back out from where it got to, rather
+      // than snapping to nothing
+      const after = Number(getComputedStyle(successLayer).opacity);
+      expect(before).to.be.within(0.05, 0.95);
+      expect(after, `success went from ${before} to ${after}`).to.be.closeTo(
+        before,
+        0.2,
+      );
     });
 
     test('keeps only the current mode when set back and forth quickly', async () => {

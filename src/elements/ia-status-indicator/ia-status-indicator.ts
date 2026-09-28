@@ -11,7 +11,6 @@ import {
   TemplateResult,
 } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { repeat } from 'lit/directives/repeat.js';
 import { customElement } from '@src/util/custom-element';
 import { msg } from '@lit/localize';
 
@@ -32,7 +31,7 @@ import webIcon from './icons/web.svg';
 /** How long a mode change takes to fade. Drives both the CSS and the timer. */
 const FADE_DURATION_MS = 250;
 
-/** Fixed running order for the layers. See the note in render(). */
+/** One layer per mode, always rendered in this order. See render(). */
 const LAYER_ORDER: LoadingStatus[] = ['ready', 'loading', 'success', 'error'];
 
 export type LoadingStatus = 'ready' | 'loading' | 'success' | 'error';
@@ -99,62 +98,59 @@ export class IAStatusIndicator extends LitElement {
   /* Whether a consumer has slotted their own center icon */
   @state() private hasSlottedIcon = false;
 
-  /* The mode being faded out, if a change is currently in flight */
-  @state() private _outgoingMode?: LoadingStatus;
+  /* The modes still fading out after a change. More than one when changes overlap. */
+  @state() private _outgoingModes: ReadonlySet<LoadingStatus> = new Set();
 
   /* Set once the first render is done, so the element doesn't fade in on mount */
   @state() private _canAnimate = false;
 
-  private _fadeTimer?: ReturnType<typeof setTimeout>;
+  /* One per outgoing mode, clearing it once its own fade is over */
+  private _fadeTimers = new Map<LoadingStatus, ReturnType<typeof setTimeout>>();
 
   render(): TemplateResult {
-    // Always in the same running order, so reversing a fade part way through
-    // is an insert and a remove rather than a reorder. Reordering keyed nodes
-    // moves them, which cancels the transitions they're in the middle of.
-    const modes = LAYER_ORDER.filter(
-      (mode) => mode === this.mode || mode === this._outgoingMode,
-    );
-
-    // Keyed on the mode so lit gives each one its own element. Reusing a
-    // single element across modes would swap the artwork inside a node that
-    // never leaves full opacity, and nothing would fade.
+    // Every mode has its own layer element that never moves, whatever order
+    // the changes come in. Moving an element cancels the transition it's in
+    // the middle of, so a layer partway through a fade would snap to its end
+    // value. A layer only has content while it's on screen.
     return html`
       <div class="layers ${this._canAnimate ? 'animate' : ''}">
-        ${repeat(
-          modes,
-          (mode) => mode,
-          (mode) => this.layerTemplate(mode, mode === this.mode),
-        )}
+        ${LAYER_ORDER.map((mode) => this.layerTemplate(mode))}
       </div>
     `;
   }
 
   /**
-   * One mode's artwork, stacked in the same cell as the other layer so that a
-   * mode change fades between them. At rest only the active layer exists; the
-   * one being faded out is dropped as soon as the transition is over, so the
+   * One mode's artwork, stacked in the same cell as the other layers so that
+   * a mode change fades between them. At rest only the active layer has
+   * content; an outgoing one is emptied as soon as its fade is over, so the
    * shadow tree holds a single mode's markup and a single `<title>`.
    */
-  private layerTemplate(
-    mode: LoadingStatus,
-    isActive: boolean,
-  ): TemplateResult {
+  private layerTemplate(mode: LoadingStatus): TemplateResult {
     // `mode` is a public string attribute, so a consumer can hand us anything.
-    // An unrecognised one draws nothing, the same as it always has.
-    const content =
-      {
-        ready: () => this.placeholderTemplate,
-        loading: () => this.loadingIndicatorTemplate,
-        success: () => this.successIndicatorTemplate,
-        error: () => this.errorIndicatorTemplate,
-      }[mode]?.() ?? nothing;
+    // An unrecognised one matches no layer and draws nothing.
+    const isActive = mode === this.mode;
+    const isOutgoing = !isActive && this._outgoingModes.has(mode);
+    const state = isActive ? 'active' : isOutgoing ? 'outgoing' : '';
 
     return html`<div
-      class="layer ${isActive ? 'active' : 'outgoing'}"
+      class="layer ${state}"
       aria-hidden=${isActive ? nothing : 'true'}
     >
-      ${content}
+      ${isActive || isOutgoing ? this.modeTemplate(mode) : nothing}
     </div>`;
+  }
+
+  private modeTemplate(mode: LoadingStatus): TemplateResult {
+    switch (mode) {
+      case 'ready':
+        return this.placeholderTemplate;
+      case 'loading':
+        return this.loadingIndicatorTemplate;
+      case 'success':
+        return this.successIndicatorTemplate;
+      case 'error':
+        return this.errorIndicatorTemplate;
+    }
   }
 
   willUpdate(changedProps: PropertyValues): void {
@@ -164,11 +160,26 @@ export class IAStatusIndicator extends LitElement {
     const previous = changedProps.get('mode') as LoadingStatus | undefined;
     if (previous === undefined || previous === this.mode) return;
 
-    this._outgoingMode = previous;
-    clearTimeout(this._fadeTimer);
-    this._fadeTimer = setTimeout(() => {
-      this._outgoingMode = undefined;
-    }, FADE_DURATION_MS);
+    // The mode coming back in may still be fading out from an earlier change.
+    // Its layer just turns around, so it's no longer outgoing.
+    this.stopFadingOut(this.mode);
+
+    this._outgoingModes = new Set(this._outgoingModes).add(previous);
+    clearTimeout(this._fadeTimers.get(previous));
+    this._fadeTimers.set(
+      previous,
+      setTimeout(() => this.stopFadingOut(previous), FADE_DURATION_MS),
+    );
+  }
+
+  private stopFadingOut(mode: LoadingStatus): void {
+    clearTimeout(this._fadeTimers.get(mode));
+    this._fadeTimers.delete(mode);
+    if (!this._outgoingModes.has(mode)) return;
+
+    const outgoing = new Set(this._outgoingModes);
+    outgoing.delete(mode);
+    this._outgoingModes = outgoing;
   }
 
   firstUpdated(): void {
@@ -184,10 +195,11 @@ export class IAStatusIndicator extends LitElement {
   }
 
   disconnectedCallback(): void {
-    clearTimeout(this._fadeTimer);
-    // Nothing reschedules this timer, so leaving the mode set would strand the
-    // outgoing layer on reconnect.
-    this._outgoingMode = undefined;
+    this._fadeTimers.forEach((timer) => clearTimeout(timer));
+    this._fadeTimers.clear();
+    // Nothing reschedules these timers, so leaving the modes set would strand
+    // the outgoing layers on reconnect.
+    this._outgoingModes = new Set();
     super.disconnectedCallback();
   }
 
@@ -393,22 +405,6 @@ export class IAStatusIndicator extends LitElement {
 
         .layer.active {
           opacity: 1;
-        }
-
-        /*
-         * A freshly inserted element has no previous value to transition from,
-         * so without this the incoming layer would appear at full opacity
-         * while only the outgoing one faded. Browsers without @starting-style
-         * skip the fade in rather than breaking.
-         */
-        @starting-style {
-          .animate .layer.active {
-            opacity: 0;
-          }
-        }
-
-        .layer.outgoing {
-          opacity: 0;
         }
 
         /* A ring on its way out would otherwise keep animating unseen */
