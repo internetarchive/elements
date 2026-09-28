@@ -468,13 +468,6 @@ export class IAImageViewer extends LitElement {
             rgba(255, 255, 255, 0.25)
           );
           /*
-           * The breakpoint the controls query against. Named so the query in
-           * ia-imgview-controls resolves to this host rather than to whatever
-           * container the consumer happens to have further up.
-           */
-          container: image-viewer / inline-size;
-
-          /*
            * Size and placement are the host's business, set with ordinary CSS
            * on the element. These are only defaults for a host that sets
            * neither; a rule in the outer tree beats them.
