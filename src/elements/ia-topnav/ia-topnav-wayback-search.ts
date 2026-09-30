@@ -7,6 +7,7 @@ import logo from './assets/img/wayback-logo';
 import { TOPNAV_MOBILE_BREAKPOINT } from './models';
 import themeStyles from '@src/themes/theme-styles';
 import { srOnlyStyles } from '@src/themes/sr-only-styles';
+import { msg } from '@lit/localize';
 
 /**
  * The Wayback Machine search form shown inside the topnav's wayback slider.
@@ -31,30 +32,34 @@ export class IATopNavWaybackSearch extends LitElement {
     return html`
       <form method="post" @submit=${this.handleSubmit}>
         <p>
-          Search the history of more than ${this.waybackPagesArchived}
-          <a
-            @click=${this.emitWaybackMachineStatsLinkClicked}
-            data-event-click-tracking="TopNav|WaybackMachineStatsLink"
-            href="https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures/"
-            >web pages</a
-          >
-          on the Internet.
+          ${msg(
+            html`Search the history of more than ${this.waybackPagesArchived}
+              <a
+                @click=${this.emitWaybackMachineStatsLinkClicked}
+                data-event-click-tracking="TopNav|WaybackMachineStatsLink"
+                href="https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures/"
+                >web pages</a
+              >
+              on the Internet.`,
+          )}
         </p>
         <fieldset>
           <a
             @click=${this.emitWaybackMachineLogoLinkClicked}
             data-event-click-tracking="TopNav|WaybackMachineLogoLink"
-            aria-label="Visit the Wayback Machine"
+            aria-label=${msg('Visit the Wayback Machine')}
             href="https://web.archive.org"
             >${logo}</a
           >
           <div class="search-field">
-            <label for="url" class="sr-only">Search the Wayback Machine</label>
+            <label for="url" class="sr-only">
+              ${msg('Search the Wayback Machine')}
+            </label>
             <input
               type="text"
               name="url"
               id="url"
-              placeholder="Enter URL or keywords"
+              placeholder=${msg('Enter URL or keywords')}
             />
             ${searchIcon}
           </div>

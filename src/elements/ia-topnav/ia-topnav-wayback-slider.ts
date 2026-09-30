@@ -15,6 +15,7 @@ import {
 import { defaultTopNavConfig } from './data/menus';
 import { subnavListCSS } from './subnav-list-styles';
 import themeStyles from '@src/themes/theme-styles';
+import { msg } from '@lit/localize';
 
 @customElement('ia-topnav-wayback-slider')
 export class WaybackSlider extends TrackedElement {
@@ -101,17 +102,17 @@ export class WaybackSlider extends TrackedElement {
         ></ia-topnav-wayback-search>
         <div class="link-lists">
           <div>
-            <h4>Mobile Apps</h4>
+            <h4>${msg('Mobile Apps')}</h4>
             <ul class="mobile-apps">
               ${this.mobileAppsItems}
             </ul>
-            <h4>Browser Extensions</h4>
+            <h4>${msg('Browser Extensions')}</h4>
             <ul class="browser-extensions">
               ${this.browserExtensionsItems}
             </ul>
           </div>
           <div>
-            <h4>Archive-It Subscription</h4>
+            <h4>${msg('Archive-It Subscription')}</h4>
             <ul class="archive-it">
               ${this.archiveItItems}
             </ul>

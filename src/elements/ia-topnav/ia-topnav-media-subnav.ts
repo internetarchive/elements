@@ -17,6 +17,7 @@ import {
 import { defaultTopNavConfig } from './data/menus';
 import { subnavListCSS } from './subnav-list-styles';
 import themeStyles from '@src/themes/theme-styles';
+import { msg } from '@lit/localize';
 
 @customElement('ia-topnav-media-subnav')
 export class MediaSubnav extends TrackedElement {
@@ -279,13 +280,13 @@ export class MediaSubnav extends TrackedElement {
       <h3>${this.links.heading}</h3>
       <div class="icon-links">${this.iconLinks}</div>
       <div class="links featured">
-        <h4>Featured</h4>
+        <h4>${msg('Featured')}</h4>
         <ul>
           ${this.renderLinks(this.links.featuredLinks)}
         </ul>
       </div>
       <div class="links top">
-        <h4>Top</h4>
+        <h4>${msg('Top')}</h4>
         <ul>
           ${this.renderLinks(this.links.links)}
         </ul>

@@ -16,6 +16,7 @@ import {
 } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
+import { msg, str } from '@lit/localize';
 
 @customElement('ia-topnav-primary-nav')
 export class PrimaryNav extends TrackedElement {
@@ -508,7 +509,9 @@ export class PrimaryNav extends TrackedElement {
   get userIcon() {
     const userMenuClass = this.openMenu === 'user' ? 'active' : '';
     const userMenuToolTip =
-      this.openMenu === 'user' ? 'Close user menu' : 'Expand user menu';
+      this.openMenu === 'user'
+        ? msg('Close user menu')
+        : msg('Expand user menu');
 
     return html`
       <button
@@ -519,7 +522,7 @@ export class PrimaryNav extends TrackedElement {
       >
         <img
           src="${this.mediaBaseHost}${this.userProfileImagePath}"
-          alt="Profile picture for ${this.screenName}"
+          alt=${msg(str`Profile picture for ${this.screenName}`)}
         />
         <span class="screen-name" dir="auto">${this.screenName}</span>
       </button>
@@ -583,7 +586,7 @@ export class PrimaryNav extends TrackedElement {
         )}
       >
         ${icons.donateUnpadded}
-        <span class="sr-only">"Donate to the archive"</span>
+        <span class="sr-only">${msg('Donate to the archive')}</span>
       </a>
     `;
   }
@@ -595,7 +598,7 @@ export class PrimaryNav extends TrackedElement {
       @focus=${this.toggleMediaMenu}
     >
       ${icons.upload}
-      <span>Upload</span>
+      <span>${msg('Upload')}</span>
     </a>`;
   }
 
@@ -626,7 +629,7 @@ export class PrimaryNav extends TrackedElement {
           class="hamburger"
           @click="${this.toggleMediaMenu}"
           data-event-click-tracking="${this.config?.eventCategory}|NavHamburger"
-          title="Open main menu"
+          title=${msg('Open main menu')}
         >
           <ia-topnav-icon-hamburger
             ?active=${this.openMenu === 'media'}
@@ -638,7 +641,7 @@ export class PrimaryNav extends TrackedElement {
             .href=${formatUrl('/' as string & Location, this.baseHost)}
             @click=${this.trackClick}
             data-event-click-tracking="${this.config?.eventCategory}|NavHome"
-            title="Go home"
+            title=${msg('Go home')}
             class="link-home"
             >${icons.iaLogo}${logoWordmarkStacked}</a
           >

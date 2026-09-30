@@ -7,6 +7,7 @@ import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
+import { msg, str } from '@lit/localize';
 
 @customElement('ia-topnav-media-button')
 export class MediaButton extends TrackedElement {
@@ -223,8 +224,16 @@ export class MediaButton extends TrackedElement {
     return this.selected ? 'selected' : '';
   }
 
-  get tooltipPrefix() {
-    return this.selected ? 'Collapse' : 'Expand';
+  /**
+   * The button's tooltip.
+   *
+   * Built as a whole phrase per state, because word order around the
+   * mediatype differs by language.
+   */
+  get tooltip() {
+    return this.selected
+      ? msg(str`Collapse ${this.mediatype} menu`)
+      : msg(str`Expand ${this.mediatype} menu`);
   }
 
   get iconClass() {
@@ -251,7 +260,7 @@ export class MediaButton extends TrackedElement {
         class="menu-item ${this.mediatype} ${this.buttonClass}"
         @click=${this.followable ? this.trackClick : this.onClick}
         data-event-click-tracking="${this.analyticsEvent}"
-        title="${this.tooltipPrefix} ${this.mediatype} menu"
+        title=${this.tooltip}
       >
         ${this.menuItem}
       </a>

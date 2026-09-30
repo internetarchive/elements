@@ -8,6 +8,7 @@ import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
+import { msg } from '@lit/localize';
 
 @customElement('ia-topnav-login-button')
 export class LoginButton extends TrackedElement {
@@ -161,15 +162,15 @@ export class LoginButton extends TrackedElement {
           class="logged-out-menu ${this.avatarClass}"
           @click=${this.toggleDropdown}
           data-event-click-tracking="${this.analyticsEvent}"
-          aria-label="Toggle login menu"
+          aria-label=${msg('Toggle login menu')}
           aria-expanded="${makeBooleanString(this.menuOpened)}"
         >
           ${icons.user}
         </button>
         <span>
-          <a href="${this.signupPath}">Sign up</a>
+          <a href="${this.signupPath}">${msg('Sign up')}</a>
           |
-          <a href="${this.loginPath}">Log in</a>
+          <a href="${this.loginPath}">${msg('Log in')}</a>
         </span>
       </div>
     `;
