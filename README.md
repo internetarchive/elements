@@ -305,7 +305,10 @@ For any styles that you won't be exposing to consumers via the story, you can pr
 
 ### Localization
 
-Wrap user-facing text in `msg()` from `@lit/localize`, inside `render()` or a getter it calls. The first argument has to be a literal: a string, `` str`...${x}` `` when it has an expression, or `` html`...` `` when it has markup. A `msg()` that runs at module scope or in a static field resolves once at import, so it never changes language.
+Wrap user-facing text in `msg()` from `@lit/localize`, inside `render()` or a getter it calls. The first argument has to be a literal: a string, `` str`...${x}` `` when it has an expression, or `` html`...` `` when it has markup.
+
+- Decorate any element that renders a `msg()` with `@localized()`, so it re-renders when the app switches language. That includes one rendering a getter that calls `msg()`, like `TranscriptEntryConfig.displayText`.
+- Don't resolve `msg()` ahead of render. At module scope or in a static field it's fixed at import, and as a property default it's fixed when the element is created. For a text property with a default, leave the property unset and fall back when rendering: `aria-label=${this.label ?? msg('Search')}`.
 
 This package never calls `configureLocalization`. `@lit/localize` can only be configured once per page, so the app owns that call and loads one bundle holding its own messages and ours. We publish our translations for the app to merge in:
 
