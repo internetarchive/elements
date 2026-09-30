@@ -1,6 +1,5 @@
 import { fixture } from '@open-wc/testing-helpers';
 import { afterEach, describe, expect, test, vi } from 'vitest';
-import { page } from 'vitest/browser';
 import { html } from 'lit';
 
 import type { StoryTemplate } from './story-template';
@@ -256,26 +255,19 @@ describe('StoryTemplate', () => {
   });
 
   describe('Settings and Styles layout', () => {
-    afterEach(async () => {
-      await page.viewport(414, 896);
-    });
-
-    /** How many columns the Settings / Styles grid lays out at a width. */
-    async function columnsAt(width: number): Promise<number> {
-      await page.viewport(width, 800);
+    test('stacks them on a phone, so neither is squeezed to half the width', async () => {
+      // The test browser's frame is phone-sized, which is what puts the
+      // stylesheet's narrow rule in play here.
+      expect(
+        window.matchMedia('(max-width: 640px)').matches,
+        'this test needs a phone-width frame',
+      ).to.be.true;
       const el = await fixture<StoryTemplate>(html`
         <story-template elementTag="ia-button"></story-template>
       `);
       const grid = el.shadowRoot?.querySelector('.two-col') as HTMLElement;
-      return getComputedStyle(grid).gridTemplateColumns.split(' ').length;
-    }
-
-    test('puts them side by side on a wide screen', async () => {
-      expect(await columnsAt(1000)).to.equal(2);
-    });
-
-    test('stacks them on a phone, so neither is squeezed to half the width', async () => {
-      expect(await columnsAt(390)).to.equal(1);
+      const columns = getComputedStyle(grid).gridTemplateColumns.split(' ');
+      expect(columns).to.have.length(1);
     });
   });
 

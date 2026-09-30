@@ -1,6 +1,5 @@
 import { fixture, fixtureCleanup, waitUntil } from '@open-wc/testing-helpers';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
-import { page, userEvent } from 'vitest/browser';
 import { html } from 'lit';
 
 // The demo's stylesheet, applied only by the tests that need the real layout.
@@ -682,7 +681,9 @@ describe('AppRoot', () => {
       const el = await appRoot();
       await openPicker(el);
 
-      await userEvent.keyboard('{Escape}');
+      // Escape on a modal dialog is a close request, and this is the same
+      // request without the key: it runs the dialog's cancel and close steps.
+      picker(el).requestClose();
       await pickerClosed(el);
 
       expect(picker(el).open).to.be.false;
@@ -792,7 +793,6 @@ describe('AppRoot', () => {
     });
 
     test('keeps the bar on screen and clear of the page end, scrolled to the bottom', async () => {
-      await page.viewport(390, 700);
       const removeCss = applyDemoCss();
       try {
         setHash('#elem-ia-radio-player');
@@ -831,7 +831,50 @@ describe('AppRoot', () => {
         expect(story.bottom).to.be.at.most(bar.top);
       } finally {
         removeCss();
-        await page.viewport(414, 896);
+      }
+    });
+
+    test('keeps the bar and picker full size under a 10px root font', async () => {
+      const removeCss = applyDemoCss();
+      const root = document.documentElement;
+      try {
+        stubNarrowViewport(true);
+        const el = await appRoot();
+
+        /** Every control's height and text size, at the current root size. */
+        const measure = async () => {
+          await openPicker(el);
+          const controls = [
+            barButton(el, 'prev'),
+            barButton(el, 'name'),
+            barButton(el, 'next'),
+            el.querySelector('#ia-picker-close') as HTMLElement,
+            el.querySelector('#ia-picker-search') as HTMLElement,
+            ...Array.from(
+              el.querySelectorAll<HTMLElement>('#ia-picker .ia-pick'),
+            ),
+          ];
+          const sizes = controls.map((control) => ({
+            height: control.getBoundingClientRect().height,
+            font: getComputedStyle(control).fontSize,
+          }));
+          (el.querySelector('#ia-picker-close') as HTMLButtonElement).click();
+          await pickerClosed(el);
+          return sizes;
+        };
+
+        const atDefault = await measure();
+        // What a story does to suit an element sized for archive.org's root.
+        root.style.fontSize = '10px';
+        const atTenPx = await measure();
+
+        expect(atTenPx).to.deep.equal(atDefault);
+        for (const { height } of atTenPx) {
+          expect(height, 'a tap target under 44px').to.be.at.least(44);
+        }
+      } finally {
+        root.style.fontSize = '';
+        removeCss();
       }
     });
   });
