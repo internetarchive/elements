@@ -239,6 +239,31 @@ describe('AppRoot', () => {
       expect(el.querySelectorAll('.ia-elem-link.current').length).to.equal(0);
     });
 
+    test('marks the last element once the page is scrolled past it to the bottom', async () => {
+      // The demo stylesheet's bottom padding is what lets the page scroll the
+      // last element clear off the top.
+      const removeCss = applyDemoCss();
+      try {
+        const el = await appRoot();
+        const ids = anchorIds(el);
+        const lastId = ids[ids.length - 1];
+        await settleScrollSpy(el, ids[0]);
+
+        window.scrollTo({ top: document.documentElement.scrollHeight });
+        const last = el.querySelector(`#${lastId}`) as HTMLElement;
+        expect(
+          last.getBoundingClientRect().bottom,
+          'the last element is still on screen, so this proves nothing',
+        ).to.be.at.most(0);
+        await waitUntil(
+          () => inViewHref(el) === `#${lastId}`,
+          `the scroll spy marked ${inViewHref(el)} rather than the last element`,
+        );
+      } finally {
+        removeCss();
+      }
+    });
+
     test('falls back to every element when the hash names an unknown one', async () => {
       setHash('#elem-not-a-real-element');
       const el = await appRoot();

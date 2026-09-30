@@ -47,6 +47,9 @@ const productionEntries = storyEntries.filter((e) => !e.labs);
 const labsEntries = storyEntries.filter((e) => e.labs);
 // Document order in the all-elements view, which the scroll spy relies on.
 const ALL_ENTRIES = [...productionEntries, ...labsEntries];
+// How much of the top of the viewport an anchor has to reach to be the one
+// the scroll spy marks.
+const ACTIVE_BAND_PERCENT = 30;
 
 /**
  * Resolves a URL hash to the element it focuses, or null for the
@@ -113,6 +116,7 @@ export class AppRoot extends LitElement {
   private _loadStates = new Map<string, LoadState>();
 
   private _observer?: IntersectionObserver;
+  private _spyFrame?: number;
   private _abortController?: AbortController;
 
   connectedCallback() {
@@ -299,35 +303,65 @@ export class AppRoot extends LitElement {
   /**
    * Highlights the sidebar link for whichever anchor sits nearest the top of
    * the viewport. Only meaningful when every element is on the page.
+   *
+   * The observer catches anchors crossing into or out of the top of the
+   * viewport, including when a story loading shifts the layout. The scroll
+   * listener catches the page moving between two spots with no anchor there,
+   * like a jump to the padding past the last one, which the observer never
+   * reports.
    */
   private _setUpScrollSpy() {
     if (this._observer) return;
 
-    const visibleIds = new Set<string>();
-    this._observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) visibleIds.add(entry.target.id);
-          else visibleIds.delete(entry.target.id);
-        }
-        // Only anchors in the top 30% of the viewport count as "active".
-        // The first (topmost) visible anchor wins.
-        const active = ALL_ENTRIES.find((e) => visibleIds.has(e.id));
-        this._activeTag = (active ?? ALL_ENTRIES[0])?.tag;
-      },
-      { rootMargin: '0px 0px -70% 0px' },
-    );
-
+    this._observer = new IntersectionObserver(() => this._markActiveAnchor(), {
+      rootMargin: `0px 0px -${100 - ACTIVE_BAND_PERCENT}% 0px`,
+    });
     for (const entry of ALL_ENTRIES) {
       const el = this.querySelector(`#${entry.id}`);
       if (el) this._observer.observe(el);
     }
+    window.addEventListener('scroll', this._onSpyScroll, { passive: true });
+  }
+
+  private _onSpyScroll = () => {
+    if (this._spyFrame !== undefined) return;
+    this._spyFrame = requestAnimationFrame(() => {
+      this._spyFrame = undefined;
+      this._markActiveAnchor();
+    });
+  };
+
+  /**
+   * Marks the topmost anchor in the top part of the viewport. With none
+   * there, the page is between anchors or in the padding past the last one,
+   * so the last anchor scrolled off the top stays marked.
+   */
+  private _markActiveAnchor() {
+    const bandBottom = (window.innerHeight * ACTIVE_BAND_PERCENT) / 100;
+    let passed: StoryEntry | undefined;
+    let inBand: StoryEntry | undefined;
+    for (const entry of ALL_ENTRIES) {
+      const el = this.querySelector(`#${entry.id}`);
+      if (!el) continue;
+      const { top, bottom } = el.getBoundingClientRect();
+      if (bottom <= 0) {
+        passed = entry;
+        continue;
+      }
+      // Anchors are in document order, so nothing after this one is higher.
+      if (top < bandBottom) inBand = entry;
+      break;
+    }
+    this._activeTag = (inBand ?? passed ?? ALL_ENTRIES[0])?.tag;
   }
 
   // Called from updated(), so it deliberately touches no reactive state.
   private _disconnectScrollSpy() {
     this._observer?.disconnect();
     this._observer = undefined;
+    window.removeEventListener('scroll', this._onSpyScroll);
+    if (this._spyFrame !== undefined) cancelAnimationFrame(this._spyFrame);
+    this._spyFrame = undefined;
   }
 
   render() {
