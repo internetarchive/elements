@@ -5,7 +5,6 @@ import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
-import { srOnlyStyles } from '@src/themes/sr-only-styles';
 import { msg } from '@lit/localize';
 
 @customElement('ia-topnav-save-page-form')
@@ -13,6 +12,57 @@ export class SavePageForm extends TrackedElement {
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
 
   @state() inputValid = true;
+
+  render() {
+    return html`
+      <form
+        action="//web.archive.org/save"
+        method="post"
+        data-event-submit-tracking="${this.config.eventCategory}|SavePageSubmit"
+        @submit=${this.validateURL}
+      >
+        <h3>${msg('Save Page Now')}</h3>
+        <p>
+          ${msg(
+            'Capture a web page as it appears now for use as a trusted citation in the future.',
+          )}
+        </p>
+        <div>
+          <input
+            type="text"
+            aria-label=${msg('Enter a URL to save')}
+            name="url_preload"
+            id="url_preload"
+            placeholder="https://"
+          />
+          <input type="submit" value=${msg('Save')} />
+        </div>
+        <p class=${this.errorClass}>
+          ${msg('Please enter a valid web address')}
+        </p>
+      </form>
+    `;
+  }
+
+  private validateURL(e: SubmitEvent) {
+    const target = e.target as HTMLFormElement;
+    const urlInput = target.querySelector(
+      '[name="url_preload"]',
+    ) as HTMLInputElement;
+    const valid = /\..{2,}$/.test(urlInput.value);
+
+    if (!valid) {
+      e.preventDefault();
+      this.inputValid = false;
+      return;
+    }
+    this.inputValid = true;
+    this.trackSubmit(e);
+  }
+
+  get errorClass() {
+    return `error${this.inputValid ? '' : ' visible'}`;
+  }
 
   static get styles(): CSSResultGroup {
     return [
@@ -69,60 +119,6 @@ export class SavePageForm extends TrackedElement {
           }
         }
       `,
-      srOnlyStyles,
     ];
-  }
-
-  private validateURL(e: SubmitEvent) {
-    const target = e.target as HTMLFormElement;
-    const urlInput = target.querySelector(
-      '[name="url_preload"]',
-    ) as HTMLInputElement;
-    const valid = /\..{2,}$/.test(urlInput.value);
-
-    if (!valid) {
-      e.preventDefault();
-      this.inputValid = false;
-      return;
-    }
-    this.inputValid = true;
-    this.trackSubmit(e);
-  }
-
-  get errorClass() {
-    return `error${this.inputValid ? '' : ' visible'}`;
-  }
-
-  render() {
-    return html`
-      <form
-        action="//web.archive.org/save"
-        method="post"
-        data-event-submit-tracking="${this.config.eventCategory}|SavePageSubmit"
-        @submit=${this.validateURL}
-      >
-        <h3>${msg('Save Page Now')}</h3>
-        <p>
-          ${msg(
-            'Capture a web page as it appears now for use as a trusted citation in the future.',
-          )}
-        </p>
-        <div>
-          <label for="url_preload" class="sr-only">
-            ${msg('Enter a URL to save')}
-          </label>
-          <input
-            type="text"
-            name="url_preload"
-            id="url_preload"
-            placeholder="https://"
-          />
-          <input type="submit" value=${msg('Save')} />
-        </div>
-        <p class=${this.errorClass}>
-          ${msg('Please enter a valid web address')}
-        </p>
-      </form>
-    `;
   }
 }

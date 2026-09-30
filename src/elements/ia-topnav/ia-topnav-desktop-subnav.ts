@@ -1,10 +1,10 @@
-import { CSSResultGroup, TemplateResult, css, html, nothing } from 'lit';
+import { CSSResultGroup, TemplateResult, css, html } from 'lit';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 
 import TrackedElement from './tracked-element';
 import icons from './assets/img/icons';
-import formatUrl from './lib/format-url';
+import { formatUrl } from './lib/helpers';
 import { IATopNavLink } from './models';
 import themeStyles from '@src/themes/theme-styles';
 
@@ -12,6 +12,31 @@ import themeStyles from '@src/themes/theme-styles';
 export class DesktopSubnav extends TrackedElement {
   @property({ type: String }) baseHost = '';
   @property({ type: Array }) menuItems: IATopNavLink[] = [];
+
+  render() {
+    return html`
+      <ul>
+        ${this.menuItems.map(
+          (link) => html`
+            <li>
+              <a
+                class="${link.title.toLowerCase()}"
+                .href="${formatUrl(link.url, this.baseHost)}"
+                >${link.title}${DesktopSubnav.iconFor(link.title)}</a
+              >
+            </li>
+          `,
+        )}
+      </ul>
+    `;
+  }
+
+  static iconFor(title: string): TemplateResult {
+    const subnavIcons: Record<string, TemplateResult> = {
+      Donate: icons.donate,
+    };
+    return subnavIcons[title] ? subnavIcons[title] : html``;
+  }
 
   static get styles(): CSSResultGroup {
     return [
@@ -53,36 +78,5 @@ export class DesktopSubnav extends TrackedElement {
         }
       `,
     ];
-  }
-
-  get listItems() {
-    return this.menuItems
-      ? this.menuItems.map(
-          (link) => html`
-            <li>
-              <a
-                class="${link.title.toLowerCase()}"
-                .href="${formatUrl(link.url, this.baseHost)}"
-                >${link.title}${DesktopSubnav.iconFor(link.title)}</a
-              >
-            </li>
-          `,
-        )
-      : nothing;
-  }
-
-  static iconFor(title: string): TemplateResult {
-    const subnavIcons: Record<string, TemplateResult> = {
-      Donate: icons.donate,
-    };
-    return subnavIcons[title] ? subnavIcons[title] : html``;
-  }
-
-  render() {
-    return html`
-      <ul>
-        ${this.listItems}
-      </ul>
-    `;
   }
 }

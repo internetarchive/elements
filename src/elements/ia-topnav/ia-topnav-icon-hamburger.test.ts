@@ -9,12 +9,19 @@ describe('<ia-topnav-icon-hamburger>', () => {
     const icon = await fixture<HamBurger>(
       html`<ia-topnav-icon-hamburger></ia-topnav-icon-hamburger>`,
     );
+    const titleId = () =>
+      icon.shadowRoot?.querySelector('svg title')?.getAttribute('id');
+
+    expect(titleId()).to.equal('hamburgerTitleID');
 
     icon.active = true;
     await icon.updateComplete;
 
-    const titleElement = icon.shadowRoot?.querySelector('svg title');
+    expect(titleId()).to.match(/close/);
 
-    expect(titleElement?.getAttribute('id')).to.match(/close/);
+    icon.active = false;
+    await icon.updateComplete;
+
+    expect(titleId()).to.equal('hamburgerTitleID');
   });
 });

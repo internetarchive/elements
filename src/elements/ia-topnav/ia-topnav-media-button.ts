@@ -1,7 +1,7 @@
 import { CSSResultGroup, TemplateResult, css, html } from 'lit';
 import TrackedElement from './tracked-element';
 import icons from './assets/img/icons';
-import toSentenceCase from './lib/t-sentence-case';
+import { toSentenceCase } from './lib/helpers';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
@@ -19,6 +19,93 @@ export class MediaButton extends TrackedElement {
   @property({ type: String }) openMenu = '';
   @property({ type: Boolean }) selected = false;
   @property({ type: Boolean }) followable = false;
+
+  render() {
+    return html`
+      <a
+        href="${this.href}"
+        class="menu-item ${this.mediatype} ${this.buttonClass}"
+        @click=${this.followable ? this.trackClick : this.onClick}
+        data-event-click-tracking="${this.analyticsEvent}"
+        title=${this.tooltip}
+      >
+        ${this.menuItem}
+      </a>
+    `;
+  }
+
+  static get icons(): Record<string, TemplateResult> {
+    return icons;
+  }
+
+  onClick(e: Event) {
+    this.trackClick(e);
+    e.preventDefault();
+    // On desktop viewport widths, the media subnav is always visible. To
+    // ensure the media subnav is open on mobile if the viewport is
+    // resized, the openMenu needs to be set to 'media'.
+    if (this.openMenu !== 'media') {
+      this.dispatchMenuToggledEvent();
+    }
+    this.dispatchMediaTypeSelectedEvent();
+  }
+
+  dispatchMenuToggledEvent() {
+    this.dispatchEvent(
+      new CustomEvent('menuToggled', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          menuName: 'media',
+        },
+      }),
+    );
+  }
+
+  dispatchMediaTypeSelectedEvent() {
+    this.dispatchEvent(
+      new CustomEvent('mediaTypeSelected', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          mediatype: this.mediatype,
+        },
+      }),
+    );
+  }
+
+  get buttonClass() {
+    return this.selected ? 'selected' : '';
+  }
+
+  /**
+   * The button's tooltip.
+   *
+   * Built as a whole phrase per state, because word order around the
+   * mediatype differs by language.
+   */
+  get tooltip() {
+    return this.selected
+      ? msg(str`Collapse ${this.mediatype} menu`)
+      : msg(str`Expand ${this.mediatype} menu`);
+  }
+
+  get iconClass() {
+    return this.selected ? 'active' : '';
+  }
+
+  get analyticsEvent() {
+    return `${this.config.eventCategory}|NavMenu${toSentenceCase(this.mediatype)}`;
+  }
+
+  get menuItem() {
+    return html`
+      <span class="icon ${this.iconClass}">
+        ${MediaButton.icons[this.icon]}
+      </span>
+      <span class="label">${this.label}</span>
+    `;
+  }
 
   static get styles(): CSSResultGroup {
     return [
@@ -178,92 +265,5 @@ export class MediaButton extends TrackedElement {
         }
       `,
     ];
-  }
-
-  static get icons(): Record<string, TemplateResult> {
-    return icons;
-  }
-
-  onClick(e: Event) {
-    this.trackClick(e);
-    e.preventDefault();
-    // On desktop viewport widths, the media subnav is always visible. To
-    // ensure the media subnav is open on mobile if the viewport is
-    // resized, the openMenu needs to be set to 'media'.
-    if (this.openMenu !== 'media') {
-      this.dispatchMenuToggledEvent();
-    }
-    this.dispatchMediaTypeSelectedEvent();
-  }
-
-  dispatchMenuToggledEvent() {
-    this.dispatchEvent(
-      new CustomEvent('menuToggled', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          menuName: 'media',
-        },
-      }),
-    );
-  }
-
-  dispatchMediaTypeSelectedEvent() {
-    this.dispatchEvent(
-      new CustomEvent('mediaTypeSelected', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          mediatype: this.mediatype,
-        },
-      }),
-    );
-  }
-
-  get buttonClass() {
-    return this.selected ? 'selected' : '';
-  }
-
-  /**
-   * The button's tooltip.
-   *
-   * Built as a whole phrase per state, because word order around the
-   * mediatype differs by language.
-   */
-  get tooltip() {
-    return this.selected
-      ? msg(str`Collapse ${this.mediatype} menu`)
-      : msg(str`Expand ${this.mediatype} menu`);
-  }
-
-  get iconClass() {
-    return this.selected ? 'active' : '';
-  }
-
-  get analyticsEvent() {
-    return `${this.config.eventCategory}|NavMenu${toSentenceCase(this.mediatype)}`;
-  }
-
-  get menuItem() {
-    return html`
-      <span class="icon ${this.iconClass}">
-        ${MediaButton.icons[this.icon]}
-      </span>
-      <span class="label">${this.label}</span>
-    `;
-  }
-
-  render() {
-    return html`
-      <a
-        href="${this.href}"
-        class="menu-item ${this.mediatype} ${this.buttonClass}"
-        @click=${this.followable ? this.trackClick : this.onClick}
-        data-event-click-tracking="${this.analyticsEvent}"
-        title=${this.tooltip}
-      >
-        ${this.menuItem}
-      </a>
-    `;
   }
 }

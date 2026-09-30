@@ -2,9 +2,7 @@ import { CSSResultGroup, css, html } from 'lit';
 import './ia-topnav-wayback-search';
 import TrackedElement from './tracked-element';
 import './ia-topnav-save-page-form';
-import queryHandler from './lib/query-handler';
-import toSentenceCase from './lib/t-sentence-case';
-import formatUrl from './lib/format-url';
+import { formatUrl, toSentenceCase } from './lib/helpers';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import {
@@ -25,38 +23,35 @@ export class WaybackSlider extends TrackedElement {
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
   @property({ type: Array }) mobileAppsLinks: IATopNavLink[] = [];
 
-  static get styles(): CSSResultGroup {
-    return [
-      themeStyles,
-      subnavListCSS,
-      css`
-        @media (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) {
-          :host {
-            display: block;
-            grid-column: 1 / 4;
-            padding: 0 1.5rem;
-          }
-
-          h4 {
-            margin-top: 0;
-            font: normal 100 1.6rem var(--themeFontFamily);
-          }
-
-          .grid {
-            display: grid;
-            grid-template-columns: minmax(auto, 260px) 1fr minmax(auto, 260px);
-            /* Possible for 890 - 935: minmax(auto, 260px) 1fr minmax(auto, 260px) */
-            grid-column-gap: 2.5rem;
-          }
-
-          .link-lists {
-            display: grid;
-            grid-template-columns: calc(50% - 1.25rem) calc(50% - 1.25rem);
-            grid-column-gap: 2.5rem;
-          }
-        }
-      `,
-    ];
+  render() {
+    return html`
+      <div class="grid">
+        <ia-topnav-wayback-search
+          .waybackPagesArchived=${this.config.waybackPagesArchived ?? ''}
+        ></ia-topnav-wayback-search>
+        <div class="link-lists">
+          <div>
+            <h4>${msg('Mobile Apps')}</h4>
+            <ul class="mobile-apps">
+              ${this.mobileAppsItems}
+            </ul>
+            <h4>${msg('Browser Extensions')}</h4>
+            <ul class="browser-extensions">
+              ${this.browserExtensionsItems}
+            </ul>
+          </div>
+          <div>
+            <h4>${msg('Archive-It Subscription')}</h4>
+            <ul class="archive-it">
+              ${this.archiveItItems}
+            </ul>
+          </div>
+        </div>
+        <ia-topnav-save-page-form
+          .config=${this.config}
+        ></ia-topnav-save-page-form>
+      </div>
+    `;
   }
 
   get mobileAppsItems() {
@@ -93,35 +88,37 @@ export class WaybackSlider extends TrackedElement {
     return `${this.config?.eventCategory}|${toSentenceCase(title)}`;
   }
 
-  render() {
-    return html`
-      <div class="grid">
-        <ia-topnav-wayback-search
-          .waybackPagesArchived=${this.config.waybackPagesArchived ?? ''}
-          .queryHandler=${queryHandler}
-        ></ia-topnav-wayback-search>
-        <div class="link-lists">
-          <div>
-            <h4>${msg('Mobile Apps')}</h4>
-            <ul class="mobile-apps">
-              ${this.mobileAppsItems}
-            </ul>
-            <h4>${msg('Browser Extensions')}</h4>
-            <ul class="browser-extensions">
-              ${this.browserExtensionsItems}
-            </ul>
-          </div>
-          <div>
-            <h4>${msg('Archive-It Subscription')}</h4>
-            <ul class="archive-it">
-              ${this.archiveItItems}
-            </ul>
-          </div>
-        </div>
-        <ia-topnav-save-page-form
-          .config=${this.config}
-        ></ia-topnav-save-page-form>
-      </div>
-    `;
+  static get styles(): CSSResultGroup {
+    return [
+      themeStyles,
+      subnavListCSS,
+      css`
+        @media (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) {
+          :host {
+            display: block;
+            grid-column: 1 / 4;
+            padding: 0 1.5rem;
+          }
+
+          h4 {
+            margin-top: 0;
+            font: normal 100 1.6rem var(--themeFontFamily);
+          }
+
+          .grid {
+            display: grid;
+            grid-template-columns: minmax(auto, 260px) 1fr minmax(auto, 260px);
+            /* Possible for 890 - 935: minmax(auto, 260px) 1fr minmax(auto, 260px) */
+            grid-column-gap: 2.5rem;
+          }
+
+          .link-lists {
+            display: grid;
+            grid-template-columns: calc(50% - 1.25rem) calc(50% - 1.25rem);
+            grid-column-gap: 2.5rem;
+          }
+        }
+      `,
+    ];
   }
 }

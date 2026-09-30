@@ -4,8 +4,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import TrackedElement from './tracked-element';
 import './ia-topnav-wayback-slider';
 import './ia-topnav-more-slider';
-import toSentenceCase from './lib/t-sentence-case';
-import formatUrl from './lib/format-url';
+import { formatUrl, toSentenceCase } from './lib/helpers';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import {
@@ -36,6 +35,103 @@ export class MediaSubnav extends TrackedElement {
     MediaSubnav.defaultLinks;
 
   private links: IATopNavMediaMenu = MediaSubnav.defaultLinks;
+
+  shouldUpdate() {
+    if (this.menuItems) {
+      this.links = this.menuItems;
+    }
+    return true;
+  }
+
+  render() {
+    if (!this.menu) {
+      return html``;
+    }
+
+    if (this.menuItems) {
+      this.links = this.menuItems;
+    }
+
+    if (this.menu === 'web') {
+      return html` <ia-topnav-wayback-slider
+        .baseHost=${this.baseHost}
+        .config=${this.config}
+        .archiveItLinks=${this.menuItems.archiveItLinks}
+        .browserExtensionsLinks=${this.menuItems.browserExtensionsLinks}
+        .mobileAppsLinks=${this.menuItems.mobileAppsLinks}
+      ></ia-topnav-wayback-slider>`;
+    }
+
+    if (this.menu === 'more') {
+      return html` <ia-topnav-more-slider
+        .baseHost=${this.baseHost}
+        .config=${this.config}
+        .menuItems=${this.menuItems.links}
+      >
+      </ia-topnav-more-slider>`;
+    }
+
+    return html`
+      <h3>${this.links.heading}</h3>
+      <div class="icon-links">${this.iconLinks}</div>
+      <div class="links featured">
+        <h4>${msg('Featured')}</h4>
+        <ul>
+          ${this.renderLinks(this.links.featuredLinks)}
+        </ul>
+      </div>
+      <div class="links top">
+        <h4>${msg('Top')}</h4>
+        <ul>
+          ${this.renderLinks(this.links.links)}
+        </ul>
+      </div>
+    `;
+  }
+
+  static get defaultLinks(): IATopNavMediaMenu {
+    return {
+      heading: '',
+      iconLinks: [],
+      featuredLinks: [],
+      links: [],
+      mobileAppsLinks: [],
+      browserExtensionsLinks: [],
+      archiveItLinks: [],
+    };
+  }
+
+  analyticsEvent(title: string) {
+    return `${this.config?.eventCategory}|${toSentenceCase(title)}${toSentenceCase(this.menu)}`;
+  }
+
+  get iconLinks() {
+    return this.links.iconLinks.map(
+      (link) => html`
+        <a
+          .href="${formatUrl(link.url, this.baseHost)}"
+          @click=${this.trackClick}
+          data-event-click-tracking="${this.analyticsEvent(link.title)}"
+          ><img src="${ifDefined(link.icon)}" loading="lazy" />${link.title}</a
+        >
+      `,
+    );
+  }
+
+  renderLinks(links: IATopNavLink[]) {
+    return links.map(
+      (link) => html`
+        <li>
+          <a
+            .href="${formatUrl(link.url, this.baseHost)}"
+            @click=${this.trackClick}
+            data-event-click-tracking="${this.analyticsEvent(link.title)}"
+            >${link.title}</a
+          >
+        </li>
+      `,
+    );
+  }
 
   static get styles(): CSSResultGroup {
     return [
@@ -195,102 +291,5 @@ export class MediaSubnav extends TrackedElement {
         }
       `,
     ];
-  }
-
-  shouldUpdate() {
-    if (this.menuItems) {
-      this.links = this.menuItems;
-    }
-    return true;
-  }
-
-  static get defaultLinks(): IATopNavMediaMenu {
-    return {
-      heading: '',
-      iconLinks: [],
-      featuredLinks: [],
-      links: [],
-      mobileAppsLinks: [],
-      browserExtensionsLinks: [],
-      archiveItLinks: [],
-    };
-  }
-
-  analyticsEvent(title: string) {
-    return `${this.config?.eventCategory}|${toSentenceCase(title)}${toSentenceCase(this.menu)}`;
-  }
-
-  get iconLinks() {
-    return this.links.iconLinks.map(
-      (link) => html`
-        <a
-          .href="${formatUrl(link.url, this.baseHost)}"
-          @click=${this.trackClick}
-          data-event-click-tracking="${this.analyticsEvent(link.title)}"
-          ><img src="${ifDefined(link.icon)}" loading="lazy" />${link.title}</a
-        >
-      `,
-    );
-  }
-
-  renderLinks(links: IATopNavLink[]) {
-    return links.map(
-      (link) => html`
-        <li>
-          <a
-            .href="${formatUrl(link.url, this.baseHost)}"
-            @click=${this.trackClick}
-            data-event-click-tracking="${this.analyticsEvent(link.title)}"
-            >${link.title}</a
-          >
-        </li>
-      `,
-    );
-  }
-
-  render() {
-    if (!this.menu) {
-      return html``;
-    }
-
-    if (this.menuItems) {
-      this.links = this.menuItems;
-    }
-
-    if (this.menu === 'web') {
-      return html` <ia-topnav-wayback-slider
-        .baseHost=${this.baseHost}
-        .config=${this.config}
-        .archiveItLinks=${this.menuItems.archiveItLinks}
-        .browserExtensionsLinks=${this.menuItems.browserExtensionsLinks}
-        .mobileAppsLinks=${this.menuItems.mobileAppsLinks}
-      ></ia-topnav-wayback-slider>`;
-    }
-
-    if (this.menu === 'more') {
-      return html` <ia-topnav-more-slider
-        .baseHost=${this.baseHost}
-        .config=${this.config}
-        .menuItems=${this.menuItems.links}
-      >
-      </ia-topnav-more-slider>`;
-    }
-
-    return html`
-      <h3>${this.links.heading}</h3>
-      <div class="icon-links">${this.iconLinks}</div>
-      <div class="links featured">
-        <h4>${msg('Featured')}</h4>
-        <ul>
-          ${this.renderLinks(this.links.featuredLinks)}
-        </ul>
-      </div>
-      <div class="links top">
-        <h4>${msg('Top')}</h4>
-        <ul>
-          ${this.renderLinks(this.links.links)}
-        </ul>
-      </div>
-    `;
   }
 }

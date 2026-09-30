@@ -1,8 +1,7 @@
 import { CSSResultGroup, css, html } from 'lit';
 import TrackedElement from './tracked-element';
 import icons from './assets/img/icons';
-import formatUrl from './lib/format-url';
-import { makeBooleanString } from './lib/make-boolean-string';
+import { formatUrl, makeBooleanString } from './lib/helpers';
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
@@ -17,6 +16,70 @@ export class LoginButton extends TrackedElement {
   @property({ type: String }) openMenu = '';
 
   @query('button.logged-out-menu') private toggleButton?: HTMLButtonElement;
+
+  render() {
+    return html`
+      <div class="logged-out-toolbar">
+        <button
+          class="logged-out-menu ${this.avatarClass}"
+          @click=${this.toggleDropdown}
+          data-event-click-tracking="${this.analyticsEvent}"
+          aria-label=${msg('Toggle login menu')}
+          aria-expanded="${makeBooleanString(this.menuOpened)}"
+        >
+          ${icons.user}
+        </button>
+        <span>
+          <a href="${this.signupPath}">${msg('Sign up')}</a>
+          |
+          <a href="${this.loginPath}">${msg('Log in')}</a>
+        </span>
+      </div>
+    `;
+  }
+
+  /** Distance (px) from this element's right edge to the right edge of the dropdown toggle icon. */
+  getDropdownToggleOffset(): number {
+    if (!this.toggleButton) return 0;
+    return (
+      this.getBoundingClientRect().right -
+      this.toggleButton.getBoundingClientRect().right
+    );
+  }
+
+  get signupPath() {
+    return formatUrl('/signup', this.baseHost);
+  }
+
+  get loginPath() {
+    return formatUrl('/login', this.baseHost);
+  }
+
+  get analyticsEvent() {
+    return `${this.config?.eventCategory}|NavLoginIcon`;
+  }
+
+  get menuOpened(): boolean {
+    return this.openMenu === 'login';
+  }
+
+  get avatarClass() {
+    return `dropdown-toggle${this.menuOpened ? ' active' : ''}`;
+  }
+
+  toggleDropdown(e: Event) {
+    e.preventDefault();
+    this.trackClick(e);
+    this.dispatchEvent(
+      new CustomEvent('menuToggled', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          menuName: 'login',
+        },
+      }),
+    );
+  }
 
   static get styles(): CSSResultGroup {
     return [
@@ -110,69 +173,5 @@ export class LoginButton extends TrackedElement {
         }
       `,
     ];
-  }
-
-  /** Distance (px) from this element's right edge to the right edge of the dropdown toggle icon. */
-  getDropdownToggleOffset(): number {
-    if (!this.toggleButton) return 0;
-    return (
-      this.getBoundingClientRect().right -
-      this.toggleButton.getBoundingClientRect().right
-    );
-  }
-
-  get signupPath() {
-    return formatUrl('/signup', this.baseHost);
-  }
-
-  get loginPath() {
-    return formatUrl('/login', this.baseHost);
-  }
-
-  get analyticsEvent() {
-    return `${this.config?.eventCategory}|NavLoginIcon`;
-  }
-
-  get menuOpened(): boolean {
-    return this.openMenu === 'login';
-  }
-
-  get avatarClass() {
-    return `dropdown-toggle${this.menuOpened ? ' active' : ''}`;
-  }
-
-  toggleDropdown(e: Event) {
-    e.preventDefault();
-    this.trackClick(e);
-    this.dispatchEvent(
-      new CustomEvent('menuToggled', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          menuName: 'login',
-        },
-      }),
-    );
-  }
-
-  render() {
-    return html`
-      <div class="logged-out-toolbar">
-        <button
-          class="logged-out-menu ${this.avatarClass}"
-          @click=${this.toggleDropdown}
-          data-event-click-tracking="${this.analyticsEvent}"
-          aria-label=${msg('Toggle login menu')}
-          aria-expanded="${makeBooleanString(this.menuOpened)}"
-        >
-          ${icons.user}
-        </button>
-        <span>
-          <a href="${this.signupPath}">${msg('Sign up')}</a>
-          |
-          <a href="${this.loginPath}">${msg('Log in')}</a>
-        </span>
-      </div>
-    `;
   }
 }

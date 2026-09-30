@@ -6,20 +6,9 @@ import { msg } from '@lit/localize';
 
 @customElement('ia-topnav-icon-hamburger')
 export class HamBurger extends Icon {
-  static get styles() {
-    return css`
-      svg {
-        display: block;
-        height: 4rem;
-        width: 4rem;
-      }
-      .fill-color {
-        fill: var(--activeColor);
-      }
-    `;
-  }
+  render() {
+    if (this.active) return icons.close;
 
-  static get closed() {
     return html`
       <svg
         viewBox="0 0 40 40"
@@ -41,11 +30,16 @@ export class HamBurger extends Icon {
     `;
   }
 
-  static get opened() {
-    return icons.close;
-  }
-
-  render() {
-    return this.active ? HamBurger.opened : HamBurger.closed;
+  static get styles() {
+    return css`
+      svg {
+        display: block;
+        height: 4rem;
+        width: 4rem;
+      }
+      .fill-color {
+        fill: var(--activeColor);
+      }
+    `;
   }
 }

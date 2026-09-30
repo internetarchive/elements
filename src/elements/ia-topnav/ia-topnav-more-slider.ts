@@ -3,8 +3,7 @@ import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 
 import TrackedElement from './tracked-element';
-import toSentenceCase from './lib/t-sentence-case';
-import formatUrl from './lib/format-url';
+import { formatUrl, toSentenceCase } from './lib/helpers';
 import { IATopNavConfig, IATopNavLink } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
@@ -14,6 +13,28 @@ export class MoreSlider extends TrackedElement {
   @property({ type: String }) baseHost = '';
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
   @property({ type: Array }) menuItems: IATopNavLink[] = [];
+
+  render() {
+    return html`
+      <ul>
+        ${this.menuItems.map(
+          (item) =>
+            html`<li>
+              <a
+                @click=${this.trackClick}
+                href=${formatUrl(item.url, this.baseHost)}
+                data-event-click-tracking="${this.analyticsEvent(item.title)}"
+                >${item.title}</a
+              >
+            </li>`,
+        )}
+      </ul>
+    `;
+  }
+
+  analyticsEvent(title: string) {
+    return `${this.config.eventCategory}|NavMore${toSentenceCase(title)}`;
+  }
 
   static get styles(): CSSResultGroup {
     return [
@@ -32,27 +53,5 @@ export class MoreSlider extends TrackedElement {
         }
       `,
     ];
-  }
-
-  analyticsEvent(title: string) {
-    return `${this.config.eventCategory}|NavMore${toSentenceCase(title)}`;
-  }
-
-  render() {
-    return html`
-      <ul>
-        ${this.menuItems.map(
-          (item) =>
-            html`<li>
-              <a
-                @click=${this.trackClick}
-                href=${formatUrl(item.url, this.baseHost)}
-                data-event-click-tracking="${this.analyticsEvent(item.title)}"
-                >${item.title}</a
-              >
-            </li>`,
-        )}
-      </ul>
-    `;
   }
 }

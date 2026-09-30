@@ -23,6 +23,15 @@ async function submitWith(el: SavePageForm, url: string): Promise<void> {
 }
 
 describe('<ia-topnav-save-page-form>', () => {
+  test('names the URL input for screen readers', async () => {
+    const el = await fixture<SavePageForm>(component);
+    const urlInput = el.shadowRoot?.querySelector('[name="url_preload"]');
+
+    expect(urlInput?.getAttribute('aria-label')).to.equal(
+      'Enter a URL to save',
+    );
+  });
+
   test('rejects a URL with no domain suffix and shows the error', async () => {
     const el = await fixture<SavePageForm>(component);
 

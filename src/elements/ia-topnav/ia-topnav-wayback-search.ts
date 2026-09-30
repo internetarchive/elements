@@ -6,7 +6,6 @@ import searchIcon from './assets/img/icon-search';
 import logo from './assets/img/wayback-logo';
 import { TOPNAV_MOBILE_BREAKPOINT } from './models';
 import themeStyles from '@src/themes/theme-styles';
-import { srOnlyStyles } from '@src/themes/sr-only-styles';
 import { msg } from '@lit/localize';
 
 /**
@@ -52,11 +51,9 @@ export class IATopNavWaybackSearch extends LitElement {
             >${logo}</a
           >
           <div class="search-field">
-            <label for="url" class="sr-only">
-              ${msg('Search the Wayback Machine')}
-            </label>
             <input
               type="text"
+              aria-label=${msg('Search the Wayback Machine')}
               name="url"
               id="url"
               placeholder=${msg('Enter URL or keywords')}
@@ -96,7 +93,6 @@ export class IATopNavWaybackSearch extends LitElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
-      srOnlyStyles,
       css`
         :host {
           --topnav-wayback-input-text-color--: var(

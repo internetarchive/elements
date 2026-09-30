@@ -39,6 +39,18 @@ afterEach(() => {
 });
 
 describe('<ia-topnav-primary-nav>', () => {
+  test('labels the mobile donate heart for screen readers', async () => {
+    const el = await fixture<PrimaryNav>(
+      component({ baseHost: 'archive.org', username: '' }),
+    );
+    const label = el.shadowRoot?.querySelector(
+      '.mobile-donate-link ia-sr-only-text',
+    );
+
+    expect(customElements.get('ia-sr-only-text')).to.exist;
+    expect(label?.textContent).to.contain('Donate to the archive');
+  });
+
   test('renders the login link when no username present', async () => {
     const el = await fixture<PrimaryNav>(
       component({

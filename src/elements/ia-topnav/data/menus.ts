@@ -1,5 +1,3 @@
-// @see https://git.archive.org/www/offshoot/-/blob/main/guides/update-top-nav.md
-
 import { IATopNavConfig, IATopNavMenuConfig } from '../models';
 
 export const defaultTopNavConfig: IATopNavConfig = {
@@ -12,15 +10,18 @@ export const defaultTopNavConfig: IATopNavConfig = {
 /**
  * Creates archive.org top navigation configuration
  * @param { string } userid archive.org account (immutable) userid
- * @param { boolean } localLinks passing in false will ensure all links begin: https://archive.org
+ * @param { string } baseHost prefixed to every archive.org link. Pass '' for
+ *                            links relative to the current host.
  * @param { string } waybackPagesArchived label readable 'how many pages in WayBack machine?'
  *                                        If you don't pass in something, you'll get the potentially
  *                                        older/less accurate version.
  * @param { string } itemIdentifier The current item being viewed, to populate admin menu items
+ * @param { string } uploader email of the item's uploader, for the uploader admin section
+ * @param { string } biblio biblio URL for a texts item, for the biblio admin section
  * @returns { object }
  */
 export function buildTopNavMenus(
-  userid: string = '___USERID___',
+  userid: string = '',
   baseHost: string = 'https://archive.org',
   waybackPagesArchived: string = '',
   itemIdentifier: string = '',
