@@ -5,13 +5,14 @@ import {
   type CSSResultGroup,
   type TemplateResult,
 } from 'lit';
-import { customElement } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
+import { customElement } from '@src/util/custom-element';
+import { localized, msg } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
 
 /** The footer of the error modal: a link to the help article on failed donations. */
 @customElement('ia-donation-error-modal-content')
+@localized()
 export class IADonationErrorModalContent extends LitElement {
   render(): TemplateResult {
     return html`

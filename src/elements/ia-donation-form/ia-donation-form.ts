@@ -7,8 +7,9 @@ import {
   type PropertyValues,
   type TemplateResult,
 } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
+import { property, query, state } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
+import { localized, msg } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
 import type { BraintreeManagerInterface } from './braintree/braintree-manager-interface';
@@ -47,6 +48,7 @@ import './form-elements/ia-donation-total-amount';
  * renders and emits events.
  */
 @customElement('ia-donation-form')
+@localized()
 export class IADonationForm extends LitElement {
   @property({ type: Object }) braintreeManager?: BraintreeManagerInterface;
 

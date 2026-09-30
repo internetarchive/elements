@@ -6,7 +6,7 @@ import searchIcon from './assets/img/icon-search';
 import logo from './assets/img/wayback-logo';
 import { TOPNAV_MOBILE_BREAKPOINT } from './models';
 import themeStyles from '@src/themes/theme-styles';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 /**
  * The Wayback Machine search form shown inside the topnav's wayback slider.
@@ -15,6 +15,7 @@ import { msg } from '@lit/localize';
  * over the base ones on equal specificity.
  */
 @customElement('ia-topnav-wayback-search')
+@localized()
 export class IATopNavWaybackSearch extends LitElement {
   @property({ type: Object }) queryHandler: {
     performQuery: (query: string) => void;

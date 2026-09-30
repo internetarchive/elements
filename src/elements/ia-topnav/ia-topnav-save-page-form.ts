@@ -5,9 +5,10 @@ import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 @customElement('ia-topnav-save-page-form')
+@localized()
 export class SavePageForm extends TrackedElement {
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
 

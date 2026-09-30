@@ -6,8 +6,9 @@ import {
   type CSSResultGroup,
   type TemplateResult,
 } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
+import { property, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
+import { localized, msg } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
 import { CurrencyValidator } from '../currency-validator';
@@ -27,6 +28,7 @@ export type UpsellModalCTAMode =
  * the donation came through PayPal).
  */
 @customElement('ia-donation-upsell-modal-content')
+@localized()
 export class IADonationUpsellModalContent extends LitElement {
   @property({ type: String }) yesButtonMode: UpsellModalCTAMode =
     UpsellModalCTAMode.YesButton;

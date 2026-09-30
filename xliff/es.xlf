@@ -150,6 +150,740 @@
   <source>[Transcript unavailable]</source>
 <target>[Transcripción no disponible]</target>
 </trans-unit>
+<trans-unit id="s21f68e65dbf5b5a4">
+  <source>Processing...</source>
+<target>Procesando...</target>
+</trans-unit>
+<trans-unit id="s98ce2bd73b910e5b">
+  <source>Thank You!</source>
+<target>¡Gracias!</target>
+</trans-unit>
+<trans-unit id="s7d0148b99f987f74">
+  <source>Processing error</source>
+<target>Error de procesamiento</target>
+</trans-unit>
+<trans-unit id="s13653e99bba87d4c">
+  <source>There's been a problem completing your donation.</source>
+<target>Hubo un problema al completar tu donación.</target>
+</trans-unit>
+<trans-unit id="sc78e631879dc2f68">
+  <source>Confirm monthly donation</source>
+<target>Confirmar donación mensual</target>
+</trans-unit>
+<trans-unit id="s905d744ee89b8d4a">
+  <source>Donation received</source>
+<target>Donación recibida</target>
+</trans-unit>
+<trans-unit id="s1a48fb64b48125fe">
+  <source>Payment failed</source>
+<target>El pago no se pudo completar</target>
+</trans-unit>
+<trans-unit id="sa01aedf1499a36cc">
+  <source>Recaptcha failure</source>
+<target>Error de reCAPTCHA</target>
+</trans-unit>
+<trans-unit id="sb7f183a3569b99fb">
+  <source>Error setting up monthly donation</source>
+<target>Error al configurar la donación mensual</target>
+</trans-unit>
+<trans-unit id="s166eb3ac954fd902">
+  <source>Error restoring donation session</source>
+<target>Error al restaurar la sesión de donación</target>
+</trans-unit>
+<trans-unit id="s034029ce33a61b25">
+  <source>Error setting up the donation</source>
+<target>Error al preparar la donación</target>
+</trans-unit>
+<trans-unit id="sfb976f2d07677d66">
+  <source>There was a problem loading your donation information. Please try again.</source>
+<target>Hubo un problema al cargar la información de tu donación. Inténtalo de nuevo.</target>
+</trans-unit>
+<trans-unit id="seb6e0a8569e9575c">
+  <source>Please enter any missing or invalid contact information below</source>
+<target>Completa o corrige tu información de contacto a continuación</target>
+</trans-unit>
+<trans-unit id="sf968a1b8e11a61db">
+  <source>Enter at least two characters</source>
+<target>Escribe al menos dos caracteres</target>
+</trans-unit>
+<trans-unit id="sd235a81aa694050f">
+  <source>Enter at least four characters</source>
+<target>Escribe al menos cuatro caracteres</target>
+</trans-unit>
+<trans-unit id="s47114b888d97214a">
+  <source>Enter a valid 5 or 9 digit zip/postal code</source>
+<target>Escribe un código postal válido de 5 o 9 dígitos</target>
+</trans-unit>
+<trans-unit id="sd1f44f1a8bc20e67">
+  <source>Email</source>
+<target>Correo electrónico</target>
+</trans-unit>
+<trans-unit id="sab459038e3c6bcb8">
+  <source>First name</source>
+<target>Nombre</target>
+</trans-unit>
+<trans-unit id="s6e8059179423bfa0">
+  <source>Last name</source>
+<target>Apellido</target>
+</trans-unit>
+<trans-unit id="seebce40c90900c08">
+  <source>Address Line 1</source>
+<target>Dirección, línea 1</target>
+</trans-unit>
+<trans-unit id="s6587cdfe86a67e5c">
+  <source>Address Line 2 (optional)</source>
+<target>Dirección, línea 2 (opcional)</target>
+</trans-unit>
+<trans-unit id="s2468b69d10791c82">
+  <source>City</source>
+<target>Ciudad</target>
+</trans-unit>
+<trans-unit id="s9d0e8f5c7db6fe95">
+  <source>State / Province</source>
+<target>Estado / Provincia</target>
+</trans-unit>
+<trans-unit id="s54cf107bdd506448">
+  <source>Zip / Postal</source>
+<target>Código postal</target>
+</trans-unit>
+<trans-unit id="s9cf7402fe920f7d1">
+  <source>Country</source>
+<target>País</target>
+</trans-unit>
+<trans-unit id="s1d32bf0a660906de">
+  <source>Choose an amount (USD)</source>
+<target>Elige una cantidad (USD)</target>
+</trans-unit>
+<trans-unit id="sac40746f1d52bde5">
+  <source>Choose a frequency</source>
+<target>Elige una frecuencia</target>
+</trans-unit>
+<trans-unit id="saec17a4cb0379720">
+  <source>Make this monthly</source>
+<target>Hacerla mensual</target>
+</trans-unit>
+<trans-unit id="sf69331efcae8e012">
+  <source>I'll generously add <x id="0" equiv-text="${feeAmountString}"/> to cover fees.</source>
+<target>Añadiré generosamente <x id="0" equiv-text="${feeAmountString}"/> para cubrir las comisiones.</target>
+</trans-unit>
+<trans-unit id="sd197802fd037edfc">
+  <source>One time</source>
+<target>Una vez</target>
+</trans-unit>
+<trans-unit id="s046a35bfdd88a596">
+  <source>Monthly</source>
+<target>Mensual</target>
+</trans-unit>
+<trans-unit id="s2ef68d75fe033dd0">
+  <source>Custom: $</source>
+<target>Otra cantidad: $</target>
+</trans-unit>
+<trans-unit id="s342e7501fb2c77b6">
+  <source>Custom amount in dollars</source>
+<target>Otra cantidad en dólares</target>
+</trans-unit>
+<trans-unit id="h8c1c54b7ac1ca52b">
+  <source>
+          To make a donation of $10,000 or more, please contact our philanthropy
+          department at
+          <x id="0" equiv-text="&lt;a href=&quot;mailto:donations@archive.org&quot;&gt;"/>donations@archive.org<x id="1" equiv-text="&lt;/a&gt;&#10;        "/></source>
+<target>
+          Para hacer una donación de $10,000 o más, comunícate con nuestro
+          departamento de filantropía en
+          <x id="0" equiv-text="&lt;a href=&quot;mailto:donations@archive.org&quot;&gt;"/>donations@archive.org<x id="1" equiv-text="&lt;/a&gt;&#10;        "/></target>
+</trans-unit>
+<trans-unit id="s6090e7072ddb0872">
+  <source>Please select an amount (minimum $1)</source>
+<target>Selecciona una cantidad (mínimo $1)</target>
+</trans-unit>
+<trans-unit id="se185c2430b4347ba">
+  <source>Please enter a valid donation amount</source>
+<target>Escribe una cantidad de donación válida</target>
+</trans-unit>
+<trans-unit id="s23f5e19870334f0d">
+  <source>Pay with Apple Pay</source>
+<target>Pagar con Apple Pay</target>
+</trans-unit>
+<trans-unit id="s9b304ef58dd8be08">
+  <source>Pay with Google Pay</source>
+<target>Pagar con Google Pay</target>
+</trans-unit>
+<trans-unit id="sd3796671b94fe0d6">
+  <source>Pay with Venmo</source>
+<target>Pagar con Venmo</target>
+</trans-unit>
+<trans-unit id="s505636e8ede55f02">
+  <source>Pay with PayPal</source>
+<target>Pagar con PayPal</target>
+</trans-unit>
+<trans-unit id="s49d9f0805e17f262">
+  <source>Credit Card</source>
+<target>Tarjeta de crédito</target>
+</trans-unit>
+<trans-unit id="s50bf30bd981c33ac">
+  <source>Change payment method</source>
+<target>Cambiar método de pago</target>
+</trans-unit>
+<trans-unit id="s33c70c33d00ddccd">
+  <source>Edit this amount</source>
+<target>Editar esta cantidad</target>
+</trans-unit>
+<trans-unit id="sf14e9ba96f59f306">
+  <source><x id="0" equiv-text="${displayAmount}"/> Monthly Donation</source>
+<target>Donación mensual de <x id="0" equiv-text="${displayAmount}"/></target>
+</trans-unit>
+<trans-unit id="s0611b8fbefc5f32d">
+  <source><x id="0" equiv-text="${displayAmount}"/> Donation</source>
+<target>Donación de <x id="0" equiv-text="${displayAmount}"/></target>
+</trans-unit>
+<trans-unit id="s381d9645b95c884a">
+  <source>Total: <x id="0" equiv-text="${amount}"/>/month</source>
+<target>Total: <x id="0" equiv-text="${amount}"/>/mes</target>
+</trans-unit>
+<trans-unit id="s27ca7d4da1a0def3">
+  <source>Total: <x id="0" equiv-text="${amount}"/></source>
+<target>Total: <x id="0" equiv-text="${amount}"/></target>
+</trans-unit>
+<trans-unit id="s873cf8b9c6836348">
+  <source>Card number</source>
+<target>Número de tarjeta</target>
+</trans-unit>
+<trans-unit id="s0b4bfc19aa153afd">
+  <source>CVC</source>
+<target>CVC</target>
+</trans-unit>
+<trans-unit id="s4d633e68f3eb5188">
+  <source>MM / YY</source>
+<target>MM / AA</target>
+</trans-unit>
+<trans-unit id="s66df49b292a11e4e">
+  <source>Choose a payment method</source>
+<target>Elige un método de pago</target>
+</trans-unit>
+<trans-unit id="se91c884c087015e5">
+  <source>Help us stay in touch</source>
+<target>Ayúdanos a mantenernos en contacto</target>
+</trans-unit>
+<trans-unit id="s6ad620dca5742149">
+  <source>Enter payment information</source>
+<target>Escribe la información de pago</target>
+</trans-unit>
+<trans-unit id="s474f9b2aff4c2eea">
+  <source>Donate</source>
+<target>Donar</target>
+</trans-unit>
+<trans-unit id="s8bf765946a155e41">
+  <source>Your payment will be securely processed</source>
+<target>Tu pago se procesará de forma segura</target>
+</trans-unit>
+<trans-unit id="s374cfbe25c1f1d77">
+  <source>Please enter contact info.</source>
+<target>Escribe tu información de contacto.</target>
+</trans-unit>
+<trans-unit id="s7990abec2352a07c">
+  <source>Please enter a valid donation amount.</source>
+<target>Escribe una cantidad de donación válida.</target>
+</trans-unit>
+<trans-unit id="h33a6ec5964686e4c">
+  <source>
+      <x id="0" equiv-text="&lt;p&gt;"/>
+        You are about to make a <x id="1" equiv-text="&lt;b&gt;${this.donationType}&lt;/b&gt;"/> donation of
+        <x id="2" equiv-text="&lt;b&gt;${this.formattedAmount} ${this.currencyType}&lt;/b&gt;"/> to the Internet
+        Archive.
+      <x id="3" equiv-text="&lt;/p&gt;&#10;    "/></source>
+<target>
+      <x id="0" equiv-text="&lt;p&gt;"/>
+        Estás a punto de hacer una donación <x id="1" equiv-text="&lt;b&gt;${this.donationType}&lt;/b&gt;"/> de
+        <x id="2" equiv-text="&lt;b&gt;${this.formattedAmount} ${this.currencyType}&lt;/b&gt;"/> a Internet
+        Archive.
+      <x id="3" equiv-text="&lt;/p&gt;&#10;    "/></target>
+</trans-unit>
+<trans-unit id="h88dff80333b0962c">
+  <source>
+      <x id="0" equiv-text="&lt;p&gt;"/>
+        You are about to begin making <x id="1" equiv-text="&lt;b&gt;"/>monthly<x id="2" equiv-text="&lt;/b&gt;"/> donations of
+        <x id="3" equiv-text="&lt;b&gt;${this.formattedAmount} ${this.currencyType}&lt;/b&gt;"/> to the Internet
+        Archive. (Your first recurring contribution will be next month.)
+      <x id="4" equiv-text="&lt;/p&gt;&#10;    "/></source>
+<target>
+      <x id="0" equiv-text="&lt;p&gt;"/>
+        Estás a punto de empezar a hacer donaciones <x id="1" equiv-text="&lt;b&gt;"/>mensuales<x id="2" equiv-text="&lt;/b&gt;"/> de
+        <x id="3" equiv-text="&lt;b&gt;${this.formattedAmount} ${this.currencyType}&lt;/b&gt;"/> a Internet
+        Archive. (Tu primera contribución recurrente será el próximo mes.)
+      <x id="4" equiv-text="&lt;/p&gt;&#10;    "/></target>
+</trans-unit>
+<trans-unit id="sd5cbf9fee1a51a18">
+  <source>Start monthly donation</source>
+<target>Empezar la donación mensual</target>
+</trans-unit>
+<trans-unit id="s7a557cf86155eb44">
+  <source>Complete donation</source>
+<target>Completar la donación</target>
+</trans-unit>
+<trans-unit id="s2ceb11be2290bb1b">
+  <source>Cancel</source>
+<target>Cancelar</target>
+</trans-unit>
+<trans-unit id="s73b125aabf2a94c7">
+  <source>Questions?</source>
+<target>¿Preguntas?</target>
+</trans-unit>
+<trans-unit id="s9b24633aab387054">
+  <source>Thank you for donating!</source>
+<target>¡Gracias por donar!</target>
+</trans-unit>
+<trans-unit id="s81ecf2d4386b8e84">
+  <source>Continue</source>
+<target>Continuar</target>
+</trans-unit>
+<trans-unit id="s08b05407b5565ca4">
+  <source>or</source>
+<target>o</target>
+</trans-unit>
+<trans-unit id="s9dd749c8150240f4">
+  <source>Join our Monthly Giving Circle</source>
+<target>Únete a nuestro Círculo de Donaciones Mensuales</target>
+</trans-unit>
+<trans-unit id="sf3e47ad58cd9b595">
+  <source>Monthly support helps us reliably plan for the future.</source>
+<target>El apoyo mensual nos ayuda a planificar el futuro con confianza.</target>
+</trans-unit>
+<trans-unit id="s4f6204a02028e1af">
+  <source>Enter your monthly amount</source>
+<target>Escribe tu cantidad mensual</target>
+</trans-unit>
+<trans-unit id="s0d1c47fc7b3a6e5e">
+  <source>Monthly amount in dollars</source>
+<target>Cantidad mensual en dólares</target>
+</trans-unit>
+<trans-unit id="sa5639b33fec73666">
+  <source>YES, I'll donate monthly</source>
+<target>SÍ, donaré cada mes</target>
+</trans-unit>
+<trans-unit id="s699a20db8d8f8202">
+  <source>Please enter a valid amount.</source>
+<target>Escribe una cantidad válida.</target>
+</trans-unit>
+<trans-unit id="h1b6c0f4149e6b703">
+  <source>
+        To make a donation of $10,000 or more, please contact our philanthropy
+        department at
+        <x id="0" equiv-text="&lt;a href=&quot;mailto:donations@archive.org&quot;&gt;"/>donations@archive.org<x id="1" equiv-text="&lt;/a&gt;&#10;      "/></source>
+<target>
+        Para hacer una donación de $10,000 o más, comunícate con nuestro
+        departamento de filantropía en
+        <x id="0" equiv-text="&lt;a href=&quot;mailto:donations@archive.org&quot;&gt;"/>donations@archive.org<x id="1" equiv-text="&lt;/a&gt;&#10;      "/></target>
+</trans-unit>
+<trans-unit id="sc51197ca5353dfb5">
+  <source>The minimum donation amount is $1.</source>
+<target>La donación mínima es de $1.</target>
+</trans-unit>
+<trans-unit id="sbb07c2ef5540e509">
+  <source>Hamburger icon</source>
+<target>Icono de menú</target>
+</trans-unit>
+<trans-unit id="see47b0d5c2bde611">
+  <source>An icon used to represent a menu that can be toggled by interacting with this icon.</source>
+<target>Un icono que representa un menú que se abre y se cierra al interactuar con él.</target>
+</trans-unit>
+<trans-unit id="s90beeb82c65e3e93">
+  <source>Toggle login menu</source>
+<target>Mostrar u ocultar el menú de inicio de sesión</target>
+</trans-unit>
+<trans-unit id="s5e6b698a2ec87331">
+  <source>Sign up</source>
+<target>Regístrate</target>
+</trans-unit>
+<trans-unit id="scb04435672ac5410">
+  <source>Log in</source>
+<target>Iniciar sesión</target>
+</trans-unit>
+<trans-unit id="s8f01bcc957dc8abb">
+  <source>Collapse <x id="0" equiv-text="${this.mediatype}"/> menu</source>
+<target>Contraer el menú de <x id="0" equiv-text="${this.mediatype}"/></target>
+</trans-unit>
+<trans-unit id="s9dfdd8881591a08a">
+  <source>Expand <x id="0" equiv-text="${this.mediatype}"/> menu</source>
+<target>Expandir el menú de <x id="0" equiv-text="${this.mediatype}"/></target>
+</trans-unit>
+<trans-unit id="s6a0bcbce56a9c0fb">
+  <source>Featured</source>
+<target>Destacados</target>
+</trans-unit>
+<trans-unit id="s6d02dc19e21eb49c">
+  <source>Top</source>
+<target>Principales</target>
+</trans-unit>
+<trans-unit id="s13b59015dc837b71">
+  <source>Open main menu</source>
+<target>Abrir el menú principal</target>
+</trans-unit>
+<trans-unit id="sb8b7458cf38d2bb2">
+  <source>Go home</source>
+<target>Ir al inicio</target>
+</trans-unit>
+<trans-unit id="sefbe887e4c1066f5">
+  <source>Close user menu</source>
+<target>Cerrar el menú de usuario</target>
+</trans-unit>
+<trans-unit id="s40bad4f49bbf9037">
+  <source>Expand user menu</source>
+<target>Expandir el menú de usuario</target>
+</trans-unit>
+<trans-unit id="sb403c27badd9ff89">
+  <source>Profile picture for <x id="0" equiv-text="${this.screenName}"/></source>
+<target>Foto de perfil de <x id="0" equiv-text="${this.screenName}"/></target>
+</trans-unit>
+<trans-unit id="s42e1b68d00bfc746">
+  <source>Donate to the archive</source>
+<target>Dona al Archive</target>
+</trans-unit>
+<trans-unit id="s96668830629e0dfc">
+  <source>Upload</source>
+<target>Subir</target>
+</trans-unit>
+<trans-unit id="sc75a2ae331b763bb">
+  <source>Save Page Now</source>
+<target>Guardar página ahora</target>
+</trans-unit>
+<trans-unit id="s9685c7283978ebe0">
+  <source>Capture a web page as it appears now for use as a trusted citation in the future.</source>
+<target>Captura una página web tal como se ve ahora para usarla como cita confiable en el futuro.</target>
+</trans-unit>
+<trans-unit id="s29d172b434200a59">
+  <source>Enter a URL to save</source>
+<target>Escribe una URL para guardarla</target>
+</trans-unit>
+<trans-unit id="s33f85f24c0f5f008">
+  <source>Save</source>
+<target>Guardar</target>
+</trans-unit>
+<trans-unit id="sa3f7437027dd0e2e">
+  <source>Please enter a valid web address</source>
+<target>Escribe una dirección web válida</target>
+</trans-unit>
+<trans-unit id="h3a575fb6a9704225">
+  <source>Search the history of more than <x id="0" equiv-text="${this.waybackPagesArchived}&#10;              &lt;a @click=&quot;${this.emitWaybackMachineStatsLinkClicked}&quot; data-event-click-tracking=&quot;TopNav|WaybackMachineStatsLink&quot; href=&quot;https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures/&quot;&gt;"/>web pages<x id="1" equiv-text="&lt;/a&gt;"/>
+              on the Internet.</source>
+<target>Busca en la historia de más de <x id="0" equiv-text="${this.waybackPagesArchived}&#10;              &lt;a @click=&quot;${this.emitWaybackMachineStatsLinkClicked}&quot; data-event-click-tracking=&quot;TopNav|WaybackMachineStatsLink&quot; href=&quot;https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures/&quot;&gt;"/>páginas web<x id="1" equiv-text="&lt;/a&gt;"/>
+              de Internet.</target>
+</trans-unit>
+<trans-unit id="s5af7506ad5717736">
+  <source>Visit the Wayback Machine</source>
+<target>Visita la Wayback Machine</target>
+</trans-unit>
+<trans-unit id="s4516b91dba2ffe93">
+  <source>Search the Wayback Machine</source>
+<target>Buscar en la Wayback Machine</target>
+</trans-unit>
+<trans-unit id="sdeef9e88871e5e9b">
+  <source>Enter URL or keywords</source>
+<target>Escribe una URL o palabras clave</target>
+</trans-unit>
+<trans-unit id="s7b5ffb3b9d69f45d">
+  <source>Mobile Apps</source>
+<target>Aplicaciones móviles</target>
+</trans-unit>
+<trans-unit id="sd1c0ded843f222b3">
+  <source>Browser Extensions</source>
+<target>Extensiones de navegador</target>
+</trans-unit>
+<trans-unit id="s05f953caf1db7632">
+  <source>Archive-It Subscription</source>
+<target>Suscripción a Archive-It</target>
+</trans-unit>
+<trans-unit id="s59cf1fbcdc399828">
+  <source>Internet Archive Audio</source>
+<target>Audio de Internet Archive</target>
+</trans-unit>
+<trans-unit id="s65bc1235f931dffe">
+  <source>Librivox Free Audio</source>
+<target>Audio gratuito de Librivox</target>
+</trans-unit>
+<trans-unit id="sf83e224f6ca4ab56">
+  <source>All Audio</source>
+<target>Todo el audio</target>
+</trans-unit>
+<trans-unit id="s4fb0256f87608aa0">
+  <source>Old Time Radio</source>
+<target>Radio de antaño</target>
+</trans-unit>
+<trans-unit id="sd668719bc2732027">
+  <source>78 RPMs and Cylinder Recordings</source>
+<target>Discos de 78 RPM y cilindros</target>
+</trans-unit>
+<trans-unit id="s279a1cb9fb49e0ae">
+  <source>Audio Books &amp; Poetry</source>
+<target>Audiolibros y poesía</target>
+</trans-unit>
+<trans-unit id="s2a9bcd426303fc90">
+  <source>Computers, Technology and Science</source>
+<target>Computación, tecnología y ciencia</target>
+</trans-unit>
+<trans-unit id="s28073688bdd0dbda">
+  <source>Music, Arts &amp; Culture</source>
+<target>Música, arte y cultura</target>
+</trans-unit>
+<trans-unit id="s64f9c1bad74946c3">
+  <source>News &amp; Public Affairs</source>
+<target>Noticias y asuntos públicos</target>
+</trans-unit>
+<trans-unit id="s2285e16155e3ac53">
+  <source>Spirituality &amp; Religion</source>
+<target>Espiritualidad y religión</target>
+</trans-unit>
+<trans-unit id="s168e676da3739030">
+  <source>Podcasts</source>
+<target>Pódcasts</target>
+</trans-unit>
+<trans-unit id="sa6623b14511dc879">
+  <source>Radio News Archive</source>
+<target>Archivo de noticias de radio</target>
+</trans-unit>
+<trans-unit id="sfc8531b2fd0f31cb">
+  <source>Images</source>
+<target>Imágenes</target>
+</trans-unit>
+<trans-unit id="saeb95e79a3695c8e">
+  <source>All Images</source>
+<target>Todas las imágenes</target>
+</trans-unit>
+<trans-unit id="s8a51ce04b439b345">
+  <source>Cover Art</source>
+<target>Portadas</target>
+</trans-unit>
+<trans-unit id="sd7bfa7f3a37bdfe5">
+  <source>Solar System Collection</source>
+<target>Colección del sistema solar</target>
+</trans-unit>
+<trans-unit id="s0487f33d9ddaabde">
+  <source>About</source>
+<target>Acerca de</target>
+</trans-unit>
+<trans-unit id="sec9bb1a7c11e8e91">
+  <source>Blog</source>
+<target>Blog</target>
+</trans-unit>
+<trans-unit id="sc265a3e29e1206e4">
+  <source>Events</source>
+<target>Eventos</target>
+</trans-unit>
+<trans-unit id="s199f5853f4e718f7">
+  <source>Projects</source>
+<target>Proyectos</target>
+</trans-unit>
+<trans-unit id="s352719d86112de9a">
+  <source>Help</source>
+<target>Ayuda</target>
+</trans-unit>
+<trans-unit id="s87bae2710b2492c3">
+  <source>Contact</source>
+<target>Contacto</target>
+</trans-unit>
+<trans-unit id="s6c470eea2ab4e3bd">
+  <source>Jobs</source>
+<target>Empleos</target>
+</trans-unit>
+<trans-unit id="s0062d29dab02c851">
+  <source>Volunteer</source>
+<target>Voluntariado</target>
+</trans-unit>
+<trans-unit id="sfec0c302ab140e30">
+  <source>Software</source>
+<target>Software</target>
+</trans-unit>
+<trans-unit id="sc6638fa941d4a799">
+  <source>All Software</source>
+<target>Todo el software</target>
+</trans-unit>
+<trans-unit id="sc7d4a8127c2e3efa">
+  <source>Old School Emulation</source>
+<target>Emulación clásica</target>
+</trans-unit>
+<trans-unit id="s4689b7cdaddbea62">
+  <source>Historical Software</source>
+<target>Software histórico</target>
+</trans-unit>
+<trans-unit id="s1da24b6ee60b5fbb">
+  <source>Classic PC Games</source>
+<target>Juegos clásicos de PC</target>
+</trans-unit>
+<trans-unit id="s4bf3b6fee15645cb">
+  <source>Software Library</source>
+<target>Biblioteca de software</target>
+</trans-unit>
+<trans-unit id="s978df2676f48193e">
+  <source>Vintage Software</source>
+<target>Software antiguo</target>
+</trans-unit>
+<trans-unit id="sdcf8e54b1fe2bc7a">
+  <source>CD-ROM Software</source>
+<target>Software en CD-ROM</target>
+</trans-unit>
+<trans-unit id="s58d327244ac97208">
+  <source>Software Sites</source>
+<target>Sitios de software</target>
+</trans-unit>
+<trans-unit id="s6aa68996f76e4bbc">
+  <source>Shareware CD-ROMs</source>
+<target>CD-ROM de shareware</target>
+</trans-unit>
+<trans-unit id="s6bc72525c0e62ae1">
+  <source>CD-ROM Images</source>
+<target>Imágenes de CD-ROM</target>
+</trans-unit>
+<trans-unit id="s2b6c26aeeab12877">
+  <source>Texts</source>
+<target>Textos</target>
+</trans-unit>
+<trans-unit id="s3fae46211841614c">
+  <source>American Libraries</source>
+<target>Bibliotecas estadounidenses</target>
+</trans-unit>
+<trans-unit id="sce10b7d19c6929c8">
+  <source>All Texts</source>
+<target>Todos los textos</target>
+</trans-unit>
+<trans-unit id="s7a0df7f5f36a2b4f">
+  <source>Smithsonian Libraries</source>
+<target>Bibliotecas Smithsonian</target>
+</trans-unit>
+<trans-unit id="sb2099d48346487ee">
+  <source>Genealogy</source>
+<target>Genealogía</target>
+</trans-unit>
+<trans-unit id="sd178927e06d04343">
+  <source>Canadian Libraries</source>
+<target>Bibliotecas canadienses</target>
+</trans-unit>
+<trans-unit id="s4224adab4a0675c7">
+  <source>Children's Library</source>
+<target>Biblioteca infantil</target>
+</trans-unit>
+<trans-unit id="s0ad8488e8c739ac8">
+  <source>Books by Language</source>
+<target>Libros por idioma</target>
+</trans-unit>
+<trans-unit id="s780116f0df578c44">
+  <source>Government Documents</source>
+<target>Documentos gubernamentales</target>
+</trans-unit>
+<trans-unit id="s47aac8be0e7ec366">
+  <source>Explore the Collections</source>
+<target>Explora las colecciones</target>
+</trans-unit>
+<trans-unit id="s0763aeb5be71575a">
+  <source>Learn More</source>
+<target>Más información</target>
+</trans-unit>
+<trans-unit id="sd05f09cf5bfd683a">
+  <source>Build Collections</source>
+<target>Crea colecciones</target>
+</trans-unit>
+<trans-unit id="s85186a61e0d55bac">
+  <source>Video</source>
+<target>Video</target>
+</trans-unit>
+<trans-unit id="sb692bfe5f5127e8e">
+  <source>TV News</source>
+<target>Noticias de TV</target>
+</trans-unit>
+<trans-unit id="s6a28135fd904ef81">
+  <source>Understanding 9/11</source>
+<target>Entender el 11-S</target>
+</trans-unit>
+<trans-unit id="s3490c3d5b9d69cb7">
+  <source>All Video</source>
+<target>Todo el video</target>
+</trans-unit>
+<trans-unit id="sb862224137da29e2">
+  <source>Animation &amp; Cartoons</source>
+<target>Animación y dibujos animados</target>
+</trans-unit>
+<trans-unit id="s49405ed700c83682">
+  <source>Arts &amp; Music</source>
+<target>Arte y música</target>
+</trans-unit>
+<trans-unit id="s2508631e3b9797d7">
+  <source>Computers &amp; Technology</source>
+<target>Computación y tecnología</target>
+</trans-unit>
+<trans-unit id="s3e0762b095cc36d3">
+  <source>Cultural &amp; Academic Films</source>
+<target>Películas culturales y académicas</target>
+</trans-unit>
+<trans-unit id="s075787b0e573bf1b">
+  <source>Ephemeral Films</source>
+<target>Películas efímeras</target>
+</trans-unit>
+<trans-unit id="s507316d0c3463394">
+  <source>Movies</source>
+<target>Películas</target>
+</trans-unit>
+<trans-unit id="see0450cbd700e6ba">
+  <source>Sports Videos</source>
+<target>Videos deportivos</target>
+</trans-unit>
+<trans-unit id="s40e8795372723a11">
+  <source>Television</source>
+<target>Televisión</target>
+</trans-unit>
+<trans-unit id="sb6ac25024a3a921e">
+  <source>Videogame Videos</source>
+<target>Videos de videojuegos</target>
+</trans-unit>
+<trans-unit id="s8322598786398a12">
+  <source>Vlogs</source>
+<target>Videoblogs</target>
+</trans-unit>
+<trans-unit id="s758a924a77ed65b4">
+  <source>Youth Media</source>
+<target>Medios juveniles</target>
+</trans-unit>
+<trans-unit id="s98ca282a5c48dd63">
+  <source>Upload files</source>
+<target>Subir archivos</target>
+</trans-unit>
+<trans-unit id="s2e568cab855a6039">
+  <source>My uploads</source>
+<target>Mis subidas</target>
+</trans-unit>
+<trans-unit id="s41dcd6f6de2708cc">
+  <source>My loans</source>
+<target>Mis préstamos</target>
+</trans-unit>
+<trans-unit id="s8f1dff5d47459b5e">
+  <source>My favorites</source>
+<target>Mis favoritos</target>
+</trans-unit>
+<trans-unit id="sd194992b9da80b72">
+  <source>My lists</source>
+<target>Mis listas</target>
+</trans-unit>
+<trans-unit id="s4b71f2218c4c60ea">
+  <source>My collections</source>
+<target>Mis colecciones</target>
+</trans-unit>
+<trans-unit id="s45eac9685577cd7c">
+  <source>My web archives</source>
+<target>Mis archivos web</target>
+</trans-unit>
+<trans-unit id="se85a9ddb91124b39">
+  <source>Account settings</source>
+<target>Configuración de la cuenta</target>
+</trans-unit>
+<trans-unit id="s9fda4232f5e1876a">
+  <source>Get help</source>
+<target>Obtener ayuda</target>
+</trans-unit>
+<trans-unit id="sb64127e4e4f0b575">
+  <source>Log out</source>
+<target>Cerrar sesión</target>
+</trans-unit>
+<trans-unit id="s690b2f9382a10be8">
+  <source>Sign up for free</source>
+<target>Regístrate gratis</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

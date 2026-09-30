@@ -1,5 +1,6 @@
 import { html, LitElement } from 'lit';
-import { customElement, query, state } from 'lit/decorators.js';
+import { query, state } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import type {
   AnalyticsEvent,
   AnalyticsManagerInterface,

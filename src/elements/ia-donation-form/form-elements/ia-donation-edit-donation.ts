@@ -7,8 +7,9 @@ import {
   type PropertyValues,
   type TemplateResult,
 } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
-import { msg, str } from '@lit/localize';
+import { property, query, state } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
+import { localized, msg, str } from '@lit/localize';
 import currency from 'currency.js';
 
 import themeStyles from '@src/themes/theme-styles';
@@ -80,6 +81,7 @@ export type EditDonationAmountSelectionLayout =
  * form.
  */
 @customElement('ia-donation-edit-donation')
+@localized()
 export class IADonationEditDonation extends LitElement {
   @property({ type: Object })
   donationInfo: DonationPaymentInfo = defaultSelectedDonationInfo;

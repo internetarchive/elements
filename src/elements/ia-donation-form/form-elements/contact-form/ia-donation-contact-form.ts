@@ -5,9 +5,10 @@ import {
   type PropertyValues,
   type TemplateResult,
 } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 import { emailIcon, localePinIcon, userIcon } from '../../icons';
 import {
@@ -32,6 +33,7 @@ import { countries } from './countries';
  * the tag name, and its field ids are unique across the page.
  */
 @customElement('ia-donation-contact-form')
+@localized()
 export class IADonationContactForm extends LitElement {
   @query('ia-donation-badged-input.donation-contact-form-email')
   emailBadgedInput!: IADonationBadgedInput;
@@ -136,19 +138,21 @@ export class IADonationContactForm extends LitElement {
 
   /** At least two non-whitespace characters */
   private minTwoCharPattern = '.*\\S{2,}.*';
-  private minTwoCharValidationMessage = msg('Enter at least two characters');
+  private get minTwoCharValidationMessage(): string {
+    return msg('Enter at least two characters');
+  }
 
   /** At least two non-whitespace characters with at least two characters between them */
   private streetAddressPattern = '.*?\\S.{2,}\\S.*?';
-  private streetAddressValidationMessage = msg(
-    'Enter at least four characters',
-  );
+  private get streetAddressValidationMessage(): string {
+    return msg('Enter at least four characters');
+  }
 
   /** 12345, 12345-6789 or 123456789 */
   private usZipCodePattern = '^\\d{5}(-?\\d{4})?$';
-  private usZipCodeValidationMessage = msg(
-    'Enter a valid 5 or 9 digit zip/postal code',
-  );
+  private get usZipCodeValidationMessage(): string {
+    return msg('Enter a valid 5 or 9 digit zip/postal code');
+  }
 
   render(): TemplateResult {
     return html`

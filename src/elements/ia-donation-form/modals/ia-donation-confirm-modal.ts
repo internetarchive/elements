@@ -5,8 +5,9 @@ import {
   type CSSResultGroup,
   type TemplateResult,
 } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
+import { property } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
+import { localized, msg } from '@lit/localize';
 import currency from 'currency.js';
 
 import themeStyles from '@src/themes/theme-styles';
@@ -17,6 +18,7 @@ import { DonationType } from '../models/donation-type';
  * donor is about to give, with Complete and Cancel buttons.
  */
 @customElement('ia-donation-confirm-modal')
+@localized()
 export class IADonationConfirmModal extends LitElement {
   @property({ type: Number }) amount = 5;
 

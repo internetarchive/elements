@@ -100,7 +100,7 @@ export default class DropdownMenu extends TrackedElement {
   }
 
   dropdownLink(link: IATopNavLink): TemplateResult {
-    const calloutText = this.config?.callouts?.[link.title];
+    const calloutText = this.config?.callouts?.[link.key ?? link.title];
     const isMobileUpload = link.class === 'mobile-upload';
     const isTabbable = this.open && !isMobileUpload;
 

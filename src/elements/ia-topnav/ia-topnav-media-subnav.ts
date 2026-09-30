@@ -16,9 +16,10 @@ import {
 import { defaultTopNavConfig } from './data/menus';
 import { subnavListCSS } from './subnav-list-styles';
 import themeStyles from '@src/themes/theme-styles';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 @customElement('ia-topnav-media-subnav')
+@localized()
 export class MediaSubnav extends TrackedElement {
   @property({ type: String }) baseHost = '';
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
@@ -111,7 +112,9 @@ export class MediaSubnav extends TrackedElement {
         <a
           .href="${formatUrl(link.url, this.baseHost)}"
           @click=${this.trackClick}
-          data-event-click-tracking="${this.analyticsEvent(link.title)}"
+          data-event-click-tracking="${this.analyticsEvent(
+            link.key ?? link.title,
+          )}"
           ><img src="${ifDefined(link.icon)}" loading="lazy" />${link.title}</a
         >
       `,
@@ -125,7 +128,9 @@ export class MediaSubnav extends TrackedElement {
           <a
             .href="${formatUrl(link.url, this.baseHost)}"
             @click=${this.trackClick}
-            data-event-click-tracking="${this.analyticsEvent(link.title)}"
+            data-event-click-tracking="${this.analyticsEvent(
+              link.key ?? link.title,
+            )}"
             >${link.title}</a
           >
         </li>

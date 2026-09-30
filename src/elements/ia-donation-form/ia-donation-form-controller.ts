@@ -5,8 +5,9 @@ import {
   type PropertyValues,
   type TemplateResult,
 } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
+import { property, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
+import { localized, msg } from '@lit/localize';
 import currency from 'currency.js';
 import {
   LazyLoaderService,
@@ -67,6 +68,7 @@ import './ia-donation-form';
  * are rendered here and slotted into `<ia-donation-form>`.
  */
 @customElement('ia-donation-form-controller')
+@localized()
 export class IADonationFormController extends LitElement {
   @property({ type: String }) environment?: HostingEnvironment;
 

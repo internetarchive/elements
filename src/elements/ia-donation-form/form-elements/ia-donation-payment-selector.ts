@@ -7,8 +7,9 @@ import {
   type PropertyValues,
   type TemplateResult,
 } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
-import { msg } from '@lit/localize';
+import { property, state } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
+import { localized, msg } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
 import type { PaymentProvidersInterface } from '../braintree/payment-providers-interface';
@@ -36,6 +37,7 @@ type PaymentMode = 'apple' | 'google' | 'venmo' | 'cc' | 'paypal';
  * the donation amount is invalid.
  */
 @customElement('ia-donation-payment-selector')
+@localized()
 export class IADonationPaymentSelector extends LitElement {
   @property({ type: Boolean }) donationInfoValid = true;
 

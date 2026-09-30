@@ -5,8 +5,9 @@ import {
   type CSSResultGroup,
   type TemplateResult,
 } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
-import { msg, str } from '@lit/localize';
+import { property } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
+import { localized, msg, str } from '@lit/localize';
 import currency from 'currency.js';
 
 import themeStyles from '@src/themes/theme-styles';
@@ -15,6 +16,7 @@ import { DonationType } from '../models/donation-type';
 
 /** The "Total: $X" line under the amount picker, with "/month" for monthly gifts. */
 @customElement('ia-donation-total-amount')
+@localized()
 export class IADonationTotalAmount extends LitElement {
   @property({ type: Object }) donationInfo?: DonationPaymentInfo;
 
