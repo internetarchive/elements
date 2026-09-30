@@ -46,6 +46,10 @@ app-root {
   overflow-y: auto;
 }
 
+#ia-sidebar[hidden] {
+  display: none;
+}
+
 /* Styled as a button, since it swaps the whole view rather than jumping to an
    anchor like the element links below it do. */
 #ia-all-link {
@@ -148,9 +152,43 @@ app-root {
   margin-bottom: 0.5rem;
 }
 
+#ia-content-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+  /* The title drops below the toggle rather than being squeezed to a letter
+     per line, which is what the narrowest phone with the nav up leaves it. */
+  flex-wrap: wrap;
+}
+
+/* Sits in the content column rather than in the sidebar, so it is still on
+   screen to press once the sidebar is hidden. Borrows the look of
+   #ia-all-link, so the demo's two controls read as a pair. */
+#ia-nav-toggle {
+  flex-shrink: 0;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fff;
+  color: #213547;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.1s,
+    border-color 0.1s;
+}
+
+#ia-nav-toggle:hover {
+  background: #f0f0f0;
+  border-color: #767676;
+}
+
 #ia-content h1 {
   font-size: 1.4rem;
-  margin: 0 0 0.25rem;
+  margin: 0;
   display: flex;
   align-items: center;
 }

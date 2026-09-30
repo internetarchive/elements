@@ -1,8 +1,9 @@
 import { fixture, fixtureCleanup, waitUntil } from '@open-wc/testing-helpers';
-import { afterEach, describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 import { html } from 'lit';
 
 import type { AppRoot } from './app-root';
+import { NARROW_VIEWPORT } from './app-root';
 import './app-root';
 
 /**
@@ -37,10 +38,106 @@ function scrollToAnchor(el: AppRoot, id: string) {
   el.querySelector(`#${id}`)?.scrollIntoView();
 }
 
+function navToggle(el: AppRoot): HTMLButtonElement {
+  return el.querySelector('#ia-nav-toggle') as HTMLButtonElement;
+}
+
+function sidebar(el: AppRoot): HTMLElement {
+  return el.querySelector('#ia-sidebar') as HTMLElement;
+}
+
+type MediaListener = (event: MediaQueryListEvent) => void;
+
+/**
+ * Pins the demo's narrow-viewport query, and hands back a way to flip it the
+ * way a real resize would. Install it before the fixture, since the opening
+ * state is read as the element is built. Every other query goes through to
+ * the real matchMedia, so nothing a story asks about changes.
+ */
+function stubNarrowViewport(narrow: boolean) {
+  const real = window.matchMedia.bind(window);
+  const listeners = new Set<MediaListener>();
+  let matches = narrow;
+
+  vi.spyOn(window, 'matchMedia').mockImplementation((query: string) => {
+    if (query !== NARROW_VIEWPORT) return real(query);
+    return {
+      media: query,
+      get matches() {
+        return matches;
+      },
+      addEventListener(
+        _type: string,
+        listener: MediaListener,
+        options?: AddEventListenerOptions,
+      ) {
+        listeners.add(listener);
+        options?.signal?.addEventListener('abort', () =>
+          listeners.delete(listener),
+        );
+      },
+      removeEventListener(_type: string, listener: MediaListener) {
+        listeners.delete(listener);
+      },
+    } as unknown as MediaQueryList;
+  });
+
+  return {
+    /** Crosses the breakpoint, as dragging a window narrower would. */
+    set(next: boolean) {
+      matches = next;
+      for (const listener of listeners) {
+        listener({
+          matches: next,
+          media: NARROW_VIEWPORT,
+        } as MediaQueryListEvent);
+      }
+    },
+  };
+}
+
+/**
+ * Waits for every story to have settled and the page to have grown past the
+ * viewport, then parks the scroll at the top with the spy marking the first
+ * element. Nothing about the scroll spy holds before that.
+ *
+ * Each story requests an update as it lands, and any still in flight would
+ * rebuild the scroll spy on its own, hiding whether the thing under test
+ * rebuilt it. A story that fails to import keeps a message too, so this waits
+ * on the console as much as on the clock. The timeout covers loading all the
+ * modules cold, which is what happens when one of these tests runs on its own.
+ */
+async function settleScrollSpy(el: AppRoot, firstId: string) {
+  await waitUntil(
+    () => el.querySelectorAll('.ia-story-message').length === 0,
+    'the stories never all settled; check the console for one that failed to import',
+    { timeout: 5000 },
+  );
+  await el.updateComplete;
+
+  // Loaded stories are also what make the page taller than the viewport.
+  // Without that, scrolling is a no-op and the assertions that follow would
+  // blame the scroll spy for a page that simply never moved.
+  await waitUntil(
+    () => document.documentElement.scrollHeight > window.innerHeight,
+    'the page never grew tall enough to scroll',
+  );
+
+  // The otp-input story puts focus in its first field as it loads, which
+  // scrolls the page down to it. Start from the top instead, so the spy has
+  // the first element to mark.
+  window.scrollTo({ top: 0 });
+  await waitUntil(
+    () => inViewHref(el) === `#${firstId}`,
+    'the scroll spy never marked the first element',
+  );
+}
+
 const appRoot = () => fixture<AppRoot>(html`<app-root></app-root>`);
 
 describe('AppRoot', () => {
   afterEach(() => {
+    vi.restoreAllMocks();
     fixtureCleanup();
     clearHash();
     // Tests that scroll would otherwise leave the next one part-way down.
@@ -177,35 +274,8 @@ describe('AppRoot', () => {
       const ids = anchorIds(el);
       const firstId = ids[0];
 
-      // Every story has to have settled before the disconnect below. Each one
-      // requests an update as it lands, and any still in flight would rebuild
-      // the scroll spy on its own, hiding whether reconnecting rebuilt it.
-      // A story that fails to import keeps a message too, so this waits on the
-      // console as much as on the clock. The timeout covers loading all the
-      // modules cold, which is what happens when this test runs on its own.
-      await waitUntil(
-        () => el.querySelectorAll('.ia-story-message').length === 0,
-        'the stories never all settled; check the console for one that failed to import',
-        { timeout: 5000 },
-      );
-      await el.updateComplete;
-
-      // Loaded stories are also what make the page taller than the viewport.
-      // Without that, scrolling is a no-op and the assertions below would
-      // blame the scroll spy for a page that simply never moved.
-      await waitUntil(
-        () => document.documentElement.scrollHeight > window.innerHeight,
-        'the page never grew tall enough to scroll',
-      );
-
-      // The otp-input story puts focus in its first field as it loads, which
-      // scrolls the page down to it. Start from the top instead, so the spy
-      // has the first element to mark.
-      window.scrollTo({ top: 0 });
-      await waitUntil(
-        () => inViewHref(el) === `#${firstId}`,
-        'the scroll spy never marked the first element',
-      );
+      // Every story has to have settled before the disconnect below.
+      await settleScrollSpy(el, firstId);
 
       // Move the highlight off the first element, so a spy that comes back
       // dead is distinguishable from one that never had to do anything. How
@@ -249,6 +319,172 @@ describe('AppRoot', () => {
       );
       expect(hrefs[0]).to.equal('#');
       expect(hrefs).to.include('#elem-ia-button');
+    });
+  });
+
+  describe('sidebar toggle', () => {
+    test('starts with the sidebar up on a wide viewport', async () => {
+      stubNarrowViewport(false);
+      const el = await appRoot();
+
+      expect(sidebar(el).hidden).to.be.false;
+      expect(navToggle(el).getAttribute('aria-expanded')).to.equal('true');
+      expect(navToggle(el).textContent?.trim()).to.equal('Hide nav');
+    });
+
+    test('starts with the sidebar hidden on a narrow viewport', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+
+      expect(sidebar(el).hidden).to.be.true;
+      expect(navToggle(el).getAttribute('aria-expanded')).to.equal('false');
+      expect(navToggle(el).textContent?.trim()).to.equal('Show nav');
+    });
+
+    test('names the sidebar it controls', async () => {
+      stubNarrowViewport(false);
+      const el = await appRoot();
+
+      expect(navToggle(el).getAttribute('aria-controls')).to.equal(
+        'ia-sidebar',
+      );
+      expect(sidebar(el).id).to.equal('ia-sidebar');
+    });
+
+    test('hides the sidebar, and brings it back, as it is pressed', async () => {
+      stubNarrowViewport(false);
+      const el = await appRoot();
+
+      navToggle(el).click();
+      await el.updateComplete;
+      expect(sidebar(el).hidden).to.be.true;
+      expect(navToggle(el).getAttribute('aria-expanded')).to.equal('false');
+
+      navToggle(el).click();
+      await el.updateComplete;
+      expect(sidebar(el).hidden).to.be.false;
+      expect(navToggle(el).getAttribute('aria-expanded')).to.equal('true');
+    });
+
+    test('takes the hidden sidebar out of the page, not just out of sight', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+
+      // Offscreening it instead would leave every link in the tab order.
+      expect(getComputedStyle(sidebar(el)).display).to.equal('none');
+
+      const link = el.querySelector('#ia-all-link') as HTMLElement;
+      link.focus();
+      expect(document.activeElement).to.not.equal(link);
+    });
+
+    test('closes the sidebar after a link is picked on a narrow viewport', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+
+      navToggle(el).click();
+      await el.updateComplete;
+      expect(sidebar(el).hidden).to.be.false;
+
+      const link = el.querySelector('#ia-sidebar .ia-elem-link') as HTMLElement;
+      link.click();
+      await el.updateComplete;
+
+      expect(sidebar(el).hidden).to.be.true;
+    });
+
+    test('keeps focus out of the sidebar as it is hidden', async () => {
+      stubNarrowViewport(false);
+      const el = await appRoot();
+
+      const link = el.querySelector('#ia-sidebar .ia-elem-link') as HTMLElement;
+      link.focus();
+      expect(document.activeElement).to.equal(link);
+
+      navToggle(el).click();
+      await el.updateComplete;
+
+      // Leaving it on the link would put focus on a `display: none` element,
+      // which the browser drops to the body.
+      expect(document.activeElement).to.equal(navToggle(el));
+      expect(sidebar(el).hidden).to.be.true;
+    });
+
+    test('leaves the sidebar up after a link is picked on a wide viewport', async () => {
+      stubNarrowViewport(false);
+      const el = await appRoot();
+
+      const link = el.querySelector('#ia-sidebar .ia-elem-link') as HTMLElement;
+      link.click();
+      await el.updateComplete;
+
+      expect(sidebar(el).hidden).to.be.false;
+    });
+
+    test('follows the viewport until the toggle has been used', async () => {
+      const viewport = stubNarrowViewport(false);
+      const el = await appRoot();
+      expect(sidebar(el).hidden).to.be.false;
+
+      viewport.set(true);
+      await el.updateComplete;
+      expect(sidebar(el).hidden).to.be.true;
+
+      viewport.set(false);
+      await el.updateComplete;
+      expect(sidebar(el).hidden).to.be.false;
+    });
+
+    test('stops following the viewport once the toggle has been used', async () => {
+      const viewport = stubNarrowViewport(false);
+      const el = await appRoot();
+
+      navToggle(el).click();
+      await el.updateComplete;
+      expect(sidebar(el).hidden).to.be.true;
+
+      // A window dragged narrow and back would otherwise undo the choice.
+      viewport.set(true);
+      await el.updateComplete;
+      viewport.set(false);
+      await el.updateComplete;
+
+      expect(sidebar(el).hidden).to.be.true;
+    });
+
+    test('still follows the hash while the sidebar is hidden', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+      expect(sidebar(el).hidden).to.be.true;
+
+      window.location.hash = '#elem-ia-button';
+      await waitUntil(
+        () => anchorIds(el).length === 1,
+        'hash navigation stopped working with the sidebar hidden',
+      );
+      expect(anchorIds(el)).to.deep.equal(['elem-ia-button']);
+    });
+
+    test('keeps the scroll spy working once the sidebar is hidden', async () => {
+      stubNarrowViewport(false);
+      const el = await appRoot();
+      const ids = anchorIds(el);
+      const firstId = ids[0];
+
+      await settleScrollSpy(el, firstId);
+
+      navToggle(el).click();
+      await el.updateComplete;
+      expect(sidebar(el).hidden).to.be.true;
+
+      // Hiding the sidebar reflows the content it is measuring against, and
+      // the marks it writes stay in the hidden sidebar to be read back.
+      scrollToAnchor(el, ids[ids.length - 1]);
+      expect(window.scrollY, 'the page did not scroll').to.be.greaterThan(0);
+      await waitUntil(
+        () => inViewHref(el) !== `#${firstId}`,
+        'the scroll spy stopped following the scroll after the nav was hidden',
+      );
     });
   });
 });
