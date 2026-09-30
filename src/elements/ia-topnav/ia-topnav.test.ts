@@ -11,7 +11,7 @@ import { IATopNav } from './ia-topnav';
 import { SignedOutDropdown } from './ia-topnav-signed-out-dropdown';
 import UserMenu from './ia-topnav-user-menu';
 
-import { afterEach, describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 const verifyClosed = (instance: IATopNav) => {
   expect(instance.mediaSliderOpen).to.be.false;
   expect(instance.selectedMenuOption).to.equal('');
@@ -24,6 +24,7 @@ const verifyOpened = (instance: IATopNav, mediatype: string) => {
 
 afterEach(() => {
   fixtureCleanup();
+  vi.restoreAllMocks();
 });
 
 describe('<ia-topnav>', () => {
@@ -131,7 +132,7 @@ describe('<ia-topnav>', () => {
 
   test('toggles user menu tabindex when dropdown open', async () => {
     const el = await fixture<IATopNav>(
-      html` <ia-topnav username="shaneriley" ?localLinks=${false}></ia-topnav>`,
+      html` <ia-topnav username="shaneriley"></ia-topnav>`,
     );
 
     el.openMenu = 'user';
@@ -174,7 +175,6 @@ describe('<ia-topnav>', () => {
       html` <ia-topnav
         username="shaneriley"
         screenName="shaneriley"
-        ?localLinks=${false}
       ></ia-topnav>`,
     );
 
@@ -188,21 +188,17 @@ describe('<ia-topnav>', () => {
     expect(el.openMenu).to.equal('user');
   });
 
-  test('uses localLinks for archive.org logo link', async () => {
-    const el = await fixture<IATopNav>(
-      html` <ia-topnav ?localLinks=${false}></ia-topnav>`,
-    );
+  test('links the logo to archive.org by default', async () => {
+    const el = await fixture<IATopNav>(html` <ia-topnav></ia-topnav>`);
     const logoLink = el.shadowRoot
       ?.querySelector('ia-topnav-primary-nav')
       ?.shadowRoot?.querySelector('.link-home');
     expect(logoLink?.getAttribute('href')).to.match(/\/\/archive\.org/);
   });
 
-  describe('sets localLinks properly', async () => {
-    test('uses localLinks to archive.org links on common child components', async () => {
-      const el = await fixture<IATopNav>(
-        html` <ia-topnav ?localLinks=${false}></ia-topnav>`,
-      );
+  describe('baseHost', () => {
+    test('passes archive.org to the common child components by default', async () => {
+      const el = await fixture<IATopNav>(html` <ia-topnav></ia-topnav>`);
       const componentSelectors = [
         'ia-topnav-primary-nav',
         'ia-topnav-media-slider',
@@ -216,24 +212,92 @@ describe('<ia-topnav>', () => {
       });
     });
 
-    test('uses localLinks to archive.org links on the signed out dropdown', async () => {
-      const el = await fixture<IATopNav>(
-        html` <ia-topnav ?localLinks=${false}></ia-topnav>`,
-      );
+    test('passes archive.org to the signed out dropdown by default', async () => {
+      const el = await fixture<IATopNav>(html` <ia-topnav></ia-topnav>`);
       const signedOutDropdown = el.shadowRoot?.querySelector(
         'ia-topnav-signed-out-dropdown',
       ) as SignedOutDropdown;
       expect(signedOutDropdown?.baseHost).to.equal('https://archive.org');
     });
 
-    test('uses localLinks to archive.org links on the user dropdown', async () => {
+    test('passes archive.org to the user dropdown by default', async () => {
       const el = await fixture<IATopNav>(
-        html` <ia-topnav username="foopey" ?localLinks=${false}></ia-topnav>`,
+        html` <ia-topnav username="foopey"></ia-topnav>`,
       );
       const signedOutDropdown = el.shadowRoot?.querySelector(
         'ia-topnav-user-menu',
       ) as UserMenu;
       expect(signedOutDropdown.baseHost).to.equal('https://archive.org');
+    });
+  });
+
+  describe('menu building', () => {
+    test('builds the user menu for the signed-in user before the first render', async () => {
+      const render = vi.spyOn(IATopNav.prototype, 'render');
+      const el = await fixture<IATopNav>(
+        html`<ia-topnav username="brewster"></ia-topnav>`,
+      );
+      const userMenu = el.shadowRoot?.querySelector(
+        'ia-topnav-user-menu',
+      ) as UserMenu;
+
+      expect(render).toHaveBeenCalledOnce();
+      const urls = userMenu.menuItems.flat().map((link) => link.url);
+      expect(urls).to.include('https://archive.org/details/@brewster');
+    });
+
+    test('rebuilds the menus when the username changes', async () => {
+      const el = await fixture<IATopNav>(
+        html`<ia-topnav username="brewster"></ia-topnav>`,
+      );
+      el.username = 'goody';
+      await el.updateComplete;
+      const userMenu = el.shadowRoot?.querySelector(
+        'ia-topnav-user-menu',
+      ) as UserMenu;
+
+      const urls = userMenu.menuItems.flat().map((link) => link.url);
+      expect(urls).to.include('https://archive.org/details/@goody');
+    });
+  });
+
+  describe('localLinks', () => {
+    test('links the logo relative to the current host', async () => {
+      const el = await fixture<IATopNav>(
+        html`<ia-topnav localLinks></ia-topnav>`,
+      );
+      const logoLink = el.shadowRoot
+        ?.querySelector('ia-topnav-primary-nav')
+        ?.shadowRoot?.querySelector('.link-home');
+      expect(logoLink?.getAttribute('href')).to.equal('/');
+    });
+
+    test('passes an empty base host to the child components', async () => {
+      const el = await fixture<IATopNav>(
+        html`<ia-topnav localLinks username="foopey"></ia-topnav>`,
+      );
+      const componentSelectors = [
+        'ia-topnav-primary-nav',
+        'ia-topnav-media-slider',
+        'ia-topnav-desktop-subnav',
+        'ia-topnav-user-menu',
+      ];
+      componentSelectors.forEach((selector) => {
+        const component = el.shadowRoot?.querySelector(selector) as unknown as {
+          baseHost: string;
+        };
+        expect(component?.baseHost, selector).to.equal('');
+      });
+    });
+
+    test('builds the menu links without a host', async () => {
+      const el = await fixture<IATopNav>(
+        html`<ia-topnav localLinks></ia-topnav>`,
+      );
+      const subnavLink = el.shadowRoot
+        ?.querySelector('ia-topnav-desktop-subnav')
+        ?.shadowRoot?.querySelector('a');
+      expect(subnavLink?.getAttribute('href')).to.match(/^\/about\//);
     });
   });
 
@@ -260,7 +324,6 @@ describe('<ia-topnav>', () => {
       test('opens a slot with `secondIdentitySlotMode`', async () => {
         const el = await fixture<IATopNav>(
           html`<ia-topnav
-            ?localLinks=${false}
             username="boop"
             screenName="somesuperlongscreenname"
             secondIdentitySlotMode="allow"

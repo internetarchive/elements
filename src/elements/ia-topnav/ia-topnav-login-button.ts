@@ -1,8 +1,7 @@
 import { CSSResultGroup, css, html } from 'lit';
 import TrackedElement from './tracked-element';
 import icons from './assets/img/icons';
-import formatUrl from './lib/format-url';
-import { makeBooleanString } from './lib/make-boolean-string';
+import { formatUrl, makeBooleanString } from './lib/helpers';
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';

@@ -5,7 +5,6 @@ import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
-import { srOnlyStyles } from '@src/themes/sr-only-styles';
 
 @customElement('ia-topnav-save-page-form')
 export class SavePageForm extends TrackedElement {
@@ -27,9 +26,9 @@ export class SavePageForm extends TrackedElement {
           the future.
         </p>
         <div>
-          <label for="url_preload" class="sr-only">Enter a URL to save</label>
           <input
             type="text"
+            aria-label="Enter a URL to save"
             name="url_preload"
             id="url_preload"
             placeholder="https://"
@@ -116,7 +115,6 @@ export class SavePageForm extends TrackedElement {
           }
         }
       `,
-      srOnlyStyles,
     ];
   }
 }

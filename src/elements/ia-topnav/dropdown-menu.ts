@@ -10,8 +10,7 @@ import { property } from 'lit/decorators.js';
 
 import icons from './assets/img/icons';
 import { defaultTopNavConfig } from './data/menus';
-import formatUrl from './lib/format-url';
-import { makeBooleanString } from './lib/make-boolean-string';
+import { formatUrl, makeBooleanString } from './lib/helpers';
 import {
   IATopNavConfig,
   IATopNavLink,

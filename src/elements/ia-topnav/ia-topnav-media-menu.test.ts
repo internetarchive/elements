@@ -29,16 +29,17 @@ describe('<ia-topnav-media-menu>', () => {
     expect(textsButton).to.not.be.null;
   });
 
-  test('renders with closed class if done animating', async () => {
+  test('renders closed until the media menu is opened', async () => {
     const mediaMenu = await fixture<MediaMenu>(component);
+    const container = () =>
+      mediaMenu.shadowRoot?.querySelector('.media-menu-container');
 
-    // mediaMenu.mediaMenuAnimate = true;
-    // await mediaMenu.updateComplete;
+    expect(container()?.classList.contains('closed')).to.be.true;
 
-    expect(
-      mediaMenu.shadowRoot
-        ?.querySelector('.media-menu-container')
-        ?.classList.contains('closed'),
-    ).to.be.true;
+    mediaMenu.openMenu = 'media';
+    await mediaMenu.updateComplete;
+
+    expect(container()?.classList.contains('open')).to.be.true;
+    expect(container()?.classList.contains('closed')).to.be.false;
   });
 });

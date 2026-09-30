@@ -22,8 +22,6 @@ describe('<ia-topnav-user-menu>', () => {
   });
 
   test('does not render admin links for logged in users', async () => {
-    // NOTE: top-nav never renders admin links now -- that's been delegated to dynamic JS insertion
-    // in petabox tree (since it's only relevant there).
     const el = await fixture<UserMenu>(component2);
     el.menuItems = buildTopNavMenus('brewster_userid').user;
 

@@ -6,10 +6,8 @@ import { customElement } from '@src/util/custom-element';
 @customElement('ia-topnav-icon-hamburger')
 export class HamBurger extends Icon {
   render() {
-    return this.active ? HamBurger.opened : HamBurger.closed;
-  }
+    if (this.active) return icons.close;
 
-  static get closed() {
     return html`
       <svg
         viewBox="0 0 40 40"
@@ -28,10 +26,6 @@ export class HamBurger extends Icon {
         />
       </svg>
     `;
-  }
-
-  static get opened() {
-    return icons.close;
   }
 
   static get styles() {

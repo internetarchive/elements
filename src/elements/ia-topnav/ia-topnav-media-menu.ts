@@ -3,7 +3,7 @@ import { property, queryAll } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 
 import { defaultTopNavConfig } from './data/menus';
-import formatUrl from './lib/format-url';
+import { formatUrl } from './lib/helpers';
 import './ia-topnav-media-button';
 import { MediaButton } from './ia-topnav-media-button';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';

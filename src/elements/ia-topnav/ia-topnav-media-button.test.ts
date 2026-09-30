@@ -15,8 +15,9 @@ describe('<ia-topnav-media-button>', () => {
       '.menu-item',
     ) as HTMLAnchorElement;
 
-    setTimeout(() => link.click());
-    const response = await oneEvent(el, 'mediaTypeSelected');
+    const selected = oneEvent(el, 'mediaTypeSelected');
+    link.click();
+    const response = await selected;
 
     expect(response).to.exist;
   });

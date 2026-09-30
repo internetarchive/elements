@@ -4,8 +4,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import TrackedElement from './tracked-element';
 import './ia-topnav-wayback-slider';
 import './ia-topnav-more-slider';
-import toSentenceCase from './lib/t-sentence-case';
-import formatUrl from './lib/format-url';
+import { formatUrl, toSentenceCase } from './lib/helpers';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import {

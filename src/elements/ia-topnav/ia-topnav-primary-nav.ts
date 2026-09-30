@@ -5,8 +5,9 @@ import './ia-topnav-icon-hamburger';
 import './ia-topnav-login-button';
 import type { LoginButton } from './ia-topnav-login-button';
 import './ia-topnav-media-menu';
+import '@src/elements/ia-sr-only-text/ia-sr-only-text';
 import logoWordmarkStacked from './assets/img/wordmark-stacked';
-import formatUrl from './lib/format-url';
+import { formatUrl } from './lib/helpers';
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import {
@@ -266,7 +267,7 @@ export class PrimaryNav extends TrackedElement {
         )}
       >
         ${icons.donateUnpadded}
-        <span class="sr-only">"Donate to the archive"</span>
+        <ia-sr-only-text>"Donate to the archive"</ia-sr-only-text>
       </a>
     `;
   }
@@ -399,21 +400,6 @@ export class PrimaryNav extends TrackedElement {
         }
         .mobile-donate-link .fill-color {
           fill: rgb(255, 0, 0);
-        }
-
-        .sr-only {
-          position: absolute;
-          width: 1px;
-          height: 1px;
-          margin: -1px;
-          padding: 0;
-          border: 0;
-          overflow: hidden;
-          white-space: nowrap;
-          clip: rect(1px, 1px, 1px, 1px);
-          -webkit-clip-path: inset(50%);
-          clip-path: inset(50%);
-          user-select: none;
         }
 
         .search-trigger {

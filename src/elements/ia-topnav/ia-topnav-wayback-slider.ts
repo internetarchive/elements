@@ -2,9 +2,7 @@ import { CSSResultGroup, css, html } from 'lit';
 import './ia-topnav-wayback-search';
 import TrackedElement from './tracked-element';
 import './ia-topnav-save-page-form';
-import queryHandler from './lib/query-handler';
-import toSentenceCase from './lib/t-sentence-case';
-import formatUrl from './lib/format-url';
+import { formatUrl, toSentenceCase } from './lib/helpers';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import {
@@ -29,7 +27,6 @@ export class WaybackSlider extends TrackedElement {
       <div class="grid">
         <ia-topnav-wayback-search
           .waybackPagesArchived=${this.config.waybackPagesArchived ?? ''}
-          .queryHandler=${queryHandler}
         ></ia-topnav-wayback-search>
         <div class="link-lists">
           <div>

@@ -1,7 +1,7 @@
 import { CSSResultGroup, TemplateResult, css, html } from 'lit';
 import TrackedElement from './tracked-element';
 import icons from './assets/img/icons';
-import toSentenceCase from './lib/t-sentence-case';
+import { toSentenceCase } from './lib/helpers';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';

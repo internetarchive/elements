@@ -102,7 +102,7 @@ export class IATopNav extends LitElement {
     document.removeEventListener('click', this.boundHandleClick);
   }
 
-  updated(props: PropertyValues) {
+  willUpdate(props: PropertyValues) {
     if (
       props.has('username') ||
       props.has('waybackPagesArchived') ||
