@@ -114,7 +114,8 @@ app-root {
 
 /* Where the all-elements list happens to be scrolled to. Tinted, so it reads
    as a position marker rather than as the thing you're looking at. */
-#ia-sidebar .ia-elem-link.in-view {
+#ia-sidebar .ia-elem-link.in-view,
+.ia-pick.in-view {
   color: #194880;
   border-left-color: #194880;
   background: #f0f4f9;
@@ -125,7 +126,8 @@ app-root {
    filled row means "this is the view" wherever it appears in the sidebar.
    Last, so it wins the specificity tie against the :hover rules above. */
 #ia-all-link.current,
-#ia-sidebar .ia-elem-link.current {
+#ia-sidebar .ia-elem-link.current,
+.ia-pick.current {
   color: #fff;
   background: #194880;
   border-color: #194880;
@@ -143,6 +145,174 @@ app-root {
   padding-bottom: 2rem;
 }
 
+/* Room for the end of each code sample to scroll clear of the bottom bar. */
+#ia-content.ia-focused.ia-narrow {
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+}
+
+/* The phone layout's bar: previous, the current element's name (which opens
+   the picker), and next. Pinned to the bottom where a thumb reaches it. */
+#ia-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  background: #fff;
+  border-top: 1px solid #ccc;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  /* Clear of the iOS home indicator. index.html opts in to the inset with
+     viewport-fit=cover, without which this is always zero. */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.ia-bar-step {
+  flex: 0 0 3.25rem;
+  min-height: 3.25rem;
+  border: none;
+  background: none;
+  color: #194880;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ia-bar-step[aria-disabled='true'] {
+  color: #c4c4c4;
+  cursor: default;
+}
+
+#ia-bar-name {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: none;
+  border-left: 1px solid #e3e3e3;
+  border-right: 1px solid #e3e3e3;
+  background: none;
+  color: #213547;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ia-bar-tag {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The picker, as a sheet up from the bottom edge. Capped in height so the
+   page stays in view behind it, and only its list scrolls. */
+#ia-picker {
+  margin: auto 0 0;
+  width: 100%;
+  max-width: none;
+  max-height: 85vh;
+  max-height: 85dvh;
+  padding: 0;
+  border: none;
+  border-radius: 12px 12px 0 0;
+  background: #fff;
+  color: #213547;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+#ia-picker[open] {
+  display: flex;
+}
+
+#ia-picker::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.ia-picker-sheet {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ia-picker-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem 0.25rem;
+}
+
+.ia-picker-head h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+#ia-picker-close {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 50%;
+  background: #f0f0f0;
+  color: #213547;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* 16px, since iOS zooms the page in on any smaller field it focuses. */
+#ia-picker-search {
+  margin: 0.5rem 1rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.ia-picker-list {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+}
+
+.ia-picker-list h3 {
+  margin: 1rem 0 0.25rem;
+  padding: 0 1rem;
+  color: #767676;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ia-pick {
+  display: block;
+  padding: 0.6rem 1rem;
+  border-left: 3px solid transparent;
+  color: #444;
+  font-size: 0.95rem;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.ia-pick-all {
+  margin: 0.25rem 1rem 0;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  color: #213547;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.ia-picker-empty {
+  padding: 0 1rem;
+  color: #767676;
+}
+
 .ia-anchor {
   scroll-margin-top: 16px;
 }
@@ -157,9 +327,6 @@ app-root {
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 0.25rem;
-  /* The title drops below the toggle rather than being squeezed to a letter
-     per line, which is what the narrowest phone with the nav up leaves it. */
-  flex-wrap: wrap;
 }
 
 /* Sits in the content column rather than in the sidebar, so it is still on

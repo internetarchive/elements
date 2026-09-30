@@ -1,6 +1,10 @@
 import { fixture, fixtureCleanup, waitUntil } from '@open-wc/testing-helpers';
-import { afterEach, describe, expect, test, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { page, userEvent } from 'vitest/browser';
 import { html } from 'lit';
+
+// The demo's stylesheet, applied only by the tests that need the real layout.
+import demoCss from './index.css?raw';
 
 import type { AppRoot } from './app-root';
 import { NARROW_VIEWPORT } from './app-root';
@@ -48,6 +52,10 @@ function sidebar(el: AppRoot): HTMLElement {
 
 type MediaListener = (event: MediaQueryListEvent) => void;
 
+// Taken before any test spies on it, so a stub installed over another stub
+// still passes other queries through to the browser.
+const realMatchMedia = window.matchMedia.bind(window);
+
 /**
  * Pins the demo's narrow-viewport query, and hands back a way to flip it the
  * way a real resize would. Install it before the fixture, since the opening
@@ -55,7 +63,7 @@ type MediaListener = (event: MediaQueryListEvent) => void;
  * the real matchMedia, so nothing a story asks about changes.
  */
 function stubNarrowViewport(narrow: boolean) {
-  const real = window.matchMedia.bind(window);
+  const real = realMatchMedia;
   const listeners = new Set<MediaListener>();
   let matches = narrow;
 
@@ -135,7 +143,62 @@ async function settleScrollSpy(el: AppRoot, firstId: string) {
 
 const appRoot = () => fixture<AppRoot>(html`<app-root></app-root>`);
 
+function barButton(el: AppRoot, which: 'prev' | 'name' | 'next') {
+  return el.querySelector(`#ia-bar-${which}`) as HTMLButtonElement;
+}
+
+function picker(el: AppRoot): HTMLDialogElement {
+  return el.querySelector('#ia-picker') as HTMLDialogElement;
+}
+
+/** The picker's element entries, in order, leaving out "Show all elements". */
+function pickerEntries(el: AppRoot): HTMLAnchorElement[] {
+  return Array.from(
+    el.querySelectorAll<HTMLAnchorElement>(
+      '#ia-picker .ia-pick:not(.ia-pick-all)',
+    ),
+  );
+}
+
+/** Every element's anchor id, in the order the bar steps through them. */
+function entryIds(el: AppRoot): string[] {
+  return pickerEntries(el).map((link) =>
+    (link.getAttribute('href') ?? '').slice(1),
+  );
+}
+
+/**
+ * Waits for the picker's close to land. A dialog fires `close` as a task of
+ * its own after `close()` returns, and that event is where the demo tidies up.
+ */
+async function pickerClosed(el: AppRoot) {
+  await waitUntil(
+    () => barButton(el, 'name').getAttribute('aria-expanded') === 'false',
+    'the picker never finished closing',
+  );
+}
+
+async function openPicker(el: AppRoot) {
+  barButton(el, 'name').click();
+  await el.updateComplete;
+  expect(picker(el).open, 'the picker never opened').to.be.true;
+}
+
+/** Applies the demo's real stylesheet for one test, returning its remover. */
+function applyDemoCss(): () => void {
+  const style = document.createElement('style');
+  style.textContent = demoCss;
+  document.head.append(style);
+  return () => style.remove();
+}
+
 describe('AppRoot', () => {
+  // The desktop layout unless a test says otherwise, since the test browser's
+  // own width would otherwise decide which layout every test gets.
+  beforeEach(() => {
+    stubNarrowViewport(false);
+  });
+
   afterEach(() => {
     vi.restoreAllMocks();
     fixtureCleanup();
@@ -332,15 +395,6 @@ describe('AppRoot', () => {
       expect(navToggle(el).textContent?.trim()).to.equal('Hide nav');
     });
 
-    test('starts with the sidebar hidden on a narrow viewport', async () => {
-      stubNarrowViewport(true);
-      const el = await appRoot();
-
-      expect(sidebar(el).hidden).to.be.true;
-      expect(navToggle(el).getAttribute('aria-expanded')).to.equal('false');
-      expect(navToggle(el).textContent?.trim()).to.equal('Show nav');
-    });
-
     test('names the sidebar it controls', async () => {
       stubNarrowViewport(false);
       const el = await appRoot();
@@ -367,8 +421,10 @@ describe('AppRoot', () => {
     });
 
     test('takes the hidden sidebar out of the page, not just out of sight', async () => {
-      stubNarrowViewport(true);
+      stubNarrowViewport(false);
       const el = await appRoot();
+      navToggle(el).click();
+      await el.updateComplete;
 
       // Offscreening it instead would leave every link in the tab order.
       expect(getComputedStyle(sidebar(el)).display).to.equal('none');
@@ -376,21 +432,6 @@ describe('AppRoot', () => {
       const link = el.querySelector('#ia-all-link') as HTMLElement;
       link.focus();
       expect(document.activeElement).to.not.equal(link);
-    });
-
-    test('closes the sidebar after a link is picked on a narrow viewport', async () => {
-      stubNarrowViewport(true);
-      const el = await appRoot();
-
-      navToggle(el).click();
-      await el.updateComplete;
-      expect(sidebar(el).hidden).to.be.false;
-
-      const link = el.querySelector('#ia-sidebar .ia-elem-link') as HTMLElement;
-      link.click();
-      await el.updateComplete;
-
-      expect(sidebar(el).hidden).to.be.true;
     });
 
     test('keeps focus out of the sidebar as it is hidden', async () => {
@@ -426,9 +467,10 @@ describe('AppRoot', () => {
       const el = await appRoot();
       expect(sidebar(el).hidden).to.be.false;
 
+      // Narrow, the phone layout takes over and the sidebar goes altogether.
       viewport.set(true);
       await el.updateComplete;
-      expect(sidebar(el).hidden).to.be.true;
+      expect(el.querySelector('#ia-sidebar')).to.not.exist;
 
       viewport.set(false);
       await el.updateComplete;
@@ -453,8 +495,10 @@ describe('AppRoot', () => {
     });
 
     test('still follows the hash while the sidebar is hidden', async () => {
-      stubNarrowViewport(true);
+      stubNarrowViewport(false);
       const el = await appRoot();
+      navToggle(el).click();
+      await el.updateComplete;
       expect(sidebar(el).hidden).to.be.true;
 
       window.location.hash = '#elem-ia-button';
@@ -485,6 +529,310 @@ describe('AppRoot', () => {
         () => inViewHref(el) !== `#${firstId}`,
         'the scroll spy stopped following the scroll after the nav was hidden',
       );
+    });
+  });
+
+  describe('phone layout', () => {
+    test('opens on the first element when there is no hash', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+
+      const [first] = entryIds(el);
+      expect(anchorIds(el)).to.deep.equal([first]);
+      // Written back, so the address bar can be shared as it stands.
+      expect(window.location.hash).to.equal(`#${first}`);
+    });
+
+    test('keeps the element the hash names', async () => {
+      setHash('#elem-ia-button');
+      stubNarrowViewport(true);
+      const el = await appRoot();
+
+      expect(anchorIds(el)).to.deep.equal(['elem-ia-button']);
+    });
+
+    test('swaps the sidebar and its toggle for the bar and picker', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+
+      expect(el.querySelector('#ia-bar')).to.exist;
+      expect(el.querySelector('#ia-picker')).to.exist;
+      expect(el.querySelector('#ia-sidebar')).to.not.exist;
+      expect(el.querySelector('#ia-nav-toggle')).to.not.exist;
+    });
+
+    test('renders neither the bar nor the picker on desktop', async () => {
+      stubNarrowViewport(false);
+      const el = await appRoot();
+
+      expect(el.querySelector('#ia-bar')).to.not.exist;
+      expect(el.querySelector('#ia-picker')).to.not.exist;
+      expect(el.querySelector('#ia-sidebar')).to.exist;
+    });
+
+    test('steps forward to the next element through the hash', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+      const [first, second] = entryIds(el);
+      expect(anchorIds(el)).to.deep.equal([first]);
+
+      barButton(el, 'next').click();
+      await waitUntil(
+        () => window.location.hash === `#${second}`,
+        'the next arrow never moved the hash',
+      );
+      await waitUntil(
+        () => anchorIds(el)[0] === second,
+        'the page never showed the next element',
+      );
+    });
+
+    test('steps back to the previous element through the hash', async () => {
+      stubNarrowViewport(true);
+      const probe = await appRoot();
+      const [first, second] = entryIds(probe);
+      fixtureCleanup();
+
+      setHash(`#${second}`);
+      const el = await appRoot();
+      barButton(el, 'prev').click();
+      await waitUntil(
+        () => window.location.hash === `#${first}`,
+        'the previous arrow never moved the hash',
+      );
+    });
+
+    test('disables back on the first element and forward on the last', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+      const ids = entryIds(el);
+      const last = ids[ids.length - 1];
+
+      expect(barButton(el, 'prev').getAttribute('aria-disabled')).to.equal(
+        'true',
+      );
+      barButton(el, 'prev').click();
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      expect(window.location.hash, "back didn't stay put").to.equal(
+        `#${ids[0]}`,
+      );
+
+      window.location.hash = `#${last}`;
+      await waitUntil(
+        () => anchorIds(el)[0] === last,
+        'never reached the last element',
+      );
+      expect(barButton(el, 'next').getAttribute('aria-disabled')).to.equal(
+        'true',
+      );
+      expect(barButton(el, 'prev').getAttribute('aria-disabled')).to.equal(
+        'false',
+      );
+      barButton(el, 'next').click();
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      // No wrapping round to the first element.
+      expect(window.location.hash, "forward didn't stay put").to.equal(
+        `#${last}`,
+      );
+    });
+
+    test('names the current element on the picker button', async () => {
+      setHash('#elem-ia-button');
+      stubNarrowViewport(true);
+      const el = await appRoot();
+
+      expect(barButton(el, 'name').getAttribute('aria-label')).to.equal(
+        'Choose element, current: ia-button',
+      );
+    });
+
+    test('opens the picker with focus on the current element', async () => {
+      setHash('#elem-ia-button');
+      stubNarrowViewport(true);
+      const el = await appRoot();
+
+      await openPicker(el);
+
+      expect(barButton(el, 'name').getAttribute('aria-expanded')).to.equal(
+        'true',
+      );
+      const active = document.activeElement;
+      expect(active?.getAttribute('href')).to.equal('#elem-ia-button');
+      // Not the search field, which would bring up a phone's keyboard.
+      expect(active?.id).to.not.equal('ia-picker-search');
+    });
+
+    test('closes the picker from its close button and hands focus back', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+      await openPicker(el);
+
+      (el.querySelector('#ia-picker-close') as HTMLButtonElement).click();
+      await pickerClosed(el);
+
+      expect(picker(el).open).to.be.false;
+      expect(document.activeElement).to.equal(barButton(el, 'name'));
+      expect(barButton(el, 'name').getAttribute('aria-expanded')).to.equal(
+        'false',
+      );
+    });
+
+    test('closes the picker on Escape', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+      await openPicker(el);
+
+      await userEvent.keyboard('{Escape}');
+      await pickerClosed(el);
+
+      expect(picker(el).open).to.be.false;
+      expect(document.activeElement).to.equal(barButton(el, 'name'));
+    });
+
+    test('closes the picker on a tap outside the sheet', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+      const hash = window.location.hash;
+      await openPicker(el);
+
+      // The browser dispatches a tap on the backdrop to the dialog itself.
+      picker(el).dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      await pickerClosed(el);
+
+      expect(picker(el).open).to.be.false;
+      expect(window.location.hash, 'a dismissal is not a pick').to.equal(hash);
+    });
+
+    test('leaves the picker open for a tap inside the sheet', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+      await openPicker(el);
+
+      (el.querySelector('.ia-picker-head') as HTMLElement).click();
+      await el.updateComplete;
+
+      expect(picker(el).open).to.be.true;
+    });
+
+    test('filters the list by tag as you type', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+      await openPicker(el);
+      const search = el.querySelector('#ia-picker-search') as HTMLInputElement;
+
+      search.value = 'OTP';
+      search.dispatchEvent(new Event('input'));
+      await el.updateComplete;
+      expect(
+        pickerEntries(el).map((link) => link.textContent?.trim()),
+      ).to.deep.equal(['<ia-otp-form>', '<ia-otp-input>']);
+      // A group with nothing left in it drops its heading too.
+      const headings = Array.from(el.querySelectorAll('#ia-picker h3')).map(
+        (h) => h.textContent?.trim(),
+      );
+      expect(headings).to.deep.equal(['Production-Ready']);
+
+      search.value = 'no-such-element';
+      search.dispatchEvent(new Event('input'));
+      await el.updateComplete;
+      expect(pickerEntries(el)).to.have.length(0);
+      expect(el.querySelector('.ia-picker-empty')).to.exist;
+    });
+
+    test('starts the next open with the whole list', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+      const total = pickerEntries(el).length;
+      await openPicker(el);
+      const search = el.querySelector('#ia-picker-search') as HTMLInputElement;
+      search.value = 'otp';
+      search.dispatchEvent(new Event('input'));
+      await el.updateComplete;
+
+      (el.querySelector('#ia-picker-close') as HTMLButtonElement).click();
+      await pickerClosed(el);
+      await openPicker(el);
+
+      expect(search.value).to.equal('');
+      expect(pickerEntries(el)).to.have.length(total);
+    });
+
+    test('goes to a picked element and closes the picker', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+      await openPicker(el);
+
+      (
+        el.querySelector(
+          '#ia-picker a[href="#elem-ia-combo-box"]',
+        ) as HTMLElement
+      ).click();
+      await el.updateComplete;
+
+      expect(picker(el).open).to.be.false;
+      await waitUntil(
+        () => anchorIds(el)[0] === 'elem-ia-combo-box',
+        'the picked element never showed',
+      );
+      expect(window.location.hash).to.equal('#elem-ia-combo-box');
+    });
+
+    test('shows every element from the picker', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+      expect(anchorIds(el)).to.have.length(1);
+      await openPicker(el);
+
+      (el.querySelector('#ia-picker .ia-pick-all') as HTMLElement).click();
+      await waitUntil(
+        () => anchorIds(el).length > 1,
+        'never switched to the all-elements view',
+      );
+      expect(picker(el).open).to.be.false;
+    });
+
+    test('keeps the bar on screen and clear of the page end, scrolled to the bottom', async () => {
+      await page.viewport(390, 700);
+      const removeCss = applyDemoCss();
+      try {
+        setHash('#elem-ia-radio-player');
+        stubNarrowViewport(true);
+        const el = await appRoot();
+        await waitUntil(
+          () => el.querySelector('ia-radio-player-story'),
+          '<ia-radio-player-story> was never rendered',
+        );
+        await waitUntil(
+          () => document.documentElement.scrollHeight > window.innerHeight * 2,
+          'the page never grew long enough to test scrolling on',
+        );
+
+        window.scrollTo({ top: document.documentElement.scrollHeight });
+        await waitUntil(() => window.scrollY > 0, 'the page never scrolled');
+
+        const bar = (
+          el.querySelector('#ia-bar') as HTMLElement
+        ).getBoundingClientRect();
+        expect(bar.top, 'the bar scrolled off the top').to.be.at.least(0);
+        expect(bar.bottom, 'the bar sits below the screen').to.be.at.most(
+          window.innerHeight + 1,
+        );
+        // On top of whatever is underneath it, not covered by it.
+        const next = barButton(el, 'next').getBoundingClientRect();
+        const hit = document.elementFromPoint(
+          next.left + next.width / 2,
+          next.top + next.height / 2,
+        );
+        expect(hit?.closest('#ia-bar-next')).to.equal(barButton(el, 'next'));
+        // The end of the element's page can be scrolled out from under it.
+        const story = (
+          el.querySelector('#elem-ia-radio-player') as HTMLElement
+        ).getBoundingClientRect();
+        expect(story.bottom).to.be.at.most(bar.top);
+      } finally {
+        removeCss();
+        await page.viewport(414, 896);
+      }
     });
   });
 });
