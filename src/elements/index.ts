@@ -29,6 +29,8 @@ export * from './ia-radio-player/search/transcript-index';
 export * from './ia-reviews/ia-review';
 export * from './ia-reviews/ia-review-form';
 export * from './ia-reviews/ia-reviews';
+export * from './ia-reviews/models';
+export * from './ia-reviews/review-service';
 export * from './ia-scrubber-bar/ia-scrubber-bar';
 export * from './ia-scrubber-bar/ia-section-marker';
 export * from './ia-scrubber-bar/models';
