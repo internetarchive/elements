@@ -179,6 +179,7 @@ It has a few main configurations:
 *Properties*
 - `elementTag` (_string_) your component's name, ie `ia-button`
 - `labs` (_boolean_) if your component is in `labs` to update links
+- `importPath` (_string_) the element's path under `@internetarchive/elements/`, for an element that lives inside another component's directory, ie `ia-donation-form/form-elements/ia-donation-section`. Defaults to `<tag>/<tag>`
 - `styleInputSettings` (_StyleInputSettings array_) the style options to display, in the appropriate format
 - `propInputSettings` (_PropInputSettings array_) the prop options to display, in the appropriate format
 

@@ -48,6 +48,14 @@ export class StoryTemplate extends LitElement {
 
   @property({ type: Boolean }) labs = false;
 
+  /*
+   * The element's path under `@internetarchive/elements/`, for elements that
+   * live inside another component's directory, e.g.
+   * `ia-donation-form/form-elements/ia-donation-section`. Defaults to
+   * `<tag>/<tag>`, which is where a top-level element lives.
+   */
+  @property({ type: String }) importPath?: string;
+
   /* Whether the demo is showing this element on its own */
   @state() private focused = false;
 
@@ -270,9 +278,10 @@ export class StoryTemplate extends LitElement {
   }
 
   private get modulePath(): string {
+    const path = this.importPath ?? `${this.elementTag}/${this.elementTag}`;
     return this.labs
-      ? `@internetarchive/elements/labs/${this.elementTag}/${this.elementTag}`
-      : `@internetarchive/elements/${this.elementTag}/${this.elementTag}`;
+      ? `@internetarchive/elements/labs/${path}`
+      : `@internetarchive/elements/${path}`;
   }
 
   /* Toggles visibility of section depending on whether inputs have been slotted in */
