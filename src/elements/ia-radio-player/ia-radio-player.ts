@@ -100,6 +100,9 @@ export class IARadioPlayer extends LitElement {
   /** Whether to skip past the music sections rather than play them */
   @property({ type: Boolean }) skipMusicSections = false;
 
+  /** Whether to shade the music sections on the waveform */
+  @property({ type: Boolean }) showMusicZones = false;
+
   @state() private percentComplete = 0;
 
   @state() private isPlaying = false;
@@ -216,7 +219,7 @@ export class IARadioPlayer extends LitElement {
         interactive
         .waveformUrl=${waveformUrl}
         .percentComplete=${this.percentComplete}
-        .zonesOfSilence=${this.zonesOfSilence}
+        .zonesOfSilence=${this.showMusicZones ? this.zonesOfSilence : []}
         @valuechange=${this.handleScrub}
       ></ia-waveform-progress>
     `;
