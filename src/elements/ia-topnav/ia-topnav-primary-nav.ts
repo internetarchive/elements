@@ -41,6 +41,266 @@ export class PrimaryNav extends TrackedElement {
   @query('button.user-menu') private userMenuButton?: HTMLButtonElement;
   @query('ia-topnav-login-button') private loginButton?: HTMLElement;
 
+  updated(props: PropertyValues) {
+    if (props.has('currentTab')) {
+      // early return
+      if (!this.currentTab || Object.keys(this.currentTab).length === 0)
+        return nothing;
+
+      const isUserMenuTab =
+        this.currentTab && this.currentTab.mediatype === 'usermenu';
+      if (isUserMenuTab) {
+        const mediaButtons = Array.from(
+          this.shadowRoot
+            ?.querySelector('ia-topnav-media-menu')
+            ?.shadowRoot?.querySelectorAll('ia-topnav-media-button') ?? [],
+        );
+        const lastMediaButton = mediaButtons.filter((element) => {
+          return element.shadowRoot
+            ?.querySelector('a')
+            ?.classList.contains('images');
+        });
+
+        let nextElement;
+        if (this.username) {
+          nextElement = this.shadowRoot?.querySelector('a.upload');
+        } else {
+          nextElement = this.shadowRoot
+            ?.querySelector('ia-topnav-login-button')
+            ?.shadowRoot?.querySelector('span a');
+        }
+
+        const menuItemElement =
+          lastMediaButton[0]?.shadowRoot?.querySelector('a.menu-item');
+
+        const focusElement =
+          this.currentTab.moveTo === 'next' ? nextElement : menuItemElement;
+
+        if (focusElement) {
+          (focusElement as HTMLElement).focus();
+        }
+      } else if (this.currentTab.moveTo === 'next') {
+        if (this.shadowRoot?.querySelector('.user-menu')) {
+          (this.shadowRoot?.querySelector('.user-menu') as HTMLElement).focus();
+        } else {
+          (
+            this.shadowRoot
+              ?.querySelector('ia-topnav-login-button')
+              ?.shadowRoot?.querySelectorAll('span a')[0] as HTMLElement
+          )?.focus();
+        }
+      }
+    }
+  }
+
+  render() {
+    // const mediaMenuTabIndex = this.openMenu === 'media' ? '' : '-1';
+    return html`
+      <nav class=${this.hideSearch ? 'hide-search' : ''}>
+        <button
+          class="hamburger"
+          @click="${this.toggleMediaMenu}"
+          data-event-click-tracking="${this.config?.eventCategory}|NavHamburger"
+          title="Open main menu"
+        >
+          <ia-topnav-icon-hamburger
+            ?active=${this.openMenu === 'media'}
+          ></ia-topnav-icon-hamburger>
+        </button>
+
+        <div class=${`branding ${this.secondLogoClass}`}>
+          <a
+            .href=${formatUrl('/' as string & Location, this.baseHost)}
+            @click=${this.trackClick}
+            data-event-click-tracking="${this.config?.eventCategory}|NavHome"
+            title="Go home"
+            class="link-home"
+            >${icons.iaLogo}${logoWordmarkStacked}</a
+          >
+          ${this.secondLogoSlot}
+        </div>
+        <ia-topnav-media-menu
+          .baseHost=${this.baseHost}
+          .config=${this.config}
+          ?mediaMenuAnimate=${this.mediaMenuAnimate}
+          .selectedMenuOption=${this.selectedMenuOption}
+          .openMenu=${this.openMenu}
+          .currentTab=${this.currentTab}
+        ></ia-topnav-media-menu>
+        ${this.searchSlotContainer}
+        <div class="right-side-section">
+          ${this.mobileDonateHeart} ${this.userStateTemplate}
+          ${this.uploadButtonTemplate} ${this.searchMenu}
+        </div>
+      </nav>
+    `;
+  }
+
+  /** Distance (px) from this element's right edge to the right edge of the account dropdown toggle. */
+  getAccountDropdownOffset(): number {
+    const hostRect = this.getBoundingClientRect();
+
+    if (this.userMenuButton) {
+      return hostRect.right - this.userMenuButton.getBoundingClientRect().right;
+    }
+
+    if (this.loginButton) {
+      const loginRect = this.loginButton.getBoundingClientRect();
+      const innerOffset = (
+        this.loginButton as LoginButton
+      ).getDropdownToggleOffset();
+      return hostRect.right - loginRect.right + innerOffset;
+    }
+
+    return 0;
+  }
+
+  toggleMediaMenu(e: Event) {
+    this.trackClick(e);
+    this.dispatchEvent(
+      new CustomEvent('menuToggled', {
+        detail: {
+          menuName: 'media',
+        },
+      }),
+    );
+  }
+
+  toggleSearchMenu(e: Event) {
+    this.trackClick(e);
+    this.dispatchEvent(
+      new CustomEvent('menuToggled', {
+        detail: {
+          menuName: 'search',
+        },
+      }),
+    );
+  }
+
+  toggleUserMenu(e: Event) {
+    this.trackClick(e);
+    this.dispatchEvent(
+      new CustomEvent('menuToggled', {
+        detail: {
+          menuName: 'user',
+        },
+      }),
+    );
+  }
+
+  get userIcon() {
+    const userMenuClass = this.openMenu === 'user' ? 'active' : '';
+    const userMenuToolTip =
+      this.openMenu === 'user' ? 'Close user menu' : 'Expand user menu';
+
+    return html`
+      <button
+        class="user-menu ${userMenuClass}"
+        title="${userMenuToolTip}"
+        @click="${this.toggleUserMenu}"
+        data-event-click-tracking="${this.config?.eventCategory}|NavUserMenu"
+      >
+        <img
+          src="${this.mediaBaseHost}${this.userProfileImagePath}"
+          alt="Profile picture for ${this.screenName}"
+        />
+        <span class="screen-name" dir="auto">${this.screenName}</span>
+      </button>
+    `;
+  }
+
+  get loginIcon() {
+    return html`
+      <ia-topnav-login-button
+        .baseHost=${this.baseHost}
+        .config=${this.config}
+        .dropdownOpen=${this.signedOutMenuOpen}
+        .openMenu=${this.openMenu}
+        @signedOutMenuToggled=${this.signedOutMenuToggled}
+      ></ia-topnav-login-button>
+    `;
+  }
+
+  get searchMenuOpen() {
+    return this.openMenu === 'search';
+  }
+
+  get allowSecondaryIcon() {
+    return this.secondIdentitySlotMode === 'allow';
+  }
+
+  /**
+   * The search slot container, rendered between ia-topnav-media-menu and
+   * right-side-section so it sits left of the Upload button on desktop.
+   */
+  get searchSlotContainer() {
+    if (this.hideSearch) return nothing;
+    return html`
+      <div class="search-container ${this.searchMenuOpen ? 'open' : ''}">
+        <slot name="search"></slot>
+      </div>
+    `;
+  }
+
+  get searchMenu() {
+    if (this.hideSearch) return nothing;
+
+    return html`
+      <button
+        class="search-trigger"
+        @click="${this.toggleSearchMenu}"
+        data-event-click-tracking="${this.config?.eventCategory}|NavSearchOpen"
+      >
+        ${icons.search}
+      </button>
+    `;
+  }
+
+  get mobileDonateHeart() {
+    return html`
+      <a
+        class="mobile-donate-link"
+        .href=${formatUrl(
+          '/donate/?origin=iawww-mbhrt' as string & Location,
+          this.baseHost,
+        )}
+      >
+        ${icons.donateUnpadded}
+        <span class="sr-only">"Donate to the archive"</span>
+      </a>
+    `;
+  }
+
+  get uploadButtonTemplate() {
+    return html` <a
+      .href="${formatUrl('/upload' as string & Location, this.baseHost)}"
+      class="upload"
+      @focus=${this.toggleMediaMenu}
+    >
+      ${icons.upload}
+      <span>Upload</span>
+    </a>`;
+  }
+
+  get userStateTemplate() {
+    return html`<div class="user-info">
+      ${this.username ? this.userIcon : this.loginIcon}
+    </div>`;
+  }
+
+  get secondLogoSlot() {
+    return this.allowSecondaryIcon
+      ? html`
+          <slot name="opt-sec-logo"></slot>
+          <slot name="opt-sec-logo-mobile"></slot>
+        `
+      : nothing;
+  }
+
+  get secondLogoClass() {
+    return this.allowSecondaryIcon ? 'second-logo' : '';
+  }
+
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
@@ -399,265 +659,5 @@ export class PrimaryNav extends TrackedElement {
         }
       `,
     ];
-  }
-
-  /** Distance (px) from this element's right edge to the right edge of the account dropdown toggle. */
-  getAccountDropdownOffset(): number {
-    const hostRect = this.getBoundingClientRect();
-
-    if (this.userMenuButton) {
-      return hostRect.right - this.userMenuButton.getBoundingClientRect().right;
-    }
-
-    if (this.loginButton) {
-      const loginRect = this.loginButton.getBoundingClientRect();
-      const innerOffset = (
-        this.loginButton as LoginButton
-      ).getDropdownToggleOffset();
-      return hostRect.right - loginRect.right + innerOffset;
-    }
-
-    return 0;
-  }
-
-  toggleMediaMenu(e: Event) {
-    this.trackClick(e);
-    this.dispatchEvent(
-      new CustomEvent('menuToggled', {
-        detail: {
-          menuName: 'media',
-        },
-      }),
-    );
-  }
-
-  toggleSearchMenu(e: Event) {
-    this.trackClick(e);
-    this.dispatchEvent(
-      new CustomEvent('menuToggled', {
-        detail: {
-          menuName: 'search',
-        },
-      }),
-    );
-  }
-
-  toggleUserMenu(e: Event) {
-    this.trackClick(e);
-    this.dispatchEvent(
-      new CustomEvent('menuToggled', {
-        detail: {
-          menuName: 'user',
-        },
-      }),
-    );
-  }
-
-  updated(props: PropertyValues) {
-    if (props.has('currentTab')) {
-      // early return
-      if (!this.currentTab || Object.keys(this.currentTab).length === 0)
-        return nothing;
-
-      const isUserMenuTab =
-        this.currentTab && this.currentTab.mediatype === 'usermenu';
-      if (isUserMenuTab) {
-        const mediaButtons = Array.from(
-          this.shadowRoot
-            ?.querySelector('ia-topnav-media-menu')
-            ?.shadowRoot?.querySelectorAll('ia-topnav-media-button') ?? [],
-        );
-        const lastMediaButton = mediaButtons.filter((element) => {
-          return element.shadowRoot
-            ?.querySelector('a')
-            ?.classList.contains('images');
-        });
-
-        let nextElement;
-        if (this.username) {
-          nextElement = this.shadowRoot?.querySelector('a.upload');
-        } else {
-          nextElement = this.shadowRoot
-            ?.querySelector('ia-topnav-login-button')
-            ?.shadowRoot?.querySelector('span a');
-        }
-
-        const menuItemElement =
-          lastMediaButton[0]?.shadowRoot?.querySelector('a.menu-item');
-
-        const focusElement =
-          this.currentTab.moveTo === 'next' ? nextElement : menuItemElement;
-
-        if (focusElement) {
-          (focusElement as HTMLElement).focus();
-        }
-      } else if (this.currentTab.moveTo === 'next') {
-        if (this.shadowRoot?.querySelector('.user-menu')) {
-          (this.shadowRoot?.querySelector('.user-menu') as HTMLElement).focus();
-        } else {
-          (
-            this.shadowRoot
-              ?.querySelector('ia-topnav-login-button')
-              ?.shadowRoot?.querySelectorAll('span a')[0] as HTMLElement
-          )?.focus();
-        }
-      }
-    }
-  }
-
-  get userIcon() {
-    const userMenuClass = this.openMenu === 'user' ? 'active' : '';
-    const userMenuToolTip =
-      this.openMenu === 'user' ? 'Close user menu' : 'Expand user menu';
-
-    return html`
-      <button
-        class="user-menu ${userMenuClass}"
-        title="${userMenuToolTip}"
-        @click="${this.toggleUserMenu}"
-        data-event-click-tracking="${this.config?.eventCategory}|NavUserMenu"
-      >
-        <img
-          src="${this.mediaBaseHost}${this.userProfileImagePath}"
-          alt="Profile picture for ${this.screenName}"
-        />
-        <span class="screen-name" dir="auto">${this.screenName}</span>
-      </button>
-    `;
-  }
-
-  get loginIcon() {
-    return html`
-      <ia-topnav-login-button
-        .baseHost=${this.baseHost}
-        .config=${this.config}
-        .dropdownOpen=${this.signedOutMenuOpen}
-        .openMenu=${this.openMenu}
-        @signedOutMenuToggled=${this.signedOutMenuToggled}
-      ></ia-topnav-login-button>
-    `;
-  }
-
-  get searchMenuOpen() {
-    return this.openMenu === 'search';
-  }
-
-  get allowSecondaryIcon() {
-    return this.secondIdentitySlotMode === 'allow';
-  }
-
-  /**
-   * The search slot container, rendered between ia-topnav-media-menu and
-   * right-side-section so it sits left of the Upload button on desktop.
-   */
-  get searchSlotContainer() {
-    if (this.hideSearch) return nothing;
-    return html`
-      <div class="search-container ${this.searchMenuOpen ? 'open' : ''}">
-        <slot name="search"></slot>
-      </div>
-    `;
-  }
-
-  get searchMenu() {
-    if (this.hideSearch) return nothing;
-
-    return html`
-      <button
-        class="search-trigger"
-        @click="${this.toggleSearchMenu}"
-        data-event-click-tracking="${this.config?.eventCategory}|NavSearchOpen"
-      >
-        ${icons.search}
-      </button>
-    `;
-  }
-
-  get mobileDonateHeart() {
-    return html`
-      <a
-        class="mobile-donate-link"
-        .href=${formatUrl(
-          '/donate/?origin=iawww-mbhrt' as string & Location,
-          this.baseHost,
-        )}
-      >
-        ${icons.donateUnpadded}
-        <span class="sr-only">"Donate to the archive"</span>
-      </a>
-    `;
-  }
-
-  get uploadButtonTemplate() {
-    return html` <a
-      .href="${formatUrl('/upload' as string & Location, this.baseHost)}"
-      class="upload"
-      @focus=${this.toggleMediaMenu}
-    >
-      ${icons.upload}
-      <span>Upload</span>
-    </a>`;
-  }
-
-  get userStateTemplate() {
-    return html`<div class="user-info">
-      ${this.username ? this.userIcon : this.loginIcon}
-    </div>`;
-  }
-
-  get secondLogoSlot() {
-    return this.allowSecondaryIcon
-      ? html`
-          <slot name="opt-sec-logo"></slot>
-          <slot name="opt-sec-logo-mobile"></slot>
-        `
-      : nothing;
-  }
-
-  get secondLogoClass() {
-    return this.allowSecondaryIcon ? 'second-logo' : '';
-  }
-
-  render() {
-    // const mediaMenuTabIndex = this.openMenu === 'media' ? '' : '-1';
-    return html`
-      <nav class=${this.hideSearch ? 'hide-search' : ''}>
-        <button
-          class="hamburger"
-          @click="${this.toggleMediaMenu}"
-          data-event-click-tracking="${this.config?.eventCategory}|NavHamburger"
-          title="Open main menu"
-        >
-          <ia-topnav-icon-hamburger
-            ?active=${this.openMenu === 'media'}
-          ></ia-topnav-icon-hamburger>
-        </button>
-
-        <div class=${`branding ${this.secondLogoClass}`}>
-          <a
-            .href=${formatUrl('/' as string & Location, this.baseHost)}
-            @click=${this.trackClick}
-            data-event-click-tracking="${this.config?.eventCategory}|NavHome"
-            title="Go home"
-            class="link-home"
-            >${icons.iaLogo}${logoWordmarkStacked}</a
-          >
-          ${this.secondLogoSlot}
-        </div>
-        <ia-topnav-media-menu
-          .baseHost=${this.baseHost}
-          .config=${this.config}
-          ?mediaMenuAnimate=${this.mediaMenuAnimate}
-          .selectedMenuOption=${this.selectedMenuOption}
-          .openMenu=${this.openMenu}
-          .currentTab=${this.currentTab}
-        ></ia-topnav-media-menu>
-        ${this.searchSlotContainer}
-        <div class="right-side-section">
-          ${this.mobileDonateHeart} ${this.userStateTemplate}
-          ${this.uploadButtonTemplate} ${this.searchMenu}
-        </div>
-      </nav>
-    `;
   }
 }

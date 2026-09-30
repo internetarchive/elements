@@ -17,6 +17,70 @@ export class LoginButton extends TrackedElement {
 
   @query('button.logged-out-menu') private toggleButton?: HTMLButtonElement;
 
+  render() {
+    return html`
+      <div class="logged-out-toolbar">
+        <button
+          class="logged-out-menu ${this.avatarClass}"
+          @click=${this.toggleDropdown}
+          data-event-click-tracking="${this.analyticsEvent}"
+          aria-label="Toggle login menu"
+          aria-expanded="${makeBooleanString(this.menuOpened)}"
+        >
+          ${icons.user}
+        </button>
+        <span>
+          <a href="${this.signupPath}">Sign up</a>
+          |
+          <a href="${this.loginPath}">Log in</a>
+        </span>
+      </div>
+    `;
+  }
+
+  /** Distance (px) from this element's right edge to the right edge of the dropdown toggle icon. */
+  getDropdownToggleOffset(): number {
+    if (!this.toggleButton) return 0;
+    return (
+      this.getBoundingClientRect().right -
+      this.toggleButton.getBoundingClientRect().right
+    );
+  }
+
+  get signupPath() {
+    return formatUrl('/signup', this.baseHost);
+  }
+
+  get loginPath() {
+    return formatUrl('/login', this.baseHost);
+  }
+
+  get analyticsEvent() {
+    return `${this.config?.eventCategory}|NavLoginIcon`;
+  }
+
+  get menuOpened(): boolean {
+    return this.openMenu === 'login';
+  }
+
+  get avatarClass() {
+    return `dropdown-toggle${this.menuOpened ? ' active' : ''}`;
+  }
+
+  toggleDropdown(e: Event) {
+    e.preventDefault();
+    this.trackClick(e);
+    this.dispatchEvent(
+      new CustomEvent('menuToggled', {
+        bubbles: true,
+        composed: true,
+        detail: {
+          menuName: 'login',
+        },
+      }),
+    );
+  }
+
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
@@ -109,69 +173,5 @@ export class LoginButton extends TrackedElement {
         }
       `,
     ];
-  }
-
-  /** Distance (px) from this element's right edge to the right edge of the dropdown toggle icon. */
-  getDropdownToggleOffset(): number {
-    if (!this.toggleButton) return 0;
-    return (
-      this.getBoundingClientRect().right -
-      this.toggleButton.getBoundingClientRect().right
-    );
-  }
-
-  get signupPath() {
-    return formatUrl('/signup', this.baseHost);
-  }
-
-  get loginPath() {
-    return formatUrl('/login', this.baseHost);
-  }
-
-  get analyticsEvent() {
-    return `${this.config?.eventCategory}|NavLoginIcon`;
-  }
-
-  get menuOpened(): boolean {
-    return this.openMenu === 'login';
-  }
-
-  get avatarClass() {
-    return `dropdown-toggle${this.menuOpened ? ' active' : ''}`;
-  }
-
-  toggleDropdown(e: Event) {
-    e.preventDefault();
-    this.trackClick(e);
-    this.dispatchEvent(
-      new CustomEvent('menuToggled', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          menuName: 'login',
-        },
-      }),
-    );
-  }
-
-  render() {
-    return html`
-      <div class="logged-out-toolbar">
-        <button
-          class="logged-out-menu ${this.avatarClass}"
-          @click=${this.toggleDropdown}
-          data-event-click-tracking="${this.analyticsEvent}"
-          aria-label="Toggle login menu"
-          aria-expanded="${makeBooleanString(this.menuOpened)}"
-        >
-          ${icons.user}
-        </button>
-        <span>
-          <a href="${this.signupPath}">Sign up</a>
-          |
-          <a href="${this.loginPath}">Log in</a>
-        </span>
-      </div>
-    `;
   }
 }

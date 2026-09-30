@@ -90,98 +90,16 @@ export class IATopNav extends LitElement {
 
   private boundHandleClick = this.handleDocumentClick.bind(this);
 
-  private get normalizedBaseHost() {
-    return !this.localLinks ? this.baseHost : '';
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener('keydown', this.boundHandleKeydown);
+    document.addEventListener('click', this.boundHandleClick);
   }
 
-  static get styles(): CSSResultGroup {
-    return [
-      themeStyles,
-      css`
-        :host {
-          --white: #fff;
-          --grey13: #222;
-          --grey20: #333;
-          --grey40: #666;
-          --grey28: #474747;
-          --grey60: #999;
-          --grey66: #aaa;
-          --grey80: #ccc;
-          --greya0: #a0a0a0;
-          --grey6f: #6f6f6f;
-          --errorYellow: #ffcd27;
-
-          --linkColor: #4b64ff;
-          --linkHoverColor: var(--white);
-          --subnavLinkColor: var(--grey66);
-          --primaryTextColor: var(--white);
-          --inverseTextColor: var(--grey20);
-          --lightTextColor: var(--grey60);
-          --activeColor: var(--white);
-          --activeButtonBg: var(--grey20);
-          --iconFill: var(--grey60);
-          --desktopSearchIconFill: var(--grey20);
-
-          --mediaMenuBg: var(--grey13);
-          --mediaLabelDesktopColor: var(--grey60);
-          --activeDesktopMenuIcon: var(--grey28);
-
-          --mediaSliderBg: var(--grey20);
-          --mediaSliderDesktopBg: var(--grey28);
-
-          --primaryNavBg: var(--grey13);
-          --primaryNavBottomBorder: var(--grey20);
-
-          --desktopSubnavBg: var(--grey20);
-
-          --dropdownMenuBg: var(--grey20);
-          --dropdownMenuInfoItem: var(--greya0);
-          --dropdownMenuDivider: var(--grey40);
-          --inverseDropdownMenuInfoItem: var(--grey6f);
-
-          --loginTextColor: var(--grey60);
-
-          --themeFontFamily: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-          --logoWidthTablet: 263px;
-
-          --savePageSubmitBg: var(--grey13);
-          --savePageSubmitText: var(--white);
-          --savePageInputBorder: var(--grey60);
-          --savePageErrorText: var(--errorYellow);
-
-          color: var(--primaryTextColor);
-          font-family: var(--themeFontFamily);
-        }
-
-        ia-topnav-primary-nav:focus {
-          outline: none !important;
-        }
-
-        #close-layer {
-          display: none;
-          position: fixed;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
-          z-index: 3;
-        }
-        #close-layer.visible {
-          display: block;
-        }
-
-        .topnav {
-          position: relative;
-          z-index: 4;
-        }
-
-        @media (max-width: ${TOPNAV_MOBILE_BREAKPOINT - 1}px) {
-          ia-topnav-desktop-subnav {
-            display: none;
-          }
-        }
-      `,
-    ];
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('keydown', this.boundHandleKeydown);
+    document.removeEventListener('click', this.boundHandleClick);
   }
 
   updated(props: PropertyValues) {
@@ -198,16 +116,55 @@ export class IATopNav extends LitElement {
     }
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    document.addEventListener('keydown', this.boundHandleKeydown);
-    document.addEventListener('click', this.boundHandleClick);
+  render() {
+    return html`
+      <div class="topnav">
+        <ia-topnav-primary-nav
+          .baseHost=${this.normalizedBaseHost}
+          .mediaBaseHost=${this.mediaBaseHost}
+          .config=${this.config}
+          .openMenu=${this.openMenu}
+          .screenName=${this.screenName}
+          .secondIdentitySlotMode=${this.secondIdentitySlotMode}
+          .selectedMenuOption=${this.selectedMenuOption}
+          .username=${this.username}
+          .userProfileImagePath=${this.userProfileImagePath}
+          .currentTab=${this.currentTab}
+          ?hideSearch=${this.hideSearch}
+          @mediaTypeSelected=${this.mediaTypeSelected}
+          @trackClick=${this.trackClick}
+          @trackSubmit=${this.trackSubmit}
+          @menuToggled=${this.menuToggled}
+        >
+          ${this.secondLogoSlot} ${this.searchSlot}
+        </ia-topnav-primary-nav>
+        <ia-topnav-media-slider
+          .baseHost=${this.normalizedBaseHost}
+          .config=${this.config}
+          .selectedMenuOption=${this.selectedMenuOption}
+          .mediaSliderOpen=${this.mediaSliderOpen}
+          .menus=${this.menus}
+          tabindex="${this.mediaSliderOpen ? '1' : '-1'}"
+          @focusToOtherMenuItem=${(e: CustomEvent) =>
+            (this.currentTab = e.detail)}
+        ></ia-topnav-media-slider>
+      </div>
+      ${this.username ? this.userMenu : this.signedOutDropdown}
+      <ia-topnav-desktop-subnav
+        .baseHost=${this.normalizedBaseHost}
+        .menuItems=${this.menus.more.links}
+        @focus=${this.closeMenus}
+      ></ia-topnav-desktop-subnav>
+      <div
+        id="close-layer"
+        class="${this.closeLayerClass}"
+        @click=${this.closeMenus}
+      ></div>
+    `;
   }
 
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    document.removeEventListener('keydown', this.boundHandleKeydown);
-    document.removeEventListener('click', this.boundHandleClick);
+  private get normalizedBaseHost() {
+    return !this.localLinks ? this.baseHost : '';
   }
 
   private handleDocumentKeydown(e: KeyboardEvent) {
@@ -404,50 +361,93 @@ export class IATopNav extends LitElement {
     return html`<li class="divider" role="presentation"></li>`;
   }
 
-  render() {
-    return html`
-      <div class="topnav">
-        <ia-topnav-primary-nav
-          .baseHost=${this.normalizedBaseHost}
-          .mediaBaseHost=${this.mediaBaseHost}
-          .config=${this.config}
-          .openMenu=${this.openMenu}
-          .screenName=${this.screenName}
-          .secondIdentitySlotMode=${this.secondIdentitySlotMode}
-          .selectedMenuOption=${this.selectedMenuOption}
-          .username=${this.username}
-          .userProfileImagePath=${this.userProfileImagePath}
-          .currentTab=${this.currentTab}
-          ?hideSearch=${this.hideSearch}
-          @mediaTypeSelected=${this.mediaTypeSelected}
-          @trackClick=${this.trackClick}
-          @trackSubmit=${this.trackSubmit}
-          @menuToggled=${this.menuToggled}
-        >
-          ${this.secondLogoSlot} ${this.searchSlot}
-        </ia-topnav-primary-nav>
-        <ia-topnav-media-slider
-          .baseHost=${this.normalizedBaseHost}
-          .config=${this.config}
-          .selectedMenuOption=${this.selectedMenuOption}
-          .mediaSliderOpen=${this.mediaSliderOpen}
-          .menus=${this.menus}
-          tabindex="${this.mediaSliderOpen ? '1' : '-1'}"
-          @focusToOtherMenuItem=${(e: CustomEvent) =>
-            (this.currentTab = e.detail)}
-        ></ia-topnav-media-slider>
-      </div>
-      ${this.username ? this.userMenu : this.signedOutDropdown}
-      <ia-topnav-desktop-subnav
-        .baseHost=${this.normalizedBaseHost}
-        .menuItems=${this.menus.more.links}
-        @focus=${this.closeMenus}
-      ></ia-topnav-desktop-subnav>
-      <div
-        id="close-layer"
-        class="${this.closeLayerClass}"
-        @click=${this.closeMenus}
-      ></div>
-    `;
+  static get styles(): CSSResultGroup {
+    return [
+      themeStyles,
+      css`
+        :host {
+          --white: #fff;
+          --grey13: #222;
+          --grey20: #333;
+          --grey40: #666;
+          --grey28: #474747;
+          --grey60: #999;
+          --grey66: #aaa;
+          --grey80: #ccc;
+          --greya0: #a0a0a0;
+          --grey6f: #6f6f6f;
+          --errorYellow: #ffcd27;
+
+          --linkColor: #4b64ff;
+          --linkHoverColor: var(--white);
+          --subnavLinkColor: var(--grey66);
+          --primaryTextColor: var(--white);
+          --inverseTextColor: var(--grey20);
+          --lightTextColor: var(--grey60);
+          --activeColor: var(--white);
+          --activeButtonBg: var(--grey20);
+          --iconFill: var(--grey60);
+          --desktopSearchIconFill: var(--grey20);
+
+          --mediaMenuBg: var(--grey13);
+          --mediaLabelDesktopColor: var(--grey60);
+          --activeDesktopMenuIcon: var(--grey28);
+
+          --mediaSliderBg: var(--grey20);
+          --mediaSliderDesktopBg: var(--grey28);
+
+          --primaryNavBg: var(--grey13);
+          --primaryNavBottomBorder: var(--grey20);
+
+          --desktopSubnavBg: var(--grey20);
+
+          --dropdownMenuBg: var(--grey20);
+          --dropdownMenuInfoItem: var(--greya0);
+          --dropdownMenuDivider: var(--grey40);
+          --inverseDropdownMenuInfoItem: var(--grey6f);
+
+          --loginTextColor: var(--grey60);
+
+          --themeFontFamily: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+          --logoWidthTablet: 263px;
+
+          --savePageSubmitBg: var(--grey13);
+          --savePageSubmitText: var(--white);
+          --savePageInputBorder: var(--grey60);
+          --savePageErrorText: var(--errorYellow);
+
+          color: var(--primaryTextColor);
+          font-family: var(--themeFontFamily);
+        }
+
+        ia-topnav-primary-nav:focus {
+          outline: none !important;
+        }
+
+        #close-layer {
+          display: none;
+          position: fixed;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          z-index: 3;
+        }
+        #close-layer.visible {
+          display: block;
+        }
+
+        .topnav {
+          position: relative;
+          z-index: 4;
+        }
+
+        @media (max-width: ${TOPNAV_MOBILE_BREAKPOINT - 1}px) {
+          ia-topnav-desktop-subnav {
+            display: none;
+          }
+        }
+      `,
+    ];
   }
 }

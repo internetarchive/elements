@@ -71,6 +71,73 @@ export class MediaMenu extends LitElement {
 
   @queryAll('ia-topnav-media-button') mediaButtons?: MediaButton[];
 
+  updated(props: PropertyValues) {
+    if (props.has('currentTab')) {
+      const mediaButtons = Array.from(this.mediaButtons ?? []);
+
+      mediaButtons.map((button, index) => {
+        const linkItem = button.shadowRoot?.querySelector('a.menu-item');
+        if (linkItem) {
+          if (linkItem.classList.contains(`${this.selectedMenuOption}`)) {
+            linkItem.classList.remove('selected');
+            (linkItem as HTMLElement).blur();
+
+            const newFocusIndex =
+              this.currentTab?.moveTo === 'next' ? index + 1 : index - 1;
+            (
+              mediaButtons[newFocusIndex]?.shadowRoot?.querySelector(
+                'a.menu-item',
+              ) as HTMLElement
+            ).focus();
+          }
+        }
+      });
+    }
+  }
+
+  render() {
+    return html`
+      <div class="media-menu-container ${this.menuClass}">
+        <div class="overflow-clip">
+          <nav class="media-menu-inner" aria-expanded="${this.menuOpened}">
+            <div class="menu-group">${this.mediaMenuOptionsTemplate}</div>
+          </nav>
+        </div>
+      </div>
+    `;
+  }
+
+  get mediaMenuOptionsTemplate() {
+    const buttons = menuSelection.map(
+      ({ icon, menu, label, href, followable }) => {
+        const selected = this.selectedMenuOption === menu;
+        return html`
+          <ia-topnav-media-button
+            .config=${this.config}
+            .icon=${icon}
+            .href=${formatUrl(href as string & Location, this.baseHost)}
+            ?followable=${followable}
+            .label=${label}
+            .mediatype=${menu}
+            .openMenu=${this.openMenu}
+            .selected=${selected}
+            .selectedMenuOption=${this.selectedMenuOption}
+            data-mediatype="${menu}"
+          ></ia-topnav-media-button>
+        `;
+      },
+    );
+    return buttons;
+  }
+
+  get menuOpened() {
+    return this.openMenu === 'media';
+  }
+
+  get menuClass() {
+    return this.menuOpened ? 'open' : 'closed';
+  }
+
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
@@ -139,72 +206,5 @@ export class MediaMenu extends LitElement {
         }
       `,
     ];
-  }
-
-  updated(props: PropertyValues) {
-    if (props.has('currentTab')) {
-      const mediaButtons = Array.from(this.mediaButtons ?? []);
-
-      mediaButtons.map((button, index) => {
-        const linkItem = button.shadowRoot?.querySelector('a.menu-item');
-        if (linkItem) {
-          if (linkItem.classList.contains(`${this.selectedMenuOption}`)) {
-            linkItem.classList.remove('selected');
-            (linkItem as HTMLElement).blur();
-
-            const newFocusIndex =
-              this.currentTab?.moveTo === 'next' ? index + 1 : index - 1;
-            (
-              mediaButtons[newFocusIndex]?.shadowRoot?.querySelector(
-                'a.menu-item',
-              ) as HTMLElement
-            ).focus();
-          }
-        }
-      });
-    }
-  }
-
-  get mediaMenuOptionsTemplate() {
-    const buttons = menuSelection.map(
-      ({ icon, menu, label, href, followable }) => {
-        const selected = this.selectedMenuOption === menu;
-        return html`
-          <ia-topnav-media-button
-            .config=${this.config}
-            .icon=${icon}
-            .href=${formatUrl(href as string & Location, this.baseHost)}
-            ?followable=${followable}
-            .label=${label}
-            .mediatype=${menu}
-            .openMenu=${this.openMenu}
-            .selected=${selected}
-            .selectedMenuOption=${this.selectedMenuOption}
-            data-mediatype="${menu}"
-          ></ia-topnav-media-button>
-        `;
-      },
-    );
-    return buttons;
-  }
-
-  get menuOpened() {
-    return this.openMenu === 'media';
-  }
-
-  get menuClass() {
-    return this.menuOpened ? 'open' : 'closed';
-  }
-
-  render() {
-    return html`
-      <div class="media-menu-container ${this.menuClass}">
-        <div class="overflow-clip">
-          <nav class="media-menu-inner" aria-expanded="${this.menuOpened}">
-            <div class="menu-group">${this.mediaMenuOptionsTemplate}</div>
-          </nav>
-        </div>
-      </div>
-    `;
   }
 }

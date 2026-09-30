@@ -5,17 +5,8 @@ import { customElement } from '@src/util/custom-element';
 
 @customElement('ia-topnav-icon-hamburger')
 export class HamBurger extends Icon {
-  static get styles() {
-    return css`
-      svg {
-        display: block;
-        height: 4rem;
-        width: 4rem;
-      }
-      .fill-color {
-        fill: var(--activeColor);
-      }
-    `;
+  render() {
+    return this.active ? HamBurger.opened : HamBurger.closed;
   }
 
   static get closed() {
@@ -43,7 +34,16 @@ export class HamBurger extends Icon {
     return icons.close;
   }
 
-  render() {
-    return this.active ? HamBurger.opened : HamBurger.closed;
+  static get styles() {
+    return css`
+      svg {
+        display: block;
+        height: 4rem;
+        width: 4rem;
+      }
+      .fill-color {
+        fill: var(--activeColor);
+      }
+    `;
   }
 }

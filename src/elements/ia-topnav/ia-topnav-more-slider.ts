@@ -15,6 +15,28 @@ export class MoreSlider extends TrackedElement {
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
   @property({ type: Array }) menuItems: IATopNavLink[] = [];
 
+  render() {
+    return html`
+      <ul>
+        ${this.menuItems.map(
+          (item) =>
+            html`<li>
+              <a
+                @click=${this.trackClick}
+                href=${formatUrl(item.url, this.baseHost)}
+                data-event-click-tracking="${this.analyticsEvent(item.title)}"
+                >${item.title}</a
+              >
+            </li>`,
+        )}
+      </ul>
+    `;
+  }
+
+  analyticsEvent(title: string) {
+    return `${this.config.eventCategory}|NavMore${toSentenceCase(title)}`;
+  }
+
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
@@ -32,27 +54,5 @@ export class MoreSlider extends TrackedElement {
         }
       `,
     ];
-  }
-
-  analyticsEvent(title: string) {
-    return `${this.config.eventCategory}|NavMore${toSentenceCase(title)}`;
-  }
-
-  render() {
-    return html`
-      <ul>
-        ${this.menuItems.map(
-          (item) =>
-            html`<li>
-              <a
-                @click=${this.trackClick}
-                href=${formatUrl(item.url, this.baseHost)}
-                data-event-click-tracking="${this.analyticsEvent(item.title)}"
-                >${item.title}</a
-              >
-            </li>`,
-        )}
-      </ul>
-    `;
   }
 }

@@ -13,6 +13,37 @@ export class DesktopSubnav extends TrackedElement {
   @property({ type: String }) baseHost = '';
   @property({ type: Array }) menuItems: IATopNavLink[] = [];
 
+  render() {
+    return html`
+      <ul>
+        ${this.listItems}
+      </ul>
+    `;
+  }
+
+  get listItems() {
+    return this.menuItems
+      ? this.menuItems.map(
+          (link) => html`
+            <li>
+              <a
+                class="${link.title.toLowerCase()}"
+                .href="${formatUrl(link.url, this.baseHost)}"
+                >${link.title}${DesktopSubnav.iconFor(link.title)}</a
+              >
+            </li>
+          `,
+        )
+      : nothing;
+  }
+
+  static iconFor(title: string): TemplateResult {
+    const subnavIcons: Record<string, TemplateResult> = {
+      Donate: icons.donate,
+    };
+    return subnavIcons[title] ? subnavIcons[title] : html``;
+  }
+
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
@@ -53,36 +84,5 @@ export class DesktopSubnav extends TrackedElement {
         }
       `,
     ];
-  }
-
-  get listItems() {
-    return this.menuItems
-      ? this.menuItems.map(
-          (link) => html`
-            <li>
-              <a
-                class="${link.title.toLowerCase()}"
-                .href="${formatUrl(link.url, this.baseHost)}"
-                >${link.title}${DesktopSubnav.iconFor(link.title)}</a
-              >
-            </li>
-          `,
-        )
-      : nothing;
-  }
-
-  static iconFor(title: string): TemplateResult {
-    const subnavIcons: Record<string, TemplateResult> = {
-      Donate: icons.donate,
-    };
-    return subnavIcons[title] ? subnavIcons[title] : html``;
-  }
-
-  render() {
-    return html`
-      <ul>
-        ${this.listItems}
-      </ul>
-    `;
   }
 }
