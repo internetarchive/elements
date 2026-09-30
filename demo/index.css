@@ -145,6 +145,14 @@ app-root {
   padding-bottom: 2rem;
 }
 
+/* A demo wider than the phone would otherwise widen the whole page, and a
+   phone then lays out a viewport wider and taller than its screen and pins
+   the bottom bar to the bottom of that, partly off the screen. Clipped
+   sideways only, so a menu dropping below a demo still shows. */
+#ia-content.ia-narrow {
+  overflow-x: clip;
+}
+
 /* Room for the end of each code sample to scroll clear of the bottom bar. In
    px, like the bar itself, so the two stay matched whatever the root font. */
 #ia-content.ia-focused.ia-narrow {

@@ -355,9 +355,12 @@ describe('AppRoot', () => {
       await el.updateComplete;
 
       window.scrollTo({ top: 0 });
+      // Reconnecting rebuilds the spy for every story on the page, which a
+      // busy CI runner can take more than the default second over.
       await waitUntil(
         () => inViewHref(el) === `#${firstId}`,
         'the scroll spy stopped following the scroll after reconnecting',
+        { timeout: 5000 },
       );
     });
 
@@ -874,6 +877,36 @@ describe('AppRoot', () => {
         }
       } finally {
         root.style.fontSize = '';
+        removeCss();
+      }
+    });
+
+    test('keeps a demo wider than the phone from pushing the bar off screen', async () => {
+      const removeCss = applyDemoCss();
+      try {
+        stubNarrowViewport(true);
+        const el = await appRoot();
+        // On the page, app-root sits right in the body and its content column
+        // is one of the body's flex items. The fixture wraps it in a div of its
+        // own, which would otherwise be the flex item, sized to fit the demo.
+        (el.parentElement as HTMLElement).style.display = 'contents';
+        // Stands in for a demo that lays itself out wider than the screen.
+        const wide = document.createElement('div');
+        wide.style.width = `${window.innerWidth * 2}px`;
+        wide.style.height = '10px';
+        el.querySelector('#ia-content')?.append(wide);
+
+        const root = document.documentElement;
+        expect(root.scrollWidth, 'the page scrolls sideways').to.be.at.most(
+          root.clientWidth,
+        );
+        // Which is what keeps the bar to the width, and so the bottom, of
+        // the screen rather than of a wider viewport laid out around the demo.
+        const bar = (
+          el.querySelector('#ia-bar') as HTMLElement
+        ).getBoundingClientRect();
+        expect(bar.width).to.equal(root.clientWidth);
+      } finally {
         removeCss();
       }
     });
