@@ -8,7 +8,8 @@ import {
   render,
 } from 'lit';
 import { msg } from '@lit/localize';
-import { property, customElement } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import themeStyles from '@src/themes/theme-styles';
 
 import '../ia-status-indicator/ia-status-indicator';
@@ -352,7 +353,7 @@ export class IAButton extends LitElement {
           border-color: var(--ia-button-custom-border--);
         }
 
-        button.custom:enabled:is(:hover, :focus, :active) {
+        button.custom:enabled:is(:hover, :focus, :active, .active) {
           color: var(--ia-button-custom-active-text-color--);
           background-color: var(--ia-button-custom-active-fill--);
           border-color: var(--ia-button-custom-active-border--);

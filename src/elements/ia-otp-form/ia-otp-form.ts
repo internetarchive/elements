@@ -8,7 +8,8 @@ import {
   PropertyValues,
 } from 'lit';
 import { msg } from '@lit/localize';
-import { property, customElement, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import themeStyles from '@src/themes/theme-styles';
 
