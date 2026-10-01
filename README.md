@@ -87,9 +87,15 @@ Add to Jest config:
 
 ## Development
 
+Requires Node 24+ and pnpm 12+. `engine-strict=true` in `.npmrc` makes an older
+Node fail the install instead of warning, but nothing hard-blocks `npm install`:
+npm ignores `engines.pnpm`, and there's deliberately no preinstall guard since it
+would run for consumers too. Use pnpm. `packageManager` and the committed
+`pnpm-lock.yaml` are what point you at it.
+
 ```zsh
-npm i
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 ## Versioning and Publishing
@@ -97,10 +103,10 @@ npm run dev
 ### Prerelease Version
 
 1. Create prerelease version on your branch:
-   1. `npm version prerelease --preid=<some_prefix>`
+   1. `pnpm version prerelease --preid=<some_prefix>`
    2. If you use JIRA, recommend using the ticket number, ie `--preid=webdev-1234`
    3. This will also create a `git` tag
-2. Push the tag that was created in the `npm version` step
+2. Push the tag that was created in the `pnpm version` step
 3. Publish prerelease to npm:
    1. Go to the [Element release page](https://github.com/internetarchive/elements/releases)
    2. Tap `Draft a new release` button
@@ -113,7 +119,7 @@ npm run dev
 
 1. Use [Semantic Versioning](https://semver.org) to determine release number
 2. On the `main` branch:
-   1. Run `npm version [major | minor | patch]`
+   1. Run `pnpm version [major | minor | patch]`
    2. `git push && git push --tags`
 3. Publish release to npm:
    1. Go to the [Element release page](https://github.com/internetarchive/elements/releases)
@@ -136,6 +142,26 @@ src
     - ia-foobar-story.ts // an element that demos your element
 ```
 Export your component in `src/index.ts`
+
+### Naming
+Custom elements all share one global registry, and that registry is shared with every other script on the host page. Give each element a name specific enough that nothing else would plausibly want it.
+
+If a component is built from several elements, prefix its parts with the component's own name rather than naming them generically, and keep the file name matching the tag:
+```
+src
+- elements
+  - ia-foobar
+    - ia-foobar.ts // ia-foobar
+    - ia-foobar-list-item.ts // ia-foobar-list-item, not ia-list-item
+```
+Declare each element in `HTMLElementTagNameMap` so `querySelector` is typed and a mistyped tag in a template is caught at build time:
+```ts
+declare global {
+  interface HTMLElementTagNameMap {
+    'ia-foobar-list-item': IAFoobarListItem;
+  }
+}
+```
 
 ### Story
 To demo your component, we have a component catalog that you can add your demo to. Create a component in your component directory. Name it `COMPONENT-NAME-story.ts`, ie `ia-button-story.ts`.

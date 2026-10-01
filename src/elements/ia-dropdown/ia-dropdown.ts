@@ -6,14 +6,10 @@ import {
   PropertyValues,
   CSSResultGroup,
 } from 'lit';
-import {
-  property,
-  query,
-  customElement,
-  queryAssignedElements,
-} from 'lit/decorators.js';
+import { property, query, queryAssignedElements } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
+import { customElement } from '@src/util/custom-element';
 
 import themeStyles from '@src/themes/theme-styles';
 

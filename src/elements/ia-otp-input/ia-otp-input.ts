@@ -6,7 +6,8 @@ import {
   css,
   PropertyValues,
 } from 'lit';
-import { property, customElement, queryAll } from 'lit/decorators.js';
+import { property, queryAll } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import themeStyles from '@src/themes/theme-styles';
 
 /**
