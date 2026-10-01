@@ -33,7 +33,6 @@
     "ghpages:build": "wireit"
   },
   "dependencies": {
-    "@internetarchive/ia-clearable-text-input": "^1.1.1",
     "@lit/localize": "^0.12.2",
     "dayjs": "^1.11.23",
     "lit": "^2.8.0 || ^3.3.2",

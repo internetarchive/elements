@@ -1,6 +1,7 @@
 export * from './ia-audio-element/ia-audio-element';
 export * from './ia-audio-element/models';
 export * from './ia-button/ia-button';
+export * from './ia-clearable-text-input/ia-clearable-text-input';
 export * from './ia-combo-box/ia-combo-box';
 export * from './ia-dropdown/ia-dropdown';
 export * from './ia-dropdown/ia-icon-label';
