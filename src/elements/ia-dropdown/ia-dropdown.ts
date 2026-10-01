@@ -8,16 +8,12 @@ import {
 } from 'lit';
 import { property, query, queryAssignedElements } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
-import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { customElement } from '@src/util/custom-element';
 
 import themeStyles from '@src/themes/theme-styles';
 
-// Imported as raw markup and inlined rather than rendered as `<img src>`, so
-// that the carets stay stylable — they're recolored through the
-// `--dropdownCaretColor` CSS var, which cannot reach inside an `<img>`.
-import caretUp from './assets/caret-up.svg?raw';
-import caretDown from './assets/caret-down.svg?raw';
+import caretUp from './assets/caret-up';
+import caretDown from './assets/caret-down';
 
 export interface OptionInterface {
   url?: string;
@@ -323,7 +319,7 @@ export class IADropdown extends LitElement {
   private get caretUpTemplate(): TemplateResult {
     return html`
       <span ?hidden=${!this.open} class="caret-up">
-        <slot name="caret-up">${unsafeHTML(caretUp)}</slot>
+        <slot name="caret-up">${caretUp}</slot>
       </span>
     `;
   }
@@ -336,7 +332,7 @@ export class IADropdown extends LitElement {
   private get caretDownTemplate(): TemplateResult {
     return html`
       <span ?hidden=${this.open} class="caret-down">
-        <slot name="caret-down">${unsafeHTML(caretDown)}</slot>
+        <slot name="caret-down">${caretDown}</slot>
       </span>
     `;
   }
