@@ -15,6 +15,7 @@ export * from './ia-item-navigator/menus/ia-itemnav-sort-files-button';
 export * from './ia-item-navigator/menus/ia-itemnav-share-panel';
 export * from './ia-playback-controls/ia-playback-controls';
 export * from './ia-playback-controls/models';
+export * from './ia-playback-controls/playback-rate-formatter';
 export * from './ia-radio-player/ia-radio-player';
 export * from './ia-radio-player/ia-search-results-switcher';
 export * from './ia-radio-player/models';
