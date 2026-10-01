@@ -55,6 +55,8 @@ export * from './ia-donation-form/models/donation-type';
 export * from './ia-donation-form/models/donor-contact-info';
 export * from './ia-donation-form/models/payment-provider';
 export * from './ia-donation-form/recaptcha-manager';
+export * from './ia-dropdown/ia-dropdown';
+export * from './ia-dropdown/ia-icon-label';
 export * from './ia-dropdown-search-bar/ia-dropdown-search-bar';
 export * from './ia-expandable-search-bar/ia-expandable-search-bar';
 export * from './ia-expandable-search-bar/ia-quick-search';
