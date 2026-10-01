@@ -563,7 +563,7 @@
 <target>Escribe una dirección web válida</target>
 </trans-unit>
 <trans-unit id="h3a575fb6a9704225">
-  <source>Search the history of more than <x id="0" equiv-text="${this.waybackPagesArchived}&#10;              &lt;a @click=&quot;${this.emitWaybackMachineStatsLinkClicked}&quot; data-event-click-tracking=&quot;TopNav|WaybackMachineStatsLink&quot; href=&quot;https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures/&quot;&gt;"/>web pages<x id="1" equiv-text="&lt;/a&gt;"/>
+  <source>Search the history of more than <x id="0" equiv-text="${pagesArchived}&#10;              &lt;a @click=&quot;${this.emitWaybackMachineStatsLinkClicked}&quot; data-event-click-tracking=&quot;TopNav|WaybackMachineStatsLink&quot; href=&quot;https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures/&quot;&gt;"/>web pages<x id="1" equiv-text="&lt;/a&gt;"/>
               on the Internet.</source>
 <target>Busca en la historia de más de <x id="0" equiv-text="${this.waybackPagesArchived}&#10;              &lt;a @click=&quot;${this.emitWaybackMachineStatsLinkClicked}&quot; data-event-click-tracking=&quot;TopNav|WaybackMachineStatsLink&quot; href=&quot;https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures/&quot;&gt;"/>páginas web<x id="1" equiv-text="&lt;/a&gt;"/>
               de Internet.</target>
@@ -883,6 +883,170 @@
 <trans-unit id="s690b2f9382a10be8">
   <source>Sign up for free</source>
 <target>Regístrate gratis</target>
+</trans-unit>
+<trans-unit id="s3aa2789183447d53">
+  <source>Toggle <x id="0" equiv-text="${this.optionGroup}"/></source>
+<target>Mostrar u ocultar <x id="0" equiv-text="${this.optionGroup}"/></target>
+</trans-unit>
+<trans-unit id="sdaf8f9ac7bb549e0">
+  <source>Could not validate review. Please try again later.</source>
+<target>No se pudo validar la reseña. Inténtalo de nuevo más tarde.</target>
+</trans-unit>
+<trans-unit id="s4390700f23a6fae7">
+  <source>There's been a temporary error. Please wait a moment and try again.</source>
+<target>Se ha producido un error temporal. Espera un momento y vuelve a intentarlo.</target>
+</trans-unit>
+<trans-unit id="h0c767c6fc1ce6768">
+  <source>This site is protected by reCAPTCHA and the Google
+            <x id="0" equiv-text="&lt;a target=&quot;_blank&quot; class=&quot;inline-link&quot; href=&quot;https://policies.google.com/privacy&quot;&gt;"/>Privacy Policy<x id="1" equiv-text="&lt;/a&gt;"/>
+            and
+            <x id="2" equiv-text="&lt;a target=&quot;_blank&quot; class=&quot;inline-link&quot; href=&quot;https://policies.google.com/terms&quot;&gt;"/>Terms of Service<x id="3" equiv-text="&lt;/a&gt;"/>
+            apply.</source>
+<target>Este sitio está protegido por reCAPTCHA y se aplican la <x id="0" equiv-text="&lt;a target=&quot;_blank&quot; class=&quot;inline-link&quot; href=&quot;https://policies.google.com/privacy&quot;&gt;"/>Política de privacidad<x id="1" equiv-text="&lt;/a&gt;"/> y los <x id="2" equiv-text="&lt;a target=&quot;_blank&quot; class=&quot;inline-link&quot; href=&quot;https://policies.google.com/terms&quot;&gt;"/>Términos del servicio<x id="3" equiv-text="&lt;/a&gt;"/> de Google.</target>
+</trans-unit>
+<trans-unit id="s44465964dcedadd7">
+  <source>Rating (optional)</source>
+<target>Valoración (opcional)</target>
+</trans-unit>
+<trans-unit id="sbbc53e0e54d7946f">
+  <source>Subject</source>
+<target>Asunto</target>
+</trans-unit>
+<trans-unit id="sea1e2d4024d78a64">
+  <source>Subject may only have <x id="0" equiv-text="${this.maxSubjectLength}"/> characters</source>
+<target>El asunto solo puede tener <x id="0" equiv-text="${this.maxSubjectLength}"/> caracteres</target>
+</trans-unit>
+<trans-unit id="sfc53e352afbca881">
+  <source>Review</source>
+<target>Reseña</target>
+</trans-unit>
+<trans-unit id="s6dd98c57b8238d56">
+  <source>Review may only have <x id="0" equiv-text="${this.maxBodyLength}"/> characters</source>
+<target>La reseña solo puede tener <x id="0" equiv-text="${this.maxBodyLength}"/> caracteres</target>
+</trans-unit>
+<trans-unit id="s80aec501701151a7">
+  <source>Submit review</source>
+<target>Enviar reseña</target>
+</trans-unit>
+<trans-unit id="sa54fa4ecaec5db1c">
+  <source>Rate 1 star</source>
+<target>Valorar con 1 estrella</target>
+</trans-unit>
+<trans-unit id="s7d5f6727f21c7274">
+  <source>Rate <x id="0" equiv-text="${num}"/> stars</source>
+<target>Valorar con <x id="0" equiv-text="${num}"/> estrellas</target>
+</trans-unit>
+<trans-unit id="sc2a242918e324eb7">
+  <source>Clear rating</source>
+<target>Borrar valoración</target>
+</trans-unit>
+<trans-unit id="sc221faca1ecb4aee">
+  <source>Anonymous</source>
+<target>Anónimo</target>
+</trans-unit>
+<trans-unit id="sdf3f9c8baa5e155a">
+  <source>This review cannot be displayed at this time.</source>
+<target>Esta reseña no se puede mostrar en este momento.</target>
+</trans-unit>
+<trans-unit id="sa79693645604876a">
+  <source>Delete this review</source>
+<target>Eliminar esta reseña</target>
+</trans-unit>
+<trans-unit id="s7490a67887716f40">
+  <source>Reviewer:</source>
+<target>Autor de la reseña:</target>
+</trans-unit>
+<trans-unit id="s16d30d35e7b7ea3d">
+  <source>Subject: </source>
+<target>Asunto: </target>
+</trans-unit>
+<trans-unit id="sd01d6e9b9f301ee6">
+  <source>More...</source>
+<target>Más...</target>
+</trans-unit>
+<trans-unit id="se8494f6d60c7926c">
+  <source>...Less</source>
+<target>...Menos</target>
+</trans-unit>
+<trans-unit id="sebb2ea0d482f0cdc">
+  <source><x id="0" equiv-text="${this.review.stars}"/> out of 5 stars</source>
+<target><x id="0" equiv-text="${this.review.stars}"/> de 5 estrellas</target>
+</trans-unit>
+<trans-unit id="sbfae5d5b8978baef">
+  <source><x id="0" equiv-text="${prettyDate}"/> (edited)</source>
+<target><x id="0" equiv-text="${prettyDate}"/> (editada)</target>
+</trans-unit>
+<trans-unit id="saeac976b4240bcc3">
+  <source>Are you sure you want to delete this review?</source>
+<target>¿Seguro que quieres eliminar esta reseña?</target>
+</trans-unit>
+<trans-unit id="se1968d56aba3b3cb">
+  <source>This review has been queued for deletion.</source>
+<target>Esta reseña está en cola para eliminarse.</target>
+</trans-unit>
+<trans-unit id="sd1f0ff839e37b1ec">
+  <source>Sorry, we were unable to delete this review.</source>
+<target>Lo sentimos, no pudimos eliminar esta reseña.</target>
+</trans-unit>
+<trans-unit id="s556715ca21d28f73">
+  <source>Reviews can no longer be added to this item.</source>
+<target>Ya no se pueden añadir reseñas a este elemento.</target>
+</trans-unit>
+<trans-unit id="s52ec579f2c5c9d2c">
+  <source>Reviews have been disabled for this item.</source>
+<target>Las reseñas están desactivadas para este elemento.</target>
+</trans-unit>
+<trans-unit id="sde4e809e2411f660">
+  <source>Reviews cannot be added to this item.</source>
+<target>No se pueden añadir reseñas a este elemento.</target>
+</trans-unit>
+<trans-unit id="s00b50a47c6e7c741">
+  <source>There are no reviews yet.</source>
+<target>Todavía no hay reseñas.</target>
+</trans-unit>
+<trans-unit id="he787c4ac48d02309">
+  <source>
+          Be the first one to
+          <x id="0" equiv-text="&lt;ia-button mode=&quot;link&quot; class=&quot;no-reviews-btn&quot; @click=&quot;${this.addEditReview}&quot;&gt;"/>
+            write a review<x id="1" equiv-text="&lt;/ia-button&gt;"/>.
+        </source>
+<target>Sé el primero en <x id="0" equiv-text="&lt;ia-button mode=&quot;link&quot; class=&quot;no-reviews-btn&quot; @click=&quot;${this.addEditReview}&quot;&gt;"/>escribir una reseña<x id="1" equiv-text="&lt;/ia-button&gt;"/>.</target>
+</trans-unit>
+<trans-unit id="sf5f5218c011da3da">
+  <source>There is 1 review for this item.</source>
+<target>Hay 1 reseña de este elemento.</target>
+</trans-unit>
+<trans-unit id="s74b17b5bfc5bbd36">
+  <source>There are <x id="0" equiv-text="${this.reviewsCount}"/> reviews for this item.</source>
+<target>Hay <x id="0" equiv-text="${this.reviewsCount}"/> reseñas de este elemento.</target>
+</trans-unit>
+<trans-unit id="s2848e46cd1281637">
+  <source>Display review</source>
+<target>Mostrar reseña</target>
+</trans-unit>
+<trans-unit id="s9bf268e7671dd58c">
+  <source>Display reviews</source>
+<target>Mostrar reseñas</target>
+</trans-unit>
+<trans-unit id="sb094ddadb5f59b64">
+  <source>Sorry, something went wrong. Please try again later.</source>
+<target>Lo sentimos, algo salió mal. Inténtalo de nuevo más tarde.</target>
+</trans-unit>
+<trans-unit id="sb245d6bc5a8222a1">
+  <source>New feature: <x id="0" equiv-text="${link.title}"/></source>
+<target>Novedad: <x id="0" equiv-text="${link.title}"/></target>
+</trans-unit>
+<trans-unit id="s08e6bd98452e6bb9">
+  <source>Audio</source>
+<target>Audio</target>
+</trans-unit>
+<trans-unit id="s37a9e8aec5713460">
+  <source>More</source>
+<target>Más</target>
+</trans-unit>
+<trans-unit id="s56090efc526a8ff5">
+  <source>1 trillion</source>
+<target>1 billón</target>
 </trans-unit>
 </body>
 </file>

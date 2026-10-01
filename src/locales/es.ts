@@ -8,6 +8,22 @@ import { str } from '@lit/localize';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export const templates = {
+  h0c767c6fc1ce6768: html`Este sitio está protegido por reCAPTCHA y se aplican
+    la
+    <a
+      target="_blank"
+      class="inline-link"
+      href="https://policies.google.com/privacy"
+      >Política de privacidad</a
+    >
+    y los
+    <a
+      target="_blank"
+      class="inline-link"
+      href="https://policies.google.com/terms"
+      >Términos del servicio</a
+    >
+    de Google.`,
   h1b6c0f4149e6b703: html`
     Para hacer una donación de $10,000 o más, comunícate con nuestro
     departamento de filantropía en
@@ -39,7 +55,12 @@ export const templates = {
     departamento de filantropía en
     <a href="mailto:donations@archive.org">donations@archive.org</a>
   `,
+  he787c4ac48d02309: html`Sé el primero en
+    <ia-button mode="link" class="no-reviews-btn" @click="${0}"
+      >escribir una reseña</ia-button
+    >.`,
   s0062d29dab02c851: `Voluntariado`,
+  s00b50a47c6e7c741: `Todavía no hay reseñas.`,
   s034029ce33a61b25: `Error al preparar la donación`,
   s046a35bfdd88a596: `Mensual`,
   s0487f33d9ddaabde: `Acerca de`,
@@ -50,6 +71,7 @@ export const templates = {
   s075787b0e573bf1b: `Películas efímeras`,
   s0763aeb5be71575a: `Más información`,
   s08b05407b5565ca4: `o`,
+  s08e6bd98452e6bb9: `Audio`,
   s0ad8488e8c739ac8: `Libros por idioma`,
   s0b4bfc19aa153afd: `CVC`,
   s0d1c47fc7b3a6e5e: `Cantidad mensual en dólares`,
@@ -59,6 +81,7 @@ export const templates = {
   s1587aa01e9bb42c6: `Mostrar u ocultar la búsqueda rápida`,
   s166eb3ac954fd902: `Error al restaurar la sesión de donación`,
   s168e676da3739030: `Pódcasts`,
+  s16d30d35e7b7ea3d: `Asunto: `,
   s199f5853f4e718f7: `Proyectos`,
   s1a48fb64b48125fe: `El pago no se pudo completar`,
   s1c9c386a1a79feef: str`Resultado ${0} de ${1}`,
@@ -72,6 +95,7 @@ export const templates = {
   s279a1cb9fb49e0ae: `Audiolibros y poesía`,
   s27ca7d4da1a0def3: str`Total: ${0}`,
   s28073688bdd0dbda: `Música, arte y cultura`,
+  s2848e46cd1281637: `Mostrar reseña`,
   s290adadea9c2979c: `No se pudo cargar esta imagen.`,
   s29d172b434200a59: `Escribe una URL para guardarla`,
   s2a9bcd426303fc90: `Computación, tecnología y ciencia`,
@@ -86,7 +110,9 @@ export const templates = {
   s352719d86112de9a: `Ayuda`,
   s370e44cc8c6c311b: `Mostrar u ocultar opciones`,
   s374cfbe25c1f1d77: `Escribe tu información de contacto.`,
+  s37a9e8aec5713460: `Más`,
   s381d9645b95c884a: str`Total: ${0}/mes`,
+  s3aa2789183447d53: str`Mostrar u ocultar ${0}`,
   s3e0762b095cc36d3: `Películas culturales y académicas`,
   s3fae46211841614c: `Bibliotecas estadounidenses`,
   s40bad4f49bbf9037: `Expandir el menú de usuario`,
@@ -94,6 +120,8 @@ export const templates = {
   s41dcd6f6de2708cc: `Mis préstamos`,
   s4224adab4a0675c7: `Biblioteca infantil`,
   s42e1b68d00bfc746: `Dona al Archive`,
+  s4390700f23a6fae7: `Se ha producido un error temporal. Espera un momento y vuelve a intentarlo.`,
+  s44465964dcedadd7: `Valoración (opcional)`,
   s4516b91dba2ffe93: `Buscar en la Wayback Machine`,
   s45eac9685577cd7c: `Mis archivos web`,
   s4689b7cdaddbea62: `Software histórico`,
@@ -113,7 +141,10 @@ export const templates = {
   s505636e8ede55f02: `Pagar con PayPal`,
   s507316d0c3463394: `Películas`,
   s50bf30bd981c33ac: `Cambiar método de pago`,
+  s52ec579f2c5c9d2c: `Las reseñas están desactivadas para este elemento.`,
   s54cf107bdd506448: `Código postal`,
+  s556715ca21d28f73: `Ya no se pueden añadir reseñas a este elemento.`,
+  s56090efc526a8ff5: `1 billón`,
   s58d327244ac97208: `Sitios de software`,
   s59cf1fbcdc399828: `Audio de Internet Archive`,
   s5af7506ad5717736: `Visita la Wayback Machine`,
@@ -136,8 +167,11 @@ export const templates = {
   s6bc72525c0e62ae1: `Imágenes de CD-ROM`,
   s6c470eea2ab4e3bd: `Empleos`,
   s6d02dc19e21eb49c: `Principales`,
+  s6dd98c57b8238d56: str`La reseña solo puede tener ${0} caracteres`,
   s6e8059179423bfa0: `Apellido`,
   s73b125aabf2a94c7: `¿Preguntas?`,
+  s7490a67887716f40: `Autor de la reseña:`,
+  s74b17b5bfc5bbd36: str`Hay ${0} reseñas de este elemento.`,
   s7505401da0a6d6f7: `No hay opciones que coincidan`,
   s758a924a77ed65b4: `Medios juveniles`,
   s7655667379814b36: `Busca en el archivo. Filtros y búsqueda avanzada disponible a continuación.`,
@@ -150,6 +184,8 @@ export const templates = {
   s7b5ffb3b9d69f45d: `Aplicaciones móviles`,
   s7cc651d6e80f42f9: `Envíame otro código`,
   s7d0148b99f987f74: `Error de procesamiento`,
+  s7d5f6727f21c7274: str`Valorar con ${0} estrellas`,
+  s80aec501701151a7: `Enviar reseña`,
   s81ecf2d4386b8e84: `Continuar`,
   s82fc0d7c4b5d5189: str`${0} resultados de búsqueda`,
   s8322598786398a12: `Videoblogs`,
@@ -172,6 +208,7 @@ export const templates = {
   s98ce2bd73b910e5b: `¡Gracias!`,
   s9b24633aab387054: `¡Gracias por donar!`,
   s9b304ef58dd8be08: `Pagar con Google Pay`,
+  s9bf268e7671dd58c: `Mostrar reseñas`,
   s9cf7402fe920f7d1: `País`,
   s9d0e8f5c7db6fe95: `Estado / Provincia`,
   s9dd749c8150240f4: `Únete a nuestro Círculo de Donaciones Mensuales`,
@@ -181,14 +218,19 @@ export const templates = {
   sa034673b5a3c355c: `Este campo es obligatorio`,
   sa135b299b78d517d: `[Transcripción no disponible]`,
   sa3f7437027dd0e2e: `Escribe una dirección web válida`,
+  sa54fa4ecaec5db1c: `Valorar con 1 estrella`,
   sa5639b33fec73666: `SÍ, donaré cada mes`,
   sa6623b14511dc879: `Archivo de noticias de radio`,
+  sa79693645604876a: `Eliminar esta reseña`,
   sab459038e3c6bcb8: `Nombre`,
   sac330cdfd2a92c75: `Resultado anterior`,
   sac40746f1d52bde5: `Elige una frecuencia`,
+  saeac976b4240bcc3: `¿Seguro que quieres eliminar esta reseña?`,
   saeb95e79a3695c8e: `Todas las imágenes`,
   saec17a4cb0379720: `Hacerla mensual`,
+  sb094ddadb5f59b64: `Lo sentimos, algo salió mal. Inténtalo de nuevo más tarde.`,
   sb2099d48346487ee: `Genealogía`,
+  sb245d6bc5a8222a1: str`Novedad: ${0}`,
   sb2d5fa10375dab13: `Desplazar el texto con el audio`,
   sb403c27badd9ff89: str`Foto de perfil de ${0}`,
   sb4f1dffbb6be6302: `Borrar`,
@@ -200,9 +242,13 @@ export const templates = {
   sb8b7458cf38d2bb2: `Ir al inicio`,
   sb9b90dd7e5256784: `Logotipo de la colección`,
   sbb07c2ef5540e509: `Icono de menú`,
+  sbbc53e0e54d7946f: `Asunto`,
+  sbfae5d5b8978baef: str`${0} (editada)`,
   sbfbc77dc3543556f: `Sección anterior`,
   sc13705f8a93d185e: `Buscando en la transcripción`,
+  sc221faca1ecb4aee: `Anónimo`,
   sc265a3e29e1206e4: `Eventos`,
+  sc2a242918e324eb7: `Borrar valoración`,
   sc51197ca5353dfb5: `La donación mínima es de \$1.`,
   sc6638fa941d4a799: `Todo el software`,
   sc75a2ae331b763bb: `Guardar página ahora`,
@@ -211,11 +257,13 @@ export const templates = {
   scb04435672ac5410: `Iniciar sesión`,
   scd105819b5a10243: `Reproducir`,
   sce10b7d19c6929c8: `Todos los textos`,
+  sd01d6e9b9f301ee6: `Más...`,
   sd05f09cf5bfd683a: `Crea colecciones`,
   sd178927e06d04343: `Bibliotecas canadienses`,
   sd194992b9da80b72: `Mis listas`,
   sd197802fd037edfc: `Una vez`,
   sd1c0ded843f222b3: `Extensiones de navegador`,
+  sd1f0ff839e37b1ec: `Lo sentimos, no pudimos eliminar esta reseña.`,
   sd1f44f1a8bc20e67: `Correo electrónico`,
   sd235a81aa694050f: `Escribe al menos cuatro caracteres`,
   sd3796671b94fe0d6: `Pagar con Venmo`,
@@ -223,14 +271,21 @@ export const templates = {
   sd5cbf9fee1a51a18: `Empezar la donación mensual`,
   sd668719bc2732027: `Discos de 78 RPM y cilindros`,
   sd7bfa7f3a37bdfe5: `Colección del sistema solar`,
+  sdaf8f9ac7bb549e0: `No se pudo validar la reseña. Inténtalo de nuevo más tarde.`,
   sdcf8e54b1fe2bc7a: `Software en CD-ROM`,
+  sde4e809e2411f660: `No se pueden añadir reseñas a este elemento.`,
   sdeef9e88871e5e9b: `Escribe una URL o palabras clave`,
+  sdf3f9c8baa5e155a: `Esta reseña no se puede mostrar en este momento.`,
   se185c2430b4347ba: `Escribe una cantidad de donación válida`,
+  se1968d56aba3b3cb: `Esta reseña está en cola para eliminarse.`,
   se645d473fbdc4705: `Imagen siguiente`,
+  se8494f6d60c7926c: `...Menos`,
   se85a9ddb91124b39: `Configuración de la cuenta`,
   se91c884c087015e5: `Ayúdanos a mantenernos en contacto`,
   se9d11cd23b249157: `Posición de reproducción`,
+  sea1e2d4024d78a64: str`El asunto solo puede tener ${0} caracteres`,
   seb6e0a8569e9575c: `Completa o corrige tu información de contacto a continuación`,
+  sebb2ea0d482f0cdc: str`${0} de 5 estrellas`,
   sec9bb1a7c11e8e91: `Blog`,
   see0450cbd700e6ba: `Videos deportivos`,
   see47b0d5c2bde611: `Un icono que representa un menú que se abre y se cierra al interactuar con él.`,
@@ -238,10 +293,12 @@ export const templates = {
   sefbe887e4c1066f5: `Cerrar el menú de usuario`,
   sf14e9ba96f59f306: str`Donación mensual de ${0}`,
   sf3e47ad58cd9b595: `El apoyo mensual nos ayuda a planificar el futuro con confianza.`,
+  sf5f5218c011da3da: `Hay 1 reseña de este elemento.`,
   sf69331efcae8e012: str`Añadiré generosamente ${0} para cubrir las comisiones.`,
   sf83e224f6ca4ab56: `Todo el audio`,
   sf968a1b8e11a61db: `Escribe al menos dos caracteres`,
   sfb976f2d07677d66: `Hubo un problema al cargar la información de tu donación. Inténtalo de nuevo.`,
+  sfc53e352afbca881: `Reseña`,
   sfc8531b2fd0f31cb: `Imágenes`,
   sfcae9f83f7f25e25: `Imagen anterior`,
   sfe786d22e4310635: `Enviando el correo...`,
