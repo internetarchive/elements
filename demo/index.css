@@ -148,11 +148,51 @@ app-root {
   margin-bottom: 0.5rem;
 }
 
+#ia-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 #ia-content h1 {
   font-size: 1.4rem;
   margin: 0 0 0.25rem;
   display: flex;
   align-items: center;
+}
+
+#ia-locale-switch {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.ia-locale-btn {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fff;
+  color: #213547;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.1s,
+    color 0.1s,
+    border-color 0.1s;
+}
+
+.ia-locale-btn:hover {
+  background: #f0f0f0;
+  border-color: #767676;
+}
+
+.ia-locale-btn.ia-locale-active {
+  color: #fff;
+  background: #194880;
+  border-color: #194880;
 }
 
 #ia-content h2 {

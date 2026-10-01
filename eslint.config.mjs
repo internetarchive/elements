@@ -81,4 +81,39 @@ export default [
       '@typescript-eslint/no-unused-expressions': 'off',
     },
   },
+  {
+    // Only the demo app calls configureLocalization (demo/demo-localization.ts).
+    // @lit/localize throws if it's configured twice, so this package's own
+    // source never does. Test files are exempt: they stand in for the app to
+    // exercise a published locale module on its own.
+    files: ['src/**/*.ts'],
+    ignores: ['src/**/*.test.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'lit/decorators.js',
+              importNames: ['customElement'],
+              message:
+                "Import customElement from '@src/util/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
+            },
+            {
+              name: 'lit/decorators/custom-element.js',
+              importNames: ['customElement'],
+              message:
+                "Import customElement from '@src/util/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
+            },
+            {
+              name: '@lit/localize',
+              importNames: ['configureLocalization'],
+              message:
+                'Only the demo app (demo/demo-localization.ts) calls configureLocalization. @lit/localize throws if configured twice, so this package never does.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 ];

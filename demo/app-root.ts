@@ -6,6 +6,12 @@ import { customElement } from '@src/util/custom-element';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 import { HASH_PREFIX, tagFromHash } from './element-hash';
+import {
+  getLocale,
+  localeFromUrl,
+  setLocale,
+  writeLocaleToUrl,
+} from './demo-localization';
 
 // Globbed without `eager`, so the keys give us the full element list at build
 // time while each module is only fetched when its story is displayed.
@@ -70,6 +76,9 @@ export class AppRoot extends LitElement {
   /** Sidebar highlight in the all-elements view, driven by scroll position. */
   @state() private _activeTag?: string;
 
+  /** The demo's own locale, so the EN/ES control can show which is active. */
+  @state() private _locale = getLocale();
+
   // Plain map rather than reactive state: Lit doesn't observe mutation, so
   // _loadStory requests its own update once a module settles.
   private _loadStates = new Map<string, LoadState>();
@@ -87,6 +96,10 @@ export class AppRoot extends LitElement {
     window.addEventListener('hashchange', this._onHashChange, {
       signal: this._abortController.signal,
     });
+    // A `?lang=es` deep link gives a reviewer a one-click way to see elements
+    // in Spanish, so it wins over whatever locale the page started in.
+    const urlLocale = localeFromUrl();
+    if (urlLocale !== this._locale) this._setLocale(urlLocale);
     // updated() owns the scroll spy, and disconnecting tore it down. An
     // unchanged hash resolves to the same StoryEntry object, so the assignment
     // above requests no update on its own, which would leave the spy dead.
@@ -98,6 +111,15 @@ export class AppRoot extends LitElement {
     this._disconnectScrollSpy();
     this._abortController?.abort();
   }
+
+  /** Switches the demo's language, reflecting it in the URL and the page. */
+  private _setLocale = async (locale: 'en' | 'es') => {
+    if (locale === this._locale) return;
+    await setLocale(locale);
+    this._locale = locale;
+    document.documentElement.lang = locale;
+    writeLocaleToUrl(locale);
+  };
 
   private _onHashChange = () => {
     const focused = entryFromHash(window.location.hash);
@@ -172,10 +194,41 @@ export class AppRoot extends LitElement {
     return html`
       ${this._renderSidebar()}
       <div id="ia-content" class="${this._focused ? 'ia-focused' : ''}">
-        <h1>Internet Archive Elements</h1>
+        <div id="ia-title-row">
+          <h1>Internet Archive Elements</h1>
+          ${this._renderLocaleSwitch()}
+        </div>
         ${this._focused
           ? this._renderFocused(this._focused)
           : this._renderAll()}
+      </div>
+    `;
+  }
+
+  /**
+   * Demo-only EN/ES toggle so a reviewer can see elements in Spanish from a
+   * PR preview, without digging through dev tools. It's the one place in
+   * this repo that owns a locale switch; everything under src/ just renders
+   * whatever locale this picks.
+   */
+  private _renderLocaleSwitch(): TemplateResult {
+    const localeButton = (locale: 'en' | 'es', label: string) => html`
+      <button
+        type="button"
+        id="ia-locale-${locale}"
+        class="ia-locale-btn ${this._locale === locale
+          ? 'ia-locale-active'
+          : ''}"
+        aria-pressed="${this._locale === locale}"
+        @click=${() => this._setLocale(locale)}
+      >
+        ${label}
+      </button>
+    `;
+
+    return html`
+      <div id="ia-locale-switch" role="group" aria-label="Demo language">
+        ${localeButton('en', 'EN')} ${localeButton('es', 'ES')}
       </div>
     `;
   }
