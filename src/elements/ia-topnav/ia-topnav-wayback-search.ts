@@ -6,6 +6,7 @@ import searchIcon from './assets/img/icon-search';
 import logo from './assets/img/wayback-logo';
 import { TOPNAV_MOBILE_BREAKPOINT } from './models';
 import themeStyles from '@src/themes/theme-styles';
+import { localized, msg } from '@lit/localize';
 
 /**
  * The Wayback Machine search form shown inside the topnav's wayback slider.
@@ -14,6 +15,7 @@ import themeStyles from '@src/themes/theme-styles';
  * over the base ones on equal specificity.
  */
 @customElement('ia-topnav-wayback-search')
+@localized()
 export class IATopNavWaybackSearch extends LitElement {
   @property({ type: Object }) queryHandler: {
     performQuery: (query: string) => void;
@@ -22,38 +24,42 @@ export class IATopNavWaybackSearch extends LitElement {
       (window.location.href = `https://web.archive.org/web/*/${query}`),
   };
 
-  @property({ type: String }) waybackPagesArchived = '916 billion';
+  /** How many pages the Wayback Machine holds. Blank shows a localized default. */
+  @property({ type: String }) waybackPagesArchived = '';
 
   @query('#url') private urlInput!: HTMLInputElement;
 
   render() {
+    const pagesArchived = this.waybackPagesArchived || msg('1 trillion');
     return html`
       <form method="post" @submit=${this.handleSubmit}>
         <p>
-          Search the history of more than ${this.waybackPagesArchived}
-          <a
-            @click=${this.emitWaybackMachineStatsLinkClicked}
-            data-event-click-tracking="TopNav|WaybackMachineStatsLink"
-            href="https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures/"
-            >web pages</a
-          >
-          on the Internet.
+          ${msg(
+            html`Search the history of more than ${pagesArchived}
+              <a
+                @click=${this.emitWaybackMachineStatsLinkClicked}
+                data-event-click-tracking="TopNav|WaybackMachineStatsLink"
+                href="https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures/"
+                >web pages</a
+              >
+              on the Internet.`,
+          )}
         </p>
         <fieldset>
           <a
             @click=${this.emitWaybackMachineLogoLinkClicked}
             data-event-click-tracking="TopNav|WaybackMachineLogoLink"
-            aria-label="Visit the Wayback Machine"
+            aria-label=${msg('Visit the Wayback Machine')}
             href="https://web.archive.org"
             >${logo}</a
           >
           <div class="search-field">
             <input
               type="text"
-              aria-label="Search the Wayback Machine"
+              aria-label=${msg('Search the Wayback Machine')}
               name="url"
               id="url"
-              placeholder="Enter URL or keywords"
+              placeholder=${msg('Enter URL or keywords')}
             />
             ${searchIcon}
           </div>

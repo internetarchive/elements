@@ -8,60 +8,76 @@ import './ia-topnav-media-button';
 import { MediaButton } from './ia-topnav-media-button';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import themeStyles from '@src/themes/theme-styles';
+import { localized, msg } from '@lit/localize';
 
-const menuSelection = [
-  {
-    icon: 'web',
-    menu: 'web',
-    href: 'https://web.archive.org',
-    label: 'Wayback Machine',
-  },
-  {
-    icon: 'texts',
-    menu: 'texts',
-    href: '/details/texts',
-    label: 'Texts',
-  },
-  {
-    icon: 'video',
-    menu: 'video',
-    href: '/details/movies',
-    label: 'Video',
-  },
-  {
-    icon: 'audio',
-    menu: 'audio',
-    href: '/details/audio',
-    label: 'Audio',
-  },
-  {
-    icon: 'software',
-    menu: 'software',
-    href: '/details/software',
-    label: 'Software',
-  },
-  {
-    icon: 'images',
-    menu: 'images',
-    href: '/details/image',
-    label: 'Images',
-  },
-  {
-    icon: 'donate',
-    menu: 'donate',
-    href: '/donate/?origin=iawww-mbhmbgrmenu',
-    label: 'Donate',
-    followable: true,
-  },
-  {
-    icon: 'ellipses',
-    menu: 'more',
-    href: '/about/',
-    label: 'More',
-  },
-];
+type MediaMenuOption = {
+  icon: string;
+  menu: string;
+  href: string;
+  label: string;
+  followable?: boolean;
+};
+
+/**
+ * The top-level media buttons. A function so the labels are read in the
+ * current locale each time the menu renders.
+ */
+function menuSelection(): MediaMenuOption[] {
+  return [
+    {
+      icon: 'web',
+      menu: 'web',
+      href: 'https://web.archive.org',
+      label: 'Wayback Machine',
+    },
+    {
+      icon: 'texts',
+      menu: 'texts',
+      href: '/details/texts',
+      label: msg('Texts'),
+    },
+    {
+      icon: 'video',
+      menu: 'video',
+      href: '/details/movies',
+      label: msg('Video'),
+    },
+    {
+      icon: 'audio',
+      menu: 'audio',
+      href: '/details/audio',
+      label: msg('Audio'),
+    },
+    {
+      icon: 'software',
+      menu: 'software',
+      href: '/details/software',
+      label: msg('Software'),
+    },
+    {
+      icon: 'images',
+      menu: 'images',
+      href: '/details/image',
+      label: msg('Images'),
+    },
+    {
+      icon: 'donate',
+      menu: 'donate',
+      href: '/donate/?origin=iawww-mbhmbgrmenu',
+      label: msg('Donate'),
+      followable: true,
+    },
+    {
+      icon: 'ellipses',
+      menu: 'more',
+      href: '/about/',
+      label: msg('More'),
+    },
+  ];
+}
 
 @customElement('ia-topnav-media-menu')
+@localized()
 export class MediaMenu extends LitElement {
   @property({ type: String }) baseHost = '';
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
@@ -108,7 +124,7 @@ export class MediaMenu extends LitElement {
   }
 
   get mediaMenuOptionsTemplate() {
-    const buttons = menuSelection.map(
+    const buttons = menuSelection().map(
       ({ icon, menu, label, href, followable }) => {
         const selected = this.selectedMenuOption === menu;
         return html`

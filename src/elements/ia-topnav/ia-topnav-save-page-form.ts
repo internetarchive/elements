@@ -5,8 +5,10 @@ import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
+import { localized, msg } from '@lit/localize';
 
 @customElement('ia-topnav-save-page-form')
+@localized()
 export class SavePageForm extends TrackedElement {
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
 
@@ -20,22 +22,25 @@ export class SavePageForm extends TrackedElement {
         data-event-submit-tracking="${this.config.eventCategory}|SavePageSubmit"
         @submit=${this.validateURL}
       >
-        <h3>Save Page Now</h3>
+        <h3>${msg('Save Page Now')}</h3>
         <p>
-          Capture a web page as it appears now for use as a trusted citation in
-          the future.
+          ${msg(
+            'Capture a web page as it appears now for use as a trusted citation in the future.',
+          )}
         </p>
         <div>
           <input
             type="text"
-            aria-label="Enter a URL to save"
+            aria-label=${msg('Enter a URL to save')}
             name="url_preload"
             id="url_preload"
             placeholder="https://"
           />
-          <input type="submit" value="Save" />
+          <input type="submit" value=${msg('Save')} />
         </div>
-        <p class=${this.errorClass}>Please enter a valid web address</p>
+        <p class=${this.errorClass}>
+          ${msg('Please enter a valid web address')}
+        </p>
       </form>
     `;
   }
