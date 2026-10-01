@@ -1,5 +1,5 @@
 import { html, LitElement } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import '@demo/story-template';
 import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';

@@ -1,5 +1,6 @@
 import { html, css, nothing, LitElement, TemplateResult } from 'lit';
-import { property, query, customElement } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import closeIcon from './assets/close';
 
