@@ -6,8 +6,12 @@ import {
   PropertyValues,
   CSSResultGroup,
 } from 'lit';
-import { property, query, queryAssignedElements } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import {
+  property,
+  query,
+  customElement,
+  queryAssignedElements,
+} from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { localized, msg, str } from '@lit/localize';
