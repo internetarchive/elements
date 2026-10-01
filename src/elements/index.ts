@@ -95,3 +95,4 @@ export * from './ia-transcript-view/ia-transcript-view';
 export * from './ia-transcript-view/models';
 export * from './ia-waveform-progress/ia-waveform-progress';
 export * from './ia-waveform-progress/models';
+export * from './ia-wayback-search-form/ia-wayback-search-form';
