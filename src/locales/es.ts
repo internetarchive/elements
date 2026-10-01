@@ -112,7 +112,6 @@ export const templates = {
   s374cfbe25c1f1d77: `Escribe tu información de contacto.`,
   s37a9e8aec5713460: `Más`,
   s381d9645b95c884a: str`Total: ${0}/mes`,
-  s3aa2789183447d53: str`Mostrar u ocultar ${0}`,
   s3e0762b095cc36d3: `Películas culturales y académicas`,
   s3fae46211841614c: `Bibliotecas estadounidenses`,
   s40bad4f49bbf9037: `Expandir el menú de usuario`,

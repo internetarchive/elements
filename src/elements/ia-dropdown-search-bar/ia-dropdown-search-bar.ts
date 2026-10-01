@@ -10,17 +10,14 @@ import {
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-input';
-import type {
-  IADropdown,
-  OptionInterface,
-} from '@src/elements/ia-dropdown/ia-dropdown';
+import type { IaDropdown, optionInterface } from '@internetarchive/ia-dropdown';
 import type { SearchCategory, SearchRequestedDetail } from './models';
 
 import themeStyles from '@src/themes/theme-styles';
 import searchIcon from './search.svg';
 
 import '@internetarchive/ia-clearable-text-input';
-import '@src/elements/ia-dropdown/ia-dropdown';
+import '@internetarchive/ia-dropdown';
 import '@src/elements/ia-status-indicator/ia-status-indicator';
 
 /**
@@ -59,7 +56,7 @@ export class IADropdownSearchBar extends LitElement {
   private searchInput!: IaClearableTextInput;
 
   @query('#category-dropdown')
-  private categoryDropdown?: IADropdown;
+  private categoryDropdown?: IaDropdown;
 
   /** The effective selected category, falling back to the first in the list. */
   private get resolvedCategory(): string {
@@ -202,7 +199,7 @@ export class IADropdownSearchBar extends LitElement {
    * pattern). The parent also binds this property and may re-set it on re-render.
    */
   private handleCategorySelected(
-    e: CustomEvent<{ option: OptionInterface }>,
+    e: CustomEvent<{ option: optionInterface }>,
   ): void {
     const newCategoryId = e.detail.option.id;
     if (newCategoryId === this.resolvedCategory) return;
