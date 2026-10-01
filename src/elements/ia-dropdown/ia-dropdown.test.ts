@@ -43,6 +43,25 @@ describe('IADropdown', () => {
     expect(caret).to.exist;
   });
 
+  test('renders the default caret icons', async () => {
+    const el = await fixture<IADropdown>(
+      html`<ia-dropdown displaycaret></ia-dropdown>`,
+    );
+
+    expect(el.shadowRoot?.querySelector('svg.caret-down-svg')).to.exist;
+    expect(el.shadowRoot?.querySelector('svg.caret-up-svg')).to.exist;
+
+    el.open = true;
+    await el.updateComplete;
+
+    const caretDown = el.shadowRoot?.querySelector(
+      '.caret-down',
+    ) as HTMLElement;
+    const caretUp = el.shadowRoot?.querySelector('.caret-up') as HTMLElement;
+    expect(caretDown.hidden).to.be.true;
+    expect(caretUp.hidden).to.be.false;
+  });
+
   test('can be disabled', async () => {
     const el = await fixture<IADropdown>(html`<ia-dropdown></ia-dropdown>`);
     expect(el.isDisabled).to.be.false;
