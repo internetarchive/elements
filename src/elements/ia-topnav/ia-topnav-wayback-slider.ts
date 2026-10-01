@@ -75,7 +75,7 @@ export class WaybackSlider extends TrackedElement {
             .href=${formatUrl(link.url, this.baseHost)}
             @click=${this.trackClick}
             data-event-click-tracking="${this.analyticsEvent(
-              `${eventPrefix}${link.title}`,
+              `${eventPrefix}${link.key ?? link.title}`,
             )}"
             target=${link.external ? '_blank' : ''}
             rel=${link.external ? 'noreferrer noopener' : ''}

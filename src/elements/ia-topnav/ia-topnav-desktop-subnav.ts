@@ -20,9 +20,11 @@ export class DesktopSubnav extends TrackedElement {
           (link) => html`
             <li>
               <a
-                class="${link.title.toLowerCase()}"
+                class="${(link.key ?? link.title).toLowerCase()}"
                 .href="${formatUrl(link.url, this.baseHost)}"
-                >${link.title}${DesktopSubnav.iconFor(link.title)}</a
+                >${link.title}${DesktopSubnav.iconFor(
+                  link.key ?? link.title,
+                )}</a
               >
             </li>
           `,
