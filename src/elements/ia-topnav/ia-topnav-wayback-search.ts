@@ -118,7 +118,8 @@ export class IATopNavWaybackSearch extends LitElement {
             #333
           );
 
-          font: normal 1.2rem/1.5 var(--themeFontFamily);
+          font: normal calc(12 * var(--topnavUnit--)) / 1.5
+            var(--themeFontFamily);
         }
 
         form {
@@ -137,8 +138,8 @@ export class IATopNavWaybackSearch extends LitElement {
         }
 
         fieldset {
-          padding: 0.7rem 2rem;
-          margin: 1.5rem 0;
+          padding: calc(7 * var(--topnavUnit--)) calc(20 * var(--topnavUnit--));
+          margin: calc(15 * var(--topnavUnit--)) 0;
           box-sizing: border-box;
           text-align: center;
           border: none;
@@ -155,20 +156,22 @@ export class IATopNavWaybackSearch extends LitElement {
           width: 100%;
           max-width: 215px;
           max-height: 60px;
-          margin-bottom: 1.3rem;
+          margin-bottom: calc(13 * var(--topnavUnit--));
           vertical-align: middle;
         }
 
         input {
           display: block;
           width: 100%;
-          height: 3rem;
-          padding: 0.5rem 1rem 0.5rem 3rem;
-          font: normal 1.2rem/1.5 var(--themeFontFamily);
+          height: calc(30 * var(--topnavUnit--));
+          padding: calc(5 * var(--topnavUnit--)) calc(10 * var(--topnavUnit--))
+            calc(5 * var(--topnavUnit--)) calc(30 * var(--topnavUnit--));
+          font: normal calc(12 * var(--topnavUnit--)) / 1.5
+            var(--themeFontFamily);
           color: var(--topnav-wayback-input-text-color--);
           box-sizing: border-box;
           border: 1px solid var(--grey80);
-          border-radius: 2rem;
+          border-radius: calc(20 * var(--topnavUnit--));
           background: var(--topnav-wayback-input-bg--);
         }
 
@@ -186,8 +189,8 @@ export class IATopNavWaybackSearch extends LitElement {
           position: absolute;
           top: 3px;
           left: 3px;
-          width: 2.4rem;
-          height: 2.4rem;
+          width: calc(24 * var(--topnavUnit--));
+          height: calc(24 * var(--topnavUnit--));
         }
 
         .search-field .fill-color {
@@ -200,8 +203,8 @@ export class IATopNavWaybackSearch extends LitElement {
           }
 
           p {
-            margin-bottom: 3rem;
-            font-size: 1.6rem;
+            margin-bottom: calc(30 * var(--topnavUnit--));
+            font-size: calc(16 * var(--topnavUnit--));
             text-align: center;
           }
 
@@ -235,21 +238,21 @@ export class IATopNavWaybackSearch extends LitElement {
       `,
       css`
         p {
-          margin-bottom: 1rem;
-          font-size: 1.6rem;
+          margin-bottom: calc(10 * var(--topnavUnit--));
+          font-size: calc(16 * var(--topnavUnit--));
           text-align: center;
         }
 
         fieldset {
-          padding: 0.5rem;
+          padding: calc(5 * var(--topnavUnit--));
           border-radius: 5px;
           box-shadow: none;
         }
 
         input {
-          padding-left: 3rem;
-          margin-top: 0.3rem;
-          font-size: 1.4rem;
+          padding-left: calc(30 * var(--topnavUnit--));
+          margin-top: calc(3 * var(--topnavUnit--));
+          font-size: calc(14 * var(--topnavUnit--));
           border-color: #bca38e;
           background: #fff;
         }
@@ -272,7 +275,7 @@ export class IATopNavWaybackSearch extends LitElement {
           }
 
           fieldset a {
-            margin: 0 1.5rem;
+            margin: 0 calc(15 * var(--topnavUnit--));
           }
         }
       `,

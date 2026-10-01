@@ -121,7 +121,7 @@ export class MediaButton extends TrackedElement {
           display: inline-block;
           width: 100%;
           padding: 0;
-          font-size: 1.6rem;
+          font-size: calc(16 * var(--topnavUnit--));
           text-align: left;
           background: transparent;
           -webkit-box-align: center;
@@ -154,13 +154,14 @@ export class MediaButton extends TrackedElement {
         }
 
         .menu-item > .icon > svg {
-          height: 4rem;
-          width: 4rem;
+          height: calc(40 * var(--topnavUnit--));
+          width: calc(40 * var(--topnavUnit--));
         }
 
         .menu-item.selected .icon {
           background-color: var(--activeButtonBg);
-          border-radius: 1rem 0 0 1rem;
+          border-radius: calc(10 * var(--topnavUnit--)) 0 0
+            calc(10 * var(--topnavUnit--));
         }
 
         .icon .fill-color {
@@ -178,7 +179,7 @@ export class MediaButton extends TrackedElement {
         @media (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) {
           .menu-item {
             width: auto;
-            height: 5rem;
+            height: calc(50 * var(--topnavUnit--));
             color: var(--mediaLabelDesktopColor);
             display: inline-flex;
           }
@@ -200,8 +201,8 @@ export class MediaButton extends TrackedElement {
 
           .label,
           .web:after {
-            padding-right: 1rem;
-            font-size: 1.3rem;
+            padding-right: calc(10 * var(--topnavUnit--));
+            font-size: calc(13 * var(--topnavUnit--));
             text-transform: uppercase;
             color: inherit;
           }

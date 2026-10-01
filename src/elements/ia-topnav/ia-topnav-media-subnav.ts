@@ -147,13 +147,13 @@ export class MediaSubnav extends TrackedElement {
           display: block;
           width: 90px;
           height: 90px;
-          margin: 0 auto 1rem auto;
+          margin: 0 auto calc(10 * var(--topnavUnit--)) auto;
           border-radius: 45px;
         }
 
         h3 {
           margin-top: 0;
-          font-size: 1.8rem;
+          font-size: calc(18 * var(--topnavUnit--));
         }
 
         .icon-links {
@@ -168,8 +168,8 @@ export class MediaSubnav extends TrackedElement {
 
         .icon-links a {
           display: inline-block;
-          width: 12rem;
-          margin-bottom: 1.5rem;
+          width: calc(120 * var(--topnavUnit--));
+          margin-bottom: calc(15 * var(--topnavUnit--));
           overflow: hidden;
           white-space: nowrap;
           text-align: center;
@@ -177,7 +177,7 @@ export class MediaSubnav extends TrackedElement {
         }
 
         .icon-links a + a {
-          margin-left: 2rem;
+          margin-left: calc(20 * var(--topnavUnit--));
         }
 
         .featured h4 {
@@ -207,12 +207,12 @@ export class MediaSubnav extends TrackedElement {
           }
 
           .icon-links a {
-            padding-top: 3.5rem;
-            max-width: 16rem;
+            padding-top: calc(35 * var(--topnavUnit--));
+            max-width: calc(160 * var(--topnavUnit--));
           }
 
           .links {
-            padding: 0 1.5rem;
+            padding: 0 calc(15 * var(--topnavUnit--));
           }
 
           .featured {
@@ -230,11 +230,11 @@ export class MediaSubnav extends TrackedElement {
           .top ul {
             display: -ms-grid;
             display: grid;
-            -ms-grid-columns: 50% 3rem 50%;
+            -ms-grid-columns: 50% calc(30 * var(--topnavUnit--)) 50%;
             grid-template-columns: 50% 50%;
             -ms-grid-rows: (auto) [7];
             grid-template-rows: repeat(7, auto);
-            grid-column-gap: 3rem;
+            grid-column-gap: calc(30 * var(--topnavUnit--));
             grid-auto-flow: column;
           }
           .top ul > *:nth-child(1) {
