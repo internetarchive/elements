@@ -9,7 +9,7 @@ import {
 } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
-import { msg } from '@lit/localize';
+import { localized, msg, str } from '@lit/localize';
 
 import type { Review } from '@internetarchive/metadata-service';
 import type { RecaptchaManagerInterface } from '@internetarchive/recaptcha-manager';
@@ -25,6 +25,7 @@ import './ia-review-form';
  * Renders the full IA reviews piece
  */
 @customElement('ia-reviews')
+@localized()
 export class IAReviews extends LitElement {
   /** GLOBAL/REVIEW-RENDERING PROPERTIES */
   /* The identifier for the item being reviewed */
@@ -56,8 +57,8 @@ export class IAReviews extends LitElement {
 
   /** REVIEW FORM PROPERTIES */
 
-  /** Form submitter's screenname, if applicable */
-  @property({ type: String }) submitterScreenname: string = 'Anonymous';
+  /** Form submitter's screenname, if applicable. Defaults to "Anonymous". */
+  @property({ type: String }) submitterScreenname?: string;
 
   /** Form submitter's itemname, if applicable */
   @property({ type: String }) submitterItemname?: string;
@@ -199,19 +200,21 @@ export class IAReviews extends LitElement {
 
   /* Message to display instead of the reviews list if reviews are hidden */
   private get displayReviewsMsgTemplate(): HTMLTemplateResult {
+    const hasOneReview = this.reviewsCount === 1;
+
     return html`
       <div class="message">
-        ${this.reviewsCount === 1
+        ${hasOneReview
           ? msg('There is 1 review for this item.')
-          : msg(`There are ${this.reviewsCount} reviews for this item.`)}
+          : msg(str`There are ${this.reviewsCount} reviews for this item.`)}
         <ia-button
           mode="link"
           class="display-reviews-btn"
           @click=${() => (this.displayReviews = true)}
         >
-          ${msg(
-            `Display ${this.reviewsCount === 1 ? 'review' : 'reviews'}`,
-          )}</ia-button
+          ${hasOneReview
+            ? msg('Display review')
+            : msg('Display reviews')}</ia-button
         >.
       </div>
     `;
