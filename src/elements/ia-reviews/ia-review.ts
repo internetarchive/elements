@@ -8,7 +8,7 @@ import {
 } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
-import { msg } from '@lit/localize';
+import { localized, msg, str } from '@lit/localize';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 import { Review } from '@internetarchive/metadata-service';
@@ -24,10 +24,16 @@ import collapseSpace from './utils/collapse-space';
 
 import deleteIcon from './assets/delete-icon.svg';
 
+/** What became of a deletion: queued, or failed with the server's message if it sent one */
+type DeleteOutcome =
+  | { status: 'queued' }
+  | { status: 'failed'; error?: string };
+
 /**
  * Renders a single IA review
  */
 @customElement('ia-review')
+@localized()
 export class IAReview extends LitElement {
   /* The review to be rendered */
   @property({ type: Object }) review?: Review;
@@ -57,9 +63,9 @@ export class IAReview extends LitElement {
   @state()
   private showTruncatedContent: boolean = false;
 
-  /* An optional message created following attempted review deletion */
+  /* The outcome of an attempted review deletion, if there was one */
   @state()
-  private deleteMsg: string = '';
+  private deleteOutcome?: DeleteOutcome;
 
   render() {
     return !this.review
@@ -74,7 +80,7 @@ export class IAReview extends LitElement {
               ? html`
                   <button
                     class="delete-btn"
-                    title="Delete this review"
+                    title=${msg('Delete this review')}
                     @click=${this.deleteReview}
                   >
                     <img
@@ -94,9 +100,9 @@ export class IAReview extends LitElement {
               <b>${msg('Subject: ')}</b>${this.subjectTemplate}
             </div>
             <div class="body">
-              ${!this.deleteMsg
-                ? this.bodyTemplate
-                : html`<i>${msg(this.deleteMsg)}</i>`}
+              ${this.deleteOutcome
+                ? html`<i>${this.deleteOutcomeMessage}</i>`
+                : this.bodyTemplate}
             </div>
             ${this.truncationButtonsTemplate}
           </article>
@@ -184,7 +190,7 @@ export class IAReview extends LitElement {
     return html`
       <div
         class="review-stars"
-        title="${msg(`${this.review.stars} out of 5 stars`)}"
+        title=${msg(str`${this.review.stars} out of 5 stars`)}
       >
         ${new Array(Number(this.review.stars)).fill(null).map(
           () =>
@@ -215,10 +221,9 @@ export class IAReview extends LitElement {
       year: 'numeric',
     });
 
-    const editedMsg =
-      reviewDate.getTime() !== createDate.getTime() ? '(edited)' : '';
+    const wasEdited = reviewDate.getTime() !== createDate.getTime();
 
-    return msg(`${prettyDate} ${editedMsg}`);
+    return wasEdited ? msg(str`${prettyDate} (edited)`) : prettyDate;
   }
 
   /**
@@ -259,7 +264,7 @@ export class IAReview extends LitElement {
     if (!confirm(msg('Are you sure you want to delete this review?'))) return;
 
     if (!this.reviewService) {
-      this.deleteMsg = msg('Sorry, we were unable to delete this review.');
+      this.deleteOutcome = { status: 'failed' };
       return;
     }
 
@@ -269,9 +274,21 @@ export class IAReview extends LitElement {
       reviewerItemname: this.review.reviewer_itemname,
     });
 
-    this.deleteMsg = result.success
-      ? msg('This review has been queued for deletion.')
-      : (result.error ?? msg('Sorry, we were unable to delete this review.'));
+    this.deleteOutcome = result.success
+      ? { status: 'queued' }
+      : { status: 'failed', error: result.error };
+  }
+
+  /* The message that replaces the body once a deletion has been attempted */
+  private get deleteOutcomeMessage(): string {
+    if (this.deleteOutcome?.status === 'queued') {
+      return msg('This review has been queued for deletion.');
+    }
+
+    return (
+      this.deleteOutcome?.error ??
+      msg('Sorry, we were unable to delete this review.')
+    );
   }
 
   static get styles(): CSSResultGroup {
