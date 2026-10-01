@@ -169,9 +169,6 @@ importers:
       '@internetarchive/ia-clearable-text-input':
         specifier: ^1.1.1
         version: 1.1.1
-      '@internetarchive/ia-dropdown':
-        specifier: ^2.2.0
-        version: 2.2.0
       '@lit/localize':
         specifier: ^0.12.2
         version: 0.12.2
@@ -521,9 +518,6 @@ packages:
 
   '@internetarchive/ia-clearable-text-input@1.1.1':
     resolution: {integrity: sha512-l3Z6gKfSRURvicHlAjL3V+q/yESYSev34fswfG7ESIiWuF7UuWDKjlLOyY3gFch8eAfqS5AQ6KurRw5JWGD4RA==}
-
-  '@internetarchive/ia-dropdown@2.2.0':
-    resolution: {integrity: sha512-h1vF1qLmjbPcRVkYz3kv1HzNHhucaM+IorVzvUejgYhIYRxrBjCswpOpMXeoR16UE4pyDVc/mtkKq/QFaVinRw==}
 
   '@internetarchive/icon-close@1.4.1':
     resolution: {integrity: sha512-nN1rGfScGssGFpfEew4azsrsMyUJtkDWqUDlckJi31PtyQnbZqUmZ07UO3Aw+wZIo3cU1MHxb5VxDy3Rmr8QGA==}
@@ -2843,10 +2837,6 @@ snapshots:
   '@internetarchive/ia-clearable-text-input@1.1.1':
     dependencies:
       '@internetarchive/icon-close': 1.4.1
-      lit: 2.8.0
-
-  '@internetarchive/ia-dropdown@2.2.0':
-    dependencies:
       lit: 2.8.0
 
   '@internetarchive/icon-close@1.4.1':
