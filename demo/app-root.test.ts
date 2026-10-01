@@ -309,5 +309,29 @@ describe('AppRoot', () => {
         'the deep link never put the playback controls in Spanish',
       );
     });
+
+    test('a quick EN click after ES wins, even if the Spanish load resolves later', async () => {
+      setHash('#elem-ia-playback-controls');
+      const el = await appRoot();
+      await waitUntil(
+        () => backButtonLabel(el) != null,
+        'the playback controls never rendered their back button',
+      );
+
+      // Neither await is started before the next fires, the way two quick
+      // clicks would land. Spanish has to come over the network while
+      // English is already loaded, so the ES call is still the one in
+      // flight when the EN call starts.
+      const setLocaleOnEl = (
+        el as unknown as { _setLocale(locale: 'en' | 'es'): Promise<void> }
+      )._setLocale.bind(el);
+      const first = setLocaleOnEl('es');
+      const second = setLocaleOnEl('en');
+      await Promise.all([first, second]);
+
+      expect(backButtonLabel(el)).to.equal('Skip back ten seconds');
+      const enButton = el.querySelector('#ia-locale-en') as HTMLButtonElement;
+      expect(enButton.getAttribute('aria-pressed')).to.equal('true');
+    });
   });
 });

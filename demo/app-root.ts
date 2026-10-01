@@ -112,10 +112,17 @@ export class AppRoot extends LitElement {
     this._abortController?.abort();
   }
 
+  // Counts _setLocale calls so a reply that arrives after a newer one was
+  // made doesn't overwrite it. this._locale only updates once setLocale
+  // resolves, so comparing against it can't tell a request already in flight
+  // from one that's stale.
+  private _localeRequestId = 0;
+
   /** Switches the demo's language, reflecting it in the URL and the page. */
   private _setLocale = async (locale: 'en' | 'es') => {
-    if (locale === this._locale) return;
+    const requestId = ++this._localeRequestId;
     await setLocale(locale);
+    if (requestId !== this._localeRequestId) return;
     this._locale = locale;
     document.documentElement.lang = locale;
     writeLocaleToUrl(locale);
