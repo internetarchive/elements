@@ -4,10 +4,17 @@ import { generateMsgId } from '@lit/localize/internal/id-generation.js';
 import { html } from 'lit';
 import { afterEach, describe, expect, test } from 'vitest';
 
+import { buildTopNavMenus } from './data/menus';
+import './ia-topnav';
+import './ia-topnav-desktop-subnav';
 import './ia-topnav-login-button';
 import './ia-topnav-media-menu';
+import './ia-topnav-media-subnav';
+import './ia-topnav-more-slider';
 import './ia-topnav-user-menu';
 import './ia-topnav-wayback-search';
+import type { IATopNav } from './ia-topnav';
+import type { DesktopSubnav } from './ia-topnav-desktop-subnav';
 import type { LoginButton } from './ia-topnav-login-button';
 import type { MediaMenu } from './ia-topnav-media-menu';
 import type UserMenu from './ia-topnav-user-menu';
@@ -26,6 +33,9 @@ const translated = [
   'More',
   'Log in',
   '1 trillion',
+  'About',
+  'All Audio',
+  'My lists',
 ];
 
 const templates = {
@@ -143,5 +153,100 @@ describe('topnav live locale switch', () => {
     expect(search.shadowRoot?.querySelector('p')?.textContent).toContain(
       'more than 946 billion',
     );
+  });
+
+  test('topnav rebuilds its menu labels on a locale change', async () => {
+    const topnav = await fixture<IATopNav>(html`<ia-topnav></ia-topnav>`);
+    const subnav = () =>
+      topnav.shadowRoot?.querySelector<DesktopSubnav>(
+        'ia-topnav-desktop-subnav',
+      );
+    const titles = () => subnav()?.menuItems.map((link) => link.title) ?? [];
+    expect(titles()).toContain('About');
+
+    await setLocale('xx');
+    await topnav.updateComplete;
+
+    expect(titles()).toContain(pseudo('About'));
+    expect(titles()).toContain(pseudo('Donate'));
+  });
+
+  test('translated menu links keep their English key', async () => {
+    await setLocale('xx');
+    const menus = buildTopNavMenus();
+    const about = menus.more.links.find((link) => link.key === 'About');
+    const myLists = menus.user.find((link) => link.key === 'My lists');
+
+    expect(about?.title).toBe(pseudo('About'));
+    expect(myLists?.title).toBe(pseudo('My lists'));
+  });
+
+  test('desktop subnav keeps the Donate icon and class in another locale', async () => {
+    await setLocale('xx');
+    const subnav = await fixture<DesktopSubnav>(
+      html`<ia-topnav-desktop-subnav
+        .menuItems=${buildTopNavMenus().more.links}
+      ></ia-topnav-desktop-subnav>`,
+    );
+    const donate = subnav.shadowRoot?.querySelector('a.donate');
+
+    expect(donate?.textContent).toContain(pseudo('Donate'));
+    expect(donate?.querySelector('svg')).to.exist;
+  });
+
+  test('menu analytics events stay in English in another locale', async () => {
+    await setLocale('xx');
+    const slider = await fixture<HTMLElement>(
+      html`<ia-topnav-more-slider
+        .menuItems=${buildTopNavMenus().more.links}
+      ></ia-topnav-more-slider>`,
+    );
+    const about = [...(slider.shadowRoot?.querySelectorAll('a') ?? [])].find(
+      (a) => a.textContent?.includes(pseudo('About')),
+    );
+
+    expect(about?.dataset.eventClickTracking).toBe('TopNav|NavMoreAbout');
+  });
+
+  test('the My lists callout still shows in another locale', async () => {
+    await setLocale('xx');
+    const menu = await fixture<UserMenu>(
+      html`<ia-topnav-user-menu
+        open
+        .config=${{ eventCategory: 'TopNav', callouts: { 'My lists': 'NEW' } }}
+        .menuItems=${buildTopNavMenus('brewster').user}
+      ></ia-topnav-user-menu>`,
+    );
+    const callout = menu.shadowRoot?.querySelector('.callout');
+
+    expect(callout?.textContent).toBe('NEW');
+    expect(callout?.closest('a')?.getAttribute('aria-label')).toBe(
+      `xx New feature: ${pseudo('My lists')}`,
+    );
+  });
+
+  test('media subnav analytics events stay in English in another locale', async () => {
+    const events = async () => {
+      const subnav = await fixture<HTMLElement>(
+        html`<ia-topnav-media-subnav
+          menu="audio"
+          .menuItems=${buildTopNavMenus().audio}
+        ></ia-topnav-media-subnav>`,
+      );
+      const link = [...(subnav.shadowRoot?.querySelectorAll('a') ?? [])].find(
+        (a) => a.textContent?.includes('All Audio'),
+      );
+      return {
+        text: link?.textContent?.trim(),
+        event: link?.dataset.eventClickTracking,
+      };
+    };
+    const english = await events();
+
+    await setLocale('xx');
+    const translatedLink = await events();
+
+    expect(translatedLink.text).toBe(pseudo('All Audio'));
+    expect(translatedLink.event).toBe(english.event);
   });
 });
