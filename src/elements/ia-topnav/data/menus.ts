@@ -4,8 +4,6 @@ import { IATopNavConfig, IATopNavMenuConfig } from '../models';
 export const defaultTopNavConfig: IATopNavConfig = {
   // Google Analytics event category
   eventCategory: 'TopNav',
-  // Default value, if more accurate value is not passed in to `buildTopNavMenus()`
-  waybackPagesArchived: '1 trillion',
 };
 
 /**
@@ -14,8 +12,8 @@ export const defaultTopNavConfig: IATopNavConfig = {
  * @param { string } baseHost prefixed to every archive.org link. Pass '' for
  *                            links relative to the current host.
  * @param { string } waybackPagesArchived label readable 'how many pages in WayBack machine?'
- *                                        If you don't pass in something, you'll get the potentially
- *                                        older/less accurate version.
+ *                                        If you don't pass in something, the wayback search falls
+ *                                        back to a localized, potentially less accurate figure.
  * @param { string } itemIdentifier The current item being viewed, to populate admin menu items
  * @param { string } uploader email of the item's uploader, for the uploader admin section
  * @param { string } biblio biblio URL for a texts item, for the biblio admin section

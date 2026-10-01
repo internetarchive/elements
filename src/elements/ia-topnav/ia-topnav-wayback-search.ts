@@ -24,16 +24,18 @@ export class IATopNavWaybackSearch extends LitElement {
       (window.location.href = `https://web.archive.org/web/*/${query}`),
   };
 
-  @property({ type: String }) waybackPagesArchived = '916 billion';
+  /** How many pages the Wayback Machine holds. Blank shows a localized default. */
+  @property({ type: String }) waybackPagesArchived = '';
 
   @query('#url') private urlInput!: HTMLInputElement;
 
   render() {
+    const pagesArchived = this.waybackPagesArchived || msg('1 trillion');
     return html`
       <form method="post" @submit=${this.handleSubmit}>
         <p>
           ${msg(
-            html`Search the history of more than ${this.waybackPagesArchived}
+            html`Search the history of more than ${pagesArchived}
               <a
                 @click=${this.emitWaybackMachineStatsLinkClicked}
                 data-event-click-tracking="TopNav|WaybackMachineStatsLink"
