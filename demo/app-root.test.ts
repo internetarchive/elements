@@ -1,11 +1,27 @@
 import { fixture, fixtureCleanup, waitUntil } from '@open-wc/testing-helpers';
-import { afterEach, describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 import { html } from 'lit';
 
 import type { AppRoot } from './app-root';
 import './app-root';
 import { setLocale, writeLocaleToUrl } from './demo-localization';
 import type { IAPlaybackControls } from '@src/elements/ia-playback-controls/ia-playback-controls';
+
+// A test-only seam into demo-localization's setLocale: null defers to the
+// real implementation, so every test gets the genuine @lit/localize behavior
+// unless it opts into controlling the timing of a setLocale call itself.
+const localeOverride = vi.hoisted(() => ({
+  fn: null as ((locale: 'en' | 'es') => Promise<void>) | null,
+}));
+
+vi.mock('./demo-localization', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('./demo-localization')>();
+  return {
+    ...actual,
+    setLocale: (locale: 'en' | 'es') =>
+      (localeOverride.fn ?? actual.setLocale)(locale),
+  };
+});
 
 /**
  * Sets the hash without firing hashchange, so a fixture created afterwards
@@ -259,6 +275,7 @@ describe('AppRoot', () => {
       // The configured locale and the URL param both outlive the fixture, so
       // a test that switches to Spanish would otherwise leak into whatever
       // runs next in this file.
+      localeOverride.fn = null;
       await setLocale('en');
       writeLocaleToUrl('en');
     });
@@ -318,20 +335,33 @@ describe('AppRoot', () => {
         'the playback controls never rendered their back button',
       );
 
-      // Neither await is started before the next fires, the way two quick
-      // clicks would land. Spanish has to come over the network while
-      // English is already loaded, so the ES call is still the one in
-      // flight when the EN call starts.
+      // Stubs setLocale with one controllable promise per call, so the test
+      // can make the ES call's reply arrive after the EN call's even though
+      // ES was requested first. That's the out-of-order network reply
+      // _setLocale's request-id guard exists for. Neither call's await is
+      // started before the next fires, the way two quick clicks would land.
+      const resolvers = new Map<'en' | 'es', () => void>();
+      localeOverride.fn = (locale) =>
+        new Promise<void>((resolve) => resolvers.set(locale, resolve));
+
       const setLocaleOnEl = (
         el as unknown as { _setLocale(locale: 'en' | 'es'): Promise<void> }
       )._setLocale.bind(el);
       const first = setLocaleOnEl('es');
       const second = setLocaleOnEl('en');
-      await Promise.all([first, second]);
+
+      // The EN reply lands first even though it was requested second.
+      resolvers.get('en')?.();
+      await second;
+      resolvers.get('es')?.();
+      await first;
 
       expect(backButtonLabel(el)).to.equal('Skip back ten seconds');
       const enButton = el.querySelector('#ia-locale-en') as HTMLButtonElement;
+      const esButton = el.querySelector('#ia-locale-es') as HTMLButtonElement;
       expect(enButton.getAttribute('aria-pressed')).to.equal('true');
+      expect(esButton.getAttribute('aria-pressed')).to.equal('false');
+      expect(document.documentElement.lang).to.equal('en');
     });
   });
 });
