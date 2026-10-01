@@ -2,9 +2,10 @@ import { html, css } from 'lit';
 import Icon from './assets/img/icon';
 import icons from './assets/img/icons';
 import { customElement } from '@src/util/custom-element';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 @customElement('ia-topnav-icon-hamburger')
+@localized()
 export class HamBurger extends Icon {
   render() {
     if (this.active) return icons.close;

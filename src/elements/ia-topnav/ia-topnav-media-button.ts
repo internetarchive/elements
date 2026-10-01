@@ -7,9 +7,10 @@ import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
-import { msg, str } from '@lit/localize';
+import { localized, msg, str } from '@lit/localize';
 
 @customElement('ia-topnav-media-button')
+@localized()
 export class MediaButton extends TrackedElement {
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
   @property({ type: String }) icon = '';

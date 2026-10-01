@@ -17,9 +17,10 @@ import {
 } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
-import { msg, str } from '@lit/localize';
+import { localized, msg, str } from '@lit/localize';
 
 @customElement('ia-topnav-primary-nav')
+@localized()
 export class PrimaryNav extends TrackedElement {
   @property({ type: String }) mediaBaseHost = 'https://archive.org';
   @property({ type: String }) baseHost = '';

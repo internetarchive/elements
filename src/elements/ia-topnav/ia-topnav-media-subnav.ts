@@ -16,9 +16,10 @@ import {
 import { defaultTopNavConfig } from './data/menus';
 import { subnavListCSS } from './subnav-list-styles';
 import themeStyles from '@src/themes/theme-styles';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 @customElement('ia-topnav-media-subnav')
+@localized()
 export class MediaSubnav extends TrackedElement {
   @property({ type: String }) baseHost = '';
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
