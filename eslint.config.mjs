@@ -14,6 +14,24 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
+// Flat config has no equivalent to extending a rule's existing options, so
+// both `no-restricted-imports` blocks below spread this in rather than
+// repeating it.
+const customElementRestrictedImports = [
+  {
+    name: 'lit/decorators.js',
+    importNames: ['customElement'],
+    message:
+      "Import customElement from '@src/util/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
+  },
+  {
+    name: 'lit/decorators/custom-element.js',
+    importNames: ['customElement'],
+    message:
+      "Import customElement from '@src/util/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
+  },
+];
+
 export default [
   ...compat.extends('plugin:@typescript-eslint/recommended'),
   {
@@ -43,20 +61,7 @@ export default [
       'no-restricted-imports': [
         'error',
         {
-          paths: [
-            {
-              name: 'lit/decorators.js',
-              importNames: ['customElement'],
-              message:
-                "Import customElement from '@src/util/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
-            },
-            {
-              name: 'lit/decorators/custom-element.js',
-              importNames: ['customElement'],
-              message:
-                "Import customElement from '@src/util/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
-            },
-          ],
+          paths: [...customElementRestrictedImports],
         },
       ],
     },
@@ -79,6 +84,44 @@ export default [
     files: ['**/*.test.ts'],
     rules: {
       '@typescript-eslint/no-unused-expressions': 'off',
+    },
+  },
+  {
+    // Only the demo app calls configureLocalization (demo/demo-localization.ts).
+    // @lit/localize throws if it's configured twice, so this package's own
+    // source never does. Test files are exempt: they stand in for the app to
+    // exercise a published locale module on its own.
+    files: ['src/**/*.ts'],
+    ignores: ['src/**/*.test.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            ...customElementRestrictedImports,
+            {
+              name: '@lit/localize',
+              importNames: [
+                'configureLocalization',
+                'configureTransformLocalization',
+              ],
+              message:
+                'Only the demo app (demo/demo-localization.ts) calls configureLocalization. @lit/localize throws if configured twice, so this package never does.',
+            },
+          ],
+          patterns: [
+            {
+              // configureLocalization and configureTransformLocalization also
+              // live at these deep import paths, which the `paths` entry
+              // above (matched on the `@lit/localize` specifier alone)
+              // doesn't catch.
+              group: ['@lit/localize/init/*'],
+              message:
+                'Only the demo app (demo/demo-localization.ts) calls configureLocalization. @lit/localize throws if configured twice, so this package never does.',
+            },
+          ],
+        },
+      ],
     },
   },
 ];
