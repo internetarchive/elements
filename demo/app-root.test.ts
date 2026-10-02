@@ -291,9 +291,12 @@ describe('AppRoot', () => {
       setHash('#elem-ia-button');
       const el = await appRoot();
 
+      // Loading the story is a lazy import, which a busy CI runner can take
+      // more than the default second over.
       await waitUntil(
         () => el.querySelector('ia-button-story'),
         '<ia-button-story> was never rendered',
+        { timeout: 5000 },
       );
       expect(customElements.get('ia-button-story')).to.exist;
     });
