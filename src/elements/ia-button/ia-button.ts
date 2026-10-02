@@ -7,7 +7,6 @@ import {
   PropertyValues,
   render,
 } from 'lit';
-import { msg } from '@lit/localize';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import themeStyles from '@src/themes/theme-styles';
@@ -100,9 +99,8 @@ export class IAButton extends LitElement {
   private get loadingStateTemplate(): TemplateResult {
     return html`
       <span class="loading-indicator" alt="Loading indicator">
-        <ia-status-indicator mode="loading"></ia-status-indicator> ${msg(
-          this.loadingText,
-        )}
+        <ia-status-indicator mode="loading"></ia-status-indicator> ${this
+          .loadingText}
       </span>
     `;
   }

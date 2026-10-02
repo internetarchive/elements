@@ -259,7 +259,7 @@ app-root {
 .ia-picker-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
   padding: 8px 12px 4px 16px;
 }
 
@@ -380,6 +380,42 @@ app-root {
   margin: 0;
   display: flex;
   align-items: center;
+}
+
+/* Pushed to the end of whichever flex header it's in: the content header
+   next to the h1, or the phone picker's sheet header before the close
+   button. */
+#ia-locale-switch {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+.ia-locale-btn {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fff;
+  color: #213547;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.1s,
+    color 0.1s,
+    border-color 0.1s;
+}
+
+.ia-locale-btn:hover {
+  background: #f0f0f0;
+  border-color: #767676;
+}
+
+.ia-locale-btn.ia-locale-active {
+  color: #fff;
+  background: #194880;
+  border-color: #194880;
 }
 
 #ia-content h2 {

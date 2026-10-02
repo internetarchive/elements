@@ -7,7 +7,7 @@ import {
 } from 'lit';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
 
@@ -30,6 +30,7 @@ import themeStyles from '@src/themes/theme-styles';
  * anything to shrink-wrap.
  */
 @customElement('ia-imgview-controls')
+@localized()
 export class IAImageViewerControls extends LitElement {
   /** Zero-based index of the image being shown, for the counter. */
   @property({ type: Number }) currentIndex = 0;
