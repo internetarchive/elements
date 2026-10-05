@@ -89,7 +89,8 @@ jobs:
   # Warns (never blocks) when a test file lands slow or the run gets slower
   # than main. The report from main's latest successful run is the baseline.
   slow-tests:
-    if: github.event_name == 'pull_request'
+    # Runs after a failed test run too, since the report is uploaded either way.
+    if: ${{ !cancelled() && github.event_name == 'pull_request' }}
     needs: build
     runs-on: ubuntu-latest
     permissions:
