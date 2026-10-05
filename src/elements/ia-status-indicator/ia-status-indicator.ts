@@ -1,9 +1,11 @@
 import {
   css,
+  unsafeCSS,
   CSSResultGroup,
   html,
   LitElement,
   nothing,
+  PropertyValues,
   svg,
   SVGTemplateResult,
   TemplateResult,
@@ -11,7 +13,6 @@ import {
 import { property, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import { msg } from '@lit/localize';
-import { choose } from 'lit/directives/choose.js';
 
 import themeStyles from '@src/themes/theme-styles';
 import { maskedIcon } from '@src/util/masked-icon';
@@ -26,6 +27,12 @@ import textsIcon from './icons/texts.svg';
 import tvIcon from './icons/tv.svg';
 import videoIcon from './icons/video.svg';
 import webIcon from './icons/web.svg';
+
+/** How long a mode change takes to fade. Drives both the CSS and the timer. */
+const FADE_DURATION_MS = 250;
+
+/** One layer per mode, always rendered in this order. See render(). */
+const LAYER_ORDER: LoadingStatus[] = ['ready', 'loading', 'success', 'error'];
 
 export type LoadingStatus = 'ready' | 'loading' | 'success' | 'error';
 
@@ -91,13 +98,109 @@ export class IAStatusIndicator extends LitElement {
   /* Whether a consumer has slotted their own center icon */
   @state() private hasSlottedIcon = false;
 
+  /* The modes still fading out after a change. More than one when changes overlap. */
+  @state() private _outgoingModes: ReadonlySet<LoadingStatus> = new Set();
+
+  /* Set once the first render is done, so the element doesn't fade in on mount */
+  @state() private _canAnimate = false;
+
+  /* One per outgoing mode, clearing it once its own fade is over */
+  private _fadeTimers = new Map<LoadingStatus, ReturnType<typeof setTimeout>>();
+
   render(): TemplateResult {
-    return html`${choose(this.mode, [
-      ['ready', () => this.placeholderTemplate],
-      ['loading', () => this.loadingIndicatorTemplate],
-      ['success', () => this.successIndicatorTemplate],
-      ['error', () => this.errorIndicatorTemplate],
-    ])}`;
+    // Every mode has its own layer element that never moves, whatever order
+    // the changes come in. Moving an element cancels the transition it's in
+    // the middle of, so a layer partway through a fade would snap to its end
+    // value. A layer only has content while it's on screen.
+    return html`
+      <div class="layers ${this._canAnimate ? 'animate' : ''}">
+        ${LAYER_ORDER.map((mode) => this.layerTemplate(mode))}
+      </div>
+    `;
+  }
+
+  /**
+   * One mode's artwork, stacked in the same cell as the other layers so that
+   * a mode change fades between them. At rest only the active layer has
+   * content; an outgoing one is emptied as soon as its fade is over, so the
+   * shadow tree holds a single mode's markup and a single `<title>`.
+   */
+  private layerTemplate(mode: LoadingStatus): TemplateResult {
+    // `mode` is a public string attribute, so a consumer can hand us anything.
+    // An unrecognised one matches no layer and draws nothing.
+    const isActive = mode === this.mode;
+    const isOutgoing = !isActive && this._outgoingModes.has(mode);
+    const state = isActive ? 'active' : isOutgoing ? 'outgoing' : '';
+
+    return html`<div
+      class="layer ${state}"
+      aria-hidden=${isActive ? nothing : 'true'}
+    >
+      ${isActive || isOutgoing ? this.modeTemplate(mode) : nothing}
+    </div>`;
+  }
+
+  private modeTemplate(mode: LoadingStatus): TemplateResult {
+    switch (mode) {
+      case 'ready':
+        return this.placeholderTemplate;
+      case 'loading':
+        return this.loadingIndicatorTemplate;
+      case 'success':
+        return this.successIndicatorTemplate;
+      case 'error':
+        return this.errorIndicatorTemplate;
+    }
+  }
+
+  willUpdate(changedProps: PropertyValues): void {
+    if (!changedProps.has('mode')) return;
+    // Hold on to the mode we're leaving so both can be on screen together for
+    // the length of the fade.
+    const previous = changedProps.get('mode') as LoadingStatus | undefined;
+    if (previous === undefined || previous === this.mode) return;
+
+    // The mode coming back in may still be fading out from an earlier change.
+    // Its layer just turns around, so it's no longer outgoing.
+    this.stopFadingOut(this.mode);
+
+    this._outgoingModes = new Set(this._outgoingModes).add(previous);
+    clearTimeout(this._fadeTimers.get(previous));
+    this._fadeTimers.set(
+      previous,
+      setTimeout(() => this.stopFadingOut(previous), FADE_DURATION_MS),
+    );
+  }
+
+  private stopFadingOut(mode: LoadingStatus): void {
+    clearTimeout(this._fadeTimers.get(mode));
+    this._fadeTimers.delete(mode);
+    if (!this._outgoingModes.has(mode)) return;
+
+    const outgoing = new Set(this._outgoingModes);
+    outgoing.delete(mode);
+    this._outgoingModes = outgoing;
+  }
+
+  firstUpdated(): void {
+    // Fading applies to mode changes, not to the element appearing. Waiting a
+    // frame is what makes that true: enabling it inline would put the
+    // transition in the element's very first computed style, and it would
+    // fade up from nothing on mount.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        this._canAnimate = true;
+      });
+    });
+  }
+
+  disconnectedCallback(): void {
+    this._fadeTimers.forEach((timer) => clearTimeout(timer));
+    this._fadeTimers.clear();
+    // Nothing reschedules these timers, so leaving the modes set would strand
+    // the outgoing layers on reconnect.
+    this._outgoingModes = new Set();
+    super.disconnectedCallback();
   }
 
   /**
@@ -286,6 +389,36 @@ export class IAStatusIndicator extends LitElement {
           width: var(--indicator-width--);
         }
 
+        /* Every mode occupies the same cell, so the element keeps one size */
+        .layers {
+          display: grid;
+        }
+
+        .layer {
+          grid-area: 1 / 1;
+          opacity: 0;
+        }
+
+        .animate .layer {
+          transition: opacity ${unsafeCSS(FADE_DURATION_MS)}ms ease-out;
+        }
+
+        .layer.active {
+          opacity: 1;
+        }
+
+        /* A ring on its way out would otherwise keep animating unseen */
+        .layer.outgoing .loading-ring,
+        .layer.outgoing .loading-dots > * {
+          animation-play-state: paused;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .animate .layer {
+            transition: none;
+          }
+        }
+
         .placeholder {
           height: var(--indicator-width--);
         }
@@ -322,6 +455,12 @@ export class IAStatusIndicator extends LitElement {
           width: 50%;
           height: 50%;
           background-color: var(--loading-icon-color--);
+        }
+
+        /* Block, so the svg isn't padded out by the line box it would sit in */
+        .success-indicator,
+        .error-indicator {
+          display: block;
         }
 
         .success-icon {

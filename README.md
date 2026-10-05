@@ -87,7 +87,7 @@ Add to Jest config:
 
 ## Development
 
-Requires Node 24+ and pnpm 11+. `engine-strict=true` in `.npmrc` makes an older
+Requires Node 24+ and pnpm 12+. `engine-strict=true` in `.npmrc` makes an older
 Node fail the install instead of warning, but nothing hard-blocks `npm install`:
 npm ignores `engines.pnpm`, and there's deliberately no preinstall guard since it
 would run for consumers too. Use pnpm. `packageManager` and the committed
@@ -141,7 +141,7 @@ src
     - ia-foobar.test.ts // the element's tests
     - ia-foobar-story.ts // an element that demos your element
 ```
-Export your component in `src/index.ts`
+Consumers import each element by its own subpath (`@internetarchive/elements/ia-button/ia-button`). There's no package root export, so there's no barrel file to update.
 
 ### Naming
 Custom elements all share one global registry, and that registry is shared with every other script on the host page. Give each element a name specific enough that nothing else would plausibly want it.
