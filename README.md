@@ -87,7 +87,7 @@ Add to Jest config:
 
 ## Development
 
-Requires Node 24+ and pnpm 11+. `engine-strict=true` in `.npmrc` makes an older
+Requires Node 24+ and pnpm 12+. `engine-strict=true` in `.npmrc` makes an older
 Node fail the install instead of warning, but nothing hard-blocks `npm install`:
 npm ignores `engines.pnpm`, and there's deliberately no preinstall guard since it
 would run for consumers too. Use pnpm. `packageManager` and the committed
