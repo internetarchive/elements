@@ -9,7 +9,7 @@ import { str } from '@lit/localize';
 export const templates = {
   s061cc20e3432dead: `Pausar`,
   s0661ae8e65d136c7: str`Imagen ${0} de ${1}`,
-  s13c406cbcde6b73f: `El código que has introducido no es válido o ha caducado`,
+  s13c406cbcde6b73f: `El código introducido no es válido o ha caducado`,
   s1587aa01e9bb42c6: `Mostrar u ocultar la búsqueda rápida`,
   s1c9c386a1a79feef: str`Resultado ${0} de ${1}`,
   s290adadea9c2979c: `No se pudo cargar esta imagen.`,
@@ -22,7 +22,7 @@ export const templates = {
   s5f4586bc1e2740e6: `Borrar la búsqueda`,
   s6aa79ab2e0656795: str`Velocidad de reproducción, actualmente ${0}`,
   s7505401da0a6d6f7: `No hay opciones que coincidan`,
-  s7655667379814b36: `Busca en el archivo. Filtros y búsqueda avanzada disponible a continuación.`,
+  s7655667379814b36: `Busca en Internet Archive. Filtros y búsqueda avanzada disponibles a continuación.`,
   s78fa9c8370847255: `Resultado siguiente`,
   s7ad0c46f2280e6b7: `Retroceder diez segundos`,
   s7cc651d6e80f42f9: `Envíame otro código`,
