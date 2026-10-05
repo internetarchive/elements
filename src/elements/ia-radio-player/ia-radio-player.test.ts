@@ -10,6 +10,7 @@ import type { IAAudioElement } from '@src/elements/ia-audio-element/ia-audio-ele
 import type { IATranscriptView } from '@src/elements/ia-transcript-view/ia-transcript-view';
 import type { IAPlaybackControls } from '@src/elements/ia-playback-controls/ia-playback-controls';
 import type { IAScrubberBar } from '@src/elements/ia-scrubber-bar/ia-scrubber-bar';
+import type { IAWaveformProgress } from '@src/elements/ia-waveform-progress/ia-waveform-progress';
 
 import type { RadioPlayerConfig } from './models';
 import type { SearchHandlerInterface } from './search/search-handler';
@@ -395,6 +396,41 @@ describe('IA Radio Player', () => {
       await reportDuration(el, 100);
 
       // Start, the music break's two edges, and the end.
+      expect(
+        childIn<IAScrubberBar>(el, 'ia-scrubber-bar').sectionMarkerPercentages,
+      ).to.deep.equal([0, 10, 20, 100]);
+    });
+
+    test('leaves the music sections off the waveform by default', async () => {
+      const el = await fixture<IARadioPlayer>(
+        html`<ia-radio-player
+          .config=${CONFIG}
+          .transcriptConfig=${transcriptWithMusic()}
+        ></ia-radio-player>`,
+      );
+      await reportDuration(el, 100);
+
+      expect(
+        childIn<IAWaveformProgress>(el, 'ia-waveform-progress').zonesOfSilence,
+      ).to.deep.equal([]);
+      expect(
+        childIn<IAScrubberBar>(el, 'ia-scrubber-bar').sectionMarkerPercentages,
+      ).to.deep.equal([0, 10, 20, 100]);
+    });
+
+    test('shades the music sections on the waveform when asked to', async () => {
+      const el = await fixture<IARadioPlayer>(
+        html`<ia-radio-player
+          .config=${CONFIG}
+          .transcriptConfig=${transcriptWithMusic()}
+          showMusicZones
+        ></ia-radio-player>`,
+      );
+      await reportDuration(el, 100);
+
+      expect(
+        childIn<IAWaveformProgress>(el, 'ia-waveform-progress').zonesOfSilence,
+      ).to.deep.equal([{ startPercent: 10, endPercent: 20 }]);
       expect(
         childIn<IAScrubberBar>(el, 'ia-scrubber-bar').sectionMarkerPercentages,
       ).to.deep.equal([0, 10, 20, 100]);
