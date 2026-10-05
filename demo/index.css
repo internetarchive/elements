@@ -382,6 +382,58 @@ app-root {
   align-items: center;
 }
 
+/* Pushed to the end of whichever flex row it's in: the content header next
+   to the h1, or the phone bar after the next arrow. */
+#ia-locale-switch {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+.ia-locale-btn {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fff;
+  color: #213547;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.1s,
+    color 0.1s,
+    border-color 0.1s;
+}
+
+.ia-locale-btn:hover {
+  background: #f0f0f0;
+  border-color: #767676;
+}
+
+.ia-locale-btn.ia-locale-active {
+  color: #fff;
+  background: #194880;
+  border-color: #194880;
+}
+
+/* In the phone bar the pair is sized in px with 44px tap targets, like the
+   rest of the bar, whatever root font size a story sets. */
+#ia-bar #ia-locale-switch {
+  align-items: center;
+  margin-left: 0;
+  padding: 0 4px;
+  border-left: 1px solid #e3e3e3;
+  gap: 2px;
+}
+
+#ia-bar .ia-locale-btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  font-size: 13px;
+}
+
 #ia-content h2 {
   font-size: 1.1rem;
   font-weight: 600;

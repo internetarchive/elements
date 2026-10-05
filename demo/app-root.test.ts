@@ -8,6 +8,8 @@ import demoCss from './index.css?raw';
 import type { AppRoot } from './app-root';
 import { NARROW_VIEWPORT } from './app-root';
 import './app-root';
+import { setLocale, writeLocaleToUrl } from './demo-localization';
+import type { IAPlaybackControls } from '@src/elements/ia-playback-controls/ia-playback-controls';
 
 /**
  * Sets the hash without firing hashchange, so a fixture created afterwards
@@ -412,6 +414,97 @@ describe('AppRoot', () => {
       );
       expect(hrefs[0]).to.equal('#');
       expect(hrefs).to.include('#elem-ia-button');
+    });
+  });
+
+  describe('locale switch', () => {
+    afterEach(async () => {
+      // The configured locale and the URL param both outlive the fixture, so
+      // a test that switches to Spanish would otherwise leak into whatever
+      // runs next in this file.
+      await setLocale('en');
+      writeLocaleToUrl('en');
+    });
+
+    function backButtonLabel(el: AppRoot): string | null | undefined {
+      const controls = el
+        .querySelector('ia-playback-controls-story')
+        ?.shadowRoot?.querySelector<IAPlaybackControls>('ia-playback-controls');
+      return controls?.shadowRoot
+        ?.getElementById('back-btn')
+        ?.getAttribute('aria-label');
+    }
+
+    test('the EN/ES control switches a loaded element to Spanish live', async () => {
+      setHash('#elem-ia-playback-controls');
+      const el = await appRoot();
+
+      await waitUntil(
+        () => el.querySelector('ia-playback-controls-story'),
+        '<ia-playback-controls-story> was never rendered',
+      );
+      await waitUntil(
+        () => backButtonLabel(el) != null,
+        'the playback controls never rendered their back button',
+      );
+      expect(backButtonLabel(el)).to.equal('Skip back ten seconds');
+
+      const esButton = el.querySelector('#ia-locale-es') as HTMLButtonElement;
+      esButton.click();
+
+      await waitUntil(
+        () => backButtonLabel(el) === 'Retroceder diez segundos',
+        'the playback controls never switched to Spanish',
+      );
+      expect(esButton.getAttribute('aria-pressed')).to.equal('true');
+    });
+
+    test('a ?lang=es deep link starts the demo in Spanish', async () => {
+      window.history.replaceState(
+        null,
+        '',
+        '?lang=es#elem-ia-playback-controls',
+      );
+      const el = await appRoot();
+
+      await waitUntil(
+        () => backButtonLabel(el) === 'Retroceder diez segundos',
+        'the deep link never put the playback controls in Spanish',
+      );
+    });
+
+    test('a quick EN click after ES wins, even if the Spanish load resolves later', async () => {
+      setHash('#elem-ia-playback-controls');
+      const el = await appRoot();
+      await waitUntil(
+        () => backButtonLabel(el) != null,
+        'the playback controls never rendered their back button',
+      );
+
+      // Neither await is started before the next fires, the way two quick
+      // clicks would land. Spanish has to come over the network while
+      // English is already loaded, so the ES call is still the one in
+      // flight when the EN call starts.
+      const setLocaleOnEl = (
+        el as unknown as { _setLocale(locale: 'en' | 'es'): Promise<void> }
+      )._setLocale.bind(el);
+      const first = setLocaleOnEl('es');
+      const second = setLocaleOnEl('en');
+      await Promise.all([first, second]);
+
+      expect(backButtonLabel(el)).to.equal('Skip back ten seconds');
+      const enButton = el.querySelector('#ia-locale-en') as HTMLButtonElement;
+      expect(enButton.getAttribute('aria-pressed')).to.equal('true');
+    });
+
+    test('moves into the bottom bar on a narrow viewport', async () => {
+      stubNarrowViewport(true);
+      const el = await appRoot();
+
+      expect(el.querySelector('#ia-bar #ia-locale-switch')).to.exist;
+      expect(el.querySelector('#ia-picker #ia-locale-switch')).to.not.exist;
+      expect(el.querySelector('#ia-content-header #ia-locale-switch')).to.not
+        .exist;
     });
   });
 
@@ -879,6 +972,9 @@ describe('AppRoot', () => {
             barButton(el, 'prev'),
             barButton(el, 'name'),
             barButton(el, 'next'),
+            ...Array.from(
+              el.querySelectorAll<HTMLElement>('#ia-bar .ia-locale-btn'),
+            ),
             el.querySelector('#ia-picker-close') as HTMLElement,
             el.querySelector('#ia-picker-search') as HTMLElement,
             ...Array.from(

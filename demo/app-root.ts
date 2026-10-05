@@ -7,6 +7,12 @@ import { customElement } from '@src/util/custom-element';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 import { HASH_PREFIX, tagFromHash } from './element-hash';
+import {
+  getLocale,
+  localeFromUrl,
+  setLocale,
+  writeLocaleToUrl,
+} from './demo-localization';
 
 // Globbed without `eager`, so the keys give us the full element list at build
 // time while each module is only fetched when its story is displayed.
@@ -87,6 +93,9 @@ export class AppRoot extends LitElement {
   /** Sidebar highlight in the all-elements view, driven by scroll position. */
   @state() private _activeTag?: string;
 
+  /** The demo's own locale, so the EN/ES control can show which is active. */
+  @state() private _locale = getLocale();
+
   /** Whether the viewport calls for the phone layout. */
   @state() private _narrow = isNarrowViewport();
 
@@ -136,6 +145,14 @@ export class AppRoot extends LitElement {
     // the first element rather than on all of them. The hash is written back
     // so the URL names what's showing and can be passed on as it is.
     if (narrowQuery.matches && !window.location.hash) this._focusFirstEntry();
+    // A `?lang=es` deep link gives a reviewer a one-click way to see elements
+    // in Spanish, so it wins over whatever locale the page started in.
+    const urlLocale = localeFromUrl();
+    if (urlLocale !== this._locale) {
+      this._setLocale(urlLocale).catch((e) =>
+        console.warn('Failed to apply the deep-linked demo locale:', e),
+      );
+    }
     // updated() owns the scroll spy, and disconnecting tore it down. An
     // unchanged hash resolves to the same StoryEntry object, so the assignment
     // above requests no update on its own, which would leave the spy dead.
@@ -147,6 +164,14 @@ export class AppRoot extends LitElement {
     this._disconnectScrollSpy();
     this._abortController?.abort();
   }
+
+  /** Switches the demo's language, reflecting it in the URL and the page. */
+  private _setLocale = async (locale: 'en' | 'es') => {
+    await setLocale(locale);
+    this._locale = locale;
+    document.documentElement.lang = locale;
+    writeLocaleToUrl(locale);
+  };
 
   private _onHashChange = () => {
     const focused = entryFromHash(window.location.hash);
@@ -377,6 +402,7 @@ export class AppRoot extends LitElement {
         <div id="ia-content-header">
           ${this._narrow ? nothing : this._renderNavToggle()}
           <h1>Internet Archive Elements</h1>
+          ${this._narrow ? nothing : this._renderLocaleSwitch()}
         </div>
         ${this._focused
           ? this._renderFocused(this._focused)
@@ -423,6 +449,37 @@ export class AppRoot extends LitElement {
     `;
   }
 
+  /**
+   * Demo-only EN/ES toggle so a reviewer can see elements in Spanish from a
+   * PR preview, without digging through dev tools. It's the one place in
+   * this repo that owns a locale switch; everything under src/ just renders
+   * whatever locale this picks.
+   */
+  private _renderLocaleSwitch(): TemplateResult {
+    const localeButton = (locale: 'en' | 'es', label: string) => html`
+      <button
+        type="button"
+        id="ia-locale-${locale}"
+        class="ia-locale-btn ${this._locale === locale
+          ? 'ia-locale-active'
+          : ''}"
+        aria-pressed="${this._locale === locale}"
+        @click=${() =>
+          this._setLocale(locale).catch((e) =>
+            console.warn('Failed to switch the demo locale:', e),
+          )}
+      >
+        ${label}
+      </button>
+    `;
+
+    return html`
+      <div id="ia-locale-switch" role="group" aria-label="Demo language">
+        ${localeButton('en', 'EN')} ${localeButton('es', 'ES')}
+      </div>
+    `;
+  }
+
   private _renderSidebar() {
     const showingAll = !this._focused;
     const link = (entry: StoryEntry) =>
@@ -447,8 +504,9 @@ export class AppRoot extends LitElement {
 
   /**
    * The phone layout's way around: step to the element either side, or tap
-   * the name in the middle for the full list. Along the bottom of the screen
-   * where a thumb reaches it, and there at any scroll position.
+   * the name in the middle for the full list, or switch the demo's language.
+   * Along the bottom of the screen where a thumb reaches it, and there at any
+   * scroll position.
    */
   private _renderBar(): TemplateResult {
     const back = this._neighbour(-1);
@@ -496,6 +554,7 @@ export class AppRoot extends LitElement {
         >
           ›
         </button>
+        ${this._renderLocaleSwitch()}
       </nav>
     `;
   }
