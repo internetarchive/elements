@@ -391,3 +391,9 @@ export class IADonationThermometer extends LitElement {
     ];
   }
 }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ia-donation-thermometer': IADonationThermometer;
+  }
+}

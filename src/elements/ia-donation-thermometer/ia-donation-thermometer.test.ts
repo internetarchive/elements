@@ -24,9 +24,7 @@ async function sizedFixture(
   const wrapper = await fixture<HTMLDivElement>(
     html`<div style="width: ${width}px">${template}</div>`,
   );
-  const el = wrapper.querySelector<IADonationThermometer>(
-    'ia-donation-thermometer',
-  )!;
+  const el = wrapper.querySelector('ia-donation-thermometer')!;
   await settleLayout(el);
   return el;
 }
