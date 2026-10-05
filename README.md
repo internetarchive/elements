@@ -141,7 +141,7 @@ src
     - ia-foobar.test.ts // the element's tests
     - ia-foobar-story.ts // an element that demos your element
 ```
-Export your component in `src/index.ts`
+Consumers import each element by its own subpath (`@internetarchive/elements/ia-button/ia-button`). There's no package root export, so there's no barrel file to update.
 
 ### Naming
 Custom elements all share one global registry, and that registry is shared with every other script on the host page. Give each element a name specific enough that nothing else would plausibly want it.
