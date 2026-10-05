@@ -72,8 +72,55 @@ jobs:
       timeout-minutes: 6
 
     - name: Run tests
-      run: pnpm run test
+      run: pnpm run test -- --reporter=default --reporter=json --outputFile.json=reports/vitest.json
+
+    - name: Upload test report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: vitest-report
+        path: reports/vitest.json
+        retention-days: 30
 
     - uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+
+  # Warns (never blocks) when a test file lands slow or the run gets slower
+  # than main. The report from main's latest successful run is the baseline.
+  slow-tests:
+    if: github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
+      with:
+        node-version: 24
+
+    - name: Download this run's report
+      uses: actions/download-artifact@v4
+      with:
+        name: vitest-report
+        path: reports
+
+    - name: Download main's report
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        run_id=$(gh run list --workflow ci.yml --branch main --event push \
+          --status success --limit 1 --json databaseId --jq '.[0].databaseId')
+        if [ -n "$run_id" ]; then
+          gh run download "$run_id" --name vitest-report --dir baseline \
+            || echo "Couldn't download main's report."
+        fi
+
+    # continue-on-error keeps a slow test from blocking the merge. The step
+    # still shows as failed, and each slow file is a warning annotation.
+    - name: Check for slow tests
+      continue-on-error: true
+      run: node support/check-slow-tests.mjs reports/vitest.json baseline/vitest.json
