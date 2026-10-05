@@ -497,11 +497,12 @@ describe('AppRoot', () => {
       expect(enButton.getAttribute('aria-pressed')).to.equal('true');
     });
 
-    test('moves into the picker sheet header on a narrow viewport', async () => {
+    test('moves into the bottom bar on a narrow viewport', async () => {
       stubNarrowViewport(true);
       const el = await appRoot();
 
-      expect(el.querySelector('.ia-picker-head #ia-locale-switch')).to.exist;
+      expect(el.querySelector('#ia-bar #ia-locale-switch')).to.exist;
+      expect(el.querySelector('#ia-picker #ia-locale-switch')).to.not.exist;
       expect(el.querySelector('#ia-content-header #ia-locale-switch')).to.not
         .exist;
     });
@@ -971,6 +972,9 @@ describe('AppRoot', () => {
             barButton(el, 'prev'),
             barButton(el, 'name'),
             barButton(el, 'next'),
+            ...Array.from(
+              el.querySelectorAll<HTMLElement>('#ia-bar .ia-locale-btn'),
+            ),
             el.querySelector('#ia-picker-close') as HTMLElement,
             el.querySelector('#ia-picker-search') as HTMLElement,
             ...Array.from(

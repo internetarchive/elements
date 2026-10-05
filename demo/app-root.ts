@@ -504,8 +504,9 @@ export class AppRoot extends LitElement {
 
   /**
    * The phone layout's way around: step to the element either side, or tap
-   * the name in the middle for the full list. Along the bottom of the screen
-   * where a thumb reaches it, and there at any scroll position.
+   * the name in the middle for the full list, or switch the demo's language.
+   * Along the bottom of the screen where a thumb reaches it, and there at any
+   * scroll position.
    */
   private _renderBar(): TemplateResult {
     const back = this._neighbour(-1);
@@ -553,6 +554,7 @@ export class AppRoot extends LitElement {
         >
           ›
         </button>
+        ${this._renderLocaleSwitch()}
       </nav>
     `;
   }
@@ -586,7 +588,6 @@ export class AppRoot extends LitElement {
         <div class="ia-picker-sheet">
           <div class="ia-picker-head">
             <h2 id="ia-picker-title">Elements</h2>
-            ${this._renderLocaleSwitch()}
             <button
               id="ia-picker-close"
               type="button"

@@ -259,7 +259,7 @@ app-root {
 .ia-picker-head {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
   padding: 8px 12px 4px 16px;
 }
 
@@ -382,9 +382,8 @@ app-root {
   align-items: center;
 }
 
-/* Pushed to the end of whichever flex header it's in: the content header
-   next to the h1, or the phone picker's sheet header before the close
-   button. */
+/* Pushed to the end of whichever flex row it's in: the content header next
+   to the h1, or the phone bar after the next arrow. */
 #ia-locale-switch {
   display: flex;
   flex-shrink: 0;
@@ -416,6 +415,23 @@ app-root {
   color: #fff;
   background: #194880;
   border-color: #194880;
+}
+
+/* In the phone bar the pair is sized in px with 44px tap targets, like the
+   rest of the bar, whatever root font size a story sets. */
+#ia-bar #ia-locale-switch {
+  align-items: center;
+  margin-left: 0;
+  padding: 0 4px;
+  border-left: 1px solid #e3e3e3;
+  gap: 2px;
+}
+
+#ia-bar .ia-locale-btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  font-size: 13px;
 }
 
 #ia-content h2 {
