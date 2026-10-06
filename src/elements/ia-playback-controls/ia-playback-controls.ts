@@ -7,7 +7,7 @@ import {
 } from 'lit';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
-import { msg, str } from '@lit/localize';
+import { localized, msg, str } from '@lit/localize';
 
 import { PlaybackMode } from './models';
 
@@ -53,6 +53,7 @@ const VOLUME_STEP = 0.25;
  * playing the audio decide what to do with them.
  */
 @customElement('ia-playback-controls')
+@localized()
 export class IAPlaybackControls extends LitElement {
   /** Whether the track is playing or paused */
   @property({ type: String }) playbackMode: PlaybackMode = PlaybackMode.paused;
