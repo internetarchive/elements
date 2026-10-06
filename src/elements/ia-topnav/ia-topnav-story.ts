@@ -132,11 +132,15 @@ export class IATopNavStory extends LitElement {
             Sizes scale off the topnav's own <code>--topnavUnit--</code>, which
             tracks the browser's default font size rather than the host page's
             <code>html</code> font size, so the topnav renders the same whether
-            or not a page resets its root font size.
+            or not a page resets its root font size. It does grow with the
+            user's browser font-size setting, and <code>--topnavFontSize</code>
+            overrides that base size.
           </p>
           <p>
             A search bar goes in the <code>search</code> slot. Offshoot slots an
-            <code>ia-dropdown-search-bar</code> in there.
+            <code>ia-dropdown-search-bar</code> in there. It sizes its own text,
+            so it follows the page's <code>html</code> font size rather than the
+            topnav's scale.
           </p>
         </div>
       </story-template>
