@@ -1,9 +1,8 @@
 {
   "name": "@internetarchive/elements",
-  "version": "1.1.2",
+  "version": "1.1.5",
   "description": "A web component library from the Internet Archive.",
   "license": "AGPL-3.0-only",
-  "types": "./dist/src/elements/index.d.ts",
   "type": "module",
   "packageManager": "pnpm@12.4.0",
   "engines": {
@@ -30,7 +29,9 @@
     "circular": "wireit",
     "prepare": "wireit",
     "test": "wireit",
-    "ghpages:build": "wireit"
+    "ghpages:build": "wireit",
+    "strings:extract": "wireit",
+    "strings:build": "wireit"
   },
   "dependencies": {
     "@internetarchive/ia-clearable-text-input": "^1.1.1",
@@ -44,6 +45,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.1",
+    "@lit/localize-tools": "^0.8.2",
     "@open-wc/testing-helpers": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",
@@ -70,9 +72,9 @@
     "wireit": "^0.14.12"
   },
   "exports": {
-    ".": "./dist/src/index.js",
     "./*": "./dist/src/elements/*.js",
-    "./labs/*": "./dist/src/labs/*.js"
+    "./labs/*": "./dist/src/labs/*.js",
+    "./locales/*.js": "./dist/src/locales/*.js"
   },
   "files": [
     "README.md",
@@ -134,6 +136,24 @@
     },
     "ghpages:build": {
       "command": "vite build --config vite.config.ghpages.ts && touch ./ghpages/.nojekyll"
+    },
+    "strings:extract": {
+      "command": "lit-localize extract",
+      "files": [
+        "src/**/*.ts",
+        "lit-localize.json",
+        "tsconfig.json"
+      ]
+    },
+    "strings:build": {
+      "command": "node scripts/build-locales.mts && prettier --write \"src/locales/*.ts\"",
+      "files": [
+        "xliff/*.xlf",
+        "src/**/*.ts",
+        "!src/locales/*.ts",
+        "lit-localize.json",
+        "scripts/build-locales.mts"
+      ]
     }
   }
 }
