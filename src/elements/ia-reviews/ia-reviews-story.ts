@@ -122,11 +122,39 @@ const demoFetchHandler: FetchHandlerInterface = {
 
 const MAX_LOG_ENTRIES = 6;
 
+const DELETE_ENDPOINT = '/edit-reviews.php';
+
 @customElement('ia-reviews-story')
 export class IAReviewsStory extends LitElement {
   @state() private log: string[] = [];
 
   @query('ia-reviews') private reviews?: IAReviews;
+
+  private realFetch?: typeof window.fetch;
+
+  /**
+   * Deleting a review calls the global `fetch` directly, not the
+   * `fetchHandler`. While the demo is on the page, that one endpoint is
+   * answered locally so a delete click never posts to archive.org.
+   */
+  connectedCallback() {
+    super.connectedCallback();
+    const realFetch = window.fetch;
+    this.realFetch = realFetch;
+    window.fetch = (input, init) => {
+      const url = input instanceof Request ? input.url : String(input);
+      if (url.includes(DELETE_ENDPOINT)) {
+        return Promise.resolve(new Response('{}', { status: 200 }));
+      }
+      return realFetch.call(window, input, init);
+    };
+  }
+
+  disconnectedCallback() {
+    if (this.realFetch) window.fetch = this.realFetch;
+    this.realFetch = undefined;
+    super.disconnectedCallback();
+  }
 
   render() {
     return html`
@@ -178,8 +206,9 @@ export class IAReviewsStory extends LitElement {
           <p>
             <code>bypassRecaptcha</code> is set here so the form can be
             submitted without a reCAPTCHA key, and the demo supplies a stub
-            <code>fetchHandler</code> so nothing posts to archive.org. In real
-            use, hand it a <code>recaptchaManager</code> and the real handler.
+            <code>fetchHandler</code> and answers the delete request locally, so
+            nothing posts to archive.org. In real use, hand it a
+            <code>recaptchaManager</code> and the real handler.
           </p>
           <p>
             The component only shows a "write a review" link when an item has no
