@@ -5,10 +5,12 @@ import { html } from 'lit';
 import { afterEach, describe, expect, test } from 'vitest';
 
 import './ia-topnav-login-button';
+import './ia-topnav-media-button';
 import './ia-topnav-media-menu';
 import './ia-topnav-user-menu';
 import './ia-topnav-wayback-search';
 import type { LoginButton } from './ia-topnav-login-button';
+import type { MediaButton } from './ia-topnav-media-button';
 import type { MediaMenu } from './ia-topnav-media-menu';
 import type UserMenu from './ia-topnav-user-menu';
 import type { IATopNavWaybackSearch } from './ia-topnav-wayback-search';
@@ -26,6 +28,8 @@ const translated = [
   'More',
   'Log in',
   '1 trillion',
+  'Expand texts menu',
+  'Collapse texts menu',
 ];
 
 const templates = {
@@ -143,5 +147,22 @@ describe('topnav live locale switch', () => {
     expect(search.shadowRoot?.querySelector('p')?.textContent).toContain(
       'more than 946 billion',
     );
+  });
+
+  test('media button tooltip is a whole translatable phrase', async () => {
+    const button = await fixture<MediaButton>(
+      html`<ia-topnav-media-button mediatype="texts"></ia-topnav-media-button>`,
+    );
+    const tooltip = () =>
+      button.shadowRoot?.querySelector('a')?.getAttribute('title');
+    expect(tooltip()).toBe('Expand texts menu');
+
+    await setLocale('xx');
+    await button.updateComplete;
+    expect(tooltip()).toBe(pseudo('Expand texts menu'));
+
+    button.selected = true;
+    await button.updateComplete;
+    expect(tooltip()).toBe(pseudo('Collapse texts menu'));
   });
 });
