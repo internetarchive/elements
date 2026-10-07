@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+<file target-language="es" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+<body>
+<trans-unit id="sb4f1dffbb6be6302">
+  <source>Clear</source>
+<target>Borrar</target>
+</trans-unit>
+<trans-unit id="s370e44cc8c6c311b">
+  <source>Toggle options</source>
+<target>Mostrar u ocultar opciones</target>
+</trans-unit>
+<trans-unit id="s7505401da0a6d6f7">
+  <source>No matching options</source>
+<target>No hay opciones que coincidan</target>
+</trans-unit>
+<trans-unit id="sa034673b5a3c355c">
+  <source>A value is required</source>
+<target>Este campo es obligatorio</target>
+</trans-unit>
+<trans-unit id="s5d929ff1619ac0c9">
+  <source>Search</source>
+<target>Buscar</target>
+</trans-unit>
+<trans-unit id="sd4089915c0f14c1e">
+  <source>Clear search query</source>
+<target>Borrar la búsqueda</target>
+</trans-unit>
+<trans-unit id="s7655667379814b36">
+  <source>Search the Archive. Filters and Advanced Search available below.</source>
+<target>Busca en Internet Archive. Filtros y búsqueda avanzada disponibles a continuación.</target>
+</trans-unit>
+<trans-unit id="s5f4586bc1e2740e6">
+  <source>Clear search</source>
+<target>Borrar la búsqueda</target>
+</trans-unit>
+<trans-unit id="s1587aa01e9bb42c6">
+  <source>Toggle quick search</source>
+<target>Mostrar u ocultar la búsqueda rápida</target>
+</trans-unit>
+<trans-unit id="s0661ae8e65d136c7">
+  <source>Image <x id="0" equiv-text="${this.currentIndex + 1}"/> of <x id="1" equiv-text="${this.images.length}"/></source>
+<target>Imagen <x id="0" equiv-text="${this.currentIndex + 1}"/> de <x id="1" equiv-text="${this.images.length}"/></target>
+</trans-unit>
+<trans-unit id="sfcae9f83f7f25e25">
+  <source>Previous image</source>
+<target>Imagen anterior</target>
+</trans-unit>
+<trans-unit id="se645d473fbdc4705">
+  <source>Next image</source>
+<target>Imagen siguiente</target>
+</trans-unit>
+<trans-unit id="s290adadea9c2979c">
+  <source>This image could not be loaded.</source>
+<target>No se pudo cargar esta imagen.</target>
+</trans-unit>
+<trans-unit id="s13c406cbcde6b73f">
+  <source>The code entered is invalid or expired</source>
+<target>El código introducido no es válido o ha caducado</target>
+</trans-unit>
+<trans-unit id="sfe786d22e4310635">
+  <source>Emailing...</source>
+<target>Enviando el correo...</target>
+</trans-unit>
+<trans-unit id="s7cc651d6e80f42f9">
+  <source>Email me another code</source>
+<target>Envíame otro código</target>
+</trans-unit>
+<trans-unit id="sbfbc77dc3543556f">
+  <source>Previous section</source>
+<target>Sección anterior</target>
+</trans-unit>
+<trans-unit id="s7ad0c46f2280e6b7">
+  <source>Skip back ten seconds</source>
+<target>Retroceder diez segundos</target>
+</trans-unit>
+<trans-unit id="s061cc20e3432dead">
+  <source>Pause</source>
+<target>Pausar</target>
+</trans-unit>
+<trans-unit id="scd105819b5a10243">
+  <source>Play</source>
+<target>Reproducir</target>
+</trans-unit>
+<trans-unit id="s872b27cf7155f325">
+  <source>Skip ahead ten seconds</source>
+<target>Avanzar diez segundos</target>
+</trans-unit>
+<trans-unit id="s8744f82be5bc754f">
+  <source>Next section</source>
+<target>Sección siguiente</target>
+</trans-unit>
+<trans-unit id="s6aa79ab2e0656795">
+  <source>Playback speed, currently <x id="0" equiv-text="${this.playbackRate}"/></source>
+<target>Velocidad de reproducción, actualmente <x id="0" equiv-text="${this.playbackRate}"/></target>
+</trans-unit>
+<trans-unit id="s4e3bb79d82e09ea4">
+  <source>Volume, currently <x id="0" equiv-text="${this.volumePercent}"/> percent</source>
+<target>Volumen, actualmente al <x id="0" equiv-text="${this.volumePercent}"/> por ciento</target>
+</trans-unit>
+<trans-unit id="sb9b90dd7e5256784">
+  <source>Collection logo</source>
+<target>Logotipo de la colección</target>
+</trans-unit>
+<trans-unit id="sc13705f8a93d185e">
+  <source>Searching the transcript</source>
+<target>Buscando en la transcripción</target>
+</trans-unit>
+<trans-unit id="s4c25f08d080da5fa">
+  <source>No search results.</source>
+<target>No hay resultados.</target>
+</trans-unit>
+<trans-unit id="s82fc0d7c4b5d5189">
+  <source><x id="0" equiv-text="${count}"/> search results</source>
+<target><x id="0" equiv-text="${count}"/> resultados de búsqueda</target>
+</trans-unit>
+<trans-unit id="sac330cdfd2a92c75">
+  <source>Previous search result</source>
+<target>Resultado anterior</target>
+</trans-unit>
+<trans-unit id="s78fa9c8370847255">
+  <source>Next search result</source>
+<target>Resultado siguiente</target>
+</trans-unit>
+<trans-unit id="s1c9c386a1a79feef">
+  <source>Search result <x id="0" equiv-text="${position}"/> of <x id="1" equiv-text="${total}"/></source>
+<target>Resultado <x id="0" equiv-text="${position}"/> de <x id="1" equiv-text="${total}"/></target>
+</trans-unit>
+<trans-unit id="se9d11cd23b249157">
+  <source>Playback position</source>
+<target>Posición de reproducción</target>
+</trans-unit>
+<trans-unit id="s49730f3d5751a433">
+  <source>Loading...</source>
+<target>Cargando...</target>
+</trans-unit>
+<trans-unit id="s92a0d19a28995530">
+  <source>Success</source>
+<target>Correcto</target>
+</trans-unit>
+<trans-unit id="s5f343a43e7ea9f91">
+  <source>Error</source>
+<target>Error</target>
+</trans-unit>
+<trans-unit id="sb2d5fa10375dab13">
+  <source>Scroll text with audio</source>
+<target>Desplazar el texto con el audio</target>
+</trans-unit>
+<trans-unit id="sa135b299b78d517d">
+  <source>[Transcript unavailable]</source>
+<target>[Transcripción no disponible]</target>
+</trans-unit>
+</body>
+</file>
+</xliff>

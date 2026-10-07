@@ -83,23 +83,22 @@ export class IATopNavStory extends LitElement {
         elementClassName="IATopNav"
         .propInputData=${this.propInputData}
       >
-        <div slot="demo">
-          <ia-topnav
-            username=${username}
-            screenName=${screenName}
-            itemIdentifier=${itemIdentifier}
-            uploader=${uploader}
-            biblio=${biblio}
-            ?admin=${this.admin}
-            ?canManageFlags=${this.canManageFlags}
-            ?hideSearch=${this.hideSearch}
-            @analyticsClick=${this.onAnalyticsClick}
-            @analyticsSubmit=${this.onAnalyticsSubmit}
-          ></ia-topnav>
-          <p class="event-log">${this.lastEvent || 'No events yet.'}</p>
-        </div>
+        <ia-topnav
+          slot="demo"
+          username=${username}
+          screenName=${screenName}
+          itemIdentifier=${itemIdentifier}
+          uploader=${uploader}
+          biblio=${biblio}
+          ?admin=${this.admin}
+          ?canManageFlags=${this.canManageFlags}
+          ?hideSearch=${this.hideSearch}
+          @analyticsClick=${this.onAnalyticsClick}
+          @analyticsSubmit=${this.onAnalyticsSubmit}
+        ></ia-topnav>
 
         <div slot="settings">
+          <p class="event-log">${this.lastEvent || 'No events yet.'}</p>
           <table>
             ${this.toggleRow('Signed in', 'signedIn')}
             ${this.toggleRow('Viewing an item', 'onAnItem')}

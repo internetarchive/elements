@@ -10,6 +10,7 @@ import './ia-topnav';
 import { IATopNav } from './ia-topnav';
 import { SignedOutDropdown } from './ia-topnav-signed-out-dropdown';
 import UserMenu from './ia-topnav-user-menu';
+import { defaultTopNavConfig } from './data/menus';
 
 import { afterEach, describe, expect, test, vi } from 'vitest';
 const verifyClosed = (instance: IATopNav) => {
@@ -344,113 +345,160 @@ describe('<ia-topnav>', () => {
       });
     });
   });
-});
 
-describe('<ia-topnav> admin user menu sections', () => {
-  type ExtraSection = '' | 'uploader' | 'biblio' | 'both';
-  const adminFixture = async (extra: ExtraSection = '') =>
-    fixture<IATopNav>(
-      html`<ia-topnav
-        admin
-        username="brewster"
-        itemIdentifier="boop"
-        uploader=${extra === 'uploader' || extra === 'both'
-          ? 'up+loader@example.com'
-          : ''}
-        biblio=${extra === 'biblio' || extra === 'both'
-          ? 'https://books-yaz.archive.org/biblio.php?b_id=boop&add=1'
-          : ''}
-      ></ia-topnav>`,
-    );
+  describe('wayback page count', () => {
+    const waybackIntro = (el: IATopNav) => {
+      const slider = el.shadowRoot?.querySelector('ia-topnav-media-slider');
+      const subnav = slider?.shadowRoot?.querySelector(
+        'ia-topnav-media-subnav[menu="web"]',
+      );
+      const waybackSlider = subnav?.shadowRoot?.querySelector(
+        'ia-topnav-wayback-slider',
+      );
+      const search = waybackSlider?.shadowRoot?.querySelector(
+        'ia-topnav-wayback-search',
+      );
+      return search?.shadowRoot?.querySelector('p')?.textContent ?? '';
+    };
 
-  test('renders the basic and item admin sections by default', async () => {
-    const el = await adminFixture();
-    expect(el.userMenuItems.length).to.equal(2);
+    test('reaches the wayback search when the host supplies its own config', async () => {
+      const el = await fixture<IATopNav>(
+        html`<ia-topnav
+          .config=${{ eventCategory: 'TopNav' }}
+          waybackPagesArchived="333 billion"
+        ></ia-topnav>`,
+      );
+      await elementUpdated(el);
+
+      expect(waybackIntro(el)).to.contain('more than 333 billion');
+    });
+
+    test('follows a later change to the count', async () => {
+      const el = await fixture<IATopNav>(
+        html`<ia-topnav .config=${{ eventCategory: 'TopNav' }}></ia-topnav>`,
+      );
+      el.waybackPagesArchived = '400 billion';
+
+      await vi.waitFor(() =>
+        expect(waybackIntro(el)).to.contain('more than 400 billion'),
+      );
+    });
+
+    test('leaves the shared default config alone', async () => {
+      await fixture<IATopNav>(
+        html`<ia-topnav waybackPagesArchived="333 billion"></ia-topnav>`,
+      );
+
+      expect(defaultTopNavConfig.waybackPagesArchived).to.be.undefined;
+    });
   });
 
-  test('adds an uploader section when an uploader is set', async () => {
-    const el = await adminFixture('uploader');
-    const sections = el.userMenuItems;
-    expect(sections.length).to.equal(3);
+  describe('<ia-topnav> admin user menu sections', () => {
+    type ExtraSection = '' | 'uploader' | 'biblio' | 'both';
+    const adminFixture = async (extra: ExtraSection = '') =>
+      fixture<IATopNav>(
+        html`<ia-topnav
+          admin
+          username="brewster"
+          itemIdentifier="boop"
+          uploader=${extra === 'uploader' || extra === 'both'
+            ? 'up+loader@example.com'
+            : ''}
+          biblio=${extra === 'biblio' || extra === 'both'
+            ? 'https://books-yaz.archive.org/biblio.php?b_id=boop&add=1'
+            : ''}
+        ></ia-topnav>`,
+      );
 
-    const uploaderSection = sections[2];
-    expect(uploaderSection.map((link) => link.title)).to.deep.equal([
-      'uploader:',
-      'up+loader@example.com',
-      'user admin',
-      'user privs',
-    ]);
-    expect(uploaderSection[0].url).to.be.undefined;
-    expect(uploaderSection[1].url).to.be.undefined;
-    expect(uploaderSection[2].url).to.equal(
-      'https://catalogd.archive.org/control/useradmin.php?email=up%2Bloader%40example.com',
-    );
-    expect(uploaderSection[3].url).to.equal(
-      'https://catalogd.archive.org/control/setadmin.php?user=up%2Bloader%40example.com&ignore=boop',
-    );
-  });
+    test('renders the basic and item admin sections by default', async () => {
+      const el = await adminFixture();
+      expect(el.userMenuItems.length).to.equal(2);
+    });
 
-  test('adds a biblio section when a biblio URL is set', async () => {
-    const el = await adminFixture('biblio');
-    const sections = el.userMenuItems;
-    expect(sections.length).to.equal(3);
+    test('adds an uploader section when an uploader is set', async () => {
+      const el = await adminFixture('uploader');
+      const sections = el.userMenuItems;
+      expect(sections.length).to.equal(3);
 
-    const biblioSection = sections[2];
-    expect(biblioSection.map((link) => link.title)).to.deep.equal([
-      'biblio',
-      'bookview',
-      'jp2 zip',
-    ]);
-    expect(biblioSection[0].url).to.equal(
-      'https://books-yaz.archive.org/biblio.php?b_id=boop&add=1&ignored=boop',
-    );
-    expect(biblioSection[1].url).to.equal(
-      'https://archive.org/bookview.php?mode=debug&identifier=boop',
-    );
-    expect(biblioSection[2].url).to.equal(
-      'https://archive.org/download/boop/format=Single Page Processed JP2 ZIP',
-    );
-  });
+      const uploaderSection = sections[2];
+      expect(uploaderSection.map((link) => link.title)).to.deep.equal([
+        'uploader:',
+        'up+loader@example.com',
+        'user admin',
+        'user privs',
+      ]);
+      expect(uploaderSection[0].url).to.be.undefined;
+      expect(uploaderSection[1].url).to.be.undefined;
+      expect(uploaderSection[2].url).to.equal(
+        'https://catalogd.archive.org/control/useradmin.php?email=up%2Bloader%40example.com',
+      );
+      expect(uploaderSection[3].url).to.equal(
+        'https://catalogd.archive.org/control/setadmin.php?user=up%2Bloader%40example.com&ignore=boop',
+      );
+    });
 
-  test('orders the biblio section before the uploader section', async () => {
-    const el = await adminFixture('both');
-    const sections = el.userMenuItems;
-    expect(sections.length).to.equal(4);
-    expect(sections[2][0].title).to.equal('biblio');
-    expect(sections[3][0].title).to.equal('uploader:');
-  });
+    test('adds a biblio section when a biblio URL is set', async () => {
+      const el = await adminFixture('biblio');
+      const sections = el.userMenuItems;
+      expect(sections.length).to.equal(3);
 
-  test('renders the sections in the user menu with dividers between them', async () => {
-    const el = await adminFixture('both');
-    // The menus rebuild in updated(), so the sections land one update later.
-    await el.updateComplete;
-    const userMenu = el.shadowRoot?.querySelector(
-      'ia-topnav-user-menu',
-    ) as UserMenu;
-    await userMenu.updateComplete;
+      const biblioSection = sections[2];
+      expect(biblioSection.map((link) => link.title)).to.deep.equal([
+        'biblio',
+        'bookview',
+        'jp2 zip',
+      ]);
+      expect(biblioSection[0].url).to.equal(
+        'https://books-yaz.archive.org/biblio.php?b_id=boop&add=1&ignored=boop',
+      );
+      expect(biblioSection[1].url).to.equal(
+        'https://archive.org/bookview.php?mode=debug&identifier=boop',
+      );
+      expect(biblioSection[2].url).to.equal(
+        'https://archive.org/download/boop/format=Single Page Processed JP2 ZIP',
+      );
+    });
 
-    const listItems = Array.from(
-      userMenu.shadowRoot?.querySelectorAll('li') ?? [],
-    );
-    const text = listItems.map((li) => li.textContent?.trim());
-    expect(text).to.include('uploader:');
-    expect(text).to.include('up+loader@example.com');
-    expect(text).to.include('user privs');
-    expect(text).to.include('jp2 zip');
-    expect(userMenu.shadowRoot?.querySelectorAll('.divider').length).to.equal(
-      3,
-    );
-  });
+    test('orders the biblio section before the uploader section', async () => {
+      const el = await adminFixture('both');
+      const sections = el.userMenuItems;
+      expect(sections.length).to.equal(4);
+      expect(sections[2][0].title).to.equal('biblio');
+      expect(sections[3][0].title).to.equal('uploader:');
+    });
 
-  test('leaves the extra sections out for non-admins', async () => {
-    const el = await fixture<IATopNav>(
-      html`<ia-topnav
-        username="brewster"
-        itemIdentifier="boop"
-        uploader="up@example.com"
-        biblio="https://books-yaz.archive.org/biblio.php?b_id=boop&add=1"
-      ></ia-topnav>`,
-    );
-    expect(el.userMenuItems.length).to.equal(1);
+    test('renders the sections in the user menu with dividers between them', async () => {
+      const el = await adminFixture('both');
+      // The menus rebuild in updated(), so the sections land one update later.
+      await el.updateComplete;
+      const userMenu = el.shadowRoot?.querySelector(
+        'ia-topnav-user-menu',
+      ) as UserMenu;
+      await userMenu.updateComplete;
+
+      const listItems = Array.from(
+        userMenu.shadowRoot?.querySelectorAll('li') ?? [],
+      );
+      const text = listItems.map((li) => li.textContent?.trim());
+      expect(text).to.include('uploader:');
+      expect(text).to.include('up+loader@example.com');
+      expect(text).to.include('user privs');
+      expect(text).to.include('jp2 zip');
+      expect(userMenu.shadowRoot?.querySelectorAll('.divider').length).to.equal(
+        3,
+      );
+    });
+
+    test('leaves the extra sections out for non-admins', async () => {
+      const el = await fixture<IATopNav>(
+        html`<ia-topnav
+          username="brewster"
+          itemIdentifier="boop"
+          uploader="up@example.com"
+          biblio="https://books-yaz.archive.org/biblio.php?b_id=boop&add=1"
+        ></ia-topnav>`,
+      );
+      expect(el.userMenuItems.length).to.equal(1);
+    });
   });
 });

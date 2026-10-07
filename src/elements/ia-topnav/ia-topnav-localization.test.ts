@@ -8,6 +8,7 @@ import { buildTopNavMenus } from './data/menus';
 import './ia-topnav';
 import './ia-topnav-desktop-subnav';
 import './ia-topnav-login-button';
+import './ia-topnav-media-button';
 import './ia-topnav-media-menu';
 import './ia-topnav-media-subnav';
 import './ia-topnav-more-slider';
@@ -16,6 +17,7 @@ import './ia-topnav-wayback-search';
 import type { IATopNav } from './ia-topnav';
 import type { DesktopSubnav } from './ia-topnav-desktop-subnav';
 import type { LoginButton } from './ia-topnav-login-button';
+import type { MediaButton } from './ia-topnav-media-button';
 import type { MediaMenu } from './ia-topnav-media-menu';
 import type UserMenu from './ia-topnav-user-menu';
 import type { IATopNavWaybackSearch } from './ia-topnav-wayback-search';
@@ -36,6 +38,8 @@ const translated = [
   'About',
   'All Audio',
   'My lists',
+  'Expand texts menu',
+  'Collapse texts menu',
 ];
 
 const templates = {
@@ -248,5 +252,22 @@ describe('topnav live locale switch', () => {
 
     expect(translatedLink.text).toBe(pseudo('All Audio'));
     expect(translatedLink.event).toBe(english.event);
+  });
+
+  test('media button tooltip is a whole translatable phrase', async () => {
+    const button = await fixture<MediaButton>(
+      html`<ia-topnav-media-button mediatype="texts"></ia-topnav-media-button>`,
+    );
+    const tooltip = () =>
+      button.shadowRoot?.querySelector('a')?.getAttribute('title');
+    expect(tooltip()).toBe('Expand texts menu');
+
+    await setLocale('xx');
+    await button.updateComplete;
+    expect(tooltip()).toBe(pseudo('Expand texts menu'));
+
+    button.selected = true;
+    await button.updateComplete;
+    expect(tooltip()).toBe(pseudo('Collapse texts menu'));
   });
 });
