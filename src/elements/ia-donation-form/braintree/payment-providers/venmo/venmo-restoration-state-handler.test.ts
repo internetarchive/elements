@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import { DonorContactInfo } from '../../../models/donor-contact-info';
 import {
@@ -99,5 +99,39 @@ describe('VenmoRestorationStateHandler', () => {
 
     handler.clearState();
     expect(localStorage.getItem('venmoRestorationStateInfo')).to.be.null;
+  });
+
+  describe('when a storage global throws on access', () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    function throwSecurityError(): never {
+      throw new DOMException('The operation is insecure.', 'SecurityError');
+    }
+
+    test('does not throw from the constructor', () => {
+      vi.spyOn(window, 'localStorage', 'get').mockImplementation(
+        throwSecurityError,
+      );
+      vi.spyOn(window, 'sessionStorage', 'get').mockImplementation(
+        throwSecurityError,
+      );
+
+      expect(() => new VenmoRestorationStateHandler()).to.not.throw();
+    });
+
+    test('falls back to sessionStorage when localStorage throws', () => {
+      vi.spyOn(window, 'localStorage', 'get').mockImplementation(
+        throwSecurityError,
+      );
+
+      const handler = new VenmoRestorationStateHandler();
+      handler.persistState(contactInfo, fiveDollars());
+
+      expect(sessionStorage.getItem('venmoRestorationStateInfo')).to.not.be
+        .null;
+      handler.clearState();
+    });
   });
 });
