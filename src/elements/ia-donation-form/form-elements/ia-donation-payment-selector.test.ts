@@ -153,4 +153,41 @@ describe('IADonationPaymentSelector', () => {
       'Apple Pay',
     );
   });
+
+  describe('credit-card-fields slot', () => {
+    async function setupWithCardFields(): Promise<IADonationPaymentSelector> {
+      return fixture<IADonationPaymentSelector>(html`
+        <ia-donation-payment-selector>
+          <div slot="credit-card-fields" id="my-card-fields">card fields</div>
+        </ia-donation-payment-selector>
+      `);
+    }
+
+    test('is not rendered before a payment method is selected', async () => {
+      const el = await setupWithCardFields();
+
+      expect(el.shadowRoot!.querySelector('slot[name="credit-card-fields"]')).to
+        .not.exist;
+    });
+
+    test('renders below the change payment method button once one is selected', async () => {
+      const el = await setupWithCardFields();
+
+      button(el, '.credit-card-button').click();
+      await elementUpdated(el);
+
+      const changeButton = button(el, '#change-payment-method');
+      const slot = button(
+        el,
+        'slot[name="credit-card-fields"]',
+      ) as HTMLSlotElement;
+      expect(
+        changeButton.compareDocumentPosition(slot) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ).to.be.greaterThan(0);
+      expect(slot.assignedElements().map((node) => node.id)).to.include(
+        'my-card-fields',
+      );
+    });
+  });
 });

@@ -156,6 +156,8 @@ export class IADonationPaymentSelector extends LitElement {
             >
               ${msg('Change payment method')}
             </button>
+
+            <slot name="credit-card-fields"></slot>
           `
         : nothing}
     `;
@@ -372,6 +374,7 @@ export class IADonationPaymentSelector extends LitElement {
 
         button#change-payment-method {
           margin-top: 10px;
+          margin-bottom: 10px;
           background: var(--true-white);
           border: 1px solid;
           border-radius: 3px;

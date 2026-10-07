@@ -2,7 +2,7 @@ import { fixture } from '@open-wc/testing-helpers';
 import { describe, expect, test } from 'vitest';
 import { html } from 'lit';
 
-import { emailIcon } from '../icons';
+import { lockIcon } from '../icons';
 import {
   SpacerOption,
   type IADonationBadgedInput,
@@ -16,7 +16,7 @@ function wrapper(el: IADonationBadgedInput): HTMLDivElement {
 describe('IADonationBadgedInput', () => {
   test('slots the field and shows the icon', async () => {
     const el = await fixture<IADonationBadgedInput>(
-      html`<ia-donation-badged-input .icon=${emailIcon}>
+      html`<ia-donation-badged-input .icon=${lockIcon}>
         <input id="field" />
       </ia-donation-badged-input>`,
     );

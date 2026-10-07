@@ -80,6 +80,12 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     // The hosted fields only report focus and blur through these callbacks,
     // so the error state of the wrapping badged inputs is toggled here, apart
     // from the HostedFieldContainer that handles it everywhere else.
+    //
+    // A field is only marked errored on blur when it has content that's
+    // invalid, not when it's merely empty. Otherwise clicking a nearby button
+    // (like "Change payment method") blurs an untouched field and flashes it
+    // red. Empty fields are still caught when the donor tries to submit, in
+    // handleHostedFieldTokenizationError.
     instance?.on('focus', (event: braintree.HostedFieldsEvent): void => {
       const { emittedBy, fields } = event;
       const { container } = fields[emittedBy];
@@ -90,7 +96,7 @@ export class CreditCardFlowHandler implements CreditCardFlowHandlerInterface {
     instance?.on('blur', (event: braintree.HostedFieldsEvent): void => {
       const { emittedBy, fields } = event;
       const { container, isEmpty, isValid } = fields[emittedBy];
-      if (isEmpty || !isValid) {
+      if (!isEmpty && !isValid) {
         (container.parentElement as IADonationBadgedInput).error = true;
       }
     });

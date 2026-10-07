@@ -7,7 +7,6 @@ import {
 } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
-import { msg } from '@lit/localize';
 import currency from 'currency.js';
 import {
   LazyLoaderService,
@@ -30,7 +29,6 @@ import {
   type PaymentClientsInterface,
 } from './braintree/payment-clients';
 import { HostedFieldConfiguration } from './braintree/payment-providers/credit-card/hosted-field-configuration';
-import { HostedFieldContainer } from './braintree/payment-providers/credit-card/hosted-field-container';
 import {
   PaymentFlowHandlers,
   type PaymentFlowHandlersInterface,
@@ -40,8 +38,8 @@ import {
   EditDonationAmountSelectionLayout,
   EditDonationFrequencySelectionMode,
 } from './form-elements/ia-donation-edit-donation';
+import type { IADonationCreditCardFields } from './form-elements/ia-donation-credit-card-fields';
 import type { IADonationForm } from './ia-donation-form';
-import { calendarIcon, creditCardIcon, lockIcon } from './icons';
 import {
   DonationPaymentInfo,
   defaultDonationAmounts,
@@ -55,7 +53,7 @@ import {
   type RecaptchaManagerInterface,
 } from './recaptcha-manager';
 import './form-elements/contact-form/ia-donation-contact-form';
-import './form-elements/ia-donation-badged-input';
+import './form-elements/ia-donation-credit-card-fields';
 import './ia-donation-form';
 
 /**
@@ -129,15 +127,8 @@ export class IADonationFormController extends LitElement {
 
   @query('ia-donation-form') private donationForm!: IADonationForm;
 
-  @query('#braintree-creditcard') private braintreeNumberInput!: HTMLDivElement;
-
-  @query('#braintree-cvv') private braintreeCVVInput!: HTMLDivElement;
-
-  @query('#braintree-expiration')
-  private braintreeExpirationDateInput!: HTMLDivElement;
-
-  @query('#braintree-error-message')
-  private braintreeErrorMessage!: HTMLDivElement;
+  @query('ia-donation-credit-card-fields')
+  private creditCardFieldsElement!: IADonationCreditCardFields;
 
   @query('ia-donation-contact-form')
   private contactForm?: IADonationContactForm;
@@ -403,33 +394,32 @@ export class IADonationFormController extends LitElement {
       ':focus': {
         color: '#333',
       },
-      '.valid': {},
+      // The text color stays the same when valid or invalid. The badged
+      // input's red border and the error message already show the error
+      // state, and red text on top of them is confusing.
+      '.valid': {
+        color: '#333',
+      },
       '.invalid': {
-        color: '#b00b00',
+        color: '#333',
       },
     };
 
+    // No placeholders. The visible labels above each field are the only text.
     const hostedFieldFieldOptions: braintree.HostedFieldFieldOptions = {
       number: {
         selector: '#braintree-creditcard',
-        placeholder: msg('Card number'),
       },
       cvv: {
         selector: '#braintree-cvv',
-        placeholder: msg('CVC'),
       },
       expirationDate: {
         selector: '#braintree-expiration',
-        placeholder: msg('MM / YY'),
       },
     };
 
-    const hostedFieldContainer = new HostedFieldContainer({
-      number: this.braintreeNumberInput,
-      cvv: this.braintreeCVVInput,
-      expirationDate: this.braintreeExpirationDateInput,
-      errorContainer: this.braintreeErrorMessage,
-    });
+    const hostedFieldContainer =
+      this.creditCardFieldsElement.hostedFieldContainer;
 
     return new HostedFieldConfiguration({
       hostedFieldStyle,
@@ -463,28 +453,7 @@ export class IADonationFormController extends LitElement {
             and https://github.com/paypal/paypal-checkout-components/issues/353
           -->
           <div slot="braintree-hosted-fields">
-            <div id="braintree-error-message"></div>
-            <div class="braintree-row">
-              <ia-donation-badged-input
-                .icon=${creditCardIcon}
-                required
-                class="creditcard"
-              >
-                <div class="braintree-input" id="braintree-creditcard"></div>
-              </ia-donation-badged-input>
-            </div>
-            <div class="braintree-row">
-              <ia-donation-badged-input
-                .icon=${calendarIcon}
-                required
-                class="expiration"
-              >
-                <div class="braintree-input" id="braintree-expiration"></div>
-              </ia-donation-badged-input>
-              <ia-donation-badged-input .icon=${lockIcon} required class="cvv">
-                <div class="braintree-input" id="braintree-cvv"></div>
-              </ia-donation-badged-input>
-            </div>
+            <ia-donation-credit-card-fields></ia-donation-credit-card-fields>
           </div>
 
           <!-- Autofill doesn't reach into shadow DOM, so the contact form is light DOM too -->
@@ -663,34 +632,6 @@ export class IADonationFormController extends LitElement {
           width: calc(var(--donation-form-controller-base-font-size--) * 5);
           height: calc(var(--donation-form-controller-base-font-size--) * 3);
           overflow: hidden;
-        }
-
-        .ia-donation-form-controller-container .braintree-row {
-          display: flex;
-          margin-top: -1px;
-        }
-
-        .ia-donation-form-controller-container ia-donation-badged-input {
-          width: 100%;
-        }
-
-        .ia-donation-form-controller-container ia-donation-badged-input.cvv {
-          margin-left: -1px;
-        }
-
-        .ia-donation-form-controller-container .braintree-input {
-          width: 100%;
-          height: 100%;
-        }
-
-        .ia-donation-form-controller-container #braintree-error-message {
-          color: var(--ia-theme-color-danger, #e51c23);
-          font-size: calc(
-            var(--donation-form-controller-base-font-size--) * 1.4
-          );
-          margin-bottom: calc(
-            var(--donation-form-controller-base-font-size--) * 0.6
-          );
         }
 
         .ia-donation-form-controller-container

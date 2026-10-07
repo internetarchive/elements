@@ -135,6 +135,93 @@ describe('IADonationContactForm', () => {
     });
   });
 
+  describe('labels', () => {
+    test('renders a visible label tied to every text field', async () => {
+      const el = await setup();
+
+      const fieldsAndLabels: [string, string][] = [
+        ['donation-contact-form-email', 'Email *'],
+        ['donation-contact-form-first-name', 'First name *'],
+        ['donation-contact-form-last-name', 'Last name *'],
+        ['donation-contact-form-street-address', 'Address *'],
+        ['donation-contact-form-locality', 'City *'],
+        ['donation-contact-form-region', 'State / Province *'],
+        ['donation-contact-form-postal-code', 'Zip / Postal Code *'],
+        ['donation-contact-form-countryCodeAlpha2', 'Country *'],
+      ];
+
+      fieldsAndLabels.forEach(([id, text]) => {
+        const label = el.querySelector<HTMLLabelElement>(`label[for="${id}"]`);
+        expect(label, `expected a label for #${id}`).to.exist;
+        expect(label!.textContent?.replace(/\s+/g, ' ').trim()).to.equal(text);
+        expect(
+          getComputedStyle(label!).position,
+          `label for #${id} should be visible`,
+        ).to.not.equal('absolute');
+      });
+    });
+
+    test('leaves the asterisk off the region and postal labels outside the US', async () => {
+      const el = await setup();
+      el.selectedCountry = 'GB';
+      await elementUpdated(el);
+
+      const label = (id: string): string | undefined =>
+        el
+          .querySelector(`label[for="${id}"]`)
+          ?.textContent?.replace(/\s+/g, ' ')
+          .trim();
+      expect(label('donation-contact-form-region')).to.equal(
+        'State / Province',
+      );
+      expect(label('donation-contact-form-postal-code')).to.equal(
+        'Zip / Postal Code',
+      );
+    });
+
+    test('has no placeholder text on any field', async () => {
+      const el = await setup();
+      const inputs = el.querySelectorAll<HTMLInputElement>(
+        'input.donation-contact-form-input',
+      );
+
+      expect(inputs.length).to.be.greaterThan(0);
+      inputs.forEach((input) => expect(input.placeholder).to.equal(''));
+    });
+  });
+
+  describe('field layout', () => {
+    test('puts first name and last name side by side', async () => {
+      const el = await setup();
+      const firstName = el.querySelector('#donation-contact-form-first-name')!;
+      const lastName = el.querySelector('#donation-contact-form-last-name')!;
+
+      expect(firstName.closest('.row')).to.equal(lastName.closest('.row'));
+    });
+
+    test('puts the country row above the region and postal code row', async () => {
+      const el = await setup();
+      const countryRow = el
+        .querySelector('#donation-contact-form-countryCodeAlpha2')!
+        .closest('.row')!;
+      const regionRow = el
+        .querySelector('#donation-contact-form-region')!
+        .closest('.row')!;
+
+      expect(
+        countryRow.compareDocumentPosition(regionRow) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ).to.be.greaterThan(0);
+    });
+
+    test('has no second address line', async () => {
+      const el = await setup();
+
+      expect(el.querySelector('#donation-contact-form-extended-address')).to.be
+        .null;
+    });
+  });
+
   describe('reportValidity()', () => {
     test('is false with required fields empty, marking them and focusing the first', async () => {
       const el = await setup();
@@ -143,7 +230,6 @@ describe('IADonationContactForm', () => {
       expect(el.emailField.validationMessage).to.not.equal('');
       expect(el.firstNameBadgedInput.error).to.be.true;
       expect(el.lastNameBadgedInput.error).to.be.true;
-      expect(el.extendedAddressBadgedInput.error).to.be.false;
       // The browser focuses the first invalid field, and focusing a field
       // clears its error state, so the email field is already clear again
       expect(document.activeElement).to.equal(el.emailField);
@@ -179,7 +265,7 @@ describe('IADonationContactForm', () => {
     expect(info.customer.firstName).to.equal('Fooey');
     expect(info.customer.lastName).to.equal('McBarrison');
     expect(info.billing.streetAddress).to.equal('123 Fake St');
-    expect(info.billing.extendedAddress).to.equal('Apt 123');
+    expect(info.billing.extendedAddress).to.be.undefined;
     expect(info.billing.locality).to.equal('San Francisco');
     expect(info.billing.region).to.equal('CA');
     expect(info.billing.postalCode).to.equal('12345');

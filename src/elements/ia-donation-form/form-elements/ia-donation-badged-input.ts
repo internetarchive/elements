@@ -84,11 +84,11 @@ export class IADonationBadgedInput extends LitElement {
           );
           --donation-badged-input-icon-size--: var(
             --ia-donation-badged-input-icon-size,
-            calc(var(--donation-badged-input-base-font-size--) * 1.4)
+            calc(var(--donation-badged-input-base-font-size--) * 2)
           );
           --donation-badged-input-icon-color--: var(
             --ia-donation-badged-input-icon-color,
-            currentColor
+            #2c2c2c
           );
           --donation-badged-input-icon-spacer-width--: var(
             --ia-donation-badged-input-icon-spacer-width,

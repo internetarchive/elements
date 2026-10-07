@@ -5,12 +5,9 @@ import { maskedIcon } from '@src/util/masked-icon';
 import applePayUrl from './icons/apple-pay.svg';
 import calendarUrl from './icons/calendar.svg';
 import creditCardUrl from './icons/credit-card.svg';
-import emailUrl from './icons/email.svg';
 import googlePayUrl from './icons/google-pay.svg';
-import localePinUrl from './icons/locale-pin.svg';
 import lockUrl from './icons/lock.svg';
 import paypalUrl from './icons/paypal.svg';
-import userUrl from './icons/user.svg';
 import venmoUrl from './icons/venmo.svg';
 
 /**
@@ -33,7 +30,4 @@ export const venmoLogo = brandLogo(venmoUrl, 'Venmo');
 
 export const calendarIcon = maskedIcon(calendarUrl);
 export const creditCardIcon = maskedIcon(creditCardUrl);
-export const emailIcon = maskedIcon(emailUrl);
-export const localePinIcon = maskedIcon(localePinUrl);
 export const lockIcon = maskedIcon(lockUrl);
-export const userIcon = maskedIcon(userUrl);

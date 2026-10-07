@@ -3,6 +3,7 @@ import { describe, expect, test } from 'vitest';
 import './form-elements/ia-donation-section';
 import './form-elements/ia-donation-edit-donation';
 import './form-elements/ia-donation-badged-input';
+import './form-elements/ia-donation-credit-card-fields';
 import './form-elements/ia-donation-header';
 import './form-elements/ia-donation-payment-selector';
 import './form-elements/ia-donation-summary';
@@ -26,6 +27,7 @@ const NAMESPACED_ELEMENTS = [
   'ia-donation-section',
   'ia-donation-edit-donation',
   'ia-donation-badged-input',
+  'ia-donation-credit-card-fields',
   'ia-donation-header',
   'ia-donation-payment-selector',
   'ia-donation-summary',

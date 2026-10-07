@@ -25,6 +25,7 @@ import {
   DonationSectionBadgeMode,
   type IADonationSection,
 } from './form-elements/ia-donation-section';
+import { HostedFieldName } from './braintree/payment-providers/credit-card/hosted-field-container';
 import { lockIcon } from './icons';
 import {
   DonationPaymentInfo,
@@ -126,6 +127,12 @@ export class IADonationForm extends LitElement {
           }}
         >
           <slot name="paypal-button" slot="paypal-button"></slot>
+          <div
+            class="credit-card-fields ${this.creditCardVisible ? '' : 'hidden'}"
+            slot="credit-card-fields"
+          >
+            <slot name="braintree-hosted-fields"></slot>
+          </div>
         </ia-donation-payment-selector>
       </ia-donation-section>
 
@@ -188,7 +195,7 @@ export class IADonationForm extends LitElement {
     const headline =
       this.selectedPaymentProvider === PaymentProvider.Venmo
         ? msg('Help us stay in touch')
-        : msg('Enter payment information');
+        : msg('Enter contact information');
 
     return html`
       <ia-donation-section
@@ -197,11 +204,6 @@ export class IADonationForm extends LitElement {
         id="contactFormSection"
       >
         <slot name="contact-form"></slot>
-        <div
-          class="credit-card-fields ${this.creditCardVisible ? '' : 'hidden'}"
-        >
-          <slot name="braintree-hosted-fields"></slot>
-        </div>
       </ia-donation-section>
 
       <ia-donation-section
@@ -286,7 +288,7 @@ export class IADonationForm extends LitElement {
     this.selectedPaymentProvider = PaymentProvider.CreditCard;
     this.contactFormVisible = true;
     this.creditCardVisible = true;
-    this.focusContactForm();
+    this.focusCreditCardNumberField();
   }
 
   private async venmoSelected(): Promise<void> {
@@ -311,6 +313,13 @@ export class IADonationForm extends LitElement {
     if (this.contactFormSection) {
       this.contactForm?.focus();
     }
+  }
+
+  private async focusCreditCardNumberField(): Promise<void> {
+    await this.updateComplete;
+    const creditCardHandler =
+      await this.braintreeManager?.paymentProviders.creditCardHandler.get();
+    creditCardHandler?.focusField(HostedFieldName.Number);
   }
 
   private async donateClicked(): Promise<void> {

@@ -20,7 +20,6 @@ export function fillInContactForm(contactForm: IADonationContactForm): void {
   contactForm.firstNameField.value = 'Fooey';
   contactForm.lastNameField.value = 'McBarrison';
   contactForm.streetAddressField.value = '123 Fake St';
-  contactForm.extendedAddressField.value = 'Apt 123';
   contactForm.localityField.value = 'San Francisco';
   contactForm.regionField.value = 'CA';
   contactForm.postalCodeField.value = '12345';

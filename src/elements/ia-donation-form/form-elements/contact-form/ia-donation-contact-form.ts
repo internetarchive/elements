@@ -2,6 +2,7 @@ import {
   css,
   html,
   LitElement,
+  nothing,
   type PropertyValues,
   type TemplateResult,
 } from 'lit';
@@ -10,7 +11,6 @@ import { customElement } from '@src/util/custom-element';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { msg } from '@lit/localize';
 
-import { emailIcon, localePinIcon, userIcon } from '../../icons';
 import {
   BillingInfo,
   CustomerInfo,
@@ -55,11 +55,6 @@ export class IADonationContactForm extends LitElement {
   streetAddressBadgedInput!: IADonationBadgedInput;
   @query('#donation-contact-form-street-address')
   streetAddressField!: HTMLInputElement;
-
-  @query('ia-donation-badged-input.donation-contact-form-extended-address')
-  extendedAddressBadgedInput!: IADonationBadgedInput;
-  @query('#donation-contact-form-extended-address')
-  extendedAddressField!: HTMLInputElement;
 
   @query('ia-donation-badged-input.donation-contact-form-locality')
   localityBadgedInput!: IADonationBadgedInput;
@@ -108,10 +103,6 @@ export class IADonationContactForm extends LitElement {
         badgedInput: this.streetAddressBadgedInput,
         inputField: this.streetAddressField,
       },
-      {
-        badgedInput: this.extendedAddressBadgedInput,
-        inputField: this.extendedAddressField,
-      },
       { badgedInput: this.localityBadgedInput, inputField: this.localityField },
       { badgedInput: this.regionBadgedInput, inputField: this.regionField },
       { badgedInput: this.postalBadgedInput, inputField: this.postalCodeField },
@@ -155,113 +146,93 @@ export class IADonationContactForm extends LitElement {
     return html`
       <div id="donation-contact-form-error-message"></div>
       <form>
-        <fieldset>
-          <div class="row">
-            ${this.generateInput({
-              id: 'donation-contact-form-email',
-              placeholder: msg('Email'),
-              required: true,
-              fieldType: 'email',
-              name: 'email',
-              autocomplete: 'email',
-              minlength: 5,
-              maxlength: 255,
-              icon: emailIcon,
-            })}
-          </div>
-        </fieldset>
+        <div class="row">
+          ${this.generateInput({
+            id: 'donation-contact-form-email',
+            label: msg('Email'),
+            required: true,
+            fieldType: 'email',
+            name: 'email',
+            autocomplete: 'email',
+            minlength: 5,
+            maxlength: 255,
+          })}
+        </div>
 
-        <fieldset>
-          <div class="row">
-            ${this.generateInput({
-              id: 'donation-contact-form-first-name',
-              placeholder: msg('First name'),
-              name: 'fname',
-              required: true,
-              validationPattern: this.minTwoCharPattern,
-              validationMessage: this.minTwoCharValidationMessage,
-              maxlength: 255,
-              autocomplete: 'given-name',
-              icon: userIcon,
-            })}
-          </div>
-          <div class="row">
-            ${this.generateInput({
-              id: 'donation-contact-form-last-name',
-              placeholder: msg('Last name'),
-              name: 'lname',
-              autocomplete: 'family-name',
-              required: true,
-              validationPattern: this.minTwoCharPattern,
-              validationMessage: this.minTwoCharValidationMessage,
-              maxlength: 255,
-            })}
-          </div>
-        </fieldset>
-        <fieldset>
-          <div class="row">
-            ${this.generateInput({
-              id: 'donation-contact-form-street-address',
-              placeholder: msg('Address Line 1'),
-              required: true,
-              autocomplete: 'address-line1',
-              icon: localePinIcon,
-              name: 'street-address',
-              validationPattern: this.streetAddressPattern,
-              validationMessage: this.streetAddressValidationMessage,
-            })}
-          </div>
-          <div class="row">
-            ${this.generateInput({
-              id: 'donation-contact-form-extended-address',
-              placeholder: msg('Address Line 2 (optional)'),
-              autocomplete: 'address-line2',
-              required: false,
-              name: 'extended-address',
-            })}
-          </div>
-          <div class="row">
-            ${this.generateInput({
-              id: 'donation-contact-form-locality',
-              placeholder: msg('City'),
-              autocomplete: 'address-level2',
-              required: true,
-              name: 'locality',
-              validationPattern: this.minTwoCharPattern,
-              validationMessage: this.minTwoCharValidationMessage,
-            })}
-          </div>
-          <div class="row">
-            ${this.generateInput({
-              id: 'donation-contact-form-region',
-              placeholder: msg('State / Province'),
-              autocomplete: 'address-level1',
-              required: this.regionAndPostalCodeRequired,
-              name: 'region',
-              validationPattern: this.regionAndPostalCodeRequired
-                ? this.minTwoCharPattern
-                : undefined,
-              validationMessage: this.regionAndPostalCodeRequired
-                ? this.minTwoCharValidationMessage
-                : undefined,
-            })}
-            ${this.generateInput({
-              id: 'donation-contact-form-postal-code',
-              placeholder: msg('Zip / Postal'),
-              autocomplete: 'postal-code',
-              required: this.regionAndPostalCodeRequired,
-              name: 'postal',
-              validationPattern: this.regionAndPostalCodeRequired
-                ? this.usZipCodePattern
-                : undefined,
-              validationMessage: this.regionAndPostalCodeRequired
-                ? this.usZipCodeValidationMessage
-                : undefined,
-              iconSpaceOption: SpacerOption.CompressSpace,
-            })}
-          </div>
-          <div class="row">${this.countrySelectorTemplate}</div>
-        </fieldset>
+        <div class="row">
+          ${this.generateInput({
+            id: 'donation-contact-form-first-name',
+            label: msg('First name'),
+            name: 'fname',
+            required: true,
+            validationPattern: this.minTwoCharPattern,
+            validationMessage: this.minTwoCharValidationMessage,
+            maxlength: 255,
+            autocomplete: 'given-name',
+          })}
+          ${this.generateInput({
+            id: 'donation-contact-form-last-name',
+            label: msg('Last name'),
+            name: 'lname',
+            autocomplete: 'family-name',
+            required: true,
+            validationPattern: this.minTwoCharPattern,
+            validationMessage: this.minTwoCharValidationMessage,
+            maxlength: 255,
+          })}
+        </div>
+
+        <div class="row">
+          ${this.generateInput({
+            id: 'donation-contact-form-street-address',
+            label: msg('Address'),
+            required: true,
+            autocomplete: 'address-line1',
+            name: 'street-address',
+            validationPattern: this.streetAddressPattern,
+            validationMessage: this.streetAddressValidationMessage,
+          })}
+        </div>
+        <div class="row">
+          ${this.generateInput({
+            id: 'donation-contact-form-locality',
+            label: msg('City'),
+            autocomplete: 'address-level2',
+            required: true,
+            name: 'locality',
+            validationPattern: this.minTwoCharPattern,
+            validationMessage: this.minTwoCharValidationMessage,
+          })}
+        </div>
+        <div class="row">${this.countrySelectorTemplate}</div>
+        <div class="row region-postal-row">
+          ${this.generateInput({
+            id: 'donation-contact-form-region',
+            label: msg('State / Province'),
+            autocomplete: 'address-level1',
+            required: this.regionAndPostalCodeRequired,
+            name: 'region',
+            validationPattern: this.regionAndPostalCodeRequired
+              ? this.minTwoCharPattern
+              : undefined,
+            validationMessage: this.regionAndPostalCodeRequired
+              ? this.minTwoCharValidationMessage
+              : undefined,
+          })}
+          ${this.generateInput({
+            id: 'donation-contact-form-postal-code',
+            label: msg('Zip / Postal Code'),
+            autocomplete: 'postal-code',
+            required: this.regionAndPostalCodeRequired,
+            name: 'postal',
+            validationPattern: this.regionAndPostalCodeRequired
+              ? this.usZipCodePattern
+              : undefined,
+            validationMessage: this.regionAndPostalCodeRequired
+              ? this.usZipCodeValidationMessage
+              : undefined,
+          })}
+        </div>
       </form>
       ${this.getStyles}
     `;
@@ -273,29 +244,36 @@ export class IADonationContactForm extends LitElement {
 
   private get countrySelectorTemplate(): TemplateResult {
     return html`
-      <ia-donation-badged-input>
-        <label for="donation-contact-form-countryCodeAlpha2">
-          ${msg('Country')}
-        </label>
-        <select
-          id="donation-contact-form-countryCodeAlpha2"
-          name="country"
-          autocomplete="country"
-          @change=${(e: Event) => {
-            const newValue = (e.target as HTMLSelectElement).value;
-            if (countries[newValue]) this.selectedCountry = newValue;
-          }}
+      <div class="field">
+        <label
+          for="donation-contact-form-countryCodeAlpha2"
+          class="field-label"
         >
-          ${Object.keys(countries).map((key) => {
-            const name = countries[key];
-            return html`
-              <option value=${key} ?selected=${key === this.selectedCountry}>
-                ${name}
-              </option>
-            `;
-          })}
-        </select>
-      </ia-donation-badged-input>
+          ${msg('Country')}<span class="required-asterisk"> *</span>
+        </label>
+        <ia-donation-badged-input
+          .iconSpaceOption=${SpacerOption.CompressSpace}
+        >
+          <select
+            id="donation-contact-form-countryCodeAlpha2"
+            name="country"
+            autocomplete="country"
+            @change=${(e: Event) => {
+              const newValue = (e.target as HTMLSelectElement).value;
+              if (countries[newValue]) this.selectedCountry = newValue;
+            }}
+          >
+            ${Object.keys(countries).map((key) => {
+              const name = countries[key];
+              return html`
+                <option value=${key} ?selected=${key === this.selectedCountry}>
+                  ${name}
+                </option>
+              `;
+            })}
+          </select>
+        </ia-donation-badged-input>
+      </div>
     `;
   }
 
@@ -316,45 +294,46 @@ export class IADonationContactForm extends LitElement {
 
   private generateInput(options: {
     id: string;
-    placeholder: string;
+    label: string;
     required?: boolean;
     fieldType?: 'text' | 'email';
     autocomplete?: AutoCompleteFieldOptions;
     minlength?: number;
     maxlength?: number;
     name: string;
-    icon?: TemplateResult;
-    iconSpaceOption?: SpacerOption;
     validationPattern?: string;
     validationMessage?: string;
   }): TemplateResult {
     const required = options.required ?? true;
     const fieldType = options.fieldType ?? 'text';
-    const iconOption = options.iconSpaceOption ?? SpacerOption.LeaveSpace;
 
     return html`
-      <ia-donation-badged-input
-        class=${options.id}
-        .icon=${options.icon}
-        .iconSpaceOption=${iconOption}
-        ?required=${required}
-      >
-        <label for=${options.id}>${options.placeholder}</label>
-        <input
-          type=${fieldType}
-          id=${options.id}
-          class="donation-contact-form-input"
-          name=${options.name}
-          placeholder=${options.placeholder}
-          maxlength=${ifDefined(options.maxlength)}
-          minlength=${ifDefined(options.minlength)}
-          autocomplete=${options.autocomplete ?? 'on'}
-          pattern=${ifDefined(options.validationPattern)}
-          title=${ifDefined(options.validationMessage)}
-          @focus=${this.inputFocused}
-          ?required=${required}
-        />
-      </ia-donation-badged-input>
+      <div class="field ${options.id}">
+        <label for=${options.id} class="field-label">
+          ${options.label}${required
+            ? html`<span class="required-asterisk"> *</span>`
+            : nothing}
+        </label>
+        <ia-donation-badged-input
+          class=${options.id}
+          .iconSpaceOption=${SpacerOption.CompressSpace}
+          .requiredIndicatorSpaceOption=${SpacerOption.CompressSpace}
+        >
+          <input
+            type=${fieldType}
+            id=${options.id}
+            class="donation-contact-form-input"
+            name=${options.name}
+            maxlength=${ifDefined(options.maxlength)}
+            minlength=${ifDefined(options.minlength)}
+            autocomplete=${options.autocomplete ?? 'on'}
+            pattern=${ifDefined(options.validationPattern)}
+            title=${ifDefined(options.validationMessage)}
+            @focus=${this.inputFocused}
+            ?required=${required}
+          />
+        </ia-donation-badged-input>
+      </div>
     `;
   }
 
@@ -368,7 +347,6 @@ export class IADonationContactForm extends LitElement {
   get billingInfo(): BillingInfo {
     return new BillingInfo({
       streetAddress: this.streetAddressField.value,
-      extendedAddress: this.extendedAddressField.value,
       locality: this.localityField.value,
       region: this.regionField.value,
       postalCode: this.postalCodeField.value,
@@ -391,7 +369,6 @@ export class IADonationContactForm extends LitElement {
    */
   private get getStyles(): TemplateResult {
     const noIconSpacerWidth = css`var(--ia-donation-badged-input-no-icon-spacer-width, calc(var(--donation-contact-base-font-size--) * 3))`;
-    const iconSpacerWidth = css`var(--ia-donation-badged-input-icon-spacer-width, calc(var(--donation-contact-base-font-size--) * 5))`;
 
     return html`
       <style>
@@ -400,9 +377,9 @@ export class IADonationContactForm extends LitElement {
             --ia-donation-form-base-font-size,
             10px
           );
-          --donation-contact-fieldset-spacing--: var(
-            --ia-donation-contact-fieldset-spacing,
-            var(--donation-contact-base-font-size--)
+          --donation-contact-row-gap--: var(
+            --ia-donation-field-row-gap,
+            calc(var(--donation-contact-base-font-size--) * 0.5)
           );
           --donation-contact-field-font-family--: var(
             --ia-theme-base-font-family,
@@ -413,58 +390,91 @@ export class IADonationContactForm extends LitElement {
           );
           --donation-contact-field-font-size--: var(
             --ia-donation-contact-field-font-size,
-            calc(var(--donation-contact-base-font-size--) * 1.6)
+            calc(var(--donation-contact-base-font-size--) * 1.4)
           );
           --donation-contact-field-font-color--: var(
             --ia-donation-form-input-font-color,
-            #333
+            #2c2c2c
+          );
+          --donation-contact-label-font-family--: var(
+            --ia-donation-field-label-font-family,
+            var(--donation-contact-field-font-family--)
+          );
+          --donation-contact-label-font-size--: var(
+            --ia-donation-field-label-font-size,
+            calc(var(--donation-contact-base-font-size--) * 1.4)
+          );
+          --donation-contact-label-color--: var(
+            --ia-donation-field-label-color,
+            #2c2c2c
+          );
+          --donation-contact-label-margin-bottom--: var(
+            --ia-donation-field-label-margin-bottom,
+            calc(var(--donation-contact-base-font-size--) * 0.5)
+          );
+          --donation-contact-required-color--: var(
+            --ia-donation-badged-input-required-color,
+            var(--ia-theme-color-danger, #e51c23)
           );
           --donation-contact-error-color--: var(
             --ia-theme-color-danger,
             #e51c23
-          );
-          --donation-contact-icon-field-width--: calc(
-            100% - ${iconSpacerWidth}
           );
           --donation-contact-no-icon-field-width--: calc(
             100% - ${noIconSpacerWidth}
           );
         }
 
-        ia-donation-contact-form fieldset {
-          border: 0;
-          padding: 0;
-          margin: 0;
-          margin-bottom: var(--donation-contact-fieldset-spacing--);
-          background-color: white;
-        }
-
-        /* The negative margins fold the doubled borders where fields touch */
+        /*
+          A grid, so a label that wraps to two lines in one column doesn't push
+          that column's input out of line with its siblings. All labels share
+          row line 1 and all inputs share row line 2, each sized to the tallest
+          content on its line.
+        */
         ia-donation-contact-form .row {
-          display: flex;
-          margin: -1px 0 0 0;
+          display: grid;
+          grid-auto-flow: column;
+          grid-auto-columns: 1fr;
+          grid-template-rows: auto auto;
+          column-gap: var(--donation-contact-row-gap--);
         }
 
-        ia-donation-contact-form fieldset .row:first-child {
-          margin-top: 0;
+        /*
+          State / Province gives up room to Zip / Postal Code so the
+          "Zip / Postal Code *" label stays on one line.
+        */
+        ia-donation-contact-form .row.region-postal-row {
+          grid-template-columns:
+            calc(60% - var(--donation-contact-base-font-size--) * 3)
+            calc(40% + var(--donation-contact-base-font-size--) * 3);
+        }
+
+        ia-donation-contact-form .row + .row {
+          margin-top: var(--donation-contact-row-gap--);
+        }
+
+        ia-donation-contact-form .field {
+          display: contents;
+        }
+
+        ia-donation-contact-form .field-label {
+          display: block;
+          font-family: var(--donation-contact-label-font-family--);
+          font-size: var(--donation-contact-label-font-size--);
+          font-weight: bold;
+          color: var(--donation-contact-label-color--);
+          margin-bottom: var(--donation-contact-label-margin-bottom--);
+        }
+
+        ia-donation-contact-form .required-asterisk {
+          color: var(--donation-contact-required-color--);
         }
 
         ia-donation-contact-form
-          ia-donation-badged-input.donation-contact-form-region {
-          width: 60%;
-        }
-
+          ia-donation-badged-input.donation-contact-form-region,
         ia-donation-contact-form
           ia-donation-badged-input.donation-contact-form-postal-code {
-          width: 40%;
-        }
-
-        ia-donation-contact-form #donation-contact-form-region {
-          width: var(--donation-contact-icon-field-width--);
-        }
-
-        ia-donation-contact-form #donation-contact-form-postal-code {
-          width: var(--donation-contact-no-icon-field-width--);
+          width: 100%;
         }
 
         ia-donation-contact-form #donation-contact-form-error-message {
@@ -473,22 +483,8 @@ export class IADonationContactForm extends LitElement {
           margin-bottom: calc(var(--donation-contact-base-font-size--) * 0.6);
         }
 
-        ia-donation-contact-form #donation-contact-form-last-name {
-          width: var(--donation-contact-no-icon-field-width--);
-        }
-
-        /* The labels are for screen readers, the placeholders carry the visible text */
-        ia-donation-contact-form label {
-          position: absolute;
-          left: -10000px;
-          top: auto;
-          width: 1px;
-          height: 1px;
-          overflow: hidden;
-        }
-
         ia-donation-contact-form .donation-contact-form-input {
-          width: var(--donation-contact-icon-field-width--);
+          width: var(--donation-contact-no-icon-field-width--);
           border: 0;
           outline: 0;
           background: transparent;
@@ -499,16 +495,13 @@ export class IADonationContactForm extends LitElement {
           font-family: var(--donation-contact-field-font-family--);
         }
 
-        ia-donation-contact-form .donation-contact-form-input::placeholder {
-          color: revert;
-        }
-
         ia-donation-contact-form #donation-contact-form-countryCodeAlpha2 {
-          width: 100%;
+          width: var(--donation-contact-no-icon-field-width--);
           height: 100%;
           box-sizing: border-box;
           font-weight: bold;
           font-size: var(--donation-contact-field-font-size--);
+          color: var(--donation-contact-field-font-color--);
           font-family: var(--donation-contact-field-font-family--);
           border: 0;
           background: #fff;
