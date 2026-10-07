@@ -1,5 +1,6 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
-import { customElement, query, state } from 'lit/decorators.js';
+import { query, state } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import type { PropInputSettings } from '@demo/story-components/story-prop-settings';
 import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';

@@ -7,7 +7,8 @@ import {
   type PropertyValues,
   type TemplateResult,
 } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
+import { property, query, state } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import type { ZoneOfSilence } from './models';
 

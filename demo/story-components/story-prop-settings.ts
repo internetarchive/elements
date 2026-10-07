@@ -7,7 +7,7 @@ import {
   type CSSResultGroup,
 } from 'lit';
 import { property, queryAll } from 'lit/decorators.js';
-import { customElement } from 'lit/decorators/custom-element.js';
+import { customElement } from '@src/util/custom-element';
 import { choose } from 'lit/directives/choose.js';
 
 import themeStyles from '@src/themes/theme-styles';
