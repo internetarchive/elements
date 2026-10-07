@@ -8,7 +8,7 @@ import {
 } from 'lit';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
-import { msg, str } from '@lit/localize';
+import { localized, msg, str } from '@lit/localize';
 
 import nextResultIcon from './assets/next-result';
 import previousResultIcon from './assets/previous-result';
@@ -26,6 +26,7 @@ const Events = {
  * Both ends wrap around, so there is always somewhere to go.
  */
 @customElement('ia-search-results-switcher')
+@localized()
 export class IASearchResultsSwitcher extends LitElement {
   /** How many results there are to step through */
   @property({ type: Number }) numberOfResults = 0;

@@ -440,6 +440,15 @@ export class StoryTemplate extends LitElement {
           gap: 0 12px;
         }
 
+        /* Side by side on a phone, Settings and Styles get half the width
+           each, which wraps every radio group and clips the style inputs.
+           Matches NARROW_VIEWPORT in app-root.ts. */
+        @media (max-width: 640px) {
+          .two-col {
+            grid-template-columns: 1fr;
+          }
+        }
+
         .left-col,
         .right-col {
           min-width: 0;
