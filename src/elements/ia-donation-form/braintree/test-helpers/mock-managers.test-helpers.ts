@@ -36,7 +36,10 @@ import type {
   CreditCardHandlerInterface,
 } from '../payment-providers/credit-card/credit-card-interface';
 import { HostedFieldConfiguration } from '../payment-providers/credit-card/hosted-field-configuration';
-import type { HostedFieldContainerInterface } from '../payment-providers/credit-card/hosted-field-container';
+import type {
+  HostedFieldContainerInterface,
+  HostedFieldName,
+} from '../payment-providers/credit-card/hosted-field-container';
 import type { GooglePayHandlerInterface } from '../payment-providers/google-pay/google-pay-interface';
 import type { PayPalButtonDataSourceInterface } from '../payment-providers/paypal/paypal-button-datasource';
 import type { PayPalHandlerInterface } from '../payment-providers/paypal/paypal-interface';
@@ -165,6 +168,12 @@ export class MockCreditCardHandler implements CreditCardHandlerInterface {
 
   async tokenizeHostedFields(): Promise<braintree.HostedFieldsTokenizePayload> {
     return this.mockPayload;
+  }
+
+  focusedField?: HostedFieldName;
+
+  async focusField(field: HostedFieldName): Promise<void> {
+    this.focusedField = field;
   }
 
   markFieldErrors(): void {}

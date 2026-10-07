@@ -123,6 +123,27 @@ export class MockHostedFieldsClient {
     this.handlers['validityChange']?.(mockHostedFieldsEvent(valid));
   }
 
+  /** Fires the handler registered for a hosted fields event. */
+  emitEvent(
+    event: string,
+    hostedFieldsEvent: braintree.HostedFieldsEvent,
+  ): void {
+    this.handlers[event]?.(hostedFieldsEvent);
+  }
+
+  /** The handler registered for a hosted fields event. */
+  getHandler(
+    event: string,
+  ): ((event: braintree.HostedFieldsEvent) => void) | undefined {
+    return this.handlers[event];
+  }
+
+  focusedField?: string;
+
+  async focus(field: string): Promise<void> {
+    this.focusedField = field;
+  }
+
   get module(): typeof braintree.hostedFields {
     return this as unknown as typeof braintree.hostedFields;
   }
