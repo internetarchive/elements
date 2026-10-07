@@ -31,7 +31,9 @@
     "test": "wireit",
     "ghpages:build": "wireit",
     "strings:extract": "wireit",
-    "strings:build": "wireit"
+    "strings:build": "wireit",
+    "exports": "wireit",
+    "exports:check": "wireit"
   },
   "dependencies": {
     "@internetarchive/ia-clearable-text-input": "^1.1.1",
@@ -72,6 +74,26 @@
     "wireit": "^0.14.12"
   },
   "exports": {
+    "./ia-audio-element": "./dist/src/elements/ia-audio-element/ia-audio-element.js",
+    "./ia-button": "./dist/src/elements/ia-button/ia-button.js",
+    "./ia-combo-box": "./dist/src/elements/ia-combo-box/ia-combo-box.js",
+    "./ia-donation-thermometer": "./dist/src/elements/ia-donation-thermometer/ia-donation-thermometer.js",
+    "./ia-dropdown-search-bar": "./dist/src/elements/ia-dropdown-search-bar/ia-dropdown-search-bar.js",
+    "./ia-expandable-search-bar": "./dist/src/elements/ia-expandable-search-bar/ia-expandable-search-bar.js",
+    "./ia-histogram-date-range": "./dist/src/elements/ia-histogram-date-range/ia-histogram-date-range.js",
+    "./ia-image-viewer": "./dist/src/elements/ia-image-viewer/ia-image-viewer.js",
+    "./ia-item-navigator": "./dist/src/elements/ia-item-navigator/ia-item-navigator.js",
+    "./ia-otp-form": "./dist/src/elements/ia-otp-form/ia-otp-form.js",
+    "./ia-otp-input": "./dist/src/elements/ia-otp-input/ia-otp-input.js",
+    "./ia-playback-controls": "./dist/src/elements/ia-playback-controls/ia-playback-controls.js",
+    "./ia-radio-player": "./dist/src/elements/ia-radio-player/ia-radio-player.js",
+    "./ia-scrubber-bar": "./dist/src/elements/ia-scrubber-bar/ia-scrubber-bar.js",
+    "./ia-sr-only-text": "./dist/src/elements/ia-sr-only-text/ia-sr-only-text.js",
+    "./ia-status-indicator": "./dist/src/elements/ia-status-indicator/ia-status-indicator.js",
+    "./ia-topnav": "./dist/src/elements/ia-topnav/ia-topnav.js",
+    "./ia-transcript-view": "./dist/src/elements/ia-transcript-view/ia-transcript-view.js",
+    "./ia-waveform-progress": "./dist/src/elements/ia-waveform-progress/ia-waveform-progress.js",
+    "./labs/ia-snow": "./dist/src/labs/ia-snow/ia-snow.js",
     "./*": "./dist/src/elements/*.js",
     "./labs/*": "./dist/src/labs/*.js",
     "./locales/*.js": "./dist/src/locales/*.js"
@@ -89,7 +111,8 @@
     "build": {
       "command": "tsc --build --pretty && tsc-alias && rsync -zarvm --prune-empty-dirs --include \"*/\" --include \"*.svg\" --exclude=\"*\" src dist",
       "dependencies": [
-        "circular"
+        "circular",
+        "exports:check"
       ],
       "files": [
         "src/**/*.ts",
@@ -109,7 +132,10 @@
       "command": "vite"
     },
     "lint": {
-      "command": "eslint . && prettier \"**/*.ts\" --check"
+      "command": "eslint . && prettier \"**/*.ts\" --check",
+      "dependencies": [
+        "exports:check"
+      ]
     },
     "format": {
       "command": "eslint . --fix && prettier \"**/*.ts\" --write"
@@ -154,6 +180,19 @@
         "lit-localize.json",
         "scripts/build-locales.mts"
       ]
+    },
+    "exports": {
+      "command": "node scripts/build-exports.mts"
+    },
+    "exports:check": {
+      "command": "node scripts/build-exports.mts --check",
+      "files": [
+        "package.json",
+        "src/elements/*/*.ts",
+        "src/labs/*/*.ts",
+        "scripts/build-exports.mts"
+      ],
+      "output": []
     }
   }
 }
