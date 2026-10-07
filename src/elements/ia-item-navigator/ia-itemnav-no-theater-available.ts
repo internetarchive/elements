@@ -6,7 +6,8 @@ import {
   css,
   type CSSResultGroup,
 } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import themeStyles from '@src/themes/theme-styles';
 
 /**

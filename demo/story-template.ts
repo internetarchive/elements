@@ -6,7 +6,7 @@ import {
   type PropertyValues,
 } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { customElement } from 'lit/decorators/custom-element.js';
+import { customElement } from '@src/util/custom-element';
 import { when } from 'lit/directives/when.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
@@ -438,6 +438,15 @@ export class StoryTemplate extends LitElement {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 0 12px;
+        }
+
+        /* Side by side on a phone, Settings and Styles get half the width
+           each, which wraps every radio group and clips the style inputs.
+           Matches NARROW_VIEWPORT in app-root.ts. */
+        @media (max-width: 640px) {
+          .two-col {
+            grid-template-columns: 1fr;
+          }
         }
 
         .left-col,

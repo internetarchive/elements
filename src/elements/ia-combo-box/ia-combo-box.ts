@@ -7,12 +7,13 @@ import {
   css,
   PropertyValues,
 } from 'lit';
-import { customElement, property, state, query } from 'lit/decorators.js';
+import { property, state, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { live } from 'lit/directives/live.js';
 import { when } from 'lit/directives/when.js';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 import {
   hasAnyOf,
@@ -54,6 +55,7 @@ const STRING_LOWER_CASE_FN = (str: string): string => str.toLocaleLowerCase();
  * freeform text to filter down & find specific options.
  */
 @customElement('ia-combo-box')
+@localized()
 export class IAComboBox extends LitElement {
   /**
    * Array of options representing values that this combo box can take.

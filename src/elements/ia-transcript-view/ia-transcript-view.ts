@@ -7,9 +7,10 @@ import {
   type PropertyValues,
   type TemplateResult,
 } from 'lit';
-import { customElement, property, query, state } from 'lit/decorators.js';
+import { property, query, state } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 import { formatDuration } from './duration-formatter';
 import type { TranscriptConfig, TranscriptEntryConfig } from './models';
@@ -36,6 +37,7 @@ const SCROLL_DURATION_SECONDS = 1;
  * listener scrolls by hand, and picks the job back up once they've stopped.
  */
 @customElement('ia-transcript-view')
+@localized()
 export class IATranscriptView extends LitElement {
   /** The transcript to render */
   @property({ type: Object }) config?: TranscriptConfig;
