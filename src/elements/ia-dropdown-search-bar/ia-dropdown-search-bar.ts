@@ -1,4 +1,4 @@
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import {
   css,
   html,
@@ -7,7 +7,8 @@ import {
   PropertyValues,
   TemplateResult,
 } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-input';
 import type { IaDropdown, optionInterface } from '@internetarchive/ia-dropdown';
 import type { SearchCategory, SearchRequestedDetail } from './models';
@@ -28,6 +29,7 @@ const Events = {
 };
 
 @customElement('ia-dropdown-search-bar')
+@localized()
 export class IADropdownSearchBar extends LitElement {
   /** The query that appears in the search bar */
   @property({ type: String }) query?: string;
@@ -38,8 +40,8 @@ export class IADropdownSearchBar extends LitElement {
   /** The currently selected dropdown category ID */
   @property({ type: String }) selectedCategory?: string;
 
-  /** Placeholder text for the search input */
-  @property({ type: String }) placeholder = msg('Search');
+  /** Placeholder text for the search input. Defaults to "Search". */
+  @property({ type: String }) placeholder?: string;
 
   /** Whether to use the mobile layout */
   @property({ type: Boolean }) useMobileView = false;
@@ -125,7 +127,7 @@ export class IADropdownSearchBar extends LitElement {
         id="search-input"
         part="search-input"
         .value=${this.spacedQuery}
-        placeholder=${this.placeholder}
+        placeholder=${this.placeholder ?? msg('Search')}
         clearButtonScreenReaderLabel=${msg('Clear search query')}
         screenReaderLabel=${msg(
           'Search the Archive. Filters and Advanced Search available below.',

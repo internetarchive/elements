@@ -7,7 +7,8 @@ import {
   TemplateResult,
   type CSSResultGroup,
 } from 'lit';
-import { customElement, property, query } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import themeStyles from '@src/themes/theme-styles';
 import { collapseSidebarIcon } from './icons';
 import './ia-itemnav-menu-button';

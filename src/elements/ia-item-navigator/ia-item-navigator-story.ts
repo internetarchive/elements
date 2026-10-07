@@ -1,5 +1,6 @@
 import { css, html, LitElement, nothing, type CSSResultGroup } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { state } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import './ia-item-navigator';
 import './menus/ia-itemnav-viewable-files-panel';

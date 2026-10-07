@@ -26,6 +26,27 @@ jobs:
     - name: Lint
       run: pnpm run lint
 
+  # Its own job so a type error is reported as one, rather than surfacing under
+  # lint or tests. Neither of those checks types: vitest transpiles without
+  # checking, and eslint isn't type-aware here, so without this a type error
+  # reaches `pnpm build` at publish time.
+  typecheck:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v6
+    - uses: pnpm/action-setup@v4
+    - uses: actions/setup-node@v6
+      with:
+        node-version: 24
+        cache: pnpm
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Typecheck
+      run: pnpm run typecheck
+
   build:
     runs-on: ubuntu-latest
 
@@ -51,8 +72,56 @@ jobs:
       timeout-minutes: 6
 
     - name: Run tests
-      run: pnpm run test
+      run: pnpm run test -- --reporter=default --reporter=json --outputFile.json=reports/vitest.json
+
+    - name: Upload test report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: vitest-report
+        path: reports/vitest.json
+        retention-days: 30
 
     - uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+
+  # Warns (never blocks) when a test file lands slow or the run gets slower
+  # than main. The report from main's latest successful run is the baseline.
+  slow-tests:
+    # Runs after a failed test run too, since the report is uploaded either way.
+    if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
+      with:
+        node-version: 24
+
+    - name: Download this run's report
+      uses: actions/download-artifact@v4
+      with:
+        name: vitest-report
+        path: reports
+
+    - name: Download main's report
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        run_id=$(gh run list --workflow ci.yml --branch main --event push \
+          --status success --limit 1 --json databaseId --jq '.[0].databaseId')
+        if [ -n "$run_id" ]; then
+          gh run download "$run_id" --name vitest-report --dir baseline \
+            || echo "Couldn't download main's report."
+        fi
+
+    # continue-on-error keeps a slow test from blocking the merge. The step
+    # still shows as failed, and each slow file is a warning annotation.
+    - name: Check for slow tests
+      continue-on-error: true
+      run: node support/check-slow-tests.mjs reports/vitest.json baseline/vitest.json

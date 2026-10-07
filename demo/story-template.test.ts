@@ -278,6 +278,23 @@ describe('StoryTemplate', () => {
     });
   });
 
+  describe('Settings and Styles layout', () => {
+    test('stacks them on a phone, so neither is squeezed to half the width', async () => {
+      // The test browser's frame is phone-sized, which is what puts the
+      // stylesheet's narrow rule in play here.
+      expect(
+        window.matchMedia('(max-width: 640px)').matches,
+        'this test needs a phone-width frame',
+      ).to.be.true;
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+      const grid = el.shadowRoot?.querySelector('.two-col') as HTMLElement;
+      const columns = getComputedStyle(grid).gridTemplateColumns.split(' ');
+      expect(columns).to.have.length(1);
+    });
+  });
+
   describe('Copy buttons', () => {
     afterEach(() => {
       vi.restoreAllMocks();

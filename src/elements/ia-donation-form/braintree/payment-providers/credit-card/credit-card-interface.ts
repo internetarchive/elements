@@ -14,6 +14,7 @@ export interface CreditCardHandlerInterface {
   tokenizeHostedFields(): Promise<
     braintree.HostedFieldsTokenizePayload | undefined
   >;
+  focusField(field: HostedFieldName): Promise<void>;
   markFieldErrors(fields: HostedFieldName[]): void;
   removeFieldErrors(fields: HostedFieldName[]): void;
   showErrorMessage(message?: string): void;

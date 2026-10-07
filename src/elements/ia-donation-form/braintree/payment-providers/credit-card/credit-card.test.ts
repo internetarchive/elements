@@ -40,6 +40,15 @@ describe('CreditCardHandler', () => {
     expect(client.createOptions).to.include.keys('client', 'styles', 'fields');
   });
 
+  test('focuses a hosted field', async () => {
+    const client = new MockHostedFieldsClient();
+    const { handler } = setup({ client });
+
+    await handler.focusField('number');
+
+    expect(client.focusedField).to.equal('number');
+  });
+
   test('can tokenize the hosted fields', async () => {
     const { handler } = setup();
 

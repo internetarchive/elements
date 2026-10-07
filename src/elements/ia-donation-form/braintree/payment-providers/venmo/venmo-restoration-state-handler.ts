@@ -45,13 +45,10 @@ export class VenmoRestorationStateHandler
   private storageSystem?: Storage;
 
   constructor(options?: { storageSystem?: Storage }) {
-    if (options?.storageSystem) {
-      this.storageSystem = options.storageSystem;
-    } else if (this.storageSystemAvailable(localStorage)) {
-      this.storageSystem = localStorage;
-    } else if (this.storageSystemAvailable(sessionStorage)) {
-      this.storageSystem = sessionStorage;
-    }
+    this.storageSystem =
+      options?.storageSystem ??
+      this.getAvailableStorageSystem(() => localStorage) ??
+      this.getAvailableStorageSystem(() => sessionStorage);
   }
 
   clearState(): void {
@@ -86,14 +83,21 @@ export class VenmoRestorationStateHandler
     return new VenmoRestorationState(deserialized);
   }
 
-  /** Whether a storage system (localStorage or sessionStorage) can be written to */
-  private storageSystemAvailable(system: Storage): boolean {
+  /**
+   * Resolves a storage system (localStorage or sessionStorage) and returns it
+   * if it can be written to. Some browsers (Safari private browsing) throw from
+   * reading the storage global itself, so the lookup happens inside the guard.
+   */
+  private getAvailableStorageSystem(
+    getSystem: () => Storage,
+  ): Storage | undefined {
     try {
+      const system = getSystem();
       system.setItem('foo', 'bar');
       system.removeItem('foo');
-      return true;
+      return system;
     } catch {
-      return false;
+      return undefined;
     }
   }
 }
