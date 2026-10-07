@@ -4,7 +4,7 @@ import type {
 } from '@internetarchive/modal-manager';
 import { ModalManagerMode } from '@internetarchive/modal-manager';
 import { html, LitElement, type TemplateResult } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 /** Records what it was asked to show instead of rendering a modal. */
 @customElement('test-mock-modal-manager')

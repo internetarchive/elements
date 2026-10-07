@@ -5,7 +5,7 @@ import {
   type CSSResultGroup,
   type TemplateResult,
 } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import { msg } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
