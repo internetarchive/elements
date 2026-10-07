@@ -11,9 +11,6 @@ export const defaultTopNavConfig: IATopNavConfig = {
  * @param { string } userid archive.org account (immutable) userid
  * @param { string } baseHost prefixed to every archive.org link. Pass '' for
  *                            links relative to the current host.
- * @param { string } waybackPagesArchived label readable 'how many pages in WayBack machine?'
- *                                        If you don't pass in something, the wayback search falls
- *                                        back to a localized, potentially less accurate figure.
  * @param { string } itemIdentifier The current item being viewed, to populate admin menu items
  * @param { string } uploader email of the item's uploader, for the uploader admin section
  * @param { string } biblio biblio URL for a texts item, for the biblio admin section
@@ -22,14 +19,10 @@ export const defaultTopNavConfig: IATopNavConfig = {
 export function buildTopNavMenus(
   userid: string = '',
   baseHost: string = 'https://archive.org',
-  waybackPagesArchived: string = '',
   itemIdentifier: string = '',
   uploader: string = '',
   biblio: string = '',
 ): IATopNavMenuConfig {
-  if (waybackPagesArchived)
-    defaultTopNavConfig.waybackPagesArchived = waybackPagesArchived; // update to more accurate val
-
   return {
     audio: {
       heading: msg('Internet Archive Audio'),
