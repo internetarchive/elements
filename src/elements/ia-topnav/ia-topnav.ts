@@ -400,6 +400,11 @@ export class IATopNav extends LitElement {
            * doesn't re-evaluate against a descendant's own font-size) and
            * reaches every part of the topnav sized with
            * calc(N * var(--topnavUnit--)).
+           *
+           * Public override: --topnavFontSize sets that base size. The layout
+           * is verified from 16px (the browser default) up to 18px. Past
+           * that, at desktop widths around 1440px, the media buttons can
+           * wrap onto a second row (seen at 20px and up).
            */
           font-size: var(--topnavFontSize, medium);
           --topnavUnit--: calc(1em / 16);

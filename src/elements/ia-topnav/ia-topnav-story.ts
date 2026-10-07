@@ -134,7 +134,8 @@ export class IATopNavStory extends LitElement {
             <code>html</code> font size, so the topnav renders the same whether
             or not a page resets its root font size. It does grow with the
             user's browser font-size setting, and <code>--topnavFontSize</code>
-            overrides that base size.
+            overrides that base size. The layout is verified up to 18px; at 20px
+            and up the media buttons can wrap at desktop widths.
           </p>
           <p>
             A search bar goes in the <code>search</code> slot. Offshoot slots an
