@@ -24,6 +24,7 @@
     "build": "wireit",
     "clean": "wireit",
     "lint": "wireit",
+    "icons:lint": "wireit",
     "typecheck": "wireit",
     "format": "wireit",
     "circular": "wireit",
@@ -121,7 +122,10 @@
       ]
     },
     "lint": {
-      "command": "eslint . && prettier \"**/*.ts\" --check"
+      "command": "eslint . && prettier \"**/*.ts\" --check",
+      "dependencies": [
+        "icons:lint"
+      ]
     },
     "format": {
       "command": "eslint . --fix && prettier \"**/*.ts\" --write"
@@ -174,11 +178,22 @@
         "scripts/build-locales.mts"
       ]
     },
+    "icons:lint": {
+      "command": "node scripts/lint-icons.mts",
+      "files": [
+        "icons/*.svg",
+        "icons/.multicolor",
+        "scripts/lint-icons.mts",
+        "scripts/icon-source.mts"
+      ],
+      "output": []
+    },
     "icons": {
       "command": "node scripts/build-icons.mts",
       "files": [
         "icons/*.svg",
-        "scripts/build-icons.mts"
+        "scripts/build-icons.mts",
+        "scripts/icon-source.mts"
       ],
       "output": [
         "src/icons/**"
