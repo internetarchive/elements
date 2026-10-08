@@ -336,6 +336,24 @@ export const templates = { ...elements, ...app };
 
 The XLIFF in `xliff/` is where translations are edited. It isn't published.
 
+## Icons
+
+SVG sources live in `icons/<kebab-name>.svg`. To add one, drop the file in that folder and run `pnpm run icons` (`build`, `dev`, `typecheck` and `test` run it for you). The root `<svg>` needs a `viewBox`. The build fails on a name that isn't kebab-case, a duplicate, or a missing `viewBox`. It writes `src/icons/` (gitignored), one `.ts` and one `.svg` per icon.
+
+```ts
+import { html } from 'lit';
+import search from '@internetarchive/elements/icons/search';
+
+html`<button>${search} Search</button>`;
+```
+
+Outside lit, use the raw file at `@internetarchive/elements/icons/search.svg`.
+
+- **Decorative by default.** The root `<svg>` has `aria-hidden="true"` and `focusable="false"`. If an icon is the only content of a control, label the control (`aria-label`), or wrap the icon in an element with `role="img"` and an `aria-label`.
+- **Color and size.** Icons are filled with `currentColor` and sized `1em` by `width`/`height` on the root, so they follow the surrounding text. Set `font-size` or override `width`/`height` in CSS to resize.
+- **No barrel.** There's deliberately no `icons/index`. Every icon is its own module, so a page that imports one loads one.
+- **`sideEffects`.** `package.json` lists the trees that do work at import time (`dist/src/elements/**`, `dist/src/labs/**`, `dist/src/locales/**`). Elements register themselves when imported, so a package-wide `"sideEffects": false` would let a bundler drop `import '@internetarchive/elements/ia-button/ia-button'`. Everything else, including `dist/src/icons/**`, is safe to tree-shake. `src/util/icons-bundle.node.test.ts` bundles the built package to check both.
+
 ## Component Inventory
 
 To kickstart our library, we are going to take inventory of what already exists
