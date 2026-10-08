@@ -319,8 +319,10 @@ export class ImageViewerGestures implements ReactiveController {
 
   private onKeydown = (e: KeyboardEvent): void => {
     if (this.host.imageCount <= 1) return;
-    const target = e.target as HTMLElement;
-    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
+    // A listener on `document` sees a shadow-DOM event retargeted to its
+    // outermost host, so the focused field is the first entry in the path.
+    const target = (e.composedPath()[0] ?? e.target) as HTMLElement;
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return;
     if (target.isContentEditable) return;
     if (e.key === 'ArrowLeft') this.host.showPrevious();
     else if (e.key === 'ArrowRight') this.host.showNext();
