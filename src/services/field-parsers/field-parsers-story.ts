@@ -98,7 +98,7 @@ function show(value: unknown): string {
 export class FieldParsersStory extends LitElement {
   @state() private parserName = PARSERS[0].name;
 
-  @state() private raw = PARSERS[0].samples[0];
+  @state() private raw = '';
 
   @state() private result?: { call: string; output: string };
 
@@ -133,6 +133,7 @@ export class FieldParsersStory extends LitElement {
             <input
               type="text"
               name="raw"
+              placeholder=${this.entry.samples[0]}
               autocomplete="off"
               spellcheck="false"
               .value=${this.raw}
@@ -174,7 +175,7 @@ export class FieldParsersStory extends LitElement {
 
   private pickParser(e: Event) {
     this.parserName = (e.target as HTMLSelectElement).value;
-    this.raw = this.entry.samples[0];
+    this.raw = '';
     this.result = undefined;
   }
 

@@ -55,7 +55,7 @@ describe('field-parsers story', () => {
     expect(output()).to.equal('undefined');
   });
 
-  test('switching parser loads that parser’s sample and clears the result', async () => {
+  test('switching parser clears the input and result, and hints that parser’s sample', async () => {
     const el = await fixture<FieldParsersStory>(
       html`<field-parsers-story></field-parsers-story>`,
     );
@@ -68,7 +68,8 @@ describe('field-parsers story', () => {
     select.dispatchEvent(new Event('change'));
     await el.updateComplete;
 
-    expect(input.value).to.equal('true');
+    expect(input.value).to.equal('');
+    expect(input.placeholder).to.equal('true');
     expect(output()).to.be.undefined;
   });
 
