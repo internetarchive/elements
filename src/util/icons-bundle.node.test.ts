@@ -1,6 +1,8 @@
 import {
+  existsSync,
   mkdirSync,
   mkdtempSync,
+  readdirSync,
   readFileSync,
   rmSync,
   symlinkSync,
@@ -39,6 +41,7 @@ async function bundle(source: string): Promise<string> {
     configFile: false,
     root: scratch,
     logLevel: 'silent',
+    resolve: { alias: { '@src': join(repoRoot, 'src') } },
     build: {
       write: false,
       minify: false,
@@ -84,6 +87,43 @@ describe('icon exports', () => {
     );
     expect(code).toContain('ia-button');
     expect(code).toContain('customElements.define(tagName');
+  });
+
+  it('keeps every element in the demo build', async () => {
+    // The demo imports `src/` directly, so the `sideEffects` list has to cover
+    // those paths too or the elements are tree-shaken out of the page.
+    const result = await build({
+      configFile: join(repoRoot, 'vite.config.ghpages.ts'),
+      logLevel: 'silent',
+      build: { write: false, outDir: join(scratch, 'demo-out') },
+    });
+    const outputs = Array.isArray(result) ? result : [result];
+    const bundled = outputs
+      .flatMap((output) => ('output' in output ? output.output : []))
+      .flatMap((chunk) =>
+        'modules' in chunk
+          ? Object.entries(chunk.modules)
+              .filter(([, module]) => module.renderedLength > 0)
+              .map(([id]) => id)
+          : [],
+      );
+
+    // Each element lives in `src/elements/<tag>/<tag>.ts`. A folder without
+    // that file has no element of its own yet.
+    const elements = readdirSync(join(repoRoot, 'src/elements'), {
+      withFileTypes: true,
+    })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+      .filter((name) =>
+        existsSync(join(repoRoot, 'src/elements', name, `${name}.ts`)),
+      );
+    expect(elements.length).toBeGreaterThan(0);
+    const dropped = elements.filter(
+      (name) =>
+        !bundled.some((id) => id.endsWith(`/src/elements/${name}/${name}.ts`)),
+    );
+    expect(dropped).toEqual([]);
   });
 
   it('resolves icons/<name> to the icon module, not an element', () => {
