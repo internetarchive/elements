@@ -194,9 +194,6 @@ importers:
       '@eslint/js':
         specifier: ^9.39.1
         version: 9.39.5
-      '@internetarchive/field-parsers':
-        specifier: 1.2.1
-        version: 1.2.1
       '@lit/localize-tools':
         specifier: ^0.8.2
         version: 0.8.2
@@ -524,9 +521,6 @@ packages:
   '@humanwhocodes/retry@0.4.3':
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
-
-  '@internetarchive/field-parsers@1.2.1':
-    resolution: {integrity: sha512-4Dx1EBuiAbmYgBPwXFyJdUE+DV9VwwY7kx6qoEGfmRBNjCjgf+hS8Rdoe0GRVc9/6IqrKUJJPRZKMF7vc2G1XQ==}
 
   '@internetarchive/ia-clearable-text-input@1.1.1':
     resolution: {integrity: sha512-l3Z6gKfSRURvicHlAjL3V+q/yESYSev34fswfG7ESIiWuF7UuWDKjlLOyY3gFch8eAfqS5AQ6KurRw5JWGD4RA==}
@@ -2879,8 +2873,6 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/retry@0.4.3': {}
-
-  '@internetarchive/field-parsers@1.2.1': {}
 
   '@internetarchive/ia-clearable-text-input@1.1.1':
     dependencies:
