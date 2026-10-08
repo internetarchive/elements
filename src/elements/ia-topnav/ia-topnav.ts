@@ -86,6 +86,13 @@ export class IATopNav extends LitElement {
 
   @state() private menus: IATopNavMenuConfig = buildTopNavMenus();
 
+  /**
+   * The config handed to the media slider: the host's `config` with the
+   * Wayback page count folded in. Rebuilt only when one of those changes,
+   * since a new object on every render would make the slider reset its scroll.
+   */
+  private sliderConfig: IATopNavConfig = defaultTopNavConfig;
+
   private boundHandleKeydown = this.handleDocumentKeydown.bind(this);
 
   private boundHandleClick = this.handleDocumentClick.bind(this);
@@ -103,9 +110,15 @@ export class IATopNav extends LitElement {
   }
 
   willUpdate(props: PropertyValues) {
+    if (props.has('config') || props.has('waybackPagesArchived')) {
+      this.sliderConfig = {
+        ...this.config,
+        waybackPagesArchived:
+          this.waybackPagesArchived || this.config.waybackPagesArchived,
+      };
+    }
     if (
       props.has('username') ||
-      props.has('waybackPagesArchived') ||
       props.has('itemIdentifier') ||
       props.has('uploader') ||
       props.has('biblio') ||
@@ -140,7 +153,7 @@ export class IATopNav extends LitElement {
         </ia-topnav-primary-nav>
         <ia-topnav-media-slider
           .baseHost=${this.normalizedBaseHost}
-          .config=${this.config}
+          .config=${this.sliderConfig}
           .selectedMenuOption=${this.selectedMenuOption}
           .mediaSliderOpen=${this.mediaSliderOpen}
           .menus=${this.menus}
@@ -187,7 +200,6 @@ export class IATopNav extends LitElement {
     this.menus = buildTopNavMenus(
       this.username,
       this.normalizedBaseHost,
-      this.waybackPagesArchived,
       this.itemIdentifier,
       this.uploader,
       this.biblio,
