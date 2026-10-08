@@ -349,6 +349,8 @@ html`<button>${search} Search</button>`;
 
 Outside lit, use the raw file at `@internetarchive/elements/icons/search.svg`.
 
+To see every icon, run `pnpm run dev` and open the Icons entry (`ia-icon-gallery`) in the demo. It lists each icon with its import line, and is built from `icons/`, so a new icon appears with no extra work.
+
 - **Decorative by default.** The root `<svg>` has `aria-hidden="true"` and `focusable="false"`. If an icon is the only content of a control, label the control (`aria-label`), or wrap the icon in an element with `role="img"` and an `aria-label`.
 - **Color and size.** Icons are filled with `currentColor` and sized `1em` by `width`/`height` on the root, so they follow the surrounding text. Set `font-size` or override `width`/`height` in CSS to resize.
 - **Lint.** `pnpm run lint` (and CI) runs `scripts/lint-icons.mts` over the sources, or run it alone with `pnpm run icons:lint`. Each icon needs a `viewBox` and no `width`/`height` on the root, only `currentColor`, `none` or `url(#...)` for `fill`, `stroke` and `stop-color` (attribute, inline `style` or `<style>`), no `id` attributes (they'd collide when icons share a page), and no `<script>`, `on*` handlers, `<foreignObject>` or external `href`. A logo that needs its own colors goes in `icons/.multicolor`, one icon name per line (`#` for comments). Listed icons are exempt from the color and `id` rules only. A listed icon still gets `currentColor` painted by the build's root `fill`, so give each of its shapes an explicit `fill`.
