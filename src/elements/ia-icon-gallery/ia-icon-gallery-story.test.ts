@@ -46,6 +46,8 @@ describe('toIdentifier', () => {
 
   test('prefixes a name that would start with a digit', () => {
     expect(toIdentifier('3d-box')).toBe('icon3dBox');
+    expect(toIdentifier('delete')).toBe('iconDelete');
+    expect(toIdentifier('class')).toBe('iconClass');
   });
 });
 
