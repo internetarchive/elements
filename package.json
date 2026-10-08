@@ -82,7 +82,11 @@
   "sideEffects": [
     "./dist/src/elements/**",
     "./dist/src/labs/**",
-    "./dist/src/locales/**"
+    "./dist/src/locales/**",
+    "./src/elements/**",
+    "./src/labs/**",
+    "./src/locales/**",
+    "./demo/**"
   ],
   "files": [
     "README.md",
