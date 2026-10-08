@@ -47,6 +47,7 @@
     "@eslint/js": "^9.39.1",
     "@lit/localize-tools": "^0.8.2",
     "@open-wc/testing-helpers": "^3.0.1",
+    "@types/node": "^24.13.6",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",
     "@vitest/browser": "^4.0.8",
@@ -73,9 +74,20 @@
   },
   "exports": {
     "./*": "./dist/src/elements/*.js",
+    "./icons/*": "./dist/src/icons/*.js",
+    "./icons/*.svg": "./dist/src/icons/*.svg",
     "./labs/*": "./dist/src/labs/*.js",
     "./locales/*.js": "./dist/src/locales/*.js"
   },
+  "sideEffects": [
+    "./dist/src/elements/**",
+    "./dist/src/labs/**",
+    "./dist/src/locales/**",
+    "./src/elements/**",
+    "./src/labs/**",
+    "./src/locales/**",
+    "./demo/**"
+  ],
   "files": [
     "README.md",
     "dist",
@@ -89,7 +101,8 @@
     "build": {
       "command": "tsc --build --pretty && tsc-alias && rsync -zarvm --prune-empty-dirs --include \"*/\" --include \"*.svg\" --exclude=\"*\" src dist",
       "dependencies": [
-        "circular"
+        "circular",
+        "icons"
       ],
       "files": [
         "src/**/*.ts",
@@ -106,7 +119,10 @@
       "command": "rm -rf dist"
     },
     "dev": {
-      "command": "vite"
+      "command": "vite",
+      "dependencies": [
+        "icons"
+      ]
     },
     "lint": {
       "command": "eslint . && prettier \"**/*.ts\" --check"
@@ -126,16 +142,23 @@
         "demo/**/*.ts",
         "tsconfig.json"
       ],
-      "output": []
+      "output": [],
+      "dependencies": [
+        "icons"
+      ]
     },
     "test": {
       "command": "vitest",
       "dependencies": [
-        "circular"
+        "circular",
+        "build"
       ]
     },
     "ghpages:build": {
-      "command": "vite build --config vite.config.ghpages.ts && touch ./ghpages/.nojekyll"
+      "command": "vite build --config vite.config.ghpages.ts && touch ./ghpages/.nojekyll",
+      "dependencies": [
+        "icons"
+      ]
     },
     "strings:extract": {
       "command": "lit-localize extract",
@@ -153,6 +176,16 @@
         "!src/locales/*.ts",
         "lit-localize.json",
         "scripts/build-locales.mts"
+      ]
+    },
+    "icons": {
+      "command": "node scripts/build-icons.mts",
+      "files": [
+        "icons/*.svg",
+        "scripts/build-icons.mts"
+      ],
+      "output": [
+        "src/icons/**"
       ]
     }
   }
