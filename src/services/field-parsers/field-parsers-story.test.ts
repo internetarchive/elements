@@ -2,6 +2,7 @@ import { fixture } from '@open-wc/testing-helpers';
 import { describe, expect, test } from 'vitest';
 import { html } from 'lit';
 
+import type { ServiceTemplate } from '@demo/service-template';
 import type { FieldParsersStory } from './field-parsers-story';
 import './field-parsers-story';
 
@@ -87,7 +88,9 @@ describe('field-parsers story', () => {
       html`<field-parsers-story></field-parsers-story>`,
     );
 
-    const template = el.shadowRoot!.querySelector('service-template') as any;
+    const template = el.shadowRoot!.querySelector(
+      'service-template',
+    ) as ServiceTemplate;
 
     expect(template.apiSource).to.include('interface FieldParserInterface');
     expect(template.apiSource).to.include('class DurationParser');
