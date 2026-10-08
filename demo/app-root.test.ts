@@ -266,6 +266,23 @@ describe('AppRoot', () => {
       }
     });
 
+    test('lists the services in their own sidebar group, after the elements', async () => {
+      const el = await appRoot();
+
+      const headings = Array.from(sidebar(el).querySelectorAll('h2')).map(
+        (h) => h.textContent,
+      );
+      expect(headings).to.deep.equal([
+        'Production-Ready',
+        'Labs 🧪',
+        'Services',
+      ]);
+      const ids = anchorIds(el);
+      expect(ids.indexOf('elem-field-parsers')).to.be.greaterThan(
+        ids.indexOf('elem-ia-button'),
+      );
+    });
+
     test('falls back to every element when the hash names an unknown one', async () => {
       setHash('#elem-not-a-real-element');
       const el = await appRoot();
@@ -282,6 +299,16 @@ describe('AppRoot', () => {
   });
 
   describe('focused view', () => {
+    test('renders a service named in the hash on its own', async () => {
+      setHash('#elem-field-parsers');
+      const el = await appRoot();
+
+      expect(anchorIds(el)).to.deep.equal(['elem-field-parsers']);
+      expect(el.querySelector('#ia-content h2')?.textContent?.trim()).to.equal(
+        'Service',
+      );
+    });
+
     test('renders only the element named in the hash', async () => {
       setHash('#elem-ia-button');
       const el = await appRoot();
