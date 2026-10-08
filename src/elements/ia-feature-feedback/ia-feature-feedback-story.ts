@@ -142,23 +142,27 @@ export class IAFeatureFeedbackStory extends LitElement {
     this.submissionLog = [entry, ...this.submissionLog].slice(0, 5);
   }
 
-  /** Wraps a service so each submission lands in the on-page log. */
+  /** Wraps a service so each submission and its outcome land in the on-page log. */
   private loggedService(
     inner: FeatureFeedbackServiceInterface,
   ): FeatureFeedbackServiceInterface {
     return {
       submitFeedback: async (options) => {
+        const result = await inner.submitFeedback(options);
         this.record(
           `Feedback: ${options.vote} on ${options.featureIdentifier}` +
-            (options.comments ? `, "${options.comments}"` : ''),
+            (options.comments ? `, "${options.comments}"` : '') +
+            (result.success ? '' : ' (failed)'),
         );
-        return inner.submitFeedback(options);
+        return result;
       },
       submitSurvey: async (options) => {
+        const result = await inner.submitSurvey(options);
         this.record(
-          `Survey ${options.surveyIdentifier}: ${options.responses.length} responses`,
+          `Survey ${options.surveyIdentifier}: ${options.responses.length} responses` +
+            (result.success ? '' : ' (failed)'),
         );
-        return inner.submitSurvey(options);
+        return result;
       },
     };
   }
