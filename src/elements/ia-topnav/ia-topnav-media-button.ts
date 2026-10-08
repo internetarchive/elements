@@ -7,7 +7,7 @@ import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
-import { localized, msg, str } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 @customElement('ia-topnav-media-button')
 @localized()
@@ -82,13 +82,35 @@ export class MediaButton extends TrackedElement {
   /**
    * The button's tooltip.
    *
-   * Built as a whole phrase per state, because word order around the
-   * mediatype differs by language.
+   * Each menu has its own whole phrase, so a translator can reword it and
+   * move the menu name freely, and the name shown is a translated one.
    */
   get tooltip() {
-    return this.selected
-      ? msg(str`Collapse ${this.mediatype} menu`)
-      : msg(str`Expand ${this.mediatype} menu`);
+    const phrases = this.selected
+      ? {
+          web: msg('Collapse web menu'),
+          texts: msg('Collapse texts menu'),
+          video: msg('Collapse video menu'),
+          audio: msg('Collapse audio menu'),
+          software: msg('Collapse software menu'),
+          images: msg('Collapse images menu'),
+          donate: msg('Collapse donate menu'),
+          more: msg('Collapse more menu'),
+        }
+      : {
+          web: msg('Expand web menu'),
+          texts: msg('Expand texts menu'),
+          video: msg('Expand video menu'),
+          audio: msg('Expand audio menu'),
+          software: msg('Expand software menu'),
+          images: msg('Expand images menu'),
+          donate: msg('Expand donate menu'),
+          more: msg('Expand more menu'),
+        };
+    return (
+      (phrases as Record<string, string>)[this.mediatype] ??
+      (this.selected ? msg('Collapse menu') : msg('Expand menu'))
+    );
   }
 
   get iconClass() {
