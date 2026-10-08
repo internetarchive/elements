@@ -35,8 +35,8 @@ export class HamBurger extends Icon {
     return css`
       svg {
         display: block;
-        height: 4rem;
-        width: 4rem;
+        height: calc(40 * var(--topnavUnit--));
+        width: calc(40 * var(--topnavUnit--));
       }
       .fill-color {
         fill: var(--activeColor);

@@ -42,12 +42,12 @@ export class MoreSlider extends TrackedElement {
       css`
         ul {
           padding: 0;
-          margin: -1rem 0 0 0;
+          margin: calc(-10 * var(--topnavUnit--)) 0 0 0;
           list-style: none;
         }
         a {
           display: block;
-          padding: 1rem 0;
+          padding: calc(10 * var(--topnavUnit--)) 0;
           text-decoration: none;
           color: var(--activeColor);
         }
