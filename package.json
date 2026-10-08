@@ -45,6 +45,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.1",
+    "@internetarchive/field-parsers": "1.2.1",
     "@lit/localize-tools": "^0.8.2",
     "@open-wc/testing-helpers": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
