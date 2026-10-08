@@ -172,6 +172,12 @@ importers:
       '@internetarchive/ia-dropdown':
         specifier: ^2.2.0
         version: 2.2.0
+      '@internetarchive/icon-close':
+        specifier: ^1.4.0
+        version: 1.4.1
+      '@internetarchive/icon-user':
+        specifier: ^1.4.0
+        version: 1.4.1
       '@lit/localize':
         specifier: ^0.12.2
         version: 0.12.2
@@ -184,6 +190,9 @@ importers:
       magic-snowflakes:
         specifier: ^7.0.2
         version: 7.0.2
+      throttle-debounce:
+        specifier: ^5.0.2
+        version: 5.0.2
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -200,6 +209,9 @@ importers:
       '@open-wc/testing-helpers':
         specifier: ^3.0.1
         version: 3.0.1
+      '@types/throttle-debounce':
+        specifier: ^5.0.2
+        version: 5.0.2
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.46.4
         version: 8.64.0(@typescript-eslint/parser@8.64.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
@@ -531,6 +543,9 @@ packages:
   '@internetarchive/icon-close@1.4.1':
     resolution: {integrity: sha512-nN1rGfScGssGFpfEew4azsrsMyUJtkDWqUDlckJi31PtyQnbZqUmZ07UO3Aw+wZIo3cU1MHxb5VxDy3Rmr8QGA==}
 
+  '@internetarchive/icon-user@1.4.1':
+    resolution: {integrity: sha512-xRlpX954+lLKjC++A+jpIutptHCmVMwLZI/WqOoAQoKfnCNKKvJ6Wcdq4bM/qUDt44Oj2VgP/gM6hSdWyljzEA==}
+
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
     engines: {node: '>=6.0.0'}
@@ -767,6 +782,9 @@ packages:
 
   '@types/parse5@2.2.34':
     resolution: {integrity: sha512-p3qOvaRsRpFyEmaS36RtLzpdxZZnmxGuT1GMgzkTtTJVFuEw7KFjGK83MFODpJExgX1bEzy9r0NYjMC3IMfi7w==}
+
+  '@types/throttle-debounce@5.0.2':
+    resolution: {integrity: sha512-pDzSNulqooSKvSNcksnV72nk8p7gRqN8As71Sp28nov1IgmPKWbOEIwAWvBME5pPTtaXJAvG3O4oc76HlQ4kqQ==}
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -2428,6 +2446,10 @@ packages:
     resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
     engines: {node: '>=6'}
 
+  throttle-debounce@5.0.2:
+    resolution: {integrity: sha512-B71/4oyj61iNH0KeCamLuE2rmKuTO5byTOSVwECM5FA7TiAiAW+UqTKZ9ERueC4qvgSttUhdmq1mXC3kJqGX7A==}
+    engines: {node: '>=12.22'}
+
   tinybench@2.9.0:
     resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
 
@@ -2887,6 +2909,10 @@ snapshots:
     dependencies:
       lit: 3.3.3
 
+  '@internetarchive/icon-user@1.4.1':
+    dependencies:
+      lit: 3.3.3
+
   '@jridgewell/resolve-uri@3.1.2': {}
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
@@ -3073,6 +3099,8 @@ snapshots:
   '@types/parse5@2.2.34':
     dependencies:
       '@types/node': 26.1.1
+
+  '@types/throttle-debounce@5.0.2': {}
 
   '@types/trusted-types@2.0.7': {}
 
@@ -5052,6 +5080,8 @@ snapshots:
   supports-preserve-symlinks-flag@1.0.0: {}
 
   tapable@2.3.3: {}
+
+  throttle-debounce@5.0.2: {}
 
   tinybench@2.9.0: {}
 
