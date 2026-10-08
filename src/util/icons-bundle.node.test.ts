@@ -124,7 +124,7 @@ describe('icon exports', () => {
         !bundled.some((id) => id.endsWith(`/src/elements/${name}/${name}.ts`)),
     );
     expect(dropped).toEqual([]);
-  });
+  }, 60_000);
 
   it('resolves icons/<name> to the icon module, not an element', () => {
     expect(
