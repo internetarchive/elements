@@ -31,10 +31,65 @@ export interface GalleryIcon {
   template: TemplateResult;
 }
 
-/** `caret-open` becomes `caretOpen`. A leading digit gets an `icon` prefix. */
+const RESERVED_WORDS = new Set([
+  'break',
+  'case',
+  'catch',
+  'class',
+  'const',
+  'continue',
+  'debugger',
+  'default',
+  'delete',
+  'do',
+  'else',
+  'enum',
+  'export',
+  'extends',
+  'false',
+  'finally',
+  'for',
+  'function',
+  'if',
+  'import',
+  'in',
+  'instanceof',
+  'new',
+  'null',
+  'return',
+  'super',
+  'switch',
+  'this',
+  'throw',
+  'true',
+  'try',
+  'typeof',
+  'var',
+  'void',
+  'while',
+  'with',
+  'yield',
+  'let',
+  'static',
+  'await',
+  'implements',
+  'interface',
+  'package',
+  'private',
+  'protected',
+  'public',
+]);
+
+/**
+ * `caret-open` becomes `caretOpen`. A leading digit or a reserved word gets an
+ * `icon` prefix so the result is always a valid identifier.
+ */
 export function toIdentifier(name: string): string {
   const camel = name.replace(/-([a-z0-9])/g, (_, c: string) => c.toUpperCase());
-  return /^[0-9]/.test(camel) ? `icon${camel}` : camel;
+  if (/^[0-9]/.test(camel) || RESERVED_WORDS.has(camel)) {
+    return `icon${camel.charAt(0).toUpperCase()}${camel.slice(1)}`;
+  }
+  return camel;
 }
 
 export const galleryIcons: GalleryIcon[] = Object.entries(iconModules)
