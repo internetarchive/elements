@@ -74,6 +74,7 @@
   "exports": {
     "./*": "./dist/src/elements/*.js",
     "./labs/*": "./dist/src/labs/*.js",
+    "./services/*": "./dist/src/services/*.js",
     "./locales/*.js": "./dist/src/locales/*.js"
   },
   "files": [
