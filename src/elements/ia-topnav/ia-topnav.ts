@@ -8,6 +8,7 @@ import {
 } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
+import { LOCALE_STATUS_EVENT } from '@lit/localize';
 
 import { buildTopNavMenus, defaultTopNavConfig } from './data/menus';
 import './ia-topnav-desktop-subnav';
@@ -97,14 +98,21 @@ export class IATopNav extends LitElement {
 
   private boundHandleClick = this.handleDocumentClick.bind(this);
 
+  private boundHandleLocaleStatus = this.handleLocaleStatus.bind(this);
+
   connectedCallback() {
     super.connectedCallback();
+    window.addEventListener(LOCALE_STATUS_EVENT, this.boundHandleLocaleStatus);
     document.addEventListener('keydown', this.boundHandleKeydown);
     document.addEventListener('click', this.boundHandleClick);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    window.removeEventListener(
+      LOCALE_STATUS_EVENT,
+      this.boundHandleLocaleStatus,
+    );
     document.removeEventListener('keydown', this.boundHandleKeydown);
     document.removeEventListener('click', this.boundHandleClick);
   }
@@ -193,6 +201,11 @@ export class IATopNav extends LitElement {
     if (!path.includes(this)) {
       this.closeMenus();
     }
+  }
+
+  /** The menu labels are built by `buildTopNavMenus()`, so a new locale needs a rebuild. */
+  private handleLocaleStatus(e: WindowEventMap[typeof LOCALE_STATUS_EVENT]) {
+    if (e.detail.status === 'ready') this.menuSetup();
   }
 
   menuSetup() {

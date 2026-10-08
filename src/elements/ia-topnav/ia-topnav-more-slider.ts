@@ -23,7 +23,9 @@ export class MoreSlider extends TrackedElement {
               <a
                 @click=${this.trackClick}
                 href=${formatUrl(item.url, this.baseHost)}
-                data-event-click-tracking="${this.analyticsEvent(item.title)}"
+                data-event-click-tracking="${this.analyticsEvent(
+                  item.key ?? item.title,
+                )}"
                 >${item.title}</a
               >
             </li>`,
