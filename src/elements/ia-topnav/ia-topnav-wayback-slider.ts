@@ -98,25 +98,28 @@ export class WaybackSlider extends TrackedElement {
           :host {
             display: block;
             grid-column: 1 / 4;
-            padding: 0 1.5rem;
+            padding: 0 calc(15 * var(--topnavUnit--));
           }
 
           h4 {
             margin-top: 0;
-            font: normal 100 1.6rem var(--themeFontFamily);
+            font: normal 100 calc(16 * var(--topnavUnit--))
+              var(--themeFontFamily);
           }
 
           .grid {
             display: grid;
             grid-template-columns: minmax(auto, 260px) 1fr minmax(auto, 260px);
             /* Possible for 890 - 935: minmax(auto, 260px) 1fr minmax(auto, 260px) */
-            grid-column-gap: 2.5rem;
+            grid-column-gap: calc(25 * var(--topnavUnit--));
           }
 
           .link-lists {
             display: grid;
-            grid-template-columns: calc(50% - 1.25rem) calc(50% - 1.25rem);
-            grid-column-gap: 2.5rem;
+            grid-template-columns:
+              calc(50% - (12.5 * var(--topnavUnit--)))
+              calc(50% - (12.5 * var(--topnavUnit--)));
+            grid-column-gap: calc(25 * var(--topnavUnit--));
           }
         }
       `,
