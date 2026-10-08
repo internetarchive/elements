@@ -36,6 +36,8 @@
   "dependencies": {
     "@internetarchive/ia-clearable-text-input": "^1.1.1",
     "@internetarchive/ia-dropdown": "^2.2.0",
+    "@internetarchive/recaptcha-manager": "^2.0.1",
+    "@internetarchive/shared-resize-observer": "^0.2.0",
     "@lit/localize": "^0.12.2",
     "dayjs": "^1.11.23",
     "lit": "^2.8.0 || ^3.3.2",
@@ -47,6 +49,7 @@
     "@eslint/js": "^9.39.1",
     "@lit/localize-tools": "^0.8.2",
     "@open-wc/testing-helpers": "^3.0.1",
+    "@types/grecaptcha": "^3.0.9",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",
     "@vitest/browser": "^4.0.8",
