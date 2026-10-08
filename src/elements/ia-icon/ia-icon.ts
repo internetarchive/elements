@@ -1,8 +1,22 @@
 import type { TemplateResult, CSSResultGroup } from 'lit';
 import { html, LitElement, css, nothing } from 'lit';
-import { property, customElement } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import themeStyles from '@src/themes/theme-styles';
+
+/**
+ * Percent-encodes the characters that could end the quoted url() string or the
+ * inline style declaration it sits in, so any source stays a single url().
+ */
+const CSS_URL_UNSAFE = /['"\\()\n\r\f]/g;
+function encodeForCssUrl(src: string): string {
+  return src.replace(
+    CSS_URL_UNSAFE,
+    (char) =>
+      `%${char.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0')}`,
+  );
+}
 
 /**
  * Renders an icon from the given source, inheriting the surrounding text
@@ -12,8 +26,8 @@ import themeStyles from '@src/themes/theme-styles';
  * sets the height on its own if a non-square icon is needed.
  *
  * Browsers that support masking render the icon as a masked element so it can
- * take on the current color, with --ia-icon-transition available to animate
- * color changes. The rest fall back to a plain image, which --ia-icon-filter
+ * take on the current color, with --ia-theme-icon-transition available to animate
+ * color changes. The rest fall back to a plain image, which --ia-theme-icon-filter
  * can recolor.
  */
 @customElement('ia-icon')
@@ -23,7 +37,7 @@ export class IAIcon extends LitElement {
 
   render(): TemplateResult | typeof nothing {
     if (!this.src) return nothing;
-    const encodedSrc = this.src.replace(/'/g, '%27').replace(/"/g, '%22');
+    const encodedSrc = encodeForCssUrl(this.src);
 
     return html`
       <div
@@ -43,14 +57,14 @@ export class IAIcon extends LitElement {
           --icon-height--: var(--icon-height);
           --icon-width--: var(--icon-width);
           --icon-color--: var(--icon-color);
-          --ia-icon-filter--: var(--ia-icon-filter, none);
-          --ia-icon-transition--: var(--ia-icon-transition, none);
+          --icon-filter--: var(--icon-filter);
+          --icon-transition--: var(--icon-transition);
         }
 
         .icon {
           height: var(--icon-height--);
           width: var(--icon-width--);
-          filter: var(--ia-icon-filter--);
+          filter: var(--icon-filter--);
         }
 
         .icon.masked {
@@ -67,7 +81,7 @@ export class IAIcon extends LitElement {
             mask-position: center;
             background: var(--icon-color--);
             filter: none;
-            transition: var(--ia-icon-transition--);
+            transition: var(--icon-transition--);
           }
 
           .icon.fallback {
@@ -76,5 +90,11 @@ export class IAIcon extends LitElement {
         }
       `,
     ];
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ia-icon': IAIcon;
   }
 }

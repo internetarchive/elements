@@ -42,6 +42,8 @@ const themeStyles = css`
     --navy-blue: #194880;
     --bright-blue: #4b64ff;
     --default-icon-color: currentColor;
+    --default-icon-filter: none;
+    --default-icon-transition: none;
 
     /*
     ADJUSTABLE STYLES
@@ -102,6 +104,11 @@ const themeStyles = css`
 
     /* Backgrounds and fills */
     --icon-color: var(--ia-theme-icon-color, var(--default-icon-color));
+    --icon-filter: var(--ia-theme-icon-filter, var(--default-icon-filter));
+    --icon-transition: var(
+      --ia-theme-icon-transition,
+      var(--default-icon-transition)
+    );
     --primary-background-color: var(
       --ia-theme-primary-background-color,
       var(--off-white)

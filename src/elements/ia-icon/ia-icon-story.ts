@@ -1,5 +1,5 @@
 import { html, LitElement } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import type { PropInputSettings } from '@demo/story-components/story-prop-settings';
 import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
@@ -38,7 +38,7 @@ const styleInputSettings: StyleInputSettings[] = [
   },
   {
     label: 'Transition',
-    cssVariable: '--ia-icon-transition',
+    cssVariable: '--ia-theme-icon-transition',
     defaultValue: 'none',
   },
 ];
@@ -58,7 +58,7 @@ export class IAIconStory extends LitElement {
       <story-template
         elementTag="ia-icon"
         elementClassName="IAIcon"
-        defaultUsageProps="src=\${favoriteIcon}"
+        .defaultUsageProps=${'src=${favoriteIcon}'}
         .styleInputData=${{ settings: styleInputSettings }}
         .propInputData=${{ settings: propInputSettings }}
       >
