@@ -1,0 +1,1 @@
+import{f as s,g as i,A as o}from"./index-B_Coxf3J.js";import{p as n}from"./directive-helpers-COcCE9Xq.js";const a=s(class extends i{constructor(){super(...arguments),this.key=o}render(r,e){return this.key=r,e}update(r,[e,t]){return e!==this.key&&(n(r),this.key=e),t}});export{a as i};
