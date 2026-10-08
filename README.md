@@ -87,9 +87,15 @@ Add to Jest config:
 
 ## Development
 
+Requires Node 24+ and pnpm 12+. `engine-strict=true` in `.npmrc` makes an older
+Node fail the install instead of warning, but nothing hard-blocks `npm install`:
+npm ignores `engines.pnpm`, and there's deliberately no preinstall guard since it
+would run for consumers too. Use pnpm. `packageManager` and the committed
+`pnpm-lock.yaml` are what point you at it.
+
 ```zsh
-npm i
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 ## Versioning and Publishing
@@ -97,10 +103,10 @@ npm run dev
 ### Prerelease Version
 
 1. Create prerelease version on your branch:
-   1. `npm version prerelease --preid=<some_prefix>`
+   1. `pnpm version prerelease --preid=<some_prefix>`
    2. If you use JIRA, recommend using the ticket number, ie `--preid=webdev-1234`
    3. This will also create a `git` tag
-2. Push the tag that was created in the `npm version` step
+2. Push the tag that was created in the `pnpm version` step
 3. Publish prerelease to npm:
    1. Go to the [Element release page](https://github.com/internetarchive/elements/releases)
    2. Tap `Draft a new release` button
@@ -113,7 +119,7 @@ npm run dev
 
 1. Use [Semantic Versioning](https://semver.org) to determine release number
 2. On the `main` branch:
-   1. Run `npm version [major | minor | patch]`
+   1. Run `pnpm version [major | minor | patch]`
    2. `git push && git push --tags`
 3. Publish release to npm:
    1. Go to the [Element release page](https://github.com/internetarchive/elements/releases)
@@ -135,7 +141,27 @@ src
     - ia-foobar.test.ts // the element's tests
     - ia-foobar-story.ts // an element that demos your element
 ```
-Export your component in `src/index.ts`
+Consumers import each element by its own subpath (`@internetarchive/elements/ia-button/ia-button`). There's no package root export, so there's no barrel file to update.
+
+### Naming
+Custom elements all share one global registry, and that registry is shared with every other script on the host page. Give each element a name specific enough that nothing else would plausibly want it.
+
+If a component is built from several elements, prefix its parts with the component's own name rather than naming them generically, and keep the file name matching the tag:
+```
+src
+- elements
+  - ia-foobar
+    - ia-foobar.ts // ia-foobar
+    - ia-foobar-list-item.ts // ia-foobar-list-item, not ia-list-item
+```
+Declare each element in `HTMLElementTagNameMap` so `querySelector` is typed and a mistyped tag in a template is caught at build time:
+```ts
+declare global {
+  interface HTMLElementTagNameMap {
+    'ia-foobar-list-item': IAFoobarListItem;
+  }
+}
+```
 
 ### Story
 To demo your component, we have a component catalog that you can add your demo to. Create a component in your component directory. Name it `COMPONENT-NAME-story.ts`, ie `ia-button-story.ts`.
@@ -153,6 +179,7 @@ It has a few main configurations:
 *Properties*
 - `elementTag` (_string_) your component's name, ie `ia-button`
 - `labs` (_boolean_) if your component is in `labs` to update links
+- `importPath` (_string_) the element's path under `@internetarchive/elements/`, for an element that lives inside another component's directory, ie `ia-donation-form/form-elements/ia-donation-section`. Defaults to `<tag>/<tag>`
 - `styleInputSettings` (_StyleInputSettings array_) the style options to display, in the appropriate format
 - `propInputSettings` (_PropInputSettings array_) the prop options to display, in the appropriate format
 
@@ -276,6 +303,38 @@ For any styles that you won't be exposing to consumers via the story, you can pr
   ></ia-status-indicator>
 </div>
 ```
+
+### Localization
+
+Wrap user-facing text in `msg()` from `@lit/localize`, inside `render()` or a getter it calls. The first argument has to be a literal: a string, `` str`...${x}` `` when it has an expression, or `` html`...` `` when it has markup.
+
+- Decorate any element that renders a `msg()` with `@localized()`, so it re-renders when the app switches language. That includes one rendering a getter that calls `msg()`, like `TranscriptEntryConfig.displayText`.
+- Don't resolve `msg()` ahead of render. At module scope or in a static field it's fixed at import, and as a property default it's fixed when the element is created. For a text property with a default, leave the property unset and fall back when rendering: `aria-label=${this.label ?? msg('Search')}`.
+
+This package never calls `configureLocalization`. `@lit/localize` can only be configured once per page, so the app owns that call and loads one bundle holding its own messages and ours. We publish our translations for the app to merge in:
+
+```zsh
+pnpm run strings:extract   # add new msg() strings to xliff/<locale>.xlf
+# translate the empty <target>s in xliff/<locale>.xlf
+pnpm run strings:build     # write src/locales/<locale>.ts
+```
+
+Commit all three: the XLIFF, the generated module and the source change.
+
+#### What gets published
+
+`@internetarchive/elements/locales/<locale>.js` exports `templates`, the same shape `lit-localize build` writes in runtime mode: an object keyed by message id (a hash of the English source) whose values are what `loadLocale` returns. It only holds messages that have a translation. A message with no translation is left out instead of falling back to English, so merging it can never override another package's or the app's translation of the same text.
+
+To merge it, an app spreads it under its own templates, app last so the app wins a conflict:
+
+```ts
+import { templates as elements } from '@internetarchive/elements/locales/es.js';
+import { templates as app } from './app-es';
+
+export const templates = { ...elements, ...app };
+```
+
+The XLIFF in `xliff/` is where translations are edited. It isn't published.
 
 ## Component Inventory
 

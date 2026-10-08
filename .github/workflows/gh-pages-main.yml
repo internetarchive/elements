@@ -20,11 +20,13 @@ jobs:
         with:
           persist-credentials: false
 
+      - uses: pnpm/action-setup@v4
+
       - name: Set up Node 🟢
         uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: npm
+          cache: pnpm
 
       - name: Set up Git
         run: |
@@ -33,8 +35,8 @@ jobs:
 
       - name: Install and Build 🔧
         run: |
-          npm ci
-          npm run ghpages:build
+          pnpm install --frozen-lockfile
+          pnpm run ghpages:build
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4

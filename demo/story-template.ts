@@ -1,6 +1,12 @@
-import { css, html, LitElement, type CSSResultGroup } from 'lit';
+import {
+  css,
+  html,
+  LitElement,
+  type CSSResultGroup,
+  type PropertyValues,
+} from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { customElement } from 'lit/decorators/custom-element.js';
+import { customElement } from '@src/util/custom-element';
 import { when } from 'lit/directives/when.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
@@ -11,6 +17,8 @@ import type {
   AppliedProps,
   PropInputData,
 } from './story-components/story-prop-settings';
+
+import { tagFromHash } from './element-hash';
 
 import testTube from './test-tube.svg';
 
@@ -40,6 +48,18 @@ export class StoryTemplate extends LitElement {
 
   @property({ type: Boolean }) labs = false;
 
+  /*
+   * The element's path under `@internetarchive/elements/`, for elements that
+   * live inside another component's directory, e.g.
+   * `ia-donation-form/form-elements/ia-donation-section`. Defaults to
+   * `<tag>/<tag>`, which is where a top-level element lives.
+   */
+  @property({ type: String }) importPath?: string;
+
+  /* Whether the demo is showing this element on its own */
+  @state() private focused = false;
+
+  /* Whether the Import, Usage & Settings section is expanded */
   @state() private detailsVisible = false;
 
   /* Stringified styles applied for the demo component */
@@ -60,6 +80,16 @@ export class StoryTemplate extends LitElement {
   /* Tracks which copy button was last clicked, for feedback */
   @state() private copiedKey: 'import' | 'usage' | 'styling' | null = null;
   private _copyTimeout?: ReturnType<typeof setTimeout>;
+
+  willUpdate(changedProperties: PropertyValues) {
+    if (changedProperties.has('elementTag')) {
+      this.focused = this.elementTag === tagFromHash(window.location.hash);
+      // Start expanded when this is the only element on the page, since
+      // nothing is buried under it. Only on the first read of elementTag, so
+      // a later render can't reopen a section the reader has closed.
+      this.detailsVisible = this.focused;
+    }
+  }
 
   render() {
     return html`
@@ -96,7 +126,9 @@ export class StoryTemplate extends LitElement {
           id="details"
           class="${this.detailsVisible ? 'expanded' : 'collapsed'}"
         >
-          <div class="details-inner">${this.detailsTemplate}</div>
+          <div class="details-inner ${this.focused ? 'focused' : ''}">
+            ${this.detailsTemplate}
+          </div>
         </div>
       </div>
     `;
@@ -246,9 +278,10 @@ export class StoryTemplate extends LitElement {
   }
 
   private get modulePath(): string {
+    const path = this.importPath ?? `${this.elementTag}/${this.elementTag}`;
     return this.labs
-      ? `@internetarchive/elements/labs/${this.elementTag}/${this.elementTag}`
-      : `@internetarchive/elements/${this.elementTag}/${this.elementTag}`;
+      ? `@internetarchive/elements/labs/${path}`
+      : `@internetarchive/elements/${path}`;
   }
 
   /* Toggles visibility of section depending on whether inputs have been slotted in */
@@ -271,19 +304,19 @@ export class StoryTemplate extends LitElement {
     if (slottedComponent) this.slottedDemoComponent = slottedComponent;
   }
 
-  /* Applies styles from the settings to the component and code demo */
+  /* Applies styles from the settings to the component and code demo; an empty
+     string clears them (Reset), reverting to the component's own defaults. */
   private handleStylesApplied(e: CustomEvent): void {
-    const stringifiedStyles = e.detail.styles;
-    if (!stringifiedStyles) return;
-
-    this.stringifiedStyles = stringifiedStyles;
+    this.stringifiedStyles = e.detail.styles || undefined;
   }
 
   /* Applies props from the settings to the component and code demo */
   private handlePropsApplied(e: CustomEvent): void {
     const stringifiedProps = e.detail.stringifiedProps;
     const appliedProps: AppliedProps = e.detail.appliedProps;
-    if (!stringifiedProps || !appliedProps) return;
+    // An empty string is meaningful: every prop is at its default, so the
+    // example should show none of them.
+    if (typeof stringifiedProps !== 'string' || !appliedProps) return;
 
     this.stringifiedProps = stringifiedProps;
     appliedProps.forEach((prop) => {
@@ -407,6 +440,15 @@ export class StoryTemplate extends LitElement {
           gap: 0 12px;
         }
 
+        /* Side by side on a phone, Settings and Styles get half the width
+           each, which wraps every radio group and clips the style inputs.
+           Matches NARROW_VIEWPORT in app-root.ts. */
+        @media (max-width: 640px) {
+          .two-col {
+            grid-template-columns: 1fr;
+          }
+        }
+
         .left-col,
         .right-col {
           min-width: 0;
@@ -422,6 +464,13 @@ export class StoryTemplate extends LitElement {
         .details-inner syntax-highlighter {
           display: block;
           --syntax-max-height: 5.5rem;
+        }
+
+        /* One element on the page means nothing else is competing for the
+           height, so let the snippets run their full length rather than
+           scroll inside a short box. */
+        .details-inner.focused syntax-highlighter {
+          --syntax-max-height: none;
         }
 
         .labs-icon {

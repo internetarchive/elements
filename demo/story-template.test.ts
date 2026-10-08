@@ -5,6 +5,22 @@ import { html } from 'lit';
 import type { StoryTemplate } from './story-template';
 import './story-template';
 
+/**
+ * Sets the hash without firing hashchange, so a fixture created afterwards
+ * picks it up as its initial view.
+ */
+function setHash(hash: string) {
+  window.history.replaceState(null, '', hash);
+}
+
+function clearHash() {
+  window.history.replaceState(
+    null,
+    '',
+    window.location.pathname + window.location.search,
+  );
+}
+
 describe('StoryTemplate', () => {
   describe('importCode', () => {
     test('includes both side-effect and named import when elementClassName is provided', async () => {
@@ -45,6 +61,30 @@ describe('StoryTemplate', () => {
       );
     });
 
+    test('uses importPath for an element nested inside another component', async () => {
+      const el = await fixture<StoryTemplate>(html`
+        <story-template
+          elementTag="ia-donation-section"
+          elementClassName="IADonationSection"
+          importPath="ia-donation-form/form-elements/ia-donation-section"
+        ></story-template>
+      `);
+
+      const importHighlighter = el.shadowRoot?.querySelectorAll(
+        'syntax-highlighter',
+      )[0] as any;
+      expect(importHighlighter).to.exist;
+
+      const code: string = importHighlighter.code;
+      expect(code).to.include(
+        "import '@internetarchive/elements/ia-donation-form/form-elements/ia-donation-section';",
+      );
+      expect(code).to.include(
+        "import { IADonationSection } from '@internetarchive/elements/ia-donation-form/form-elements/ia-donation-section';",
+      );
+      expect(code).to.not.include('ia-donation-section/ia-donation-section');
+    });
+
     test('has no leading or trailing whitespace', async () => {
       const el = await fixture<StoryTemplate>(html`
         <story-template
@@ -68,7 +108,8 @@ describe('StoryTemplate', () => {
       `);
 
       // Only import + usage highlighters; styling section is absent when cssCode is empty
-      const highlighters = el.shadowRoot?.querySelectorAll('syntax-highlighter');
+      const highlighters =
+        el.shadowRoot?.querySelectorAll('syntax-highlighter');
       expect(highlighters?.length).to.equal(2);
     });
 
@@ -80,13 +121,12 @@ describe('StoryTemplate', () => {
       (el as any).stringifiedStyles = 'color: red;';
       await el.updateComplete;
 
-      const highlighters = el.shadowRoot?.querySelectorAll('syntax-highlighter');
+      const highlighters =
+        el.shadowRoot?.querySelectorAll('syntax-highlighter');
       expect(highlighters?.length).to.equal(3);
 
       const stylingHighlighter = highlighters?.[2] as any;
-      expect(stylingHighlighter.code).to.equal(
-        'ia-button {\n color: red;\n}',
-      );
+      expect(stylingHighlighter.code).to.equal('ia-button {\n color: red;\n}');
     });
 
     test('has no trailing whitespace on any line', async () => {
@@ -97,7 +137,8 @@ describe('StoryTemplate', () => {
       (el as any).stringifiedStyles = '--my-var: blue;';
       await el.updateComplete;
 
-      const highlighters = el.shadowRoot?.querySelectorAll('syntax-highlighter');
+      const highlighters =
+        el.shadowRoot?.querySelectorAll('syntax-highlighter');
       const code: string = (highlighters?.[2] as any).code;
       for (const line of code.split('\n')) {
         expect(line).to.equal(line.trimEnd());
@@ -153,6 +194,104 @@ describe('StoryTemplate', () => {
       await el.updateComplete;
       expect(details?.classList.contains('collapsed')).to.be.true;
       expect(details?.classList.contains('expanded')).to.be.false;
+    });
+  });
+
+  describe('Details in the focused view', () => {
+    afterEach(() => {
+      clearHash();
+    });
+
+    const detailsFor = (el: StoryTemplate) =>
+      el.shadowRoot?.querySelector('#details');
+
+    test('starts expanded when the hash focuses this element', async () => {
+      setHash('#elem-ia-button');
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+
+      expect(detailsFor(el)?.classList.contains('expanded')).to.be.true;
+    });
+
+    test('starts collapsed when the hash focuses a different element', async () => {
+      setHash('#elem-ia-combo-box');
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+
+      expect(detailsFor(el)?.classList.contains('collapsed')).to.be.true;
+    });
+
+    test('starts collapsed for a hash that names no element', async () => {
+      setHash('#some-other-anchor');
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+
+      expect(detailsFor(el)?.classList.contains('collapsed')).to.be.true;
+    });
+
+    const maxHeightFor = (el: StoryTemplate) => {
+      const highlighter = el.shadowRoot?.querySelector(
+        'syntax-highlighter',
+      ) as HTMLElement;
+      return getComputedStyle(highlighter)
+        .getPropertyValue('--syntax-max-height')
+        .trim();
+    };
+
+    test('lets the code snippets run full height when focused', async () => {
+      setHash('#elem-ia-button');
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+
+      expect(maxHeightFor(el)).to.equal('none');
+    });
+
+    test('keeps the code snippets capped when not focused', async () => {
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+
+      expect(maxHeightFor(el)).to.equal('5.5rem');
+    });
+
+    test('leaves a section the reader closed alone on later renders', async () => {
+      setHash('#elem-ia-button');
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+      expect(detailsFor(el)?.classList.contains('expanded')).to.be.true;
+
+      const toggleBtn = el.shadowRoot?.querySelector(
+        '.details-toggle',
+      ) as HTMLButtonElement;
+      toggleBtn.click();
+      await el.updateComplete;
+      expect(detailsFor(el)?.classList.contains('collapsed')).to.be.true;
+
+      el.elementClassName = 'IAButton';
+      await el.updateComplete;
+      expect(detailsFor(el)?.classList.contains('collapsed')).to.be.true;
+    });
+  });
+
+  describe('Settings and Styles layout', () => {
+    test('stacks them on a phone, so neither is squeezed to half the width', async () => {
+      // The test browser's frame is phone-sized, which is what puts the
+      // stylesheet's narrow rule in play here.
+      expect(
+        window.matchMedia('(max-width: 640px)').matches,
+        'this test needs a phone-width frame',
+      ).to.be.true;
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+      const grid = el.shadowRoot?.querySelector('.two-col') as HTMLElement;
+      const columns = getComputedStyle(grid).gridTemplateColumns.split(' ');
+      expect(columns).to.have.length(1);
     });
   });
 
