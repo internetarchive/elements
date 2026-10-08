@@ -211,7 +211,9 @@ export class FieldParsersStory extends LitElement {
       }
 
       input[type='text'] {
-        min-width: 14rem;
+        min-width: 0;
+        width: 14rem;
+        max-width: 100%;
       }
 
       .samples {
@@ -224,7 +226,10 @@ export class FieldParsersStory extends LitElement {
       }
 
       .result {
+        box-sizing: border-box;
         flex-basis: 100%;
+        min-width: 0;
+        max-width: 100%;
         display: flex;
         flex-direction: column;
         gap: 2px;
@@ -234,9 +239,13 @@ export class FieldParsersStory extends LitElement {
         font-size: 0.85rem;
       }
 
+      .call,
+      .output {
+        overflow-wrap: anywhere;
+      }
+
       .output {
         font-weight: 600;
-        overflow-wrap: anywhere;
       }
     `;
   }
