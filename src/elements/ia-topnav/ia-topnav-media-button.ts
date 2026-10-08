@@ -7,8 +7,10 @@ import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
+import { localized, msg } from '@lit/localize';
 
 @customElement('ia-topnav-media-button')
+@localized()
 export class MediaButton extends TrackedElement {
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
   @property({ type: String }) icon = '';
@@ -26,7 +28,7 @@ export class MediaButton extends TrackedElement {
         class="menu-item ${this.mediatype} ${this.buttonClass}"
         @click=${this.followable ? this.trackClick : this.onClick}
         data-event-click-tracking="${this.analyticsEvent}"
-        title="${this.tooltipPrefix} ${this.mediatype} menu"
+        title=${this.tooltip}
       >
         ${this.menuItem}
       </a>
@@ -77,8 +79,38 @@ export class MediaButton extends TrackedElement {
     return this.selected ? 'selected' : '';
   }
 
-  get tooltipPrefix() {
-    return this.selected ? 'Collapse' : 'Expand';
+  /**
+   * The button's tooltip.
+   *
+   * Each menu has its own whole phrase, so a translator can reword it and
+   * move the menu name freely, and the name shown is a translated one.
+   */
+  get tooltip() {
+    const phrases = this.selected
+      ? {
+          web: msg('Collapse web menu'),
+          texts: msg('Collapse texts menu'),
+          video: msg('Collapse video menu'),
+          audio: msg('Collapse audio menu'),
+          software: msg('Collapse software menu'),
+          images: msg('Collapse images menu'),
+          donate: msg('Collapse donate menu'),
+          more: msg('Collapse more menu'),
+        }
+      : {
+          web: msg('Expand web menu'),
+          texts: msg('Expand texts menu'),
+          video: msg('Expand video menu'),
+          audio: msg('Expand audio menu'),
+          software: msg('Expand software menu'),
+          images: msg('Expand images menu'),
+          donate: msg('Expand donate menu'),
+          more: msg('Expand more menu'),
+        };
+    return (
+      (phrases as Record<string, string>)[this.mediatype] ??
+      (this.selected ? msg('Collapse menu') : msg('Expand menu'))
+    );
   }
 
   get iconClass() {
