@@ -23,6 +23,7 @@ import {
 } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parseAttributes, stripPrologue } from './icon-source.mts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const sourceDir = join(root, 'icons');
@@ -44,25 +45,6 @@ const MANAGED_ATTRIBUTES = new Set([
 
 function fail(message: string): never {
   throw new Error(`build-icons: ${message}`);
-}
-
-/** Strips the XML prolog, doctype and comments that precede the root. */
-function stripPrologue(source: string): string {
-  return source
-    .replace(/<\?xml[\s\S]*?\?>/g, '')
-    .replace(/<!DOCTYPE[\s\S]*?>/gi, '')
-    .replace(/<!--[\s\S]*?-->/g, '')
-    .trim();
-}
-
-function parseAttributes(source: string): [string, string][] {
-  const attributes: [string, string][] = [];
-  for (const match of source.matchAll(
-    /([^\s=/]+)\s*=\s*("([^"]*)"|'([^']*)')/g,
-  )) {
-    attributes.push([match[1], match[3] ?? match[4]]);
-  }
-  return attributes;
 }
 
 function buildModule(name: string, raw: string): string {
