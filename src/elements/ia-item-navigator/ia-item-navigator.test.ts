@@ -543,4 +543,49 @@ describe('IAItemNavigator', () => {
     expect(el.openMenu).to.equal('share');
     expect(el.menuOpened).to.equal(true);
   });
+
+  describe('toggle button icon', () => {
+    async function navigator(style = ''): Promise<IAItemNavigator> {
+      const el = await fixture<IAItemNavigator>(
+        html`<ia-item-navigator style=${style}></ia-item-navigator>`,
+      );
+      el.menuContents = [provider('contents')];
+      await el.updateComplete;
+      return el;
+    }
+
+    test('draws the ellipses glyph as inline svg at the icon size', async () => {
+      const el = await navigator('--item-navigator-icon-size: 40px');
+      const glyph = el.shadowRoot?.querySelector(
+        'button.toggle-menu .ia-icon > svg',
+      ) as SVGElement;
+      expect(glyph).to.exist;
+      expect(glyph.getAttribute('viewBox')).to.equal('0 0 40 40');
+
+      // The glyph fills the ring's border box: the 40px icon plus 2px borders.
+      const { width, height } = glyph.getBoundingClientRect();
+      expect(width).to.equal(44);
+      expect(height).to.equal(44);
+    });
+
+    test('recolors the glyph with the icon color knob', async () => {
+      const el = await navigator('--item-navigator-icon-color: rgb(1, 2, 3)');
+      const glyph = el.shadowRoot?.querySelector(
+        'button.toggle-menu .ia-icon > svg',
+      ) as SVGElement;
+
+      expect(getComputedStyle(glyph).color).to.equal('rgb(1, 2, 3)');
+      expect(getComputedStyle(glyph).fill).to.equal('rgb(1, 2, 3)');
+    });
+
+    test('keeps the toggle named by its aria-label, not the decorative glyph', async () => {
+      const el = await navigator();
+      const button = el.shadowRoot?.querySelector('button.toggle-menu');
+
+      expect(button?.getAttribute('aria-label')).to.equal('Open side panel');
+      expect(
+        button?.querySelector('svg')?.getAttribute('aria-hidden'),
+      ).to.equal('true');
+    });
+  });
 });
