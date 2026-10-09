@@ -10,15 +10,14 @@ import {
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import themeStyles from '@src/themes/theme-styles';
-import {
-  shareIcon,
-  twitterIcon,
-  facebookIcon,
-  tumblrIcon,
-  pinterestIcon,
-  emailIcon,
-  linkIcon,
-} from './share-icons';
+import share from '@src/icons/share';
+import twitter from '@src/icons/twitter';
+import facebook from '@src/icons/facebook';
+import tumblr from '@src/icons/tumblr';
+import pinterest from '@src/icons/pinterest';
+import email from '@src/icons/email';
+import link from '@src/icons/link';
+import { iconBox, iconBoxStyles } from '@src/util/icon-box';
 
 type ShareOption = {
   name: string;
@@ -27,7 +26,7 @@ type ShareOption = {
 };
 
 /** Icon for the share menu shortcut / menu entry. */
-export { shareIcon };
+export const shareIcon: TemplateResult = iconBox(share);
 
 /**
  * The "share this item" side panel: social sharing links (Twitter, Facebook,
@@ -83,7 +82,7 @@ export class IAItemNavSharePanel extends LitElement {
     this.sharingOptions = [
       {
         name: 'Twitter',
-        icon: twitterIcon,
+        icon: iconBox(twitter),
         url: `https://twitter.com/intent/tweet?${new URLSearchParams({
           url: shareUrl,
           text: shareBlurb,
@@ -92,14 +91,14 @@ export class IAItemNavSharePanel extends LitElement {
       },
       {
         name: 'Facebook',
-        icon: facebookIcon,
+        icon: iconBox(facebook),
         url: `https://www.facebook.com/sharer/sharer.php?${new URLSearchParams({
           u: shareUrl,
         })}`,
       },
       {
         name: 'Tumblr',
-        icon: tumblrIcon,
+        icon: iconBox(tumblr),
         url: `https://www.tumblr.com/widgets/share/tool/preview?${new URLSearchParams(
           {
             posttype: 'link',
@@ -110,7 +109,7 @@ export class IAItemNavSharePanel extends LitElement {
       },
       {
         name: 'Pinterest',
-        icon: pinterestIcon,
+        icon: iconBox(pinterest),
         url: `http://www.pinterest.com/pin/create/button/?${new URLSearchParams(
           {
             url: shareUrl,
@@ -120,7 +119,7 @@ export class IAItemNavSharePanel extends LitElement {
       },
       {
         name: 'Email',
-        icon: emailIcon,
+        icon: iconBox(email),
         url: `mailto:?${new URLSearchParams({
           subject: shareBlurb,
           body: shareUrl,
@@ -190,7 +189,7 @@ export class IAItemNavSharePanel extends LitElement {
         )}
         <details>
           <summary class="share-option">
-            ${linkIcon} Get an embeddable link
+            ${iconBox(link)} Get an embeddable link
           </summary>
           <div class="embed">
             <h4>Embed</h4>
@@ -221,6 +220,7 @@ export class IAItemNavSharePanel extends LitElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      iconBoxStyles,
       css`
         :host {
           --item-navigator-text-color--: var(
@@ -293,7 +293,8 @@ export class IAItemNavSharePanel extends LitElement {
           padding: 0.2em;
           margin-right: 1em;
           vertical-align: middle;
-          border: 1px solid var(--item-navigator-border-color--);
+          /* The border only reserves geometry. It isn't drawn. */
+          border: 1px solid transparent;
           border-radius: 7px;
         }
 
@@ -303,12 +304,22 @@ export class IAItemNavSharePanel extends LitElement {
           font-size: var(--item-navigator-base-font-size--);
           width: 2em;
           height: 2em;
+          position: relative;
+          /* The glyph fills the border box (the padding box plus the 1px
+             border) and is clipped to its rounded corners. */
+          clip-path: inset(0 round 7px);
         }
 
-        /* Our glyphs are masked spans: the mask supplies the shape, this
-           supplies the paint. */
-        span.ia-icon {
-          background-color: var(--item-navigator-icon-color--);
+        .share-option .ia-icon > svg {
+          position: absolute;
+          inset: -1px;
+          width: calc(100% + 2px);
+          height: calc(100% + 2px);
+        }
+
+        /* Our glyphs paint with currentColor, so this supplies the paint. */
+        .ia-icon {
+          color: var(--item-navigator-icon-color--);
         }
 
         /* Host-supplied icons may still be inline svg, so keep theming those

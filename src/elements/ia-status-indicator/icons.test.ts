@@ -1,35 +1,25 @@
 import { describe, expect, test } from 'vitest';
 
-import audioIcon from './icons/audio.svg';
-import collectionIcon from './icons/collection.svg';
-import etreeIcon from './icons/etree.svg';
-import imagesIcon from './icons/images.svg';
-import searchIcon from './icons/search.svg';
-import softwareIcon from './icons/software.svg';
-import textsIcon from './icons/texts.svg';
-import tvIcon from './icons/tv.svg';
-import videoIcon from './icons/video.svg';
-import webIcon from './icons/web.svg';
-
 /**
- * These assert the shape of the shipped .svg assets rather than any component
- * behaviour, because that is where the bug lived: `mask-size: contain` centres
- * a glyph's *viewBox*, not its ink, so a glyph whose ink sits against one edge
- * of its box renders off-centre no matter what the component does.
+ * The mediatype glyph sources the status indicator draws, read as raw markup
+ * from the shared `icons/` folder. These assert the shape of the sources rather
+ * than any component behaviour, because that is where the bug lived: the
+ * indicator sizes a glyph by its *viewBox*, and an svg centres the viewBox in
+ * its box, not the ink. A glyph whose ink sits against one edge of its viewBox
+ * renders off-centre no matter what the component does.
  */
+const sources = import.meta.glob<string>(
+  [
+    '../../../icons/mediatype-*.svg',
+    // The `search` mediatype shares the glyph the dropdown search bar uses.
+    '../../../icons/search.svg',
+  ],
+  { query: '?raw', import: 'default', eager: true },
+);
 
-const ICONS: [name: string, url: string][] = [
-  ['audio', audioIcon],
-  ['collection', collectionIcon],
-  ['etree', etreeIcon],
-  ['images', imagesIcon],
-  ['search', searchIcon],
-  ['software', softwareIcon],
-  ['texts', textsIcon],
-  ['tv', tvIcon],
-  ['video', videoIcon],
-  ['web', webIcon],
-];
+const ICONS: [name: string, markup: string][] = Object.entries(sources).map(
+  ([path, markup]) => [path.split('/').pop() as string, markup],
+);
 
 type Margins = {
   top: number;
@@ -40,12 +30,10 @@ type Margins = {
 
 /**
  * Loads a glyph as inline svg and measures where its ink sits inside its
- * viewBox, as a fraction of the box. Inline is the only way to get `getBBox`;
- * the component itself draws these as CSS masks.
+ * viewBox, as a fraction of the box. `getBBox` needs the markup in the
+ * document.
  */
-async function measure(url: string): Promise<Margins> {
-  const markup = await (await fetch(url)).text();
-
+function measure(name: string, markup: string): Margins {
   const host = document.createElement('div');
   // Off-screen rather than hidden: `display: none` gives an empty bbox.
   host.style.cssText = 'position:absolute;left:-9999px;top:0';
@@ -54,10 +42,10 @@ async function measure(url: string): Promise<Margins> {
 
   try {
     const svg = host.querySelector('svg');
-    expect(svg, `${url} should contain an <svg>`).to.exist;
+    expect(svg, `${name} should contain an <svg>`).to.exist;
 
     const viewBox = svg?.getAttribute('viewBox');
-    expect(viewBox, `${url} should declare a viewBox`).to.exist;
+    expect(viewBox, `${name} should declare a viewBox`).to.exist;
 
     const [vx, vy, width, height] = (viewBox as string)
       .split(/[\s,]+/)
@@ -75,10 +63,25 @@ async function measure(url: string): Promise<Margins> {
   }
 }
 
-describe('mediatype glyph assets', () => {
-  ICONS.forEach(([name, url]) => {
-    test(`${name} centres its ink vertically within its viewBox`, async () => {
-      const { top, bottom } = await measure(url);
+describe('mediatype glyph sources', () => {
+  test('covers every mediatype glyph', () => {
+    expect(ICONS.map(([name]) => name).sort()).to.deep.equal([
+      'mediatype-audio.svg',
+      'mediatype-collection.svg',
+      'mediatype-etree.svg',
+      'mediatype-images.svg',
+      'mediatype-software.svg',
+      'mediatype-texts.svg',
+      'mediatype-tv.svg',
+      'mediatype-video.svg',
+      'mediatype-web.svg',
+      'search.svg',
+    ]);
+  });
+
+  ICONS.forEach(([name, markup]) => {
+    test(`${name} centres its ink vertically within its viewBox`, () => {
+      const { top, bottom } = measure(name, markup);
 
       // `collection`, `texts` and `web` each had ~29% empty above the ink and
       // 6.7% below, so they rendered visibly low in the ring.
@@ -90,8 +93,8 @@ describe('mediatype glyph assets', () => {
       ).to.be.lessThan(0.02);
     });
 
-    test(`${name} centres its ink horizontally within its viewBox`, async () => {
-      const { left, right } = await measure(url);
+    test(`${name} centres its ink horizontally within its viewBox`, () => {
+      const { left, right } = measure(name, markup);
 
       expect(
         Math.abs(left - right),

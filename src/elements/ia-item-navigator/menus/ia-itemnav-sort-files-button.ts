@@ -8,17 +8,17 @@ import {
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import themeStyles from '@src/themes/theme-styles';
-import { maskedIcon } from '@src/util/masked-icon';
-import sortAscUrl from './icons/sort-asc.svg';
-import sortDescUrl from './icons/sort-desc.svg';
-import sortNeutralUrl from './icons/sort-neutral.svg';
+import { iconBox, iconBoxStyles } from '@src/util/icon-box';
+import sortAsc from '@src/icons/sort-asc';
+import sortDesc from '@src/icons/sort-desc';
+import sortNeutral from '@src/icons/sort-neutral';
 import type { FileSortOption, ViewableFileInfo } from './models';
 
-const sortAscIcon = maskedIcon(sortAscUrl);
+const sortAscIcon = iconBox(sortAsc);
 
-const sortDescIcon = maskedIcon(sortDescUrl);
+const sortDescIcon = iconBox(sortDesc);
 
-const sortNeutralIcon = maskedIcon(sortNeutralUrl);
+const sortNeutralIcon = iconBox(sortNeutral);
 
 /**
  * A tri-state sort toggle for the viewable-files panel header. Cycles
@@ -97,6 +97,7 @@ export class IAItemNavSortFilesButton extends LitElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      iconBoxStyles,
       css`
         :host {
           /* Every glyph is square, so one knob sizes both axes. Matches the
@@ -129,12 +130,11 @@ export class IAItemNavSortFilesButton extends LitElement {
           font: inherit;
         }
 
-        /* The glyph is a masked span: the mask supplies the shape, this
-           supplies the paint. */
+        /* The glyph paints with currentColor, so this supplies the paint. */
         button.sort-by .ia-icon {
           width: var(--item-navigator-header-icon-size--);
           height: var(--item-navigator-header-icon-size--);
-          background-color: var(--item-navigator-icon-color--);
+          color: var(--item-navigator-icon-color--);
         }
       `,
     ];

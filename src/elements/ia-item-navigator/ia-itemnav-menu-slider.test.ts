@@ -348,4 +348,35 @@ describe('IAItemNavMenuSlider', () => {
     expect(linky.href).to.equal('/go');
     expect(linky.followable).to.equal(true);
   });
+
+  describe('close button icons', () => {
+    test('draw the collapse glyph at the header icon size, in the icon color', async () => {
+      const el = await fixture<IAItemNavMenuSlider>(
+        html`<ia-itemnav-menu-slider
+          style="--item-navigator-header-icon-size: 28px;
+                 --item-navigator-icon-color: rgb(4, 5, 6)"
+        ></ia-itemnav-menu-slider>`,
+      );
+      el.menus = [provider('a')];
+      await el.updateComplete;
+
+      const glyph = el.shadowRoot?.querySelector(
+        '.menu > button.close .ia-icon > svg',
+      ) as SVGElement;
+      expect(glyph).to.exist;
+
+      const { width, height } = glyph.getBoundingClientRect();
+      expect(width).to.equal(28);
+      expect(height).to.equal(28);
+      expect(getComputedStyle(glyph).color).to.equal('rgb(4, 5, 6)');
+      expect(getComputedStyle(glyph).fill).to.equal('rgb(4, 5, 6)');
+    });
+
+    test('stay named by their aria-label', async () => {
+      const el = await sliderWith([provider('a')]);
+      const close = el.shadowRoot?.querySelector('.menu > button.close');
+
+      expect(close?.getAttribute('aria-label')).to.equal('Close navigation');
+    });
+  });
 });
