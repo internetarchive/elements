@@ -187,6 +187,9 @@ importers:
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
+      typescript-cookie:
+        specifier: ^1.0.6
+        version: 1.0.6
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.5
@@ -194,6 +197,9 @@ importers:
       '@eslint/js':
         specifier: ^9.39.1
         version: 9.39.5
+      '@internetarchive/local-cache':
+        specifier: 1.0.0
+        version: 1.0.0
       '@lit/localize-tools':
         specifier: ^0.8.2
         version: 0.8.2
@@ -530,6 +536,9 @@ packages:
 
   '@internetarchive/icon-close@1.4.1':
     resolution: {integrity: sha512-nN1rGfScGssGFpfEew4azsrsMyUJtkDWqUDlckJi31PtyQnbZqUmZ07UO3Aw+wZIo3cU1MHxb5VxDy3Rmr8QGA==}
+
+  '@internetarchive/local-cache@1.0.0':
+    resolution: {integrity: sha512-KGY2gwSBpxrEf7+zOIdgLF/KKhk6KnBAH5nphKpoUEm8mn3ht8wPdUACZ13hUqagZPY3txCLuPPbjiKNH5RPeA==}
 
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
@@ -1641,6 +1650,9 @@ packages:
   htmlparser2@10.1.0:
     resolution: {integrity: sha512-VTZkM9GWRAtEpveh7MSF6SjjrpNVNNVJfFup7xTY3UpFtm67foy9HDVXneLtFVt4pMz5kZtgNcvCniNFb1hlEQ==}
 
+  idb-keyval@6.3.0:
+    resolution: {integrity: sha512-um+2dgAWmYsu615EXpWVwSmapJhON0G43t3Ka/EVaohzPQXSMqKEqeDK/oIW3Ow+BXaF2PvSc+oBTFp793A5Ow==}
+
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
 
@@ -2502,6 +2514,10 @@ packages:
     resolution: {integrity: sha512-phPGCwqr2+Qo0fwniCE8e4pKnGu/yFb5nD5Y8bf0EEeiI5GklnACYA9GFy/DrAeRrKHXvHn+1SUsOWgJp6RO+g==}
     engines: {node: '>= 0.4'}
 
+  typescript-cookie@1.0.6:
+    resolution: {integrity: sha512-s+BZr7/9BUG6Kg7jGGcOY/4XJcP+iZRFdF3q4FPTfRSP83ivLWF94OcH8PrzGmnS8Ab9qP7ENu/ikLwNFsIafA==}
+    engines: {node: '>=14'}
+
   typescript@5.2.2:
     resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
     engines: {node: '>=14.17'}
@@ -2886,6 +2902,10 @@ snapshots:
   '@internetarchive/icon-close@1.4.1':
     dependencies:
       lit: 3.3.3
+
+  '@internetarchive/local-cache@1.0.0':
+    dependencies:
+      idb-keyval: 6.3.0
 
   '@jridgewell/resolve-uri@3.1.2': {}
 
@@ -4195,6 +4215,8 @@ snapshots:
       domutils: 3.2.2
       entities: 7.0.1
 
+  idb-keyval@6.3.0: {}
+
   ieee754@1.2.1: {}
 
   ignore@5.3.2: {}
@@ -5149,6 +5171,8 @@ snapshots:
       is-typed-array: 1.1.15
       possible-typed-array-names: 1.1.0
       reflect.getprototypeof: 1.0.10
+
+  typescript-cookie@1.0.6: {}
 
   typescript@5.2.2: {}
 
