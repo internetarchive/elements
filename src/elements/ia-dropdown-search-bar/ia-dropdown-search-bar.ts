@@ -9,7 +9,7 @@ import {
 } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
-import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-input';
+import type { IaClearableTextInput } from '@src/elements/ia-clearable-text-input/ia-clearable-text-input';
 import type {
   IADropdown,
   OptionInterface,
@@ -19,7 +19,7 @@ import type { SearchCategory, SearchRequestedDetail } from './models';
 import themeStyles from '@src/themes/theme-styles';
 import searchIcon from './search.svg';
 
-import '@internetarchive/ia-clearable-text-input';
+import '@src/elements/ia-clearable-text-input/ia-clearable-text-input';
 import '@src/elements/ia-dropdown/ia-dropdown';
 import '@src/elements/ia-status-indicator/ia-status-indicator';
 
