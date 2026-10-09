@@ -51,8 +51,26 @@ export class DefaultMetadataBackend implements MetadataBackendInterface {
     identifier: string,
     keypath?: string,
   ): Promise<Result<any, MetadataServiceError>> {
-    const path = keypath ? `/${keypath}` : '';
-    const url = `https://${this.baseUrl}/metadata/${identifier}${path}`;
+    // `.` and `..` would climb out of /metadata/ once the URL is resolved, so
+    // they are refused. Every other part is encoded, so none can add a query
+    // string or more path.
+    const keyParts = keypath ? keypath.split('/') : [];
+    if (
+      [identifier, ...keyParts].some((part) => part === '.' || part === '..')
+    ) {
+      return {
+        error: new MetadataServiceError(
+          MetadataServiceErrorType.itemNotFound,
+          'Invalid identifier or path',
+        ),
+      };
+    }
+    const path = keyParts
+      .map((part) => `/${encodeURIComponent(part)}`)
+      .join('');
+    const url = `https://${this.baseUrl}/metadata/${encodeURIComponent(
+      identifier,
+    )}${path}`;
     return this.fetchUrl(url);
   }
 

@@ -99,4 +99,68 @@ describe('DefaultMetadataBackend', () => {
     expect(urlConfig?.credentials).to.equal('include');
     window.fetch = fetchBackup;
   });
+
+  describe('request path', () => {
+    async function urlFor(identifier: string, keypath?: string) {
+      const fetchBackup = window.fetch;
+      let urlCalled = '';
+      window.fetch = (input: RequestInfo | URL): Promise<Response> => {
+        urlCalled = input.toString();
+        return Promise.resolve(new Response('{}'));
+      };
+      try {
+        await new DefaultMetadataBackend({
+          scope: 'foo',
+        }).fetchMetadata(identifier, keypath);
+      } finally {
+        window.fetch = fetchBackup;
+      }
+      return new URL(urlCalled);
+    }
+
+    it('keeps an ordinary identifier and key path as they are', async () => {
+      const url = await urlFor('foo-bar_1.2', 'metadata/title');
+
+      expect(url.pathname).to.equal('/metadata/foo-bar_1.2/metadata/title');
+    });
+
+    it('does not let an identifier leave /metadata/ or add a query', async () => {
+      const url = await urlFor('../services/user?x=1#frag');
+
+      // one path segment after /metadata/, with the slashes and query encoded
+      expect(url.pathname.split('/')).to.have.length(3);
+      expect(url.pathname.startsWith('/metadata/')).to.be.true;
+      expect(url.searchParams.get('x')).to.be.null;
+      expect(url.hash).to.equal('');
+      expect(url.searchParams.get('scope')).to.equal('foo');
+    });
+
+    it('refuses a dot segment in the identifier or key path', async () => {
+      const backend = new DefaultMetadataBackend({ scope: 'foo' });
+      const fetchBackup = window.fetch;
+      let fetched = false;
+      window.fetch = (): Promise<Response> => {
+        fetched = true;
+        return Promise.resolve(new Response('{}'));
+      };
+      try {
+        const cases: [string, string | undefined][] = [
+          ['..', undefined],
+          ['.', undefined],
+          ['foo', '../../services/user'],
+          ['foo', 'metadata/./title'],
+        ];
+        for (const [identifier, keypath] of cases) {
+          const result = await backend.fetchMetadata(identifier, keypath);
+          expect(result.error?.type).to.equal(
+            MetadataServiceErrorType.itemNotFound,
+          );
+        }
+      } finally {
+        window.fetch = fetchBackup;
+      }
+
+      expect(fetched).to.be.false;
+    });
+  });
 });
