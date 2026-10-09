@@ -1,12 +1,15 @@
 import { CSSResultGroup, PropertyValues, css, html, nothing } from 'lit';
 import TrackedElement from './tracked-element';
-import icons from './assets/img/icons';
+import donateUnpaddedIcon from '@src/icons/topnav-donate-unpadded';
+import iaLogoIcon from '@src/icons/topnav-ia-logo';
+import searchIcon from '@src/icons/topnav-search';
+import uploadIcon from '@src/icons/topnav-upload';
+import wordmarkStackedIcon from '@src/icons/topnav-wordmark-stacked';
 import './ia-topnav-icon-hamburger';
 import './ia-topnav-login-button';
 import type { LoginButton } from './ia-topnav-login-button';
 import './ia-topnav-media-menu';
 import '@src/elements/ia-sr-only-text/ia-sr-only-text';
-import logoWordmarkStacked from './assets/img/wordmark-stacked';
 import { formatUrl } from './lib/helpers';
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
@@ -117,8 +120,9 @@ export class PrimaryNav extends TrackedElement {
             @click=${this.trackClick}
             data-event-click-tracking="${this.config?.eventCategory}|NavHome"
             title=${msg('Go home')}
+            aria-label="Internet Archive"
             class="link-home"
-            >${icons.iaLogo}${logoWordmarkStacked}</a
+            >${iaLogoIcon}${wordmarkStackedIcon}</a
           >
           ${this.secondLogoSlot}
         </div>
@@ -255,8 +259,9 @@ export class PrimaryNav extends TrackedElement {
         class="search-trigger"
         @click="${this.toggleSearchMenu}"
         data-event-click-tracking="${this.config?.eventCategory}|NavSearchOpen"
+        aria-label=${msg('Search')}
       >
-        ${icons.search}
+        ${searchIcon}
       </button>
     `;
   }
@@ -270,7 +275,7 @@ export class PrimaryNav extends TrackedElement {
           this.baseHost,
         )}
       >
-        ${icons.donateUnpadded}
+        ${donateUnpaddedIcon}
         <ia-sr-only-text>${msg('Donate to the archive')}</ia-sr-only-text>
       </a>
     `;
@@ -280,9 +285,10 @@ export class PrimaryNav extends TrackedElement {
     return html` <a
       .href="${formatUrl('/upload' as string & Location, this.baseHost)}"
       class="upload"
+      aria-label=${msg('Upload')}
       @focus=${this.toggleMediaMenu}
     >
-      ${icons.upload}
+      ${uploadIcon}
       <span>${msg('Upload')}</span>
     </a>`;
   }
@@ -369,18 +375,16 @@ export class PrimaryNav extends TrackedElement {
           justify-self: stretch;
         }
 
-        .ia-logo {
+        .link-home svg {
           height: 3rem;
+          margin-right: 5px;
+        }
+        .link-home svg:first-child {
           width: 2.7rem;
           display: inline-block;
         }
-        .ia-wordmark {
-          height: 3rem;
+        .link-home svg:last-child {
           width: 9.5rem;
-        }
-        .ia-logo,
-        .ia-wordmark {
-          margin-right: 5px;
         }
 
         .hamburger {
@@ -401,9 +405,7 @@ export class PrimaryNav extends TrackedElement {
         .mobile-donate-link svg {
           height: 4rem;
           width: 4rem;
-        }
-        .mobile-donate-link .fill-color {
-          fill: rgb(255, 0, 0);
+          color: rgb(255, 0, 0);
         }
 
         .search-trigger {
@@ -412,9 +414,7 @@ export class PrimaryNav extends TrackedElement {
         .search-trigger svg {
           height: 4rem;
           width: 4rem;
-        }
-        .search-trigger .fill-color {
-          fill: var(--iconFill);
+          color: var(--iconFill);
         }
 
         .search-container {
@@ -547,8 +547,7 @@ export class PrimaryNav extends TrackedElement {
             display: none;
           }
 
-          .ia-logo,
-          .ia-wordmark {
+          .link-home svg {
             margin-right: 10px;
           }
 
@@ -604,13 +603,13 @@ export class PrimaryNav extends TrackedElement {
 
           .upload svg {
             vertical-align: middle;
-            fill: var(--iconFill);
+            color: var(--iconFill);
           }
 
           .upload:hover svg,
           .upload:focus svg,
           .upload:active svg {
-            fill: var(--linkHoverColor);
+            color: var(--linkHoverColor);
           }
 
           .search-container,

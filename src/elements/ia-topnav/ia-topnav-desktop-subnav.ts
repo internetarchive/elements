@@ -3,7 +3,7 @@ import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 
 import TrackedElement from './tracked-element';
-import icons from './assets/img/icons';
+import donateIcon from '@src/icons/topnav-donate';
 import { formatUrl } from './lib/helpers';
 import { IATopNavLink } from './models';
 import themeStyles from '@src/themes/theme-styles';
@@ -33,7 +33,7 @@ export class DesktopSubnav extends TrackedElement {
 
   static iconFor(title: string): TemplateResult {
     const subnavIcons: Record<string, TemplateResult> = {
-      Donate: icons.donate,
+      Donate: donateIcon,
     };
     return subnavIcons[title] ? subnavIcons[title] : html``;
   }
@@ -74,7 +74,7 @@ export class DesktopSubnav extends TrackedElement {
           width: 1.6rem;
           height: 1.6rem;
           vertical-align: top;
-          fill: #f00;
+          color: #f00;
         }
       `,
     ];
