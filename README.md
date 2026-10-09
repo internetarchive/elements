@@ -13,7 +13,7 @@ npm i -S @internetarchive/elements
 ## Usage
 
 ```typescript
-import "@internetarchive/elements/ia-button/ia-button";
+import "@internetarchive/elements/ia-button";
 
 ...
 
@@ -141,7 +141,9 @@ src
     - ia-foobar.test.ts // the element's tests
     - ia-foobar-story.ts // an element that demos your element
 ```
-Consumers import each element by its own subpath (`@internetarchive/elements/ia-button/ia-button`). There's no package root export, so there's no barrel file to update.
+Consumers import each element by its own subpath (`@internetarchive/elements/ia-button`). There's no package root export, so there's no barrel file to update.
+
+The short path is a `package.json` `exports` entry that `scripts/build-exports.mts` writes for every `src/elements/<name>/<name>.ts` and `src/labs/<name>/<name>.ts`. A new component doesn't need to do anything: run `pnpm run exports` after adding the folder (`pnpm run lint` and the build fail on `exports:check` until you do) and commit the result. The long path (`@internetarchive/elements/ia-button/ia-button`) still works, and it's how you import the other files in a folder, like `ia-item-navigator/menus/ia-itemnav-share-panel`. A folder with no file named after it has no short path.
 
 ### Naming
 Custom elements all share one global registry, and that registry is shared with every other script on the host page. Give each element a name specific enough that nothing else would plausibly want it.
@@ -179,7 +181,7 @@ It has a few main configurations:
 *Properties*
 - `elementTag` (_string_) your component's name, ie `ia-button`
 - `labs` (_boolean_) if your component is in `labs` to update links
-- `importPath` (_string_) the element's path under `@internetarchive/elements/`, for an element that lives inside another component's directory, ie `ia-donation-form/form-elements/ia-donation-section`. Defaults to `<tag>/<tag>`
+- `importPath` (_string_) the element's path under `@internetarchive/elements/`, for an element that lives inside another component's directory, ie `ia-donation-form/form-elements/ia-donation-section`. Defaults to `<tag>`
 - `styleInputSettings` (_StyleInputSettings array_) the style options to display, in the appropriate format
 - `propInputSettings` (_PropInputSettings array_) the prop options to display, in the appropriate format
 

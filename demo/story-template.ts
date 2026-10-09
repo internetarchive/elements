@@ -278,7 +278,7 @@ export class StoryTemplate extends LitElement {
   }
 
   private get modulePath(): string {
-    const path = this.importPath ?? `${this.elementTag}/${this.elementTag}`;
+    const path = this.importPath ?? this.elementTag;
     return this.labs
       ? `@internetarchive/elements/labs/${path}`
       : `@internetarchive/elements/${path}`;
