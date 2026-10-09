@@ -20,6 +20,12 @@ import "@internetarchive/elements/ia-button/ia-button";
 <ia-button @click=() => alert('Clicked!')>Click Me</ia-button>
 ```
 
+Services (code with no UI, like a metadata fetcher or a parser) import the same way, from `services/`:
+
+```typescript
+import { FoobarService } from "@internetarchive/elements/services/foobar-service/foobar-service";
+```
+
 ## Build Dependencies
 
 We use SVGs in this repo, which not all build systems support out of the box. Here's how to support SVGs:
@@ -132,7 +138,7 @@ pnpm run dev
 ## Adding a Component
 
 ### Structure
-Each component has its own directory in `src/elements` (or `src/labs` if it's still in development). The basic structure looks like this, though components can have additional files and directories if needed. Take a look at other elements to see what they each contain.
+Each component has its own directory in `src/elements` (or `src/labs` if it's still in development). Code with no UI goes in `src/services` instead, see [Adding a Service](#adding-a-service). The basic structure looks like this, though components can have additional files and directories if needed. Take a look at other elements to see what they each contain.
 ```
 src
 - elements
@@ -335,6 +341,26 @@ export const templates = { ...elements, ...app };
 ```
 
 The XLIFF in `xliff/` is where translations are edited. It isn't published.
+
+## Adding a Service
+
+A service is code that renders nothing: an API client, a parser, a cache. It lives in `src/services`, one directory per service, and is published next to the elements.
+
+```
+src
+- services
+  - foobar-service // the name of the service
+    - foobar-service.ts // the entry point consumers import
+    - foobar-service.test.ts // the service's tests
+    - foobar-service-story.ts // the demo page for it
+```
+
+Consumers import it by its own subpath, same as an element: `@internetarchive/elements/services/foobar-service/foobar-service`. The `./services/*` export maps to `dist/src/services/*.js`.
+
+- **Tests** run with the rest, in vitest browser mode (real Chromium). Anything that needs the network gets a fake backend or fetch so the test runs offline.
+- **No tag name.** There's no custom element to register, so nothing goes in `HTMLElementTagNameMap` and the services are named after what they are, not `ia-`.
+- **Demo.** A service has no UI, so its story is a small console: inputs, a Run button, and the result. It follows the same `-story.ts` naming so `demo/app-root.ts` finds it.
+- **Migrating one in.** Port it from the latest version on npm, not a local clone, and say which version in the ticket.
 
 ## Component Inventory
 
