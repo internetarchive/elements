@@ -8,7 +8,7 @@ import {
 } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 import { SectionMarkerMode } from './models';
 
@@ -56,6 +56,7 @@ interface SurroundingMarkers {
  * laid over the track.
  */
 @customElement('ia-scrubber-bar')
+@localized()
 export class IAScrubberBar extends LitElement {
   /** The current position along the track */
   @property({ type: Number }) value = 0;
@@ -75,8 +76,8 @@ export class IAScrubberBar extends LitElement {
   /** Whether the markers either side of the playhead point towards it */
   @property({ type: Boolean }) expandSectionMarkers = false;
 
-  /** The accessible name for the slider */
-  @property({ type: String }) label = msg('Playback position');
+  /** The accessible name for the slider. Defaults to "Playback position". */
+  @property({ type: String }) label?: string;
 
   /**
    * The position actually shown.
@@ -119,7 +120,7 @@ export class IAScrubberBar extends LitElement {
         <input
           id="slider"
           type="range"
-          aria-label=${this.label}
+          aria-label=${this.label ?? msg('Playback position')}
           min=${this.min}
           max=${this.max}
           step=${this.step}
