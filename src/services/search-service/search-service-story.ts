@@ -59,7 +59,7 @@ const USAGE = `import { SearchService } from '@internetarchive/elements/services
 import { SearchType } from '@internetarchive/elements/services/search-service/search-type';
 
 const { success, error } = await new SearchService().search(
-  { query: 'nasa', rows: 5, fields: ['title', 'mediatype'] },
+  { query: 'nasa', rows: 5, fields: ['identifier', 'title', 'mediatype'] },
   SearchType.METADATA,
 );
 success?.response.results.map((hit) => hit.identifier);`;
@@ -183,7 +183,7 @@ export class SearchServiceStory extends LitElement {
     const params: SearchParams = {
       query,
       rows,
-      fields: ['title', 'mediatype'],
+      fields: ['identifier', 'title', 'mediatype'],
     };
     const call = this.sample
       ? 'new SearchResponse(sampleResponse)'
