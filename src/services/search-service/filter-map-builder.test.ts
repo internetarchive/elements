@@ -146,4 +146,39 @@ describe('filter map builder', () => {
       baz: { boop: ['exc', 'lte'] },
     });
   });
+
+  describe('keys that name object internals', () => {
+    it('ignores them instead of writing to Object.prototype', () => {
+      const builder = new FilterMapBuilder();
+
+      builder
+        .addFilter('__proto__', 'polluted', FilterConstraint.INCLUDE)
+        .addFilter('constructor', 'polluted', FilterConstraint.INCLUDE)
+        .addFilter('subject', '__proto__', FilterConstraint.INCLUDE)
+        .addFilter('subject', 'constructor', FilterConstraint.INCLUDE)
+        .addFilter('prototype', 'x', FilterConstraint.INCLUDE);
+
+      expect(({} as Record<string, unknown>).polluted).to.be.undefined;
+      expect((Object as unknown as Record<string, unknown>).polluted).to.be
+        .undefined;
+      expect(builder.build()).to.deep.equal({});
+    });
+
+    it('ignores them when removing and merging', () => {
+      const builder = new FilterMapBuilder();
+      builder.addFilter('subject', 'a', FilterConstraint.INCLUDE);
+
+      builder
+        .removeFilters('__proto__', 'x')
+        .removeSingleFilter('constructor', 'x', FilterConstraint.INCLUDE)
+        .mergeFilterMap(
+          JSON.parse('{"__proto__": {"polluted": "inc"}}') as FilterMap,
+        );
+
+      expect(({} as Record<string, unknown>).polluted).to.be.undefined;
+      expect(builder.build()).to.deep.equal({
+        subject: { a: FilterConstraint.INCLUDE },
+      });
+    });
+  });
 });

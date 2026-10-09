@@ -3,6 +3,15 @@ import { FilterConstraint, FilterMap } from './search-params';
 /**
  * A utility class for building filter maps
  */
+/**
+ * Keys that would reach `Object.prototype` or the `Object` constructor if used
+ * as a property name on the plain objects that make up a `FilterMap`.
+ */
+const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
+const isUnsafe = (...keys: string[]): boolean =>
+  keys.some((key) => UNSAFE_KEYS.has(key));
+
 export class FilterMapBuilder {
   private filterMap: FilterMap = {};
 
@@ -16,6 +25,10 @@ export class FilterMapBuilder {
    * Allowed values are the enum members of `FilterConstraint`.
    */
   addFilter(field: string, value: string, constraint: FilterConstraint): this {
+    // Filters on keys that name object internals are ignored, so a field or
+    // value taken from user input can't write to `Object.prototype`.
+    if (isUnsafe(field, value)) return this;
+
     if (!this.filterMap[field]) {
       this.filterMap[field] = {};
     }
@@ -48,6 +61,7 @@ export class FilterMapBuilder {
     value: string,
     constraint: FilterConstraint,
   ): this {
+    if (isUnsafe(field, value)) return this;
     if (!this.filterMap[field]?.[value]) return this;
 
     const constraints = ([] as FilterConstraint[]).concat(
@@ -77,6 +91,7 @@ export class FilterMapBuilder {
    * @param value The value to remove the filter for
    */
   removeFilters(field: string, value: string): this {
+    if (isUnsafe(field, value)) return this;
     if (!this.filterMap[field]) return this;
 
     delete this.filterMap[field][value];
