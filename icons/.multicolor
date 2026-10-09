@@ -1,0 +1,10 @@
+# Icons that keep their own colours. The build forces fill="currentColor" on the
+# root, so a shape that should be a fixed colour sets an explicit fill. Shapes
+# left on currentColor follow the surrounding text colour.
+applepay
+googlepay
+paypal
+venmo
+credit-card
+calendar
+info
