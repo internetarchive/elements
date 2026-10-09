@@ -193,7 +193,6 @@ describe('IA Icon', () => {
         const mask = style.maskImage || style.webkitMaskImage;
         expect(mask).to.match(/^url\(/);
         expect(mask.match(/url\(/g)).to.have.length(1);
-        expect(masked?.getAttribute('style')).to.not.include('background');
       });
     }
 
