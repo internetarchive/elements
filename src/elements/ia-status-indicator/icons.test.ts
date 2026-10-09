@@ -11,6 +11,9 @@ import { describe, expect, test } from 'vitest';
 const sources = import.meta.glob<string>(
   [
     '../../../icons/mediatype-*.svg',
+    // The unpadded variants are a different crop of the same artwork and
+    // aren't drawn by the status indicator.
+    '!../../../icons/mediatype-*-unpadded.svg',
     // The `search` mediatype shares the glyph the dropdown search bar uses.
     '../../../icons/search.svg',
   ],
