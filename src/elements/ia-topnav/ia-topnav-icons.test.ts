@@ -20,7 +20,10 @@ import { buildTopNavMenus } from './data/menus';
 const rem = () =>
   parseFloat(getComputedStyle(document.documentElement).fontSize);
 
-const px = (value: number) => `${value}px`;
+/** Computed lengths are laid out in 1/64 px steps, so compare within a pixel. */
+function expectPx(actual: string, expected: number, message?: string) {
+  expect(parseFloat(actual), message).to.be.closeTo(expected, 0.5);
+}
 
 function svgIn(root: ParentNode | null | undefined, selector = 'svg') {
   const svg = root?.querySelector<SVGSVGElement>(selector);
@@ -65,8 +68,8 @@ describe('ia-topnav icons', () => {
         const svg = svgIn(button.shadowRoot, '.icon svg');
         expect(svg.getAttribute('viewBox'), menuName).to.equal('0 0 40 40');
         expectDecorative(svg);
-        expect(getComputedStyle(svg).width, menuName).to.equal(px(4 * rem()));
-        expect(getComputedStyle(svg).height, menuName).to.equal(px(4 * rem()));
+        expectPx(getComputedStyle(svg).width, 4 * rem(), menuName);
+        expectPx(getComputedStyle(svg).height, 4 * rem(), menuName);
 
         // The label span is hidden on desktop, so the link names itself.
         const link = button.shadowRoot?.querySelector('a');
@@ -114,10 +117,10 @@ describe('ia-topnav icons', () => {
       expect(wordmark.getAttribute('viewBox')).to.equal('0 0 95 30');
       expectDecorative(logo);
       expectDecorative(wordmark);
-      expect(getComputedStyle(logo).height).to.equal(px(3 * rem()));
-      expect(getComputedStyle(logo).width).to.equal(px(2.7 * rem()));
-      expect(getComputedStyle(wordmark).height).to.equal(px(3 * rem()));
-      expect(getComputedStyle(wordmark).width).to.equal(px(9.5 * rem()));
+      expectPx(getComputedStyle(logo).height, 3 * rem());
+      expectPx(getComputedStyle(logo).width, 2.7 * rem());
+      expectPx(getComputedStyle(wordmark).height, 3 * rem());
+      expectPx(getComputedStyle(wordmark).width, 9.5 * rem());
       expect(getComputedStyle(logo.querySelector('path')!).fill).to.equal(
         'rgb(255, 255, 255)',
       );
@@ -133,7 +136,7 @@ describe('ia-topnav icons', () => {
 
       expect(trigger?.getAttribute('aria-label')).to.equal('Search');
       expectDecorative(svg);
-      expect(getComputedStyle(svg).width).to.equal(px(4 * rem()));
+      expectPx(getComputedStyle(svg).width, 4 * rem());
     });
 
     test('the donate heart is red, 4rem and named by its hidden text', async () => {
@@ -143,7 +146,7 @@ describe('ia-topnav icons', () => {
 
       expectDecorative(svg);
       expect(svg.getAttribute('viewBox')).to.equal('0 0 40 40');
-      expect(getComputedStyle(svg).width).to.equal(px(4 * rem()));
+      expectPx(getComputedStyle(svg).width, 4 * rem());
       expect(getComputedStyle(svg.querySelector('path')!).fill).to.equal(
         'rgb(255, 0, 0)',
       );
@@ -159,7 +162,7 @@ describe('ia-topnav icons', () => {
 
       expect(link?.getAttribute('aria-label')).to.equal('Upload');
       expectDecorative(svg);
-      expect(getComputedStyle(svg).width).to.equal(px(3 * rem()));
+      expectPx(getComputedStyle(svg).width, 3 * rem());
     });
   });
 
@@ -186,7 +189,7 @@ describe('ia-topnav icons', () => {
     expect(svg.getAttribute('viewBox')).to.equal('8 8 24 24');
     expectDecorative(svg);
     expect(link?.textContent?.trim()).to.not.equal('');
-    expect(getComputedStyle(svg).width).to.equal(px(1.4 * rem()));
+    expectPx(getComputedStyle(svg).width, 1.4 * rem());
   });
 
   test('the desktop subnav donate link shows a red 1.6rem heart beside its text', async () => {
@@ -200,7 +203,7 @@ describe('ia-topnav icons', () => {
 
     expectDecorative(svg);
     expect(link?.textContent?.trim()).to.equal('Donate');
-    expect(getComputedStyle(svg).width).to.equal(px(1.6 * rem()));
+    expectPx(getComputedStyle(svg).width, 1.6 * rem());
     expect(getComputedStyle(svg.querySelector('path')!).fill).to.equal(
       'rgb(255, 0, 0)',
     );
@@ -225,7 +228,7 @@ describe('ia-topnav icons', () => {
 
       const search = svgIn(el.shadowRoot?.querySelector('.search-field'));
       expectDecorative(search);
-      expect(getComputedStyle(search).width).to.equal(px(2.4 * rem()));
+      expectPx(getComputedStyle(search).width, 2.4 * rem());
     });
   });
 });
