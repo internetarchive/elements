@@ -17,7 +17,11 @@ describe('<ia-topnav-icon-hamburger>', () => {
     icon.active = true;
     await icon.updateComplete;
 
-    expect(titleId()).to.match(/close/);
+    // The close icon is decorative, so it carries no title.
+    const close = icon.shadowRoot?.querySelector('svg');
+    expect(titleId()).to.equal(undefined);
+    expect(close?.getAttribute('aria-hidden')).to.equal('true');
+    expect(close?.getAttribute('fill')).to.equal('currentColor');
 
     icon.active = false;
     await icon.updateComplete;

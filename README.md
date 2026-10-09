@@ -349,6 +349,8 @@ html`<button>${search} Search</button>`;
 
 Outside lit, use the raw file at `@internetarchive/elements/icons/search.svg`.
 
+`ia-topnav` and `ia-wayback-search-form` render the `topnav-*` icons.
+
 - **Decorative by default.** The root `<svg>` has `aria-hidden="true"` and `focusable="false"`. If an icon is the only content of a control, label the control (`aria-label`), or wrap the icon in an element with `role="img"` and an `aria-label`.
 - **Color and size.** Icons are filled with `currentColor` and sized `1em` by `width`/`height` on the root, so they follow the surrounding text. Set `font-size` or override `width`/`height` in CSS to resize.
 - **No barrel.** There's deliberately no `icons/index`. Every icon is its own module, so a page that imports one loads one.

@@ -1,6 +1,13 @@
 import { CSSResultGroup, TemplateResult, css, html } from 'lit';
 import TrackedElement from './tracked-element';
-import icons from './assets/img/icons';
+import audio from '@src/icons/topnav-audio';
+import donate from '@src/icons/topnav-donate';
+import ellipses from '@src/icons/topnav-ellipses';
+import images from '@src/icons/topnav-images';
+import software from '@src/icons/topnav-software';
+import texts from '@src/icons/topnav-texts';
+import video from '@src/icons/topnav-video';
+import web from '@src/icons/topnav-web';
 import { toSentenceCase } from './lib/helpers';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
@@ -8,6 +15,17 @@ import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
 import { localized, msg } from '@lit/localize';
+
+const icons: Record<string, TemplateResult> = {
+  audio,
+  donate,
+  ellipses,
+  images,
+  software,
+  texts,
+  video,
+  web,
+};
 
 @customElement('ia-topnav-media-button')
 @localized()
@@ -185,16 +203,16 @@ export class MediaButton extends TrackedElement {
           border-radius: 1rem 0 0 1rem;
         }
 
-        .icon .fill-color {
-          fill: #999;
+        .icon svg {
+          color: #999;
         }
 
-        .icon.active .fill-color {
-          fill: #fff;
+        .icon.active svg {
+          color: #fff;
         }
 
-        .donate .fill-color {
-          fill: #f00;
+        .donate svg {
+          color: #f00;
         }
 
         @media (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) {
@@ -210,22 +228,21 @@ export class MediaButton extends TrackedElement {
             color: var(--linkHoverColor);
           }
 
-          .menu-item:hover .fill-color,
-          .menu-item:active .fill-color,
-          .menu-item:focus .fill-color {
-            fill: var(--linkHoverColor);
+          .menu-item:hover svg,
+          .menu-item:active svg,
+          .menu-item:focus svg {
+            color: var(--linkHoverColor);
           }
 
+          /* Visually hidden, so the link's name still contains the label. */
           .label {
-            display: none;
-          }
-
-          .label,
-          .web:after {
-            padding-right: 1rem;
-            font-size: 1.3rem;
-            text-transform: uppercase;
-            color: inherit;
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            white-space: nowrap;
+            clip-path: inset(50%);
           }
 
           .web:after {
@@ -251,35 +268,49 @@ export class MediaButton extends TrackedElement {
           }
 
           /* selected state icon colors */
-          .web.selected .fill-color {
-            fill: #ffcd27;
+          .web.selected svg {
+            color: #ffcd27;
           }
 
-          .texts.selected .fill-color {
-            fill: #faab3c;
+          .texts.selected svg {
+            color: #faab3c;
           }
 
-          .video.selected .fill-color {
-            fill: #f1644b;
+          .video.selected svg {
+            color: #f1644b;
           }
 
-          .audio.selected .fill-color {
-            fill: #00adef;
+          .audio.selected svg {
+            color: #00adef;
           }
 
-          .software.selected .fill-color {
-            fill: #9ecc4f;
+          .software.selected svg {
+            color: #9ecc4f;
           }
 
-          .images.selected .fill-color {
-            fill: #aa99c9;
+          .images.selected svg {
+            color: #aa99c9;
           }
         }
 
         @media (min-width: 1200px) {
+          .label {
+            position: static;
+            width: auto;
+            height: auto;
+            margin: 0;
+            overflow: visible;
+            white-space: normal;
+            clip-path: none;
+          }
+
           .label,
           .web:after {
             display: inline;
+            padding-right: 1rem;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            color: inherit;
           }
 
           .web .label {

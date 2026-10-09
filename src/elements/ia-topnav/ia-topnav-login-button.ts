@@ -1,6 +1,6 @@
 import { CSSResultGroup, css, html } from 'lit';
 import TrackedElement from './tracked-element';
-import icons from './assets/img/icons';
+import userIcon from '@src/icons/topnav-user';
 import { formatUrl, makeBooleanString } from './lib/helpers';
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
@@ -28,7 +28,7 @@ export class LoginButton extends TrackedElement {
           aria-label=${msg('Toggle login menu')}
           aria-expanded="${makeBooleanString(this.menuOpened)}"
         >
-          ${icons.user}
+          ${userIcon}
         </button>
         <span>
           <a href="${this.signupPath}">${msg('Sign up')}</a>
@@ -104,16 +104,13 @@ export class LoginButton extends TrackedElement {
         .dropdown-toggle svg {
           height: 100%;
           width: 4rem;
+          color: var(--iconFill);
         }
 
-        .dropdown-toggle .fill-color {
-          fill: var(--iconFill);
-        }
-
-        .dropdown-toggle:active .fill-color,
-        .dropdown-toggle:focus .fill-color,
-        .dropdown-toggle:hover .fill-color {
-          fill: var(--linkHoverColor);
+        .dropdown-toggle:active svg,
+        .dropdown-toggle:focus svg,
+        .dropdown-toggle:hover svg {
+          color: var(--linkHoverColor);
         }
 
         .active {
@@ -121,8 +118,8 @@ export class LoginButton extends TrackedElement {
           background: var(--activeButtonBg);
         }
 
-        .active .fill-color {
-          fill: var(--activeColor);
+        .active svg {
+          color: var(--activeColor);
         }
 
         span {
