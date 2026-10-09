@@ -1,5 +1,6 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { state } from 'lit/decorators.js';
+import { keyed } from 'lit/directives/keyed.js';
 import { customElement } from '@src/util/custom-element';
 
 import '@demo/story-template';
@@ -9,6 +10,7 @@ import type { StyleInputSettings } from '@demo/story-components/story-styles-set
 
 import './ia-book-actions';
 import type { IABookActions } from './ia-book-actions';
+import type { IAModalManager } from '../modal-manager/modal-manager';
 import { defaultLendingStatus } from './ia-book-actions-story-data';
 import type { LendingStatus, LoanRenewTimeConfig } from './models';
 
@@ -38,7 +40,7 @@ const styleInputSettings: StyleInputSettings[] = [
     inputType: 'color',
   },
   {
-    label: 'Primary button fill (RGB)',
+    label: 'Primary button hover fill (RGB)',
     cssVariable: '--primaryCTAFillRGB',
     defaultValue: '25, 72, 128',
     inputType: 'text',
@@ -56,7 +58,7 @@ const styleInputSettings: StyleInputSettings[] = [
     inputType: 'color',
   },
   {
-    label: 'Secondary button fill (RGB)',
+    label: 'Secondary button hover fill (RGB)',
     cssVariable: '--secondaryCTAFillRGB',
     defaultValue: '51, 51, 51',
     inputType: 'text',
@@ -74,7 +76,7 @@ const styleInputSettings: StyleInputSettings[] = [
     inputType: 'color',
   },
   {
-    label: 'Danger button fill (RGB)',
+    label: 'Danger button hover fill (RGB)',
     cssVariable: '--primaryErrorCTAFillRGB',
     defaultValue: '229, 28, 38',
     inputType: 'text',
@@ -222,6 +224,7 @@ const SCENARIOS: Record<string, Scenario> = {
   waitlist: {
     label: 'Waitlist available',
     status: () => ({
+      available_to_browse: true,
       available_to_waitlist: true,
       available_lendable_copies: 0,
     }),
@@ -247,6 +250,9 @@ const SCENARIOS: Record<string, Scenario> = {
   },
 };
 
+/** The path the element posts lending actions to on archive.org. */
+const LOAN_SERVICE_PATH = '/services/loans/loan';
+
 /** The lending service actions the element posts to the loans endpoint. */
 const LENDING_ACTIONS = [
   'browse_book',
@@ -257,6 +263,17 @@ const LENDING_ACTIONS = [
   'join_waitlist',
   'leave_waitlist',
 ];
+
+/**
+ * The actions "Fail lending requests" fails. `create_token` is left out: it
+ * runs on a timer for as long as a loan is active, so failing it reopens the
+ * error modal on every tick.
+ */
+const FAILING_ACTIONS = LENDING_ACTIONS.filter(
+  (action) => action !== 'create_token',
+);
+
+const FAIL_MESSAGE = 'The demo is set to fail lending requests.';
 
 const ARCHIVE_ROOT_FONT_SIZE = '10px';
 
@@ -319,6 +336,13 @@ export class IABookActionsStory extends LitElement {
    */
   @state() private status: LendingStatus = {};
 
+  /**
+   * Changes with each rebuild of the status, so the element is created anew.
+   * An element that already shows a loan leaves its bar alone when the loan
+   * expires, so it only shows the expired state on a fresh load.
+   */
+  @state() private statusVersion = 0;
+
   @state() private loanConfig: LoanRenewTimeConfig = LOAN_LENGTHS['2m'];
 
   private rootFontSizeBefore?: string;
@@ -372,7 +396,6 @@ export class IABookActionsStory extends LitElement {
     this.removeFetchStub();
     this.removeLoanCookies();
     this.restoreRootFontSize();
-    this.setFailParam(false);
   }
 
   updated(): void {
@@ -414,14 +437,27 @@ export class IABookActionsStory extends LitElement {
             ? input.href
             : input.url;
       const identifier = (body as FormData).get('identifier');
+      // Hosts the element treats as test hosts get the page URL instead of
+      // the lending service path.
+      const target =
+        new URL(url, window.location.href).href === window.location.href
+          ? `${LOAN_SERVICE_PATH} (the page URL on a test host)`
+          : url;
       this.log(
         'request',
-        `POST ${url} action=${action} identifier=${identifier}`,
+        `POST ${target} action=${action} identifier=${identifier}`,
       );
 
-      const response = this.failRequests
-        ? { error: 'The demo is set to fail lending requests.' }
-        : action === 'renew_loan'
+      if (this.failRequests && FAILING_ACTIONS.includes(action!)) {
+        // Rejecting the request fails it on every host. The element ignores a
+        // stubbed response on test hosts but reports a rejected request.
+        const failure = new Error(FAIL_MESSAGE);
+        failure.toString = () => FAIL_MESSAGE;
+        throw failure;
+      }
+
+      const response =
+        action === 'renew_loan'
           ? { success: true, loan: { renewal: true } }
           : { success: true };
       return new Response(JSON.stringify(response), {
@@ -529,20 +565,6 @@ export class IABookActionsStory extends LitElement {
     });
   }
 
-  /**
-   * The lending service helper fails requests when the page URL carries
-   * `?error=true`, and only on hosts it treats as test hosts, where it ignores
-   * the response. The fetch stub covers every other host.
-   */
-  private setFailParam(fail: boolean): void {
-    const url = new URL(window.location.href);
-    if (fail) url.searchParams.set('error', 'true');
-    else url.searchParams.delete('error');
-    if (url.href !== window.location.href) {
-      window.history.replaceState(window.history.state, '', url);
-    }
-  }
-
   private restoreRootFontSize(): void {
     if (this.rootFontSizeBefore === undefined) return;
     document.documentElement.style.fontSize = this.rootFontSizeBefore;
@@ -554,6 +576,8 @@ export class IABookActionsStory extends LitElement {
     const { loanTotalTime, loanRenewAtLast, pageChangedInLast } =
       LOAN_LENGTHS[this.loanLength];
     this.loanConfig = { loanTotalTime, loanRenewAtLast, pageChangedInLast };
+    document.body.querySelector<IAModalManager>('modal-manager')?.closeModal();
+    this.statusVersion += 1;
     this.status = {
       ...defaultLendingStatus,
       is_printdisabled: this.printDisabled,
@@ -571,7 +595,6 @@ export class IABookActionsStory extends LitElement {
 
   private onFailChange(event: Event): void {
     this.failRequests = (event.target as HTMLInputElement).checked;
-    this.setFailParam(this.failRequests);
   }
 
   private simulatePageTurn(): void {
@@ -630,21 +653,24 @@ export class IABookActionsStory extends LitElement {
         .styleInputData=${{ settings: styleInputSettings }}
         .propInputData=${{ settings: propInputSettings }}
       >
-        <ia-book-actions
-          slot="demo"
-          .userid=${this.loggedIn ? '@brewster' : ''}
-          .identifier=${'demo-book'}
-          .bookTitle=${'Goody Two-Shoes'}
-          .lendingStatus=${this.status}
-          .loanRenewTimeConfig=${this.loanConfig}
-          .loaderIcon=${'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'}
-          .lendingBarPostInit=${this.onPostInit}
-          .reloadPageImages=${this.onReloadPageImages}
-          @IABookReader:BrowsingHasExpired=${() =>
-            this.log('event', 'IABookReader:BrowsingHasExpired')}
-          @lendingActionError=${(event: CustomEvent) =>
-            this.log('event', `lendingActionError ${event.detail?.action}`)}
-        ></ia-book-actions>
+        ${keyed(
+          this.statusVersion,
+          html`<ia-book-actions
+            slot="demo"
+            .userid=${this.loggedIn ? '@brewster' : ''}
+            .identifier=${'demo-book'}
+            .bookTitle=${'Goody Two-Shoes'}
+            .lendingStatus=${this.status}
+            .loanRenewTimeConfig=${this.loanConfig}
+            .loaderIcon=${'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'}
+            .lendingBarPostInit=${this.onPostInit}
+            .reloadPageImages=${this.onReloadPageImages}
+            @IABookReader:BrowsingHasExpired=${() =>
+              this.log('event', 'IABookReader:BrowsingHasExpired')}
+            @lendingActionError=${(event: CustomEvent) =>
+              this.log('event', `lendingActionError ${event.detail?.action}`)}
+          ></ia-book-actions>`,
+        )}
 
         <div slot="demo" class="log">
           <h4>What the element would have sent</h4>
@@ -684,6 +710,7 @@ export class IABookActionsStory extends LitElement {
             )}
             ${this.checkRow('Logged in', this.loggedIn, (event) => {
               this.loggedIn = (event.target as HTMLInputElement).checked;
+              this.applyScenario();
             })}
             ${this.checkRow('Admin', this.admin, (event) => {
               this.admin = (event.target as HTMLInputElement).checked;
@@ -694,7 +721,7 @@ export class IABookActionsStory extends LitElement {
               this.applyScenario();
             })}
             ${this.checkRow(
-              'Fail lending requests',
+              'Fail lending requests (not create_token)',
               this.failRequests,
               this.onFailChange,
             )}
@@ -716,10 +743,12 @@ export class IABookActionsStory extends LitElement {
           <p class="hint">
             Pick a 1 hour loan with a short length to reach the warning modal,
             the automatic renewal and the auto-return in under two minutes. Fail
-            lending requests makes every lending call return an error.
-            archive.org font size sets the page's root font size to 10px, which
-            the bar is built for. It applies to the whole demo page, so it's on
-            by default only when this element is the one being viewed.
+            lending requests makes borrow, return, renew and waitlist calls
+            fail. create_token still succeeds, since it repeats for as long as a
+            loan is active. archive.org font size sets the page's root font size
+            to 10px, which the bar is built for. It applies to the whole demo
+            page, so it's on by default only when this element is the one being
+            viewed.
           </p>
         </div>
 
