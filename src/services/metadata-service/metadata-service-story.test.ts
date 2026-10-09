@@ -108,4 +108,14 @@ describe('metadata-service story', () => {
     expect(shown.error).to.contain('MetadataService.NetworkError');
     expect(shown.error).to.contain('Try "Sample data"');
   });
+
+  test('sends no request for an identifier that climbs out of /metadata/', async () => {
+    const fetchSpy = vi.spyOn(globalThis, 'fetch');
+
+    const shown = await fetchItem({ identifier: '..' });
+
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(shown.request).to.be.undefined;
+    expect(shown.error).to.contain('Invalid identifier or path');
+  });
 });

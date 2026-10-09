@@ -55,7 +55,14 @@ class RecordingBackend implements MetadataBackendInterface {
     this.last = `GET https://archive.org/metadata/${identifier}${
       keypath ? `/${keypath}` : ''
     }`;
-    if (!this.sample) return this.live.fetchMetadata(identifier, keypath);
+    if (!this.sample) {
+      const result = await this.live.fetchMetadata(identifier, keypath);
+      // A refused identifier or path never becomes a request.
+      if (result.error?.message === 'Invalid identifier or path') {
+        this.last = undefined;
+      }
+      return result;
+    }
     const response = new MockResponseGenerator().generateMockMetadataResponse(
       identifier,
     );
