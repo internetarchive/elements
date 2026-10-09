@@ -17,8 +17,27 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
-// A few of the icons that came from the iaux-icons set.
-const SAMPLE = ['close', 'calendar-blank', 'edit-pencil', 'ia-logo', 'paypal'];
+// A few of the icons that came from the iaux-icons set and from offshoot.
+const SAMPLE = [
+  'close',
+  'calendar-blank',
+  'edit-pencil',
+  'ia-logo',
+  'paypal',
+  'external-link',
+  'license-by',
+  'mediatype-web-unpadded',
+];
+
+/** Everything inside the root `<svg>`, with whitespace between tags dropped. */
+function innerMarkup(source: string): string {
+  return source
+    .replace(/^[\s\S]*?<svg[^>]*>/, '')
+    .replace(/<\/svg>\s*$/, '')
+    .replace(/\s+/g, ' ')
+    .replace(/> </g, '><')
+    .trim();
+}
 
 let scratch: string;
 let sources: string[];
@@ -63,7 +82,19 @@ describe('icon set', () => {
     }
   });
 
-  it('has a source for each sampled iaux icon', () => {
+  it('has no two sources with the same markup', () => {
+    const byMarkup = new Map<string, string>();
+    for (const name of sources) {
+      const markup = innerMarkup(
+        readFileSync(join(scratch, 'icons', `${name}.svg`), 'utf8'),
+      );
+      const existing = byMarkup.get(markup);
+      expect(existing, `${name} duplicates ${existing}`).toBeUndefined();
+      byMarkup.set(markup, name);
+    }
+  });
+
+  it('has a source for each sampled icon', () => {
     for (const name of SAMPLE) {
       expect(sources).toContain(name);
     }

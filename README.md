@@ -349,6 +349,8 @@ html`<button>${search} Search</button>`;
 
 Outside lit, use the raw file at `@internetarchive/elements/icons/search.svg`.
 
+The offshoot assets were ported from offshoot commit `a6199f5db22d3908d856033da8bfa8777867d86c`.
+
 - **Decorative by default.** The root `<svg>` has `aria-hidden="true"` and `focusable="false"`. If an icon is the only content of a control, label the control (`aria-label`), or wrap the icon in an element with `role="img"` and an `aria-label`.
 - **Color and size.** Icons are filled with `currentColor` and sized `1em` by `width`/`height` on the root, so they follow the surrounding text. Set `font-size` or override `width`/`height` in CSS to resize.
 - **Used by.** `ia-item-navigator`, `ia-status-indicator`, `ia-combo-box`, `ia-dropdown-search-bar` and `ia-scrubber-bar` draw their icons from this folder. Recolor one with `color`, since the glyph paints with `currentColor`.
