@@ -80,7 +80,8 @@ export class PromisedSingletonStory extends LitElement {
             The generator takes about half a second. However many
             <code>get()</code> calls arrive while it runs, it runs once and they
             all receive the same result, or the same error. Later calls get the
-            cached result until <code>reset()</code>.
+            cached result, or the same error, until <code>reset()</code>. A
+            failed generator stays failed until then.
           </p>
         </div>
       </service-template>
