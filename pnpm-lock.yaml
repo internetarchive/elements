@@ -175,9 +175,18 @@ importers:
       '@internetarchive/icon-close':
         specifier: ^1.4.0
         version: 1.4.1
+      '@internetarchive/icon-info':
+        specifier: ^1.4.1
+        version: 1.4.1
       '@internetarchive/icon-user':
         specifier: ^1.4.0
         version: 1.4.1
+      '@internetarchive/local-cache':
+        specifier: ^0.2.1
+        version: 0.2.1
+      '@internetarchive/shared-resize-observer':
+        specifier: ^0.2.0
+        version: 0.2.0
       '@lit/localize':
         specifier: ^0.12.2
         version: 0.12.2
@@ -543,8 +552,17 @@ packages:
   '@internetarchive/icon-close@1.4.1':
     resolution: {integrity: sha512-nN1rGfScGssGFpfEew4azsrsMyUJtkDWqUDlckJi31PtyQnbZqUmZ07UO3Aw+wZIo3cU1MHxb5VxDy3Rmr8QGA==}
 
+  '@internetarchive/icon-info@1.4.1':
+    resolution: {integrity: sha512-lxb0K996QA+tpJKqKNHpV+3aSXmLKxfXisHcPfcoGCXxYzPYDqyk6XlcPj3h1H80XgqRk1pWRsHBykOvCui2ZA==}
+
   '@internetarchive/icon-user@1.4.1':
     resolution: {integrity: sha512-xRlpX954+lLKjC++A+jpIutptHCmVMwLZI/WqOoAQoKfnCNKKvJ6Wcdq4bM/qUDt44Oj2VgP/gM6hSdWyljzEA==}
+
+  '@internetarchive/local-cache@0.2.1':
+    resolution: {integrity: sha512-8FFAvEEoazktWsIEod2NVYp0r+Fk3OxM8woe42mNlXHbht3Je98yQjooIFiA3/sJYB7xsZB2RHzUzh+GmBHFgw==}
+
+  '@internetarchive/shared-resize-observer@0.2.0':
+    resolution: {integrity: sha512-E5Jh6rX03usPkihB/lnGpoL3qedE84NLRHxuAEGrlwC0zyQ7xTr6NNQWwKBDzG1OBcCrUJXIWaQuJdjqo+og1Q==}
 
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
@@ -1658,6 +1676,9 @@ packages:
 
   htmlparser2@10.1.0:
     resolution: {integrity: sha512-VTZkM9GWRAtEpveh7MSF6SjjrpNVNNVJfFup7xTY3UpFtm67foy9HDVXneLtFVt4pMz5kZtgNcvCniNFb1hlEQ==}
+
+  idb-keyval@6.3.0:
+    resolution: {integrity: sha512-um+2dgAWmYsu615EXpWVwSmapJhON0G43t3Ka/EVaohzPQXSMqKEqeDK/oIW3Ow+BXaF2PvSc+oBTFp793A5Ow==}
 
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
@@ -2909,9 +2930,19 @@ snapshots:
     dependencies:
       lit: 3.3.3
 
+  '@internetarchive/icon-info@1.4.1':
+    dependencies:
+      lit: 3.3.3
+
   '@internetarchive/icon-user@1.4.1':
     dependencies:
       lit: 3.3.3
+
+  '@internetarchive/local-cache@0.2.1':
+    dependencies:
+      idb-keyval: 6.3.0
+
+  '@internetarchive/shared-resize-observer@0.2.0': {}
 
   '@jridgewell/resolve-uri@3.1.2': {}
 
@@ -4222,6 +4253,8 @@ snapshots:
       domhandler: 5.0.3
       domutils: 3.2.2
       entities: 7.0.1
+
+  idb-keyval@6.3.0: {}
 
   ieee754@1.2.1: {}
 

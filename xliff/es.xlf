@@ -166,6 +166,116 @@
   <source>A line drawing of the Internet Archive headquarters building façade.</source>
 <target>Dibujo lineal de la fachada del edificio de la sede de Internet Archive.</target>
 </trans-unit>
+<trans-unit id="s52ef4d6b672b62c0">
+  <source>Borrow</source>
+<target>Tomar prestado</target>
+</trans-unit>
+<trans-unit id="s172b0b0a12f9358f">
+  <source>Return now</source>
+<target>Devolver ahora</target>
+</trans-unit>
+<trans-unit id="s11b14f26438518cb">
+  <source>Borrow for 14 days</source>
+<target>Tomar prestado por 14 días</target>
+</trans-unit>
+<trans-unit id="s012c5cc405931f66">
+  <source>Log In and Borrow</source>
+<target>Iniciar sesión y tomar prestado</target>
+</trans-unit>
+<trans-unit id="s4c29bd07ebc9434d">
+  <source>Leave Waitlist</source>
+<target>Salir de la lista de espera</target>
+</trans-unit>
+<trans-unit id="sa28e46550c1f7944">
+  <source>Log In and Join Waitlist</source>
+<target>Iniciar sesión y unirse a la lista de espera</target>
+</trans-unit>
+<trans-unit id="sb63af8d690996e7e">
+  <source>Join Waitlist</source>
+<target>Unirse a la lista de espera</target>
+</trans-unit>
+<trans-unit id="sdc730817e541df59">
+  <source>Purchase at </source>
+</trans-unit>
+<trans-unit id="sb7700696be07efa2">
+  <source>Purchase</source>
+<target>Comprar</target>
+</trans-unit>
+<trans-unit id="sd9008e684baf1398">
+  <source>Print Disability Access</source>
+<target>Acceso para personas con discapacidad de lectura</target>
+</trans-unit>
+<trans-unit id="s410d71a46d13cc16">
+  <source>Admin Access</source>
+<target>Acceso de administrador</target>
+</trans-unit>
+<trans-unit id="s688daa759e945c22">
+  <source>You have administrative privileges to read this book</source>
+</trans-unit>
+<trans-unit id="se6c270748158596f">
+  <source>← Exit admin access mode</source>
+</trans-unit>
+<trans-unit id="sa16545f1d31aa41c">
+  <source>← Exit print-disabled access mode</source>
+</trans-unit>
+<trans-unit id="sa26fcfc36653fc8a">
+  <source>Borrow Unavailable</source>
+</trans-unit>
+<trans-unit id="s0df7149186ba4294">
+  <source>Renews automatically with continued use.</source>
+</trans-unit>
+<trans-unit id="s7e764be002eb7fa2">
+  <source>This book can be borrowed for 14 days.</source>
+</trans-unit>
+<trans-unit id="s138e076972a77b48">
+  <source>Book available to patrons with print disabilities.</source>
+</trans-unit>
+<trans-unit id="s20bbc5fad9b8fbd2">
+  <source>A waitlist is available.</source>
+</trans-unit>
+<trans-unit id="s3d14b1dc76186864">
+  <source>You have administrative privileges to read this book.</source>
+</trans-unit>
+<trans-unit id="se3fb837768fb6b3c">
+  <source>You are at the top of the waitlist for this book.</source>
+</trans-unit>
+<trans-unit id="saff513a4afeafcdc">
+  <source>Another patron is using this book. Please check back later.</source>
+</trans-unit>
+<trans-unit id="s69af696079c513be">
+  <source>You are eligible for print-disabled access.</source>
+</trans-unit>
+<trans-unit id="sf98c6ac129596eb3">
+  <source>You are on the waitlist for this book.</source>
+</trans-unit>
+<trans-unit id="s2dd03bf35bad462e">
+  <source>This book is not available at this time.</source>
+</trans-unit>
+<trans-unit id="se5557e3a50f196bc">
+  <source>Your loan of this book has <x id="0" equiv-text="${lendingStatus.daysLeftOnLoan}"/> days left.</source>
+<target>Tu préstamo de este libro tiene <x id="0" equiv-text="${lendingStatus.daysLeftOnLoan}"/> días restantes.</target>
+</trans-unit>
+<trans-unit id="s40f3e855fa65e69d">
+  <source>Get more info on borrowing from The Lending Library</source>
+</trans-unit>
+<trans-unit id="s986e9457d8b6a74b">
+  <source>Are you still there?</source>
+<target>¿Sigues ahí?</target>
+</trans-unit>
+<trans-unit id="s5cdea4c084c27089">
+  <source>Okay</source>
+<target>Aceptar</target>
+</trans-unit>
+<trans-unit id="s720c7a567a295376">
+  <source>This book has been returned due to inactivity.</source>
+</trans-unit>
+<trans-unit id="s222808c8c605b67f">
+  <source>Due to inactivity, this book was returned, and someone else has now borrowed it. Please try again later.</source>
+</trans-unit>
+<trans-unit id="sfc1e95d30bec94d6">
+  <source>Lending error</source>
+<target>Error de préstamo</target>
+</trans-unit>
 </body>
 </file>
 </xliff>
