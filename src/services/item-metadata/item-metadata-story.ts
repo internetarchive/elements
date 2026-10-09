@@ -5,8 +5,10 @@ import fieldSource from './models/metadata-fields/metadata-field.ts?raw';
 import keySource from './models/metadata-field-key.ts?raw';
 
 import '@demo/service-template';
-import { Metadata } from './item-metadata';
-import type { MetadataFieldInterface } from './item-metadata';
+import * as itemMetadata from './item-metadata';
+import type { Metadata, MetadataFieldInterface } from './item-metadata';
+
+const MetadataModel = itemMetadata.Metadata;
 
 const DEFAULT_IDENTIFIER = 'nasa';
 
@@ -45,11 +47,13 @@ const withoutImports = (source: string) =>
 const API_SOURCE = [fieldSource, keySource].map(withoutImports).join('\n\n');
 
 /** Every field the model exposes, read off `Metadata`'s prototype getters. */
-const MODELED_FIELDS: string[] = Object.getOwnPropertyNames(Metadata.prototype)
+const MODELED_FIELDS: string[] = Object.getOwnPropertyNames(
+  MetadataModel.prototype,
+)
   .filter(
     (name) =>
-      typeof Object.getOwnPropertyDescriptor(Metadata.prototype, name)?.get ===
-      'function',
+      typeof Object.getOwnPropertyDescriptor(MetadataModel.prototype, name)
+        ?.get === 'function',
   )
   .sort();
 
@@ -61,10 +65,42 @@ const isMetadataField = (
 ): value is MetadataFieldInterface<unknown> =>
   typeof value === 'object' && value !== null && 'rawValue' in value;
 
-/** The field class that parsed a value, e.g. `DateField`. */
+const prototypeDepth = (constructor: Function): number => {
+  let depth = 0;
+  for (
+    let proto = Object.getPrototypeOf(constructor);
+    proto;
+    proto = Object.getPrototypeOf(proto)
+  ) {
+    depth += 1;
+  }
+  return depth;
+};
+
+/**
+ * The field class that parsed a value, e.g. `DateField`. Named from the entry
+ * point's export names, which survive minification, and the most specific
+ * class wins (`NumberListField` over `ListField`).
+ */
 function fieldTypeName(value: unknown): string {
-  if (isMetadataField(value)) return value.constructor?.name ?? 'unknown';
-  return typeof value;
+  if (!isMetadataField(value)) return typeof value;
+  const matches = Object.entries(itemMetadata)
+    .filter(
+      ([, exported]) =>
+        typeof exported === 'function' && value instanceof exported,
+    )
+    .sort(
+      ([, a], [, b]) =>
+        prototypeDepth(b as Function) - prototypeDepth(a as Function),
+    );
+  return matches[0]?.[0] ?? 'unknown';
+}
+
+/** A list field shows all of its values, other fields their one value. */
+function fieldDisplayValue(field: unknown): unknown {
+  if (!isMetadataField(field)) return field;
+  const values = (field as { values?: unknown }).values;
+  return Array.isArray(values) ? values : field.value;
 }
 
 /** Renders a parsed value (Date, number, string, array, object) as text. */
@@ -85,7 +121,7 @@ function modeledRawKeys(raw: Record<string, unknown>): Set<string> {
       return Reflect.get(target, key);
     },
   });
-  const metadata = new Metadata(probe);
+  const metadata = new MetadataModel(probe);
   for (const name of MODELED_FIELDS) fieldValue(metadata, name);
   return touched;
 }
@@ -187,6 +223,7 @@ export class ItemMetadataStory extends LitElement {
   private async run(e: Event) {
     e.preventDefault();
     const identifier = this.identifier.trim() || DEFAULT_IDENTIFIER;
+    const url = `https://archive.org/metadata/${encodeURIComponent(identifier)}`;
     const call = `new Metadata(${
       this.sample ? 'sample' : `response.metadata /* ${identifier} */`
     })`;
@@ -196,20 +233,18 @@ export class ItemMetadataStory extends LitElement {
       if (this.sample) {
         raw = SAMPLE_METADATA;
       } else {
-        const response = await fetch(
-          `https://archive.org/metadata/${encodeURIComponent(identifier)}`,
-        );
+        const response = await fetch(url);
         if (!response.ok)
           throw new Error(`Request failed (${response.status})`);
         const json = (await response.json()) as {
           metadata?: Record<string, unknown>;
         };
         if (!json.metadata) {
-          throw new Error(`No item found for "${identifier}".`);
+          throw new Error(`No item found for "${identifier}"`);
         }
         raw = json.metadata;
       }
-      const metadata = new Metadata(raw);
+      const metadata = new MetadataModel(raw);
       const rows: Row[] = MODELED_FIELDS.map((name) => ({
         name,
         value: fieldValue(metadata, name),
@@ -218,7 +253,7 @@ export class ItemMetadataStory extends LitElement {
         .map(({ name, value }) => ({
           name,
           type: fieldTypeName(value),
-          value: display(isMetadataField(value) ? value.value : value),
+          value: display(fieldDisplayValue(value)),
         }));
       const modeled = modeledRawKeys(raw);
       const unmodeled = Object.keys(raw)
@@ -227,7 +262,7 @@ export class ItemMetadataStory extends LitElement {
       this.result = { call, rows, unmodeled };
     } catch (error) {
       this.result = {
-        call,
+        call: this.sample ? call : `fetch("${url}")`,
         rows: [],
         unmodeled: [],
         error: `${error instanceof Error ? error.message : error}${

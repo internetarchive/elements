@@ -66,7 +66,14 @@ describe('item-metadata story', () => {
       type: 'StringField',
       value: 'A sample item',
     });
-    expect(shown.rows.downloads.value).to.equal('42');
+    expect(shown.rows.downloads).to.deep.equal({
+      type: 'NumberField',
+      value: '42',
+    });
+    expect(shown.rows.subject).to.deep.equal({
+      type: 'StringListField',
+      value: 'sample, demo, metadata',
+    });
     expect(shown.rows.addeddate.type).to.equal('DateField');
     expect(shown.rows.addeddate.value).to.match(/^2021-05-20T/);
     expect(shown.unmodeled).to.contain('mystery_field');
@@ -90,6 +97,18 @@ describe('item-metadata story', () => {
     expect(shown.rows.title.value).to.equal('Foo');
   });
 
+  test('says when no item is found, with one period', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(
+      new Response('{}', { status: 200 }),
+    );
+
+    const shown = await parse({ identifier: 'nope' });
+
+    expect(shown.error).to.equal(
+      'No item found for "nope". Try "Sample data".',
+    );
+  });
+
   test('suggests the sample data when the request fails', async () => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(
       new Response('', { status: 500 }),
@@ -97,6 +116,7 @@ describe('item-metadata story', () => {
 
     const shown = await parse();
 
+    expect(shown.call).to.equal('fetch("https://archive.org/metadata/nasa")');
     expect(shown.error).to.equal('Request failed (500). Try "Sample data".');
   });
 });
