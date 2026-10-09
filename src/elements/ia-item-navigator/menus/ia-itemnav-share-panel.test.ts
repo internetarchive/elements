@@ -181,6 +181,37 @@ describe('IAItemNavSharePanel', () => {
       expect(markup.size, 'each row has its own glyph').to.equal(6);
     });
 
+    test('keeps each icon box geometry but does not draw its border', async () => {
+      const el = await fixture<IAItemNavSharePanel>(
+        html`<ia-itemnav-share-panel
+          identifier="my-item"
+        ></ia-itemnav-share-panel>`,
+      );
+
+      const boxes = el.shadowRoot?.querySelectorAll(
+        '.share-option > .ia-icon',
+      ) as NodeListOf<HTMLElement>;
+      expect(boxes).to.have.lengthOf(6);
+      boxes.forEach((box) => {
+        const style = getComputedStyle(box);
+        expect(style.borderTopWidth).to.equal('1px');
+        for (const side of ['Top', 'Right', 'Bottom', 'Left'] as const) {
+          expect(style[`border${side}Color`], side).to.equal(
+            'rgba(0, 0, 0, 0)',
+          );
+        }
+        // The glyph covers exactly the span's border box.
+        const outer = box.getBoundingClientRect();
+        const inner = (
+          box.querySelector('svg') as SVGElement
+        ).getBoundingClientRect();
+        expect(inner.left).to.be.closeTo(outer.left, 0.01);
+        expect(inner.top).to.be.closeTo(outer.top, 0.01);
+        expect(inner.width).to.be.closeTo(outer.width, 0.01);
+        expect(inner.height).to.be.closeTo(outer.height, 0.01);
+      });
+    });
+
     test('recolors the glyphs with the icon color knob', async () => {
       const el = await fixture<IAItemNavSharePanel>(
         html`<ia-itemnav-share-panel

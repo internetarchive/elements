@@ -498,7 +498,9 @@ export class IAItemNavigator extends LitElement {
         }
 
         nav .minimized button.toggle-menu > * {
-          border: 2px solid var(--item-navigator-icon-color--);
+          /* The border only reserves the ring's geometry. The glyph fills the
+             border box and the ring itself isn't drawn. */
+          border: 2px solid transparent;
           border-radius: ${iconSize};
           width: ${iconSize};
           height: ${iconSize};
@@ -506,9 +508,11 @@ export class IAItemNavigator extends LitElement {
         }
 
         /* The glyph fills the ring's border box, so it is as large as the ring
-           it sits in rather than the smaller box inside the border. */
+           it sits in rather than the smaller box inside the border, and is
+           clipped to the ring's rounded corners. */
         nav .minimized button.toggle-menu > .ia-icon {
           position: relative;
+          clip-path: inset(0 round ${iconSize});
         }
 
         nav .minimized button.toggle-menu > .ia-icon > svg {

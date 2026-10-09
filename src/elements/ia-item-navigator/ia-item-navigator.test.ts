@@ -573,6 +573,27 @@ describe('IAItemNavigator', () => {
       expect(glyphBox.top).to.be.closeTo(ringBox.top, 0.5);
     });
 
+    test('keeps the ring geometry but does not draw it', async () => {
+      const el = await navigator('--item-navigator-icon-size: 40px');
+      const box = el.shadowRoot?.querySelector(
+        'button.toggle-menu > .ia-icon',
+      ) as HTMLElement;
+      const glyph = box.querySelector('svg') as SVGElement;
+      const style = getComputedStyle(box);
+
+      expect(style.borderTopWidth).to.equal('2px');
+      for (const side of ['Top', 'Right', 'Bottom', 'Left'] as const) {
+        expect(style[`border${side}Color`], side).to.equal('rgba(0, 0, 0, 0)');
+      }
+      // The glyph covers exactly the span's border box.
+      const outer = box.getBoundingClientRect();
+      const inner = glyph.getBoundingClientRect();
+      expect(inner.left).to.be.closeTo(outer.left, 0.01);
+      expect(inner.top).to.be.closeTo(outer.top, 0.01);
+      expect(inner.width).to.be.closeTo(outer.width, 0.01);
+      expect(inner.height).to.be.closeTo(outer.height, 0.01);
+    });
+
     test('recolors the glyph with the icon color knob', async () => {
       const el = await navigator('--item-navigator-icon-color: rgb(1, 2, 3)');
       const glyph = el.shadowRoot?.querySelector(

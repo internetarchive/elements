@@ -293,7 +293,8 @@ export class IAItemNavSharePanel extends LitElement {
           padding: 0.2em;
           margin-right: 1em;
           vertical-align: middle;
-          border: 1px solid var(--item-navigator-border-color--);
+          /* The border only reserves geometry. It isn't drawn. */
+          border: 1px solid transparent;
           border-radius: 7px;
         }
 
@@ -303,6 +304,17 @@ export class IAItemNavSharePanel extends LitElement {
           font-size: var(--item-navigator-base-font-size--);
           width: 2em;
           height: 2em;
+          position: relative;
+          /* The glyph fills the border box (the padding box plus the 1px
+             border) and is clipped to its rounded corners. */
+          clip-path: inset(0 round 7px);
+        }
+
+        .share-option .ia-icon > svg {
+          position: absolute;
+          inset: -1px;
+          width: calc(100% + 2px);
+          height: calc(100% + 2px);
         }
 
         /* Our glyphs paint with currentColor, so this supplies the paint. */
