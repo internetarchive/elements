@@ -41,6 +41,9 @@ const themeStyles = css`
     --mint-green: #31a481;
     --navy-blue: #194880;
     --bright-blue: #4b64ff;
+    --default-icon-color: currentColor;
+    --default-icon-filter: none;
+    --default-icon-transition: none;
 
     /*
     ADJUSTABLE STYLES
@@ -61,6 +64,8 @@ const themeStyles = css`
 
     /* Sizing */
     --icon-width: var(--ia-theme-icon-width, var(--default-icon-width));
+    /* Icons are square unless a height is set on its own */
+    --icon-height: var(--ia-theme-icon-height, var(--icon-width));
     --padding-sm: var(--ia-theme-padding-sm, var(--default-padding-sm));
     --search-bar-height: var(
       --ia-theme-search-bar-height,
@@ -98,6 +103,12 @@ const themeStyles = css`
     --font-size-lg: var(--ia-theme-font-size-lg, var(--default-font-size-lg));
 
     /* Backgrounds and fills */
+    --icon-color: var(--ia-theme-icon-color, var(--default-icon-color));
+    --icon-filter: var(--ia-theme-icon-filter, var(--default-icon-filter));
+    --icon-transition: var(
+      --ia-theme-icon-transition,
+      var(--default-icon-transition)
+    );
     --primary-background-color: var(
       --ia-theme-primary-background-color,
       var(--off-white)
