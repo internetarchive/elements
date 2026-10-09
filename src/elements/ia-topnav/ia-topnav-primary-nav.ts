@@ -101,13 +101,18 @@ export class PrimaryNav extends TrackedElement {
 
   render() {
     // const mediaMenuTabIndex = this.openMenu === 'media' ? '' : '-1';
+    const hamburgerLabel =
+      this.openMenu === 'media'
+        ? msg('Close main menu')
+        : msg('Open main menu');
     return html`
       <nav class=${this.hideSearch ? 'hide-search' : ''}>
         <button
           class="hamburger"
           @click="${this.toggleMediaMenu}"
           data-event-click-tracking="${this.config?.eventCategory}|NavHamburger"
-          title=${msg('Open main menu')}
+          title=${hamburgerLabel}
+          aria-label=${hamburgerLabel}
         >
           <ia-topnav-icon-hamburger
             ?active=${this.openMenu === 'media'}

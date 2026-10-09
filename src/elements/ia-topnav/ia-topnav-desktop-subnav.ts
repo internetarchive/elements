@@ -35,7 +35,8 @@ export class DesktopSubnav extends TrackedElement {
     const subnavIcons: Record<string, TemplateResult> = {
       Donate: donateIcon,
     };
-    return subnavIcons[title] ? subnavIcons[title] : html``;
+    // The leading space separates the heart from the link text.
+    return subnavIcons[title] ? html` ${subnavIcons[title]}` : html``;
   }
 
   static get styles(): CSSResultGroup {

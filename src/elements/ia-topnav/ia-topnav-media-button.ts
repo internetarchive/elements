@@ -1,5 +1,4 @@
 import { CSSResultGroup, TemplateResult, css, html } from 'lit';
-import { ifDefined } from 'lit/directives/if-defined.js';
 import TrackedElement from './tracked-element';
 import audio from '@src/icons/topnav-audio';
 import donate from '@src/icons/topnav-donate';
@@ -48,7 +47,6 @@ export class MediaButton extends TrackedElement {
         @click=${this.followable ? this.trackClick : this.onClick}
         data-event-click-tracking="${this.analyticsEvent}"
         title=${this.tooltip}
-        aria-label=${ifDefined(this.label || undefined)}
       >
         ${this.menuItem}
       </a>
@@ -236,16 +234,15 @@ export class MediaButton extends TrackedElement {
             color: var(--linkHoverColor);
           }
 
+          /* Visually hidden, so the link's name still contains the label. */
           .label {
-            display: none;
-          }
-
-          .label,
-          .web:after {
-            padding-right: 1rem;
-            font-size: 1.3rem;
-            text-transform: uppercase;
-            color: inherit;
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            white-space: nowrap;
+            clip-path: inset(50%);
           }
 
           .web:after {
@@ -297,9 +294,23 @@ export class MediaButton extends TrackedElement {
         }
 
         @media (min-width: 1200px) {
+          .label {
+            position: static;
+            width: auto;
+            height: auto;
+            margin: 0;
+            overflow: visible;
+            white-space: normal;
+            clip-path: none;
+          }
+
           .label,
           .web:after {
             display: inline;
+            padding-right: 1rem;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            color: inherit;
           }
 
           .web .label {

@@ -52,7 +52,7 @@ describe('ia-topnav icons', () => {
       'more',
     ];
 
-    test('render one 4rem svg each, labelled by the button', async () => {
+    test('render one 4rem svg each, beside a label that is never display:none', async () => {
       const menu = await fixture<MediaMenu>(
         html`<ia-topnav-media-menu></ia-topnav-media-menu>`,
       );
@@ -71,11 +71,13 @@ describe('ia-topnav icons', () => {
         expectPx(getComputedStyle(svg).width, 4 * rem(), menuName);
         expectPx(getComputedStyle(svg).height, 4 * rem(), menuName);
 
-        // The label span is hidden on desktop, so the link names itself.
+        // The link is named by its own content, so the name contains the
+        // label even where the label is only visually hidden.
         const link = button.shadowRoot?.querySelector('a');
-        expect(link?.getAttribute('aria-label'), menuName).to.equal(
-          button.label,
-        );
+        const label = button.shadowRoot?.querySelector('.label');
+        expect(link?.hasAttribute('aria-label'), menuName).to.equal(false);
+        expect(label?.textContent, menuName).to.equal(button.label);
+        expect(getComputedStyle(label!).display, menuName).to.not.equal('none');
       }
     });
 
@@ -202,7 +204,8 @@ describe('ia-topnav icons', () => {
     const svg = svgIn(link);
 
     expectDecorative(svg);
-    expect(link?.textContent?.trim()).to.equal('Donate');
+    // A space sits between the text and the heart.
+    expect(link?.textContent).to.equal('Donate ');
     expectPx(getComputedStyle(svg).width, 1.6 * rem());
     expect(getComputedStyle(svg.querySelector('path')!).fill).to.equal(
       'rgb(255, 0, 0)',
