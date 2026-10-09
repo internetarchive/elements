@@ -562,10 +562,15 @@ describe('IAItemNavigator', () => {
       expect(glyph).to.exist;
       expect(glyph.getAttribute('viewBox')).to.equal('0 0 40 40');
 
-      // The glyph fills the ring's border box: the 40px icon plus 2px borders.
-      const { width, height } = glyph.getBoundingClientRect();
-      expect(width).to.equal(44);
-      expect(height).to.equal(44);
+      // The glyph fills the ring's border box, which is the area the ring's
+      // border is drawn around.
+      const ring = glyph.parentElement as HTMLElement;
+      const glyphBox = glyph.getBoundingClientRect();
+      const ringBox = ring.getBoundingClientRect();
+      expect(glyphBox.width).to.be.closeTo(ringBox.width, 0.5);
+      expect(glyphBox.height).to.be.closeTo(ringBox.height, 0.5);
+      expect(glyphBox.left).to.be.closeTo(ringBox.left, 0.5);
+      expect(glyphBox.top).to.be.closeTo(ringBox.top, 0.5);
     });
 
     test('recolors the glyph with the icon color knob', async () => {
