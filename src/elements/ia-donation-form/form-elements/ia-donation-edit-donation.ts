@@ -154,7 +154,9 @@ export class IADonationEditDonation extends LitElement {
             : nothing}
         </ul>
 
-        <div class="errors">${this.error}</div>
+        <div class="errors" id="amount-errors" aria-live="polite">
+          ${this.error}
+        </div>
 
         ${this.coverFeesCheckboxMode === 'display'
           ? html`<div class="checkbox-options">
@@ -482,6 +484,7 @@ export class IADonationEditDonation extends LitElement {
             id="custom-amount-input"
             tabindex="-1"
             aria-label=${msg('Custom amount in dollars')}
+            aria-describedby="amount-errors"
             value=${this.customAmountDisplayValue}
             @input=${this.customAmountChanged}
             @keydown=${this.currencyValidator.keydown}

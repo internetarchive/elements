@@ -238,6 +238,12 @@ describe('IADonationEditDonation', () => {
     `);
     const errors = el.shadowRoot!.querySelector<HTMLDivElement>('.errors')!;
     expect(errors.textContent?.trim()).to.equal('');
+    expect(errors.getAttribute('aria-live')).to.equal('polite');
+    expect(
+      el
+        .shadowRoot!.querySelector('#custom-amount-input')!
+        .getAttribute('aria-describedby'),
+    ).to.equal(errors.id);
 
     const errored = oneEvent(el, 'editDonationError');
     typeCustomAmount(el, '10000');

@@ -17,8 +17,10 @@ import {
 } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
+import { localized, msg, str } from '@lit/localize';
 
 @customElement('ia-topnav-primary-nav')
+@localized()
 export class PrimaryNav extends TrackedElement {
   @property({ type: String }) mediaBaseHost = 'https://archive.org';
   @property({ type: String }) baseHost = '';
@@ -102,7 +104,7 @@ export class PrimaryNav extends TrackedElement {
           class="hamburger"
           @click="${this.toggleMediaMenu}"
           data-event-click-tracking="${this.config?.eventCategory}|NavHamburger"
-          title="Open main menu"
+          title=${msg('Open main menu')}
         >
           <ia-topnav-icon-hamburger
             ?active=${this.openMenu === 'media'}
@@ -114,7 +116,7 @@ export class PrimaryNav extends TrackedElement {
             .href=${formatUrl('/' as string & Location, this.baseHost)}
             @click=${this.trackClick}
             data-event-click-tracking="${this.config?.eventCategory}|NavHome"
-            title="Go home"
+            title=${msg('Go home')}
             class="link-home"
             >${icons.iaLogo}${logoWordmarkStacked}</a
           >
@@ -192,7 +194,9 @@ export class PrimaryNav extends TrackedElement {
   get userIcon() {
     const userMenuClass = this.openMenu === 'user' ? 'active' : '';
     const userMenuToolTip =
-      this.openMenu === 'user' ? 'Close user menu' : 'Expand user menu';
+      this.openMenu === 'user'
+        ? msg('Close user menu')
+        : msg('Expand user menu');
 
     return html`
       <button
@@ -203,7 +207,7 @@ export class PrimaryNav extends TrackedElement {
       >
         <img
           src="${this.mediaBaseHost}${this.userProfileImagePath}"
-          alt="Profile picture for ${this.screenName}"
+          alt=${msg(str`Profile picture for ${this.screenName}`)}
         />
         <span class="screen-name" dir="auto">${this.screenName}</span>
       </button>
@@ -267,7 +271,7 @@ export class PrimaryNav extends TrackedElement {
         )}
       >
         ${icons.donateUnpadded}
-        <ia-sr-only-text>"Donate to the archive"</ia-sr-only-text>
+        <ia-sr-only-text>${msg('Donate to the archive')}</ia-sr-only-text>
       </a>
     `;
   }
@@ -279,7 +283,7 @@ export class PrimaryNav extends TrackedElement {
       @focus=${this.toggleMediaMenu}
     >
       ${icons.upload}
-      <span>Upload</span>
+      <span>${msg('Upload')}</span>
     </a>`;
   }
 
