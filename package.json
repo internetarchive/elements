@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/elements",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "A web component library from the Internet Archive.",
   "license": "AGPL-3.0-only",
   "type": "module",
@@ -39,7 +39,7 @@
     "@internetarchive/ia-dropdown": "^2.2.0",
     "@internetarchive/lazy-loader-service": "^0.2.0",
     "@internetarchive/modal-manager": "^2.0.6",
-    "@internetarchive/promised-singleton": "0.3.0-alpha.1",
+    "@internetarchive/promised-singleton": "^0.2.1",
     "@lit/localize": "^0.12.2",
     "@types/applepayjs": "^14.0.9",
     "@types/braintree-web": "^3.143.0",

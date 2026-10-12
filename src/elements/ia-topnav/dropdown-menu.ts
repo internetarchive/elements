@@ -20,7 +20,9 @@ import TrackedElement from './tracked-element';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import KeyboardNavigation from './lib/keyboard-navigation';
 import themeStyles from '@src/themes/theme-styles';
+import { localized, msg, str } from '@lit/localize';
 
+@localized()
 export default class DropdownMenu extends TrackedElement {
   @property({ type: String }) baseHost = '';
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
@@ -111,7 +113,7 @@ export default class DropdownMenu extends TrackedElement {
       @click=${this.trackClick}
       data-event-click-tracking="${this.config
         ?.eventCategory}|Nav${link.analyticsEvent}"
-      aria-label=${calloutText ? `New feature: ${link.title}` : nothing}
+      aria-label=${calloutText ? msg(str`New feature: ${link.title}`) : nothing}
     >
       ${isMobileUpload ? icons.uploadUnpadded : nothing} ${link.title}
       ${calloutText
