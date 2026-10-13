@@ -19,9 +19,7 @@ const id = (strings: string | string[]) => generateMsgId(strings, false);
 // A stand-in catalog, keyed and shaped like the one lit-localize generates.
 // Placeholders are the index of the source expression.
 const templates = {
-  [id(['There are ', ' reviews for this item.'])]:
-    str`Hay ${0} reseñas de este elemento.`,
-  [id('Display reviews')]: 'Mostrar reseñas',
+  [id(['Show ', ' more reviews'])]: str`Mostrar ${0} reseñas más`,
   [id('Delete this review')]: 'Eliminar esta reseña',
   [id(['', ' out of 5 stars'])]: str`${0} de 5 estrellas`,
   [id(['', ' (edited)'])]: str`${0} (editada)`,
@@ -58,19 +56,20 @@ describe('ia-reviews localization', () => {
     await setLocale('en');
   });
 
-  test('switches the review count already on the page', async () => {
+  test('switches the hidden review count already on the page', async () => {
     const el = await fixture<IAReviews>(
-      html`<ia-reviews .reviews=${[review, review]}></ia-reviews>`,
+      html`<ia-reviews
+        .reviews=${[review, review]}
+        .maxInitialReviews=${0}
+      ></ia-reviews>`,
     );
-    const message = () => textOf(el.shadowRoot?.querySelector('.message'));
-    expect(message()).toBe(
-      'There are 2 reviews for this item. Display reviews.',
-    );
+    const button = () => textOf(el.shadowRoot?.querySelector('.show-more-btn'));
+    expect(button()).toBe('Show 2 more reviews');
 
     await setLocale('es');
     await el.updateComplete;
 
-    expect(message()).toBe('Hay 2 reseñas de este elemento. Mostrar reseñas.');
+    expect(button()).toBe('Mostrar 2 reseñas más');
   });
 
   test('switches a rendered review', async () => {
