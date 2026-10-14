@@ -23,7 +23,9 @@ export class MoreSlider extends TrackedElement {
               <a
                 @click=${this.trackClick}
                 href=${formatUrl(item.url, this.baseHost)}
-                data-event-click-tracking="${this.analyticsEvent(item.title)}"
+                data-event-click-tracking="${this.analyticsEvent(
+                  item.key ?? item.title,
+                )}"
                 >${item.title}</a
               >
             </li>`,
@@ -42,12 +44,12 @@ export class MoreSlider extends TrackedElement {
       css`
         ul {
           padding: 0;
-          margin: -1rem 0 0 0;
+          margin: calc(-10 * var(--topnavUnit--)) 0 0 0;
           list-style: none;
         }
         a {
           display: block;
-          padding: 1rem 0;
+          padding: calc(10 * var(--topnavUnit--)) 0;
           text-decoration: none;
           color: var(--activeColor);
         }
