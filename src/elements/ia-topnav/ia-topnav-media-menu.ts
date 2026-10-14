@@ -164,7 +164,7 @@ export class MediaMenu extends LitElement {
 
         .media-menu-inner {
           z-index: -1;
-          top: -40rem;
+          top: calc(-400 * var(--topnavUnit--));
           background-color: var(--mediaMenuBg);
           margin: 0;
           overflow: hidden;
@@ -192,7 +192,7 @@ export class MediaMenu extends LitElement {
           .overflow-clip {
             position: absolute;
             z-index: -1; /** needs to be under the navigation, otherwise it intercepts clicks */
-            top: 4rem;
+            top: calc(40 * var(--topnavUnit--));
             left: 0;
             height: 0;
             width: 100%;
@@ -202,7 +202,7 @@ export class MediaMenu extends LitElement {
           }
 
           .open .overflow-clip {
-            height: 40rem;
+            height: calc(400 * var(--topnavUnit--));
           }
         }
 
@@ -212,7 +212,7 @@ export class MediaMenu extends LitElement {
             display: block;
             position: static;
             width: auto;
-            height: 5rem;
+            height: calc(50 * var(--topnavUnit--));
             transition-property: none;
           }
 
