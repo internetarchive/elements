@@ -1145,4 +1145,74 @@ describe('IA Combo Box', () => {
       expect(comboBox.value).to.equal('foo'); // Closed & selected the highlighted option
     });
   });
+
+  describe('Icons', () => {
+    test('draws the caret as inline svg, closed then open', async () => {
+      const el = await fixture<IAComboBox>(
+        html`<ia-combo-box .options=${BASIC_OPTIONS}></ia-combo-box>`,
+      );
+      const carets = el.shadowRoot?.querySelectorAll(
+        '#caret-button .caret-icon',
+      ) as NodeListOf<HTMLElement>;
+      expect(carets).to.have.lengthOf(2);
+      carets.forEach((caret) => {
+        expect(caret.getAttribute('part')).to.equal('icon caret-icon');
+        expect(caret.getAttribute('aria-hidden')).to.equal('true');
+        expect(caret.querySelector('svg')).to.exist;
+        expect(caret.querySelector('img')).to.not.exist;
+      });
+      expect(carets[0].innerHTML).to.not.equal(carets[1].innerHTML);
+
+      const fontSize = parseFloat(getComputedStyle(carets[0]).fontSize);
+      const svg = carets[0].querySelector('svg') as SVGElement;
+      const { width, height } = svg.getBoundingClientRect();
+      expect(width).to.be.closeTo(fontSize * 0.875, 0.01);
+      expect(height).to.be.closeTo(fontSize * 0.875, 0.01);
+      expect(getComputedStyle(svg).fill).to.equal('rgb(0, 0, 0)');
+    });
+
+    test('draws the clear glyph at 1em, and lets a part rule recolor it', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <style>
+          ia-combo-box::part(clear-icon) {
+            color: rgb(10, 20, 30);
+          }
+        </style>
+        <ia-combo-box
+          .options=${BASIC_OPTIONS}
+          value="foo"
+          clearable
+        ></ia-combo-box>
+      `);
+      const combo = el.parentElement?.querySelector(
+        'ia-combo-box',
+      ) as IAComboBox;
+      await combo.updateComplete;
+      const svg = combo.shadowRoot?.querySelector(
+        '#clear-button .clear-icon svg',
+      ) as SVGElement;
+      expect(svg).to.exist;
+
+      const fontSize = parseFloat(getComputedStyle(svg).fontSize);
+      expect(svg.getBoundingClientRect().width).to.be.closeTo(fontSize, 0.01);
+      expect(getComputedStyle(svg).fill).to.equal('rgb(10, 20, 30)');
+    });
+
+    test('keeps the icon-only buttons named by their screen-reader text', async () => {
+      const el = await fixture<IAComboBox>(
+        html`<ia-combo-box
+          .options=${BASIC_OPTIONS}
+          value="foo"
+          clearable
+        ></ia-combo-box>`,
+      );
+
+      expect(
+        el.shadowRoot?.querySelector('#caret-button .sr-only')?.textContent,
+      ).to.equal('Toggle options');
+      expect(
+        el.shadowRoot?.querySelector('#clear-button .sr-only')?.textContent,
+      ).to.equal('Clear');
+    });
+  });
 });
