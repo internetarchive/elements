@@ -72,7 +72,7 @@ export class SavePageForm extends TrackedElement {
         div {
           display: grid;
           grid-template-columns: 1fr auto;
-          grid-column-gap: 0.8rem;
+          grid-column-gap: calc(8 * var(--topnavUnit--));
           margin: 0;
           padding: 0;
           border: none;
@@ -80,10 +80,10 @@ export class SavePageForm extends TrackedElement {
 
         input[type='text'] {
           width: 100%;
-          height: 3rem;
+          height: calc(30 * var(--topnavUnit--));
           box-sizing: border-box;
           border: 1px solid var(--savePageInputBorder);
-          border-radius: 0.5rem;
+          border-radius: calc(5 * var(--topnavUnit--));
           color: var(--grey13);
           font-size: inherit;
         }
@@ -92,8 +92,8 @@ export class SavePageForm extends TrackedElement {
           -webkit-appearance: none;
           -moz-appearance: none;
           appearance: none;
-          padding: 0.4rem 0.8rem;
-          font: normal 1.3rem var(--themeFontFamily);
+          padding: calc(4 * var(--topnavUnit--)) calc(8 * var(--topnavUnit--));
+          font: normal calc(13 * var(--topnavUnit--)) var(--themeFontFamily);
           text-transform: uppercase;
           color: var(--savePageSubmitText);
           border: none;
@@ -104,7 +104,7 @@ export class SavePageForm extends TrackedElement {
 
         .error {
           display: none;
-          margin-top: 0.5rem;
+          margin-top: calc(5 * var(--topnavUnit--));
           font-weight: bold;
           color: var(--savePageErrorText);
         }
@@ -116,7 +116,8 @@ export class SavePageForm extends TrackedElement {
         @media (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) {
           h3 {
             margin-top: 0;
-            font: normal 100 1.6rem var(--themeFontFamily);
+            font: normal 100 calc(16 * var(--topnavUnit--))
+              var(--themeFontFamily);
           }
         }
       `,
