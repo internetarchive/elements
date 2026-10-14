@@ -209,7 +209,7 @@ export class IATopNavStory extends LitElement {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 4rem;
+        width: calc(40 * var(--topnavUnit--));
         color: var(--iconFill);
       }
 
@@ -218,8 +218,8 @@ export class IATopNavStory extends LitElement {
       }
 
       .sample-language-picker svg {
-        width: 2.4rem;
-        height: 2.4rem;
+        width: calc(24 * var(--topnavUnit--));
+        height: calc(24 * var(--topnavUnit--));
         pointer-events: none;
       }
 

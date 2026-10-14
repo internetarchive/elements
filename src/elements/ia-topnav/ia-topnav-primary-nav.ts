@@ -435,7 +435,7 @@ export class PrimaryNav extends TrackedElement {
         slot[name='language-picker']::slotted(*) {
           display: inline-flex;
           align-items: center;
-          height: 4rem;
+          height: calc(40 * var(--topnavUnit--));
           vertical-align: top;
         }
 
@@ -563,6 +563,10 @@ export class PrimaryNav extends TrackedElement {
           }
           .right-side-section .user-info {
             order: 1;
+          }
+
+          .mobile-donate-link {
+            margin-right: calc(4.5 * var(--topnavUnit--));
           }
         }
 
