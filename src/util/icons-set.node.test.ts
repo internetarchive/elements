@@ -49,10 +49,9 @@ beforeAll(() => {
   // Run the generator over a copy of `icons/`, so the test never rewrites the
   // repo's own `src/icons/`.
   mkdirSync(join(scratch, 'scripts'));
-  cpSync(
-    join(repoRoot, 'scripts/build-icons.mts'),
-    join(scratch, 'scripts/build-icons.mts'),
-  );
+  for (const script of ['build-icons.mts', 'icon-source.mts']) {
+    cpSync(join(repoRoot, 'scripts', script), join(scratch, 'scripts', script));
+  }
   cpSync(join(repoRoot, 'icons'), join(scratch, 'icons'), { recursive: true });
   execFileSync(process.execPath, [join(scratch, 'scripts/build-icons.mts')], {
     stdio: 'pipe',
