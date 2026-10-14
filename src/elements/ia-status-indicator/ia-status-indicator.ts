@@ -15,18 +15,18 @@ import { customElement } from '@src/util/custom-element';
 import { localized, msg } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
-import { maskedIcon } from '@src/util/masked-icon';
+import { iconBox, iconBoxStyles } from '@src/util/icon-box';
 
-import audioIcon from './icons/audio.svg';
-import collectionIcon from './icons/collection.svg';
-import etreeIcon from './icons/etree.svg';
-import imagesIcon from './icons/images.svg';
-import searchIcon from './icons/search.svg';
-import softwareIcon from './icons/software.svg';
-import textsIcon from './icons/texts.svg';
-import tvIcon from './icons/tv.svg';
-import videoIcon from './icons/video.svg';
-import webIcon from './icons/web.svg';
+import audioIcon from '@src/icons/mediatype-audio';
+import collectionIcon from '@src/icons/mediatype-collection';
+import etreeIcon from '@src/icons/mediatype-etree';
+import imagesIcon from '@src/icons/mediatype-images';
+import searchIcon from '@src/icons/search';
+import softwareIcon from '@src/icons/mediatype-software';
+import textsIcon from '@src/icons/mediatype-texts';
+import tvIcon from '@src/icons/mediatype-tv';
+import videoIcon from '@src/icons/mediatype-video';
+import webIcon from '@src/icons/mediatype-web';
 
 /** How long a mode change takes to fade. Drives both the CSS and the timer. */
 const FADE_DURATION_MS = 250;
@@ -53,7 +53,7 @@ export type MediaTypeIcon =
   | 'video'
   | 'web';
 
-const MEDIATYPE_ICONS: Record<MediaTypeIcon, string> = {
+const MEDIATYPE_ICONS: Record<MediaTypeIcon, SVGTemplateResult> = {
   audio: audioIcon,
   collection: collectionIcon,
   etree: etreeIcon,
@@ -213,19 +213,19 @@ export class IAStatusIndicator extends LitElement {
   }
 
   /**
-   * The asset URL for the current mediatype, if it maps to a glyph we ship.
+   * The glyph for the current mediatype, if it maps to one we ship.
    *
    * Unmapped values (e.g. archive.org's `account` or `data`) resolve to
-   * undefined and degrade to the default dots rather than a broken mask.
+   * undefined and degrade to the default dots.
    */
-  private get mediatypeIconUrl(): string | undefined {
+  private get mediatypeGlyph(): SVGTemplateResult | undefined {
     if (!this.mediatype) return undefined;
     return MEDIATYPE_ICONS[this.mediatype];
   }
 
   /** Whether the middle of the ring is occupied by a glyph rather than dots */
   private get hasCenterIcon(): boolean {
-    return this.hasSlottedIcon || !!this.mediatypeIconUrl;
+    return this.hasSlottedIcon || !!this.mediatypeGlyph;
   }
 
   /**
@@ -304,14 +304,14 @@ export class IAStatusIndicator extends LitElement {
   }
 
   /**
-   * The bundled mediatype glyph. `maskedIcon` supplies the mask geometry and
-   * the decorative `aria-hidden`; this component supplies the size and paint.
+   * The bundled mediatype glyph. The generated svg is decorative
+   * (`aria-hidden`); this component supplies the size and paint.
    */
   private get mediatypeIconTemplate(): TemplateResult | typeof nothing {
-    const url = this.mediatypeIconUrl;
-    if (!url) return nothing;
+    const glyph = this.mediatypeGlyph;
+    if (!glyph) return nothing;
 
-    return maskedIcon(url);
+    return iconBox(glyph);
   }
 
   private handleIconSlotChange(e: Event): void {
@@ -371,6 +371,7 @@ export class IAStatusIndicator extends LitElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      iconBoxStyles,
       css`
         :host {
           --indicator-width--: var(--icon-width);
@@ -430,7 +431,7 @@ export class IAStatusIndicator extends LitElement {
           display: block;
         }
 
-        .indicator svg {
+        .indicator > svg {
           display: block;
           width: 100%;
           height: auto;
@@ -448,14 +449,13 @@ export class IAStatusIndicator extends LitElement {
         }
 
         /*
-         * Sized to fit within the icon ring's inner diameter. maskedIcon sets
-         * the mask itself; background-color is what paints the glyph, so it
-         * recolors with the ring.
+         * Sized to fit within the icon ring's inner diameter. The glyph paints
+         * with currentColor, so it recolors with the ring.
          */
         .ia-icon {
           width: 50%;
           height: 50%;
-          background-color: var(--loading-icon-color--);
+          color: var(--loading-icon-color--);
         }
 
         /* Block, so the svg isn't padded out by the line box it would sit in */
