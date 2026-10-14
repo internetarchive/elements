@@ -543,4 +543,75 @@ describe('IAItemNavigator', () => {
     expect(el.openMenu).to.equal('share');
     expect(el.menuOpened).to.equal(true);
   });
+
+  describe('toggle button icon', () => {
+    async function navigator(style = ''): Promise<IAItemNavigator> {
+      const el = await fixture<IAItemNavigator>(
+        html`<ia-item-navigator style=${style}></ia-item-navigator>`,
+      );
+      el.menuContents = [provider('contents')];
+      await el.updateComplete;
+      return el;
+    }
+
+    test('draws the ellipses glyph as inline svg at the icon size', async () => {
+      const el = await navigator('--item-navigator-icon-size: 40px');
+      const glyph = el.shadowRoot?.querySelector(
+        'button.toggle-menu .ia-icon > svg',
+      ) as SVGElement;
+      expect(glyph).to.exist;
+      expect(glyph.getAttribute('viewBox')).to.equal('0 0 40 40');
+
+      // The glyph fills the ring's border box, which is the area the ring's
+      // border is drawn around.
+      const ring = glyph.parentElement as HTMLElement;
+      const glyphBox = glyph.getBoundingClientRect();
+      const ringBox = ring.getBoundingClientRect();
+      expect(glyphBox.width).to.be.closeTo(ringBox.width, 0.5);
+      expect(glyphBox.height).to.be.closeTo(ringBox.height, 0.5);
+      expect(glyphBox.left).to.be.closeTo(ringBox.left, 0.5);
+      expect(glyphBox.top).to.be.closeTo(ringBox.top, 0.5);
+    });
+
+    test('keeps the ring geometry but does not draw it', async () => {
+      const el = await navigator('--item-navigator-icon-size: 40px');
+      const box = el.shadowRoot?.querySelector(
+        'button.toggle-menu > .ia-icon',
+      ) as HTMLElement;
+      const glyph = box.querySelector('svg') as SVGElement;
+      const style = getComputedStyle(box);
+
+      expect(style.borderTopWidth).to.equal('2px');
+      for (const side of ['Top', 'Right', 'Bottom', 'Left'] as const) {
+        expect(style[`border${side}Color`], side).to.equal('rgba(0, 0, 0, 0)');
+      }
+      // The glyph covers exactly the span's border box.
+      const outer = box.getBoundingClientRect();
+      const inner = glyph.getBoundingClientRect();
+      expect(inner.left).to.be.closeTo(outer.left, 0.01);
+      expect(inner.top).to.be.closeTo(outer.top, 0.01);
+      expect(inner.width).to.be.closeTo(outer.width, 0.01);
+      expect(inner.height).to.be.closeTo(outer.height, 0.01);
+    });
+
+    test('recolors the glyph with the icon color knob', async () => {
+      const el = await navigator('--item-navigator-icon-color: rgb(1, 2, 3)');
+      const glyph = el.shadowRoot?.querySelector(
+        'button.toggle-menu .ia-icon > svg',
+      ) as SVGElement;
+
+      expect(getComputedStyle(glyph).color).to.equal('rgb(1, 2, 3)');
+      expect(getComputedStyle(glyph).fill).to.equal('rgb(1, 2, 3)');
+    });
+
+    test('keeps the toggle named by its aria-label, not the decorative glyph', async () => {
+      const el = await navigator();
+      const button = el.shadowRoot?.querySelector('button.toggle-menu');
+
+      expect(button?.getAttribute('aria-label')).to.equal('Open side panel');
+      expect(
+        button?.querySelector('svg')?.getAttribute('aria-hidden'),
+      ).to.equal('true');
+    });
+  });
 });
