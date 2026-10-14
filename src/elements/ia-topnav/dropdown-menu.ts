@@ -158,7 +158,7 @@ export default class DropdownMenu extends TrackedElement {
           right: 0;
           z-index: 4;
           overflow: hidden;
-          font-size: 1.6rem;
+          font-size: calc(16 * var(--topnavUnit--));
           background-color: var(--dropdownMenuBg);
           transition-property: top;
           transition-duration: 0.2s;
@@ -180,7 +180,7 @@ export default class DropdownMenu extends TrackedElement {
         }
 
         h3 {
-          padding: 0.6rem 2rem;
+          padding: calc(6 * var(--topnavUnit--)) calc(20 * var(--topnavUnit--));
           margin: 0;
           font-size: inherit;
           overflow: hidden;
@@ -188,17 +188,18 @@ export default class DropdownMenu extends TrackedElement {
         }
 
         ul {
-          padding: 0.4rem 0 0.7rem 0;
+          padding: calc(4 * var(--topnavUnit--)) 0 calc(7 * var(--topnavUnit--))
+            0;
           margin: 0;
           list-style: none;
           /* viewport height - nav height + bottom nav border */
-          max-height: calc(100vh - 7.2rem + 1px);
+          max-height: calc(100vh - (72 * var(--topnavUnit--)) + 1px);
           overflow: auto;
           box-sizing: border-box;
         }
 
         .divider {
-          margin: 0.5rem 0;
+          margin: calc(5 * var(--topnavUnit--)) 0;
           border-bottom: 1px solid var(--dropdownMenuDivider);
         }
 
@@ -207,7 +208,7 @@ export default class DropdownMenu extends TrackedElement {
           display: block;
           color: var(--primaryTextColor);
           text-decoration: none;
-          padding: 1rem 2rem;
+          padding: calc(10 * var(--topnavUnit--)) calc(20 * var(--topnavUnit--));
         }
 
         .info-item {
@@ -222,7 +223,7 @@ export default class DropdownMenu extends TrackedElement {
           border-radius: 2px;
           background: #fee257;
           color: #2c2c2c;
-          font-size: 1.4rem;
+          font-size: calc(14 * var(--topnavUnit--));
           font-weight: bold;
         }
 
@@ -233,9 +234,9 @@ export default class DropdownMenu extends TrackedElement {
         }
         a.mobile-upload svg {
           fill: var(--white);
-          margin-right: 1rem;
-          height: 1.4rem;
-          width: 1.4rem;
+          margin-right: calc(10 * var(--topnavUnit--));
+          height: calc(14 * var(--topnavUnit--));
+          width: calc(14 * var(--topnavUnit--));
         }
 
         @media (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) {
@@ -247,7 +248,7 @@ export default class DropdownMenu extends TrackedElement {
             right: var(--topnav-dropdown-right--);
             z-index: 5;
             transition: opacity 0.2s ease-in-out;
-            font-size: 1.4rem;
+            font-size: calc(14 * var(--topnavUnit--));
             border-radius: 2px;
             background: var(--primaryTextColor);
             box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.15);
@@ -273,7 +274,7 @@ export default class DropdownMenu extends TrackedElement {
 
           ul {
             /* viewport height - nav height + bottom nav border */
-            max-height: calc(100vh - 8.5rem + 1px);
+            max-height: calc(100vh - (85 * var(--topnavUnit--)) + 1px);
           }
 
           .divider {
@@ -281,7 +282,8 @@ export default class DropdownMenu extends TrackedElement {
           }
 
           a {
-            padding: 0.5rem 2rem;
+            padding: calc(5 * var(--topnavUnit--))
+              calc(20 * var(--topnavUnit--));
             color: var(--inverseTextColor);
             transition:
               background 0.1s ease-out,
@@ -289,7 +291,8 @@ export default class DropdownMenu extends TrackedElement {
           }
 
           .info-item {
-            padding: 0.5rem 2rem;
+            padding: calc(5 * var(--topnavUnit--))
+              calc(20 * var(--topnavUnit--));
             font-size: 0.8em;
             color: var(--inverseDropdownMenuInfoItem);
           }
