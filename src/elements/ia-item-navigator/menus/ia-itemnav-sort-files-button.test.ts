@@ -137,11 +137,38 @@ describe('IAItemNavSortFilesButton', () => {
         style="--item-navigator-icon-color: rgb(0, 128, 64)"
       ></ia-itemnav-sort-files-button>`,
     );
-    const icon = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
+    const glyph = el.shadowRoot?.querySelector('.ia-icon > svg') as SVGElement;
 
-    // The glyph is a masked span, so the theming knob drives background-color.
-    expect(icon.tagName).to.equal('SPAN');
-    expect(getComputedStyle(icon).backgroundColor).to.equal('rgb(0, 128, 64)');
+    // The glyph is inline svg painted with currentColor, so the theming knob
+    // drives color.
+    expect(getComputedStyle(glyph).color).to.equal('rgb(0, 128, 64)');
+    expect(getComputedStyle(glyph).fill).to.equal('rgb(0, 128, 64)');
+  });
+
+  test('sizes the sort glyph with the header icon size knob', async () => {
+    const el = await fixture<IAItemNavSortFilesButton>(
+      html`<ia-itemnav-sort-files-button
+        style="--item-navigator-header-icon-size: 24px"
+      ></ia-itemnav-sort-files-button>`,
+    );
+    const glyph = el.shadowRoot?.querySelector('.ia-icon > svg') as SVGElement;
+    const { width, height } = glyph.getBoundingClientRect();
+
+    expect(width).to.equal(24);
+    expect(height).to.equal(24);
+  });
+
+  test('keeps an accessible name on the icon-only toggle in every state', async () => {
+    const el = await fixture<IAItemNavSortFilesButton>(
+      html`<ia-itemnav-sort-files-button></ia-itemnav-sort-files-button>`,
+    );
+
+    for (const state of ['title_asc', 'title_desc', 'default'] as const) {
+      el.sortVolumes(state);
+      await el.updateComplete;
+      const button = el.shadowRoot?.querySelector('button.sort-by');
+      expect(button?.getAttribute('aria-label'), state).to.match(/^Sort/);
+    }
   });
 
   test('recolors every state of the sort toggle', async () => {
@@ -154,8 +181,10 @@ describe('IAItemNavSortFilesButton', () => {
     for (const state of ['title_asc', 'title_desc', 'default'] as const) {
       el.sortVolumes(state);
       await el.updateComplete;
-      const icon = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
-      expect(getComputedStyle(icon).backgroundColor, state).to.equal(
+      const glyph = el.shadowRoot?.querySelector(
+        '.ia-icon > svg',
+      ) as SVGElement;
+      expect(getComputedStyle(glyph).color, state).to.equal(
         'rgb(200, 100, 50)',
       );
     }
