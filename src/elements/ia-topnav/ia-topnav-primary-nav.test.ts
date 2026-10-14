@@ -51,6 +51,15 @@ describe('<ia-topnav-primary-nav>', () => {
     expect(label?.textContent).to.contain('Donate to the archive');
   });
 
+  test('renders a language-picker slot in the right side section', async () => {
+    const el = await fixture<PrimaryNav>(component({}));
+    const slot = el.shadowRoot?.querySelector(
+      '.right-side-section slot[name="language-picker"]',
+    );
+
+    expect(slot).to.exist;
+  });
+
   test('renders the login link when no username present', async () => {
     const el = await fixture<PrimaryNav>(
       component({

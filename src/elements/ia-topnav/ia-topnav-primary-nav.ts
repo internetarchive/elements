@@ -132,8 +132,10 @@ export class PrimaryNav extends TrackedElement {
         ></ia-topnav-media-menu>
         ${this.searchSlotContainer}
         <div class="right-side-section">
-          ${this.mobileDonateHeart} ${this.userStateTemplate}
-          ${this.uploadButtonTemplate} ${this.searchMenu}
+          ${this.mobileDonateHeart}
+          <slot name="language-picker"></slot>
+          ${this.userStateTemplate} ${this.uploadButtonTemplate}
+          ${this.searchMenu}
         </div>
       </nav>
     `;
@@ -556,6 +558,10 @@ export class PrimaryNav extends TrackedElement {
           .search-trigger,
           .mobile-donate-link {
             display: none;
+          }
+
+          slot[name='language-picker']::slotted(*) {
+            height: 100%;
           }
 
           .user-info {
