@@ -85,12 +85,15 @@ describe('icon set', () => {
     }
   });
 
-  it('has no two sources with the same markup', () => {
+  it('has no two sources with the same markup and viewBox', () => {
     const byMarkup = new Map<string, string>();
     for (const name of sources) {
-      const markup = innerMarkup(
-        readFileSync(join(scratch, 'icons', `${name}.svg`), 'utf8'),
+      const source = readFileSync(
+        join(scratch, 'icons', `${name}.svg`),
+        'utf8',
       );
+      // The same artwork in a different viewBox is a different crop.
+      const markup = `${source.match(/viewBox="([^"]*)"/)?.[1]}|${innerMarkup(source)}`;
       const existing = byMarkup.get(markup);
       expect(existing, `${name} duplicates ${existing}`).toBeUndefined();
       byMarkup.set(markup, name);

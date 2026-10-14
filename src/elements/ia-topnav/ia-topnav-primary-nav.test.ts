@@ -51,6 +51,20 @@ describe('<ia-topnav-primary-nav>', () => {
     expect(label?.textContent).to.contain('Donate to the archive');
   });
 
+  test('names the hamburger button for the state it will change to', async () => {
+    const el = await fixture<PrimaryNav>(component({}));
+    const button = () => el.shadowRoot?.querySelector('button.hamburger');
+
+    expect(button()?.getAttribute('aria-label')).to.equal('Open main menu');
+    expect(button()?.getAttribute('title')).to.equal('Open main menu');
+
+    el.openMenu = 'media';
+    await elementUpdated(el);
+
+    expect(button()?.getAttribute('aria-label')).to.equal('Close main menu');
+    expect(button()?.getAttribute('title')).to.equal('Close main menu');
+  });
+
   test('renders the login link when no username present', async () => {
     const el = await fixture<PrimaryNav>(
       component({
