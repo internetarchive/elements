@@ -17,7 +17,7 @@ import type {
 import type { SearchCategory, SearchRequestedDetail } from './models';
 
 import themeStyles from '@src/themes/theme-styles';
-import searchIcon from './search.svg';
+import searchIcon from '@src/icons/search';
 
 import '@internetarchive/ia-clearable-text-input';
 import '@src/elements/ia-dropdown/ia-dropdown';
@@ -159,7 +159,7 @@ export class IADropdownSearchBar extends LitElement {
               mode="loading"
               class="search-button-loading-icon"
             ></ia-status-indicator>`
-          : html`<img src=${searchIcon} alt="" />`}
+          : searchIcon}
       </button>
     `;
   }
@@ -341,9 +341,10 @@ export class IADropdownSearchBar extends LitElement {
         flex-shrink: 0;
       }
 
-      #search-button img {
+      #search-button svg {
         width: 18px;
         height: 18px;
+        color: #2c2c2c;
       }
 
       .search-button-loading-icon {
