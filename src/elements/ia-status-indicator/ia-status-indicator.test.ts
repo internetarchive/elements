@@ -146,17 +146,16 @@ describe('IA Status Indicator', () => {
         ></ia-status-indicator>`,
       );
 
-      const icon = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
-      expect(icon).to.exist;
-      expect(getComputedStyle(icon).maskImage).to.not.equal('none');
+      const glyph = el.shadowRoot?.querySelector('.ia-icon > svg');
+      expect(glyph).to.exist;
+      expect(glyph?.getAttribute('viewBox')).to.match(/^[\d.\s-]+$/);
     });
   });
 
   test('maps every mediatype to a distinct glyph', async () => {
-    // The bundler inlines small SVGs as data URIs, so the asset filename is not
-    // in the resolved URL. Distinctness is what actually proves the mapping is
-    // wired up rather than every entry pointing at the same glyph.
-    const masksSeen = new Map<string, MediaTypeIcon>();
+    // Distinct markup is what proves the mapping is wired up rather than every
+    // entry pointing at the same glyph.
+    const glyphsSeen = new Map<string, MediaTypeIcon>();
 
     for (const mediatype of ALL_MEDIATYPES) {
       const el = await fixture<IAStatusIndicator>(
@@ -164,18 +163,20 @@ describe('IA Status Indicator', () => {
           .mediatype=${mediatype}
         ></ia-status-indicator>`,
       );
-      const icon = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
-      const mask = getComputedStyle(icon).maskImage;
+      const glyph = el.shadowRoot?.querySelector(
+        '.ia-icon > svg',
+      ) as SVGElement;
+      const markup = glyph.innerHTML;
 
-      const collision = masksSeen.get(mask);
+      const collision = glyphsSeen.get(markup);
       expect(
         collision,
         `${mediatype} resolved to the same glyph as ${collision}`,
       ).to.equal(undefined);
-      masksSeen.set(mask, mediatype);
+      glyphsSeen.set(markup, mediatype);
     }
 
-    expect(masksSeen.size).to.equal(ALL_MEDIATYPES.length);
+    expect(glyphsSeen.size).to.equal(ALL_MEDIATYPES.length);
   });
 
   test('degrades to the default dots for an unmapped mediatype', async () => {
@@ -190,25 +191,13 @@ describe('IA Status Indicator', () => {
     expect(el.shadowRoot?.querySelector('.loading-dots')).to.exist;
   });
 
-  test('quotes the mask url so inlined data URIs stay valid', async () => {
-    const el = await fixture<IAStatusIndicator>(
-      html`<ia-status-indicator .mediatype=${'texts'}></ia-status-indicator>`,
-    );
-
-    const icon = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
-    // An unquoted url() containing apostrophes silently drops the declaration,
-    // which paints a solid block instead of the glyph.
-    expect(icon.getAttribute('style')).to.contain('url("');
-    expect(getComputedStyle(icon).maskImage).to.not.equal('none');
-  });
-
   test('hides the decorative center glyph from assistive tech', async () => {
     const el = await fixture<IAStatusIndicator>(
       html`<ia-status-indicator .mediatype=${'texts'}></ia-status-indicator>`,
     );
 
-    const icon = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
-    expect(icon.getAttribute('aria-hidden')).to.equal('true');
+    const glyph = el.shadowRoot?.querySelector('.ia-icon > svg') as SVGElement;
+    expect(glyph.getAttribute('aria-hidden')).to.equal('true');
   });
 
   test('keeps the svg title as the only accessible name with an icon present', async () => {
@@ -367,6 +356,20 @@ describe('IA Status Indicator', () => {
       ).to.be.lessThan(1);
     });
 
+    test('fills the glyph box with the svg, at half the indicator width', async () => {
+      const { el, glyph } = await sized('200px');
+      const svg = glyph.querySelector('svg') as SVGElement;
+
+      const box = glyph.getBoundingClientRect();
+      const drawn = svg.getBoundingClientRect();
+      expect(drawn.width).to.be.closeTo(box.width, 0.5);
+      expect(drawn.height).to.be.closeTo(box.height, 0.5);
+      expect(box.width).to.be.closeTo(
+        el.getBoundingClientRect().width / 2,
+        0.5,
+      );
+    });
+
     test('keeps the glyph inside the ring', async () => {
       const { el, glyph } = await sized('200px');
 
@@ -395,14 +398,15 @@ describe('IA Status Indicator', () => {
         ></ia-status-indicator>`,
       );
 
-      const glyph = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
+      const glyph = el.shadowRoot?.querySelector(
+        '.ia-icon > svg',
+      ) as SVGElement;
       const ring = el.shadowRoot?.querySelector('.loading-ring') as SVGElement;
 
       // The glyph is monochrome with the ring by design -- offshoot's
       // per-mediatype brand colours are deliberately not carried over.
-      expect(getComputedStyle(glyph).backgroundColor).to.equal(
-        'rgb(12, 34, 56)',
-      );
+      expect(getComputedStyle(glyph).color).to.equal('rgb(12, 34, 56)');
+      expect(getComputedStyle(glyph).fill).to.equal('rgb(12, 34, 56)');
       expect(getComputedStyle(ring).fill).to.equal('rgb(12, 34, 56)');
     });
 
