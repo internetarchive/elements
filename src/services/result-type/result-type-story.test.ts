@@ -34,6 +34,23 @@ describe('result-type story', () => {
     expect(el.shadowRoot!.querySelector('.output')).to.be.null;
   });
 
+  test('starts with 10 and 4 filled in', async () => {
+    const el = await fixture<ResultTypeStory>(
+      html`<result-type-story></result-type-story>`,
+    );
+    const root = el.shadowRoot!;
+    const values = Array.from(root.querySelectorAll('input[type="text"]')).map(
+      (input) => (input as HTMLInputElement).value,
+    );
+
+    expect(values).to.deep.equal(['10', '4']);
+    (root.querySelector('form') as HTMLFormElement).requestSubmit();
+    await el.updateComplete;
+    expect(root.querySelector('.output')?.textContent).to.equal(
+      '{ success: 2.5 }',
+    );
+  });
+
   test('returns a success value', async () => {
     const { call, output } = await divide('10', '4');
 
