@@ -41,6 +41,17 @@ async function search(options: { sample?: boolean; query?: string } = {}) {
 describe('search-service story', () => {
   afterEach(() => vi.restoreAllMocks());
 
+  test('starts with the query filled in, not as a placeholder', async () => {
+    const el = await fixture<SearchServiceStory>(
+      html`<search-service-story></search-service-story>`,
+    );
+    const input = el.shadowRoot!.querySelector(
+      'label.query input',
+    ) as HTMLInputElement;
+
+    expect(input.value).to.equal('nasa');
+  });
+
   test('shows nothing until Search is clicked', async () => {
     const el = await fixture<SearchServiceStory>(
       html`<search-service-story></search-service-story>`,

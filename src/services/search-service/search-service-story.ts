@@ -80,7 +80,7 @@ interface Row {
 
 @customElement('search-service-story')
 export class SearchServiceStory extends LitElement {
-  @state() private query = '';
+  @state() private query = DEFAULT_QUERY;
 
   @state() private rows = 5;
 
@@ -107,7 +107,8 @@ export class SearchServiceStory extends LitElement {
             Query
             <input
               type="text"
-              placeholder=${DEFAULT_QUERY}
+              placeholder="Enter a search term"
+              required
               autocomplete="off"
               spellcheck="false"
               .value=${this.query}
@@ -178,7 +179,7 @@ export class SearchServiceStory extends LitElement {
 
   private async run(e: Event) {
     e.preventDefault();
-    const query = this.query.trim() || DEFAULT_QUERY;
+    const query = this.query.trim();
     const rows = Math.min(Math.max(this.rows || 1, 1), 20);
     const params: SearchParams = {
       query,
