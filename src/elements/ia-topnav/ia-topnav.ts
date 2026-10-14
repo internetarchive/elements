@@ -167,6 +167,7 @@ export class IATopNav extends LitElement {
         .baseHost=${this.normalizedBaseHost}
         .menuItems=${this.menus.more.links}
         @focus=${this.closeMenus}
+        @click=${this.closeMenus}
       ></ia-topnav-desktop-subnav>
       <div
         id="close-layer"
@@ -183,7 +184,7 @@ export class IATopNav extends LitElement {
   private handleDocumentKeydown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
       this.openMenu = '';
-      this.mediaSliderOpen = false;
+      this.closeMediaSlider();
     }
   }
 
