@@ -19,12 +19,12 @@ import type {
   RecaptchaWidgetInterface,
 } from '@internetarchive/recaptcha-manager';
 import '@src/elements/ia-button/ia-button';
-import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
 import { Review } from '@internetarchive/metadata-service';
 
 import starSelected from './assets/star-selected.svg';
 import starUnselected from './assets/star-unselected.svg';
 
+import type { ReviewServiceInterface } from './models';
 import './ia-review';
 
 /**
@@ -34,15 +34,6 @@ import './ia-review';
 export class IAReviewForm extends LitElement {
   /* The IA item being reviewed */
   @property({ type: String }) identifier?: string;
-
-  /* The token for the review edit */
-  @property({ type: String }) token: string = '';
-
-  /* The host for archive endpoints and data */
-  @property({ type: String }) baseHost: string = 'https://archive.org';
-
-  /* The path for the endpoint we're submitting to */
-  @property({ type: String }) endpointPath: string = '/write-review.php';
 
   /** Form submitter's screenname, if applicable */
   @property({ type: String }) submitterScreenname: string = 'Anonymous';
@@ -62,8 +53,8 @@ export class IAReviewForm extends LitElement {
   /* Optional max length for review body */
   @property({ type: Number }) maxBodyLength?: number;
 
-  /* Handler for form submission */
-  @property({ type: Object }) fetchHandler?: FetchHandlerInterface;
+  /* Handles the review submission request */
+  @property({ type: Object }) reviewService?: ReviewServiceInterface;
 
   /* Service for activating the recaptcha challenge */
   @property({ type: Object }) recaptchaManager?: RecaptchaManagerInterface;
@@ -116,7 +107,7 @@ export class IAReviewForm extends LitElement {
         : html`
             <span class="inputs">
               ${this.starsInputTemplate} ${this.subjectInputTemplate}
-              ${this.bodyInputTemplate} ${this.hiddenInputsTemplate}
+              ${this.bodyInputTemplate}
             </span>
           `}
       ${this.recaptchaMessageTemplate} ${this.recoverableErrorTemplate}
@@ -310,20 +301,6 @@ export class IAReviewForm extends LitElement {
     `;
   }
 
-  /** Hidden inputs we use to store other information for form submission */
-  private get hiddenInputsTemplate(): HTMLTemplateResult {
-    return html`
-      <input type="hidden" name="field_reviewtoken" .value=${this.token} />
-      ${this.identifier
-        ? html`<input
-            type="hidden"
-            name="identifier"
-            .value=${this.identifier}
-          />`
-        : nothing}
-    `;
-  }
-
   /** Buttons to render at bottom of form */
   private get actionButtonsTemplate(): HTMLTemplateResult {
     return html`<div class="action-btns">
@@ -420,37 +397,25 @@ export class IAReviewForm extends LitElement {
       return this.stopSubmission();
     }
 
-    if (!this.fetchHandler) {
+    if (!this.reviewService || !this.identifier) {
       this.recoverableError = this.GENERIC_ERROR_MESSAGE;
       return this.stopSubmission();
     }
 
     try {
-      const formData = new URLSearchParams();
-
+      let recaptchaToken: string | undefined;
       if (!this.bypassRecaptcha) {
-        const recaptchaToken = await this.getRecaptchaToken();
+        recaptchaToken = await this.getRecaptchaToken();
         if (!recaptchaToken) return this.handleRecaptchaError();
-
-        formData.append('g-recaptcha-response', recaptchaToken ?? '');
       }
 
-      for (const entry of new FormData(this.reviewForm)) {
-        formData.append(entry[0], entry[1] as string);
-      }
-
-      // Indicates to the backend that submission is intended
-      formData.append('submitter', 'review-form');
-
-      const result: { success: boolean; error?: string } =
-        await this.fetchHandler.fetchApiResponse(
-          `${this.baseHost}${this.endpointPath}`,
-          {
-            method: 'POST',
-            includeCredentials: true,
-            body: formData,
-          },
-        );
+      const result = await this.reviewService.submitReview({
+        identifier: this.identifier,
+        title: this.reviewForm.field_reviewtitle.value,
+        body: this.reviewForm.field_reviewbody.value,
+        stars: this.reviewForm.field_stars.value,
+        recaptchaToken,
+      });
 
       if (result?.success === true) {
         this.submissionInProgress = false;
