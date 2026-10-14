@@ -31,7 +31,8 @@
     "test": "wireit",
     "ghpages:build": "wireit",
     "strings:extract": "wireit",
-    "strings:build": "wireit"
+    "strings:build": "wireit",
+    "strings:translate": "node scripts/translate-xliff.mts"
   },
   "dependencies": {
     "@internetarchive/ia-clearable-text-input": "^1.1.1",
