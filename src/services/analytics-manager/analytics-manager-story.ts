@@ -38,7 +38,7 @@ export class AnalyticsManagerStory extends LitElement {
 
   @state() private label = '';
 
-  @state() private result?: { call: string; url: URL };
+  @state() private result?: { call: string; url?: URL };
 
   render() {
     const iax = this.method === 'trackIaxParameter';
@@ -102,19 +102,22 @@ export class AnalyticsManagerStory extends LitElement {
           <button type="submit">${iax ? 'Track' : 'Send'}</button>
           <div class="result" aria-live="polite" ?hidden=${!this.result}>
             ${this.result
-              ? html`<code class="call">${this.result.call}</code>
-                  <code class="output"
-                    >${this.result.url.origin}${this.result.url.pathname}</code
-                  >
-                  <table>
-                    ${[...this.result.url.searchParams].map(
-                      ([key, value]) =>
-                        html`<tr>
-                          <th scope="row">${key}</th>
-                          <td>${value}</td>
-                        </tr>`,
-                    )}
-                  </table>`
+              ? html`<code class="call">${this.result.call}</code> ${this.result
+                    .url
+                    ? html`<code class="output"
+                          >${this.result.url.origin}${this.result.url
+                            .pathname}</code
+                        >
+                        <table>
+                          ${[...this.result.url.searchParams].map(
+                            ([key, value]) =>
+                              html`<tr>
+                                <th scope="row">${key}</th>
+                                <td>${value}</td>
+                              </tr>`,
+                          )}
+                        </table>`
+                    : html`<code class="output">No ping sent</code>`}`
               : nothing}
           </div>
         </form>
@@ -165,13 +168,14 @@ export class AnalyticsManagerStory extends LitElement {
         new AnalyticsHelpers(manager).trackIaxParameter(location);
         call = `trackIaxParameter(${JSON.stringify(location)})`;
       } else {
-        manager[this.method](event);
+        // The manager mutates the event it's given, so describe the call first.
         call = `${this.method}(${JSON.stringify(event)})`;
+        manager[this.method](event);
       }
     } finally {
       navigator.sendBeacon = realSendBeacon;
     }
-    this.result = sent ? { call, url: new URL(sent) } : undefined;
+    this.result = { call, url: sent ? new URL(sent) : undefined };
   }
 
   static get styles(): CSSResultGroup {
