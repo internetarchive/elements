@@ -175,15 +175,36 @@ importers:
       '@internetarchive/ia-dropdown':
         specifier: ^2.2.0
         version: 2.2.0
+      '@internetarchive/lazy-loader-service':
+        specifier: ^0.2.0
+        version: 0.2.0
       '@internetarchive/metadata-service':
         specifier: ^1.0.4
-        version: 1.1.0
+        version: 1.1.1
+      '@internetarchive/promised-singleton':
+        specifier: ^0.2.1
+        version: 0.2.1
       '@internetarchive/recaptcha-manager':
         specifier: ^1.0.0
         version: 1.0.0
       '@lit/localize':
         specifier: ^0.12.2
         version: 0.12.2
+      '@types/applepayjs':
+        specifier: ^14.0.9
+        version: 14.0.9
+      '@types/braintree-web':
+        specifier: ^3.143.0
+        version: 3.143.0
+      '@types/googlepay':
+        specifier: ^0.7.12
+        version: 0.7.13
+      '@types/grecaptcha':
+        specifier: ^3.0.9
+        version: 3.0.9
+      '@types/paypal-checkout-components':
+        specifier: ^4.0.8
+        version: 4.0.8
       currency.js:
         specifier: ^2.0.4
         version: 2.0.4
@@ -192,13 +213,16 @@ importers:
         version: 1.11.23
       dompurify:
         specifier: ^3.2.5
-        version: 3.4.15
+        version: 3.4.16
       lit:
         specifier: ^2.8.0 || ^3.3.2
         version: 3.3.3
       magic-snowflakes:
         specifier: ^7.0.2
         version: 7.0.2
+      nanoevents:
+        specifier: ^9.1.0
+        version: 9.1.0
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -215,9 +239,9 @@ importers:
       '@open-wc/testing-helpers':
         specifier: ^3.0.1
         version: 3.0.1
-      '@types/grecaptcha':
-        specifier: ^3.0.9
-        version: 3.0.9
+      '@types/node':
+        specifier: ^24.13.6
+        version: 24.13.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.46.4
         version: 8.64.0(@typescript-eslint/parser@8.64.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
@@ -226,10 +250,10 @@ importers:
         version: 8.64.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
       '@vitest/browser':
         specifier: ^4.0.8
-        version: 4.1.10(vite@7.3.6(@types/node@26.1.1))(vitest@4.1.10)
+        version: 4.1.10(vite@7.3.6(@types/node@24.13.6))(vitest@4.1.10)
       '@vitest/browser-playwright':
         specifier: ^4.0.8
-        version: 4.1.10(playwright@1.61.1)(vite@7.3.6(@types/node@26.1.1))(vitest@4.1.10)
+        version: 4.1.10(playwright@1.61.1)(vite@7.3.6(@types/node@24.13.6))(vitest@4.1.10)
       '@vitest/coverage-v8':
         specifier: ^4.0.8
         version: 4.1.10(@vitest/browser@4.1.10)(vitest@4.1.10)
@@ -283,10 +307,10 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^7.2.2
-        version: 7.3.6(@types/node@26.1.1)
+        version: 7.3.6(@types/node@24.13.6)
       vitest:
         specifier: ^4.0.8
-        version: 4.1.10(@types/node@26.1.1)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(vite@7.3.6(@types/node@26.1.1))
+        version: 4.1.10(@types/node@24.13.6)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(vite@7.3.6(@types/node@24.13.6))
       wireit:
         specifier: ^0.14.12
         version: 0.14.13
@@ -552,8 +576,8 @@ packages:
   '@internetarchive/field-parsers@0.1.4':
     resolution: {integrity: sha512-J5nhMsIU91eXnfoApa6SE0PffPbwK1Cd3YTLX/HjgayzMbXVkQvfebfVKSaoPmzHRRttbtY3Sg9FjviCwBq6qg==}
 
-  '@internetarchive/field-parsers@1.2.0':
-    resolution: {integrity: sha512-qldfCN0w5QDeKzZG80h54hxQ9oyQ10uulazMy451846BHeklqTb3sNLzqyUWzSiqr/vopvQlCHITaGrPtkUlrw==}
+  '@internetarchive/field-parsers@1.2.1':
+    resolution: {integrity: sha512-4Dx1EBuiAbmYgBPwXFyJdUE+DV9VwwY7kx6qoEGfmRBNjCjgf+hS8Rdoe0GRVc9/6IqrKUJJPRZKMF7vc2G1XQ==}
 
   '@internetarchive/ia-clearable-text-input@1.1.1':
     resolution: {integrity: sha512-l3Z6gKfSRURvicHlAjL3V+q/yESYSev34fswfG7ESIiWuF7UuWDKjlLOyY3gFch8eAfqS5AQ6KurRw5JWGD4RA==}
@@ -570,8 +594,11 @@ packages:
   '@internetarchive/lazy-loader-service@0.2.0':
     resolution: {integrity: sha512-SI/ADWnIhdtuAbxkeOItb0xOqco+ueVtwEAdEb0D60sFngUCUpBr/EXeIeh+ykXveO9pmd5J0ZVpgEfKdbhE+g==}
 
-  '@internetarchive/metadata-service@1.1.0':
-    resolution: {integrity: sha512-H0LMymCBigtMlPJumbjjd4H3llwqqVFW4nUPhh6kMg9FsO0qRXKm5w8iz6e/fcukz3eM8jWb+UDzG7moEX+vag==}
+  '@internetarchive/metadata-service@1.1.1':
+    resolution: {integrity: sha512-76Jr4kSkTwZFPCQJVkYGf9vsFZw4JuxIZKFiZdavEBt2mKoLw0bkX6LQBJ31LxJfy6fZWUjAGcK9D9AjIwhZ6A==}
+
+  '@internetarchive/promised-singleton@0.2.1':
+    resolution: {integrity: sha512-HR0bg3AuY0ffJ3m2vQyFo1qXhg12olAlef0L2nD05xr+7z3qZb5K3/NBcN16k523f9Y6z5T/ELf3U+IVHAVF7w==}
 
   '@internetarchive/recaptcha-manager@1.0.0':
     resolution: {integrity: sha512-/L5QQB88gz88NblU8n+sRFbH1ye1QBdNkBL7eDOPrKqkshnUrL/E5O6u5/v8CDoYJ2EA+0Qadd3TSiFPZTzvmA==}
@@ -795,6 +822,12 @@ packages:
     resolution: {integrity: sha512-w071DSzP94YfN6XiWhOxnLpYT3uqtxJBDYdh6Jdjzt+Ce6DNspJsPQgpC7rbts/B8tEkq0LHoYuIF/O5Jh5rPg==}
     engines: {node: '>=18'}
 
+  '@types/applepayjs@14.0.9':
+    resolution: {integrity: sha512-xEprYbb0TEP/XIiDPbVnTYpDai8fTFpsQfVSfTd81Is2GOMUy7ie019eyX6Mz2ECxfjoUVKaiGSL577roIeHCg==}
+
+  '@types/braintree-web@3.143.0':
+    resolution: {integrity: sha512-coLPuEWUj6oLPoYH/peCAwTpzdQ6QwWiL3NvWMQI19yoAsJlGlBZtT+pIS375X8GH5SzNwYvoxu43sH14lVfmQ==}
+
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
 
@@ -803,6 +836,9 @@ packages:
 
   '@types/estree@1.0.9':
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
+
+  '@types/googlepay@0.7.13':
+    resolution: {integrity: sha512-Tj9Y/UfYxUHepJe84AXeLLeBaNHySq9NorRTQ0M2uzqEBS+mmzdJYJeK2Z4XhO58gtkndC0915DM7eIn90DCPA==}
 
   '@types/grecaptcha@2.0.36':
     resolution: {integrity: sha512-SfzcAJPls94/Lz1FznWe6Vm9NLkakhGmk3EO7g2QdkDDR2OU4FH63YILnDpGIU6l7gPnsf5WQ81Kr05JOYAlZw==}
@@ -816,11 +852,17 @@ packages:
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
+  '@types/node@24.13.6':
+    resolution: {integrity: sha512-SGrw/h3KPFshy3OE6ZL53LMBG5vGQQ8/gIpiqz/kRZhPJ7HgwCEs8LBuNtWLa8dvGZVpSF7+Bf+c11HUrCb/yg==}
+
   '@types/node@26.1.1':
     resolution: {integrity: sha512-nxAkRSVkN1Y0JC1W8ky/fTfkGsMmcrRsbx+3XoZE+rMOX71kLYTV7fLXpqud1GpbpP5TuffXFqfX7fH2GgZREw==}
 
   '@types/parse5@2.2.34':
     resolution: {integrity: sha512-p3qOvaRsRpFyEmaS36RtLzpdxZZnmxGuT1GMgzkTtTJVFuEw7KFjGK83MFODpJExgX1bEzy9r0NYjMC3IMfi7w==}
+
+  '@types/paypal-checkout-components@4.0.8':
+    resolution: {integrity: sha512-Z3IWbFPGdgL3O+Bg+TyVmMT8S3uGBsBjw3a8uRNR4OlYWa9m895djENErJMYU8itoki9rtcQMzoHOSFn8NFb1A==}
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -1303,8 +1345,8 @@ packages:
     resolution: {integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==}
     engines: {node: '>= 4'}
 
-  dompurify@3.4.15:
-    resolution: {integrity: sha512-EUBjM+B+lkDE41iE82DDSCfkoPGfXx8IxFxPMjNzm/Uk4xDet77rTN9wqlxlVg71kK7XGuUMv6wUxJUwwv+Xyw==}
+  dompurify@3.4.16:
+    resolution: {integrity: sha512-sqo+pNp3qRhCIpbgRi1y8Tgk27Bo2Ry7w0dC1NBeNTdZChWjz9Xb/KOoZbRP/R6pQZ80Qw8YhXw13hWWBbMRnQ==}
 
   domutils@3.2.2:
     resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
@@ -2053,6 +2095,10 @@ packages:
     resolution: {integrity: sha512-FRS2otuFcPPYDPYViNWQ42+1iZqbXydinkRHTHFxrF4a1CpBfmydR9zkI44WSXAXCyPrkcGtPk5CnpW6Y3lFKQ==}
     engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
 
+  nanoevents@9.1.0:
+    resolution: {integrity: sha512-Jd0fILWG44a9luj8v5kED4WI+zfkkgwKyRQKItTtlPfEsh7Lznfi1kr8/iZ+XAIss4Qq5GqRB0qtWbaz9ceO/A==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+
   nanoid@3.3.16:
     resolution: {integrity: sha512-bzlKTyNJ7+LdGIIwy8ijFpIqEQIvafahV7eYykJ8Cvh42EdJeODoJ6gUJXpQJvej1BddH8OqTXZNE/KfbWAu8Q==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -2584,6 +2630,9 @@ packages:
     resolution: {integrity: sha512-nWJ91DjeOkej/TA8pXQ3myruKpKEYgqvpw9lz4OPHj/NWFNluYrjbz9j01CJ8yKQd2g4jFoOkINCTW2I5LEEyw==}
     engines: {node: '>= 0.4'}
 
+  undici-types@7.18.2:
+    resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
+
   undici-types@8.3.0:
     resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
 
@@ -2950,7 +2999,7 @@ snapshots:
 
   '@internetarchive/field-parsers@0.1.4': {}
 
-  '@internetarchive/field-parsers@1.2.0': {}
+  '@internetarchive/field-parsers@1.2.1': {}
 
   '@internetarchive/ia-clearable-text-input@1.1.1':
     dependencies:
@@ -2963,7 +3012,7 @@ snapshots:
 
   '@internetarchive/iaux-item-metadata@1.5.0':
     dependencies:
-      '@internetarchive/field-parsers': 1.2.0
+      '@internetarchive/field-parsers': 1.2.1
       typescript-memoize: 1.1.1
 
   '@internetarchive/icon-close@1.4.1':
@@ -2974,12 +3023,14 @@ snapshots:
     dependencies:
       nanoevents: 6.0.2
 
-  '@internetarchive/metadata-service@1.1.0':
+  '@internetarchive/metadata-service@1.1.1':
     dependencies:
       '@internetarchive/field-parsers': 0.1.4
       '@internetarchive/iaux-item-metadata': 1.5.0
       '@internetarchive/result-type': 0.0.1
       typescript-memoize: 1.1.1
+
+  '@internetarchive/promised-singleton@0.2.1': {}
 
   '@internetarchive/recaptcha-manager@1.0.0':
     dependencies:
@@ -3155,6 +3206,13 @@ snapshots:
       '@ts-graphviz/ast': 2.0.7
       '@ts-graphviz/common': 2.1.5
 
+  '@types/applepayjs@14.0.9': {}
+
+  '@types/braintree-web@3.143.0':
+    dependencies:
+      '@types/googlepay': 0.7.13
+      '@types/paypal-checkout-components': 4.0.8
+
   '@types/chai@5.2.3':
     dependencies:
       '@types/deep-eql': 4.0.2
@@ -3164,6 +3222,8 @@ snapshots:
 
   '@types/estree@1.0.9': {}
 
+  '@types/googlepay@0.7.13': {}
+
   '@types/grecaptcha@2.0.36': {}
 
   '@types/grecaptcha@3.0.9': {}
@@ -3172,6 +3232,10 @@ snapshots:
 
   '@types/json5@0.0.29': {}
 
+  '@types/node@24.13.6':
+    dependencies:
+      undici-types: 7.18.2
+
   '@types/node@26.1.1':
     dependencies:
       undici-types: 8.3.0
@@ -3179,6 +3243,8 @@ snapshots:
   '@types/parse5@2.2.34':
     dependencies:
       '@types/node': 26.1.1
+
+  '@types/paypal-checkout-components@4.0.8': {}
 
   '@types/trusted-types@2.0.7': {}
 
@@ -3273,29 +3339,29 @@ snapshots:
       '@typescript-eslint/types': 8.64.0
       eslint-visitor-keys: 5.0.1
 
-  '@vitest/browser-playwright@4.1.10(playwright@1.61.1)(vite@7.3.6(@types/node@26.1.1))(vitest@4.1.10)':
+  '@vitest/browser-playwright@4.1.10(playwright@1.61.1)(vite@7.3.6(@types/node@24.13.6))(vitest@4.1.10)':
     dependencies:
-      '@vitest/browser': 4.1.10(vite@7.3.6(@types/node@26.1.1))(vitest@4.1.10)
-      '@vitest/mocker': 4.1.10(vite@7.3.6(@types/node@26.1.1))
+      '@vitest/browser': 4.1.10(vite@7.3.6(@types/node@24.13.6))(vitest@4.1.10)
+      '@vitest/mocker': 4.1.10(vite@7.3.6(@types/node@24.13.6))
       playwright: 1.61.1
       tinyrainbow: 3.1.0
-      vitest: 4.1.10(@types/node@26.1.1)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(vite@7.3.6(@types/node@26.1.1))
+      vitest: 4.1.10(@types/node@24.13.6)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(vite@7.3.6(@types/node@24.13.6))
     transitivePeerDependencies:
       - bufferutil
       - msw
       - utf-8-validate
       - vite
 
-  '@vitest/browser@4.1.10(vite@7.3.6(@types/node@26.1.1))(vitest@4.1.10)':
+  '@vitest/browser@4.1.10(vite@7.3.6(@types/node@24.13.6))(vitest@4.1.10)':
     dependencies:
       '@blazediff/core': 1.9.1
-      '@vitest/mocker': 4.1.10(vite@7.3.6(@types/node@26.1.1))
+      '@vitest/mocker': 4.1.10(vite@7.3.6(@types/node@24.13.6))
       '@vitest/utils': 4.1.10
       magic-string: 0.30.21
       pngjs: 7.0.0
       sirv: 3.0.2
       tinyrainbow: 3.1.0
-      vitest: 4.1.10(@types/node@26.1.1)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(vite@7.3.6(@types/node@26.1.1))
+      vitest: 4.1.10(@types/node@24.13.6)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(vite@7.3.6(@types/node@24.13.6))
       ws: 8.21.1
     transitivePeerDependencies:
       - bufferutil
@@ -3315,9 +3381,9 @@ snapshots:
       obug: 2.1.3
       std-env: 4.2.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.10(@types/node@26.1.1)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(vite@7.3.6(@types/node@26.1.1))
+      vitest: 4.1.10(@types/node@24.13.6)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(vite@7.3.6(@types/node@24.13.6))
     optionalDependencies:
-      '@vitest/browser': 4.1.10(vite@7.3.6(@types/node@26.1.1))(vitest@4.1.10)
+      '@vitest/browser': 4.1.10(vite@7.3.6(@types/node@24.13.6))(vitest@4.1.10)
 
   '@vitest/expect@4.1.10':
     dependencies:
@@ -3328,13 +3394,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.10(vite@7.3.6(@types/node@26.1.1))':
+  '@vitest/mocker@4.1.10(vite@7.3.6(@types/node@24.13.6))':
     dependencies:
       '@vitest/spy': 4.1.10
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 7.3.6(@types/node@26.1.1)
+      vite: 7.3.6(@types/node@24.13.6)
 
   '@vitest/pretty-format@4.1.10':
     dependencies:
@@ -3780,7 +3846,7 @@ snapshots:
     dependencies:
       domelementtype: 2.3.0
 
-  dompurify@3.4.15:
+  dompurify@3.4.16:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
 
@@ -4660,6 +4726,8 @@ snapshots:
 
   nanoevents@6.0.2: {}
 
+  nanoevents@9.1.0: {}
+
   nanoid@3.3.16: {}
 
   natural-compare@1.4.0: {}
@@ -5277,6 +5345,8 @@ snapshots:
       has-symbols: 1.1.0
       which-boxed-primitive: 1.1.1
 
+  undici-types@7.18.2: {}
+
   undici-types@8.3.0: {}
 
   universalify@2.0.1: {}
@@ -5287,7 +5357,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@7.3.6(@types/node@26.1.1):
+  vite@7.3.6(@types/node@24.13.6):
     dependencies:
       esbuild: 0.28.1
       fdir: 6.5.0(picomatch@4.0.5)
@@ -5296,13 +5366,13 @@ snapshots:
       rollup: 4.62.2
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 26.1.1
+      '@types/node': 24.13.6
       fsevents: 2.3.3
 
-  vitest@4.1.10(@types/node@26.1.1)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(vite@7.3.6(@types/node@26.1.1)):
+  vitest@4.1.10(@types/node@24.13.6)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(vite@7.3.6(@types/node@24.13.6)):
     dependencies:
       '@vitest/expect': 4.1.10
-      '@vitest/mocker': 4.1.10(vite@7.3.6(@types/node@26.1.1))
+      '@vitest/mocker': 4.1.10(vite@7.3.6(@types/node@24.13.6))
       '@vitest/pretty-format': 4.1.10
       '@vitest/runner': 4.1.10
       '@vitest/snapshot': 4.1.10
@@ -5319,11 +5389,11 @@ snapshots:
       tinyexec: 1.2.4
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.0
-      vite: 7.3.6(@types/node@26.1.1)
+      vite: 7.3.6(@types/node@24.13.6)
       why-is-node-running: 2.3.0
     optionalDependencies:
-      '@types/node': 26.1.1
-      '@vitest/browser-playwright': 4.1.10(playwright@1.61.1)(vite@7.3.6(@types/node@26.1.1))(vitest@4.1.10)
+      '@types/node': 24.13.6
+      '@vitest/browser-playwright': 4.1.10(playwright@1.61.1)(vite@7.3.6(@types/node@24.13.6))(vitest@4.1.10)
       '@vitest/coverage-v8': 4.1.10(@vitest/browser@4.1.10)(vitest@4.1.10)
     transitivePeerDependencies:
       - msw
