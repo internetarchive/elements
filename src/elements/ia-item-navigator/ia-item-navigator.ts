@@ -11,7 +11,8 @@ import { customElement } from '@src/util/custom-element';
 import { classMap } from 'lit/directives/class-map.js';
 import themeStyles from '@src/themes/theme-styles';
 
-import { ellipsesIcon } from './icons';
+import ellipsesIcon from '@src/icons/ellipses';
+import { iconBox, iconBoxStyles } from '@src/util/icon-box';
 import './ia-itemnav-menu-slider';
 import './ia-itemnav-no-theater-available';
 import type { IAItemNavMenuSlider } from './ia-itemnav-menu-slider';
@@ -245,7 +246,7 @@ export class IAItemNavigator extends LitElement {
         aria-expanded=${this.menuOpened}
         aria-controls="menu"
       >
-        ${ellipsesIcon}
+        ${iconBox(ellipsesIcon)}
       </button>
     `;
   }
@@ -347,6 +348,7 @@ export class IAItemNavigator extends LitElement {
 
     return [
       themeStyles,
+      iconBoxStyles,
       css`
         :host {
           --item-navigator-menu-width--: var(
@@ -496,11 +498,28 @@ export class IAItemNavigator extends LitElement {
         }
 
         nav .minimized button.toggle-menu > * {
-          border: 2px solid var(--item-navigator-icon-color--);
+          /* The border only reserves the ring's geometry. The glyph fills the
+             border box and the ring itself isn't drawn. */
+          border: 2px solid transparent;
           border-radius: ${iconSize};
           width: ${iconSize};
           height: ${iconSize};
           margin: auto;
+        }
+
+        /* The glyph fills the ring's border box, so it is as large as the ring
+           it sits in rather than the smaller box inside the border, and is
+           clipped to the ring's rounded corners. */
+        nav .minimized button.toggle-menu > .ia-icon {
+          position: relative;
+          clip-path: inset(0 round ${iconSize});
+        }
+
+        nav .minimized button.toggle-menu > .ia-icon > svg {
+          position: absolute;
+          inset: -2px;
+          width: calc(100% + 4px);
+          height: calc(100% + 4px);
         }
 
         /* The rail is a list for assistive tech; strip the list chrome so it
@@ -518,10 +537,9 @@ export class IAItemNavigator extends LitElement {
           height: ${iconSize};
         }
 
-        /* Our glyphs are masked spans: the mask supplies the shape, this
-           supplies the paint. */
-        span.ia-icon {
-          background-color: var(--item-navigator-icon-color--);
+        /* Our glyphs paint with currentColor, so this supplies the paint. */
+        .ia-icon {
+          color: var(--item-navigator-icon-color--);
         }
 
         /* Host-supplied icons may still be inline svg, so keep theming those
