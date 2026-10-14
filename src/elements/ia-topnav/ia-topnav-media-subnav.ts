@@ -112,7 +112,9 @@ export class MediaSubnav extends TrackedElement {
         <a
           .href="${formatUrl(link.url, this.baseHost)}"
           @click=${this.trackClick}
-          data-event-click-tracking="${this.analyticsEvent(link.title)}"
+          data-event-click-tracking="${this.analyticsEvent(
+            link.key ?? link.title,
+          )}"
           ><img src="${ifDefined(link.icon)}" loading="lazy" />${link.title}</a
         >
       `,
@@ -126,7 +128,9 @@ export class MediaSubnav extends TrackedElement {
           <a
             .href="${formatUrl(link.url, this.baseHost)}"
             @click=${this.trackClick}
-            data-event-click-tracking="${this.analyticsEvent(link.title)}"
+            data-event-click-tracking="${this.analyticsEvent(
+              link.key ?? link.title,
+            )}"
             >${link.title}</a
           >
         </li>
