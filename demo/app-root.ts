@@ -19,6 +19,7 @@ import {
 const storyLoaders = import.meta.glob([
   '../src/elements/**/*-story.ts',
   '../src/labs/**/*-story.ts',
+  '../src/services/**/*-story.ts',
 ]);
 
 interface StoryEntry {
@@ -29,6 +30,8 @@ interface StoryEntry {
   /** Anchor id and hash fragment, e.g. `elem-ia-button`. */
   id: string;
   labs: boolean;
+  /** Whether this is a service, which has no UI and gets its own group. */
+  service: boolean;
   load: () => Promise<unknown>;
 }
 
@@ -44,15 +47,17 @@ const storyEntries: StoryEntry[] = Object.keys(storyLoaders)
       storyTag: `${tag}-story`,
       id: `${HASH_PREFIX}${tag}`,
       labs: path.includes('/src/labs/'),
+      service: path.includes('/src/services/'),
       load: storyLoaders[path],
     };
   })
   .sort((a, b) => a.tag.localeCompare(b.tag));
 
-const productionEntries = storyEntries.filter((e) => !e.labs);
+const productionEntries = storyEntries.filter((e) => !e.labs && !e.service);
 const labsEntries = storyEntries.filter((e) => e.labs);
+const serviceEntries = storyEntries.filter((e) => e.service);
 // Document order in the all-elements view, which the scroll spy relies on.
-const ALL_ENTRIES = [...productionEntries, ...labsEntries];
+const ALL_ENTRIES = [...productionEntries, ...labsEntries, ...serviceEntries];
 // How much of the top of the viewport an anchor has to reach to be the one
 // the scroll spy marks.
 const ACTIVE_BAND_PERCENT = 30;
@@ -498,6 +503,8 @@ export class AppRoot extends LitElement {
         ${productionEntries.map(link)}
         <h2>Labs 🧪</h2>
         ${labsEntries.map(link)}
+        <h2>Services</h2>
+        ${serviceEntries.map(link)}
       </nav>
     `;
   }
@@ -569,6 +576,7 @@ export class AppRoot extends LitElement {
     const matches = (entry: StoryEntry) => entry.tag.includes(filter);
     const production = productionEntries.filter(matches);
     const labs = labsEntries.filter(matches);
+    const services = serviceEntries.filter(matches);
     const showingAll = !this._focused;
     const group = (heading: string, entries: StoryEntry[]) =>
       entries.length
@@ -616,7 +624,8 @@ export class AppRoot extends LitElement {
               >Show all elements</a
             >
             ${group('Production-Ready', production)} ${group('Labs 🧪', labs)}
-            ${production.length + labs.length === 0
+            ${group('Services', services)}
+            ${production.length + labs.length + services.length === 0
               ? html`<p class="ia-picker-empty">No elements match.</p>`
               : nothing}
           </div>
@@ -627,7 +636,13 @@ export class AppRoot extends LitElement {
 
   private _renderFocused(entry: StoryEntry): TemplateResult {
     return html`
-      <h2>${entry.labs ? 'Labs Element' : 'Production-Ready Element'}</h2>
+      <h2>
+        ${entry.service
+          ? 'Service'
+          : entry.labs
+            ? 'Labs Element'
+            : 'Production-Ready Element'}
+      </h2>
       ${this._renderStory(entry)}
     `;
   }
@@ -638,6 +653,8 @@ export class AppRoot extends LitElement {
       ${productionEntries.map((e) => this._renderStory(e))}
       <h2>Labs Elements</h2>
       ${labsEntries.map((e) => this._renderStory(e))}
+      <h2>Services</h2>
+      ${serviceEntries.map((e) => this._renderStory(e))}
     `;
   }
 
