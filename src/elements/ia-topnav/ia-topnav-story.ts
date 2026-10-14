@@ -5,7 +5,6 @@ import { customElement } from '@src/util/custom-element';
 import './ia-topnav';
 import type { PropInputSettings } from '@demo/story-components/story-prop-settings';
 import '@demo/story-template';
-import { tagFromHash } from '@demo/element-hash';
 
 import type { IATopNav } from './ia-topnav';
 
@@ -28,13 +27,6 @@ const globeIcon = svg`
   </svg>
 `;
 
-/**
- * The topnav sizes everything in rem against the 10px root font size that
- * archive.org and offshoot both set, so at the demo's 16px root it renders
- * 1.6x too big and its menus get cut off.
- */
-const ARCHIVE_ROOT_FONT_SIZE = '10px';
-
 @customElement('ia-topnav-story')
 export class IATopNavStory extends LitElement {
   @state() private signedIn = false;
@@ -50,31 +42,6 @@ export class IATopNavStory extends LitElement {
   @state() private languagePicker = true;
 
   @state() private lastEvent = '';
-
-  /**
-   * Matches archive.org's root font size. On by default only when the topnav
-   * is the element being viewed, since the root size applies to the whole
-   * demo page and would shrink every other story in the all-elements view.
-   */
-  @state() private archiveFontSize =
-    tagFromHash(window.location.hash) === 'ia-topnav';
-
-  private rootFontSizeBefore?: string;
-
-  updated() {
-    const root = document.documentElement.style;
-    if (this.archiveFontSize && this.rootFontSizeBefore === undefined) {
-      this.rootFontSizeBefore = root.fontSize;
-      root.fontSize = ARCHIVE_ROOT_FONT_SIZE;
-    } else if (!this.archiveFontSize) {
-      this.restoreRootFontSize();
-    }
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.restoreRootFontSize();
-  }
 
   private get propInputData() {
     const settings: PropInputSettings<IATopNav>[] = [
@@ -95,12 +62,6 @@ export class IATopNavStory extends LitElement {
     this.lastEvent = `analyticsSubmit → ${e.detail?.event ?? ''}`;
   }
 
-  private restoreRootFontSize() {
-    if (this.rootFontSizeBefore === undefined) return;
-    document.documentElement.style.fontSize = this.rootFontSizeBefore;
-    this.rootFontSizeBefore = undefined;
-  }
-
   private toggleRow(
     label: string,
     key:
@@ -109,8 +70,7 @@ export class IATopNavStory extends LitElement {
       | 'admin'
       | 'canManageFlags'
       | 'hideSearch'
-      | 'languagePicker'
-      | 'archiveFontSize',
+      | 'languagePicker',
   ) {
     return html`
       <tr>
@@ -179,17 +139,11 @@ export class IATopNavStory extends LitElement {
             ${this.toggleRow('Can manage flags', 'canManageFlags')}
             ${this.toggleRow('Hide search', 'hideSearch')}
             ${this.toggleRow('Language picker slot', 'languagePicker')}
-            ${this.toggleRow('archive.org font size', 'archiveFontSize')}
           </table>
           <p class="hint">
             The admin sections of the user menu need all three of Signed in,
             Viewing an item and Admin on the item. Narrow the window below 890px
             for the mobile layout.
-          </p>
-          <p class="hint">
-            archive.org font size sets the page's root font size to 10px, which
-            the topnav is built for. It applies to the whole demo page, so it's
-            on by default only when the topnav is the element being viewed.
           </p>
         </div>
 
@@ -208,9 +162,13 @@ export class IATopNavStory extends LitElement {
             <code>biblio</code> adds the book-scanning links for a texts item.
           </p>
           <p>
-            Sizes are in rem and assume the host page sets
-            <code>html { font-size: 10px }</code>, as archive.org and offshoot
-            both do.
+            Sizes scale off the topnav's own <code>--topnavUnit--</code>, which
+            tracks the browser's default font size rather than the host page's
+            <code>html</code> font size, so the topnav renders the same whether
+            or not a page resets its root font size. It does grow with the
+            user's browser font-size setting, and <code>--topnavFontSize</code>
+            overrides that base size. The layout is verified up to 18px; at 20px
+            and up the media buttons can wrap at desktop widths.
           </p>
           <p>
             The <code>language-picker</code> slot sits left of the user menu on
@@ -221,7 +179,9 @@ export class IATopNavStory extends LitElement {
           </p>
           <p>
             A search bar goes in the <code>search</code> slot. Offshoot slots an
-            <code>ia-dropdown-search-bar</code> in there.
+            <code>ia-dropdown-search-bar</code> in there. It sizes its own text,
+            so it follows the page's <code>html</code> font size rather than the
+            topnav's scale.
           </p>
         </div>
       </story-template>
@@ -231,17 +191,17 @@ export class IATopNavStory extends LitElement {
   static get styles(): CSSResultGroup {
     return css`
       .event-log {
-        margin: 0.8rem 0 0;
+        margin: 8px 0 0;
         font-family: monospace;
-        font-size: 1.2rem;
+        font-size: 12px;
       }
 
       .hint {
-        font-size: 1.2rem;
+        font-size: 12px;
       }
 
       td {
-        padding-right: 1rem;
+        padding-right: 10px;
       }
 
       .sample-language-picker {

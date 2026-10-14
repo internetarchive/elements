@@ -8,6 +8,7 @@ import {
 } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
+import { LOCALE_STATUS_EVENT } from '@lit/localize';
 
 import { buildTopNavMenus, defaultTopNavConfig } from './data/menus';
 import './ia-topnav-desktop-subnav';
@@ -24,6 +25,12 @@ import type { PrimaryNav } from './ia-topnav-primary-nav';
 import './ia-topnav-signed-out-dropdown';
 import './ia-topnav-user-menu';
 import themeStyles from '@src/themes/theme-styles';
+import {
+  applyTopnavUnitFallback,
+  registerTopnavUnit,
+} from './lib/register-topnav-unit';
+
+const topnavUnitRegistered = registerTopnavUnit();
 
 @customElement('ia-topnav')
 export class IATopNav extends LitElement {
@@ -97,14 +104,27 @@ export class IATopNav extends LitElement {
 
   private boundHandleClick = this.handleDocumentClick.bind(this);
 
+  private boundHandleLocaleStatus = this.handleLocaleStatus.bind(this);
+
   connectedCallback() {
     super.connectedCallback();
+    window.addEventListener(LOCALE_STATUS_EVENT, this.boundHandleLocaleStatus);
     document.addEventListener('keydown', this.boundHandleKeydown);
     document.addEventListener('click', this.boundHandleClick);
+    // Only matters on a browser without CSS.registerProperty. Reads the
+    // font-size this connect resolved to, so a later change to
+    // --topnavFontSize on an already-connected instance won't move it again.
+    // That's an accepted limitation on those older browsers, not a bug on
+    // the registered path above.
+    if (!topnavUnitRegistered) applyTopnavUnitFallback(this);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    window.removeEventListener(
+      LOCALE_STATUS_EVENT,
+      this.boundHandleLocaleStatus,
+    );
     document.removeEventListener('keydown', this.boundHandleKeydown);
     document.removeEventListener('click', this.boundHandleClick);
   }
@@ -194,6 +214,11 @@ export class IATopNav extends LitElement {
     if (!path.includes(this)) {
       this.closeMenus();
     }
+  }
+
+  /** The menu labels are built by `buildTopNavMenus()`, so a new locale needs a rebuild. */
+  private handleLocaleStatus(e: WindowEventMap[typeof LOCALE_STATUS_EVENT]) {
+    if (e.detail.status === 'ready') this.menuSetup();
   }
 
   menuSetup() {
@@ -383,6 +408,24 @@ export class IATopNav extends LitElement {
       themeStyles,
       css`
         :host {
+          /**
+           * 'medium' is the browser's default font size (16px, or whatever
+           * the user raised it to), so this ignores a page's own root
+           * font-size reset (e.g. archive.org and offshoot's 10px html).
+           * --topnavUnit-- is 1px at that default, computed here (where it's
+           * registered as an inheriting <length> so it resolves once and
+           * doesn't re-evaluate against a descendant's own font-size) and
+           * reaches every part of the topnav sized with
+           * calc(N * var(--topnavUnit--)).
+           *
+           * Public override: --topnavFontSize sets that base size. The layout
+           * is verified from 16px (the browser default) up to 18px. Past
+           * that, at desktop widths around 1440px, the media buttons can
+           * wrap onto a second row (seen at 20px and up).
+           */
+          font-size: var(--topnavFontSize, medium);
+          --topnavUnit--: calc(1em / 16);
+
           --white: #fff;
           --grey13: #222;
           --grey20: #333;
