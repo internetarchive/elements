@@ -17,8 +17,8 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
-// A few of the icons that came from the iaux-icons set, offshoot and
-// collection-browser.
+// A few of the icons that came from the iaux-icons set, offshoot,
+// collection-browser and bookreader.
 const SAMPLE = [
   'close',
   'calendar-blank',
@@ -31,6 +31,8 @@ const SAMPLE = [
   'sort-toggle-up',
   'mediatype-tv-commercial',
   'list-view',
+  'page-two-up',
+  'play-circle',
 ];
 
 /** Everything inside the root `<svg>`, with whitespace between tags dropped. */

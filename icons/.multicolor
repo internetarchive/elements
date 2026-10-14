@@ -35,3 +35,11 @@ topnav-wordmark-stacked
 sort-toggle-up
 sort-toggle-down
 sort-toggle-disabled
+
+# Ported from bookreader: play and pause buttons are a white disc with a dark
+# glyph, and the chapter and search markers are pins in fixed state colours.
+pause-circle
+play-circle
+marker-chapter-off
+marker-chapter-on
+marker-search-on
