@@ -1,4 +1,4 @@
-import { fixture } from '@open-wc/testing-helpers';
+import { fixture, waitUntil } from '@open-wc/testing-helpers';
 import { describe, expect, test } from 'vitest';
 import axe from 'axe-core';
 import { html } from 'lit';
@@ -54,6 +54,27 @@ function listedReviewers(el: IAReviews): (string | undefined)[] {
     '.reviews-list > ia-review',
   ) as NodeListOf<IAReview>;
   return [...reviews].map((review) => review.review?.reviewer);
+}
+
+/**
+ * Where focus is in the list, e.g. "Reviewer 6: reviewer-link". A string keeps a failing
+ * assertion readable, where comparing elements prints whole DOM trees.
+ */
+function focusedSpot(el: IAReviews): string {
+  const active = el.shadowRoot?.activeElement;
+  if (!(active instanceof IAReview)) return active?.tagName ?? 'nothing';
+
+  const inner = active.shadowRoot?.activeElement;
+  return `${active.review?.reviewer}: ${inner?.classList[0] ?? 'host'}`;
+}
+
+/** Clicks "Show more" and waits for focus to move to a revealed review */
+async function showMore(el: IAReviews): Promise<void> {
+  showMoreButton(el)?.click();
+  await waitUntil(
+    () => el.shadowRoot?.activeElement instanceof IAReview,
+    'focus never moved to a revealed review',
+  );
 }
 
 /** The "Show more" button, if it's rendered */
@@ -179,21 +200,28 @@ describe('IAReviews', () => {
     expect(showMoreButton(el)).not.to.exist;
   });
 
-  test('moves focus to the first revealed review on button click', async () => {
+  test("moves focus to the first revealed review's reviewer link on button click", async () => {
     const el = await fixture<IAReviews>(
       html`<ia-reviews .reviews=${makeReviews(8)}></ia-reviews>`,
     );
 
-    showMoreButton(el)?.click();
-    // The click handler awaits a render before it moves focus
-    await el.updateComplete;
-    await el.updateComplete;
+    await showMore(el);
 
-    const focused = el.shadowRoot?.activeElement as IAReview | null;
-    expect(focused?.review?.reviewer).toBe('Reviewer 6');
-    // Focusable from script only, so it doesn't add a tab stop
-    expect(focused?.getAttribute('tabindex')).toBe('-1');
-    expect(el.shadowRoot?.querySelectorAll('[tabindex]').length).toBe(1);
+    expect(focusedSpot(el)).toBe('Reviewer 6: reviewer-link');
+  });
+
+  test('keeps the revealed reviews in the tab order', async () => {
+    const el = await fixture<IAReviews>(
+      html`<ia-reviews .reviews=${makeReviews(8)}></ia-reviews>`,
+    );
+    await showMore(el);
+
+    // A tabindex on an ia-review host, even -1, would drop the links inside it from the tab
+    // order, since a shadow host with a negative tabindex takes its whole tree out of
+    // sequential navigation
+    expect(el.shadowRoot?.querySelectorAll('ia-review[tabindex]').length).toBe(
+      0,
+    );
   });
 
   test('passes the a11y audit with reviews hidden behind the button', async () => {

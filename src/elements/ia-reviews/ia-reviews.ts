@@ -7,8 +7,7 @@ import {
   nothing,
   PropertyValues,
 } from 'lit';
-import { property, query, state } from 'lit/decorators.js';
-import { ifDefined } from 'lit/directives/if-defined.js';
+import { property, queryAll, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import { localized, msg, str } from '@lit/localize';
 
@@ -18,6 +17,7 @@ import type { RecaptchaManagerInterface } from '@internetarchive/recaptcha-manag
 import '@src/elements/ia-button/ia-button';
 
 import type { ReviewServiceInterface } from './models';
+import type { IAReview } from './ia-review';
 import { ReviewService } from './review-service';
 import './ia-review';
 import './ia-review-form';
@@ -115,9 +115,9 @@ export class IAReviews extends LitElement {
   @state()
   private recaptchaActivated: boolean = false;
 
-  /* The first review revealed by the "Show more" button, which takes focus */
-  @query('.reviews-list > ia-review[tabindex]')
-  private firstRevealedReview?: HTMLElement;
+  /* The reviews in the list, not counting the patron's own */
+  @queryAll('.reviews-list > ia-review')
+  private listedReviews?: NodeListOf<IAReview>;
 
   render() {
     if (this.reviewsDisabled) return this.reviewsDisabledTemplate;
@@ -132,9 +132,7 @@ export class IAReviews extends LitElement {
             </div>`
           : nothing}
         ${this.editableCurrentReviewTemplate}
-        ${this.visibleReviews.map((review, index) =>
-          this.renderReview(review, index === this.firstRevealedIndex),
-        )}
+        ${this.visibleReviews.map((review) => this.renderReview(review))}
         ${this.showMoreButtonTemplate}
       </div>
     `;
@@ -169,11 +167,6 @@ export class IAReviews extends LitElement {
       return this.filteredReviews;
 
     return this.filteredReviews.slice(0, this.maxInitialReviews);
-  }
-
-  /* Index of the first review the "Show more" button revealed, if it has been clicked */
-  private get firstRevealedIndex(): number | undefined {
-    return this.showAllReviews ? this.maxInitialReviews : undefined;
   }
 
   /* Message to display if reviews are disabled */
@@ -290,18 +283,11 @@ export class IAReviews extends LitElement {
     return sortedReviews;
   }
 
-  /**
-   * Renders the given review, using the ia-review component
-   * @param focusable Whether the review can take focus from script, but not from tabbing
-   */
-  private renderReview(
-    review?: Review,
-    focusable = false,
-  ): HTMLTemplateResult | typeof nothing {
+  /* Renders the given review, using the ia-review component */
+  private renderReview(review?: Review): HTMLTemplateResult | typeof nothing {
     if (!review) return nothing;
 
     return html`<ia-review
-      tabindex=${ifDefined(focusable ? '-1' : undefined)}
       .review=${review}
       .identifier=${this.identifier}
       .baseHost=${this.baseHost}
@@ -313,11 +299,16 @@ export class IAReviews extends LitElement {
 
   /** Reveals the rest of the reviews */
   private async showMoreReviews(): Promise<void> {
+    const firstRevealedIndex = this.visibleReviews.length;
     this.showAllReviews = true;
     await this.updateComplete;
 
-    // The button that was clicked is gone, so focus would otherwise fall back to the page
-    this.firstRevealedReview?.focus();
+    // The button that was clicked is gone, so focus would otherwise fall back to the page.
+    // ia-review moves focus inside itself rather than making its host focusable, since a shadow
+    // host with a negative tabindex drops everything inside it from the tab order.
+    const firstRevealed = this.listedReviews?.[firstRevealedIndex];
+    await firstRevealed?.updateComplete;
+    firstRevealed?.focus();
   }
 
   /** Prepare the review form for adding or editing */
