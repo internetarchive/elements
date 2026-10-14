@@ -154,4 +154,90 @@ describe('IAItemNavSharePanel', () => {
     vi.advanceTimersByTime(4000);
     expect(note.classList.contains('visible')).to.equal(false);
   });
+
+  describe('icons', () => {
+    test('every share option and the embed link draw an inline svg glyph', async () => {
+      const el = await fixture<IAItemNavSharePanel>(
+        html`<ia-itemnav-share-panel
+          identifier="my-item"
+        ></ia-itemnav-share-panel>`,
+      );
+
+      const rows = el.shadowRoot?.querySelectorAll(
+        'a.share-option, summary.share-option',
+      );
+      expect(rows).to.have.lengthOf(6);
+      const markup = new Set<string>();
+      rows?.forEach((row) => {
+        const glyph = row.querySelector('.ia-icon > svg') as SVGElement;
+        expect(glyph, row.textContent?.trim()).to.exist;
+        expect(glyph.getAttribute('aria-hidden')).to.equal('true');
+        // The 2em icon box inherits the panel's base font size.
+        const { width, height } = glyph.getBoundingClientRect();
+        expect(width).to.be.greaterThan(0);
+        expect(width).to.equal(height);
+        markup.add(glyph.innerHTML);
+      });
+      expect(markup.size, 'each row has its own glyph').to.equal(6);
+    });
+
+    test('keeps each icon box geometry but does not draw its border', async () => {
+      const el = await fixture<IAItemNavSharePanel>(
+        html`<ia-itemnav-share-panel
+          identifier="my-item"
+        ></ia-itemnav-share-panel>`,
+      );
+
+      const boxes = el.shadowRoot?.querySelectorAll(
+        '.share-option > .ia-icon',
+      ) as NodeListOf<HTMLElement>;
+      expect(boxes).to.have.lengthOf(6);
+      boxes.forEach((box) => {
+        const style = getComputedStyle(box);
+        expect(style.borderTopWidth).to.equal('1px');
+        for (const side of ['Top', 'Right', 'Bottom', 'Left'] as const) {
+          expect(style[`border${side}Color`], side).to.equal(
+            'rgba(0, 0, 0, 0)',
+          );
+        }
+        // The glyph covers exactly the span's border box.
+        const outer = box.getBoundingClientRect();
+        const inner = (
+          box.querySelector('svg') as SVGElement
+        ).getBoundingClientRect();
+        expect(inner.left).to.be.closeTo(outer.left, 0.01);
+        expect(inner.top).to.be.closeTo(outer.top, 0.01);
+        expect(inner.width).to.be.closeTo(outer.width, 0.01);
+        expect(inner.height).to.be.closeTo(outer.height, 0.01);
+      });
+    });
+
+    test('recolors the glyphs with the icon color knob', async () => {
+      const el = await fixture<IAItemNavSharePanel>(
+        html`<ia-itemnav-share-panel
+          identifier="my-item"
+          style="--item-navigator-icon-color: rgb(7, 8, 9)"
+        ></ia-itemnav-share-panel>`,
+      );
+
+      const glyph = el.shadowRoot?.querySelector(
+        'a.share-option .ia-icon > svg',
+      ) as SVGElement;
+      expect(getComputedStyle(glyph).color).to.equal('rgb(7, 8, 9)');
+      expect(getComputedStyle(glyph).fill).to.equal('rgb(7, 8, 9)');
+    });
+
+    test('keeps each option named by its text', async () => {
+      const el = await fixture<IAItemNavSharePanel>(
+        html`<ia-itemnav-share-panel
+          identifier="my-item"
+        ></ia-itemnav-share-panel>`,
+      );
+
+      const names = [
+        ...(el.shadowRoot?.querySelectorAll('a.share-option') ?? []),
+      ].map((a) => a.textContent?.trim());
+      expect(names.every((name) => !!name)).to.equal(true);
+    });
+  });
 });
