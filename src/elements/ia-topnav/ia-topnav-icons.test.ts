@@ -1,6 +1,6 @@
 import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
-import { describe, expect, test } from 'vitest';
+import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 
 import './ia-topnav-primary-nav';
 import './ia-topnav-media-menu';
@@ -19,6 +19,17 @@ import { buildTopNavMenus } from './data/menus';
 
 const rem = () =>
   parseFloat(getComputedStyle(document.documentElement).fontSize);
+
+/** The topnav sizes its icons in --topnavUnit-- steps; pin one step to 1px. */
+const unit = 1;
+
+beforeAll(() => {
+  document.documentElement.style.setProperty('--topnavUnit--', `${unit}px`);
+});
+
+afterAll(() => {
+  document.documentElement.style.removeProperty('--topnavUnit--');
+});
 
 /** Computed lengths are laid out in 1/64 px steps, so compare within a pixel. */
 function expectPx(actual: string, expected: number, message?: string) {
@@ -52,7 +63,7 @@ describe('ia-topnav icons', () => {
       'more',
     ];
 
-    test('render one 4rem svg each, beside a label that is never display:none', async () => {
+    test('render one 40px svg each, beside a label that is never display:none', async () => {
       const menu = await fixture<MediaMenu>(
         html`<ia-topnav-media-menu></ia-topnav-media-menu>`,
       );
@@ -68,8 +79,8 @@ describe('ia-topnav icons', () => {
         const svg = svgIn(button.shadowRoot, '.icon svg');
         expect(svg.getAttribute('viewBox'), menuName).to.equal('0 0 40 40');
         expectDecorative(svg);
-        expectPx(getComputedStyle(svg).width, 4 * rem(), menuName);
-        expectPx(getComputedStyle(svg).height, 4 * rem(), menuName);
+        expectPx(getComputedStyle(svg).width, 40 * unit, menuName);
+        expectPx(getComputedStyle(svg).height, 40 * unit, menuName);
 
         // The link is named by its own content, so the name contains the
         // label even where the label is only visually hidden.
@@ -119,10 +130,10 @@ describe('ia-topnav icons', () => {
       expect(wordmark.getAttribute('viewBox')).to.equal('0 0 95 30');
       expectDecorative(logo);
       expectDecorative(wordmark);
-      expectPx(getComputedStyle(logo).height, 3 * rem());
-      expectPx(getComputedStyle(logo).width, 2.7 * rem());
-      expectPx(getComputedStyle(wordmark).height, 3 * rem());
-      expectPx(getComputedStyle(wordmark).width, 9.5 * rem());
+      expectPx(getComputedStyle(logo).height, 30 * unit);
+      expectPx(getComputedStyle(logo).width, 27 * unit);
+      expectPx(getComputedStyle(wordmark).height, 30 * unit);
+      expectPx(getComputedStyle(wordmark).width, 95 * unit);
       expect(getComputedStyle(logo.querySelector('path')!).fill).to.equal(
         'rgb(255, 255, 255)',
       );
@@ -131,24 +142,24 @@ describe('ia-topnav icons', () => {
       );
     });
 
-    test('the search trigger is labelled and its icon is 4rem', async () => {
+    test('the search trigger is labelled and its icon is 40px', async () => {
       const el = await nav();
       const trigger = el.shadowRoot?.querySelector('button.search-trigger');
       const svg = svgIn(trigger);
 
       expect(trigger?.getAttribute('aria-label')).to.equal('Search');
       expectDecorative(svg);
-      expectPx(getComputedStyle(svg).width, 4 * rem());
+      expectPx(getComputedStyle(svg).width, 40 * unit);
     });
 
-    test('the donate heart is red, 4rem and named by its hidden text', async () => {
+    test('the donate heart is red, 40px and named by its hidden text', async () => {
       const el = await nav();
       const link = el.shadowRoot?.querySelector('a.mobile-donate-link');
       const svg = svgIn(link);
 
       expectDecorative(svg);
       expect(svg.getAttribute('viewBox')).to.equal('0 0 40 40');
-      expectPx(getComputedStyle(svg).width, 4 * rem());
+      expectPx(getComputedStyle(svg).width, 40 * unit);
       expect(getComputedStyle(svg.querySelector('path')!).fill).to.equal(
         'rgb(255, 0, 0)',
       );
@@ -164,7 +175,7 @@ describe('ia-topnav icons', () => {
 
       expect(link?.getAttribute('aria-label')).to.equal('Upload');
       expectDecorative(svg);
-      expectPx(getComputedStyle(svg).width, 3 * rem());
+      expectPx(getComputedStyle(svg).width, 30 * unit);
     });
   });
 
@@ -178,7 +189,7 @@ describe('ia-topnav icons', () => {
     expectDecorative(svgIn(button));
   });
 
-  test('the mobile upload link in a dropdown keeps its text and a 1.4rem icon', async () => {
+  test('the mobile upload link in a dropdown keeps its text and a 14px icon', async () => {
     const el = await fixture<UserMenu>(
       html`<ia-topnav-user-menu></ia-topnav-user-menu>`,
     );
@@ -191,10 +202,10 @@ describe('ia-topnav icons', () => {
     expect(svg.getAttribute('viewBox')).to.equal('8 8 24 24');
     expectDecorative(svg);
     expect(link?.textContent?.trim()).to.not.equal('');
-    expectPx(getComputedStyle(svg).width, 1.4 * rem());
+    expectPx(getComputedStyle(svg).width, 14 * unit);
   });
 
-  test('the desktop subnav donate link shows a red 1.6rem heart beside its text', async () => {
+  test('the desktop subnav donate link shows a red 16px heart beside its text', async () => {
     const el = await fixture<DesktopSubnav>(
       html`<ia-topnav-desktop-subnav
         .menuItems=${[{ title: 'Donate', url: '/donate' }]}
@@ -206,7 +217,7 @@ describe('ia-topnav icons', () => {
     expectDecorative(svg);
     // A space sits between the text and the heart.
     expect(link?.textContent).to.equal('Donate ');
-    expectPx(getComputedStyle(svg).width, 1.6 * rem());
+    expectPx(getComputedStyle(svg).width, 16 * unit);
     expect(getComputedStyle(svg.querySelector('path')!).fill).to.equal(
       'rgb(255, 0, 0)',
     );
