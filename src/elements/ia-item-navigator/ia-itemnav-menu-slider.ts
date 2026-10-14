@@ -10,7 +10,8 @@ import {
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import themeStyles from '@src/themes/theme-styles';
-import { collapseSidebarIcon } from './icons';
+import collapseSidebar from '@src/icons/collapse-sidebar';
+import { iconBox, iconBoxStyles } from '@src/util/icon-box';
 import './ia-itemnav-menu-button';
 import type { IAItemNavMenuButton } from './ia-itemnav-menu-button';
 import { MenuProviderInterface } from './interfaces/menu-interfaces';
@@ -177,7 +178,7 @@ export class IAItemNavMenuSlider extends LitElement {
           title=${closeLabel}
           @click=${this.closePanel}
         >
-          ${collapseSidebarIcon}
+          ${iconBox(collapseSidebar)}
         </button>
       </header>
     `;
@@ -191,7 +192,7 @@ export class IAItemNavMenuSlider extends LitElement {
         title="Close navigation"
         @click=${this.closeMenu}
       >
-        ${collapseSidebarIcon}
+        ${iconBox(collapseSidebar)}
       </button>
     `;
   }
@@ -235,6 +236,7 @@ export class IAItemNavMenuSlider extends LitElement {
 
     return [
       themeStyles,
+      iconBoxStyles,
       css`
         :host {
           --item-navigator-menu-width--: var(
@@ -356,10 +358,9 @@ export class IAItemNavMenuSlider extends LitElement {
           height: var(--item-navigator-header-icon-size--);
         }
 
-        /* Our glyphs are masked spans: the mask supplies the shape, this
-           supplies the paint. */
-        span.ia-icon {
-          background-color: var(--item-navigator-icon-color--);
+        /* Our glyphs paint with currentColor, so this supplies the paint. */
+        .ia-icon {
+          color: var(--item-navigator-icon-color--);
         }
 
         /* Host-supplied icons may still be inline svg, so keep theming those

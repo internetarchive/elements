@@ -9,6 +9,7 @@ import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import themeStyles from '@src/themes/theme-styles';
+import { iconBoxStyles } from '@src/util/icon-box';
 
 /**
  * A single entry in the item navigator's side menu. Renders either a button
@@ -105,6 +106,7 @@ export class IAItemNavMenuButton extends LitElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      iconBoxStyles,
       css`
         :host {
           --item-navigator-text-color--: var(
@@ -220,14 +222,13 @@ export class IAItemNavMenuButton extends LitElement {
           border-radius: 1em 0 0 1em;
         }
 
-        /* Our glyphs are masked spans: the mask supplies the shape, these
-           supply the paint. */
-        .icon span.ia-icon {
-          background-color: var(--item-navigator-icon-inactive-color--);
+        /* Our glyphs paint with currentColor, so these supply the paint. */
+        .icon .ia-icon {
+          color: var(--item-navigator-icon-inactive-color--);
         }
 
-        .icon.active span.ia-icon {
-          background-color: var(--item-navigator-icon-active-color--);
+        .icon.active .ia-icon {
+          color: var(--item-navigator-icon-active-color--);
         }
 
         /* Host-supplied icons may still be inline svg, so keep theming those
