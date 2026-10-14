@@ -1,4 +1,4 @@
-import { css, html, LitElement, type CSSResultGroup } from 'lit';
+import { css, html, LitElement, nothing, svg, type CSSResultGroup } from 'lit';
 import { state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 
@@ -18,6 +18,16 @@ const DEMO_ITEM_IDENTIFIER = 'goody';
 const DEMO_UPLOADER = 'uploader@archive.org';
 const DEMO_BIBLIO = 'https://openlibrary.org/search/inside?q=';
 
+const globeIcon = svg`
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="9.25" />
+    <path d="M2.75 12h18.5" />
+    <path d="M12 2.75c2.4 2.5 3.6 5.6 3.6 9.25s-1.2 6.75-3.6 9.25" />
+    <path d="M12 2.75c-2.4 2.5-3.6 5.6-3.6 9.25s1.2 6.75 3.6 9.25" />
+  </svg>
+`;
+
 /**
  * The topnav sizes everything in rem against the 10px root font size that
  * archive.org and offshoot both set, so at the demo's 16px root it renders
@@ -36,6 +46,8 @@ export class IATopNavStory extends LitElement {
   @state() private canManageFlags = false;
 
   @state() private hideSearch = false;
+
+  @state() private languagePicker = true;
 
   @state() private lastEvent = '';
 
@@ -97,6 +109,7 @@ export class IATopNavStory extends LitElement {
       | 'admin'
       | 'canManageFlags'
       | 'hideSearch'
+      | 'languagePicker'
       | 'archiveFontSize',
   ) {
     return html`
@@ -112,6 +125,18 @@ export class IATopNavStory extends LitElement {
           />
         </td>
       </tr>
+    `;
+  }
+
+  private get sampleLanguagePicker() {
+    return html`
+      <div slot="language-picker" class="sample-language-picker">
+        ${globeIcon}
+        <select aria-label="Language">
+          <option>English</option>
+          <option>Español</option>
+        </select>
+      </div>
     `;
   }
 
@@ -140,7 +165,10 @@ export class IATopNavStory extends LitElement {
           ?hideSearch=${this.hideSearch}
           @analyticsClick=${this.onAnalyticsClick}
           @analyticsSubmit=${this.onAnalyticsSubmit}
-        ></ia-topnav>
+          >${this.languagePicker
+            ? this.sampleLanguagePicker
+            : nothing}</ia-topnav
+        >
 
         <div slot="settings">
           <p class="event-log">${this.lastEvent || 'No events yet.'}</p>
@@ -150,6 +178,7 @@ export class IATopNavStory extends LitElement {
             ${this.toggleRow('Admin on the item', 'admin')}
             ${this.toggleRow('Can manage flags', 'canManageFlags')}
             ${this.toggleRow('Hide search', 'hideSearch')}
+            ${this.toggleRow('Language picker slot', 'languagePicker')}
             ${this.toggleRow('archive.org font size', 'archiveFontSize')}
           </table>
           <p class="hint">
@@ -184,6 +213,13 @@ export class IATopNavStory extends LitElement {
             both do.
           </p>
           <p>
+            The <code>language-picker</code> slot sits left of the user menu on
+            desktop and between the donate heart and the user icon on phones. It
+            takes up no room while it's empty. The demo fills it with a sample
+            globe over a native select. Turn off Language picker slot to see the
+            empty state.
+          </p>
+          <p>
             A search bar goes in the <code>search</code> slot. Offshoot slots an
             <code>ia-dropdown-search-bar</code> in there.
           </p>
@@ -206,6 +242,35 @@ export class IATopNavStory extends LitElement {
 
       td {
         padding-right: 1rem;
+      }
+
+      .sample-language-picker {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 4rem;
+        color: var(--iconFill);
+      }
+
+      .sample-language-picker:hover {
+        color: var(--linkHoverColor);
+      }
+
+      .sample-language-picker svg {
+        width: 2.4rem;
+        height: 2.4rem;
+        pointer-events: none;
+      }
+
+      .sample-language-picker select {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        appearance: none;
       }
     `;
   }
