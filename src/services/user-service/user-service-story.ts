@@ -24,9 +24,36 @@ else console.log(user.screenname);`;
 const withoutImports = (source: string) =>
   source.replace(/^import[\s\S]*?from '[^']+';\n/gm, '').trim();
 
-const API_SOURCE = [serviceSource, errorSource, userSource]
-  .map(withoutImports)
-  .join('\n\n');
+/** The source from `start` up to, but not including, `end`. */
+const between = (source: string, start: string, end: string) =>
+  source.slice(source.indexOf(start), source.indexOf(end)).trim();
+
+/** What a consumer calls, without the implementation behind it. */
+const SERVICE_CLASS = `export declare class UserService implements UserServiceInterface {
+  constructor(options?: {
+    userServiceEndpoint?: string;
+    cache?: UserServiceCacheInterface;
+    cacheTTL?: number;
+    userCacheKey?: string;
+  });
+
+  getLoggedInUser(): Promise<Result<UserInterface, UserServiceError>>;
+}`;
+
+const API_SOURCE = [
+  between(
+    withoutImports(serviceSource),
+    'export interface UserServiceInterface',
+    'export class UserService ',
+  ),
+  SERVICE_CLASS,
+  withoutImports(errorSource),
+  between(
+    withoutImports(userSource),
+    'export interface UserInterface',
+    'export class User ',
+  ),
+].join('\n\n');
 
 const jsonUrl = (body: unknown) =>
   `data:application/json,${encodeURIComponent(JSON.stringify(body))}`;

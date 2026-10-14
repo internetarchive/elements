@@ -33,6 +33,23 @@ async function run(options: { source?: string; username?: string } = {}) {
 }
 
 describe('user-service story', () => {
+  test('lists the public interface, not the implementation', async () => {
+    const el = await fixture<UserServiceStory>(
+      html`<user-service-story></user-service-story>`,
+    );
+    const { apiSource } = el.shadowRoot!.querySelector(
+      'service-template',
+    ) as unknown as { apiSource: string };
+
+    expect(apiSource).to.contain('export interface UserServiceInterface');
+    expect(apiSource).to.contain('export declare class UserService');
+    expect(apiSource).to.contain('export interface UserInterface');
+    expect(apiSource).to.contain('class UserServiceError');
+    expect(apiSource).not.to.contain('fetchUser');
+    expect(apiSource).not.to.contain('private ');
+    expect(apiSource).not.to.contain('fromUserResponse');
+  });
+
   afterEach(() => {
     removeCookie('logged-in-user');
     vi.restoreAllMocks();
