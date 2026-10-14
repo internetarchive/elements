@@ -155,9 +155,9 @@ export class MediaSlider extends LitElement {
           right: 0;
           left: 0;
           padding: 0;
-          height: 31.9rem;
+          height: calc(319 * var(--topnavUnit--));
           overflow-x: hidden;
-          font-size: 1.4rem;
+          font-size: calc(14 * var(--topnavUnit--));
           background: var(--mediaSliderBg);
         }
 
@@ -170,14 +170,14 @@ export class MediaSlider extends LitElement {
         }
 
         .info-box {
-          padding: 1rem;
+          padding: calc(10 * var(--topnavUnit--));
         }
 
         @media (max-width: ${TOPNAV_MOBILE_BREAKPOINT - 1}px) {
           .overflow-clip.open {
             display: block;
-            height: 35.8rem;
-            left: 4rem;
+            height: calc(358 * var(--topnavUnit--));
+            left: calc(40 * var(--topnavUnit--));
             top: 0;
           }
         }
@@ -191,14 +191,14 @@ export class MediaSlider extends LitElement {
             left: 0;
             z-index: 3;
             height: auto;
-            min-height: 21rem;
+            min-height: calc(210 * var(--topnavUnit--));
             background: var(--mediaSliderDesktopBg);
             transform: translate(0, -100%);
             transition: transform 0.2s ease;
           }
 
           .overflow-clip.open {
-            height: 22rem;
+            height: calc(220 * var(--topnavUnit--));
           }
 
           .information-menu.open {
@@ -206,8 +206,8 @@ export class MediaSlider extends LitElement {
           }
 
           .info-box {
-            max-width: 100rem;
-            padding: 1.5rem 0;
+            max-width: calc(1000 * var(--topnavUnit--));
+            padding: calc(15 * var(--topnavUnit--)) 0;
             margin: 0 auto;
           }
         }
