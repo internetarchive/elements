@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/elements",
-  "version": "1.1.6",
+  "version": "1.2.1",
   "description": "A web component library from the Internet Archive.",
   "license": "AGPL-3.0-only",
   "type": "module",
@@ -34,10 +34,13 @@
     "strings:build": "wireit"
   },
   "dependencies": {
+    "@internetarchive/fetch-handler": "^1.4.0",
     "@internetarchive/ia-clearable-text-input": "^1.1.1",
     "@internetarchive/ia-dropdown": "^2.2.0",
     "@internetarchive/lazy-loader-service": "^0.2.0",
+    "@internetarchive/metadata-service": "^1.0.4",
     "@internetarchive/promised-singleton": "^0.2.1",
+    "@internetarchive/recaptcha-manager": "^1.0.0",
     "@lit/localize": "^0.12.2",
     "@types/applepayjs": "^14.0.9",
     "@types/braintree-web": "^3.143.0",
@@ -46,6 +49,7 @@
     "@types/paypal-checkout-components": "^4.0.8",
     "currency.js": "^2.0.4",
     "dayjs": "^1.11.23",
+    "dompurify": "^3.2.5",
     "lit": "^2.8.0 || ^3.3.2",
     "magic-snowflakes": "^7.0.2",
     "nanoevents": "^9.1.0",
@@ -62,6 +66,7 @@
     "@vitest/browser": "^4.0.8",
     "@vitest/browser-playwright": "^4.0.8",
     "@vitest/coverage-v8": "^4.0.8",
+    "axe-core": "^4.10.2",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-html": "^8.1.3",
