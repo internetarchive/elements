@@ -8,7 +8,7 @@ import './ia-topnav-media-menu';
 import '@src/elements/ia-sr-only-text/ia-sr-only-text';
 import logoWordmarkStacked from './assets/img/wordmark-stacked';
 import { formatUrl } from './lib/helpers';
-import { property, query } from 'lit/decorators.js';
+import { property, query, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import {
   IATopNavConfig,
@@ -132,10 +132,8 @@ export class PrimaryNav extends TrackedElement {
         ></ia-topnav-media-menu>
         ${this.searchSlotContainer}
         <div class="right-side-section">
-          ${this.mobileDonateHeart}
-          <slot name="language-picker"></slot>
-          ${this.userStateTemplate} ${this.uploadButtonTemplate}
-          ${this.searchMenu}
+          ${this.mobileDonateHeart} ${this.userStateTemplate}
+          ${this.uploadButtonTemplate} ${this.searchMenu}
         </div>
       </nav>
     `;
@@ -263,6 +261,15 @@ export class PrimaryNav extends TrackedElement {
     `;
   }
 
+  /** True once the consumer has slotted something into `language-picker`. */
+  @state() private hasLanguagePicker = false;
+
+  private languagePickerChanged(e: Event) {
+    const slot = e.target as HTMLSlotElement;
+    this.hasLanguagePicker =
+      slot.assignedElements({ flatten: true }).length > 0;
+  }
+
   get mobileDonateHeart() {
     return html`
       <a
@@ -273,8 +280,12 @@ export class PrimaryNav extends TrackedElement {
         )}
       >
         ${icons.donateUnpadded}
-        <ia-sr-only-text>${msg('Donate to the archive')}</ia-sr-only-text>
-      </a>
+        <ia-sr-only-text>${msg('Donate to the archive')}</ia-sr-only-text> </a
+      ><slot
+        name="language-picker"
+        class=${this.hasLanguagePicker ? '' : 'empty'}
+        @slotchange=${this.languagePickerChanged}
+      ></slot>
     `;
   }
 
@@ -408,6 +419,17 @@ export class PrimaryNav extends TrackedElement {
           fill: rgb(255, 0, 0);
         }
 
+        slot[name='language-picker'].empty {
+          display: none;
+        }
+
+        slot[name='language-picker']::slotted(*) {
+          display: inline-flex;
+          align-items: center;
+          height: 4rem;
+          vertical-align: top;
+        }
+
         .search-trigger {
           padding: 0;
         }
@@ -525,10 +547,11 @@ export class PrimaryNav extends TrackedElement {
           }
 
           .right-side-section {
-            display: initial;
+            display: flex;
+            align-items: flex-start;
           }
           .right-side-section .user-info {
-            float: right;
+            order: 1;
           }
         }
 

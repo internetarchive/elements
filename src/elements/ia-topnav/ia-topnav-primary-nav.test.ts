@@ -9,7 +9,7 @@ import './ia-topnav-primary-nav';
 import { IATopNavConfig, IATopNavSecondIdentitySlotMode } from './models';
 import { PrimaryNav } from './ia-topnav-primary-nav';
 
-import { afterEach, describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 const component = ({
   baseHost = 'archive.org',
   username = '',
@@ -58,6 +58,31 @@ describe('<ia-topnav-primary-nav>', () => {
     );
 
     expect(slot).to.exist;
+  });
+
+  test('takes no room while the language-picker slot is empty', async () => {
+    const el = await fixture<PrimaryNav>(component({}));
+    const slot = el.shadowRoot?.querySelector<HTMLSlotElement>(
+      'slot[name="language-picker"]',
+    );
+
+    expect(slot?.classList.contains('empty')).toBe(true);
+    expect(getComputedStyle(slot as HTMLSlotElement).display).toBe('none');
+  });
+
+  test('shows the language-picker slot once something is slotted', async () => {
+    const el = await fixture<PrimaryNav>(component({}));
+    const picker = document.createElement('div');
+    picker.slot = 'language-picker';
+    el.appendChild(picker);
+    await elementUpdated(el);
+
+    const slot = el.shadowRoot?.querySelector<HTMLSlotElement>(
+      'slot[name="language-picker"]',
+    );
+    await vi.waitFor(() => {
+      expect(slot?.classList.contains('empty')).toBe(false);
+    });
   });
 
   test('renders the login link when no username present', async () => {
