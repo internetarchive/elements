@@ -230,9 +230,6 @@ importers:
       '@eslint/js':
         specifier: ^9.39.1
         version: 9.39.5
-      '@internetarchive/field-parsers':
-        specifier: 1.2.1
-        version: 1.2.1
       '@lit/localize-tools':
         specifier: ^0.8.2
         version: 0.8.2
