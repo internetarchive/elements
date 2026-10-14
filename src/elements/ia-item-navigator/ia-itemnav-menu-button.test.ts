@@ -4,7 +4,8 @@ import { describe, expect, test, vi } from 'vitest';
 
 import { IAItemNavMenuButton } from './ia-itemnav-menu-button';
 import './ia-itemnav-menu-button';
-import { maskedIcon } from '@src/util/masked-icon';
+import list from '@src/icons/list';
+import { iconBox } from '@src/util/icon-box';
 
 describe('IAItemNavMenuButton', () => {
   test('renders a <button> by default', async () => {
@@ -58,24 +59,56 @@ describe('IAItemNavMenuButton', () => {
   test('paints the icon with the inactive color until it is selected', async () => {
     const el = await fixture<IAItemNavMenuButton>(
       html`<ia-itemnav-menu-button
-        .icon=${maskedIcon('/glyph.svg')}
+        .icon=${iconBox(list)}
         style="--item-navigator-icon-inactive-color: rgb(9, 9, 9);
                --item-navigator-icon-active-color: rgb(7, 7, 7)"
       ></ia-itemnav-menu-button>`,
     );
-    const icon = () => el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
+    const glyph = () =>
+      el.shadowRoot?.querySelector('.ia-icon > svg') as SVGElement;
 
-    expect(getComputedStyle(icon()).backgroundColor).to.equal('rgb(9, 9, 9)');
+    expect(getComputedStyle(glyph()).color).to.equal('rgb(9, 9, 9)');
+    expect(getComputedStyle(glyph()).fill).to.equal('rgb(9, 9, 9)');
 
     el.selected = true;
     await el.updateComplete;
-    expect(getComputedStyle(icon()).backgroundColor).to.equal('rgb(7, 7, 7)');
+    expect(getComputedStyle(glyph()).color).to.equal('rgb(7, 7, 7)');
+    expect(getComputedStyle(glyph()).fill).to.equal('rgb(7, 7, 7)');
+  });
+
+  test('sizes the icon with the icon size knob', async () => {
+    const el = await fixture<IAItemNavMenuButton>(
+      html`<ia-itemnav-menu-button
+        .icon=${iconBox(list)}
+        style="--item-navigator-icon-size: 30px"
+      ></ia-itemnav-menu-button>`,
+    );
+    const glyph = el.shadowRoot?.querySelector('.ia-icon > svg') as SVGElement;
+    const { width, height } = glyph.getBoundingClientRect();
+
+    expect(width).to.equal(30);
+    expect(height).to.equal(30);
+  });
+
+  test('keeps the generated icon decorative', async () => {
+    const el = await fixture<IAItemNavMenuButton>(
+      html`<ia-itemnav-menu-button
+        label="Contents"
+        .icon=${iconBox(list)}
+      ></ia-itemnav-menu-button>`,
+    );
+    const glyph = el.shadowRoot?.querySelector('.ia-icon > svg');
+
+    expect(glyph?.getAttribute('aria-hidden')).to.equal('true');
+    expect(el.shadowRoot?.querySelector('.label')?.textContent).to.contain(
+      'Contents',
+    );
   });
 
   test("only the open entry's icon lifts above the panel", async () => {
     const el = await fixture<IAItemNavMenuButton>(
       html`<ia-itemnav-menu-button
-        .icon=${maskedIcon('/glyph.svg')}
+        .icon=${iconBox(list)}
       ></ia-itemnav-menu-button>`,
     );
     const icon = () => el.shadowRoot?.querySelector('.icon') as HTMLElement;
