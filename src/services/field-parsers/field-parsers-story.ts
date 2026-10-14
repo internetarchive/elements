@@ -11,8 +11,8 @@ import {
   PageProgressionParser,
   StringParser,
   type FieldParserInterface,
-} from '@internetarchive/field-parsers';
-import interfaceSource from '@internetarchive/field-parsers/dist/src/field-parser-interface.d.ts?raw';
+} from './field-parsers';
+import interfaceSource from './field-parser-interface.ts?raw';
 
 import '@demo/service-template';
 
@@ -65,9 +65,9 @@ const PARSERS: ParserEntry[] = [
   },
 ];
 
-// The parsers' declaration files, which carry the signatures and result types.
+// The parsers' source, which carries the signatures and result types.
 const parserSources = import.meta.glob<string>(
-  '../../../node_modules/@internetarchive/field-parsers/dist/src/field-types/*.d.ts',
+  ['./field-types/*.ts', '!./field-types/*.test.ts'],
   { query: '?raw', import: 'default', eager: true },
 );
 
@@ -77,7 +77,9 @@ const API_SOURCE = [
     .sort()
     .map((path) => parserSources[path]),
 ]
-  .map((source) => source.replace(/^import .*\n/gm, '').trim())
+  .map((source) =>
+    source.replace(/^import[\s\S]*?from '[^']+';\n/gm, '').trim(),
+  )
   .join('\n\n');
 
 const USAGE = `import { DurationParser } from '@internetarchive/elements/services/field-parsers/field-parsers';
