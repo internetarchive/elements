@@ -22,6 +22,13 @@ describe('Menu data', () => {
     expect(menu).to.have.property('heading');
   });
 
+  test('lists Democracy’s Library in the texts menu', () => {
+    const menus = buildTopNavMenus();
+    const urls = JSON.stringify(menus.texts);
+
+    expect(urls).to.contain('https://archive.org/details/democracys-library');
+  });
+
   test('builds the signed-out and user link lists', () => {
     const menus = buildTopNavMenus();
 

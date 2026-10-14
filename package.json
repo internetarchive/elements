@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/elements",
-  "version": "1.1.6",
+  "version": "1.2.1",
   "description": "A web component library from the Internet Archive.",
   "license": "AGPL-3.0-only",
   "type": "module",
@@ -24,6 +24,7 @@
     "build": "wireit",
     "clean": "wireit",
     "lint": "wireit",
+    "icons:lint": "wireit",
     "typecheck": "wireit",
     "format": "wireit",
     "circular": "wireit",
@@ -35,8 +36,9 @@
   },
   "dependencies": {
     "@internetarchive/fetch-handler": "^1.4.0",
-    "@internetarchive/ia-clearable-text-input": "^1.1.1",
     "@internetarchive/ia-dropdown": "^2.2.0",
+    "@internetarchive/icon-close": "^1.4.0",
+    "@internetarchive/icon-user": "^1.4.0",
     "@internetarchive/lazy-loader-service": "^0.2.0",
     "@internetarchive/metadata-service": "^1.0.4",
     "@internetarchive/promised-singleton": "^0.2.1",
@@ -53,14 +55,19 @@
     "lit": "^2.8.0 || ^3.3.2",
     "magic-snowflakes": "^7.0.2",
     "nanoevents": "^9.1.0",
-    "tslib": "^2.8.1"
+    "throttle-debounce": "^5.0.2",
+    "tslib": "^2.8.1",
+    "typescript-cookie": "^1.0.6",
+    "typescript-memoize": "^1.1.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.1",
+    "@internetarchive/local-cache": "1.0.0",
     "@lit/localize-tools": "^0.8.2",
     "@open-wc/testing-helpers": "^3.0.1",
     "@types/node": "^24.13.6",
+    "@types/throttle-debounce": "^5.0.2",
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",
     "@vitest/browser": "^4.0.8",
@@ -91,6 +98,7 @@
     "./icons/*": "./dist/src/icons/*.js",
     "./icons/*.svg": "./dist/src/icons/*.svg",
     "./labs/*": "./dist/src/labs/*.js",
+    "./services/*": "./dist/src/services/*.js",
     "./locales/*.js": "./dist/src/locales/*.js"
   },
   "sideEffects": [
@@ -139,7 +147,10 @@
       ]
     },
     "lint": {
-      "command": "eslint . && prettier \"**/*.ts\" --check"
+      "command": "eslint . && prettier \"**/*.ts\" --check",
+      "dependencies": [
+        "icons:lint"
+      ]
     },
     "format": {
       "command": "eslint . --fix && prettier \"**/*.ts\" --write"
@@ -192,11 +203,22 @@
         "scripts/build-locales.mts"
       ]
     },
+    "icons:lint": {
+      "command": "node scripts/lint-icons.mts",
+      "files": [
+        "icons/*.svg",
+        "icons/.multicolor",
+        "scripts/lint-icons.mts",
+        "scripts/icon-source.mts"
+      ],
+      "output": []
+    },
     "icons": {
       "command": "node scripts/build-icons.mts",
       "files": [
         "icons/*.svg",
-        "scripts/build-icons.mts"
+        "scripts/build-icons.mts",
+        "scripts/icon-source.mts"
       ],
       "output": [
         "src/icons/**"
