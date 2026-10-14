@@ -691,7 +691,7 @@
 <trans-unit id="h3a575fb6a9704225">
   <source>Search the history of more than <x id="0" equiv-text="${pagesArchived}&#10;              &lt;a @click=&quot;${this.emitWaybackMachineStatsLinkClicked}&quot; data-event-click-tracking=&quot;TopNav|WaybackMachineStatsLink&quot; href=&quot;https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures/&quot;&gt;"/>web pages<x id="1" equiv-text="&lt;/a&gt;"/>
               on the Internet.</source>
-<target>Busca en el historial de más de <x id="0" equiv-text="${pagesArchived}&#10;              &lt;a @click=&quot;${this.emitWaybackMachineStatsLinkClicked}&quot; data-event-click-tracking=&quot;TopNav|WaybackMachineStatsLink&quot; href=&quot;https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures/&quot;&gt;"/>páginas web<x id="1" equiv-text="&lt;/a&gt;"/>
+<target>Busca en el historial de más de <x id="0" equiv-text="${pagesArchived}&#10;              &lt;a @click=&quot;${this.emitWaybackMachineStatsLinkClicked}&quot; data-event-click-tracking=&quot;TopNav|WaybackMachineStatsLink&quot; href=&quot;https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures/&quot;&gt;"/>de páginas web<x id="1" equiv-text="&lt;/a&gt;"/>
               de internet.</target>
 </trans-unit>
 <trans-unit id="s5af7506ad5717736">

@@ -13,7 +13,7 @@ export const templates = {
       @click="${1}"
       data-event-click-tracking="TopNav|WaybackMachineStatsLink"
       href="https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures/"
-      >páginas web</a
+      >de páginas web</a
     >
     de internet.`,
   h8c1c54b7ac1ca52b: html`
