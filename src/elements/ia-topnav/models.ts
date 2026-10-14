@@ -30,6 +30,13 @@ export interface IATopNavConfig {
 export interface IATopNavLink {
   title: string;
 
+  /**
+   * Stable English name for a link whose title is translated. Analytics event
+   * names, CSS classes, icons and `callouts` are keyed by this, falling back
+   * to `title`.
+   */
+  key?: string;
+
   url?: string;
 
   class?: string;
