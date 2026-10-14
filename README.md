@@ -359,6 +359,8 @@ To see every icon, run `pnpm run dev` and open the Icons entry (`ia-icon-gallery
 
 The offshoot assets were ported from offshoot commit `a6199f5db22d3908d856033da8bfa8777867d86c`.
 
+`ia-topnav` and `ia-wayback-search-form` render the `topnav-*` icons.
+
 The collection-browser icons were ported from `@internetarchive/collection-browser@4.8.0`.
 
 The BookReader icons were ported from `@internetarchive/bookreader@5.0.0-87`.
