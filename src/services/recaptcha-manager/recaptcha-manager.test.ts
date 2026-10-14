@@ -61,7 +61,7 @@ describe('ReCaptcha Management', () => {
       const mockLazyLoaderWithCallback = new MockLazyLoaderService(() => {
         window.grecaptcha = new MockGrecaptcha({
           mode: 'success',
-        });
+        }) as unknown as typeof window.grecaptcha;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (window as any).grecaptchaLoadedCallback();
       });

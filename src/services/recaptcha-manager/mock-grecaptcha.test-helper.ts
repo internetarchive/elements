@@ -44,7 +44,11 @@ export class MockGrecaptcha implements ReCaptchaV2.ReCaptcha {
     return 'foo';
   }
 
-  execute(_opt_widget_id?: number): void {
+  execute(_opt_widget_id?: number): PromiseLike<void>;
+
+  execute(_siteKey: string, _action: ReCaptchaV2.Action): PromiseLike<string>;
+
+  execute(): PromiseLike<void | string> {
     this.executeCalled = true;
 
     if (this.addDelay) {
@@ -52,6 +56,7 @@ export class MockGrecaptcha implements ReCaptchaV2.ReCaptcha {
     } else {
       this.callCallback();
     }
+    return Promise.resolve();
   }
 
   ready(_callback: () => void): void {}
