@@ -64,3 +64,20 @@ export type {
   MetadataRawValue,
 } from './models/metadata-fields/metadata-field';
 export type { MetadataFieldKey } from './models/metadata-field-key';
+
+// metadata schema
+export {
+  fieldSchema,
+  isUserEditableField,
+  metadataSchema,
+} from './schema/metadata-schema';
+export type {
+  MetadataFieldAccess,
+  MetadataFieldSchema,
+  MetadataValueType,
+} from './schema/metadata-schema';
+export {
+  checkMetadataValue,
+  isRecommendedDateFormat,
+} from './schema/check-metadata-value';
+export type { MetadataValueProblem } from './schema/check-metadata-value';

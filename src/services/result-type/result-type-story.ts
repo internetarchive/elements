@@ -43,9 +43,9 @@ if (error) console.log(error.kind); // 'divide-by-zero'`;
 
 @customElement('result-type-story')
 export class ResultTypeStory extends LitElement {
-  @state() private a = '';
+  @state() private a = '10';
 
-  @state() private b = '';
+  @state() private b = '4';
 
   @state() private result?: { call: string; output: string };
 
@@ -63,7 +63,6 @@ export class ResultTypeStory extends LitElement {
             <input
               type="text"
               name="a"
-              placeholder="10"
               autocomplete="off"
               .value=${this.a}
               @input=${(e: Event) =>
@@ -75,7 +74,6 @@ export class ResultTypeStory extends LitElement {
             <input
               type="text"
               name="b"
-              placeholder="4"
               autocomplete="off"
               .value=${this.b}
               @input=${(e: Event) =>
