@@ -1,7 +1,7 @@
 import { describe, expect, test, beforeEach, afterEach, vi } from 'vitest';
 import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
-import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-input';
+import type { IaClearableTextInput } from '@src/elements/ia-clearable-text-input/ia-clearable-text-input';
 import { IADropdownSearchBar } from './ia-dropdown-search-bar';
 import type { SearchRequestedDetail } from './models';
 
@@ -267,6 +267,27 @@ describe('IA Dropdown Search Bar', () => {
         .detail as SearchRequestedDetail;
       expect(detail.query).to.equal('foo');
       expect(detail.category).to.equal('all');
+    });
+  });
+
+  describe('search button icon', () => {
+    test('draws the magnifying glass as an 18px inline svg', () => {
+      const svg = el.shadowRoot?.querySelector(
+        '#search-button svg',
+      ) as SVGElement;
+      expect(svg).to.exist;
+      expect(el.shadowRoot?.querySelector('#search-button img')).to.not.exist;
+
+      const { width, height } = svg.getBoundingClientRect();
+      expect(width).to.equal(18);
+      expect(height).to.equal(18);
+      expect(getComputedStyle(svg).color).to.equal('rgb(44, 44, 44)');
+      expect(getComputedStyle(svg).fill).to.equal('rgb(44, 44, 44)');
+    });
+
+    test('keeps the button named by its aria-label', () => {
+      const button = el.shadowRoot?.querySelector('#search-button');
+      expect(button?.getAttribute('aria-label')).to.equal('Search');
     });
   });
 });

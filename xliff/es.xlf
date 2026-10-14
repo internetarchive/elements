@@ -150,6 +150,547 @@
   <source>[Transcript unavailable]</source>
 <target>[Transcripción no disponible]</target>
 </trans-unit>
+<trans-unit id="s5e8250fb85d64c23">
+  <source>Close</source>
+<target>Cerrar</target>
+</trans-unit>
+<trans-unit id="s4b4f605151fa4cda">
+  <source>Left arrow icon</source>
+<target>Icono de flecha hacia la izquierda</target>
+</trans-unit>
+<trans-unit id="s175316679436f7e1">
+  <source>Internet Archive logo</source>
+<target>Logotipo de Internet Archive</target>
+</trans-unit>
+<trans-unit id="sd4eb63bc051b0cc4">
+  <source>A line drawing of the Internet Archive headquarters building façade.</source>
+<target>Dibujo lineal de la fachada del edificio de la sede de Internet Archive.</target>
+</trans-unit>
+<trans-unit id="s1d32bf0a660906de">
+  <source>Choose an amount (USD)</source>
+</trans-unit>
+<trans-unit id="sac40746f1d52bde5">
+  <source>Choose a frequency</source>
+</trans-unit>
+<trans-unit id="saec17a4cb0379720">
+  <source>Make this monthly</source>
+</trans-unit>
+<trans-unit id="sf69331efcae8e012">
+  <source>I'll generously add <x id="0" equiv-text="${feeAmountString}"/> to cover fees.</source>
+</trans-unit>
+<trans-unit id="sd197802fd037edfc">
+  <source>One time</source>
+</trans-unit>
+<trans-unit id="s046a35bfdd88a596">
+  <source>Monthly</source>
+</trans-unit>
+<trans-unit id="s2ef68d75fe033dd0">
+  <source>Custom: $</source>
+</trans-unit>
+<trans-unit id="s342e7501fb2c77b6">
+  <source>Custom amount in dollars</source>
+</trans-unit>
+<trans-unit id="h8c1c54b7ac1ca52b">
+  <source>
+          To make a donation of $10,000 or more, please contact our philanthropy
+          department at
+          <x id="0" equiv-text="&lt;a href=&quot;mailto:donations@archive.org&quot;&gt;"/>donations@archive.org<x id="1" equiv-text="&lt;/a&gt;&#10;        "/></source>
+</trans-unit>
+<trans-unit id="s6090e7072ddb0872">
+  <source>Please select an amount (minimum $1)</source>
+</trans-unit>
+<trans-unit id="se185c2430b4347ba">
+  <source>Please enter a valid donation amount</source>
+</trans-unit>
+<trans-unit id="s9f9915672429b6d3">
+  <source>We’ve almost reached our goal!</source>
+</trans-unit>
+<trans-unit id="s024bc438a3564697">
+  <source>We’ve reached our goal!</source>
+</trans-unit>
+<trans-unit id="sd222d8e77bf686be">
+  <source>Donation progress</source>
+</trans-unit>
+<trans-unit id="sa097aca70d016c5c">
+  <source><x id="0" equiv-text="${this.goalAmountDisplayValue}"/> goal</source>
+</trans-unit>
+<trans-unit id="sdaf8f9ac7bb549e0">
+  <source>Could not validate review. Please try again later.</source>
+</trans-unit>
+<trans-unit id="s4390700f23a6fae7">
+  <source>There's been a temporary error. Please wait a moment and try again.</source>
+</trans-unit>
+<trans-unit id="h0c767c6fc1ce6768">
+  <source>This site is protected by reCAPTCHA and the Google
+            <x id="0" equiv-text="&lt;a target=&quot;_blank&quot; class=&quot;inline-link&quot; href=&quot;https://policies.google.com/privacy&quot;&gt;"/>Privacy Policy<x id="1" equiv-text="&lt;/a&gt;"/>
+            and
+            <x id="2" equiv-text="&lt;a target=&quot;_blank&quot; class=&quot;inline-link&quot; href=&quot;https://policies.google.com/terms&quot;&gt;"/>Terms of Service<x id="3" equiv-text="&lt;/a&gt;"/>
+            apply.</source>
+</trans-unit>
+<trans-unit id="s44465964dcedadd7">
+  <source>Rating (optional)</source>
+</trans-unit>
+<trans-unit id="sbbc53e0e54d7946f">
+  <source>Subject</source>
+</trans-unit>
+<trans-unit id="sea1e2d4024d78a64">
+  <source>Subject may only have <x id="0" equiv-text="${this.maxSubjectLength}"/> characters</source>
+</trans-unit>
+<trans-unit id="sfc53e352afbca881">
+  <source>Review</source>
+</trans-unit>
+<trans-unit id="s6dd98c57b8238d56">
+  <source>Review may only have <x id="0" equiv-text="${this.maxBodyLength}"/> characters</source>
+</trans-unit>
+<trans-unit id="s2ceb11be2290bb1b">
+  <source>Cancel</source>
+</trans-unit>
+<trans-unit id="s80aec501701151a7">
+  <source>Submit review</source>
+</trans-unit>
+<trans-unit id="sa54fa4ecaec5db1c">
+  <source>Rate 1 star</source>
+</trans-unit>
+<trans-unit id="s7d5f6727f21c7274">
+  <source>Rate <x id="0" equiv-text="${num}"/> stars</source>
+</trans-unit>
+<trans-unit id="sc2a242918e324eb7">
+  <source>Clear rating</source>
+</trans-unit>
+<trans-unit id="sc221faca1ecb4aee">
+  <source>Anonymous</source>
+</trans-unit>
+<trans-unit id="sdf3f9c8baa5e155a">
+  <source>This review cannot be displayed at this time.</source>
+</trans-unit>
+<trans-unit id="sa79693645604876a">
+  <source>Delete this review</source>
+</trans-unit>
+<trans-unit id="s7490a67887716f40">
+  <source>Reviewer:</source>
+</trans-unit>
+<trans-unit id="s16d30d35e7b7ea3d">
+  <source>Subject: </source>
+</trans-unit>
+<trans-unit id="sd01d6e9b9f301ee6">
+  <source>More...</source>
+</trans-unit>
+<trans-unit id="se8494f6d60c7926c">
+  <source>...Less</source>
+</trans-unit>
+<trans-unit id="sebb2ea0d482f0cdc">
+  <source><x id="0" equiv-text="${this.review.stars}"/> out of 5 stars</source>
+</trans-unit>
+<trans-unit id="sbfae5d5b8978baef">
+  <source><x id="0" equiv-text="${prettyDate}"/> (edited)</source>
+</trans-unit>
+<trans-unit id="saeac976b4240bcc3">
+  <source>Are you sure you want to delete this review?</source>
+</trans-unit>
+<trans-unit id="se1968d56aba3b3cb">
+  <source>This review has been queued for deletion.</source>
+</trans-unit>
+<trans-unit id="sd1f0ff839e37b1ec">
+  <source>Sorry, we were unable to delete this review.</source>
+</trans-unit>
+<trans-unit id="s556715ca21d28f73">
+  <source>Reviews can no longer be added to this item.</source>
+</trans-unit>
+<trans-unit id="s52ec579f2c5c9d2c">
+  <source>Reviews have been disabled for this item.</source>
+</trans-unit>
+<trans-unit id="sde4e809e2411f660">
+  <source>Reviews cannot be added to this item.</source>
+</trans-unit>
+<trans-unit id="s00b50a47c6e7c741">
+  <source>There are no reviews yet.</source>
+</trans-unit>
+<trans-unit id="he787c4ac48d02309">
+  <source>
+          Be the first one to
+          <x id="0" equiv-text="&lt;ia-button mode=&quot;link&quot; class=&quot;no-reviews-btn&quot; @click=&quot;${this.addEditReview}&quot;&gt;"/>
+            write a review<x id="1" equiv-text="&lt;/ia-button&gt;"/>.
+        </source>
+</trans-unit>
+<trans-unit id="sb094ddadb5f59b64">
+  <source>Sorry, something went wrong. Please try again later.</source>
+</trans-unit>
+<trans-unit id="s59cf1fbcdc399828">
+  <source>Internet Archive Audio</source>
+</trans-unit>
+<trans-unit id="s65bc1235f931dffe">
+  <source>Librivox Free Audio</source>
+</trans-unit>
+<trans-unit id="sf83e224f6ca4ab56">
+  <source>All Audio</source>
+</trans-unit>
+<trans-unit id="s4fb0256f87608aa0">
+  <source>Old Time Radio</source>
+</trans-unit>
+<trans-unit id="sd668719bc2732027">
+  <source>78 RPMs and Cylinder Recordings</source>
+</trans-unit>
+<trans-unit id="s279a1cb9fb49e0ae">
+  <source>Audio Books &amp; Poetry</source>
+</trans-unit>
+<trans-unit id="s2a9bcd426303fc90">
+  <source>Computers, Technology and Science</source>
+</trans-unit>
+<trans-unit id="s28073688bdd0dbda">
+  <source>Music, Arts &amp; Culture</source>
+</trans-unit>
+<trans-unit id="s64f9c1bad74946c3">
+  <source>News &amp; Public Affairs</source>
+</trans-unit>
+<trans-unit id="s2285e16155e3ac53">
+  <source>Spirituality &amp; Religion</source>
+</trans-unit>
+<trans-unit id="s168e676da3739030">
+  <source>Podcasts</source>
+</trans-unit>
+<trans-unit id="sa6623b14511dc879">
+  <source>Radio News Archive</source>
+</trans-unit>
+<trans-unit id="sfc8531b2fd0f31cb">
+  <source>Images</source>
+</trans-unit>
+<trans-unit id="saeb95e79a3695c8e">
+  <source>All Images</source>
+</trans-unit>
+<trans-unit id="s8a51ce04b439b345">
+  <source>Cover Art</source>
+</trans-unit>
+<trans-unit id="sd7bfa7f3a37bdfe5">
+  <source>Solar System Collection</source>
+</trans-unit>
+<trans-unit id="s0487f33d9ddaabde">
+  <source>About</source>
+</trans-unit>
+<trans-unit id="sec9bb1a7c11e8e91">
+  <source>Blog</source>
+</trans-unit>
+<trans-unit id="sc265a3e29e1206e4">
+  <source>Events</source>
+</trans-unit>
+<trans-unit id="s199f5853f4e718f7">
+  <source>Projects</source>
+</trans-unit>
+<trans-unit id="s352719d86112de9a">
+  <source>Help</source>
+</trans-unit>
+<trans-unit id="s474f9b2aff4c2eea">
+  <source>Donate</source>
+</trans-unit>
+<trans-unit id="s87bae2710b2492c3">
+  <source>Contact</source>
+</trans-unit>
+<trans-unit id="s6c470eea2ab4e3bd">
+  <source>Jobs</source>
+</trans-unit>
+<trans-unit id="s0062d29dab02c851">
+  <source>Volunteer</source>
+</trans-unit>
+<trans-unit id="sfec0c302ab140e30">
+  <source>Software</source>
+</trans-unit>
+<trans-unit id="sc6638fa941d4a799">
+  <source>All Software</source>
+</trans-unit>
+<trans-unit id="sc7d4a8127c2e3efa">
+  <source>Old School Emulation</source>
+</trans-unit>
+<trans-unit id="s4689b7cdaddbea62">
+  <source>Historical Software</source>
+</trans-unit>
+<trans-unit id="s1da24b6ee60b5fbb">
+  <source>Classic PC Games</source>
+</trans-unit>
+<trans-unit id="s4bf3b6fee15645cb">
+  <source>Software Library</source>
+</trans-unit>
+<trans-unit id="s978df2676f48193e">
+  <source>Vintage Software</source>
+</trans-unit>
+<trans-unit id="sdcf8e54b1fe2bc7a">
+  <source>CD-ROM Software</source>
+</trans-unit>
+<trans-unit id="s58d327244ac97208">
+  <source>Software Sites</source>
+</trans-unit>
+<trans-unit id="s6aa68996f76e4bbc">
+  <source>Shareware CD-ROMs</source>
+</trans-unit>
+<trans-unit id="s6bc72525c0e62ae1">
+  <source>CD-ROM Images</source>
+</trans-unit>
+<trans-unit id="s2b6c26aeeab12877">
+  <source>Texts</source>
+</trans-unit>
+<trans-unit id="s3fae46211841614c">
+  <source>American Libraries</source>
+</trans-unit>
+<trans-unit id="sce10b7d19c6929c8">
+  <source>All Texts</source>
+</trans-unit>
+<trans-unit id="s7a0df7f5f36a2b4f">
+  <source>Smithsonian Libraries</source>
+</trans-unit>
+<trans-unit id="sb2099d48346487ee">
+  <source>Genealogy</source>
+</trans-unit>
+<trans-unit id="sd178927e06d04343">
+  <source>Canadian Libraries</source>
+</trans-unit>
+<trans-unit id="s4224adab4a0675c7">
+  <source>Children's Library</source>
+</trans-unit>
+<trans-unit id="s0ad8488e8c739ac8">
+  <source>Books by Language</source>
+</trans-unit>
+<trans-unit id="s780116f0df578c44">
+  <source>Government Documents</source>
+</trans-unit>
+<trans-unit id="s47aac8be0e7ec366">
+  <source>Explore the Collections</source>
+</trans-unit>
+<trans-unit id="s0763aeb5be71575a">
+  <source>Learn More</source>
+</trans-unit>
+<trans-unit id="sd05f09cf5bfd683a">
+  <source>Build Collections</source>
+</trans-unit>
+<trans-unit id="s85186a61e0d55bac">
+  <source>Video</source>
+</trans-unit>
+<trans-unit id="sb692bfe5f5127e8e">
+  <source>TV News</source>
+</trans-unit>
+<trans-unit id="s6a28135fd904ef81">
+  <source>Understanding 9/11</source>
+</trans-unit>
+<trans-unit id="s3490c3d5b9d69cb7">
+  <source>All Video</source>
+</trans-unit>
+<trans-unit id="sb862224137da29e2">
+  <source>Animation &amp; Cartoons</source>
+</trans-unit>
+<trans-unit id="s49405ed700c83682">
+  <source>Arts &amp; Music</source>
+</trans-unit>
+<trans-unit id="s2508631e3b9797d7">
+  <source>Computers &amp; Technology</source>
+</trans-unit>
+<trans-unit id="s3e0762b095cc36d3">
+  <source>Cultural &amp; Academic Films</source>
+</trans-unit>
+<trans-unit id="s075787b0e573bf1b">
+  <source>Ephemeral Films</source>
+</trans-unit>
+<trans-unit id="s507316d0c3463394">
+  <source>Movies</source>
+</trans-unit>
+<trans-unit id="see0450cbd700e6ba">
+  <source>Sports Videos</source>
+</trans-unit>
+<trans-unit id="s40e8795372723a11">
+  <source>Television</source>
+</trans-unit>
+<trans-unit id="sb6ac25024a3a921e">
+  <source>Videogame Videos</source>
+</trans-unit>
+<trans-unit id="s8322598786398a12">
+  <source>Vlogs</source>
+</trans-unit>
+<trans-unit id="s758a924a77ed65b4">
+  <source>Youth Media</source>
+</trans-unit>
+<trans-unit id="s98ca282a5c48dd63">
+  <source>Upload files</source>
+</trans-unit>
+<trans-unit id="s2e568cab855a6039">
+  <source>My uploads</source>
+</trans-unit>
+<trans-unit id="s41dcd6f6de2708cc">
+  <source>My loans</source>
+</trans-unit>
+<trans-unit id="s8f1dff5d47459b5e">
+  <source>My favorites</source>
+</trans-unit>
+<trans-unit id="sd194992b9da80b72">
+  <source>My lists</source>
+</trans-unit>
+<trans-unit id="s4b71f2218c4c60ea">
+  <source>My collections</source>
+</trans-unit>
+<trans-unit id="s45eac9685577cd7c">
+  <source>My web archives</source>
+</trans-unit>
+<trans-unit id="se85a9ddb91124b39">
+  <source>Account settings</source>
+</trans-unit>
+<trans-unit id="s9fda4232f5e1876a">
+  <source>Get help</source>
+</trans-unit>
+<trans-unit id="sb64127e4e4f0b575">
+  <source>Log out</source>
+</trans-unit>
+<trans-unit id="s690b2f9382a10be8">
+  <source>Sign up for free</source>
+</trans-unit>
+<trans-unit id="scb04435672ac5410">
+  <source>Log in</source>
+</trans-unit>
+<trans-unit id="sb245d6bc5a8222a1">
+  <source>New feature: <x id="0" equiv-text="${link.title}"/></source>
+</trans-unit>
+<trans-unit id="sbb07c2ef5540e509">
+  <source>Hamburger icon</source>
+</trans-unit>
+<trans-unit id="see47b0d5c2bde611">
+  <source>An icon used to represent a menu that can be toggled by interacting with this icon.</source>
+</trans-unit>
+<trans-unit id="s90beeb82c65e3e93">
+  <source>Toggle login menu</source>
+</trans-unit>
+<trans-unit id="s5e6b698a2ec87331">
+  <source>Sign up</source>
+</trans-unit>
+<trans-unit id="sab374637600f308b">
+  <source>Collapse web menu</source>
+</trans-unit>
+<trans-unit id="sbc14998d19ab6135">
+  <source>Collapse texts menu</source>
+</trans-unit>
+<trans-unit id="s625f3f5137d0ecf4">
+  <source>Collapse video menu</source>
+</trans-unit>
+<trans-unit id="se4bf1a427e335c33">
+  <source>Collapse audio menu</source>
+</trans-unit>
+<trans-unit id="sd1a57731992ef9de">
+  <source>Collapse software menu</source>
+</trans-unit>
+<trans-unit id="sfb133bd827ddb573">
+  <source>Collapse images menu</source>
+</trans-unit>
+<trans-unit id="s41949acc8ac2662c">
+  <source>Collapse donate menu</source>
+</trans-unit>
+<trans-unit id="s0d9123092a6e53ee">
+  <source>Collapse more menu</source>
+</trans-unit>
+<trans-unit id="s1bd91cc836b03da6">
+  <source>Expand web menu</source>
+</trans-unit>
+<trans-unit id="sf5faeb6f5f81f770">
+  <source>Expand texts menu</source>
+</trans-unit>
+<trans-unit id="s336625050fe041cd">
+  <source>Expand video menu</source>
+</trans-unit>
+<trans-unit id="se1c6b46716e251e2">
+  <source>Expand audio menu</source>
+</trans-unit>
+<trans-unit id="s3e91ed6c4e27e761">
+  <source>Expand software menu</source>
+</trans-unit>
+<trans-unit id="s960a9f0f02c98ec4">
+  <source>Expand images menu</source>
+</trans-unit>
+<trans-unit id="sf5825d3794060687">
+  <source>Expand donate menu</source>
+</trans-unit>
+<trans-unit id="sd5e6745b56fd2df5">
+  <source>Expand more menu</source>
+</trans-unit>
+<trans-unit id="sa59d43fac3473a7d">
+  <source>Collapse menu</source>
+</trans-unit>
+<trans-unit id="sa5004f54cf712724">
+  <source>Expand menu</source>
+</trans-unit>
+<trans-unit id="s08e6bd98452e6bb9">
+  <source>Audio</source>
+</trans-unit>
+<trans-unit id="s37a9e8aec5713460">
+  <source>More</source>
+</trans-unit>
+<trans-unit id="s6a0bcbce56a9c0fb">
+  <source>Featured</source>
+</trans-unit>
+<trans-unit id="s6d02dc19e21eb49c">
+  <source>Top</source>
+</trans-unit>
+<trans-unit id="s1a3f802a4059859b">
+  <source>Close main menu</source>
+</trans-unit>
+<trans-unit id="s13b59015dc837b71">
+  <source>Open main menu</source>
+</trans-unit>
+<trans-unit id="sb8b7458cf38d2bb2">
+  <source>Go home</source>
+</trans-unit>
+<trans-unit id="sefbe887e4c1066f5">
+  <source>Close user menu</source>
+</trans-unit>
+<trans-unit id="s40bad4f49bbf9037">
+  <source>Expand user menu</source>
+</trans-unit>
+<trans-unit id="sb403c27badd9ff89">
+  <source>Profile picture for <x id="0" equiv-text="${this.screenName}"/></source>
+</trans-unit>
+<trans-unit id="s42e1b68d00bfc746">
+  <source>Donate to the archive</source>
+</trans-unit>
+<trans-unit id="s96668830629e0dfc">
+  <source>Upload</source>
+</trans-unit>
+<trans-unit id="sc75a2ae331b763bb">
+  <source>Save Page Now</source>
+</trans-unit>
+<trans-unit id="s9685c7283978ebe0">
+  <source>Capture a web page as it appears now for use as a trusted citation in the future.</source>
+</trans-unit>
+<trans-unit id="s29d172b434200a59">
+  <source>Enter a URL to save</source>
+</trans-unit>
+<trans-unit id="s33f85f24c0f5f008">
+  <source>Save</source>
+</trans-unit>
+<trans-unit id="sa3f7437027dd0e2e">
+  <source>Please enter a valid web address</source>
+</trans-unit>
+<trans-unit id="s7b5ffb3b9d69f45d">
+  <source>Mobile Apps</source>
+</trans-unit>
+<trans-unit id="sd1c0ded843f222b3">
+  <source>Browser Extensions</source>
+</trans-unit>
+<trans-unit id="s05f953caf1db7632">
+  <source>Archive-It Subscription</source>
+</trans-unit>
+<trans-unit id="s56090efc526a8ff5">
+  <source>1 trillion</source>
+</trans-unit>
+<trans-unit id="h3a575fb6a9704225">
+  <source>Search the history of more than <x id="0" equiv-text="${pagesArchived}&#10;              &lt;a @click=&quot;${this.emitWaybackMachineStatsLinkClicked}&quot; data-event-click-tracking=&quot;TopNav|WaybackMachineStatsLink&quot; href=&quot;https://blog.archive.org/2016/10/23/defining-web-pages-web-sites-and-web-captures/&quot;&gt;"/>web pages<x id="1" equiv-text="&lt;/a&gt;"/>
+              on the Internet.</source>
+</trans-unit>
+<trans-unit id="s5af7506ad5717736">
+  <source>Visit the Wayback Machine</source>
+</trans-unit>
+<trans-unit id="s4516b91dba2ffe93">
+  <source>Search the Wayback Machine</source>
+</trans-unit>
+<trans-unit id="sdeef9e88871e5e9b">
+  <source>Enter URL or keywords</source>
+</trans-unit>
+<trans-unit id="sa5c2a4b46a1df9dc">
+  <source>Show 1 more review</source>
+</trans-unit>
+<trans-unit id="s5625502dc647f9c2">
+  <source>Show <x id="0" equiv-text="${hiddenCount}"/> more reviews</source>
+</trans-unit>
 </body>
 </file>
 </xliff>

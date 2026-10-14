@@ -4,8 +4,8 @@ import { customElement } from '@src/util/custom-element';
 
 import { localized, msg } from '@lit/localize';
 
-import searchIcon from '@src/elements/ia-topnav/assets/img/icon-search';
-import logo from '@src/elements/ia-topnav/assets/img/wayback-logo';
+import searchIcon from '@src/icons/topnav-search';
+import logo from '@src/icons/topnav-wayback-logo';
 import themeStyles from '@src/themes/theme-styles';
 
 /** Desktop styles apply at `min-width: WAYBACK_SEARCH_DESKTOP_BREAKPOINT px`. */
@@ -156,6 +156,11 @@ export class IAWaybackSearchForm extends LitElement {
           font-size: 0;
         }
 
+        fieldset a svg {
+          width: 205px;
+          height: 55px;
+        }
+
         img {
           width: 100%;
           max-width: 215px;
@@ -193,10 +198,7 @@ export class IAWaybackSearchForm extends LitElement {
           left: 3px;
           width: 2.4rem;
           height: 2.4rem;
-        }
-
-        .search-field .fill-color {
-          fill: var(--iconFill);
+          color: var(--iconFill, #000);
         }
 
         @media (min-width: ${WAYBACK_SEARCH_DESKTOP_BREAKPOINT}px) {
@@ -233,8 +235,8 @@ export class IAWaybackSearchForm extends LitElement {
             top: 2px;
           }
 
-          .search-field .fill-color {
-            fill: var(--wayback-search-desktop-icon-fill--);
+          .search-field svg {
+            color: var(--wayback-search-desktop-icon-fill--);
           }
         }
       `,
