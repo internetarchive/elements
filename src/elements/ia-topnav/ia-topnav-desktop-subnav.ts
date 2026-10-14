@@ -20,9 +20,11 @@ export class DesktopSubnav extends TrackedElement {
           (link) => html`
             <li>
               <a
-                class="${link.title.toLowerCase()}"
+                class="${(link.key ?? link.title).toLowerCase()}"
                 .href="${formatUrl(link.url, this.baseHost)}"
-                >${link.title}${DesktopSubnav.iconFor(link.title)}</a
+                >${link.title}${DesktopSubnav.iconFor(
+                  link.key ?? link.title,
+                )}</a
               >
             </li>
           `,
@@ -45,9 +47,9 @@ export class DesktopSubnav extends TrackedElement {
         ul {
           position: relative;
           z-index: 3;
-          padding: 0.8rem 0;
+          padding: calc(8 * var(--topnavUnit--)) 0;
           margin: 0;
-          font-size: 1.2rem;
+          font-size: calc(12 * var(--topnavUnit--));
           text-transform: uppercase;
           text-align: center;
           background: var(--desktopSubnavBg);
@@ -71,8 +73,8 @@ export class DesktopSubnav extends TrackedElement {
         }
 
         .donate svg {
-          width: 1.6rem;
-          height: 1.6rem;
+          width: calc(16 * var(--topnavUnit--));
+          height: calc(16 * var(--topnavUnit--));
           vertical-align: top;
           fill: #f00;
         }
