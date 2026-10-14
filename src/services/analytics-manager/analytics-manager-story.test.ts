@@ -91,12 +91,36 @@ describe('analytics-manager story', () => {
     expect(shown.service).to.equal('ao_no_sampling');
   });
 
+  test('shows the event as it was passed, before the manager changes it', async () => {
+    const el = await story();
+
+    await send(el, { category: 'foo', action: 'bar' }, 'sendEventNoSampling');
+
+    expect(el.shadowRoot!.querySelector('.call')?.textContent).to.equal(
+      'sendEventNoSampling({"category":"foo","action":"bar"})',
+    );
+  });
+
+  test('says so when no ping is sent', async () => {
+    const el = await story();
+
+    await send(el, { category: '', action: '' }, 'trackIaxParameter');
+
+    expect(el.shadowRoot!.querySelector('.output')?.textContent).to.equal(
+      'No ping sent',
+    );
+  });
+
   test('never sends a real beacon, and puts sendBeacon back', async () => {
     const original = navigator.sendBeacon;
+    const realBeacon = vi.fn(() => true);
+    navigator.sendBeacon = realBeacon;
     const el = await story();
 
     await send(el, { category: 'foo', action: 'bar' });
 
-    expect(navigator.sendBeacon).to.equal(original);
+    expect(realBeacon).not.toHaveBeenCalled();
+    expect(navigator.sendBeacon).to.equal(realBeacon);
+    navigator.sendBeacon = original;
   });
 });
