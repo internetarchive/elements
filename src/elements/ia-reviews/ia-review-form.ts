@@ -24,7 +24,9 @@ import { Review } from '@internetarchive/metadata-service';
 import starSelected from './assets/star-selected.svg';
 import starUnselected from './assets/star-unselected.svg';
 
+import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
 import type { ReviewServiceInterface } from './models';
+import { createLegacyReviewService } from './legacy-review-service';
 import './ia-review';
 
 /**
@@ -56,6 +58,34 @@ export class IAReviewForm extends LitElement {
 
   /* Handles the review submission request */
   @property({ type: Object }) reviewService?: ReviewServiceInterface;
+
+  /**
+   * The token for the review edit.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: String }) token?: string;
+
+  /**
+   * The host for archive endpoints and data.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: String }) baseHost: string = 'https://archive.org';
+
+  /**
+   * The path for the endpoint the review is submitted to.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: String }) endpointPath?: string;
+
+  /**
+   * The handler the submission goes through.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: Object }) fetchHandler?: FetchHandlerInterface;
 
   /* Service for activating the recaptcha challenge */
   @property({ type: Object }) recaptchaManager?: RecaptchaManagerInterface;
@@ -109,7 +139,7 @@ export class IAReviewForm extends LitElement {
         : html`
             <span class="inputs">
               ${this.starsInputTemplate} ${this.subjectInputTemplate}
-              ${this.bodyInputTemplate}
+              ${this.bodyInputTemplate} ${this.hiddenInputsTemplate}
             </span>
           `}
       ${this.recaptchaMessageTemplate} ${this.recoverableErrorTemplate}
@@ -305,6 +335,24 @@ export class IAReviewForm extends LitElement {
     `;
   }
 
+  /** Hidden inputs that carry the token and identifier of the deprecated props */
+  private get hiddenInputsTemplate(): HTMLTemplateResult {
+    return html`
+      <input
+        type="hidden"
+        name="field_reviewtoken"
+        .value=${this.token ?? ''}
+      />
+      ${this.identifier
+        ? html`<input
+            type="hidden"
+            name="identifier"
+            .value=${this.identifier}
+          />`
+        : nothing}
+    `;
+  }
+
   /** Body input and character counter */
   private get bodyInputTemplate(): HTMLTemplateResult {
     return html`
@@ -425,6 +473,22 @@ export class IAReviewForm extends LitElement {
     return DOMPurify.sanitize(errorMsg, { ALLOWED_TAGS: ['a', 'b', 'br'] });
   }
 
+  /**
+   * The injected service if there is one. Otherwise one built from the deprecated props when a
+   * `fetchHandler` was given, since a submission has nowhere to go without one.
+   */
+  private get activeReviewService(): ReviewServiceInterface | undefined {
+    if (this.reviewService) return this.reviewService;
+    if (!this.fetchHandler) return undefined;
+
+    return createLegacyReviewService({
+      token: this.token,
+      endpointPath: this.endpointPath,
+      fetchHandler: this.fetchHandler,
+      baseHost: this.baseHost,
+    });
+  }
+
   /** Handles validation and recaptcha execution on form submission */
   private async handleSubmit(e: Event): Promise<void> {
     e.preventDefault();
@@ -442,7 +506,10 @@ export class IAReviewForm extends LitElement {
       return this.stopSubmission();
     }
 
-    if (!this.reviewService || !this.identifier) {
+    // A host on the deprecated props never had to supply an identifier, since the form
+    // only sent one along when it had one.
+    const reviewService = this.activeReviewService;
+    if (!reviewService || (this.reviewService && !this.identifier)) {
       this.formError = 'generic';
       return this.stopSubmission();
     }
@@ -454,8 +521,8 @@ export class IAReviewForm extends LitElement {
         if (!recaptchaToken) return this.handleRecaptchaError();
       }
 
-      const result = await this.reviewService.submitReview({
-        identifier: this.identifier,
+      const result = await reviewService.submitReview({
+        identifier: this.identifier ?? '',
         title: this.reviewForm.field_reviewtitle.value,
         body: this.reviewForm.field_reviewbody.value,
         stars: this.reviewForm.field_stars.value,
