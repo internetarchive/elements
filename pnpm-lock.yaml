@@ -187,9 +187,6 @@ importers:
       '@internetarchive/metadata-service':
         specifier: ^1.0.4
         version: 1.1.1
-      '@internetarchive/modal-manager':
-        specifier: ^2.0.6
-        version: 2.0.6
       '@internetarchive/promised-singleton':
         specifier: ^0.2.1
         version: 0.2.1
@@ -603,9 +600,6 @@ packages:
   '@internetarchive/field-parsers@1.2.1':
     resolution: {integrity: sha512-4Dx1EBuiAbmYgBPwXFyJdUE+DV9VwwY7kx6qoEGfmRBNjCjgf+hS8Rdoe0GRVc9/6IqrKUJJPRZKMF7vc2G1XQ==}
 
-  '@internetarchive/ia-activity-indicator@1.0.0':
-    resolution: {integrity: sha512-vBwWGDBb/vzB+jxwLFeOjzmwXWD+UjAqvQFTszwQ31hEMBBY0U+jgSgMDznt/3pb1e8ZcqtzsHRTvpKkzhoZsg==}
-
   '@internetarchive/ia-dropdown@2.2.0':
     resolution: {integrity: sha512-h1vF1qLmjbPcRVkYz3kv1HzNHhucaM+IorVzvUejgYhIYRxrBjCswpOpMXeoR16UE4pyDVc/mtkKq/QFaVinRw==}
 
@@ -626,9 +620,6 @@ packages:
 
   '@internetarchive/metadata-service@1.1.1':
     resolution: {integrity: sha512-76Jr4kSkTwZFPCQJVkYGf9vsFZw4JuxIZKFiZdavEBt2mKoLw0bkX6LQBJ31LxJfy6fZWUjAGcK9D9AjIwhZ6A==}
-
-  '@internetarchive/modal-manager@2.0.6':
-    resolution: {integrity: sha512-PDEXz005tgjhKxrJLnd1sn8wn3DceEQqDluDhcn8+gxxhFKX714jyicKlbgvHzQOLtJYTdJjnNdmiyziF7ZIVA==}
 
   '@internetarchive/promised-singleton@0.2.1':
     resolution: {integrity: sha512-HR0bg3AuY0ffJ3m2vQyFo1qXhg12olAlef0L2nD05xr+7z3qZb5K3/NBcN16k523f9Y6z5T/ELf3U+IVHAVF7w==}
@@ -3048,10 +3039,6 @@ snapshots:
 
   '@internetarchive/field-parsers@1.2.1': {}
 
-  '@internetarchive/ia-activity-indicator@1.0.0':
-    dependencies:
-      lit: 3.3.3
-
   '@internetarchive/ia-dropdown@2.2.0':
     dependencies:
       lit: 2.8.0
@@ -3083,14 +3070,6 @@ snapshots:
       '@internetarchive/iaux-item-metadata': 1.5.0
       '@internetarchive/result-type': 0.0.1
       typescript-memoize: 1.1.1
-
-  '@internetarchive/modal-manager@2.0.6':
-    dependencies:
-      '@internetarchive/ia-activity-indicator': 1.0.0
-      '@internetarchive/icon-close': 1.4.1
-      '@internetarchive/icon-user': 1.4.1
-      lit: 3.3.3
-      throttle-debounce: 5.0.2
 
   '@internetarchive/promised-singleton@0.2.1': {}
 

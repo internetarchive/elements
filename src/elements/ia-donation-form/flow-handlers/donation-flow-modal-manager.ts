@@ -1,9 +1,7 @@
 import { html } from 'lit';
 import { msg } from '@lit/localize';
-import {
-  ModalConfig,
-  type ModalManagerInterface,
-} from '@internetarchive/modal-manager';
+import { ModalConfig } from '@src/elements/modal-manager/modal-config';
+import type { ModalManagerInterface } from '@src/elements/modal-manager/models';
 
 import type { DonationEventLoggerInterface } from '../analytics';
 import type { BraintreeManagerInterface } from '../braintree/braintree-manager-interface';

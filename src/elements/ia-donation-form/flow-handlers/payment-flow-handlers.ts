@@ -1,4 +1,4 @@
-import type { ModalManagerInterface } from '@internetarchive/modal-manager';
+import type { ModalManagerInterface } from '@src/elements/modal-manager/models';
 
 import type { DonationEventLoggerInterface } from '../analytics';
 import type { BraintreeManagerInterface } from '../braintree/braintree-manager-interface';

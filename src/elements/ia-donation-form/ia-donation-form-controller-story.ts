@@ -5,8 +5,8 @@ import type {
   AnalyticsEvent,
   AnalyticsManagerInterface,
 } from '@internetarchive/analytics-manager';
-import type { ModalManagerInterface } from '@internetarchive/modal-manager';
-import '@internetarchive/modal-manager';
+import '@src/elements/modal-manager/modal-manager';
+import type { ModalManagerInterface } from '@src/elements/modal-manager/models';
 
 import type { PropInputSettings } from '@demo/story-components/story-prop-settings';
 import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';

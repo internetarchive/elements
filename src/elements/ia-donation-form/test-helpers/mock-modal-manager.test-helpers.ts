@@ -1,8 +1,8 @@
-import type {
-  ModalConfig,
-  ModalManagerInterface,
-} from '@internetarchive/modal-manager';
-import { ModalManagerMode } from '@internetarchive/modal-manager';
+import type { ModalConfig } from '@src/elements/modal-manager/modal-config';
+import {
+  ModalManagerMode,
+  type ModalManagerInterface,
+} from '@src/elements/modal-manager/models';
 import { html, LitElement, type TemplateResult } from 'lit';
 import { customElement } from '@src/util/custom-element';
 

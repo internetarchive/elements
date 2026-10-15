@@ -12,7 +12,7 @@ import {
   LazyLoaderService,
   type LazyLoaderServiceInterface,
 } from '@internetarchive/lazy-loader-service';
-import type { ModalManagerInterface } from '@internetarchive/modal-manager';
+import type { ModalManagerInterface } from '@src/elements/modal-manager/models';
 import type {
   AnalyticsEvent,
   AnalyticsManagerInterface,
