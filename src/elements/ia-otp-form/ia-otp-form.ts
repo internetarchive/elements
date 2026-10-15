@@ -7,8 +7,9 @@ import {
   nothing,
   PropertyValues,
 } from 'lit';
-import { msg } from '@lit/localize';
-import { property, customElement, query } from 'lit/decorators.js';
+import { localized, msg } from '@lit/localize';
+import { property, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import themeStyles from '@src/themes/theme-styles';
 
@@ -31,6 +32,7 @@ const Events = {
  * Form for entering OTP codes, including success/loading/error states and a request new code button
  */
 @customElement('ia-otp-form')
+@localized()
 export class IAOTPForm extends LitElement {
   /* The state of the validation process */
   @property({ type: String })

@@ -4,7 +4,8 @@ import {
   type PropertyValues,
   html,
 } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { property, state } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { syntaxStyles } from './syntax-style-light';
 

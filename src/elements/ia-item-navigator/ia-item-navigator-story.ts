@@ -1,5 +1,6 @@
 import { css, html, LitElement, nothing, type CSSResultGroup } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { state } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import './ia-item-navigator';
 import './menus/ia-itemnav-viewable-files-panel';
@@ -7,8 +8,8 @@ import './menus/ia-itemnav-sort-files-button';
 import './menus/ia-itemnav-share-panel';
 import { viewableFilesIcon } from './menus/ia-itemnav-viewable-files-panel';
 import { shareIcon } from './menus/ia-itemnav-share-panel';
-import { maskedIcon } from '@src/util/masked-icon';
-import listIconUrl from './menus/icons/list.svg';
+import list from '@src/icons/list';
+import { iconBox } from '@src/util/icon-box';
 import type {
   MenuProviderInterface,
   MenuShortcutInterface,
@@ -21,7 +22,7 @@ import type {
 import '@demo/story-template';
 
 /** A generic list-ish glyph for the "About" demo menu entry. */
-const demoIcon = maskedIcon(listIconUrl);
+const demoIcon = iconBox(list);
 
 /**
  * Alternate themes for the demo's randomize control.

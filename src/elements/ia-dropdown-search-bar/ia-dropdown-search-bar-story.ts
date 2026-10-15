@@ -1,5 +1,6 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
-import { customElement, state, query } from 'lit/decorators.js';
+import { state, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import { map } from 'lit/directives/map.js';
 import { StyleInputSettings } from '@demo/story-components/story-styles-settings';
 import { SearchRequestedDetail } from './models';

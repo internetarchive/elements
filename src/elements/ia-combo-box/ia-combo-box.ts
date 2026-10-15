@@ -7,12 +7,13 @@ import {
   css,
   PropertyValues,
 } from 'lit';
-import { customElement, property, state, query } from 'lit/decorators.js';
+import { property, state, query } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import { classMap } from 'lit/directives/class-map.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { live } from 'lit/directives/live.js';
 import { when } from 'lit/directives/when.js';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 import {
   hasAnyOf,
@@ -25,9 +26,9 @@ import {
 } from './models';
 import themeStyles from '@src/themes/theme-styles';
 
-import caretClosedIcon from './caret-closed.svg';
-import caretOpenIcon from './caret-open.svg';
-import clearIcon from './clear.svg';
+import caretClosedIcon from '@src/icons/caret-closed';
+import caretOpenIcon from '@src/icons/caret-open';
+import clearIcon from '@src/icons/clear';
 
 /**
  * Map from filter preset keys to their associated filtering function.
@@ -54,6 +55,7 @@ const STRING_LOWER_CASE_FN = (str: string): string => str.toLocaleLowerCase();
  * freeform text to filter down & find specific options.
  */
 @customElement('ia-combo-box')
+@localized()
 export class IAComboBox extends LitElement {
   /**
    * Array of options representing values that this combo box can take.
@@ -421,13 +423,12 @@ export class IAComboBox extends LitElement {
       >
         <span class="sr-only">${msg('Clear')}</span>
         <slot name="clear-button">
-          <img
+          <span
             class="icon clear-icon"
             part="icon clear-icon"
-            src=${clearIcon}
-            alt=""
             aria-hidden="true"
-          />
+            >${clearIcon}</span
+          >
         </slot>
       </button>
     `;
@@ -440,22 +441,14 @@ export class IAComboBox extends LitElement {
   private get caretTemplate(): TemplateResult {
     return html`
       <slot name="caret-closed" ?hidden=${this.open}>
-        <img
-          class="icon caret-icon"
-          part="icon caret-icon"
-          src=${caretClosedIcon}
-          alt=""
-          aria-hidden="true"
-        />
+        <span class="icon caret-icon" part="icon caret-icon" aria-hidden="true"
+          >${caretClosedIcon}</span
+        >
       </slot>
       <slot name="caret-open" ?hidden=${!this.open}>
-        <img
-          class="icon caret-icon"
-          part="icon caret-icon"
-          src=${caretOpenIcon}
-          alt=""
-          aria-hidden="true"
-        />
+        <span class="icon caret-icon" part="icon caret-icon" aria-hidden="true"
+          >${caretOpenIcon}</span
+        >
       </slot>
     `;
   }
@@ -1333,6 +1326,18 @@ export class IAComboBox extends LitElement {
         color: #606060;
         font-style: italic;
         text-align: center;
+      }
+
+      /* The svg fills this box, so its width and height are the glyph's size. */
+      .icon {
+        display: inline-block;
+        color: #000;
+      }
+
+      .icon > svg {
+        display: block;
+        width: 100%;
+        height: 100%;
       }
 
       .caret-icon {

@@ -6,7 +6,7 @@ import {
   type PropertyValues,
 } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { customElement } from 'lit/decorators/custom-element.js';
+import { customElement } from '@src/util/custom-element';
 import { when } from 'lit/directives/when.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 
@@ -47,6 +47,14 @@ export class StoryTemplate extends LitElement {
   @property({ type: Object }) propInputData?: PropInputData;
 
   @property({ type: Boolean }) labs = false;
+
+  /*
+   * The element's path under `@internetarchive/elements/`, for elements that
+   * live inside another component's directory, e.g.
+   * `ia-donation-form/form-elements/ia-donation-section`. Defaults to
+   * `<tag>/<tag>`, which is where a top-level element lives.
+   */
+  @property({ type: String }) importPath?: string;
 
   /* Whether the demo is showing this element on its own */
   @state() private focused = false;
@@ -270,9 +278,10 @@ export class StoryTemplate extends LitElement {
   }
 
   private get modulePath(): string {
+    const path = this.importPath ?? `${this.elementTag}/${this.elementTag}`;
     return this.labs
-      ? `@internetarchive/elements/labs/${this.elementTag}/${this.elementTag}`
-      : `@internetarchive/elements/${this.elementTag}/${this.elementTag}`;
+      ? `@internetarchive/elements/labs/${path}`
+      : `@internetarchive/elements/${path}`;
   }
 
   /* Toggles visibility of section depending on whether inputs have been slotted in */
@@ -429,6 +438,15 @@ export class StoryTemplate extends LitElement {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 0 12px;
+        }
+
+        /* Side by side on a phone, Settings and Styles get half the width
+           each, which wraps every radio group and clips the style inputs.
+           Matches NARROW_VIEWPORT in app-root.ts. */
+        @media (max-width: 640px) {
+          .two-col {
+            grid-template-columns: 1fr;
+          }
         }
 
         .left-col,

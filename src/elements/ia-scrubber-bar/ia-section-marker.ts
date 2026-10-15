@@ -5,12 +5,13 @@ import {
   type CSSResultGroup,
   type TemplateResult,
 } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 
 import { SectionMarkerMode } from './models';
 
-import nextSectionIcon from './assets/next-section-marker';
-import previousSectionIcon from './assets/previous-section-marker';
+import nextSectionIcon from '@src/icons/scrubber-next-section';
+import previousSectionIcon from '@src/icons/scrubber-previous-section';
 
 /**
  * A single section boundary drawn on the scrubber bar.
@@ -62,6 +63,11 @@ export class IASectionMarker extends LitElement {
         display: flex;
         justify-content: center;
         height: 100%;
+      }
+
+      .arrow svg {
+        width: 8px;
+        height: 10px;
       }
 
       .arrow {

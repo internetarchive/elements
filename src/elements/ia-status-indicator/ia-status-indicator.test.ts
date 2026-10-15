@@ -146,17 +146,16 @@ describe('IA Status Indicator', () => {
         ></ia-status-indicator>`,
       );
 
-      const icon = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
-      expect(icon).to.exist;
-      expect(getComputedStyle(icon).maskImage).to.not.equal('none');
+      const glyph = el.shadowRoot?.querySelector('.ia-icon > svg');
+      expect(glyph).to.exist;
+      expect(glyph?.getAttribute('viewBox')).to.match(/^[\d.\s-]+$/);
     });
   });
 
   test('maps every mediatype to a distinct glyph', async () => {
-    // The bundler inlines small SVGs as data URIs, so the asset filename is not
-    // in the resolved URL. Distinctness is what actually proves the mapping is
-    // wired up rather than every entry pointing at the same glyph.
-    const masksSeen = new Map<string, MediaTypeIcon>();
+    // Distinct markup is what proves the mapping is wired up rather than every
+    // entry pointing at the same glyph.
+    const glyphsSeen = new Map<string, MediaTypeIcon>();
 
     for (const mediatype of ALL_MEDIATYPES) {
       const el = await fixture<IAStatusIndicator>(
@@ -164,18 +163,20 @@ describe('IA Status Indicator', () => {
           .mediatype=${mediatype}
         ></ia-status-indicator>`,
       );
-      const icon = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
-      const mask = getComputedStyle(icon).maskImage;
+      const glyph = el.shadowRoot?.querySelector(
+        '.ia-icon > svg',
+      ) as SVGElement;
+      const markup = glyph.innerHTML;
 
-      const collision = masksSeen.get(mask);
+      const collision = glyphsSeen.get(markup);
       expect(
         collision,
         `${mediatype} resolved to the same glyph as ${collision}`,
       ).to.equal(undefined);
-      masksSeen.set(mask, mediatype);
+      glyphsSeen.set(markup, mediatype);
     }
 
-    expect(masksSeen.size).to.equal(ALL_MEDIATYPES.length);
+    expect(glyphsSeen.size).to.equal(ALL_MEDIATYPES.length);
   });
 
   test('degrades to the default dots for an unmapped mediatype', async () => {
@@ -190,25 +191,13 @@ describe('IA Status Indicator', () => {
     expect(el.shadowRoot?.querySelector('.loading-dots')).to.exist;
   });
 
-  test('quotes the mask url so inlined data URIs stay valid', async () => {
-    const el = await fixture<IAStatusIndicator>(
-      html`<ia-status-indicator .mediatype=${'texts'}></ia-status-indicator>`,
-    );
-
-    const icon = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
-    // An unquoted url() containing apostrophes silently drops the declaration,
-    // which paints a solid block instead of the glyph.
-    expect(icon.getAttribute('style')).to.contain('url("');
-    expect(getComputedStyle(icon).maskImage).to.not.equal('none');
-  });
-
   test('hides the decorative center glyph from assistive tech', async () => {
     const el = await fixture<IAStatusIndicator>(
       html`<ia-status-indicator .mediatype=${'texts'}></ia-status-indicator>`,
     );
 
-    const icon = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
-    expect(icon.getAttribute('aria-hidden')).to.equal('true');
+    const glyph = el.shadowRoot?.querySelector('.ia-icon > svg') as SVGElement;
+    expect(glyph.getAttribute('aria-hidden')).to.equal('true');
   });
 
   test('keeps the svg title as the only accessible name with an icon present', async () => {
@@ -367,6 +356,20 @@ describe('IA Status Indicator', () => {
       ).to.be.lessThan(1);
     });
 
+    test('fills the glyph box with the svg, at half the indicator width', async () => {
+      const { el, glyph } = await sized('200px');
+      const svg = glyph.querySelector('svg') as SVGElement;
+
+      const box = glyph.getBoundingClientRect();
+      const drawn = svg.getBoundingClientRect();
+      expect(drawn.width).to.be.closeTo(box.width, 0.5);
+      expect(drawn.height).to.be.closeTo(box.height, 0.5);
+      expect(box.width).to.be.closeTo(
+        el.getBoundingClientRect().width / 2,
+        0.5,
+      );
+    });
+
     test('keeps the glyph inside the ring', async () => {
       const { el, glyph } = await sized('200px');
 
@@ -395,14 +398,15 @@ describe('IA Status Indicator', () => {
         ></ia-status-indicator>`,
       );
 
-      const glyph = el.shadowRoot?.querySelector('.ia-icon') as HTMLElement;
+      const glyph = el.shadowRoot?.querySelector(
+        '.ia-icon > svg',
+      ) as SVGElement;
       const ring = el.shadowRoot?.querySelector('.loading-ring') as SVGElement;
 
       // The glyph is monochrome with the ring by design -- offshoot's
       // per-mediatype brand colours are deliberately not carried over.
-      expect(getComputedStyle(glyph).backgroundColor).to.equal(
-        'rgb(12, 34, 56)',
-      );
+      expect(getComputedStyle(glyph).color).to.equal('rgb(12, 34, 56)');
+      expect(getComputedStyle(glyph).fill).to.equal('rgb(12, 34, 56)');
       expect(getComputedStyle(ring).fill).to.equal('rgb(12, 34, 56)');
     });
 
@@ -417,6 +421,177 @@ describe('IA Status Indicator', () => {
         largeInk / smallInk,
         `glyph went from ${smallInk}px to ${largeInk}px when the indicator doubled`,
       ).to.be.closeTo(2, 0.05);
+    });
+  });
+
+  (['ready', 'loading', 'success', 'error'] as const).forEach((mode) => {
+    test(`keeps a square footprint in ${mode} mode`, async () => {
+      const el = await fixture<IAStatusIndicator>(
+        html`<ia-status-indicator
+          mode=${mode}
+          style="--ia-theme-icon-width: 20px"
+        ></ia-status-indicator>`,
+      );
+
+      const { width, height } = el.getBoundingClientRect();
+      expect({ width, height }).to.eql({ width: 20, height: 20 });
+    });
+  });
+
+  describe('fading between modes', () => {
+    /** Long enough for the fade to be well under way but nowhere near done */
+    const MID_FADE_MS = 60;
+
+    /** The layers drawing something. The rest sit empty until they're needed. */
+    const layers = (el: IAStatusIndicator) =>
+      Array.from(el.shadowRoot?.querySelectorAll('.layer') ?? [])
+        .filter((l) => l.childElementCount > 0)
+        .map((l) => ({
+          outgoing: l.classList.contains('outgoing'),
+          opacity: Number(getComputedStyle(l).opacity),
+        }));
+
+    async function mounted(mode: string): Promise<IAStatusIndicator> {
+      const el = await fixture<IAStatusIndicator>(
+        html`<ia-status-indicator mode=${mode}></ia-status-indicator>`,
+      );
+      await settle(el);
+      // the element is allowed to animate only after its first render
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      return el;
+    }
+
+    test('does not fade in when it first appears', async () => {
+      const el = await fixture<IAStatusIndicator>(
+        html`<ia-status-indicator mode="loading"></ia-status-indicator>`,
+      );
+      await settle(el);
+
+      expect(layers(el)).to.eql([{ outgoing: false, opacity: 1 }]);
+    });
+
+    test('crossfades the old mode out as the new one comes in', async () => {
+      const el = await mounted('loading');
+      expect(layers(el)).to.eql([{ outgoing: false, opacity: 1 }]);
+
+      el.mode = 'success';
+      await el.updateComplete;
+      await new Promise((resolve) => setTimeout(resolve, MID_FADE_MS));
+
+      const [outgoing, incoming] = layers(el);
+      expect(outgoing.outgoing, 'the old mode is still on screen').to.be.true;
+      expect(outgoing.opacity).to.be.within(0.05, 0.95);
+      expect(incoming.outgoing).to.be.false;
+      expect(incoming.opacity).to.be.within(0.05, 0.95);
+      expect(
+        outgoing.opacity + incoming.opacity,
+        'one fades out as the other fades in',
+      ).to.be.closeTo(1, 0.15);
+    });
+
+    test('drops the old mode once the fade is over', async () => {
+      const el = await mounted('loading');
+
+      el.mode = 'success';
+      await el.updateComplete;
+      await new Promise((resolve) => setTimeout(resolve, 400));
+
+      expect(layers(el)).to.eql([{ outgoing: false, opacity: 1 }]);
+      expect(
+        el.shadowRoot?.querySelectorAll('svg title').length,
+        'only the current mode leaves a title behind',
+      ).to.equal(1);
+    });
+
+    test('draws nothing for a mode it does not recognise', async () => {
+      const el = await fixture<IAStatusIndicator>(
+        html`<ia-status-indicator mode="nonsense"></ia-status-indicator>`,
+      );
+      await settle(el);
+
+      // `mode` is a public string attribute, so this has to degrade rather
+      // than take the element out. It draws nothing, and crucially render()
+      // still completes, so the element is alive and recovers when set to a
+      // real mode.
+      expect(el.shadowRoot?.querySelector('.layers')).to.exist;
+      expect(el.shadowRoot?.querySelector('.layer.active')).to.not.exist;
+      expect(el.shadowRoot?.querySelector('svg')).to.not.exist;
+
+      el.mode = 'success';
+      await settle(el);
+      expect(el.shadowRoot?.querySelector('.success-icon')).to.exist;
+    });
+
+    test('reverses a fade without snapping', async () => {
+      const el = await mounted('loading');
+
+      el.mode = 'success';
+      await el.updateComplete;
+      await new Promise((resolve) => setTimeout(resolve, MID_FADE_MS));
+      el.mode = 'loading';
+      await el.updateComplete;
+
+      // going back mid-fade turns both fades around from where they got to,
+      // rather than snapping them to their end values
+      const opacities = layers(el).map((l) => l.opacity);
+      expect(
+        Math.max(...opacities),
+        'a layer is still part way through its fade',
+      ).to.be.within(0.05, 0.95);
+    });
+
+    test('does not strand the outgoing layer when disconnected mid-fade', async () => {
+      const el = await mounted('loading');
+      const parent = el.parentNode as Node;
+
+      el.mode = 'success';
+      await el.updateComplete;
+      expect(layers(el)).to.have.lengthOf(2);
+
+      el.remove();
+      parent.appendChild(el);
+      await el.updateComplete;
+
+      // the timer that would have cleared it is gone, and nothing reschedules
+      expect(layers(el)).to.have.lengthOf(1);
+      expect(el.shadowRoot?.querySelectorAll('svg title')).to.have.lengthOf(1);
+    });
+
+    test('switching to a third mode mid-fade does not blink', async () => {
+      const el = await mounted('loading');
+
+      el.mode = 'success';
+      await el.updateComplete;
+      await new Promise((resolve) => setTimeout(resolve, MID_FADE_MS));
+      const successLayer = el.shadowRoot?.querySelector('.success-indicator')
+        ?.parentElement as HTMLElement;
+      const before = Number(getComputedStyle(successLayer).opacity);
+
+      el.mode = 'error';
+      await el.updateComplete;
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      // the half faded in layer fades back out from where it got to, rather
+      // than snapping to nothing
+      const after = Number(getComputedStyle(successLayer).opacity);
+      expect(before).to.be.within(0.05, 0.95);
+      expect(after, `success went from ${before} to ${after}`).to.be.closeTo(
+        before,
+        0.2,
+      );
+    });
+
+    test('keeps only the current mode when set back and forth quickly', async () => {
+      const el = await mounted('loading');
+
+      el.mode = 'success';
+      await el.updateComplete;
+      el.mode = 'error';
+      await el.updateComplete;
+      await new Promise((resolve) => setTimeout(resolve, 400));
+
+      expect(layers(el)).to.eql([{ outgoing: false, opacity: 1 }]);
+      expect(el.shadowRoot?.querySelector('.error-icon')).to.exist;
     });
   });
 });
