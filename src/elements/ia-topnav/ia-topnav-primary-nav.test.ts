@@ -66,23 +66,38 @@ describe('<ia-topnav-primary-nav>', () => {
       'slot[name="language-picker"]',
     );
 
-    expect(slot?.classList.contains('empty')).toBe(true);
-    expect(getComputedStyle(slot as HTMLSlotElement).display).toBe('none');
+    const rect = (slot as HTMLSlotElement).getBoundingClientRect();
+    expect(rect.width).toBe(0);
+    expect(rect.height).toBe(0);
   });
 
   test('shows the language-picker slot once something is slotted', async () => {
     const el = await fixture<PrimaryNav>(component({}));
     const picker = document.createElement('div');
     picker.slot = 'language-picker';
+    picker.textContent = 'English';
     el.appendChild(picker);
     await elementUpdated(el);
 
-    const slot = el.shadowRoot?.querySelector<HTMLSlotElement>(
-      'slot[name="language-picker"]',
-    );
     await vi.waitFor(() => {
-      expect(slot?.classList.contains('empty')).toBe(false);
+      const rect = picker.getBoundingClientRect();
+      expect(rect.width).toBeGreaterThan(0);
+      expect(rect.height).toBeGreaterThan(0);
     });
+  });
+
+  test('names the hamburger button for the state it will change to', async () => {
+    const el = await fixture<PrimaryNav>(component({}));
+    const button = () => el.shadowRoot?.querySelector('button.hamburger');
+
+    expect(button()?.getAttribute('aria-label')).to.equal('Open main menu');
+    expect(button()?.getAttribute('title')).to.equal('Open main menu');
+
+    el.openMenu = 'media';
+    await elementUpdated(el);
+
+    expect(button()?.getAttribute('aria-label')).to.equal('Close main menu');
+    expect(button()?.getAttribute('title')).to.equal('Close main menu');
   });
 
   test('renders the login link when no username present', async () => {

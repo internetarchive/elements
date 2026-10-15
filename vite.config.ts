@@ -2,6 +2,36 @@
 import { defineConfig } from 'vitest/config';
 import path from 'path';
 import { playwright } from '@vitest/browser-playwright';
+import type { Plugin } from 'vite';
+
+/**
+ * Adds `/__test__/fail-once.js?id=<id>` to the dev server for the lazy-loader
+ * retry test: the first request for an id is a 404 and every later one serves a
+ * script that sets `window.otherService`.
+ */
+function failOnceScript(): Plugin {
+  const seen = new Set<string>();
+  return {
+    name: 'fail-once-script',
+    configureServer(server) {
+      server.middlewares.use('/__test__/fail-once.js', (req, res) => {
+        const id = new URL(req.url ?? '', 'http://localhost').searchParams.get(
+          'id',
+        );
+        if (id && seen.has(id)) {
+          res.setHeader('Content-Type', 'text/javascript');
+          res.end(
+            'window.otherService = { getResponse() { return "someotherresponse"; } }',
+          );
+          return;
+        }
+        if (id) seen.add(id);
+        res.statusCode = 404;
+        res.end('Not Found');
+      });
+    },
+  };
+}
 
 const alias = {
   '@src': path.resolve(__dirname, './src'),
@@ -28,6 +58,7 @@ export default defineConfig({
     projects: [
       {
         // Element tests, run in a real browser.
+        plugins: [failOnceScript()],
         resolve: { alias },
         test: {
           name: 'browser',

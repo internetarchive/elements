@@ -8,9 +8,19 @@ import { describe, expect, test } from 'vitest';
  * its box, not the ink. A glyph whose ink sits against one edge of its viewBox
  * renders off-centre no matter what the component does.
  */
+// The glyphs the status indicator draws. Other icons in the folder share the
+// `mediatype-` prefix, so the list is explicit.
 const sources = import.meta.glob<string>(
   [
-    '../../../icons/mediatype-*.svg',
+    '../../../icons/mediatype-audio.svg',
+    '../../../icons/mediatype-collection.svg',
+    '../../../icons/mediatype-etree.svg',
+    '../../../icons/mediatype-images.svg',
+    '../../../icons/mediatype-software.svg',
+    '../../../icons/mediatype-texts.svg',
+    '../../../icons/mediatype-tv.svg',
+    '../../../icons/mediatype-video.svg',
+    '../../../icons/mediatype-web.svg',
     // The `search` mediatype shares the glyph the dropdown search bar uses.
     '../../../icons/search.svg',
   ],

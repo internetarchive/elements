@@ -1,14 +1,17 @@
 import { CSSResultGroup, PropertyValues, css, html, nothing } from 'lit';
 import TrackedElement from './tracked-element';
-import icons from './assets/img/icons';
+import donateUnpaddedIcon from '@src/icons/topnav-donate-unpadded';
+import iaLogoIcon from '@src/icons/topnav-ia-logo';
+import searchIcon from '@src/icons/topnav-search';
+import uploadIcon from '@src/icons/topnav-upload';
+import wordmarkStackedIcon from '@src/icons/topnav-wordmark-stacked';
 import './ia-topnav-icon-hamburger';
 import './ia-topnav-login-button';
 import type { LoginButton } from './ia-topnav-login-button';
 import './ia-topnav-media-menu';
 import '@src/elements/ia-sr-only-text/ia-sr-only-text';
-import logoWordmarkStacked from './assets/img/wordmark-stacked';
 import { formatUrl } from './lib/helpers';
-import { property, query, state } from 'lit/decorators.js';
+import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import {
   IATopNavConfig,
@@ -98,13 +101,18 @@ export class PrimaryNav extends TrackedElement {
 
   render() {
     // const mediaMenuTabIndex = this.openMenu === 'media' ? '' : '-1';
+    const hamburgerLabel =
+      this.openMenu === 'media'
+        ? msg('Close main menu')
+        : msg('Open main menu');
     return html`
       <nav class=${this.hideSearch ? 'hide-search' : ''}>
         <button
           class="hamburger"
           @click="${this.toggleMediaMenu}"
           data-event-click-tracking="${this.config?.eventCategory}|NavHamburger"
-          title=${msg('Open main menu')}
+          title=${hamburgerLabel}
+          aria-label=${hamburgerLabel}
         >
           <ia-topnav-icon-hamburger
             ?active=${this.openMenu === 'media'}
@@ -117,8 +125,9 @@ export class PrimaryNav extends TrackedElement {
             @click=${this.trackClick}
             data-event-click-tracking="${this.config?.eventCategory}|NavHome"
             title=${msg('Go home')}
+            aria-label="Internet Archive"
             class="link-home"
-            >${icons.iaLogo}${logoWordmarkStacked}</a
+            >${iaLogoIcon}${wordmarkStackedIcon}</a
           >
           ${this.secondLogoSlot}
         </div>
@@ -255,19 +264,11 @@ export class PrimaryNav extends TrackedElement {
         class="search-trigger"
         @click="${this.toggleSearchMenu}"
         data-event-click-tracking="${this.config?.eventCategory}|NavSearchOpen"
+        aria-label=${msg('Search')}
       >
-        ${icons.search}
+        ${searchIcon}
       </button>
     `;
-  }
-
-  /** True once the consumer has slotted something into `language-picker`. */
-  @state() private hasLanguagePicker = false;
-
-  private languagePickerChanged(e: Event) {
-    const slot = e.target as HTMLSlotElement;
-    this.hasLanguagePicker =
-      slot.assignedElements({ flatten: true }).length > 0;
   }
 
   get mobileDonateHeart() {
@@ -279,13 +280,10 @@ export class PrimaryNav extends TrackedElement {
           this.baseHost,
         )}
       >
-        ${icons.donateUnpadded}
-        <ia-sr-only-text>${msg('Donate to the archive')}</ia-sr-only-text> </a
-      ><slot
-        name="language-picker"
-        class=${this.hasLanguagePicker ? '' : 'empty'}
-        @slotchange=${this.languagePickerChanged}
-      ></slot>
+        ${donateUnpaddedIcon}
+        <ia-sr-only-text>${msg('Donate to the archive')}</ia-sr-only-text>
+      </a>
+      <slot name="language-picker"></slot>
     `;
   }
 
@@ -293,9 +291,10 @@ export class PrimaryNav extends TrackedElement {
     return html` <a
       .href="${formatUrl('/upload' as string & Location, this.baseHost)}"
       class="upload"
+      aria-label=${msg('Upload')}
       @focus=${this.toggleMediaMenu}
     >
-      ${icons.upload}
+      ${uploadIcon}
       <span>${msg('Upload')}</span>
     </a>`;
   }
@@ -391,18 +390,16 @@ export class PrimaryNav extends TrackedElement {
           justify-self: stretch;
         }
 
-        .ia-logo {
+        .link-home svg {
           height: calc(30 * var(--topnavUnit--));
+          margin-right: 5px;
+        }
+        .link-home svg:first-child {
           width: calc(27 * var(--topnavUnit--));
           display: inline-block;
         }
-        .ia-wordmark {
-          height: calc(30 * var(--topnavUnit--));
+        .link-home svg:last-child {
           width: calc(95 * var(--topnavUnit--));
-        }
-        .ia-logo,
-        .ia-wordmark {
-          margin-right: 5px;
         }
 
         .hamburger {
@@ -423,13 +420,7 @@ export class PrimaryNav extends TrackedElement {
         .mobile-donate-link svg {
           height: calc(40 * var(--topnavUnit--));
           width: calc(40 * var(--topnavUnit--));
-        }
-        .mobile-donate-link .fill-color {
-          fill: rgb(255, 0, 0);
-        }
-
-        slot[name='language-picker'].empty {
-          display: none;
+          color: rgb(255, 0, 0);
         }
 
         slot[name='language-picker']::slotted(*) {
@@ -445,9 +436,7 @@ export class PrimaryNav extends TrackedElement {
         .search-trigger svg {
           height: calc(40 * var(--topnavUnit--));
           width: calc(40 * var(--topnavUnit--));
-        }
-        .search-trigger .fill-color {
-          fill: var(--iconFill);
+          color: var(--iconFill);
         }
 
         .search-container {
@@ -587,8 +576,7 @@ export class PrimaryNav extends TrackedElement {
             display: none;
           }
 
-          .ia-logo,
-          .ia-wordmark {
+          .link-home svg {
             margin-right: 10px;
           }
 
@@ -650,13 +638,13 @@ export class PrimaryNav extends TrackedElement {
 
           .upload svg {
             vertical-align: middle;
-            fill: var(--iconFill);
+            color: var(--iconFill);
           }
 
           .upload:hover svg,
           .upload:focus svg,
           .upload:active svg {
-            fill: var(--linkHoverColor);
+            color: var(--linkHoverColor);
           }
 
           .search-container,
