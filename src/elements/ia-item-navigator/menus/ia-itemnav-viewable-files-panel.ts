@@ -7,15 +7,16 @@ import {
   TemplateResult,
   type CSSResultGroup,
 } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { property } from 'lit/decorators.js';
+import { customElement } from '@src/util/custom-element';
 import { repeat } from 'lit/directives/repeat.js';
 import themeStyles from '@src/themes/theme-styles';
-import { maskedIcon } from '@src/util/masked-icon';
-import viewableFilesUrl from './icons/viewable-files.svg';
+import viewableFiles from '@src/icons/viewable-files';
+import { iconBox } from '@src/util/icon-box';
 import type { FileSortOption, ViewableFileInfo } from './models';
 
 /** Icon for the viewable-files menu shortcut / menu entry. */
-export const viewableFilesIcon = maskedIcon(viewableFilesUrl);
+export const viewableFilesIcon = iconBox(viewableFiles);
 
 /**
  * The "viewable files" side panel: a scrollable list of the item's viewable
