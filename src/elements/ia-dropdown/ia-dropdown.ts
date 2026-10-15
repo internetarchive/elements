@@ -8,6 +8,7 @@ import {
 } from 'lit';
 import { property, query, queryAssignedElements } from 'lit/decorators.js';
 import { when } from 'lit/directives/when.js';
+import { localized, msg, str } from '@lit/localize';
 import { customElement } from '@src/util/custom-element';
 
 import themeStyles from '@src/themes/theme-styles';
@@ -23,6 +24,7 @@ export interface OptionInterface {
 }
 
 @customElement('ia-dropdown')
+@localized()
 export class IADropdown extends LitElement {
   /**
    * Determines whether the dropdown's option menu is currently visible.
@@ -75,9 +77,10 @@ export class IADropdown extends LitElement {
   @property({ attribute: false }) options: OptionInterface[] = [];
 
   /**
-   * Option group label for screen readers.
+   * Names the options in the screen reader label for the toggle, as in
+   * "Toggle <optionGroup>". When unset, the label is "Toggle options".
    */
-  @property({ type: String }) optionGroup: string = 'options';
+  @property({ type: String }) optionGroup?: string;
 
   @property({ attribute: false }) optionSelected = () => {};
 
@@ -432,6 +435,15 @@ export class IADropdown extends LitElement {
     return !this.isDisabled && !this.hasCustomClickHandler;
   }
 
+  /**
+   * Screen reader label for the main button and caret.
+   */
+  private get toggleLabel(): string {
+    return this.optionGroup
+      ? msg(str`Toggle ${this.optionGroup}`)
+      : msg('Toggle options');
+  }
+
   render() {
     return html`
       <div class="ia-dropdown-group ${this.open ? 'open' : ''}">
@@ -450,9 +462,7 @@ export class IADropdown extends LitElement {
             )}
             ?disabled=${this.isDisabled}
           >
-            <span class="sr-only" id="caret-label"
-              >Toggle ${this.optionGroup}</span
-            >
+            <span class="sr-only" id="caret-label">${this.toggleLabel}</span>
             <slot name="dropdown-label"></slot>
             ${when(this.shouldNestCaretInButton, () => this.caretTemplate)}
           </button>
