@@ -360,4 +360,27 @@ describe('IA Section Marker', () => {
     const divider = el.shadowRoot?.querySelector('.center-divider');
     expect(getComputedStyle(divider as Element).height).to.equal('24px');
   });
+
+  describe('section marker arrows', () => {
+    test('draw both arrows as 8x10 inline svgs in the marker color', async () => {
+      const el = await fixture<IAScrubberBar>(
+        html`<ia-scrubber-bar
+          .sectionMarkerPercentages=${MARKERS}
+          style="--ia-theme-scrubber-marker-color: rgb(9, 8, 7)"
+        ></ia-scrubber-bar>`,
+      );
+
+      const arrows = markersIn(el)[0].shadowRoot?.querySelectorAll(
+        '.arrow > svg',
+      ) as NodeListOf<SVGElement>;
+      expect(arrows).to.have.lengthOf(2);
+      arrows.forEach((arrow) => {
+        const { width, height } = arrow.getBoundingClientRect();
+        expect(width).to.equal(8);
+        expect(height).to.equal(10);
+        expect(getComputedStyle(arrow).fill).to.equal('rgb(9, 8, 7)');
+      });
+      expect(arrows[0].innerHTML).to.not.equal(arrows[1].innerHTML);
+    });
+  });
 });

@@ -10,7 +10,7 @@ import {
 import { property, query, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import { classMap } from 'lit/directives/class-map.js';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
 import type { ImageViewerImage } from './models';
@@ -24,6 +24,7 @@ import type { ImageViewerImage } from './models';
  * per-instance setup beyond its properties.
  */
 @customElement('ia-imgview-slide')
+@localized()
 export class IAImageViewerSlide extends LitElement {
   @property({ type: Object }) image?: ImageViewerImage;
 

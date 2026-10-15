@@ -1,4 +1,4 @@
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import {
   css,
   html,
@@ -9,15 +9,18 @@ import {
 } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
-import type { IaClearableTextInput } from '@internetarchive/ia-clearable-text-input';
-import type { IaDropdown, optionInterface } from '@internetarchive/ia-dropdown';
+import type { IaClearableTextInput } from '@src/elements/ia-clearable-text-input/ia-clearable-text-input';
+import type {
+  IADropdown,
+  OptionInterface,
+} from '@src/elements/ia-dropdown/ia-dropdown';
 import type { SearchCategory, SearchRequestedDetail } from './models';
 
 import themeStyles from '@src/themes/theme-styles';
-import searchIcon from './search.svg';
+import searchIcon from '@src/icons/search';
 
-import '@internetarchive/ia-clearable-text-input';
-import '@internetarchive/ia-dropdown';
+import '@src/elements/ia-clearable-text-input/ia-clearable-text-input';
+import '@src/elements/ia-dropdown/ia-dropdown';
 import '@src/elements/ia-status-indicator/ia-status-indicator';
 
 /**
@@ -29,6 +32,7 @@ const Events = {
 };
 
 @customElement('ia-dropdown-search-bar')
+@localized()
 export class IADropdownSearchBar extends LitElement {
   /** The query that appears in the search bar */
   @property({ type: String }) query?: string;
@@ -39,8 +43,8 @@ export class IADropdownSearchBar extends LitElement {
   /** The currently selected dropdown category ID */
   @property({ type: String }) selectedCategory?: string;
 
-  /** Placeholder text for the search input */
-  @property({ type: String }) placeholder = msg('Search');
+  /** Placeholder text for the search input. Defaults to "Search". */
+  @property({ type: String }) placeholder?: string;
 
   /** Whether to use the mobile layout */
   @property({ type: Boolean }) useMobileView = false;
@@ -55,7 +59,7 @@ export class IADropdownSearchBar extends LitElement {
   private searchInput!: IaClearableTextInput;
 
   @query('#category-dropdown')
-  private categoryDropdown?: IaDropdown;
+  private categoryDropdown?: IADropdown;
 
   /** The effective selected category, falling back to the first in the list. */
   private get resolvedCategory(): string {
@@ -126,7 +130,7 @@ export class IADropdownSearchBar extends LitElement {
         id="search-input"
         part="search-input"
         .value=${this.spacedQuery}
-        placeholder=${this.placeholder}
+        placeholder=${this.placeholder ?? msg('Search')}
         clearButtonScreenReaderLabel=${msg('Clear search query')}
         screenReaderLabel=${msg(
           'Search the Archive. Filters and Advanced Search available below.',
@@ -155,7 +159,7 @@ export class IADropdownSearchBar extends LitElement {
               mode="loading"
               class="search-button-loading-icon"
             ></ia-status-indicator>`
-          : html`<img src=${searchIcon} alt="" />`}
+          : searchIcon}
       </button>
     `;
   }
@@ -198,7 +202,7 @@ export class IADropdownSearchBar extends LitElement {
    * pattern). The parent also binds this property and may re-set it on re-render.
    */
   private handleCategorySelected(
-    e: CustomEvent<{ option: optionInterface }>,
+    e: CustomEvent<{ option: OptionInterface }>,
   ): void {
     const newCategoryId = e.detail.option.id;
     if (newCategoryId === this.resolvedCategory) return;
@@ -337,9 +341,10 @@ export class IADropdownSearchBar extends LitElement {
         flex-shrink: 0;
       }
 
-      #search-button img {
+      #search-button svg {
         width: 18px;
         height: 18px;
+        color: #2c2c2c;
       }
 
       .search-button-loading-icon {

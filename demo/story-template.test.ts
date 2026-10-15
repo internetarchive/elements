@@ -61,6 +61,30 @@ describe('StoryTemplate', () => {
       );
     });
 
+    test('uses importPath for an element nested inside another component', async () => {
+      const el = await fixture<StoryTemplate>(html`
+        <story-template
+          elementTag="ia-donation-section"
+          elementClassName="IADonationSection"
+          importPath="ia-donation-form/form-elements/ia-donation-section"
+        ></story-template>
+      `);
+
+      const importHighlighter = el.shadowRoot?.querySelectorAll(
+        'syntax-highlighter',
+      )[0] as any;
+      expect(importHighlighter).to.exist;
+
+      const code: string = importHighlighter.code;
+      expect(code).to.include(
+        "import '@internetarchive/elements/ia-donation-form/form-elements/ia-donation-section';",
+      );
+      expect(code).to.include(
+        "import { IADonationSection } from '@internetarchive/elements/ia-donation-form/form-elements/ia-donation-section';",
+      );
+      expect(code).to.not.include('ia-donation-section/ia-donation-section');
+    });
+
     test('has no leading or trailing whitespace', async () => {
       const el = await fixture<StoryTemplate>(html`
         <story-template
@@ -251,6 +275,23 @@ describe('StoryTemplate', () => {
       el.elementClassName = 'IAButton';
       await el.updateComplete;
       expect(detailsFor(el)?.classList.contains('collapsed')).to.be.true;
+    });
+  });
+
+  describe('Settings and Styles layout', () => {
+    test('stacks them on a phone, so neither is squeezed to half the width', async () => {
+      // The test browser's frame is phone-sized, which is what puts the
+      // stylesheet's narrow rule in play here.
+      expect(
+        window.matchMedia('(max-width: 640px)').matches,
+        'this test needs a phone-width frame',
+      ).to.be.true;
+      const el = await fixture<StoryTemplate>(html`
+        <story-template elementTag="ia-button"></story-template>
+      `);
+      const grid = el.shadowRoot?.querySelector('.two-col') as HTMLElement;
+      const columns = getComputedStyle(grid).gridTemplateColumns.split(' ');
+      expect(columns).to.have.length(1);
     });
   });
 

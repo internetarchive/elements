@@ -1,4 +1,5 @@
 import { html, LitElement, type TemplateResult } from 'lit';
+import { localized } from '@lit/localize';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 
@@ -12,6 +13,8 @@ import type { TranscriptEntryConfig } from './models';
  * than pushing styles down into each one.
  */
 @customElement('ia-transcript-entry')
+// Its text can come from msg() in TranscriptEntryConfig.displayText.
+@localized()
 export class IATranscriptEntry extends LitElement {
   /** The entry to render */
   @property({ type: Object }) entry?: TranscriptEntryConfig;

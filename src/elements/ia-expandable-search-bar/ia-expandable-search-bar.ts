@@ -8,7 +8,7 @@ import {
 } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 import type { QuickSearchEntry } from './models';
 
@@ -32,6 +32,7 @@ const Events = {
  * A search bar with a quick search list that expands underneath it.
  */
 @customElement('ia-expandable-search-bar')
+@localized()
 export class IAExpandableSearchBar extends LitElement {
   /** Whether the quick search list is showing */
   @property({ type: Boolean }) isOpen = false;
@@ -45,11 +46,11 @@ export class IAExpandableSearchBar extends LitElement {
   /** The suggestions to offer in the quick search list */
   @property({ type: Array }) quickSearches: QuickSearchEntry[] = [];
 
-  /** Placeholder text for the input */
-  @property({ type: String }) placeholder = msg('Search');
+  /** Placeholder text for the input. Defaults to "Search". */
+  @property({ type: String }) placeholder?: string;
 
-  /** The accessible name for the input */
-  @property({ type: String }) label = msg('Search');
+  /** The accessible name for the input. Defaults to "Search". */
+  @property({ type: String }) label?: string;
 
   @query('#search-input') private searchInput?: HTMLInputElement | null;
 
@@ -66,8 +67,8 @@ export class IAExpandableSearchBar extends LitElement {
           <input
             id="search-input"
             type="text"
-            aria-label=${this.label}
-            placeholder=${this.placeholder}
+            aria-label=${this.label ?? msg('Search')}
+            placeholder=${this.placeholder ?? msg('Search')}
             .value=${this.searchTerm}
             @input=${this.handleInput}
             @keydown=${this.handleKeyDown}

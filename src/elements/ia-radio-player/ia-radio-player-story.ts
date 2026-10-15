@@ -208,6 +208,13 @@ const propInputSettings: PropInputSettings<IARadioPlayer>[] = [
     inputType: 'radio',
     radioOptions: [true, false],
   },
+  {
+    label: 'Show music zones',
+    propertyName: 'showMusicZones',
+    defaultValue: false,
+    inputType: 'radio',
+    radioOptions: [true, false],
+  },
 ];
 
 const MAX_LOG_ENTRIES = 8;
@@ -280,11 +287,12 @@ export class IARadioPlayerStory extends LitElement {
             instead.
           </p>
           <p>
-            The three music breaks are marked on the waveform and as boundaries
-            on the scrubber. The section buttons either side of the transport
-            controls jump between those boundaries, and
-            <code>skipMusicSections</code> above makes playback jump past them
-            entirely.
+            The three music breaks are marked as boundaries on the scrubber. The
+            section buttons either side of the transport controls jump between
+            those boundaries, and <code>skipMusicSections</code> above makes
+            playback jump past them entirely. <code>showMusicZones</code> also
+            shades them on the waveform. It's off by default, which matches the
+            player on archive.org.
           </p>
         </div>
       </story-template>
