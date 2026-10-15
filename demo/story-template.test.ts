@@ -37,11 +37,9 @@ describe('StoryTemplate', () => {
       expect(importHighlighter).to.exist;
 
       const code: string = importHighlighter.code;
+      expect(code).to.include("import '@internetarchive/elements/ia-button';");
       expect(code).to.include(
-        "import '@internetarchive/elements/ia-button/ia-button';",
-      );
-      expect(code).to.include(
-        "import { IAButton } from '@internetarchive/elements/ia-button/ia-button';",
+        "import { IAButton } from '@internetarchive/elements/ia-button';",
       );
     });
 
@@ -56,9 +54,7 @@ describe('StoryTemplate', () => {
       expect(importHighlighter).to.exist;
 
       const code: string = importHighlighter.code;
-      expect(code).to.equal(
-        "import '@internetarchive/elements/ia-button/ia-button';",
-      );
+      expect(code).to.equal("import '@internetarchive/elements/ia-button';");
     });
 
     test('uses importPath for an element nested inside another component', async () => {
