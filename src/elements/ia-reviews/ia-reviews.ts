@@ -9,17 +9,20 @@ import {
 } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
-import { msg } from '@lit/localize';
+import { localized, msg, str } from '@lit/localize';
 
 import type { Review } from '@internetarchive/metadata-service';
 import type { RecaptchaManagerInterface } from '@internetarchive/recaptcha-manager';
-import {
-  FetchHandlerInterface,
-  IaFetchHandler,
-} from '@internetarchive/fetch-handler';
+import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
 
 import '@src/elements/ia-button/ia-button';
 
+import type { ReviewServiceInterface } from './models';
+import { ReviewService } from './review-service';
+import {
+  createLegacyReviewService,
+  hasLegacyProps,
+} from './legacy-review-service';
 import './ia-review';
 import './ia-review-form';
 
@@ -27,6 +30,7 @@ import './ia-review-form';
  * Renders the full IA reviews piece
  */
 @customElement('ia-reviews')
+@localized()
 export class IAReviews extends LitElement {
   /** GLOBAL/REVIEW-RENDERING PROPERTIES */
   /* The identifier for the item being reviewed */
@@ -53,18 +57,13 @@ export class IAReviews extends LitElement {
   /* Maximum allowable length for body */
   @property({ type: Number }) maxBodyLength?: number;
 
-  /* Base for URLs */
+  /* Base for URLs. Also used for the reviewer profile links. */
   @property({ type: String }) baseHost = 'https://archive.org';
 
   /** REVIEW FORM PROPERTIES */
-  /* The token for the review edit */
-  @property({ type: String }) token: string = '';
 
-  /* The path for the endpoint we're submitting to */
-  @property({ type: String }) endpointPath: string = '/write-review.php';
-
-  /** Form submitter's screenname, if applicable */
-  @property({ type: String }) submitterScreenname: string = 'Anonymous';
+  /** Form submitter's screenname, if applicable. Defaults to "Anonymous". */
+  @property({ type: String }) submitterScreenname?: string;
 
   /** Form submitter's itemname, if applicable */
   @property({ type: String }) submitterItemname?: string;
@@ -81,9 +80,38 @@ export class IAReviews extends LitElement {
   /* Whether the add/edit button has been clicked */
   @property({ type: Boolean }) reviewAddEditRequested: boolean = false;
 
-  /* An optional handler for form submission to pass along to the form */
-  @property({ type: Object }) fetchHandler: FetchHandlerInterface =
-    new IaFetchHandler();
+  /**
+   * Handles the review write and delete requests.
+   *
+   * Writing and deleting need one, since the service is what carries the CSRF token. Left unset,
+   * reviews still render and the form still opens, but a submission reports a generic failure.
+   */
+  @property({ type: Object }) reviewService?: ReviewServiceInterface;
+
+  /**
+   * The CSRF token for review writes and deletes.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: String }) token?: string;
+
+  /**
+   * The path review submissions POST to, relative to `baseHost`.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: String }) endpointPath?: string;
+
+  /**
+   * The handler review writes and deletes go through.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: Object }) fetchHandler?: FetchHandlerInterface;
+
+  /* The service the components actually call, whether injected or built here */
+  @state()
+  private activeReviewService?: ReviewServiceInterface;
 
   /* Whether to display the review form or the editable review */
   @state()
@@ -133,6 +161,17 @@ export class IAReviews extends LitElement {
   }
 
   protected willUpdate(changed: PropertyValues): void {
+    if (
+      !this.activeReviewService ||
+      changed.has('reviewService') ||
+      changed.has('baseHost') ||
+      changed.has('token') ||
+      changed.has('endpointPath') ||
+      changed.has('fetchHandler')
+    ) {
+      this.activeReviewService = this.buildReviewService();
+    }
+
     if (changed.has('reviews') || changed.has('submitterItemname')) {
       this.reviewsCount = this.reviews.length;
       this.sortFilterReviews();
@@ -150,6 +189,19 @@ export class IAReviews extends LitElement {
     ) {
       this.displayReviews = true;
     }
+  }
+
+  /**
+   * The injected service if there is one. Otherwise one built from the deprecated props if any
+   * were given, and failing that a bare service that renders and opens the form but carries no
+   * CSRF token, so a submission through it fails.
+   */
+  private buildReviewService(): ReviewServiceInterface {
+    if (this.reviewService) return this.reviewService;
+
+    if (hasLegacyProps(this)) return createLegacyReviewService(this);
+
+    return new ReviewService({ baseHost: this.baseHost });
   }
 
   /* Message to display if reviews are disabled */
@@ -187,19 +239,21 @@ export class IAReviews extends LitElement {
 
   /* Message to display instead of the reviews list if reviews are hidden */
   private get displayReviewsMsgTemplate(): HTMLTemplateResult {
+    const hasOneReview = this.reviewsCount === 1;
+
     return html`
       <div class="message">
-        ${this.reviewsCount === 1
+        ${hasOneReview
           ? msg('There is 1 review for this item.')
-          : msg(`There are ${this.reviewsCount} reviews for this item.`)}
+          : msg(str`There are ${this.reviewsCount} reviews for this item.`)}
         <ia-button
           mode="link"
           class="display-reviews-btn"
           @click=${() => (this.displayReviews = true)}
         >
-          ${msg(
-            `Display ${this.reviewsCount === 1 ? 'review' : 'reviews'}`,
-          )}</ia-button
+          ${hasOneReview
+            ? msg('Display review')
+            : msg('Display reviews')}</ia-button
         >.
       </div>
     `;
@@ -220,15 +274,12 @@ export class IAReviews extends LitElement {
         : html`<ia-review-form
             .identifier=${this.identifier}
             .oldReview=${this.currentReview}
-            .baseHost=${this.baseHost}
-            .endpointPath=${this.endpointPath}
             .submitterItemname=${this.submitterItemname}
             .submitterScreenname=${this.submitterScreenname}
             .maxSubjectLength=${this.maxSubjectLength}
             .maxBodyLength=${this.maxBodyLength}
-            .token=${this.token}
             .unrecoverableError=${this.reviewSubmissionError}
-            .fetchHandler=${this.fetchHandler}
+            .reviewService=${this.activeReviewService}
             .recaptchaManager=${this.recaptchaActivated
               ? this.recaptchaManager
               : undefined}
@@ -276,7 +327,7 @@ export class IAReviews extends LitElement {
       .review=${review}
       .identifier=${this.identifier}
       .baseHost=${this.baseHost}
-      .csrfToken=${this.token}
+      .reviewService=${this.activeReviewService}
       ?canDelete=${this.canDelete}
       ?bypassTruncation=${this.displayReviewsByDefault}
     ></ia-review>`;

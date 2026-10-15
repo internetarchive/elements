@@ -6,6 +6,7 @@ import { html } from 'lit';
 import type { IAReview } from './ia-review';
 import { Review } from '@internetarchive/metadata-service';
 import './ia-review';
+import { MockReviewService } from './mocks/mock-review-service';
 
 const mockReview: Review = new Review({
   stars: 5,
@@ -428,7 +429,61 @@ describe('IAReview', () => {
     const deleteBtn = el.shadowRoot?.querySelector('.delete-btn');
     expect(deleteBtn).not.to.exist;
   });
-  test('reports a failure when the server rejects the delete', async () => {
+  test('hands the review to the service when deleting', async () => {
+    const reviewService = new MockReviewService();
+    const el = await fixture<IAReview>(
+      html`<ia-review
+        .review=${mockReview}
+        .reviewService=${reviewService}
+        identifier="foo"
+        ?canDelete=${true}
+      ></ia-review>`,
+    );
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+    (el.shadowRoot?.querySelector('.delete-btn') as HTMLButtonElement).click();
+    await waitUntil(
+      () => !!el.shadowRoot?.querySelector('.body i'),
+      'the delete outcome was never reported',
+    );
+
+    expect(reviewService.deletions).to.deep.equal([
+      {
+        identifier: 'foo',
+        reviewer: mockReview.reviewer,
+        reviewerItemname: mockReview.reviewer_itemname,
+      },
+    ]);
+  });
+
+  test('reports the error the service gives back when the delete fails', async () => {
+    const reviewService = new MockReviewService();
+    reviewService.result = {
+      success: false,
+      error: 'You must be logged in to edit reviews',
+    };
+    const el = await fixture<IAReview>(
+      html`<ia-review
+        .review=${mockReview}
+        .reviewService=${reviewService}
+        identifier="foo"
+        ?canDelete=${true}
+      ></ia-review>`,
+    );
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+    (el.shadowRoot?.querySelector('.delete-btn') as HTMLButtonElement).click();
+    await waitUntil(
+      () => !!el.shadowRoot?.querySelector('.body i'),
+      'the delete outcome was never reported',
+    );
+
+    expect(el.shadowRoot?.querySelector('.body')?.textContent).to.contain(
+      'You must be logged in to edit reviews',
+    );
+  });
+
+  test('reports a failure when it has no service to delete through', async () => {
     const el = await fixture<IAReview>(
       html`<ia-review
         .review=${mockReview}
@@ -437,10 +492,6 @@ describe('IAReview', () => {
       ></ia-review>`,
     );
     vi.spyOn(window, 'confirm').mockReturnValue(true);
-    // fetch resolves on a 500, so the status is what distinguishes a failure.
-    vi.spyOn(window, 'fetch').mockResolvedValue(
-      new Response('', { status: 500 }),
-    );
 
     (el.shadowRoot?.querySelector('.delete-btn') as HTMLButtonElement).click();
     await waitUntil(
@@ -457,14 +508,12 @@ describe('IAReview', () => {
     const el = await fixture<IAReview>(
       html`<ia-review
         .review=${mockReview}
+        .reviewService=${new MockReviewService()}
         identifier="foo"
         ?canDelete=${true}
       ></ia-review>`,
     );
     vi.spyOn(window, 'confirm').mockReturnValue(true);
-    vi.spyOn(window, 'fetch').mockResolvedValue(
-      new Response('', { status: 200 }),
-    );
 
     (el.shadowRoot?.querySelector('.delete-btn') as HTMLButtonElement).click();
     await waitUntil(
