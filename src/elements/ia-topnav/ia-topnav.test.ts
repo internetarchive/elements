@@ -232,6 +232,30 @@ describe('<ia-topnav>', () => {
     });
   });
 
+  describe('closing the media menu', () => {
+    test('clicking the subnav closes the open media slider', async () => {
+      const el = await fixture<IATopNav>(html`<ia-topnav></ia-topnav>`);
+      el.mediaSliderOpen = true;
+      el.selectedMenuOption = 'texts';
+      await elementUpdated(el);
+      el.shadowRoot
+        ?.querySelector('ia-topnav-desktop-subnav')
+        ?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      await elementUpdated(el);
+      verifyClosed(el);
+    });
+
+    test('Escape closes the media slider and clears the selected option', async () => {
+      const el = await fixture<IATopNav>(html`<ia-topnav></ia-topnav>`);
+      el.mediaSliderOpen = true;
+      el.selectedMenuOption = 'texts';
+      await elementUpdated(el);
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      await elementUpdated(el);
+      verifyClosed(el);
+    });
+  });
+
   describe('menu building', () => {
     test('builds the user menu for the signed-in user before the first render', async () => {
       const render = vi.spyOn(IATopNav.prototype, 'render');
