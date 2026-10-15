@@ -1,12 +1,13 @@
+import { msg } from '@lit/localize';
 import { IaFetchHandler } from '@internetarchive/fetch-handler';
-import type {
-  ApiFetchOptions,
-  FetchHandlerInterface,
-  FetchOptions,
-} from '@internetarchive/fetch-handler';
+import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
 
-import type { ReviewServiceInterface } from './models';
-import { ReviewService } from './review-service';
+import type {
+  ReviewDeletion,
+  ReviewServiceInterface,
+  ReviewServiceResult,
+  ReviewSubmission,
+} from './models';
 
 /** The deprecated `token`, `endpointPath` and `fetchHandler` props, plus `baseHost` */
 export type LegacyReviewProps = {
@@ -16,67 +17,97 @@ export type LegacyReviewProps = {
   baseHost: string;
 };
 
-/**
- * Passes everything through to another handler, adding the `X-CSRF-Token` header to the
- * requests that opt in with `includeCsrfToken`. That's how ReviewService asks for the token,
- * and a handler that wasn't built with a `getCsrfToken` source won't attach one.
- */
-class TokenFetchHandler implements FetchHandlerInterface {
-  private inner: FetchHandlerInterface;
-
-  private token: string;
-
-  constructor(inner: FetchHandlerInterface, token: string) {
-    this.inner = inner;
-    this.token = token;
-  }
-
-  fetch(request: RequestInfo, options?: RequestInit | FetchOptions) {
-    const fetchOptions = options as FetchOptions | undefined;
-    if (!fetchOptions?.includeCsrfToken)
-      return this.inner.fetch(request, options);
-
-    const headers = new Headers(fetchOptions.requestInit?.headers);
-    if (!headers.has('X-CSRF-Token')) headers.set('X-CSRF-Token', this.token);
-
-    return this.inner.fetch(request, {
-      ...fetchOptions,
-      requestInit: { ...fetchOptions.requestInit, headers },
-    });
-  }
-
-  fetchApiResponse<T>(url: string, options?: ApiFetchOptions) {
-    return this.inner.fetchApiResponse<T>(url, options);
-  }
-
-  fetchApiPathResponse<T>(path: string, options?: ApiFetchOptions) {
-    return this.inner.fetchApiPathResponse<T>(path, options);
-  }
-
-  fetchIAApiResponse<T>(path: string, options?: ApiFetchOptions) {
-    return this.inner.fetchIAApiResponse<T>(path, options);
-  }
-}
-
-/** Whether any of the old props were given, meaning the host expects them to be honored */
+/** Whether any of the deprecated props were given */
 export function hasLegacyProps(props: LegacyReviewProps): boolean {
   return !!(props.token || props.endpointPath || props.fetchHandler);
 }
 
 /**
- * Builds a ReviewService out of the old `token`, `endpointPath` and `fetchHandler` props.
+ * Review writes and deletes for a host that passes `token`, `endpointPath` and `fetchHandler`.
+ *
+ * The requests carry the CSRF token the way the backend's review endpoints read it today: a
+ * `field_reviewtoken` form field on a submission and a `csrf_token` query parameter on a
+ * delete. No `X-CSRF-Token` header is sent, since a cross-origin `baseHost` would need to
+ * allow-list it.
  */
+class LegacyReviewService implements ReviewServiceInterface {
+  private token: string;
+
+  private submitUrl: string;
+
+  private deleteUrl: string;
+
+  private fetchHandler: FetchHandlerInterface;
+
+  constructor(props: LegacyReviewProps) {
+    this.token = props.token ?? '';
+    this.submitUrl = `${props.baseHost}${props.endpointPath ?? '/write-review.php'}`;
+    this.deleteUrl = `${props.baseHost}/edit-reviews.php`;
+    this.fetchHandler = props.fetchHandler ?? new IaFetchHandler();
+  }
+
+  /** @inheritdoc */
+  async submitReview(
+    submission: ReviewSubmission,
+  ): Promise<ReviewServiceResult> {
+    const body = new URLSearchParams();
+    if (submission.recaptchaToken) {
+      body.append('g-recaptcha-response', submission.recaptchaToken);
+    }
+    body.append('field_stars', submission.stars ?? '0');
+    body.append('field_reviewtitle', submission.title);
+    body.append('field_reviewbody', submission.body);
+    body.append('field_reviewtoken', this.token);
+    body.append('identifier', submission.identifier);
+    body.append('submitter', 'review-form');
+
+    try {
+      const result = await this.fetchHandler.fetchApiResponse<{
+        success?: boolean;
+        error?: string;
+      }>(this.submitUrl, {
+        method: 'POST',
+        includeCredentials: true,
+        body,
+      });
+
+      if (result?.success === true) return { success: true };
+      return { success: false, error: result?.error ?? this.genericError };
+    } catch (e) {
+      console.error('Review request failed', e);
+      return { success: false, error: this.genericError };
+    }
+  }
+
+  /** @inheritdoc */
+  async deleteReview(deletion: ReviewDeletion): Promise<ReviewServiceResult> {
+    const params = new URLSearchParams({
+      identifier: deletion.identifier,
+      deleteReviewer: deletion.reviewer,
+      deleteReviewerItemname: deletion.reviewerItemname ?? '',
+      csrf_token: this.token,
+    });
+
+    try {
+      const response = await fetch(`${this.deleteUrl}?${params}`, {
+        method: 'POST',
+      });
+      if (!response.ok) throw new Error(`Delete failed: ${response.status}`);
+      return { success: true };
+    } catch (e) {
+      console.error('Review request failed', e);
+      return { success: false, error: this.genericError };
+    }
+  }
+
+  private get genericError(): string {
+    return msg('Sorry, something went wrong. Please try again later.');
+  }
+}
+
+/** Builds the service for a host still passing the deprecated props */
 export function createLegacyReviewService(
   props: LegacyReviewProps,
 ): ReviewServiceInterface {
-  const inner = props.fetchHandler ?? new IaFetchHandler();
-  const fetchHandler = props.token
-    ? new TokenFetchHandler(inner, props.token)
-    : inner;
-
-  return new ReviewService({
-    fetchHandler,
-    baseHost: props.baseHost,
-    submitPath: props.endpointPath,
-  });
+  return new LegacyReviewService(props);
 }

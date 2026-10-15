@@ -1,4 +1,5 @@
 import type {
+  ApiFetchOptions,
   FetchHandlerInterface,
   FetchOptions,
 } from '@internetarchive/fetch-handler';
@@ -20,7 +21,14 @@ export class MockFetchHandler implements FetchHandlerInterface {
       headers: { 'Content-Type': 'application/json' },
     });
 
-  async fetchApiResponse<T>(): Promise<T> {
+  /** Every fetchApiResponse() call, in order */
+  apiFetches: { url: string; options?: ApiFetchOptions }[] = [];
+
+  async fetchApiResponse<T>(
+    url?: string,
+    options?: ApiFetchOptions,
+  ): Promise<T> {
+    this.apiFetches.push({ url: url ?? '', options });
     return { success: true } as T;
   }
 

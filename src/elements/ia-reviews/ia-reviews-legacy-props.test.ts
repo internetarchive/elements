@@ -86,7 +86,7 @@ describe('IAReviews with the 1.2.1 props', () => {
     expect(reviews?.length).to.equal(2);
   });
 
-  test('adds: posts to baseHost + endpointPath with the token as a header', async () => {
+  test('adds: posts the 1.2.1 form body to baseHost + endpointPath', async () => {
     const fetchSpy = vi.spyOn(window, 'fetch').mockResolvedValue(jsonOk());
     const el = await renderOffshootStyle();
 
@@ -97,11 +97,11 @@ describe('IAReviews with the 1.2.1 props', () => {
     expect(String(url)).to.equal('https://archive.org/write-review.php');
     expect(init?.method).to.equal('POST');
     expect(init?.credentials).to.equal('include');
-    expect(new Headers(init?.headers).get('X-CSRF-Token')).to.equal('csrf-abc');
-    const body = new URLSearchParams(String(init?.body));
-    expect(body.get('identifier')).to.equal('foo');
-    expect(body.get('field_reviewtitle')).to.equal('What a cool book!');
-    expect(body.get('submitter')).to.equal('review-form');
+    expect(new Headers(init?.headers).has('X-CSRF-Token')).to.be.false;
+    expect(String(init?.body)).to.equal(
+      'field_stars=5&field_reviewtitle=What+a+cool+book%21&field_reviewbody=I+loved+it.' +
+        '&field_reviewtoken=csrf-abc&identifier=foo&submitter=review-form',
+    );
   });
 
   test('adds: reports the success back to the host', async () => {
@@ -137,7 +137,7 @@ describe('IAReviews with the 1.2.1 props', () => {
     ).to.contain('Nope.');
   });
 
-  test('deletes: sends the token as a header to the edit-reviews endpoint', async () => {
+  test('deletes: posts the 1.2.1 query string to edit-reviews.php', async () => {
     const fetchSpy = vi.spyOn(window, 'fetch').mockResolvedValue(jsonOk());
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     const el = await renderOffshootStyle();
@@ -147,17 +147,11 @@ describe('IAReviews with the 1.2.1 props', () => {
     await waitUntil(() => review.shadowRoot?.querySelector('.body i'));
 
     const [url, init] = fetchSpy.mock.calls[0];
-    const parsed = new URL(String(url));
-    expect(parsed.origin + parsed.pathname).to.equal(
-      'https://archive.org/edit-reviews.php',
+    expect(String(url)).to.equal(
+      'https://archive.org/edit-reviews.php?identifier=foo&deleteReviewer=Bar+Baz' +
+        '&deleteReviewerItemname=%40bar-baz&csrf_token=csrf-abc',
     );
-    expect(parsed.searchParams.get('identifier')).to.equal('foo');
-    expect(parsed.searchParams.get('deleteReviewer')).to.equal('Bar Baz');
-    expect(parsed.searchParams.get('deleteReviewerItemname')).to.equal(
-      '@bar-baz',
-    );
-    expect(init?.method).to.equal('POST');
-    expect(new Headers(init?.headers).get('X-CSRF-Token')).to.equal('csrf-abc');
+    expect(init).to.deep.equal({ method: 'POST' });
     expect(review.shadowRoot?.querySelector('.body')?.textContent).to.contain(
       'queued for deletion',
     );
@@ -198,13 +192,17 @@ describe('IAReviews with the 1.2.1 props', () => {
     );
 
     await submitForm(el);
-    await waitUntil(() => fetchHandler.fetches.length > 0);
+    await waitUntil(() => fetchHandler.apiFetches.length > 0);
 
-    expect(fetchHandler.lastFetch?.url).to.equal(
+    expect(fetchHandler.apiFetches[0].url).to.equal(
       'https://archive.org/write-review.php',
     );
+    expect(fetchHandler.apiFetches[0].options?.method).to.equal('POST');
+    expect(fetchHandler.apiFetches[0].options?.includeCredentials).to.be.true;
     expect(
-      new Headers(fetchHandler.lastRequestInit.headers).get('X-CSRF-Token'),
+      new URLSearchParams(String(fetchHandler.apiFetches[0].options?.body)).get(
+        'field_reviewtoken',
+      ),
     ).to.equal('t');
   });
 
