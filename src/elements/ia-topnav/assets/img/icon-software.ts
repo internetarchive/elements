@@ -1,3 +1,5 @@
+// @deprecated The topnav draws its icons from `@src/icons/topnav-*`. This module stays so imports of this path keep resolving.
+
 import { html } from 'lit';
 
 export default html`

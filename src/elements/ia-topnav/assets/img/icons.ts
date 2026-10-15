@@ -1,3 +1,5 @@
+// @deprecated The topnav draws its icons from `@src/icons/topnav-*`. This module stays so imports of this path keep resolving.
+
 import audio from './icon-audio';
 import close from './icon-close';
 import donate from './icon-donate';
