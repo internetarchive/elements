@@ -6,12 +6,16 @@ import {
   HTMLTemplateResult,
   CSSResultGroup,
 } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { property, query, state } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { customElement } from '@src/util/custom-element';
-import { msg } from '@lit/localize';
+import { localized, msg, str } from '@lit/localize';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 import { Review } from '@internetarchive/metadata-service';
+
+import type { ReviewServiceInterface } from './models';
+import { createLegacyReviewService } from './legacy-review-service';
 
 import starBasic from './assets/star-basic.svg';
 import { truncateScreenname } from './utils/truncate-screenname';
@@ -22,10 +26,16 @@ import collapseSpace from './utils/collapse-space';
 
 import deleteIcon from './assets/delete-icon.svg';
 
+/** What became of a deletion: queued, or failed with the server's message if it sent one */
+type DeleteOutcome =
+  | { status: 'queued' }
+  | { status: 'failed'; error?: string };
+
 /**
  * Renders a single IA review
  */
 @customElement('ia-review')
+@localized()
 export class IAReview extends LitElement {
   /* The review to be rendered */
   @property({ type: Object }) review?: Review;
@@ -42,8 +52,15 @@ export class IAReview extends LitElement {
   /* Base for URLs */
   @property({ type: String }) baseHost = 'https://archive.org';
 
-  /* CSRF token to use for delete request submission */
-  @property({ type: String }) csrfToken: string = '';
+  /* Handles the review deletion request */
+  @property({ type: Object }) reviewService?: ReviewServiceInterface;
+
+  /**
+   * CSRF token to use for delete request submission.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: String }) csrfToken?: string;
 
   /* Whether the person viewing this review has the power to delete it */
   @property({ type: Boolean }) canDelete = false;
@@ -55,9 +72,17 @@ export class IAReview extends LitElement {
   @state()
   private showTruncatedContent: boolean = false;
 
-  /* An optional message created following attempted review deletion */
+  /* The outcome of an attempted review deletion, if there was one */
   @state()
-  private deleteMsg: string = '';
+  private deleteOutcome?: DeleteOutcome;
+
+  /* The link to the reviewer's profile, if the review has one */
+  @query('.reviewer-link')
+  private reviewerLink?: HTMLAnchorElement;
+
+  /* The review's outermost element */
+  @query('article.review')
+  private reviewArticle?: HTMLElement;
 
   render() {
     return !this.review
@@ -67,12 +92,16 @@ export class IAReview extends LitElement {
           </div>
         `
       : html`
-          <article class="review" id=${this.generateDomId()}>
+          <article
+            class="review"
+            id=${this.generateDomId()}
+            tabindex=${ifDefined(this.hasReviewerLink ? undefined : '-1')}
+          >
             ${this.canDelete
               ? html`
                   <button
                     class="delete-btn"
-                    title="Delete this review"
+                    title=${msg('Delete this review')}
                     @click=${this.deleteReview}
                   >
                     <img
@@ -92,9 +121,9 @@ export class IAReview extends LitElement {
               <b>${msg('Subject: ')}</b>${this.subjectTemplate}
             </div>
             <div class="body">
-              ${!this.deleteMsg
-                ? this.bodyTemplate
-                : html`<i>${msg(this.deleteMsg)}</i>`}
+              ${this.deleteOutcome
+                ? html`<i>${this.deleteOutcomeMessage}</i>`
+                : this.bodyTemplate}
             </div>
             ${this.truncationButtonsTemplate}
           </article>
@@ -159,11 +188,25 @@ export class IAReview extends LitElement {
     </button>`;
   }
 
+  /**
+   * Focuses the reviewer link, the review's main tab stop. A review with no link (no reviewer
+   * itemname) focuses the review itself instead, which is why only that kind of review is
+   * focusable from script.
+   */
+  focus(options?: FocusOptions): void {
+    (this.reviewerLink ?? this.reviewArticle)?.focus(options);
+  }
+
+  /* Whether the reviewer's name links to their profile */
+  private get hasReviewerLink(): boolean {
+    return !!this.review?.reviewer_itemname;
+  }
+
   /* Reviewer name, with hyperlink and truncation if needed */
   private get reviewerTemplate(): HTMLTemplateResult | typeof nothing {
     return !this.review
       ? nothing
-      : this.review.reviewer_itemname
+      : this.hasReviewerLink
         ? html`
             <a
               href="${this.baseHost}/details/${this.review.reviewer_itemname}"
@@ -182,7 +225,7 @@ export class IAReview extends LitElement {
     return html`
       <div
         class="review-stars"
-        title="${msg(`${this.review.stars} out of 5 stars`)}"
+        title=${msg(str`${this.review.stars} out of 5 stars`)}
       >
         ${new Array(Number(this.review.stars)).fill(null).map(
           () =>
@@ -213,10 +256,9 @@ export class IAReview extends LitElement {
       year: 'numeric',
     });
 
-    const editedMsg =
-      reviewDate.getTime() !== createDate.getTime() ? '(edited)' : '';
+    const wasEdited = reviewDate.getTime() !== createDate.getTime();
 
-    return msg(`${prettyDate} ${editedMsg}`);
+    return wasEdited ? msg(str`${prettyDate} (edited)`) : prettyDate;
   }
 
   /**
@@ -253,30 +295,43 @@ export class IAReview extends LitElement {
    * Deletes the review, following an extra confirmation.
    */
   private async deleteReview(): Promise<void> {
-    if (!this.review || !this.identifier) return;
+    if (!this.review?.reviewer || !this.identifier) return;
     if (!confirm(msg('Are you sure you want to delete this review?'))) return;
 
-    // Screennames can contain spaces and ampersands, so the parameters are
-    // encoded rather than interpolated straight into the query string.
-    const params = new URLSearchParams({
+    const result = await this.activeReviewService.deleteReview({
       identifier: this.identifier,
-      deleteReviewer: this.review.reviewer ?? '',
-      deleteReviewerItemname: this.review.reviewer_itemname ?? '',
-      csrf_token: this.csrfToken,
+      reviewer: this.review.reviewer,
+      reviewerItemname: this.review.reviewer_itemname,
     });
-    const deleteUrl = `${this.baseHost}/edit-reviews.php?${params}`;
-    try {
-      const response = await fetch(deleteUrl, {
-        method: 'POST',
-      });
-      // fetch only rejects on a network error, so a 4xx or 5xx arrives here as
-      // a resolved response and has to be checked before reporting success.
-      if (!response.ok) throw new Error(`Delete failed: ${response.status}`);
 
-      this.deleteMsg = 'This review has been queued for deletion.';
-    } catch {
-      this.deleteMsg = 'Sorry, we were unable to delete this review.';
+    this.deleteOutcome = result.success
+      ? { status: 'queued' }
+      : { status: 'failed', error: result.error };
+  }
+
+  /**
+   * The injected service if there is one. Otherwise one built from the deprecated `csrfToken`
+   * and `baseHost`.
+   */
+  private get activeReviewService(): ReviewServiceInterface {
+    if (this.reviewService) return this.reviewService;
+
+    return createLegacyReviewService({
+      token: this.csrfToken,
+      baseHost: this.baseHost,
+    });
+  }
+
+  /* The message that replaces the body once a deletion has been attempted */
+  private get deleteOutcomeMessage(): string {
+    if (this.deleteOutcome?.status === 'queued') {
+      return msg('This review has been queued for deletion.');
     }
+
+    return (
+      this.deleteOutcome?.error ??
+      msg('Sorry, we were unable to delete this review.')
+    );
   }
 
   static get styles(): CSSResultGroup {
