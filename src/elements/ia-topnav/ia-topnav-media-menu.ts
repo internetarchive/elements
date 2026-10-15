@@ -8,60 +8,76 @@ import './ia-topnav-media-button';
 import { MediaButton } from './ia-topnav-media-button';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import themeStyles from '@src/themes/theme-styles';
+import { localized, msg } from '@lit/localize';
 
-const menuSelection = [
-  {
-    icon: 'web',
-    menu: 'web',
-    href: 'https://web.archive.org',
-    label: 'Wayback Machine',
-  },
-  {
-    icon: 'texts',
-    menu: 'texts',
-    href: '/details/texts',
-    label: 'Texts',
-  },
-  {
-    icon: 'video',
-    menu: 'video',
-    href: '/details/movies',
-    label: 'Video',
-  },
-  {
-    icon: 'audio',
-    menu: 'audio',
-    href: '/details/audio',
-    label: 'Audio',
-  },
-  {
-    icon: 'software',
-    menu: 'software',
-    href: '/details/software',
-    label: 'Software',
-  },
-  {
-    icon: 'images',
-    menu: 'images',
-    href: '/details/image',
-    label: 'Images',
-  },
-  {
-    icon: 'donate',
-    menu: 'donate',
-    href: '/donate/?origin=iawww-mbhmbgrmenu',
-    label: 'Donate',
-    followable: true,
-  },
-  {
-    icon: 'ellipses',
-    menu: 'more',
-    href: '/about/',
-    label: 'More',
-  },
-];
+type MediaMenuOption = {
+  icon: string;
+  menu: string;
+  href: string;
+  label: string;
+  followable?: boolean;
+};
+
+/**
+ * The top-level media buttons. A function so the labels are read in the
+ * current locale each time the menu renders.
+ */
+function menuSelection(): MediaMenuOption[] {
+  return [
+    {
+      icon: 'web',
+      menu: 'web',
+      href: 'https://web.archive.org',
+      label: 'Wayback Machine',
+    },
+    {
+      icon: 'texts',
+      menu: 'texts',
+      href: '/details/texts',
+      label: msg('Texts'),
+    },
+    {
+      icon: 'video',
+      menu: 'video',
+      href: '/details/movies',
+      label: msg('Video'),
+    },
+    {
+      icon: 'audio',
+      menu: 'audio',
+      href: '/details/audio',
+      label: msg('Audio'),
+    },
+    {
+      icon: 'software',
+      menu: 'software',
+      href: '/details/software',
+      label: msg('Software'),
+    },
+    {
+      icon: 'images',
+      menu: 'images',
+      href: '/details/image',
+      label: msg('Images'),
+    },
+    {
+      icon: 'donate',
+      menu: 'donate',
+      href: '/donate/?origin=iawww-mbhmbgrmenu',
+      label: msg('Donate'),
+      followable: true,
+    },
+    {
+      icon: 'ellipses',
+      menu: 'more',
+      href: '/about/',
+      label: msg('More'),
+    },
+  ];
+}
 
 @customElement('ia-topnav-media-menu')
+@localized()
 export class MediaMenu extends LitElement {
   @property({ type: String }) baseHost = '';
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
@@ -108,7 +124,7 @@ export class MediaMenu extends LitElement {
   }
 
   get mediaMenuOptionsTemplate() {
-    const buttons = menuSelection.map(
+    const buttons = menuSelection().map(
       ({ icon, menu, label, href, followable }) => {
         const selected = this.selectedMenuOption === menu;
         return html`
@@ -148,7 +164,7 @@ export class MediaMenu extends LitElement {
 
         .media-menu-inner {
           z-index: -1;
-          top: -40rem;
+          top: calc(-400 * var(--topnavUnit--));
           background-color: var(--mediaMenuBg);
           margin: 0;
           overflow: hidden;
@@ -176,7 +192,7 @@ export class MediaMenu extends LitElement {
           .overflow-clip {
             position: absolute;
             z-index: -1; /** needs to be under the navigation, otherwise it intercepts clicks */
-            top: 4rem;
+            top: calc(40 * var(--topnavUnit--));
             left: 0;
             height: 0;
             width: 100%;
@@ -186,7 +202,7 @@ export class MediaMenu extends LitElement {
           }
 
           .open .overflow-clip {
-            height: 40rem;
+            height: calc(400 * var(--topnavUnit--));
           }
         }
 
@@ -196,7 +212,7 @@ export class MediaMenu extends LitElement {
             display: block;
             position: static;
             width: auto;
-            height: 5rem;
+            height: calc(50 * var(--topnavUnit--));
             transition-property: none;
           }
 

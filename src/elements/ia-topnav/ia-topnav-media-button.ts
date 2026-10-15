@@ -1,14 +1,34 @@
 import { CSSResultGroup, TemplateResult, css, html } from 'lit';
 import TrackedElement from './tracked-element';
-import icons from './assets/img/icons';
+import audio from '@src/icons/topnav-audio';
+import donate from '@src/icons/topnav-donate';
+import ellipses from '@src/icons/topnav-ellipses';
+import images from '@src/icons/topnav-images';
+import software from '@src/icons/topnav-software';
+import texts from '@src/icons/topnav-texts';
+import video from '@src/icons/topnav-video';
+import web from '@src/icons/topnav-web';
 import { toSentenceCase } from './lib/helpers';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
+import { localized, msg } from '@lit/localize';
+
+const icons: Record<string, TemplateResult> = {
+  audio,
+  donate,
+  ellipses,
+  images,
+  software,
+  texts,
+  video,
+  web,
+};
 
 @customElement('ia-topnav-media-button')
+@localized()
 export class MediaButton extends TrackedElement {
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
   @property({ type: String }) icon = '';
@@ -26,7 +46,7 @@ export class MediaButton extends TrackedElement {
         class="menu-item ${this.mediatype} ${this.buttonClass}"
         @click=${this.followable ? this.trackClick : this.onClick}
         data-event-click-tracking="${this.analyticsEvent}"
-        title="${this.tooltipPrefix} ${this.mediatype} menu"
+        title=${this.tooltip}
       >
         ${this.menuItem}
       </a>
@@ -77,8 +97,38 @@ export class MediaButton extends TrackedElement {
     return this.selected ? 'selected' : '';
   }
 
-  get tooltipPrefix() {
-    return this.selected ? 'Collapse' : 'Expand';
+  /**
+   * The button's tooltip.
+   *
+   * Each menu has its own whole phrase, so a translator can reword it and
+   * move the menu name freely, and the name shown is a translated one.
+   */
+  get tooltip() {
+    const phrases = this.selected
+      ? {
+          web: msg('Collapse web menu'),
+          texts: msg('Collapse texts menu'),
+          video: msg('Collapse video menu'),
+          audio: msg('Collapse audio menu'),
+          software: msg('Collapse software menu'),
+          images: msg('Collapse images menu'),
+          donate: msg('Collapse donate menu'),
+          more: msg('Collapse more menu'),
+        }
+      : {
+          web: msg('Expand web menu'),
+          texts: msg('Expand texts menu'),
+          video: msg('Expand video menu'),
+          audio: msg('Expand audio menu'),
+          software: msg('Expand software menu'),
+          images: msg('Expand images menu'),
+          donate: msg('Expand donate menu'),
+          more: msg('Expand more menu'),
+        };
+    return (
+      (phrases as Record<string, string>)[this.mediatype] ??
+      (this.selected ? msg('Collapse menu') : msg('Expand menu'))
+    );
   }
 
   get iconClass() {
@@ -111,7 +161,7 @@ export class MediaButton extends TrackedElement {
           display: inline-block;
           width: 100%;
           padding: 0;
-          font-size: 1.6rem;
+          font-size: calc(16 * var(--topnavUnit--));
           text-align: left;
           background: transparent;
           -webkit-box-align: center;
@@ -144,31 +194,32 @@ export class MediaButton extends TrackedElement {
         }
 
         .menu-item > .icon > svg {
-          height: 4rem;
-          width: 4rem;
+          height: calc(40 * var(--topnavUnit--));
+          width: calc(40 * var(--topnavUnit--));
         }
 
         .menu-item.selected .icon {
           background-color: var(--activeButtonBg);
-          border-radius: 1rem 0 0 1rem;
+          border-radius: calc(10 * var(--topnavUnit--)) 0 0
+            calc(10 * var(--topnavUnit--));
         }
 
-        .icon .fill-color {
-          fill: #999;
+        .icon svg {
+          color: #999;
         }
 
-        .icon.active .fill-color {
-          fill: #fff;
+        .icon.active svg {
+          color: #fff;
         }
 
-        .donate .fill-color {
-          fill: #f00;
+        .donate svg {
+          color: #f00;
         }
 
         @media (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) {
           .menu-item {
             width: auto;
-            height: 5rem;
+            height: calc(50 * var(--topnavUnit--));
             color: var(--mediaLabelDesktopColor);
             display: inline-flex;
           }
@@ -178,22 +229,21 @@ export class MediaButton extends TrackedElement {
             color: var(--linkHoverColor);
           }
 
-          .menu-item:hover .fill-color,
-          .menu-item:active .fill-color,
-          .menu-item:focus .fill-color {
-            fill: var(--linkHoverColor);
+          .menu-item:hover svg,
+          .menu-item:active svg,
+          .menu-item:focus svg {
+            color: var(--linkHoverColor);
           }
 
+          /* Visually hidden, so the link's name still contains the label. */
           .label {
-            display: none;
-          }
-
-          .label,
-          .web:after {
-            padding-right: 1rem;
-            font-size: 1.3rem;
-            text-transform: uppercase;
-            color: inherit;
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            white-space: nowrap;
+            clip-path: inset(50%);
           }
 
           .web:after {
@@ -219,35 +269,49 @@ export class MediaButton extends TrackedElement {
           }
 
           /* selected state icon colors */
-          .web.selected .fill-color {
-            fill: #ffcd27;
+          .web.selected svg {
+            color: #ffcd27;
           }
 
-          .texts.selected .fill-color {
-            fill: #faab3c;
+          .texts.selected svg {
+            color: #faab3c;
           }
 
-          .video.selected .fill-color {
-            fill: #f1644b;
+          .video.selected svg {
+            color: #f1644b;
           }
 
-          .audio.selected .fill-color {
-            fill: #00adef;
+          .audio.selected svg {
+            color: #00adef;
           }
 
-          .software.selected .fill-color {
-            fill: #9ecc4f;
+          .software.selected svg {
+            color: #9ecc4f;
           }
 
-          .images.selected .fill-color {
-            fill: #aa99c9;
+          .images.selected svg {
+            color: #aa99c9;
           }
         }
 
         @media (min-width: 1200px) {
+          .label {
+            position: static;
+            width: auto;
+            height: auto;
+            margin: 0;
+            overflow: visible;
+            white-space: normal;
+            clip-path: none;
+          }
+
           .label,
           .web:after {
             display: inline;
+            padding-right: calc(10 * var(--topnavUnit--));
+            font-size: calc(13 * var(--topnavUnit--));
+            text-transform: uppercase;
+            color: inherit;
           }
 
           .web .label {

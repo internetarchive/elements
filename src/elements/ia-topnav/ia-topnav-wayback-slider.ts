@@ -13,8 +13,10 @@ import {
 import { defaultTopNavConfig } from './data/menus';
 import { subnavListCSS } from './subnav-list-styles';
 import themeStyles from '@src/themes/theme-styles';
+import { localized, msg } from '@lit/localize';
 
 @customElement('ia-topnav-wayback-slider')
+@localized()
 export class WaybackSlider extends TrackedElement {
   @property({ type: Array }) archiveItLinks: IATopNavLink[] = [];
   @property({ type: String }) baseHost = '';
@@ -30,17 +32,17 @@ export class WaybackSlider extends TrackedElement {
         ></ia-topnav-wayback-search>
         <div class="link-lists">
           <div>
-            <h4>Mobile Apps</h4>
+            <h4>${msg('Mobile Apps')}</h4>
             <ul class="mobile-apps">
               ${this.mobileAppsItems}
             </ul>
-            <h4>Browser Extensions</h4>
+            <h4>${msg('Browser Extensions')}</h4>
             <ul class="browser-extensions">
               ${this.browserExtensionsItems}
             </ul>
           </div>
           <div>
-            <h4>Archive-It Subscription</h4>
+            <h4>${msg('Archive-It Subscription')}</h4>
             <ul class="archive-it">
               ${this.archiveItItems}
             </ul>
@@ -73,7 +75,7 @@ export class WaybackSlider extends TrackedElement {
             .href=${formatUrl(link.url, this.baseHost)}
             @click=${this.trackClick}
             data-event-click-tracking="${this.analyticsEvent(
-              `${eventPrefix}${link.title}`,
+              `${eventPrefix}${link.key ?? link.title}`,
             )}"
             target=${link.external ? '_blank' : ''}
             rel=${link.external ? 'noreferrer noopener' : ''}
@@ -96,25 +98,28 @@ export class WaybackSlider extends TrackedElement {
           :host {
             display: block;
             grid-column: 1 / 4;
-            padding: 0 1.5rem;
+            padding: 0 calc(15 * var(--topnavUnit--));
           }
 
           h4 {
             margin-top: 0;
-            font: normal 100 1.6rem var(--themeFontFamily);
+            font: normal 100 calc(16 * var(--topnavUnit--))
+              var(--themeFontFamily);
           }
 
           .grid {
             display: grid;
             grid-template-columns: minmax(auto, 260px) 1fr minmax(auto, 260px);
             /* Possible for 890 - 935: minmax(auto, 260px) 1fr minmax(auto, 260px) */
-            grid-column-gap: 2.5rem;
+            grid-column-gap: calc(25 * var(--topnavUnit--));
           }
 
           .link-lists {
             display: grid;
-            grid-template-columns: calc(50% - 1.25rem) calc(50% - 1.25rem);
-            grid-column-gap: 2.5rem;
+            grid-template-columns:
+              calc(50% - (12.5 * var(--topnavUnit--)))
+              calc(50% - (12.5 * var(--topnavUnit--)));
+            grid-column-gap: calc(25 * var(--topnavUnit--));
           }
         }
       `,

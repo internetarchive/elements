@@ -1,10 +1,9 @@
+import { msg } from '@lit/localize';
 import { IATopNavConfig, IATopNavMenuConfig } from '../models';
 
 export const defaultTopNavConfig: IATopNavConfig = {
   // Google Analytics event category
   eventCategory: 'TopNav',
-  // Default value, if more accurate value is not passed in to `buildTopNavMenus()`
-  waybackPagesArchived: '1 trillion',
 };
 
 /**
@@ -12,9 +11,6 @@ export const defaultTopNavConfig: IATopNavConfig = {
  * @param { string } userid archive.org account (immutable) userid
  * @param { string } baseHost prefixed to every archive.org link. Pass '' for
  *                            links relative to the current host.
- * @param { string } waybackPagesArchived label readable 'how many pages in WayBack machine?'
- *                                        If you don't pass in something, you'll get the potentially
- *                                        older/less accurate version.
  * @param { string } itemIdentifier The current item being viewed, to populate admin menu items
  * @param { string } uploader email of the item's uploader, for the uploader admin section
  * @param { string } biblio biblio URL for a texts item, for the biblio admin section
@@ -23,17 +19,13 @@ export const defaultTopNavConfig: IATopNavConfig = {
 export function buildTopNavMenus(
   userid: string = '',
   baseHost: string = 'https://archive.org',
-  waybackPagesArchived: string = '',
   itemIdentifier: string = '',
   uploader: string = '',
   biblio: string = '',
 ): IATopNavMenuConfig {
-  if (waybackPagesArchived)
-    defaultTopNavConfig.waybackPagesArchived = waybackPagesArchived; // update to more accurate val
-
   return {
     audio: {
-      heading: 'Internet Archive Audio',
+      heading: msg('Internet Archive Audio'),
       iconLinks: [
         {
           icon: `${baseHost}/services/img/etree`,
@@ -42,13 +34,15 @@ export function buildTopNavMenus(
         },
         {
           icon: `${baseHost}/services/img/librivoxaudio`,
-          title: 'Librivox Free Audio',
+          title: msg('Librivox Free Audio'),
+          key: 'Librivox Free Audio',
           url: `${baseHost}/details/librivoxaudio`,
         },
       ],
       featuredLinks: [
         {
-          title: 'All Audio',
+          title: msg('All Audio'),
+          key: 'All Audio',
           url: `${baseHost}/details/audio`,
         },
         {
@@ -60,41 +54,50 @@ export function buildTopNavMenus(
           url: `${baseHost}/details/netlabels`,
         },
         {
-          title: 'Old Time Radio',
+          title: msg('Old Time Radio'),
+          key: 'Old Time Radio',
           url: `${baseHost}/details/oldtimeradio`,
         },
         {
-          title: '78 RPMs and Cylinder Recordings',
+          title: msg('78 RPMs and Cylinder Recordings'),
+          key: '78 RPMs and Cylinder Recordings',
           url: `${baseHost}/details/78rpm`,
         },
       ],
       links: [
         {
-          title: 'Audio Books & Poetry',
+          title: msg('Audio Books & Poetry'),
+          key: 'Audio Books & Poetry',
           url: `${baseHost}/details/audio_bookspoetry`,
         },
         {
-          title: 'Computers, Technology and Science',
+          title: msg('Computers, Technology and Science'),
+          key: 'Computers, Technology and Science',
           url: `${baseHost}/details/audio_tech`,
         },
         {
-          title: 'Music, Arts & Culture',
+          title: msg('Music, Arts & Culture'),
+          key: 'Music, Arts & Culture',
           url: `${baseHost}/details/audio_music`,
         },
         {
-          title: 'News & Public Affairs',
+          title: msg('News & Public Affairs'),
+          key: 'News & Public Affairs',
           url: `${baseHost}/details/audio_news`,
         },
         {
-          title: 'Spirituality & Religion',
+          title: msg('Spirituality & Religion'),
+          key: 'Spirituality & Religion',
           url: `${baseHost}/details/audio_religion`,
         },
         {
-          title: 'Podcasts',
+          title: msg('Podcasts'),
+          key: 'Podcasts',
           url: `${baseHost}/details/podcasts`,
         },
         {
-          title: 'Radio News Archive',
+          title: msg('Radio News Archive'),
+          key: 'Radio News Archive',
           url: `${baseHost}/details/radio`,
         },
       ],
@@ -103,7 +106,7 @@ export function buildTopNavMenus(
       archiveItLinks: [],
     },
     images: {
-      heading: 'Images',
+      heading: msg('Images'),
       iconLinks: [
         {
           icon: `${baseHost}/services/img/metropolitanmuseumofart-gallery`,
@@ -118,7 +121,8 @@ export function buildTopNavMenus(
       ],
       featuredLinks: [
         {
-          title: 'All Images',
+          title: msg('All Images'),
+          key: 'All Images',
           url: `${baseHost}/details/image`,
         },
         {
@@ -130,7 +134,8 @@ export function buildTopNavMenus(
           url: `${baseHost}/details/flickr-ows`,
         },
         {
-          title: 'Cover Art',
+          title: msg('Cover Art'),
+          key: 'Cover Art',
           url: `${baseHost}/details/coverartarchive`,
         },
         {
@@ -144,7 +149,8 @@ export function buildTopNavMenus(
           url: `${baseHost}/details/nasa`,
         },
         {
-          title: 'Solar System Collection',
+          title: msg('Solar System Collection'),
+          key: 'Solar System Collection',
           url: `${baseHost}/details/solarsystemcollection`,
         },
         {
@@ -159,39 +165,48 @@ export function buildTopNavMenus(
     more: {
       links: [
         {
-          title: 'About',
+          title: msg('About'),
+          key: 'About',
           url: `${baseHost}/about/`,
         },
         {
-          title: 'Blog',
+          title: msg('Blog'),
+          key: 'Blog',
           url: 'https://blog.archive.org',
         },
         {
-          title: 'Events',
+          title: msg('Events'),
+          key: 'Events',
           url: `${baseHost}/events`,
         },
         {
-          title: 'Projects',
+          title: msg('Projects'),
+          key: 'Projects',
           url: `${baseHost}/projects/`,
         },
         {
-          title: 'Help',
+          title: msg('Help'),
+          key: 'Help',
           url: `${baseHost}/about/faqs.php`,
         },
         {
-          title: 'Donate',
+          title: msg('Donate'),
+          key: 'Donate',
           url: `${baseHost}/donate?origin=iawww-TopNavDonateButton`,
         },
         {
-          title: 'Contact',
+          title: msg('Contact'),
+          key: 'Contact',
           url: `${baseHost}/about/contact`,
         },
         {
-          title: 'Jobs',
+          title: msg('Jobs'),
+          key: 'Jobs',
           url: `${baseHost}/about/jobs`,
         },
         {
-          title: 'Volunteer',
+          title: msg('Volunteer'),
+          key: 'Volunteer',
           url: `${baseHost}/about/volunteer-positions`,
         },
       ],
@@ -203,7 +218,7 @@ export function buildTopNavMenus(
       archiveItLinks: [],
     },
     software: {
-      heading: 'Software',
+      heading: msg('Software'),
       iconLinks: [
         {
           icon: `${baseHost}/services/img/internetarcade`,
@@ -218,11 +233,13 @@ export function buildTopNavMenus(
       ],
       featuredLinks: [
         {
-          title: 'All Software',
+          title: msg('All Software'),
+          key: 'All Software',
           url: `${baseHost}/details/software`,
         },
         {
-          title: 'Old School Emulation',
+          title: msg('Old School Emulation'),
+          key: 'Old School Emulation',
           url: `${baseHost}/details/tosec`,
         },
         {
@@ -230,15 +247,18 @@ export function buildTopNavMenus(
           url: `${baseHost}/details/softwarelibrary_msdos_games`,
         },
         {
-          title: 'Historical Software',
+          title: msg('Historical Software'),
+          key: 'Historical Software',
           url: `${baseHost}/details/historicalsoftware`,
         },
         {
-          title: 'Classic PC Games',
+          title: msg('Classic PC Games'),
+          key: 'Classic PC Games',
           url: `${baseHost}/details/classicpcgames`,
         },
         {
-          title: 'Software Library',
+          title: msg('Software Library'),
+          key: 'Software Library',
           url: `${baseHost}/details/softwarelibrary`,
         },
       ],
@@ -248,7 +268,8 @@ export function buildTopNavMenus(
           url: `${baseHost}/details/kodi_archive`,
         },
         {
-          title: 'Vintage Software',
+          title: msg('Vintage Software'),
+          key: 'Vintage Software',
           url: `${baseHost}/details/vintagesoftware`,
         },
         {
@@ -260,7 +281,8 @@ export function buildTopNavMenus(
           url: `${baseHost}/details/softwarelibrary_msdos`,
         },
         {
-          title: 'CD-ROM Software',
+          title: msg('CD-ROM Software'),
+          key: 'CD-ROM Software',
           url: `${baseHost}/details/cd-roms`,
         },
         {
@@ -268,7 +290,8 @@ export function buildTopNavMenus(
           url: `${baseHost}/details/cdromsoftware`,
         },
         {
-          title: 'Software Sites',
+          title: msg('Software Sites'),
+          key: 'Software Sites',
           url: `${baseHost}/details/softwaresites`,
         },
         {
@@ -276,7 +299,8 @@ export function buildTopNavMenus(
           url: `${baseHost}/details/tucows`,
         },
         {
-          title: 'Shareware CD-ROMs',
+          title: msg('Shareware CD-ROMs'),
+          key: 'Shareware CD-ROMs',
           url: `${baseHost}/details/cdbbsarchive`,
         },
         {
@@ -284,7 +308,8 @@ export function buildTopNavMenus(
           url: `${baseHost}/details/softwarecapsules`,
         },
         {
-          title: 'CD-ROM Images',
+          title: msg('CD-ROM Images'),
+          key: 'CD-ROM Images',
           url: `${baseHost}/details/cdromimages`,
         },
         {
@@ -301,7 +326,7 @@ export function buildTopNavMenus(
       archiveItLinks: [],
     },
     texts: {
-      heading: 'Texts',
+      heading: msg('Texts'),
       iconLinks: [
         {
           title: 'Open Library',
@@ -309,18 +334,21 @@ export function buildTopNavMenus(
           url: 'https://openlibrary.org/',
         },
         {
-          title: 'American Libraries',
+          title: msg('American Libraries'),
+          key: 'American Libraries',
           icon: `${baseHost}/services/img/americana`,
           url: `${baseHost}/details/americana`,
         },
       ],
       featuredLinks: [
         {
-          title: 'All Texts',
+          title: msg('All Texts'),
+          key: 'All Texts',
           url: `${baseHost}/details/texts`,
         },
         {
-          title: 'Smithsonian Libraries',
+          title: msg('Smithsonian Libraries'),
+          key: 'Smithsonian Libraries',
           url: `${baseHost}/details/smithsonian`,
         },
         {
@@ -328,21 +356,28 @@ export function buildTopNavMenus(
           url: `${baseHost}/details/fedlink`,
         },
         {
-          title: 'Genealogy',
+          title: msg('Genealogy'),
+          key: 'Genealogy',
           url: `${baseHost}/details/genealogy`,
         },
         {
           title: 'Lincoln Collection',
           url: `${baseHost}/details/lincolncollection`,
         },
+        {
+          title: 'Democracy’s Library',
+          url: `${baseHost}/details/democracys-library`,
+        },
       ],
       links: [
         {
-          title: 'American Libraries',
+          title: msg('American Libraries'),
+          key: 'American Libraries',
           url: `${baseHost}/details/americana`,
         },
         {
-          title: 'Canadian Libraries',
+          title: msg('Canadian Libraries'),
+          key: 'Canadian Libraries',
           url: `${baseHost}/details/toronto`,
         },
         {
@@ -354,7 +389,8 @@ export function buildTopNavMenus(
           url: `${baseHost}/details/gutenberg`,
         },
         {
-          title: "Children's Library",
+          title: msg("Children's Library"),
+          key: "Children's Library",
           url: `${baseHost}/details/iacl`,
         },
         {
@@ -362,7 +398,8 @@ export function buildTopNavMenus(
           url: `${baseHost}/details/biodiversity`,
         },
         {
-          title: 'Books by Language',
+          title: msg('Books by Language'),
+          key: 'Books by Language',
           url: `${baseHost}/details/booksbylanguage`,
         },
         {
@@ -370,7 +407,8 @@ export function buildTopNavMenus(
           url: `${baseHost}/details/folkscanomy`,
         },
         {
-          title: 'Government Documents',
+          title: msg('Government Documents'),
+          key: 'Government Documents',
           url: `${baseHost}/details/government-documents`,
         },
       ],
@@ -398,7 +436,7 @@ export function buildTopNavMenus(
           external: true,
         },
         {
-          url: 'https://addons.mozilla.org/en-US/firefox/addon/wayback-machine_new/',
+          url: 'https://addons.mozilla.org/en-US/firefox/addon/wayback-machine-official/',
           title: 'Firefox',
           external: true,
         },
@@ -416,17 +454,20 @@ export function buildTopNavMenus(
       archiveItLinks: [
         {
           url: 'https://www.archive-it.org/explore',
-          title: 'Explore the Collections',
+          title: msg('Explore the Collections'),
+          key: 'Explore the Collections',
           external: true,
         },
         {
           url: 'https://www.archive-it.org/blog/learn-more/',
-          title: 'Learn More',
+          title: msg('Learn More'),
+          key: 'Learn More',
           external: true,
         },
         {
           url: 'https://www.archive-it.org/contact-us',
-          title: 'Build Collections',
+          title: msg('Build Collections'),
+          key: 'Build Collections',
           external: true,
         },
       ],
@@ -436,22 +477,25 @@ export function buildTopNavMenus(
       links: [],
     },
     video: {
-      heading: 'Video',
+      heading: msg('Video'),
       iconLinks: [
         {
           icon: `${baseHost}/services/img/tv`,
-          title: 'TV News',
+          title: msg('TV News'),
+          key: 'TV News',
           url: `${baseHost}/details/tv`,
         },
         {
           icon: `${baseHost}/services/img/911`,
-          title: 'Understanding 9/11',
+          title: msg('Understanding 9/11'),
+          key: 'Understanding 9/11',
           url: `${baseHost}/details/911`,
         },
       ],
       featuredLinks: [
         {
-          title: 'All Video',
+          title: msg('All Video'),
+          key: 'All Video',
           url: `${baseHost}/details/movies`,
         },
         {
@@ -473,55 +517,68 @@ export function buildTopNavMenus(
       ],
       links: [
         {
-          title: 'Animation & Cartoons',
+          title: msg('Animation & Cartoons'),
+          key: 'Animation & Cartoons',
           url: `${baseHost}/details/animationandcartoons`,
         },
         {
-          title: 'Arts & Music',
+          title: msg('Arts & Music'),
+          key: 'Arts & Music',
           url: `${baseHost}/details/artsandmusicvideos`,
         },
         {
-          title: 'Computers & Technology',
+          title: msg('Computers & Technology'),
+          key: 'Computers & Technology',
           url: `${baseHost}/details/computersandtechvideos`,
         },
         {
-          title: 'Cultural & Academic Films',
+          title: msg('Cultural & Academic Films'),
+          key: 'Cultural & Academic Films',
           url: `${baseHost}/details/culturalandacademicfilms`,
         },
         {
-          title: 'Ephemeral Films',
+          title: msg('Ephemeral Films'),
+          key: 'Ephemeral Films',
           url: `${baseHost}/details/ephemera`,
         },
         {
-          title: 'Movies',
+          title: msg('Movies'),
+          key: 'Movies',
           url: `${baseHost}/details/moviesandfilms`,
         },
         {
-          title: 'News & Public Affairs',
+          title: msg('News & Public Affairs'),
+          key: 'News & Public Affairs',
           url: `${baseHost}/details/newsandpublicaffairs`,
         },
         {
-          title: 'Spirituality & Religion',
+          title: msg('Spirituality & Religion'),
+          key: 'Spirituality & Religion',
           url: `${baseHost}/details/spiritualityandreligion`,
         },
         {
-          title: 'Sports Videos',
+          title: msg('Sports Videos'),
+          key: 'Sports Videos',
           url: `${baseHost}/details/sports`,
         },
         {
-          title: 'Television',
+          title: msg('Television'),
+          key: 'Television',
           url: `${baseHost}/details/television`,
         },
         {
-          title: 'Videogame Videos',
+          title: msg('Videogame Videos'),
+          key: 'Videogame Videos',
           url: `${baseHost}/details/gamevideos`,
         },
         {
-          title: 'Vlogs',
+          title: msg('Vlogs'),
+          key: 'Vlogs',
           url: `${baseHost}/details/vlogs`,
         },
         {
-          title: 'Youth Media',
+          title: msg('Youth Media'),
+          key: 'Youth Media',
           url: `${baseHost}/details/youth_media`,
         },
       ],
@@ -532,53 +589,63 @@ export function buildTopNavMenus(
     user: [
       {
         url: `${baseHost}/upload`,
-        title: 'Upload files',
+        title: msg('Upload files'),
+        key: 'Upload files',
         analyticsEvent: 'UserUpload',
         class: 'mobile-upload',
       },
       {
         url: `${baseHost}/details/@${userid}`,
-        title: 'My uploads',
+        title: msg('My uploads'),
+        key: 'My uploads',
         analyticsEvent: 'UserLibrary',
       },
       {
         url: `${baseHost}/details/@${userid}/loans`,
-        title: 'My loans',
+        title: msg('My loans'),
+        key: 'My loans',
         analyticsEvent: 'UserLoans',
       },
       {
         url: `${baseHost}/details/@${userid}/favorites`,
-        title: 'My favorites',
+        title: msg('My favorites'),
+        key: 'My favorites',
         analyticsEvent: 'UserFavorites',
       },
       {
         url: `${baseHost}/details/@${userid}/lists`,
-        title: 'My lists',
+        title: msg('My lists'),
+        key: 'My lists',
         analyticsEvent: 'UserLists',
       },
       {
         url: `${baseHost}/details/@${userid}/collections`,
-        title: 'My collections',
+        title: msg('My collections'),
+        key: 'My collections',
         analyticsEvent: 'UserCollections',
       },
       {
         url: `${baseHost}/details/@${userid}/web-archive`,
-        title: 'My web archives',
+        title: msg('My web archives'),
+        key: 'My web archives',
         analyticsEvent: 'UserWebArchive',
       },
       {
         url: `${baseHost}/account/settings`,
-        title: 'Account settings',
+        title: msg('Account settings'),
+        key: 'Account settings',
         analyticsEvent: 'UserSettings',
       },
       {
         url: 'https://help.archive.org',
-        title: 'Get help',
+        title: msg('Get help'),
+        key: 'Get help',
         analyticsEvent: 'UserHelp',
       },
       {
         url: `${baseHost}/logout`,
-        title: 'Log out',
+        title: msg('Log out'),
+        key: 'Log out',
         analyticsEvent: 'UserLogOut',
       },
     ],
@@ -679,12 +746,14 @@ export function buildTopNavMenus(
     signedOut: [
       {
         url: `${baseHost}/signup`,
-        title: 'Sign up for free',
+        title: msg('Sign up for free'),
+        key: 'Sign up for free',
         analyticsEvent: 'AvatarMenu-Signup',
       },
       {
         url: `${baseHost}/login`,
-        title: 'Log in',
+        title: msg('Log in'),
+        key: 'Log in',
         analyticsEvent: 'AvatarMenu-Login',
       },
     ],

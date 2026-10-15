@@ -26,7 +26,10 @@ const GROUPS = [
 
 const WILDCARDS = {
   './*': './dist/src/elements/*.js',
+  './icons/*': './dist/src/icons/*.js',
+  './icons/*.svg': './dist/src/icons/*.svg',
   './labs/*': './dist/src/labs/*.js',
+  './services/*': './dist/src/services/*.js',
   './locales/*.js': './dist/src/locales/*.js',
 };
 

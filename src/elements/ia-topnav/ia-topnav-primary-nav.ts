@@ -1,12 +1,15 @@
 import { CSSResultGroup, PropertyValues, css, html, nothing } from 'lit';
 import TrackedElement from './tracked-element';
-import icons from './assets/img/icons';
+import donateUnpaddedIcon from '@src/icons/topnav-donate-unpadded';
+import iaLogoIcon from '@src/icons/topnav-ia-logo';
+import searchIcon from '@src/icons/topnav-search';
+import uploadIcon from '@src/icons/topnav-upload';
+import wordmarkStackedIcon from '@src/icons/topnav-wordmark-stacked';
 import './ia-topnav-icon-hamburger';
 import './ia-topnav-login-button';
 import type { LoginButton } from './ia-topnav-login-button';
 import './ia-topnav-media-menu';
 import '@src/elements/ia-sr-only-text/ia-sr-only-text';
-import logoWordmarkStacked from './assets/img/wordmark-stacked';
 import { formatUrl } from './lib/helpers';
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
@@ -17,8 +20,10 @@ import {
 } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
+import { localized, msg, str } from '@lit/localize';
 
 @customElement('ia-topnav-primary-nav')
+@localized()
 export class PrimaryNav extends TrackedElement {
   @property({ type: String }) mediaBaseHost = 'https://archive.org';
   @property({ type: String }) baseHost = '';
@@ -96,13 +101,18 @@ export class PrimaryNav extends TrackedElement {
 
   render() {
     // const mediaMenuTabIndex = this.openMenu === 'media' ? '' : '-1';
+    const hamburgerLabel =
+      this.openMenu === 'media'
+        ? msg('Close main menu')
+        : msg('Open main menu');
     return html`
       <nav class=${this.hideSearch ? 'hide-search' : ''}>
         <button
           class="hamburger"
           @click="${this.toggleMediaMenu}"
           data-event-click-tracking="${this.config?.eventCategory}|NavHamburger"
-          title="Open main menu"
+          title=${hamburgerLabel}
+          aria-label=${hamburgerLabel}
         >
           <ia-topnav-icon-hamburger
             ?active=${this.openMenu === 'media'}
@@ -114,9 +124,10 @@ export class PrimaryNav extends TrackedElement {
             .href=${formatUrl('/' as string & Location, this.baseHost)}
             @click=${this.trackClick}
             data-event-click-tracking="${this.config?.eventCategory}|NavHome"
-            title="Go home"
+            title=${msg('Go home')}
+            aria-label="Internet Archive"
             class="link-home"
-            >${icons.iaLogo}${logoWordmarkStacked}</a
+            >${iaLogoIcon}${wordmarkStackedIcon}</a
           >
           ${this.secondLogoSlot}
         </div>
@@ -192,7 +203,9 @@ export class PrimaryNav extends TrackedElement {
   get userIcon() {
     const userMenuClass = this.openMenu === 'user' ? 'active' : '';
     const userMenuToolTip =
-      this.openMenu === 'user' ? 'Close user menu' : 'Expand user menu';
+      this.openMenu === 'user'
+        ? msg('Close user menu')
+        : msg('Expand user menu');
 
     return html`
       <button
@@ -203,7 +216,7 @@ export class PrimaryNav extends TrackedElement {
       >
         <img
           src="${this.mediaBaseHost}${this.userProfileImagePath}"
-          alt="Profile picture for ${this.screenName}"
+          alt=${msg(str`Profile picture for ${this.screenName}`)}
         />
         <span class="screen-name" dir="auto">${this.screenName}</span>
       </button>
@@ -251,8 +264,9 @@ export class PrimaryNav extends TrackedElement {
         class="search-trigger"
         @click="${this.toggleSearchMenu}"
         data-event-click-tracking="${this.config?.eventCategory}|NavSearchOpen"
+        aria-label=${msg('Search')}
       >
-        ${icons.search}
+        ${searchIcon}
       </button>
     `;
   }
@@ -266,8 +280,8 @@ export class PrimaryNav extends TrackedElement {
           this.baseHost,
         )}
       >
-        ${icons.donateUnpadded}
-        <ia-sr-only-text>"Donate to the archive"</ia-sr-only-text>
+        ${donateUnpaddedIcon}
+        <ia-sr-only-text>${msg('Donate to the archive')}</ia-sr-only-text>
       </a>
     `;
   }
@@ -276,10 +290,11 @@ export class PrimaryNav extends TrackedElement {
     return html` <a
       .href="${formatUrl('/upload' as string & Location, this.baseHost)}"
       class="upload"
+      aria-label=${msg('Upload')}
       @focus=${this.toggleMediaMenu}
     >
-      ${icons.upload}
-      <span>Upload</span>
+      ${uploadIcon}
+      <span>${msg('Upload')}</span>
     </a>`;
   }
 
@@ -314,10 +329,15 @@ export class PrimaryNav extends TrackedElement {
         nav {
           position: relative;
           display: flex;
-          height: 4rem;
+          height: calc(40 * var(--topnavUnit--));
           grid-template-areas: 'hamburger empty heart search user';
-          -ms-grid-columns: 4rem minmax(1rem, 100%) 4rem 4rem 4rem;
-          grid-template-columns: 4rem auto 4rem 4rem 4rem;
+          -ms-grid-columns: calc(40 * var(--topnavUnit--))
+            minmax(calc(10 * var(--topnavUnit--)), 100%)
+            calc(40 * var(--topnavUnit--)) calc(40 * var(--topnavUnit--))
+            calc(40 * var(--topnavUnit--));
+          grid-template-columns:
+            calc(40 * var(--topnavUnit--)) auto calc(40 * var(--topnavUnit--))
+            calc(40 * var(--topnavUnit--)) calc(40 * var(--topnavUnit--));
           -ms-grid-rows: 100%;
           grid-template-rows: 100%;
           background: var(--primaryNavBg);
@@ -326,8 +346,12 @@ export class PrimaryNav extends TrackedElement {
 
         nav.hide-search {
           grid-template-areas: 'hamburger empty heart user';
-          -ms-grid-columns: 4rem minmax(1rem, 100%) 4rem 4rem;
-          grid-template-columns: 4rem auto 4rem 4rem;
+          -ms-grid-columns: calc(40 * var(--topnavUnit--))
+            minmax(calc(10 * var(--topnavUnit--)), 100%)
+            calc(40 * var(--topnavUnit--)) calc(40 * var(--topnavUnit--));
+          grid-template-columns:
+            calc(40 * var(--topnavUnit--)) auto calc(40 * var(--topnavUnit--))
+            calc(40 * var(--topnavUnit--));
         }
 
         .right-side-section {
@@ -365,18 +389,16 @@ export class PrimaryNav extends TrackedElement {
           justify-self: stretch;
         }
 
-        .ia-logo {
-          height: 3rem;
-          width: 2.7rem;
+        .link-home svg {
+          height: calc(30 * var(--topnavUnit--));
+          margin-right: 5px;
+        }
+        .link-home svg:first-child {
+          width: calc(27 * var(--topnavUnit--));
           display: inline-block;
         }
-        .ia-wordmark {
-          height: 3rem;
-          width: 9.5rem;
-        }
-        .ia-logo,
-        .ia-wordmark {
-          margin-right: 5px;
+        .link-home svg:last-child {
+          width: calc(95 * var(--topnavUnit--));
         }
 
         .hamburger {
@@ -386,8 +408,8 @@ export class PrimaryNav extends TrackedElement {
           padding: 0;
         }
         .hamburger svg {
-          height: 4rem;
-          width: 4rem;
+          height: calc(40 * var(--topnavUnit--));
+          width: calc(40 * var(--topnavUnit--));
           fill: var(--activeColor);
         }
 
@@ -395,22 +417,18 @@ export class PrimaryNav extends TrackedElement {
           display: inline-block;
         }
         .mobile-donate-link svg {
-          height: 4rem;
-          width: 4rem;
-        }
-        .mobile-donate-link .fill-color {
-          fill: rgb(255, 0, 0);
+          height: calc(40 * var(--topnavUnit--));
+          width: calc(40 * var(--topnavUnit--));
+          color: rgb(255, 0, 0);
         }
 
         .search-trigger {
           padding: 0;
         }
         .search-trigger svg {
-          height: 4rem;
-          width: 4rem;
-        }
-        .search-trigger .fill-color {
-          fill: var(--iconFill);
+          height: calc(40 * var(--topnavUnit--));
+          width: calc(40 * var(--topnavUnit--));
+          color: var(--iconFill);
         }
 
         .search-container {
@@ -421,12 +439,13 @@ export class PrimaryNav extends TrackedElement {
           display: flex;
           position: absolute;
           top: 0;
-          right: 4rem;
+          right: calc(40 * var(--topnavUnit--));
           bottom: 0;
-          left: 4rem;
+          left: calc(40 * var(--topnavUnit--));
           z-index: 3;
-          padding: 0.5rem;
-          border-radius: 1rem 1rem 0 0;
+          padding: calc(5 * var(--topnavUnit--));
+          border-radius: calc(10 * var(--topnavUnit--))
+            calc(10 * var(--topnavUnit--)) 0 0;
           background: var(--primaryNavBg);
           align-items: center;
           animation: fade-in 0.2s forwards;
@@ -458,20 +477,20 @@ export class PrimaryNav extends TrackedElement {
         }
 
         .upload svg {
-          height: 3rem;
-          width: 3rem;
+          height: calc(30 * var(--topnavUnit--));
+          width: calc(30 * var(--topnavUnit--));
         }
 
         .screen-name {
           display: none;
-          font-size: 1.3rem;
+          font-size: calc(13 * var(--topnavUnit--));
           vertical-align: middle;
           text-transform: uppercase;
         }
 
         .user-menu {
           color: var(--lightTextColor);
-          padding: 0.5rem;
+          padding: calc(5 * var(--topnavUnit--));
           height: 100%;
         }
 
@@ -482,14 +501,15 @@ export class PrimaryNav extends TrackedElement {
         }
 
         .user-menu.active {
-          border-radius: 1rem 1rem 0 0;
+          border-radius: calc(10 * var(--topnavUnit--))
+            calc(10 * var(--topnavUnit--)) 0 0;
           background: var(--activeButtonBg);
         }
 
         .user-menu img {
           display: block;
-          width: 3rem;
-          height: 3rem;
+          width: calc(30 * var(--topnavUnit--));
+          height: calc(30 * var(--topnavUnit--));
         }
 
         .link-home {
@@ -528,23 +548,22 @@ export class PrimaryNav extends TrackedElement {
 
         @media (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) {
           :host {
-            --userIconWidth: 3.2rem;
-            --userIconHeight: 3.2rem;
+            --userIconWidth: calc(32 * var(--topnavUnit--));
+            --userIconHeight: calc(32 * var(--topnavUnit--));
           }
 
           nav {
             display: flex;
             z-index: 4;
-            height: 5rem;
-            padding-right: 1.5rem;
+            height: calc(50 * var(--topnavUnit--));
+            padding-right: calc(15 * var(--topnavUnit--));
           }
 
           slot[name='opt-sec-logo-mobile'] {
             display: none;
           }
 
-          .ia-logo,
-          .ia-wordmark {
+          .link-home svg {
             margin-right: 10px;
           }
 
@@ -562,13 +581,14 @@ export class PrimaryNav extends TrackedElement {
           }
 
           .user-info .user-menu img {
-            height: 3rem;
-            width: 3rem;
-            margin-right: 0.5rem;
+            height: calc(30 * var(--topnavUnit--));
+            width: calc(30 * var(--topnavUnit--));
+            margin-right: calc(5 * var(--topnavUnit--));
           }
 
           .user-menu {
-            padding: 1rem 0.5rem;
+            padding: calc(10 * var(--topnavUnit--))
+              calc(5 * var(--topnavUnit--));
           }
           .user-menu.active {
             background: transparent;
@@ -577,14 +597,15 @@ export class PrimaryNav extends TrackedElement {
           .user-menu img {
             display: inline-block;
             vertical-align: middle;
-            margin-right: 0.5rem;
+            margin-right: calc(5 * var(--topnavUnit--));
           }
 
           .upload {
             display: block;
-            padding: 1rem 0.5rem;
+            padding: calc(10 * var(--topnavUnit--))
+              calc(5 * var(--topnavUnit--));
             float: right;
-            font-size: 1.4rem;
+            font-size: calc(14 * var(--topnavUnit--));
             text-transform: uppercase;
             text-decoration: none;
             color: var(--lightTextColor);
@@ -600,13 +621,13 @@ export class PrimaryNav extends TrackedElement {
 
           .upload svg {
             vertical-align: middle;
-            fill: var(--iconFill);
+            color: var(--iconFill);
           }
 
           .upload:hover svg,
           .upload:focus svg,
           .upload:active svg {
-            fill: var(--linkHoverColor);
+            color: var(--linkHoverColor);
           }
 
           .search-container,
@@ -618,7 +639,7 @@ export class PrimaryNav extends TrackedElement {
             bottom: auto;
             left: auto;
             align-items: center;
-            padding: 0 0 0 1rem;
+            padding: 0 0 0 calc(10 * var(--topnavUnit--));
             background: transparent;
             border-radius: 0;
             z-index: auto;

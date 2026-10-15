@@ -5,8 +5,10 @@ import { customElement } from '@src/util/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
+import { localized, msg } from '@lit/localize';
 
 @customElement('ia-topnav-save-page-form')
+@localized()
 export class SavePageForm extends TrackedElement {
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
 
@@ -20,22 +22,25 @@ export class SavePageForm extends TrackedElement {
         data-event-submit-tracking="${this.config.eventCategory}|SavePageSubmit"
         @submit=${this.validateURL}
       >
-        <h3>Save Page Now</h3>
+        <h3>${msg('Save Page Now')}</h3>
         <p>
-          Capture a web page as it appears now for use as a trusted citation in
-          the future.
+          ${msg(
+            'Capture a web page as it appears now for use as a trusted citation in the future.',
+          )}
         </p>
         <div>
           <input
             type="text"
-            aria-label="Enter a URL to save"
+            aria-label=${msg('Enter a URL to save')}
             name="url_preload"
             id="url_preload"
             placeholder="https://"
           />
-          <input type="submit" value="Save" />
+          <input type="submit" value=${msg('Save')} />
         </div>
-        <p class=${this.errorClass}>Please enter a valid web address</p>
+        <p class=${this.errorClass}>
+          ${msg('Please enter a valid web address')}
+        </p>
       </form>
     `;
   }
@@ -67,7 +72,7 @@ export class SavePageForm extends TrackedElement {
         div {
           display: grid;
           grid-template-columns: 1fr auto;
-          grid-column-gap: 0.8rem;
+          grid-column-gap: calc(8 * var(--topnavUnit--));
           margin: 0;
           padding: 0;
           border: none;
@@ -75,10 +80,10 @@ export class SavePageForm extends TrackedElement {
 
         input[type='text'] {
           width: 100%;
-          height: 3rem;
+          height: calc(30 * var(--topnavUnit--));
           box-sizing: border-box;
           border: 1px solid var(--savePageInputBorder);
-          border-radius: 0.5rem;
+          border-radius: calc(5 * var(--topnavUnit--));
           color: var(--grey13);
           font-size: inherit;
         }
@@ -87,8 +92,8 @@ export class SavePageForm extends TrackedElement {
           -webkit-appearance: none;
           -moz-appearance: none;
           appearance: none;
-          padding: 0.4rem 0.8rem;
-          font: normal 1.3rem var(--themeFontFamily);
+          padding: calc(4 * var(--topnavUnit--)) calc(8 * var(--topnavUnit--));
+          font: normal calc(13 * var(--topnavUnit--)) var(--themeFontFamily);
           text-transform: uppercase;
           color: var(--savePageSubmitText);
           border: none;
@@ -99,7 +104,7 @@ export class SavePageForm extends TrackedElement {
 
         .error {
           display: none;
-          margin-top: 0.5rem;
+          margin-top: calc(5 * var(--topnavUnit--));
           font-weight: bold;
           color: var(--savePageErrorText);
         }
@@ -111,7 +116,8 @@ export class SavePageForm extends TrackedElement {
         @media (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) {
           h3 {
             margin-top: 0;
-            font: normal 100 1.6rem var(--themeFontFamily);
+            font: normal 100 calc(16 * var(--topnavUnit--))
+              var(--themeFontFamily);
           }
         }
       `,
