@@ -13,11 +13,16 @@ import { localized, msg, str } from '@lit/localize';
 
 import type { Review } from '@internetarchive/metadata-service';
 import type { RecaptchaManagerInterface } from '@internetarchive/recaptcha-manager';
+import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
 
 import '@src/elements/ia-button/ia-button';
 
 import type { ReviewServiceInterface } from './models';
 import { ReviewService } from './review-service';
+import {
+  createLegacyReviewService,
+  hasLegacyProps,
+} from './legacy-review-service';
 import './ia-review';
 import './ia-review-form';
 
@@ -83,6 +88,27 @@ export class IAReviews extends LitElement {
    */
   @property({ type: Object }) reviewService?: ReviewServiceInterface;
 
+  /**
+   * The CSRF token for review writes and deletes.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: String }) token?: string;
+
+  /**
+   * The path review submissions POST to, relative to `baseHost`.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: String }) endpointPath?: string;
+
+  /**
+   * The handler review writes and deletes go through.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: Object }) fetchHandler?: FetchHandlerInterface;
+
   /* The service the components actually call, whether injected or built here */
   @state()
   private activeReviewService?: ReviewServiceInterface;
@@ -138,12 +164,12 @@ export class IAReviews extends LitElement {
     if (
       !this.activeReviewService ||
       changed.has('reviewService') ||
-      changed.has('baseHost')
+      changed.has('baseHost') ||
+      changed.has('token') ||
+      changed.has('endpointPath') ||
+      changed.has('fetchHandler')
     ) {
-      // the fallback keeps rendering and the form working for a consumer that supplies no
-      // service; it carries no CSRF token, so a submission through it fails
-      this.activeReviewService =
-        this.reviewService ?? new ReviewService({ baseHost: this.baseHost });
+      this.activeReviewService = this.buildReviewService();
     }
 
     if (changed.has('reviews') || changed.has('submitterItemname')) {
@@ -163,6 +189,19 @@ export class IAReviews extends LitElement {
     ) {
       this.displayReviews = true;
     }
+  }
+
+  /**
+   * The injected service if there is one. Otherwise one built from the deprecated props if any
+   * were given, and failing that a bare service that renders and opens the form but carries no
+   * CSRF token, so a submission through it fails.
+   */
+  private buildReviewService(): ReviewServiceInterface {
+    if (this.reviewService) return this.reviewService;
+
+    if (hasLegacyProps(this)) return createLegacyReviewService(this);
+
+    return new ReviewService({ baseHost: this.baseHost });
   }
 
   /* Message to display if reviews are disabled */
