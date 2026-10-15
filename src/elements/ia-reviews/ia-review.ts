@@ -14,6 +14,7 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { Review } from '@internetarchive/metadata-service';
 
 import type { ReviewServiceInterface } from './models';
+import { createLegacyReviewService } from './legacy-review-service';
 
 import starBasic from './assets/star-basic.svg';
 import { truncateScreenname } from './utils/truncate-screenname';
@@ -52,6 +53,13 @@ export class IAReview extends LitElement {
 
   /* Handles the review deletion request */
   @property({ type: Object }) reviewService?: ReviewServiceInterface;
+
+  /**
+   * CSRF token to use for delete request submission.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: String }) csrfToken?: string;
 
   /* Whether the person viewing this review has the power to delete it */
   @property({ type: Boolean }) canDelete = false;
@@ -263,12 +271,7 @@ export class IAReview extends LitElement {
     if (!this.review?.reviewer || !this.identifier) return;
     if (!confirm(msg('Are you sure you want to delete this review?'))) return;
 
-    if (!this.reviewService) {
-      this.deleteOutcome = { status: 'failed' };
-      return;
-    }
-
-    const result = await this.reviewService.deleteReview({
+    const result = await this.activeReviewService.deleteReview({
       identifier: this.identifier,
       reviewer: this.review.reviewer,
       reviewerItemname: this.review.reviewer_itemname,
@@ -277,6 +280,19 @@ export class IAReview extends LitElement {
     this.deleteOutcome = result.success
       ? { status: 'queued' }
       : { status: 'failed', error: result.error };
+  }
+
+  /**
+   * The injected service if there is one. Otherwise one built from the deprecated `csrfToken`
+   * and `baseHost`.
+   */
+  private get activeReviewService(): ReviewServiceInterface {
+    if (this.reviewService) return this.reviewService;
+
+    return createLegacyReviewService({
+      token: this.csrfToken,
+      baseHost: this.baseHost,
+    });
   }
 
   /* The message that replaces the body once a deletion has been attempted */

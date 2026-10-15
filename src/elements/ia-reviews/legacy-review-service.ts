@@ -1,4 +1,3 @@
-import { msg } from '@lit/localize';
 import { IaFetchHandler } from '@internetarchive/fetch-handler';
 import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
 
@@ -58,7 +57,7 @@ class LegacyReviewService implements ReviewServiceInterface {
     body.append('field_reviewtitle', submission.title);
     body.append('field_reviewbody', submission.body);
     body.append('field_reviewtoken', this.token);
-    body.append('identifier', submission.identifier);
+    if (submission.identifier) body.append('identifier', submission.identifier);
     body.append('submitter', 'review-form');
 
     try {
@@ -72,10 +71,10 @@ class LegacyReviewService implements ReviewServiceInterface {
       });
 
       if (result?.success === true) return { success: true };
-      return { success: false, error: result?.error ?? this.genericError };
+      return { success: false, error: result?.error };
     } catch (e) {
       console.error('Review request failed', e);
-      return { success: false, error: this.genericError };
+      return { success: false };
     }
   }
 
@@ -96,12 +95,8 @@ class LegacyReviewService implements ReviewServiceInterface {
       return { success: true };
     } catch (e) {
       console.error('Review request failed', e);
-      return { success: false, error: this.genericError };
+      return { success: false };
     }
-  }
-
-  private get genericError(): string {
-    return msg('Sorry, something went wrong. Please try again later.');
   }
 }
 
