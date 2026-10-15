@@ -8,6 +8,7 @@ import type { PropInputSettings } from '@demo/story-components/story-prop-settin
 import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
 import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
 import type { IAReviews } from './ia-reviews';
+import { ReviewService } from './review-service';
 
 import './ia-reviews';
 import '@demo/story-template';
@@ -42,6 +43,42 @@ const REVIEWS: Review[] = [
     reviewdate: '2026-06-21',
     createdate: '2026-06-21',
   }),
+  new Review({
+    stars: 4,
+    reviewtitle: 'Solid transfer',
+    reviewbody: 'Clean audio, good notes. Would listen again.',
+    reviewer: 'Dee Okafor',
+    reviewer_itemname: '@dee-okafor',
+    reviewdate: '2026-05-30',
+    createdate: '2026-05-30',
+  }),
+  new Review({
+    stars: 5,
+    reviewtitle: 'A favourite',
+    reviewbody: 'I come back to this one every year.',
+    reviewer: 'Eli Marsh',
+    reviewer_itemname: '@eli-marsh',
+    reviewdate: '2026-04-11',
+    createdate: '2026-04-11',
+  }),
+  new Review({
+    stars: 2,
+    reviewtitle: 'Not for me',
+    reviewbody: 'Well made, but the style never clicked for me.',
+    reviewer: 'Fen Albright',
+    reviewer_itemname: '@fen-albright',
+    reviewdate: '2026-03-08',
+    createdate: '2026-03-08',
+  }),
+  new Review({
+    stars: 4,
+    reviewtitle: 'Worth it for the second half',
+    reviewbody: 'Slow start, but it earns the ending.',
+    reviewer: 'Gus Tanaka',
+    reviewer_itemname: '@gus-tanaka',
+    reviewdate: '2026-02-19',
+    createdate: '2026-02-19',
+  }),
 ];
 
 const styleInputSettings: StyleInputSettings[] = [
@@ -55,9 +92,15 @@ const styleInputSettings: StyleInputSettings[] = [
 
 const propInputSettings: PropInputSettings<IAReviews>[] = [
   {
-    label: 'Reviews open by default',
+    label: 'Max reviews before "Show more"',
+    propertyName: 'maxInitialReviews',
+    defaultValue: 5,
+    inputType: 'number',
+  },
+  {
+    label: 'Show every review, untruncated',
     propertyName: 'displayReviewsByDefault',
-    defaultValue: true,
+    defaultValue: false,
     inputType: 'radio',
     radioOptions: [true, false],
   },
@@ -102,12 +145,13 @@ const propInputSettings: PropInputSettings<IAReviews>[] = [
 ];
 
 /**
- * Stands in for the real fetch handler so submitting in the demo doesn't post
- * to archive.org. Every call reports success without going near the network.
+ * Stands in for the real fetch handler so submitting or deleting in the demo
+ * doesn't reach archive.org. Every request reports success without going near
+ * the network.
  */
 const demoFetchHandler: FetchHandlerInterface = {
   async fetch() {
-    return new Response('{}', { status: 200 });
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
   },
   async fetchApiResponse<T>() {
     return { success: true } as T;
@@ -120,41 +164,15 @@ const demoFetchHandler: FetchHandlerInterface = {
   },
 };
 
-const MAX_LOG_ENTRIES = 6;
+const demoReviewService = new ReviewService({ fetchHandler: demoFetchHandler });
 
-const DELETE_ENDPOINT = '/edit-reviews.php';
+const MAX_LOG_ENTRIES = 6;
 
 @customElement('ia-reviews-story')
 export class IAReviewsStory extends LitElement {
   @state() private log: string[] = [];
 
   @query('ia-reviews') private reviews?: IAReviews;
-
-  private realFetch?: typeof window.fetch;
-
-  /**
-   * Deleting a review calls the global `fetch` directly, not the
-   * `fetchHandler`. While the demo is on the page, that one endpoint is
-   * answered locally so a delete click never posts to archive.org.
-   */
-  connectedCallback() {
-    super.connectedCallback();
-    const realFetch = window.fetch;
-    this.realFetch = realFetch;
-    window.fetch = (input, init) => {
-      const url = input instanceof Request ? input.url : String(input);
-      if (url.includes(DELETE_ENDPOINT)) {
-        return Promise.resolve(new Response('{}', { status: 200 }));
-      }
-      return realFetch.call(window, input, init);
-    };
-  }
-
-  disconnectedCallback() {
-    if (this.realFetch) window.fetch = this.realFetch;
-    this.realFetch = undefined;
-    super.disconnectedCallback();
-  }
 
   render() {
     return html`
@@ -168,11 +186,10 @@ export class IAReviewsStory extends LitElement {
         <ia-reviews
           slot="demo"
           identifier="nasa"
-          displayReviewsByDefault
           bypassRecaptcha
           submitterScreenname="Demo User"
           .reviews=${REVIEWS}
-          .fetchHandler=${demoFetchHandler}
+          .reviewService=${demoReviewService}
           @newReviewAdded=${this.record}
         ></ia-reviews>
 
@@ -200,15 +217,16 @@ export class IAReviewsStory extends LitElement {
           <p>
             The reviews list for an item, plus the form for writing one. Pass
             the existing reviews in as <code>reviews</code> and the item's
-            <code>identifier</code>; the component posts new ones itself through
-            its <code>fetchHandler</code>.
+            <code>identifier</code>. Writes and deletes go through the
+            <code>reviewService</code> it's handed, a <code>ReviewService</code>
+            built on a fetch handler that supplies the CSRF token.
           </p>
           <p>
             <code>bypassRecaptcha</code> is set here so the form can be
-            submitted without a reCAPTCHA key, and the demo supplies a stub
-            <code>fetchHandler</code> and answers the delete request locally, so
-            nothing posts to archive.org. In real use, hand it a
-            <code>recaptchaManager</code> and the real handler.
+            submitted without a reCAPTCHA key, and the demo's service sits on a
+            stub fetch handler so nothing posts to archive.org. In real use,
+            hand it a <code>recaptchaManager</code> and a service built on the
+            real handler.
           </p>
           <p>
             The component only shows a "write a review" link when an item has no
@@ -222,6 +240,13 @@ export class IAReviewsStory extends LitElement {
             component. The form's <code>reviewUpdated</code> and
             <code>reviewEditCanceled</code> are handled inside
             <code>ia-reviews</code> and don't cross its shadow boundary.
+          </p>
+          <p>
+            Only the newest <code>maxInitialReviews</code> (5 by default) show
+            at first, with a "Show more" button for the rest. The patron's own
+            review sits above the list and doesn't count toward that.
+            <code>displayReviewsByDefault</code> shows every review with no
+            truncation.
           </p>
           <p>
             <code>reviewsDisabled</code> hides the whole section, while

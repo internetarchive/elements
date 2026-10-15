@@ -9,7 +9,7 @@ import {
 } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
-import { msg } from '@lit/localize';
+import { localized, msg, str } from '@lit/localize';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 import DOMPurify from 'dompurify';
@@ -19,33 +19,27 @@ import type {
   RecaptchaWidgetInterface,
 } from '@internetarchive/recaptcha-manager';
 import '@src/elements/ia-button/ia-button';
-import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
 import { Review } from '@internetarchive/metadata-service';
 
 import starSelected from './assets/star-selected.svg';
 import starUnselected from './assets/star-unselected.svg';
 
+import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
+import type { ReviewServiceInterface } from './models';
+import { createLegacyReviewService } from './legacy-review-service';
 import './ia-review';
 
 /**
  * Renders a form to edit a given IA review.
  */
 @customElement('ia-review-form')
+@localized()
 export class IAReviewForm extends LitElement {
   /* The IA item being reviewed */
   @property({ type: String }) identifier?: string;
 
-  /* The token for the review edit */
-  @property({ type: String }) token: string = '';
-
-  /* The host for archive endpoints and data */
-  @property({ type: String }) baseHost: string = 'https://archive.org';
-
-  /* The path for the endpoint we're submitting to */
-  @property({ type: String }) endpointPath: string = '/write-review.php';
-
-  /** Form submitter's screenname, if applicable */
-  @property({ type: String }) submitterScreenname: string = 'Anonymous';
+  /** Form submitter's screenname, if applicable. Defaults to "Anonymous". */
+  @property({ type: String }) submitterScreenname?: string;
 
   /** Form submitter's itemname, if applicable */
   @property({ type: String }) submitterItemname?: string;
@@ -62,7 +56,35 @@ export class IAReviewForm extends LitElement {
   /* Optional max length for review body */
   @property({ type: Number }) maxBodyLength?: number;
 
-  /* Handler for form submission */
+  /* Handles the review submission request */
+  @property({ type: Object }) reviewService?: ReviewServiceInterface;
+
+  /**
+   * The token for the review edit.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: String }) token?: string;
+
+  /**
+   * The host for archive endpoints and data.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: String }) baseHost: string = 'https://archive.org';
+
+  /**
+   * The path for the endpoint the review is submitted to.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
+  @property({ type: String }) endpointPath?: string;
+
+  /**
+   * The handler the submission goes through.
+   *
+   * @deprecated Supply a `reviewService` instead. Only read when `reviewService` isn't set.
+   */
   @property({ type: Object }) fetchHandler?: FetchHandlerInterface;
 
   /* Service for activating the recaptcha challenge */
@@ -90,6 +112,14 @@ export class IAReviewForm extends LitElement {
   @state()
   recoverableError?: string;
 
+  /* A recoverable error the form raised itself, resolved to a message when it renders */
+  @state()
+  private formError?: 'recaptcha' | 'generic';
+
+  /* Whether recaptcha failed to load, which blocks submission */
+  @state()
+  private recaptchaUnavailable: boolean = false;
+
   /* Whether to enable the submit button */
   @state()
   private formCanSubmit: boolean = false;
@@ -102,16 +132,9 @@ export class IAReviewForm extends LitElement {
   @query('#review-form')
   private reviewForm!: HTMLFormElement;
 
-  /* Error to show if recaptcha cannot be loaded */
-  private RECAPTCHA_ERROR_MESSAGE =
-    'Could not validate review. Please try again later.';
-
-  private GENERIC_ERROR_MESSAGE =
-    "There's been a temporary error. Please wait a moment and try again.";
-
   render() {
     return html`<form id="review-form" @submit=${this.handleSubmit}>
-      ${this.unrecoverableError
+      ${this.unrecoverableErrorMessage
         ? this.unrecoverableErrorTemplate
         : html`
             <span class="inputs">
@@ -142,7 +165,10 @@ export class IAReviewForm extends LitElement {
     }
 
     // Disable form if unrecoverable error added
-    if (changed.has('unrecoverableError')) {
+    if (
+      changed.has('unrecoverableError') ||
+      changed.has('recaptchaUnavailable')
+    ) {
       this.formCanSubmit = this.checkSubmissionAllowed();
     }
 
@@ -161,10 +187,12 @@ export class IAReviewForm extends LitElement {
   private get unrecoverableErrorTemplate():
     | HTMLTemplateResult
     | typeof nothing {
-    return this.unrecoverableError
+    const message = this.unrecoverableErrorMessage;
+
+    return message
       ? html`
           <div class="unrecoverable-error">
-            <span class="error-msg">${msg(this.unrecoverableError)}</span>
+            <span class="error-msg">${message}</span>
           </div>
         `
       : nothing;
@@ -172,13 +200,47 @@ export class IAReviewForm extends LitElement {
 
   /** Error to render next to submit button */
   private get recoverableErrorTemplate(): HTMLTemplateResult | typeof nothing {
-    return this.recoverableError
+    const message = this.recoverableErrorMessage;
+
+    return message
       ? html`
           <div class="recoverable-error">
-            ${unsafeHTML(this.sanitizeErrorMsg(msg(this.recoverableError)))}
+            ${unsafeHTML(this.sanitizeErrorMsg(message))}
           </div>
         `
       : nothing;
+  }
+
+  /* The error that replaces the form inputs: one passed in, or recaptcha failing to load */
+  private get unrecoverableErrorMessage(): string | undefined {
+    if (this.unrecoverableError) return this.unrecoverableError;
+
+    return this.recaptchaUnavailable ? this.recaptchaErrorMessage : undefined;
+  }
+
+  /* The error shown next to the submit button: one passed in or sent back, or one the form raised */
+  private get recoverableErrorMessage(): string | undefined {
+    if (this.recoverableError) return this.recoverableError;
+
+    switch (this.formError) {
+      case 'recaptcha':
+        return this.recaptchaErrorMessage;
+      case 'generic':
+        return this.genericErrorMessage;
+      default:
+        return undefined;
+    }
+  }
+
+  /* Error to show if recaptcha cannot be loaded or run */
+  private get recaptchaErrorMessage(): string {
+    return msg('Could not validate review. Please try again later.');
+  }
+
+  private get genericErrorMessage(): string {
+    return msg(
+      "There's been a temporary error. Please wait a moment and try again.",
+    );
   }
 
   private get recaptchaMessageTemplate(): HTMLTemplateResult | typeof nothing {
@@ -264,12 +326,30 @@ export class IAReviewForm extends LitElement {
         ? html`
             <div class="input-error">
               ${msg(
-                `Subject may only have ${this.maxSubjectLength} characters`,
+                str`Subject may only have ${this.maxSubjectLength} characters`,
               )}
             </div>
           `
         : nothing
     }</div></span>
+    `;
+  }
+
+  /** Hidden inputs that carry the token and identifier of the deprecated props */
+  private get hiddenInputsTemplate(): HTMLTemplateResult {
+    return html`
+      <input
+        type="hidden"
+        name="field_reviewtoken"
+        .value=${this.token ?? ''}
+      />
+      ${this.identifier
+        ? html`<input
+            type="hidden"
+            name="identifier"
+            .value=${this.identifier}
+          />`
+        : nothing}
     `;
   }
 
@@ -302,25 +382,13 @@ export class IAReviewForm extends LitElement {
         ${this.maxBodyLength
           ? html`
               <div class="input-error">
-                ${msg(`Review may only have ${this.maxBodyLength} characters`)}
+                ${msg(
+                  str`Review may only have ${this.maxBodyLength} characters`,
+                )}
               </div>
             `
           : nothing}
       </span>
-    `;
-  }
-
-  /** Hidden inputs we use to store other information for form submission */
-  private get hiddenInputsTemplate(): HTMLTemplateResult {
-    return html`
-      <input type="hidden" name="field_reviewtoken" .value=${this.token} />
-      ${this.identifier
-        ? html`<input
-            type="hidden"
-            name="identifier"
-            .value=${this.identifier}
-          />`
-        : nothing}
     `;
   }
 
@@ -356,7 +424,8 @@ export class IAReviewForm extends LitElement {
    */
   private renderStar(num: number): HTMLTemplateResult {
     const isSelected = num === this.currentStars;
-    const ratingLabel = msg(`Rate ${num > 1 ? `${num} stars` : '1 star'}`);
+    const ratingLabel =
+      num === 1 ? msg('Rate 1 star') : msg(str`Rate ${num} stars`);
 
     return html`
       <button
@@ -390,7 +459,7 @@ export class IAReviewForm extends LitElement {
     try {
       this.recaptchaWidget = await this.recaptchaManager?.getRecaptchaWidget();
     } catch {
-      this.unrecoverableError = this.RECAPTCHA_ERROR_MESSAGE;
+      this.recaptchaUnavailable = true;
     }
   }
 
@@ -404,6 +473,22 @@ export class IAReviewForm extends LitElement {
     return DOMPurify.sanitize(errorMsg, { ALLOWED_TAGS: ['a', 'b', 'br'] });
   }
 
+  /**
+   * The injected service if there is one. Otherwise one built from the deprecated props when a
+   * `fetchHandler` was given, since a submission has nowhere to go without one.
+   */
+  private get activeReviewService(): ReviewServiceInterface | undefined {
+    if (this.reviewService) return this.reviewService;
+    if (!this.fetchHandler) return undefined;
+
+    return createLegacyReviewService({
+      token: this.token,
+      endpointPath: this.endpointPath,
+      fetchHandler: this.fetchHandler,
+      baseHost: this.baseHost,
+    });
+  }
+
   /** Handles validation and recaptcha execution on form submission */
   private async handleSubmit(e: Event): Promise<void> {
     e.preventDefault();
@@ -414,43 +499,35 @@ export class IAReviewForm extends LitElement {
     // Set loading behavior
     this.submissionInProgress = true;
     this.recoverableError = '';
+    this.formError = undefined;
 
     // Check for HTML errors
     if (!this.reviewForm.reportValidity()) {
       return this.stopSubmission();
     }
 
-    if (!this.fetchHandler) {
-      this.recoverableError = this.GENERIC_ERROR_MESSAGE;
+    // A host on the deprecated props never had to supply an identifier, since the form
+    // only sent one along when it had one.
+    const reviewService = this.activeReviewService;
+    if (!reviewService || (this.reviewService && !this.identifier)) {
+      this.formError = 'generic';
       return this.stopSubmission();
     }
 
     try {
-      const formData = new URLSearchParams();
-
+      let recaptchaToken: string | undefined;
       if (!this.bypassRecaptcha) {
-        const recaptchaToken = await this.getRecaptchaToken();
+        recaptchaToken = await this.getRecaptchaToken();
         if (!recaptchaToken) return this.handleRecaptchaError();
-
-        formData.append('g-recaptcha-response', recaptchaToken ?? '');
       }
 
-      for (const entry of new FormData(this.reviewForm)) {
-        formData.append(entry[0], entry[1] as string);
-      }
-
-      // Indicates to the backend that submission is intended
-      formData.append('submitter', 'review-form');
-
-      const result: { success: boolean; error?: string } =
-        await this.fetchHandler.fetchApiResponse(
-          `${this.baseHost}${this.endpointPath}`,
-          {
-            method: 'POST',
-            includeCredentials: true,
-            body: formData,
-          },
-        );
+      const result = await reviewService.submitReview({
+        identifier: this.identifier ?? '',
+        title: this.reviewForm.field_reviewtitle.value,
+        body: this.reviewForm.field_reviewbody.value,
+        stars: this.reviewForm.field_stars.value,
+        recaptchaToken,
+      });
 
       if (result?.success === true) {
         this.submissionInProgress = false;
@@ -462,12 +539,13 @@ export class IAReviewForm extends LitElement {
         });
         this.dispatchEvent(event);
       } else {
-        this.recoverableError = result.error ?? this.GENERIC_ERROR_MESSAGE;
+        if (result.error) this.recoverableError = result.error;
+        else this.formError = 'generic';
         this.stopSubmission();
       }
     } catch (e) {
       console.error(e);
-      this.recoverableError = this.GENERIC_ERROR_MESSAGE;
+      this.formError = 'generic';
       this.stopSubmission();
     }
   }
@@ -486,7 +564,10 @@ export class IAReviewForm extends LitElement {
       reviewbody: this.reviewForm.field_reviewbody.value,
       stars: this.reviewForm.field_stars.value,
       reviewdate: today,
-      reviewer: this.oldReview?.reviewer ?? this.submitterScreenname,
+      reviewer:
+        this.oldReview?.reviewer ??
+        this.submitterScreenname ??
+        msg('Anonymous'),
       reviewer_itemname:
         this.oldReview?.reviewer_itemname ?? this.submitterItemname,
       createdate: this.dateToString(this.oldReview?.createdate) ?? today,
@@ -525,7 +606,7 @@ export class IAReviewForm extends LitElement {
 
   /* Handles a recaptcha error during submission */
   private handleRecaptchaError(): void {
-    this.recoverableError = this.RECAPTCHA_ERROR_MESSAGE;
+    this.formError = 'recaptcha';
     this.stopSubmission();
   }
 
@@ -574,7 +655,7 @@ export class IAReviewForm extends LitElement {
   /* Checks if submission should be allowed */
   private checkSubmissionAllowed(): boolean {
     // Form must not have an unrecoverable error
-    if (this.unrecoverableError) {
+    if (this.unrecoverableErrorMessage) {
       return false;
     }
 
