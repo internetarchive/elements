@@ -6,7 +6,8 @@ import {
   HTMLTemplateResult,
   CSSResultGroup,
 } from 'lit';
-import { property, state } from 'lit/decorators.js';
+import { property, query, state } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { customElement } from '@src/util/custom-element';
 import { localized, msg, str } from '@lit/localize';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
@@ -75,6 +76,14 @@ export class IAReview extends LitElement {
   @state()
   private deleteOutcome?: DeleteOutcome;
 
+  /* The link to the reviewer's profile, if the review has one */
+  @query('.reviewer-link')
+  private reviewerLink?: HTMLAnchorElement;
+
+  /* The review's outermost element */
+  @query('article.review')
+  private reviewArticle?: HTMLElement;
+
   render() {
     return !this.review
       ? html`
@@ -83,7 +92,11 @@ export class IAReview extends LitElement {
           </div>
         `
       : html`
-          <article class="review" id=${this.generateDomId()}>
+          <article
+            class="review"
+            id=${this.generateDomId()}
+            tabindex=${ifDefined(this.hasReviewerLink ? undefined : '-1')}
+          >
             ${this.canDelete
               ? html`
                   <button
@@ -175,11 +188,25 @@ export class IAReview extends LitElement {
     </button>`;
   }
 
+  /**
+   * Focuses the reviewer link, the review's main tab stop. A review with no link (no reviewer
+   * itemname) focuses the review itself instead, which is why only that kind of review is
+   * focusable from script.
+   */
+  focus(options?: FocusOptions): void {
+    (this.reviewerLink ?? this.reviewArticle)?.focus(options);
+  }
+
+  /* Whether the reviewer's name links to their profile */
+  private get hasReviewerLink(): boolean {
+    return !!this.review?.reviewer_itemname;
+  }
+
   /* Reviewer name, with hyperlink and truncation if needed */
   private get reviewerTemplate(): HTMLTemplateResult | typeof nothing {
     return !this.review
       ? nothing
-      : this.review.reviewer_itemname
+      : this.hasReviewerLink
         ? html`
             <a
               href="${this.baseHost}/details/${this.review.reviewer_itemname}"

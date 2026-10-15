@@ -312,18 +312,6 @@
             write a review<x id="1" equiv-text="&lt;/ia-button&gt;"/>.
         </source>
 </trans-unit>
-<trans-unit id="sf5f5218c011da3da">
-  <source>There is 1 review for this item.</source>
-</trans-unit>
-<trans-unit id="s74b17b5bfc5bbd36">
-  <source>There are <x id="0" equiv-text="${this.reviewsCount}"/> reviews for this item.</source>
-</trans-unit>
-<trans-unit id="s2848e46cd1281637">
-  <source>Display review</source>
-</trans-unit>
-<trans-unit id="s9bf268e7671dd58c">
-  <source>Display reviews</source>
-</trans-unit>
 <trans-unit id="sb094ddadb5f59b64">
   <source>Sorry, something went wrong. Please try again later.</source>
 </trans-unit>
@@ -696,6 +684,12 @@
 </trans-unit>
 <trans-unit id="sdeef9e88871e5e9b">
   <source>Enter URL or keywords</source>
+</trans-unit>
+<trans-unit id="sa5c2a4b46a1df9dc">
+  <source>Show 1 more review</source>
+</trans-unit>
+<trans-unit id="s5625502dc647f9c2">
+  <source>Show <x id="0" equiv-text="${hiddenCount}"/> more reviews</source>
 </trans-unit>
 </body>
 </file>

@@ -43,6 +43,42 @@ const REVIEWS: Review[] = [
     reviewdate: '2026-06-21',
     createdate: '2026-06-21',
   }),
+  new Review({
+    stars: 4,
+    reviewtitle: 'Solid transfer',
+    reviewbody: 'Clean audio, good notes. Would listen again.',
+    reviewer: 'Dee Okafor',
+    reviewer_itemname: '@dee-okafor',
+    reviewdate: '2026-05-30',
+    createdate: '2026-05-30',
+  }),
+  new Review({
+    stars: 5,
+    reviewtitle: 'A favourite',
+    reviewbody: 'I come back to this one every year.',
+    reviewer: 'Eli Marsh',
+    reviewer_itemname: '@eli-marsh',
+    reviewdate: '2026-04-11',
+    createdate: '2026-04-11',
+  }),
+  new Review({
+    stars: 2,
+    reviewtitle: 'Not for me',
+    reviewbody: 'Well made, but the style never clicked for me.',
+    reviewer: 'Fen Albright',
+    reviewer_itemname: '@fen-albright',
+    reviewdate: '2026-03-08',
+    createdate: '2026-03-08',
+  }),
+  new Review({
+    stars: 4,
+    reviewtitle: 'Worth it for the second half',
+    reviewbody: 'Slow start, but it earns the ending.',
+    reviewer: 'Gus Tanaka',
+    reviewer_itemname: '@gus-tanaka',
+    reviewdate: '2026-02-19',
+    createdate: '2026-02-19',
+  }),
 ];
 
 const styleInputSettings: StyleInputSettings[] = [
@@ -56,9 +92,15 @@ const styleInputSettings: StyleInputSettings[] = [
 
 const propInputSettings: PropInputSettings<IAReviews>[] = [
   {
-    label: 'Reviews open by default',
+    label: 'Max reviews before "Show more"',
+    propertyName: 'maxInitialReviews',
+    defaultValue: 5,
+    inputType: 'number',
+  },
+  {
+    label: 'Show every review, untruncated',
     propertyName: 'displayReviewsByDefault',
-    defaultValue: true,
+    defaultValue: false,
     inputType: 'radio',
     radioOptions: [true, false],
   },
@@ -144,7 +186,6 @@ export class IAReviewsStory extends LitElement {
         <ia-reviews
           slot="demo"
           identifier="nasa"
-          displayReviewsByDefault
           bypassRecaptcha
           submitterScreenname="Demo User"
           .reviews=${REVIEWS}
@@ -199,6 +240,13 @@ export class IAReviewsStory extends LitElement {
             component. The form's <code>reviewUpdated</code> and
             <code>reviewEditCanceled</code> are handled inside
             <code>ia-reviews</code> and don't cross its shadow boundary.
+          </p>
+          <p>
+            Only the newest <code>maxInitialReviews</code> (5 by default) show
+            at first, with a "Show more" button for the rest. The patron's own
+            review sits above the list and doesn't count toward that.
+            <code>displayReviewsByDefault</code> shows every review with no
+            truncation.
           </p>
           <p>
             <code>reviewsDisabled</code> hides the whole section, while
