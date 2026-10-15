@@ -149,8 +149,8 @@ describe('IADonationPaymentSelector', () => {
     expect(
       button(el, '.paypal-local-button').getAttribute('aria-label'),
     ).to.equal('Pay with PayPal');
-    expect(button(el, '.applepay img').getAttribute('alt')).to.equal(
-      'Apple Pay',
+    expect(button(el, '.applepay svg').getAttribute('aria-hidden')).to.equal(
+      'true',
     );
   });
 

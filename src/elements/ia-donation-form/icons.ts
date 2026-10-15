@@ -1,33 +1,22 @@
-import { html, type TemplateResult } from 'lit';
-
-import { maskedIcon } from '@src/util/masked-icon';
-
-import applePayUrl from './icons/apple-pay.svg';
-import calendarUrl from './icons/calendar.svg';
-import creditCardUrl from './icons/credit-card.svg';
-import googlePayUrl from './icons/google-pay.svg';
-import lockUrl from './icons/lock.svg';
-import paypalUrl from './icons/paypal.svg';
-import venmoUrl from './icons/venmo.svg';
+import applePay from '@src/icons/applepay';
+import calendar from '@src/icons/calendar';
+import creditCard from '@src/icons/credit-card';
+import googlePay from '@src/icons/googlepay';
+import lock from '@src/icons/lock';
+import paypal from '@src/icons/paypal';
+import venmo from '@src/icons/venmo';
+import { iconBox } from '@src/util/icon-box';
 
 /**
- * Icons taken from the `@internetarchive/icon-*` packages (v1.3.4). They ship
- * as standalone `.svg` files so their path data stays out of the JS bundle.
- *
- * The single-colour field glyphs render as CSS masks (see `maskedIcon`) so
- * the host can paint them with `background-color`. The payment brand logos
- * are multicolour and render as images.
+ * The form's icons, wrapped in a box the host sizes (see `iconBoxStyles`).
+ * The field glyphs take their colour from the host's `color`. The payment
+ * brand logos keep their own colours.
  */
+export const applePayLogo = iconBox(applePay);
+export const googlePayLogo = iconBox(googlePay);
+export const paypalLogo = iconBox(paypal);
+export const venmoLogo = iconBox(venmo);
 
-/** A brand logo, drawn at the size of its container. */
-const brandLogo = (url: string, alt: string): TemplateResult =>
-  html`<img class="brand-logo" src=${url} alt=${alt} />`;
-
-export const applePayLogo = brandLogo(applePayUrl, 'Apple Pay');
-export const googlePayLogo = brandLogo(googlePayUrl, 'Google Pay');
-export const paypalLogo = brandLogo(paypalUrl, 'PayPal');
-export const venmoLogo = brandLogo(venmoUrl, 'Venmo');
-
-export const calendarIcon = maskedIcon(calendarUrl);
-export const creditCardIcon = maskedIcon(creditCardUrl);
-export const lockIcon = maskedIcon(lockUrl);
+export const calendarIcon = iconBox(calendar);
+export const creditCardIcon = iconBox(creditCard);
+export const lockIcon = iconBox(lock);

@@ -8,6 +8,7 @@ import {
 } from 'lit';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
+import { iconBoxStyles } from '@src/util/icon-box';
 
 import themeStyles from '@src/themes/theme-styles';
 
@@ -68,6 +69,7 @@ export class IADonationBadgedInput extends LitElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      iconBoxStyles,
       css`
         :host {
           --donation-badged-input-base-font-size--: var(
@@ -141,11 +143,11 @@ export class IADonationBadgedInput extends LitElement {
           flex-shrink: 0;
         }
 
-        /* Masked glyphs take their shape from the mask and their colour from here */
+        /* The glyph takes its colour from here */
         .icon-container .ia-icon {
           width: var(--donation-badged-input-icon-size--);
           height: var(--donation-badged-input-icon-size--);
-          background-color: var(--donation-badged-input-icon-color--);
+          color: var(--donation-badged-input-icon-color--);
         }
 
         .required-indicator {

@@ -9,6 +9,7 @@ import {
 } from 'lit';
 import { property, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
+import { iconBoxStyles } from '@src/util/icon-box';
 import { msg } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
@@ -247,6 +248,7 @@ export class IADonationPaymentSelector extends LitElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      iconBoxStyles,
       css`
         :host {
           --donation-selector-base-font-size--: var(
@@ -317,14 +319,9 @@ export class IADonationPaymentSelector extends LitElement {
         }
 
         .payment-image,
-        .brand-logo {
+        .payment-image .ia-icon {
           width: 100%;
           height: 100%;
-        }
-
-        .brand-logo {
-          display: block;
-          object-fit: contain;
         }
 
         .paypal-local-button {

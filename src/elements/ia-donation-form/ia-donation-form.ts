@@ -9,6 +9,7 @@ import {
 } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
+import { iconBoxStyles } from '@src/util/icon-box';
 import { msg } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
@@ -519,6 +520,7 @@ export class IADonationForm extends LitElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      iconBoxStyles,
       css`
         :host {
           /*
@@ -587,7 +589,6 @@ export class IADonationForm extends LitElement {
           width: calc(var(--donation-form-base-font-size--) * 1.2);
           height: calc(var(--donation-form-base-font-size--) * 1.5);
           vertical-align: bottom;
-          background-color: currentColor;
         }
 
         #donate-button {
