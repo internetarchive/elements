@@ -1,6 +1,6 @@
 import { html, css } from 'lit';
 import Icon from './assets/img/icon';
-import icons from './assets/img/icons';
+import closeIcon from '@src/icons/topnav-close';
 import { customElement } from '@src/util/custom-element';
 import { localized, msg } from '@lit/localize';
 
@@ -8,7 +8,7 @@ import { localized, msg } from '@lit/localize';
 @localized()
 export class HamBurger extends Icon {
   render() {
-    if (this.active) return icons.close;
+    if (this.active) return closeIcon;
 
     return html`
       <svg
@@ -35,11 +35,9 @@ export class HamBurger extends Icon {
     return css`
       svg {
         display: block;
-        height: 4rem;
-        width: 4rem;
-      }
-      .fill-color {
-        fill: var(--activeColor);
+        height: calc(40 * var(--topnavUnit--));
+        width: calc(40 * var(--topnavUnit--));
+        color: var(--activeColor);
       }
     `;
   }

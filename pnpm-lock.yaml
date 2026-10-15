@@ -166,15 +166,24 @@ importers:
 
   .:
     dependencies:
-      '@internetarchive/ia-clearable-text-input':
-        specifier: ^1.1.1
-        version: 1.1.1
+      '@internetarchive/fetch-handler':
+        specifier: ^1.4.0
+        version: 1.4.0
       '@internetarchive/ia-dropdown':
         specifier: ^2.2.0
         version: 2.2.0
+      '@internetarchive/icon-close':
+        specifier: ^1.4.0
+        version: 1.4.1
+      '@internetarchive/icon-user':
+        specifier: ^1.4.0
+        version: 1.4.1
       '@internetarchive/lazy-loader-service':
         specifier: ^0.2.0
         version: 0.2.0
+      '@internetarchive/metadata-service':
+        specifier: ^1.0.4
+        version: 1.1.1
       '@internetarchive/promised-singleton':
         specifier: ^0.2.1
         version: 0.2.1
@@ -208,6 +217,9 @@ importers:
       dayjs:
         specifier: ^1.11.23
         version: 1.11.23
+      dompurify:
+        specifier: ^3.2.5
+        version: 3.4.16
       lit:
         specifier: ^2.8.0 || ^3.3.2
         version: 3.3.3
@@ -217,9 +229,18 @@ importers:
       nanoevents:
         specifier: ^9.1.0
         version: 9.1.0
+      throttle-debounce:
+        specifier: ^5.0.2
+        version: 5.0.2
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
+      typescript-cookie:
+        specifier: ^1.0.6
+        version: 1.0.6
+      typescript-memoize:
+        specifier: ^1.1.1
+        version: 1.1.1
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.5
@@ -227,6 +248,9 @@ importers:
       '@eslint/js':
         specifier: ^9.39.1
         version: 9.39.5
+      '@internetarchive/local-cache':
+        specifier: 1.0.0
+        version: 1.0.0
       '@lit/localize-tools':
         specifier: ^0.8.2
         version: 0.8.2
@@ -236,6 +260,9 @@ importers:
       '@types/node':
         specifier: ^24.13.6
         version: 24.13.6
+      '@types/throttle-debounce':
+        specifier: ^5.0.2
+        version: 5.0.2
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.46.4
         version: 8.64.0(@typescript-eslint/parser@8.64.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3))(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.3)
@@ -251,6 +278,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^4.0.8
         version: 4.1.10(@vitest/browser@4.1.10)(vitest@4.1.10)
+      axe-core:
+        specifier: ^4.10.2
+        version: 4.12.1
       eslint:
         specifier: ^9.39.1
         version: 9.39.5(supports-color@7.2.0)
@@ -558,23 +588,47 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@internetarchive/ia-clearable-text-input@1.1.1':
-    resolution: {integrity: sha512-l3Z6gKfSRURvicHlAjL3V+q/yESYSev34fswfG7ESIiWuF7UuWDKjlLOyY3gFch8eAfqS5AQ6KurRw5JWGD4RA==}
+  '@internetarchive/analytics-manager@0.1.5':
+    resolution: {integrity: sha512-6p/EB1ls6x0+xU5WyDcpLU7N4Q1VGW4cNgVV52AUw3nmXJPFZsUM7l7iFGjjJvxWK7TpxU10Z8svAzfdpOQUaA==}
+
+  '@internetarchive/fetch-handler@1.4.0':
+    resolution: {integrity: sha512-hAWqvDHQpcjfxOF254GI0ch0UQWetwJnnrrJeEyFpcC9X6Kj7GxSSDa2yAh0mWA69R8MhtGwLX0uRVGisYpDMA==}
+
+  '@internetarchive/field-parsers@0.1.4':
+    resolution: {integrity: sha512-J5nhMsIU91eXnfoApa6SE0PffPbwK1Cd3YTLX/HjgayzMbXVkQvfebfVKSaoPmzHRRttbtY3Sg9FjviCwBq6qg==}
+
+  '@internetarchive/field-parsers@1.2.1':
+    resolution: {integrity: sha512-4Dx1EBuiAbmYgBPwXFyJdUE+DV9VwwY7kx6qoEGfmRBNjCjgf+hS8Rdoe0GRVc9/6IqrKUJJPRZKMF7vc2G1XQ==}
 
   '@internetarchive/ia-dropdown@2.2.0':
     resolution: {integrity: sha512-h1vF1qLmjbPcRVkYz3kv1HzNHhucaM+IorVzvUejgYhIYRxrBjCswpOpMXeoR16UE4pyDVc/mtkKq/QFaVinRw==}
 
+  '@internetarchive/iaux-item-metadata@1.5.0':
+    resolution: {integrity: sha512-p1wK181a2qrHsSaL+yc6WG3JNbNlD+8g3wFKIIKzbT9ipfmsYnqjOlc8JlQT5OcXXMq4EYYCw21Agi//n9gaTw==}
+
   '@internetarchive/icon-close@1.4.1':
     resolution: {integrity: sha512-nN1rGfScGssGFpfEew4azsrsMyUJtkDWqUDlckJi31PtyQnbZqUmZ07UO3Aw+wZIo3cU1MHxb5VxDy3Rmr8QGA==}
 
+  '@internetarchive/icon-user@1.4.1':
+    resolution: {integrity: sha512-xRlpX954+lLKjC++A+jpIutptHCmVMwLZI/WqOoAQoKfnCNKKvJ6Wcdq4bM/qUDt44Oj2VgP/gM6hSdWyljzEA==}
+
   '@internetarchive/lazy-loader-service@0.2.0':
     resolution: {integrity: sha512-SI/ADWnIhdtuAbxkeOItb0xOqco+ueVtwEAdEb0D60sFngUCUpBr/EXeIeh+ykXveO9pmd5J0ZVpgEfKdbhE+g==}
+
+  '@internetarchive/local-cache@1.0.0':
+    resolution: {integrity: sha512-KGY2gwSBpxrEf7+zOIdgLF/KKhk6KnBAH5nphKpoUEm8mn3ht8wPdUACZ13hUqagZPY3txCLuPPbjiKNH5RPeA==}
+
+  '@internetarchive/metadata-service@1.1.1':
+    resolution: {integrity: sha512-76Jr4kSkTwZFPCQJVkYGf9vsFZw4JuxIZKFiZdavEBt2mKoLw0bkX6LQBJ31LxJfy6fZWUjAGcK9D9AjIwhZ6A==}
 
   '@internetarchive/promised-singleton@0.2.1':
     resolution: {integrity: sha512-HR0bg3AuY0ffJ3m2vQyFo1qXhg12olAlef0L2nD05xr+7z3qZb5K3/NBcN16k523f9Y6z5T/ELf3U+IVHAVF7w==}
 
   '@internetarchive/recaptcha-manager@2.0.1':
     resolution: {integrity: sha512-/WYU/yJeQEzi4tqrKEu6BhRoGxO/V9XNRdLw6+pHRQbWN1HlayVbXWR/apabVWHbXkcATCOeMuz+riKr8wwf9A==}
+
+  '@internetarchive/result-type@0.0.1':
+    resolution: {integrity: sha512-sWahff5oP1xAK1CwAu1/5GTG2RXsdx/sQKn4SSOWH0r0vU2QoX9kAom/jSXeBsmgK0IjTc+9Ty9407SMORi+nQ==}
 
   '@internetarchive/shared-resize-observer@0.2.0':
     resolution: {integrity: sha512-E5Jh6rX03usPkihB/lnGpoL3qedE84NLRHxuAEGrlwC0zyQ7xTr6NNQWwKBDzG1OBcCrUJXIWaQuJdjqo+og1Q==}
@@ -833,6 +887,9 @@ packages:
 
   '@types/paypal-checkout-components@4.0.8':
     resolution: {integrity: sha512-Z3IWbFPGdgL3O+Bg+TyVmMT8S3uGBsBjw3a8uRNR4OlYWa9m895djENErJMYU8itoki9rtcQMzoHOSFn8NFb1A==}
+
+  '@types/throttle-debounce@5.0.2':
+    resolution: {integrity: sha512-pDzSNulqooSKvSNcksnV72nk8p7gRqN8As71Sp28nov1IgmPKWbOEIwAWvBME5pPTtaXJAvG3O4oc76HlQ4kqQ==}
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -1315,6 +1372,9 @@ packages:
     resolution: {integrity: sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==}
     engines: {node: '>= 4'}
 
+  dompurify@3.4.16:
+    resolution: {integrity: sha512-sqo+pNp3qRhCIpbgRi1y8Tgk27Bo2Ry7w0dC1NBeNTdZChWjz9Xb/KOoZbRP/R6pQZ80Qw8YhXw13hWWBbMRnQ==}
+
   domutils@3.2.2:
     resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
 
@@ -1710,6 +1770,9 @@ packages:
 
   htmlparser2@10.1.0:
     resolution: {integrity: sha512-VTZkM9GWRAtEpveh7MSF6SjjrpNVNNVJfFup7xTY3UpFtm67foy9HDVXneLtFVt4pMz5kZtgNcvCniNFb1hlEQ==}
+
+  idb-keyval@6.3.0:
+    resolution: {integrity: sha512-um+2dgAWmYsu615EXpWVwSmapJhON0G43t3Ka/EVaohzPQXSMqKEqeDK/oIW3Ow+BXaF2PvSc+oBTFp793A5Ow==}
 
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
@@ -2506,6 +2569,10 @@ packages:
     resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
     engines: {node: '>=6'}
 
+  throttle-debounce@5.0.2:
+    resolution: {integrity: sha512-B71/4oyj61iNH0KeCamLuE2rmKuTO5byTOSVwECM5FA7TiAiAW+UqTKZ9ERueC4qvgSttUhdmq1mXC3kJqGX7A==}
+    engines: {node: '>=12.22'}
+
   tinybench@2.9.0:
     resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
 
@@ -2579,6 +2646,13 @@ packages:
   typed-array-length@1.0.8:
     resolution: {integrity: sha512-phPGCwqr2+Qo0fwniCE8e4pKnGu/yFb5nD5Y8bf0EEeiI5GklnACYA9GFy/DrAeRrKHXvHn+1SUsOWgJp6RO+g==}
     engines: {node: '>= 0.4'}
+
+  typescript-cookie@1.0.6:
+    resolution: {integrity: sha512-s+BZr7/9BUG6Kg7jGGcOY/4XJcP+iZRFdF3q4FPTfRSP83ivLWF94OcH8PrzGmnS8Ab9qP7ENu/ikLwNFsIafA==}
+    engines: {node: '>=14'}
+
+  typescript-memoize@1.1.1:
+    resolution: {integrity: sha512-GQ90TcKpIH4XxYTI2F98yEQYZgjNMOGPpOgdjIBhaLaWji5HPWlRnZ4AeA1hfBxtY7bCGDJsqDDHk/KaHOl5bA==}
 
   typescript@5.2.2:
     resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
@@ -2955,16 +3029,30 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@internetarchive/ia-clearable-text-input@1.1.1':
+  '@internetarchive/analytics-manager@0.1.5': {}
+
+  '@internetarchive/fetch-handler@1.4.0':
     dependencies:
-      '@internetarchive/icon-close': 1.4.1
-      lit: 2.8.0
+      '@internetarchive/analytics-manager': 0.1.5
+
+  '@internetarchive/field-parsers@0.1.4': {}
+
+  '@internetarchive/field-parsers@1.2.1': {}
 
   '@internetarchive/ia-dropdown@2.2.0':
     dependencies:
       lit: 2.8.0
 
+  '@internetarchive/iaux-item-metadata@1.5.0':
+    dependencies:
+      '@internetarchive/field-parsers': 1.2.1
+      typescript-memoize: 1.1.1
+
   '@internetarchive/icon-close@1.4.1':
+    dependencies:
+      lit: 3.3.3
+
+  '@internetarchive/icon-user@1.4.1':
     dependencies:
       lit: 3.3.3
 
@@ -2972,12 +3060,25 @@ snapshots:
     dependencies:
       nanoevents: 6.0.2
 
+  '@internetarchive/local-cache@1.0.0':
+    dependencies:
+      idb-keyval: 6.3.0
+
+  '@internetarchive/metadata-service@1.1.1':
+    dependencies:
+      '@internetarchive/field-parsers': 0.1.4
+      '@internetarchive/iaux-item-metadata': 1.5.0
+      '@internetarchive/result-type': 0.0.1
+      typescript-memoize: 1.1.1
+
   '@internetarchive/promised-singleton@0.2.1': {}
 
   '@internetarchive/recaptcha-manager@2.0.1':
     dependencies:
       '@internetarchive/lazy-loader-service': 0.2.0
       lit: 2.8.0
+
+  '@internetarchive/result-type@0.0.1': {}
 
   '@internetarchive/shared-resize-observer@0.2.0': {}
 
@@ -3184,6 +3285,8 @@ snapshots:
       '@types/node': 26.1.1
 
   '@types/paypal-checkout-components@4.0.8': {}
+
+  '@types/throttle-debounce@5.0.2': {}
 
   '@types/trusted-types@2.0.7': {}
 
@@ -3785,6 +3888,10 @@ snapshots:
     dependencies:
       domelementtype: 2.3.0
 
+  dompurify@3.4.16:
+    optionalDependencies:
+      '@types/trusted-types': 2.0.7
+
   domutils@3.2.2:
     dependencies:
       dom-serializer: 2.0.0
@@ -4307,6 +4414,8 @@ snapshots:
       domhandler: 5.0.3
       domutils: 3.2.2
       entities: 7.0.1
+
+  idb-keyval@6.3.0: {}
 
   ieee754@1.2.1: {}
 
@@ -5170,6 +5279,8 @@ snapshots:
 
   tapable@2.3.3: {}
 
+  throttle-debounce@5.0.2: {}
+
   tinybench@2.9.0: {}
 
   tinyexec@1.2.4: {}
@@ -5266,6 +5377,10 @@ snapshots:
       is-typed-array: 1.1.15
       possible-typed-array-names: 1.1.0
       reflect.getprototypeof: 1.0.10
+
+  typescript-cookie@1.0.6: {}
+
+  typescript-memoize@1.1.1: {}
 
   typescript@5.2.2: {}
 

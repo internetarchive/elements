@@ -1,6 +1,6 @@
 import { CSSResultGroup, css, html } from 'lit';
 import TrackedElement from './tracked-element';
-import icons from './assets/img/icons';
+import userIcon from '@src/icons/topnav-user';
 import { formatUrl, makeBooleanString } from './lib/helpers';
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
@@ -28,7 +28,7 @@ export class LoginButton extends TrackedElement {
           aria-label=${msg('Toggle login menu')}
           aria-expanded="${makeBooleanString(this.menuOpened)}"
         >
-          ${icons.user}
+          ${userIcon}
         </button>
         <span>
           <a href="${this.signupPath}">${msg('Sign up')}</a>
@@ -103,31 +103,29 @@ export class LoginButton extends TrackedElement {
 
         .dropdown-toggle svg {
           height: 100%;
-          width: 4rem;
+          width: calc(40 * var(--topnavUnit--));
+          color: var(--iconFill);
         }
 
-        .dropdown-toggle .fill-color {
-          fill: var(--iconFill);
-        }
-
-        .dropdown-toggle:active .fill-color,
-        .dropdown-toggle:focus .fill-color,
-        .dropdown-toggle:hover .fill-color {
-          fill: var(--linkHoverColor);
+        .dropdown-toggle:active svg,
+        .dropdown-toggle:focus svg,
+        .dropdown-toggle:hover svg {
+          color: var(--linkHoverColor);
         }
 
         .active {
-          border-radius: 1rem 1rem 0 0;
+          border-radius: calc(10 * var(--topnavUnit--))
+            calc(10 * var(--topnavUnit--)) 0 0;
           background: var(--activeButtonBg);
         }
 
-        .active .fill-color {
-          fill: var(--activeColor);
+        .active svg {
+          color: var(--activeColor);
         }
 
         span {
           display: none;
-          font-size: 1.4rem;
+          font-size: calc(14 * var(--topnavUnit--));
           text-transform: uppercase;
           color: var(--loginTextColor);
         }
@@ -148,7 +146,8 @@ export class LoginButton extends TrackedElement {
 
         @media (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) {
           .logged-out-toolbar {
-            padding: 1rem 0.5rem;
+            padding: calc(10 * var(--topnavUnit--))
+              calc(5 * var(--topnavUnit--));
             vertical-align: middle;
           }
 
@@ -162,8 +161,8 @@ export class LoginButton extends TrackedElement {
           }
 
           .dropdown-toggle svg {
-            height: 3rem;
-            width: 3rem;
+            height: calc(30 * var(--topnavUnit--));
+            width: calc(30 * var(--topnavUnit--));
             display: block;
           }
 
