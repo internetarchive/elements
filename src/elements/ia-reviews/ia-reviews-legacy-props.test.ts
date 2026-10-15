@@ -36,7 +36,7 @@ const jsonOk = () =>
     headers: { 'Content-Type': 'application/json' },
   });
 
-/** The props offshoot's details page passes, which are the 1.2.1 ones */
+/** The props offshoot's details page passes */
 const offshootProps = {
   token: 'csrf-abc',
   baseHost: 'https://archive.org',

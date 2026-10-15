@@ -8,7 +8,7 @@ import type {
 import type { ReviewServiceInterface } from './models';
 import { ReviewService } from './review-service';
 
-/** The props <ia-reviews> used to take for talking to the backend */
+/** The deprecated `token`, `endpointPath` and `fetchHandler` props, plus `baseHost` */
 export type LegacyReviewProps = {
   token?: string;
   endpointPath?: string;
