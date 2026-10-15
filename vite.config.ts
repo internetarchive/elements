@@ -45,6 +45,7 @@ const exclude = ['**/node_modules/**', '**/dist/**', '.claude/**'];
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  resolve: { alias },
   test: {
     coverage: {
       // Stories are demo scaffolding, not shipped code. A demo test loads one
@@ -58,8 +59,8 @@ export default defineConfig({
     projects: [
       {
         // Element tests, run in a real browser.
+        extends: true,
         plugins: [failOnceScript()],
-        resolve: { alias },
         test: {
           name: 'browser',
           include: ['**/*.{test,spec}.?(c|m)[jt]s?(x)'],
@@ -81,7 +82,7 @@ export default defineConfig({
       {
         // Tests that need Node (the file system, Vite's build API). They run
         // against the built `dist`, so `pnpm test` builds first.
-        resolve: { alias },
+        extends: true,
         test: {
           name: 'node',
           environment: 'node',
