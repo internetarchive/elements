@@ -32,7 +32,8 @@
     "test": "wireit",
     "ghpages:build": "wireit",
     "strings:extract": "wireit",
-    "strings:build": "wireit"
+    "strings:build": "wireit",
+    "strings:translate": "node scripts/translate-xliff.mts"
   },
   "dependencies": {
     "@internetarchive/fetch-handler": "^1.4.0",
