@@ -150,6 +150,22 @@
   <source>[Transcript unavailable]</source>
 <target>[Transcripción no disponible]</target>
 </trans-unit>
+<trans-unit id="s5e8250fb85d64c23">
+  <source>Close</source>
+<target>Cerrar</target>
+</trans-unit>
+<trans-unit id="s4b4f605151fa4cda">
+  <source>Left arrow icon</source>
+<target>Icono de flecha hacia la izquierda</target>
+</trans-unit>
+<trans-unit id="s175316679436f7e1">
+  <source>Internet Archive logo</source>
+<target>Logotipo de Internet Archive</target>
+</trans-unit>
+<trans-unit id="sd4eb63bc051b0cc4">
+  <source>A line drawing of the Internet Archive headquarters building façade.</source>
+<target>Dibujo lineal de la fachada del edificio de la sede de Internet Archive.</target>
+</trans-unit>
 <trans-unit id="s1d32bf0a660906de">
   <source>Choose an amount (USD)</source>
 <target>Elige una cantidad (USD)</target>
@@ -215,6 +231,107 @@
 <trans-unit id="sa097aca70d016c5c">
   <source><x id="0" equiv-text="${this.goalAmountDisplayValue}"/> goal</source>
 <target>Meta: <x id="0" equiv-text="${this.goalAmountDisplayValue}"/></target>
+</trans-unit>
+<trans-unit id="sdaf8f9ac7bb549e0">
+  <source>Could not validate review. Please try again later.</source>
+</trans-unit>
+<trans-unit id="s4390700f23a6fae7">
+  <source>There's been a temporary error. Please wait a moment and try again.</source>
+</trans-unit>
+<trans-unit id="h0c767c6fc1ce6768">
+  <source>This site is protected by reCAPTCHA and the Google
+            <x id="0" equiv-text="&lt;a target=&quot;_blank&quot; class=&quot;inline-link&quot; href=&quot;https://policies.google.com/privacy&quot;&gt;"/>Privacy Policy<x id="1" equiv-text="&lt;/a&gt;"/>
+            and
+            <x id="2" equiv-text="&lt;a target=&quot;_blank&quot; class=&quot;inline-link&quot; href=&quot;https://policies.google.com/terms&quot;&gt;"/>Terms of Service<x id="3" equiv-text="&lt;/a&gt;"/>
+            apply.</source>
+</trans-unit>
+<trans-unit id="s44465964dcedadd7">
+  <source>Rating (optional)</source>
+</trans-unit>
+<trans-unit id="sbbc53e0e54d7946f">
+  <source>Subject</source>
+</trans-unit>
+<trans-unit id="sea1e2d4024d78a64">
+  <source>Subject may only have <x id="0" equiv-text="${this.maxSubjectLength}"/> characters</source>
+</trans-unit>
+<trans-unit id="sfc53e352afbca881">
+  <source>Review</source>
+</trans-unit>
+<trans-unit id="s6dd98c57b8238d56">
+  <source>Review may only have <x id="0" equiv-text="${this.maxBodyLength}"/> characters</source>
+</trans-unit>
+<trans-unit id="s2ceb11be2290bb1b">
+  <source>Cancel</source>
+</trans-unit>
+<trans-unit id="s80aec501701151a7">
+  <source>Submit review</source>
+</trans-unit>
+<trans-unit id="sa54fa4ecaec5db1c">
+  <source>Rate 1 star</source>
+</trans-unit>
+<trans-unit id="s7d5f6727f21c7274">
+  <source>Rate <x id="0" equiv-text="${num}"/> stars</source>
+</trans-unit>
+<trans-unit id="sc2a242918e324eb7">
+  <source>Clear rating</source>
+</trans-unit>
+<trans-unit id="sc221faca1ecb4aee">
+  <source>Anonymous</source>
+</trans-unit>
+<trans-unit id="sdf3f9c8baa5e155a">
+  <source>This review cannot be displayed at this time.</source>
+</trans-unit>
+<trans-unit id="sa79693645604876a">
+  <source>Delete this review</source>
+</trans-unit>
+<trans-unit id="s7490a67887716f40">
+  <source>Reviewer:</source>
+</trans-unit>
+<trans-unit id="s16d30d35e7b7ea3d">
+  <source>Subject: </source>
+</trans-unit>
+<trans-unit id="sd01d6e9b9f301ee6">
+  <source>More...</source>
+</trans-unit>
+<trans-unit id="se8494f6d60c7926c">
+  <source>...Less</source>
+</trans-unit>
+<trans-unit id="sebb2ea0d482f0cdc">
+  <source><x id="0" equiv-text="${this.review.stars}"/> out of 5 stars</source>
+</trans-unit>
+<trans-unit id="sbfae5d5b8978baef">
+  <source><x id="0" equiv-text="${prettyDate}"/> (edited)</source>
+</trans-unit>
+<trans-unit id="saeac976b4240bcc3">
+  <source>Are you sure you want to delete this review?</source>
+</trans-unit>
+<trans-unit id="se1968d56aba3b3cb">
+  <source>This review has been queued for deletion.</source>
+</trans-unit>
+<trans-unit id="sd1f0ff839e37b1ec">
+  <source>Sorry, we were unable to delete this review.</source>
+</trans-unit>
+<trans-unit id="s556715ca21d28f73">
+  <source>Reviews can no longer be added to this item.</source>
+</trans-unit>
+<trans-unit id="s52ec579f2c5c9d2c">
+  <source>Reviews have been disabled for this item.</source>
+</trans-unit>
+<trans-unit id="sde4e809e2411f660">
+  <source>Reviews cannot be added to this item.</source>
+</trans-unit>
+<trans-unit id="s00b50a47c6e7c741">
+  <source>There are no reviews yet.</source>
+</trans-unit>
+<trans-unit id="he787c4ac48d02309">
+  <source>
+          Be the first one to
+          <x id="0" equiv-text="&lt;ia-button mode=&quot;link&quot; class=&quot;no-reviews-btn&quot; @click=&quot;${this.addEditReview}&quot;&gt;"/>
+            write a review<x id="1" equiv-text="&lt;/ia-button&gt;"/>.
+        </source>
+</trans-unit>
+<trans-unit id="sb094ddadb5f59b64">
+  <source>Sorry, something went wrong. Please try again later.</source>
 </trans-unit>
 <trans-unit id="s59cf1fbcdc399828">
   <source>Internet Archive Audio</source>
@@ -624,6 +741,9 @@
   <source>Top</source>
 <target>Populares</target>
 </trans-unit>
+<trans-unit id="s1a3f802a4059859b">
+  <source>Close main menu</source>
+</trans-unit>
 <trans-unit id="s13b59015dc837b71">
   <source>Open main menu</source>
 <target>Abrir el menú principal</target>
@@ -705,6 +825,12 @@
 <trans-unit id="sdeef9e88871e5e9b">
   <source>Enter URL or keywords</source>
 <target>Introduce una URL o palabras clave</target>
+</trans-unit>
+<trans-unit id="sa5c2a4b46a1df9dc">
+  <source>Show 1 more review</source>
+</trans-unit>
+<trans-unit id="s5625502dc647f9c2">
+  <source>Show <x id="0" equiv-text="${hiddenCount}"/> more reviews</source>
 </trans-unit>
 </body>
 </file>

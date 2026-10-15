@@ -6,6 +6,7 @@ import { html } from 'lit';
 import type { IAReview } from './ia-review';
 import { Review } from '@internetarchive/metadata-service';
 import './ia-review';
+import { MockReviewService } from './mocks/mock-review-service';
 
 const mockReview: Review = new Review({
   stars: 5,
@@ -29,6 +30,37 @@ describe('IAReview', () => {
 
     const { violations } = await axe.run(el);
     expect(violations).toEqual([]);
+  });
+
+  test('focus() moves to the reviewer link', async () => {
+    const el = await fixture<IAReview>(
+      html`<ia-review .review=${mockReview} ?canDelete=${true}></ia-review>`,
+    );
+
+    el.focus();
+
+    expect(el.shadowRoot?.activeElement?.classList[0]).toBe('reviewer-link');
+    // Only a review without a link needs to be focusable itself
+    expect(
+      el.shadowRoot?.querySelector('article')?.hasAttribute('tabindex'),
+    ).toBe(false);
+  });
+
+  test('focus() moves to the review itself when there is no reviewer link', async () => {
+    const el = await fixture<IAReview>(
+      html`<ia-review
+        .review=${new Review({ ...mockReview, reviewer_itemname: undefined })}
+      ></ia-review>`,
+    );
+
+    el.focus();
+
+    expect(el.shadowRoot?.querySelector('.reviewer-link')).toBeNull();
+    expect(el.shadowRoot?.activeElement?.tagName).toBe('ARTICLE');
+    // Focusable from script, without adding a tab stop
+    expect(
+      el.shadowRoot?.querySelector('article')?.getAttribute('tabindex'),
+    ).toBe('-1');
   });
 
   test('renders an error if no review provided', async () => {
@@ -428,7 +460,61 @@ describe('IAReview', () => {
     const deleteBtn = el.shadowRoot?.querySelector('.delete-btn');
     expect(deleteBtn).not.to.exist;
   });
-  test('reports a failure when the server rejects the delete', async () => {
+  test('hands the review to the service when deleting', async () => {
+    const reviewService = new MockReviewService();
+    const el = await fixture<IAReview>(
+      html`<ia-review
+        .review=${mockReview}
+        .reviewService=${reviewService}
+        identifier="foo"
+        ?canDelete=${true}
+      ></ia-review>`,
+    );
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+    (el.shadowRoot?.querySelector('.delete-btn') as HTMLButtonElement).click();
+    await waitUntil(
+      () => !!el.shadowRoot?.querySelector('.body i'),
+      'the delete outcome was never reported',
+    );
+
+    expect(reviewService.deletions).to.deep.equal([
+      {
+        identifier: 'foo',
+        reviewer: mockReview.reviewer,
+        reviewerItemname: mockReview.reviewer_itemname,
+      },
+    ]);
+  });
+
+  test('reports the error the service gives back when the delete fails', async () => {
+    const reviewService = new MockReviewService();
+    reviewService.result = {
+      success: false,
+      error: 'You must be logged in to edit reviews',
+    };
+    const el = await fixture<IAReview>(
+      html`<ia-review
+        .review=${mockReview}
+        .reviewService=${reviewService}
+        identifier="foo"
+        ?canDelete=${true}
+      ></ia-review>`,
+    );
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+    (el.shadowRoot?.querySelector('.delete-btn') as HTMLButtonElement).click();
+    await waitUntil(
+      () => !!el.shadowRoot?.querySelector('.body i'),
+      'the delete outcome was never reported',
+    );
+
+    expect(el.shadowRoot?.querySelector('.body')?.textContent).to.contain(
+      'You must be logged in to edit reviews',
+    );
+  });
+
+  test('reports a failure when it has no service to delete through', async () => {
     const el = await fixture<IAReview>(
       html`<ia-review
         .review=${mockReview}
@@ -437,10 +523,6 @@ describe('IAReview', () => {
       ></ia-review>`,
     );
     vi.spyOn(window, 'confirm').mockReturnValue(true);
-    // fetch resolves on a 500, so the status is what distinguishes a failure.
-    vi.spyOn(window, 'fetch').mockResolvedValue(
-      new Response('', { status: 500 }),
-    );
 
     (el.shadowRoot?.querySelector('.delete-btn') as HTMLButtonElement).click();
     await waitUntil(
@@ -457,14 +539,12 @@ describe('IAReview', () => {
     const el = await fixture<IAReview>(
       html`<ia-review
         .review=${mockReview}
+        .reviewService=${new MockReviewService()}
         identifier="foo"
         ?canDelete=${true}
       ></ia-review>`,
     );
     vi.spyOn(window, 'confirm').mockReturnValue(true);
-    vi.spyOn(window, 'fetch').mockResolvedValue(
-      new Response('', { status: 200 }),
-    );
 
     (el.shadowRoot?.querySelector('.delete-btn') as HTMLButtonElement).click();
     await waitUntil(

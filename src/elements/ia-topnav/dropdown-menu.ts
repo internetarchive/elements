@@ -8,7 +8,7 @@ import {
 } from 'lit';
 import { property } from 'lit/decorators.js';
 
-import icons from './assets/img/icons';
+import uploadUnpaddedIcon from '@src/icons/topnav-upload-unpadded';
 import { defaultTopNavConfig } from './data/menus';
 import { formatUrl, makeBooleanString } from './lib/helpers';
 import {
@@ -115,7 +115,7 @@ export default class DropdownMenu extends TrackedElement {
         ?.eventCategory}|Nav${link.analyticsEvent}"
       aria-label=${calloutText ? msg(str`New feature: ${link.title}`) : nothing}
     >
-      ${isMobileUpload ? icons.uploadUnpadded : nothing} ${link.title}
+      ${isMobileUpload ? uploadUnpaddedIcon : nothing} ${link.title}
       ${calloutText
         ? html`<span class="callout" aria-hidden="true">${calloutText}</span>`
         : nothing}
@@ -233,7 +233,7 @@ export default class DropdownMenu extends TrackedElement {
           align-items: center;
         }
         a.mobile-upload svg {
-          fill: var(--white);
+          color: var(--white);
           margin-right: calc(10 * var(--topnavUnit--));
           height: calc(14 * var(--topnavUnit--));
           width: calc(14 * var(--topnavUnit--));
