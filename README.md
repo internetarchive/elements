@@ -20,6 +20,12 @@ import "@internetarchive/elements/ia-button/ia-button";
 <ia-button @click=() => alert('Clicked!')>Click Me</ia-button>
 ```
 
+Services (code with no UI, like a metadata fetcher or a parser) import the same way, from `services/`:
+
+```typescript
+import { FoobarService } from "@internetarchive/elements/services/foobar-service/foobar-service";
+```
+
 ## Build Dependencies
 
 We use SVGs in this repo, which not all build systems support out of the box. Here's how to support SVGs:
@@ -132,7 +138,7 @@ pnpm run dev
 ## Adding a Component
 
 ### Structure
-Each component has its own directory in `src/elements` (or `src/labs` if it's still in development). The basic structure looks like this, though components can have additional files and directories if needed. Take a look at other elements to see what they each contain.
+Each component has its own directory in `src/elements` (or `src/labs` if it's still in development). Code with no UI goes in `src/services` instead, see [Adding a Service](#adding-a-service). The basic structure looks like this, though components can have additional files and directories if needed. Take a look at other elements to see what they each contain.
 ```
 src
 - elements
@@ -141,7 +147,7 @@ src
     - ia-foobar.test.ts // the element's tests
     - ia-foobar-story.ts // an element that demos your element
 ```
-Export your component in `src/index.ts`
+Consumers import each element by its own subpath (`@internetarchive/elements/ia-button/ia-button`). There's no package root export, so there's no barrel file to update.
 
 ### Naming
 Custom elements all share one global registry, and that registry is shared with every other script on the host page. Give each element a name specific enough that nothing else would plausibly want it.
@@ -179,6 +185,7 @@ It has a few main configurations:
 *Properties*
 - `elementTag` (_string_) your component's name, ie `ia-button`
 - `labs` (_boolean_) if your component is in `labs` to update links
+- `importPath` (_string_) the element's path under `@internetarchive/elements/`, for an element that lives inside another component's directory, ie `ia-donation-form/form-elements/ia-donation-section`. Defaults to `<tag>/<tag>`
 - `styleInputSettings` (_StyleInputSettings array_) the style options to display, in the appropriate format
 - `propInputSettings` (_PropInputSettings array_) the prop options to display, in the appropriate format
 
@@ -302,6 +309,89 @@ For any styles that you won't be exposing to consumers via the story, you can pr
   ></ia-status-indicator>
 </div>
 ```
+
+### Localization
+
+Wrap user-facing text in `msg()` from `@lit/localize`, inside `render()` or a getter it calls. The first argument has to be a literal: a string, `` str`...${x}` `` when it has an expression, or `` html`...` `` when it has markup.
+
+- Decorate any element that renders a `msg()` with `@localized()`, so it re-renders when the app switches language. That includes one rendering a getter that calls `msg()`, like `TranscriptEntryConfig.displayText`.
+- Don't resolve `msg()` ahead of render. At module scope or in a static field it's fixed at import, and as a property default it's fixed when the element is created. For a text property with a default, leave the property unset and fall back when rendering: `aria-label=${this.label ?? msg('Search')}`.
+
+This package never calls `configureLocalization`. `@lit/localize` can only be configured once per page, so the app owns that call and loads one bundle holding its own messages and ours. We publish our translations for the app to merge in:
+
+```zsh
+pnpm run strings:extract   # add new msg() strings to xliff/<locale>.xlf
+# translate the empty <target>s in xliff/<locale>.xlf
+pnpm run strings:build     # write src/locales/<locale>.ts
+```
+
+Commit all three: the XLIFF, the generated module and the source change.
+
+#### What gets published
+
+`@internetarchive/elements/locales/<locale>.js` exports `templates`, the same shape `lit-localize build` writes in runtime mode: an object keyed by message id (a hash of the English source) whose values are what `loadLocale` returns. It only holds messages that have a translation. A message with no translation is left out instead of falling back to English, so merging it can never override another package's or the app's translation of the same text.
+
+To merge it, an app spreads it under its own templates, app last so the app wins a conflict:
+
+```ts
+import { templates as elements } from '@internetarchive/elements/locales/es.js';
+import { templates as app } from './app-es';
+
+export const templates = { ...elements, ...app };
+```
+
+The XLIFF in `xliff/` is where translations are edited. It isn't published.
+
+## Icons
+
+SVG sources live in `icons/<kebab-name>.svg`. To add one, drop the file in that folder and run `pnpm run icons` (`build`, `dev`, `typecheck` and `test` run it for you). The root `<svg>` needs a `viewBox`. The build fails on a name that isn't kebab-case, a duplicate, or a missing `viewBox`. It writes `src/icons/` (gitignored), one `.ts` and one `.svg` per icon.
+
+```ts
+import { html } from 'lit';
+import search from '@internetarchive/elements/icons/search';
+
+html`<button>${search} Search</button>`;
+```
+
+Outside lit, use the raw file at `@internetarchive/elements/icons/search.svg`.
+
+To see every icon, run `pnpm run dev` and open the Icons entry (`ia-icon-gallery`) in the demo. It lists each icon with its import line, and is built from `icons/`, so a new icon appears with no extra work.
+
+The offshoot assets were ported from offshoot commit `a6199f5db22d3908d856033da8bfa8777867d86c`.
+
+`ia-topnav` and `ia-wayback-search-form` render the `topnav-*` icons.
+
+The collection-browser icons were ported from `@internetarchive/collection-browser@4.8.0`.
+
+The BookReader icons were ported from `@internetarchive/bookreader@5.0.0-87`.
+
+- **Decorative by default.** The root `<svg>` has `aria-hidden="true"` and `focusable="false"`. If an icon is the only content of a control, label the control (`aria-label`), or wrap the icon in an element with `role="img"` and an `aria-label`.
+- **Color and size.** Icons are filled with `currentColor` and sized `1em` by `width`/`height` on the root, so they follow the surrounding text. Set `font-size` or override `width`/`height` in CSS to resize.
+- **Lint.** `pnpm run lint` (and CI) runs `scripts/lint-icons.mts` over the sources, or run it alone with `pnpm run icons:lint`. Each icon needs a `viewBox` and no `width`/`height` on the root, only `currentColor`, `none` or `url(#...)` for `fill`, `stroke` and `stop-color` (attribute, inline `style` or `<style>`), no `id` attributes (they'd collide when icons share a page), and no `<script>`, `on*` handlers, `<foreignObject>` or external `href`. A logo that needs its own colors goes in `icons/.multicolor`, one icon name per line (`#` for comments). Listed icons are exempt from the color and `id` rules only. A listed icon still gets `currentColor` painted by the build's root `fill`, so give each of its shapes an explicit `fill`.
+- **Used by.** `ia-item-navigator`, `ia-status-indicator`, `ia-combo-box`, `ia-dropdown-search-bar` and `ia-scrubber-bar` draw their icons from this folder. Recolor one with `color`, since the glyph paints with `currentColor`.
+- **iaux-icons.** The `@internetarchive/icon-*` set (the `ia-icons` package) lives here too, ported from version 1.4.1. `bookmark` is split into `bookmark`, `bookmark-hollow`, `bookmark-plus` and `bookmark-minus`, one per state of the old element. Icons that keep their own colours (payment brands, `calendar`, `credit-card`, `info`) are listed in `icons/.multicolor`.
+- **No barrel.** There's deliberately no `icons/index`. Every icon is its own module, so a page that imports one loads one.
+- **`sideEffects`.** `package.json` lists the trees that do work at import time (`dist/src/elements/**`, `dist/src/labs/**`, `dist/src/locales/**`). Elements register themselves when imported, so a package-wide `"sideEffects": false` would let a bundler drop `import '@internetarchive/elements/ia-button/ia-button'`. Everything else, including `dist/src/icons/**`, is safe to tree-shake. `src/util/icons-bundle.node.test.ts` bundles the built package to check both.
+
+## Adding a Service
+
+A service is code that renders nothing: an API client, a parser, a cache. It lives in `src/services`, one directory per service, and is published next to the elements.
+
+```
+src
+- services
+  - foobar-service // the name of the service
+    - foobar-service.ts // the entry point consumers import
+    - foobar-service.test.ts // the service's tests
+    - foobar-service-story.ts // the demo page for it
+```
+
+Consumers import it by its own subpath, same as an element: `@internetarchive/elements/services/foobar-service/foobar-service`. The `./services/*` export maps to `dist/src/services/*.js`.
+
+- **Tests** run with the rest, in vitest browser mode (real Chromium). Anything that needs the network gets a fake backend or fetch so the test runs offline.
+- **No tag name.** There's no custom element to register, so nothing goes in `HTMLElementTagNameMap` and the services are named after what they are, not `ia-`.
+- **Demo.** A service has no UI, so its story is a small console: inputs, a Run button, and the result. It follows the same `-story.ts` naming so `demo/app-root.ts` finds it.
+- **Migrating one in.** Port it from the latest version on npm, not a local clone, and say which version in the ticket.
 
 ## Component Inventory
 

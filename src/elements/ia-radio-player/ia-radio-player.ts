@@ -9,7 +9,7 @@ import {
 } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
-import { msg, str } from '@lit/localize';
+import { localized, msg, str } from '@lit/localize';
 
 import type { AudioSource } from '@src/elements/ia-audio-element/models';
 import type { QuickSearchEntry } from '@src/elements/ia-expandable-search-bar/models';
@@ -78,6 +78,7 @@ const SECTION_SEEK_NUDGE = 0.1;
  * and hands searching off to whatever `searchHandler` it is given.
  */
 @customElement('ia-radio-player')
+@localized()
 export class IARadioPlayer extends LitElement {
   /** What is being played, and what to show about it */
   @property({ type: Object }) config?: RadioPlayerConfig;

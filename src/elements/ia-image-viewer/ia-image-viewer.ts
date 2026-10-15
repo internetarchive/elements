@@ -11,7 +11,7 @@ import { property, query, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import { classMap } from 'lit/directives/class-map.js';
 import { keyed } from 'lit/directives/keyed.js';
-import { msg, str } from '@lit/localize';
+import { localized, msg, str } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
 import { prefersReducedMotion } from '@src/util/prefers-reduced-motion';
@@ -43,6 +43,7 @@ type SlideImageEvent = CustomEvent<{ image: ImageViewerImage }>;
  *   stops the default of opening the image in a new tab.
  */
 @customElement('ia-image-viewer')
+@localized()
 export class IAImageViewer extends LitElement {
   @property({ type: Array }) images: ImageViewerImage[] = [];
 
