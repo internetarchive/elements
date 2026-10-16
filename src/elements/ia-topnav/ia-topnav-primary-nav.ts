@@ -159,9 +159,9 @@ export class PrimaryNav extends TrackedElement {
         </ia-topnav-media-menu>
         ${this.searchSlotContainer}
         <div class="right-side-section">
-          ${this.desktopLanguagePickerSlot} ${this.mobileDonateHeart}
-          ${this.userStateTemplate} ${this.uploadButtonTemplate}
-          ${this.searchMenu}
+          ${this.mobileDonateHeart} ${this.userStateTemplate}
+          ${this.uploadButtonTemplate} ${this.searchMenu}
+          ${this.desktopLanguagePickerSlot}
         </div>
       </nav>
     `;
@@ -615,7 +615,6 @@ export class PrimaryNav extends TrackedElement {
 
           slot[name='language-picker']::slotted(*) {
             display: inline-flex;
-            float: right;
             align-items: center;
             height: 100%;
           }
