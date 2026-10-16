@@ -1,9 +1,11 @@
 import { LitElement } from 'lit';
 import type { LocalCacheInterface } from '@internetarchive/local-cache';
+import type { FetchHandlerInterface } from '@src/services/fetch-handler/fetch-handler-interface';
 
 import { URLHelper } from '../../config/url-helper';
 import { sentryLogs } from '../../config/sentry-events';
-import log from '../log';
+import { createLogger } from '../logger';
+import { sentryCaptureException, sentryCaptureMessage } from '../sentry-report';
 
 import ActionsHandlerService from './actions-handler-service';
 import LoanAnanlytics from '../loan-analytics';
@@ -20,6 +22,8 @@ import type {
   ReturnNowDetail,
 } from '../../../models';
 import '../../../globals';
+
+const log = createLogger('actions');
 
 /**
  * These are callback functions calling from actions-config.ts file.
@@ -41,6 +45,9 @@ export default class ActionsHandler extends LitElement {
   /** Where the loan and page-change times are kept. Set by the parent element. */
   declare localCache: LocalCacheInterface;
 
+  /** Makes the lending service requests. Set by the parent element. */
+  declare fetchHandler?: FetchHandlerInterface;
+
   /**
    * wait untill borrow is complete, then refresh the page, in seconds
    */
@@ -61,7 +68,10 @@ export default class ActionsHandler extends LitElement {
     name: string,
     handler: (event: CustomEvent<T>) => void,
   ): void {
-    this.addEventListener(name, handler as EventListener);
+    this.addEventListener(name, ((event: CustomEvent<T>) => {
+      log.debug(`click: ${name}`, { identifier: this.identifier });
+      handler(event);
+    }) as EventListener);
   }
 
   bindEvents(): void {
@@ -180,6 +190,7 @@ export default class ActionsHandler extends LitElement {
     ActionsHandlerService({
       action,
       identifier: this.identifier,
+      fetchHandler: this.fetchHandler,
       success: () => {
         this.setBrowseTimeSession();
         this.handleReadItNow();
@@ -196,6 +207,7 @@ export default class ActionsHandler extends LitElement {
     ActionsHandlerService({
       action,
       identifier: this.identifier,
+      fetchHandler: this.fetchHandler,
       success: async (data) => {
         // Anything thrown in here is an unhandled rejection that dispatches
         // NOTHING, and IABookActions only clears loanRenewInProgress when
@@ -203,7 +215,10 @@ export default class ActionsHandler extends LitElement {
         // permanently (dead countdown, loan stuck "active"). Always exit
         // through exactly one of the two dispatches below.
         try {
-          log('RENEW_LOAN --- ', data, this.identifier);
+          log.debug('renew_loan succeeded', {
+            identifier: this.identifier,
+            data,
+          });
           const activeLoan = data.loan ? data.loan : undefined;
           // Optional chaining: `data.loan` is genuinely absent on some
           // failures, and `activeLoan` can be undefined here.
@@ -242,15 +257,19 @@ export default class ActionsHandler extends LitElement {
             return;
           }
 
-          log('RENEW_LOAN ERROR --- ', {
-            action,
+          log.warn('renew_loan answered without a renewal', {
+            identifier: this.identifier,
             isRenewal,
             activeLoan,
             data,
-            id: this.identifier,
           });
-          window?.Sentry?.captureMessage(
-            `${sentryLogs.bookRenewFailed} - Error: ${JSON.stringify(data)}`,
+          sentryCaptureMessage(
+            `${sentryLogs.bookRenewFailed} - no loan active`,
+            {
+              identifier: this.identifier,
+              action,
+              extra: { response: JSON.stringify(data) },
+            },
           );
           this.dispatchActionError(action, {
             data,
@@ -258,10 +277,15 @@ export default class ActionsHandler extends LitElement {
             message: 'Loan renewal failed: no loan active.',
           });
         } catch (error) {
-          log('RENEW_LOAN THREW --- ', error);
-          window?.Sentry?.captureException(
-            `${sentryLogs.bookRenewFailed} - Exception: ${error}`,
-          );
+          log.error('renew_loan success handler threw', {
+            identifier: this.identifier,
+            error,
+          });
+          sentryCaptureException(error, {
+            identifier: this.identifier,
+            action,
+            extra: { message: `${sentryLogs.bookRenewFailed} - threw` },
+          });
           this.dispatchActionError(action, {
             data,
             error: true,
@@ -288,6 +312,7 @@ export default class ActionsHandler extends LitElement {
     ActionsHandlerService({
       action,
       identifier: this.identifier,
+      fetchHandler: this.fetchHandler,
       success: () => {
         this.deleteLoanCookies();
 
@@ -306,6 +331,7 @@ export default class ActionsHandler extends LitElement {
     ActionsHandlerService({
       action,
       identifier: this.identifier,
+      fetchHandler: this.fetchHandler,
       success: () => {
         this.handleReadItNow();
       },
@@ -322,6 +348,7 @@ export default class ActionsHandler extends LitElement {
     ActionsHandlerService({
       action,
       identifier: this.identifier,
+      fetchHandler: this.fetchHandler,
       success: () => {
         URLHelper.goToUrl(URLHelper.getRedirectUrl(), true);
       },
@@ -338,6 +365,7 @@ export default class ActionsHandler extends LitElement {
     ActionsHandlerService({
       action,
       identifier: this.identifier,
+      fetchHandler: this.fetchHandler,
       success: () => {
         URLHelper.goToUrl(URLHelper.getRedirectUrl(), true);
       },
@@ -418,7 +446,7 @@ export default class ActionsHandler extends LitElement {
         new Date().getTime() + this.loanTotalTime * 1000,
       );
 
-      log('[ActionsHandler] setBrowseTimeSession: resetting loanTime', {
+      log.debug('setBrowseTimeSession: resetting loanTime', {
         identifier: this.identifier,
         expireDate,
         loanTotalTime: this.loanTotalTime,
@@ -434,16 +462,19 @@ export default class ActionsHandler extends LitElement {
       // delete pageChangedTime when book is auto renew at nth minute
       await this.localCache.delete(`${this.identifier}-pageChangedTime`);
 
-      log('[ActionsHandler] setBrowseTimeSession: loanTime reset complete', {
+      log.debug('setBrowseTimeSession: loanTime reset complete', {
         identifier: this.identifier,
       });
     } catch (error) {
-      log('[ActionsHandler] setBrowseTimeSession failed', error);
+      log.error('setBrowseTimeSession failed', {
+        identifier: this.identifier,
+        error,
+      });
     }
   }
 
   deleteLoanCookies(): void {
-    log('[ActionsHandler] deleteLoanCookies: expiring loan cookies', {
+    log.debug('deleteLoanCookies: expiring loan cookies', {
       identifier: this.identifier,
     });
 

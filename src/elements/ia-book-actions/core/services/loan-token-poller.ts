@@ -1,13 +1,17 @@
+import type { FetchHandlerInterface } from '@src/services/fetch-handler/fetch-handler-interface';
 import ActionsHandlerService from './actions-handler/actions-handler-service';
 import LoanAnanlytics from './loan-analytics';
 import { sentryLogs } from '../config/sentry-events';
-import log from './log';
+import { createLogger } from './logger';
+import { sentryCaptureMessage } from './sentry-report';
 import type {
   BorrowType,
   LendingActionErrorEventLike,
   LoanServiceResponse,
 } from '../../models';
 import '../../globals';
+
+const log = createLogger('poller');
 
 export interface LoanTokenPollerOptions {
   identifier: string;
@@ -28,6 +32,8 @@ export interface LoanTokenPollerOptions {
    * confirming create_token call is redundant.
    */
   skipInitialCall?: boolean;
+  /** makes the `create_token` requests. */
+  fetchHandler?: FetchHandlerInterface;
 }
 
 /**
@@ -49,6 +55,15 @@ export class LoanTokenPoller {
 
   skipInitialCall: boolean;
 
+  fetchHandler?: FetchHandlerInterface;
+
+  /**
+   * create_token failures in a row since the last success, passed to
+   * errorCallback so the consumer can tell a one-off blip from a run of
+   * them. See IABookActions.handleLendingActionError.
+   */
+  consecutiveFailures = 0;
+
   loanTokenInterval?: ReturnType<typeof setInterval>;
 
   /**
@@ -65,6 +80,7 @@ export class LoanTokenPoller {
       errorCallback,
       pollerDelay,
       skipInitialCall = false,
+      fetchHandler,
     } = options;
 
     this.identifier = identifier;
@@ -73,6 +89,7 @@ export class LoanTokenPoller {
     this.errorCallback = errorCallback;
     this.pollerDelay = pollerDelay;
     this.skipInitialCall = skipInitialCall === true;
+    this.fetchHandler = fetchHandler;
 
     this.bookAccessed();
   }
@@ -84,8 +101,8 @@ export class LoanTokenPoller {
   async bookAccessed(): Promise<void> {
     if (this.borrowType) {
       if (this.skipInitialCall) {
-        log(
-          '[LoanTokenPoller] skipping initial create_token — already minted by the renewal response',
+        log.debug(
+          'skipping initial create_token — already minted by the renewal response',
           {
             identifier: this.identifier,
           },
@@ -108,9 +125,10 @@ export class LoanTokenPoller {
         }, this.pollerDelay * 1000);
       }
     } else {
-      window?.Sentry?.captureMessage(
-        `${sentryLogs.bookAccessed} - not borrowed`,
-      );
+      sentryCaptureMessage(`${sentryLogs.bookAccessed} - not borrowed`, {
+        identifier: this.identifier,
+        action: 'create_token',
+      });
 
       // if book is not browsed, just clear token polling interval
       this.disconnectedCallback();
@@ -123,27 +141,30 @@ export class LoanTokenPoller {
    */
   async handleLoanTokenPoller(isInitial = false): Promise<void> {
     const action = 'create_token';
-    log('[LoanTokenPoller] create_token requested', {
+    log.debug('create_token requested', {
       identifier: this.identifier,
       isInitial,
     });
     ActionsHandlerService({
       identifier: this.identifier,
       action,
+      fetchHandler: this.fetchHandler,
       error: (data) => this.handleTokenError(data, isInitial),
       success: () => {
-        log('[LoanTokenPoller] create_token succeeded', {
+        log.debug('create_token succeeded', {
           identifier: this.identifier,
           isInitial,
         });
+        this.consecutiveFailures = 0;
         if (isInitial) this.successCallback();
       },
     });
   }
 
   /**
-   * Reports a create_token failure via errorCallback. There is no retry, it's
-   * treated as terminal on the first failure. Split out from
+   * Reports every create_token failure via errorCallback. The poller never
+   * retries, and the consumer decides whether a failure is terminal (see
+   * IABookActions.handleLendingActionError). Split out from
    * handleLoanTokenPoller so it's directly testable without needing to
    * mock the network call.
    *
@@ -152,21 +173,40 @@ export class LoanTokenPoller {
    */
   handleTokenError(data: LoanServiceResponse, isInitial: boolean): void {
     const action = 'create_token';
+    this.consecutiveFailures += 1;
+    const { consecutiveFailures } = this;
 
-    log('[LoanTokenPoller] create_token failed', {
+    log.warn('create_token failed', {
       identifier: this.identifier,
       isInitial,
+      consecutiveFailures,
       error: data?.error,
     });
 
-    // isInitial rides along so the consumer can distinguish "the book won't
-    // open at all" from "a mid-read refresh blipped". See
+    // isInitial and consecutiveFailures ride along so the consumer can
+    // distinguish "the book won't open at all" from "a mid-read refresh
+    // blipped", and a one-off blip from a run of them. See
     // IABookActions.handleLendingActionError.
-    this.errorCallback({ detail: { action, data, isInitial } });
+    this.errorCallback({
+      detail: { action, data, isInitial, consecutiveFailures },
+    });
 
     // send error to Sentry
-    window?.Sentry?.captureMessage(
-      `${sentryLogs.handleLoanTokenPoller} - Error: ${JSON.stringify(data)}`,
+    sentryCaptureMessage(
+      `${sentryLogs.handleLoanTokenPoller} - create_token failed`,
+      {
+        identifier: this.identifier,
+        action,
+        extra: {
+          borrowType: this.borrowType,
+          isInitial,
+          consecutiveFailures,
+          error: data?.error,
+          status: data?.status,
+          nonJsonResponse: data?.nonJsonResponse === true,
+          response: JSON.stringify(data),
+        },
+      },
     );
 
     // send LendingServiceError to GA

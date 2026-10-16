@@ -17,7 +17,6 @@ import {
 } from '@internetarchive/shared-resize-observer';
 import { LocalCache } from '@internetarchive/local-cache';
 
-import '../modal-manager/modal-manager';
 import { ModalConfig } from '../modal-manager/modal-config';
 
 import './ia-book-actions-collapsible-action-group';
@@ -33,8 +32,10 @@ import { mobileContainerWidth } from './core/config/constants';
 import { sentryLogs } from './core/config/sentry-events';
 import { LoanTokenPoller } from './core/services/loan-token-poller';
 import { LoanRenewHelper } from './core/services/loan-renew-helper';
-import log from './core/services/log';
+import { createLogger } from './core/services/logger';
+import { sentryCaptureMessage } from './core/services/sentry-report';
 import { URLHelper } from './core/config/url-helper';
+import type { FetchHandlerInterface } from '@src/services/fetch-handler/fetch-handler-interface';
 import { infoIcon } from './assets/data/info-icon';
 import type {
   ActionConfig,
@@ -46,6 +47,44 @@ import type {
   LoanRenewTimeConfig,
 } from './models';
 import './globals';
+
+const log = createLogger('bar');
+
+/**
+ * Registers elements' `modal-manager` once the page has finished loading, and
+ * only when the page hasn't registered one of its own. Pages register their
+ * modal manager while their scripts load, and a second registration of the
+ * same tag from `@internetarchive/modal-manager` throws, so the bar waits for
+ * the page and then defers to whatever it finds. Every modal the bar shows
+ * waits on this first, so it never calls into a `modal-manager` element that
+ * hasn't been upgraded yet.
+ */
+let modalManagerReady: Promise<void> | undefined;
+
+function ensureModalManager(): Promise<void> {
+  modalManagerReady ??= (async () => {
+    if (document.readyState !== 'complete') {
+      await new Promise<void>((resolve) => {
+        window.addEventListener('load', () => resolve(), { once: true });
+      });
+    }
+    if (customElements.get('modal-manager')) return;
+    await import('../modal-manager/modal-manager');
+  })().catch((error) => {
+    log.error('could not register modal-manager', error);
+  });
+  return modalManagerReady;
+}
+
+/**
+ * How many create_token refreshes in a row may fail without an answer from
+ * the service before the patron is shown the error modal. Each successful
+ * refresh mints an access token good for 10 minutes (petabox
+ * LendingConfig::BOOKREADER_AUTH_SECONDS) and refreshes run every 2 minutes
+ * (tokenDelay), so the 3rd failure in a row (~6 minutes on) still shows the
+ * modal before that token runs out and pages stop loading.
+ */
+export const MAX_SILENT_TOKEN_REFRESH_FAILURES = 2;
 
 export const events = {
   browseExpired: 'IABookReader:BrowsingHasExpired',
@@ -115,6 +154,13 @@ export class IABookActions
   @property({ type: Object }) localCache!: LocalCache;
 
   /**
+   * Makes the lending service requests. Loan actions are sent once with no
+   * retries. Defaults to a plain `FetchHandler`; pass another to stub the
+   * service, as the demo does.
+   */
+  @property({ attribute: false }) fetchHandler?: FetchHandlerInterface;
+
+  /**
    * contains one hour auto-loan-renew time configuration
    * defaults to 1 hour config
    */
@@ -163,6 +209,9 @@ export class IABookActions
 
   private renewNowTimeout?: ReturnType<typeof setTimeout>;
 
+  /** True from autoRenewExpiredLoan() until its deferred renewNow fires. */
+  private renewNowScheduled = false;
+
   private visibilityChangeHandler?: () => Promise<void>;
 
   loanRenewInProgress = false;
@@ -174,6 +223,16 @@ export class IABookActions
    * handleLoanAutoRenewed.
    */
   recoveringFromLoanExpiry = false;
+
+  /**
+   * True once a create_token failure has torn the session down (see
+   * handleLendingActionError), until a renewal confirms access again. The
+   * teardown's lendingStatus change re-runs setupLendingToolbarActions(),
+   * which would otherwise start a fresh poller straight away. For a
+   * borrowed loan (user_has_borrowed is left as is) that poller's initial
+   * create_token fails the same way, tearing down again, in a tight loop.
+   */
+  tokenAccessLost = false;
 
   /**
    * True right after a confirmed renewal (any kind), until the token
@@ -194,6 +253,7 @@ export class IABookActions
     super.connectedCallback();
     // First connect binds in firstUpdated(). A reconnect re-binds here.
     if (this.hasUpdated) this.bindLoanRenewEvents();
+    void ensureModalManager();
   }
 
   disconnectedCallback(): void {
@@ -201,6 +261,14 @@ export class IABookActions
     this.unbindLoanRenewEvents();
     clearTimeout(this.pollerStartTimeout);
     clearTimeout(this.renewNowTimeout);
+    if (this.renewNowScheduled) {
+      // The deferred renewNow will never fire, so the guards
+      // autoRenewExpiredLoan() set would stay up for good and every later
+      // renewal check would return early after a reconnect.
+      this.renewNowScheduled = false;
+      this.loanRenewInProgress = false;
+      this.recoveringFromLoanExpiry = false;
+    }
     window?.IALendingIntervals?.clearAll();
     this.tokenPoller?.disconnectedCallback();
     this.sentryCaptureMsg(sentryLogs.disconnectedCallback);
@@ -208,10 +276,22 @@ export class IABookActions
   }
 
   /**
-   * send log messages to sentry
+   * send log messages to sentry, tagged with this book's identifier
+   *
+   * @param message
+   * @param action the lending action involved, if any
+   * @param extra
    */
-  sentryCaptureMsg(message: string): void {
-    window?.Sentry?.captureMessage(message);
+  sentryCaptureMsg(
+    message: string,
+    action?: string,
+    extra?: Record<string, unknown>,
+  ): void {
+    sentryCaptureMessage(message, {
+      identifier: this.identifier,
+      action,
+      extra,
+    });
   }
 
   firstUpdated(): void {
@@ -231,6 +311,10 @@ export class IABookActions
 
   updated(changed: PropertyValues<this>): void {
     if (changed.has('lendingStatus') || changed.has('bwbPurchaseUrl')) {
+      log.debug('lendingStatus changed', {
+        identifier: this.identifier,
+        lendingStatus: this.lendingStatus,
+      });
       this.setupLendingToolbarActions();
     }
 
@@ -318,11 +402,9 @@ export class IABookActions
       // Auto-return must not visibly change the bar, unless nothing's
       // rendered yet (fresh load of an already-expired loan).
       if (this.primaryActions?.length) {
-        log('[IABookActions] browsing expired — leaving action bar untouched');
+        log.debug('browsing expired — leaving action bar untouched');
       } else {
-        log(
-          '[IABookActions] browsing expired on first render — populating action bar',
-        );
+        log.debug('browsing expired on first render — populating action bar');
         this.applyLendingActions();
       }
 
@@ -375,6 +457,7 @@ export class IABookActions
       if (
         !hasExpired &&
         !this.loanRenewInProgress &&
+        !this.tokenAccessLost &&
         !window.IALendingIntervals.tokenPoller
       ) {
         // Any confirmed renewal's response already minted a valid access
@@ -419,9 +502,7 @@ export class IABookActions
      */
     this.userActionHandler = (event: Event) => {
       if (this.isBookReaderInitAction(event)) {
-        log(
-          '[IABookActions] BookReader:userAction ignored — fired by BookReader init',
-        );
+        log.debug('BookReader:userAction ignored — fired by BookReader init');
         return;
       }
 
@@ -430,7 +511,7 @@ export class IABookActions
       // autoLoanRenewChecker() run and clobber the in-flight renewal.
       const wasExpired = this.lendingStatus.browsingExpired;
 
-      log('[IABookActions] BookReader:userAction received', {
+      log.debug('BookReader:userAction received', {
         borrowType: this.borrowType,
         browsingExpired: wasExpired,
       });
@@ -449,14 +530,11 @@ export class IABookActions
     // re-check status when the patron comes back to it.
     this.visibilityChangeHandler = async () => {
       if (document.hidden) {
-        log('[IABookActions] visibilitychange: tab backgrounded');
+        log.debug('visibilitychange: tab backgrounded');
         return;
       }
 
-      log(
-        '[IABookActions] visibilitychange: tab foregrounded',
-        this.borrowType,
-      );
+      log.debug('visibilitychange: tab foregrounded', this.borrowType);
 
       try {
         // Loan already expired while tab was hidden, so try to silently renew
@@ -487,8 +565,13 @@ export class IABookActions
         }
       } catch (error) {
         // Surface localCache failures instead of an unhandled rejection.
-        log('[IABookActions] visibilitychange handler failed', error);
-        this.sentryCaptureMsg(`visibilitychange handler failed: ${error}`);
+        log.error('visibilitychange handler failed', {
+          identifier: this.identifier,
+          error,
+        });
+        this.sentryCaptureMsg('visibilitychange handler failed', undefined, {
+          error: String(error),
+        });
       }
     };
     document.addEventListener('visibilitychange', this.visibilityChangeHandler);
@@ -541,13 +624,12 @@ export class IABookActions
    */
   autoRenewExpiredLoan(): void {
     if (this.loanRenewInProgress) {
-      log(
-        '[IABookActions] autoRenewExpiredLoan: skipped, renewal already in progress',
-        { identifier: this.identifier },
-      );
+      log.debug('autoRenewExpiredLoan: skipped, renewal already in progress', {
+        identifier: this.identifier,
+      });
       return;
     }
-    log('[IABookActions] autoRenewExpiredLoan: starting silent renewal', {
+    log.debug('autoRenewExpiredLoan: starting silent renewal', {
       identifier: this.identifier,
     });
     this.loanRenewInProgress = true;
@@ -564,7 +646,9 @@ export class IABookActions
 
     // Defer renewNow until after lendingStatus timer setup completes.
     clearTimeout(this.renewNowTimeout);
+    this.renewNowScheduled = true;
     this.renewNowTimeout = setTimeout(() => {
+      this.renewNowScheduled = false;
       this.loanRenewResult = { texts: '', renewNow: true, renewType: 'auto' };
     }, 0);
   }
@@ -588,7 +672,8 @@ export class IABookActions
     if (this.warningModalOpen) return;
     this.warningModalOpen = true;
 
-    log('[IABookActions] showWarningModal');
+    log.debug('showWarningModal');
+    await ensureModalManager();
 
     const { texts: warningTexts, secondsLeft: rawSecondsLeft } =
       this.loanRenewResult;
@@ -654,7 +739,7 @@ export class IABookActions
    * Execute when loan is expired
    */
   async browseHasExpired(): Promise<void> {
-    log('[IABookActions] browseHasExpired', {
+    log.debug('browseHasExpired', {
       identifier: this.identifier,
       loanRenewInProgress: this.loanRenewInProgress,
     });
@@ -670,12 +755,9 @@ export class IABookActions
     // remove respected key:value for loan-renew
     await this.localCache.delete(`${this.identifier}-loanTime`);
     await this.localCache.delete(`${this.identifier}-pageChangedTime`);
-    log(
-      '[IABookActions] browseHasExpired: cleared loanTime/pageChangedTime cache',
-      {
-        identifier: this.identifier,
-      },
-    );
+    log.debug('browseHasExpired: cleared loanTime/pageChangedTime cache', {
+      identifier: this.identifier,
+    });
 
     // show message after browsed book is expired.
     this.loanRenewResult.renewNow = false;
@@ -696,6 +778,7 @@ export class IABookActions
    * because another patron has checked it out.
    */
   async showLoanUnavailableModal(errorMsg?: string): Promise<void> {
+    await ensureModalManager();
     const config = new ModalConfig({
       showCloseButton: false,
       closeOnBackdropClick: false,
@@ -772,6 +855,7 @@ export class IABookActions
         .borrowType=${this.borrowType}
         .returnUrl=${this.returnUrl}
         .localCache=${this.localCache}
+        .fetchHandler=${this.fetchHandler}
         .loanTotalTime=${this.loanRenewTimeConfig.loanTotalTime}
         .loanRenewType=${this.loanRenewResult.renewType}
         .loaderIcon=${this.loaderIcon}
@@ -813,7 +897,7 @@ export class IABookActions
 
       // dispatchActionError() has already reported this and shown the
       // relevant modal; don't stack a second one on top.
-      log('[IABookActions] handleLoanAutoRenewed: not a confirmed renewal', {
+      log.warn('handleLoanAutoRenewed: not a confirmed renewal', {
         identifier: this.identifier,
         activeLoan,
       });
@@ -831,7 +915,7 @@ export class IABookActions
         Number.isFinite(rawSecondsLeft) && rawSecondsLeft > 0
           ? rawSecondsLeft
           : this.loanRenewTimeConfig.loanTotalTime;
-      log('[IABookActions] handleLoanAutoRenewed', {
+      log.debug('handleLoanAutoRenewed', {
         secondsLeft,
         rawSecondsLeft,
         ajaxResponse: detail?.data,
@@ -843,6 +927,7 @@ export class IABookActions
       // redundant confirming create_token call, regardless of which path
       // triggered this renewal.
       this.skipNextInitialTokenCall = true;
+      this.tokenAccessLost = false;
 
       // A page image requested in the gap between expiry and this renewal
       // landing can come back broken, and browsers don't retry a failed
@@ -871,9 +956,11 @@ export class IABookActions
 
       // close the modal
       this.modal?.closeModal();
-      this.modal!.removeAttribute('id');
-      this.modal!.customModalContent = undefined;
-      this.sentryCaptureMsg(sentryLogs.bookHasRenewed);
+      if (this.modal) {
+        this.modal.removeAttribute('id');
+        this.modal.customModalContent = undefined;
+      }
+      this.sentryCaptureMsg(sentryLogs.bookHasRenewed, 'renew_loan');
       this.warningModalDismissed = false;
     }
 
@@ -908,10 +995,10 @@ export class IABookActions
     const resyncd = this.reSyncTimerIfGoneOff(secondsLeft);
     if (resyncd.hasSynced) {
       secondsLeft = resyncd.whatShouldLeft;
-      log('[IABookActions] timer: timer re-synced', { secondsLeft });
+      log.debug('timer: timer re-synced', { secondsLeft });
     }
 
-    log('[IABookActions] timer', {
+    log.debug('timer', {
       whatShouldLeft: resyncd.whatShouldLeft,
       whatIsleft: secondsLeft,
     });
@@ -980,8 +1067,8 @@ export class IABookActions
     }
 
     if (whatIsleft !== whatShouldLeft) {
-      log(
-        `[IABookActions] reSyncTimerIfGoneOff ${whatIsleft} - ${whatShouldLeft}: re-syncing timer`,
+      log.debug(
+        `reSyncTimerIfGoneOff ${whatIsleft} - ${whatShouldLeft}: re-syncing timer`,
       );
       return { hasSynced: true, whatShouldLeft };
     }
@@ -1001,7 +1088,7 @@ export class IABookActions
     // Under 50s left there isn't enough time for the renew_loan round-trip
     // and create_token to load images, so just expire the loan.
     if (loanSecondsLeft < 50) {
-      log('[IABookActions] loanRenewAttempt: < 50s left, expiring loan');
+      log.debug('loanRenewAttempt: < 50s left, expiring loan');
       await this.browseHasExpired();
       return;
     }
@@ -1048,6 +1135,7 @@ export class IABookActions
       errorCallback,
       pollerDelay: this.tokenDelay, // in seconds
       skipInitialCall,
+      fetchHandler: this.fetchHandler,
     });
   }
 
@@ -1078,8 +1166,10 @@ export class IABookActions
     const rawErrorMsg = event?.detail?.data?.error;
     const errorMsg = typeof rawErrorMsg === 'string' ? rawErrorMsg : undefined;
     const isInitial = event?.detail?.isInitial === true;
+    const eventData = event?.detail?.data;
+    const consecutiveFailures = event?.detail?.consecutiveFailures ?? 1;
 
-    log('[IABookActions] handleLendingActionError', {
+    log.warn('handleLendingActionError', {
       identifier: this.identifier,
       action,
       errorMsg,
@@ -1088,9 +1178,43 @@ export class IABookActions
       recoveringFromLoanExpiry: this.recoveringFromLoanExpiry,
     });
 
+    if (
+      action === 'create_token' &&
+      !isInitial &&
+      (eventData?.nonJsonResponse === true ||
+        eventData?.networkFailure === true) &&
+      consecutiveFailures <= MAX_SILENT_TOKEN_REFRESH_FAILURES
+    ) {
+      // The service never answered this routine refresh: something in
+      // front of it did (the WAF's /about/400.html, an outage page), or the
+      // request never got through. That says nothing about the loan, so
+      // no modal and no session teardown. It's already reported to Sentry
+      // (ActionsHandlerService/LoanTokenPoller), the current access token
+      // keeps the book readable, and the poll interval is left running, so
+      // the next tick tries again. The service's own answer (e.g. "You do
+      // not currently have this book borrowed.") still falls through below.
+      //
+      // Not for the initial call: its success is what runs
+      // lendingBarPostInit() and opens the book (see startLoanTokenPoller),
+      // so suppressing it would leave a reader that never loads, silently.
+      //
+      // And not forever: past MAX_SILENT_TOKEN_REFRESH_FAILURES in a row,
+      // the last good access token is about to expire, so fall through to
+      // the modal rather than let the reader break with nothing shown.
+      log.warn(
+        'create_token routine refresh got no answer from the service, no modal',
+        {
+          identifier: this.identifier,
+          status: eventData?.status,
+          errorMsg,
+        },
+      );
+      return;
+    }
+
     if (action === 'create_token') {
-      // Any create_token failure, initial or a routine interval refresh,
-      // means access can no longer be confirmed (e.g. a stale loan-record
+      // Any other create_token failure (initial, or a routine refresh the
+      // service itself answered) means access can no longer be confirmed (e.g. a stale loan-record
       // cache on some other node can make this request fail even though
       // the loan is fine, or the loan may genuinely have just been
       // returned via BookReaderImages.php's revokeAccess()). Don't retry
@@ -1099,6 +1223,7 @@ export class IABookActions
       // that isn't accessible.
       window?.IALendingIntervals?.clearAll();
       this.tokenPoller?.disconnectedCallback();
+      this.tokenAccessLost = true;
       this.lendingStatus = {
         ...this.lendingStatus,
         user_has_browsed: false,
@@ -1154,6 +1279,7 @@ export class IABookActions
 
   /* show error message if something went wrong */
   async showErrorModal(errorMsg?: string, action?: string): Promise<void> {
+    await ensureModalManager();
     const modalConfig = new ModalConfig({
       title: html`${msg('Lending error')}`,
       message: errorMsg ? html`${errorMsg}` : undefined,

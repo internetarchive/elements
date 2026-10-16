@@ -1,8 +1,10 @@
 import { analyticsCategories } from '../config/analytics-event-and-category';
 import * as Cookies from './doc-cookies';
-import log from './log';
+import { createLogger } from './logger';
 import type { LoanEventCounts } from '../../models';
 import '../../globals';
+
+const log = createLogger('analytics');
 
 /**
  * This class is used to send different GA events for loan system.
@@ -45,7 +47,11 @@ export default class LoanAnanlytics {
         '/',
       );
     } catch (error) {
-      log(error);
+      log.error('storeLoanStatsCount threw', {
+        identifier: this.identifier,
+        action,
+        error,
+      });
       // the caught error is reported as it is
       this.sendEvent('Cookies-Error-Actions', error, this.identifier);
     }

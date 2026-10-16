@@ -16,10 +16,16 @@ export interface IALendingIntervalsInterface {
   clearAll: () => void;
 }
 
+/** The capture context this element hands to Sentry. */
+export interface SentryContext {
+  tags: Record<string, string>;
+  extra: Record<string, unknown>;
+}
+
 /** The part of the Sentry browser SDK global that is used here. */
 export interface SentryGlobal {
-  captureMessage: (message: string) => unknown;
-  captureException: (exception: unknown) => unknown;
+  captureMessage: (message: string, context?: SentryContext) => unknown;
+  captureException: (exception: unknown, context?: SentryContext) => unknown;
 }
 
 /** The part of archive.org's analytics global that is used here. */

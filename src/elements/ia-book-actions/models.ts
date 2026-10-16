@@ -158,6 +158,14 @@ export interface LoanServiceResponse {
   error?: string | boolean;
   message?: string;
   loan?: { renewal?: boolean; [field: string]: unknown };
+  /** The HTTP status, when the response wasn't a clean service answer. */
+  status?: number;
+  /** Something in front of the service answered with a non-JSON body. */
+  nonJsonResponse?: boolean;
+  /** The request never reached the service. */
+  networkFailure?: boolean;
+  /** The underlying error text behind a patron-facing `error`. */
+  detail?: string;
   [field: string]: unknown;
 }
 
@@ -167,6 +175,8 @@ export interface LendingActionErrorDetail {
   data: LoanServiceResponse;
   /** Set by the loan token poller for the first `create_token` call. */
   isInitial?: boolean;
+  /** Set by the loan token poller: `create_token` failures in a row. */
+  consecutiveFailures?: number;
 }
 
 /** Detail of the `loanAutoRenewed` event. */

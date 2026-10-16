@@ -5,10 +5,20 @@ import { html } from 'lit';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
 import './ia-book-actions';
-import type { IABookActions } from './ia-book-actions';
+// The page the bar sits on provides the modal manager.
+import '../modal-manager/modal-manager';
+import {
+  MAX_SILENT_TOKEN_REFRESH_FAILURES,
+  type IABookActions,
+} from './ia-book-actions';
+import {
+  networkError,
+  unexpectedResponseError,
+} from './core/services/actions-handler/actions-handler-service';
 import type { LendingStatus } from './models';
 import {
   OFFLINE_LOADER_ICON,
+  mockLoanFetchHandler,
   settle,
   stubLoanFetch,
 } from './loan-fetch-stub.test-helper';
@@ -1722,5 +1732,275 @@ describe('Renewal and expiry edge cases', () => {
     });
 
     expect(startSpy).not.toHaveBeenCalled();
+  });
+});
+
+describe('Sentry reports', () => {
+  test('tags its Sentry reports with the identifier and action', async () => {
+    const originalSentry = window.Sentry;
+    window.Sentry = { captureMessage: vi.fn(), captureException: vi.fn() };
+    try {
+      const el = await create({
+        userid: '@user1',
+        identifier: 'sentry-tagged',
+        lendingStatus: {
+          is_lendable: true,
+          available_to_browse: true,
+          user_has_browsed: true,
+          browsingExpired: false,
+          secondsLeftOnLoan: 300,
+        },
+      });
+      await el.updateComplete;
+
+      el.sentryCaptureMsg('some message', 'renew_loan');
+
+      const [, context] = vi.mocked(window.Sentry.captureMessage).mock
+        .lastCall!;
+      expect(context?.tags).toEqual({
+        identifier: 'sentry-tagged',
+        action: 'renew_loan',
+      });
+    } finally {
+      window.Sentry = originalSentry;
+    }
+  });
+});
+
+describe('handleLendingActionError: routine create_token refresh failures', () => {
+  const htmlBadRequest = {
+    success: false,
+    error: unexpectedResponseError(400),
+    status: 400,
+    nonJsonResponse: true,
+  };
+  // the service never answered: no modal on a routine refresh
+  const noAnswer = {
+    'an HTML 400 (WAF block)': htmlBadRequest,
+    'an HTML 502': {
+      ...htmlBadRequest,
+      error: unexpectedResponseError(502),
+      status: 502,
+    },
+    'a blocked or failed request': {
+      error: networkError,
+      detail: 'TypeError: Failed to fetch',
+      networkFailure: true,
+    },
+  };
+  // the service answered "no": the loan may really be gone
+  const serviceAnswer = {
+    success: false,
+    error: 'You do not currently have this book borrowed.',
+    status: 400,
+  };
+  const setup = async () => {
+    const el = await create({
+      userid: '@user1',
+      identifier: 'token-refresh-failure',
+      lendingStatus: {
+        is_lendable: true,
+        user_has_borrowed: true,
+        browsingExpired: false,
+        secondsLeftOnLoan: 300,
+      },
+    });
+    await el.updateComplete;
+    return el;
+  };
+
+  for (const [name, data] of Object.entries(noAnswer)) {
+    test(`shows no modal and keeps the session going for ${name}`, async () => {
+      const el = await setup();
+      const showErrorModalSpy = vi.spyOn(el, 'showErrorModal');
+      const clearAllSpy = vi.spyOn(window.IALendingIntervals, 'clearAll');
+      const disconnectedCallback = vi.fn();
+      el.tokenPoller = { disconnectedCallback } as never;
+
+      el.handleLendingActionError({
+        detail: { action: 'create_token', isInitial: false, data },
+      });
+
+      expect(showErrorModalSpy).not.toHaveBeenCalled();
+      // none of the create_token teardown ran
+      expect(clearAllSpy).not.toHaveBeenCalled();
+      expect(disconnectedCallback).not.toHaveBeenCalled();
+      expect(el.lendingStatus.secondsLeftOnLoan).toBe(300);
+      expect(el.lendingStatus.available_to_browse).toBeUndefined();
+    });
+
+    test(`still shows the modal for ${name} when the book is first opening`, async () => {
+      const el = await setup();
+      const showErrorModalSpy = vi.spyOn(el, 'showErrorModal');
+
+      el.handleLendingActionError({
+        detail: { action: 'create_token', isInitial: true, data },
+      });
+
+      expect(showErrorModalSpy).toHaveBeenCalledOnce();
+    });
+  }
+
+  test('still shows the modal and resets the bar when the service itself says no', async () => {
+    const el = await setup();
+    const showErrorModalSpy = vi.spyOn(el, 'showErrorModal');
+
+    el.handleLendingActionError({
+      detail: { action: 'create_token', isInitial: false, data: serviceAnswer },
+    });
+
+    expect(showErrorModalSpy).toHaveBeenCalledExactlyOnceWith(
+      serviceAnswer.error,
+      'create_token',
+    );
+    expect(el.lendingStatus.secondsLeftOnLoan).toBe(0);
+  });
+});
+
+describe('handleLendingActionError: a run of unanswered token refreshes', () => {
+  const blocked = {
+    error: networkError,
+    detail: 'TypeError: Failed to fetch',
+    networkFailure: true,
+  };
+  const setup = async () => {
+    const el = await create({
+      userid: '@user1',
+      identifier: 'token-refresh-run',
+      lendingStatus: {
+        is_lendable: true,
+        user_has_borrowed: true,
+        browsingExpired: false,
+        secondsLeftOnLoan: 300,
+      },
+    });
+    await el.updateComplete;
+    return el;
+  };
+
+  test(`stays silent for up to ${MAX_SILENT_TOKEN_REFRESH_FAILURES} failures in a row`, async () => {
+    const el = await setup();
+    const showErrorModalSpy = vi.spyOn(el, 'showErrorModal');
+
+    for (let n = 1; n <= MAX_SILENT_TOKEN_REFRESH_FAILURES; n += 1) {
+      el.handleLendingActionError({
+        detail: {
+          action: 'create_token',
+          isInitial: false,
+          consecutiveFailures: n,
+          data: blocked,
+        },
+      });
+    }
+
+    expect(showErrorModalSpy).not.toHaveBeenCalled();
+  });
+
+  test('shows the modal and resets the bar on the next one, before the access token runs out', async () => {
+    const el = await setup();
+    const showErrorModalSpy = vi.spyOn(el, 'showErrorModal');
+
+    el.handleLendingActionError({
+      detail: {
+        action: 'create_token',
+        isInitial: false,
+        consecutiveFailures: MAX_SILENT_TOKEN_REFRESH_FAILURES + 1,
+        data: blocked,
+      },
+    });
+
+    expect(showErrorModalSpy).toHaveBeenCalledExactlyOnceWith(
+      networkError,
+      'create_token',
+    );
+    expect(el.lendingStatus.secondsLeftOnLoan).toBe(0);
+  });
+});
+
+describe('create_token failure on a borrowed loan', () => {
+  test('does not restart the token poller after the teardown', async () => {
+    const el = await create({
+      userid: '@user1',
+      identifier: 'borrowed-teardown-loop',
+      lendingStatus: {
+        is_lendable: true,
+        user_has_borrowed: true,
+        available_to_borrow: false,
+        browsingExpired: false,
+      },
+    });
+    await el.updateComplete;
+    await aTimeout(150);
+    const startSpy = vi.spyOn(el, 'startLoanTokenPoller');
+    const showErrorModalSpy = vi
+      .spyOn(el, 'showErrorModal')
+      .mockResolvedValue();
+
+    el.handleLendingActionError({
+      detail: {
+        action: 'create_token',
+        isInitial: false,
+        consecutiveFailures: MAX_SILENT_TOKEN_REFRESH_FAILURES + 1,
+        data: {
+          error: networkError,
+          detail: 'TypeError: Failed to fetch',
+          networkFailure: true,
+        },
+      },
+    });
+    await el.updateComplete;
+    await aTimeout(300);
+
+    expect(showErrorModalSpy).toHaveBeenCalledOnce();
+    expect(startSpy).not.toHaveBeenCalled();
+    expect(window.IALendingIntervals.tokenPoller).toBe(0);
+  });
+});
+
+describe('disconnecting during a silent renewal', () => {
+  test('clears the renewal guards so the timer restarts after a reconnect', async () => {
+    const el = await create({
+      userid: '@user1',
+      identifier: 'detach-during-renew',
+      lendingStatus: {
+        is_lendable: true,
+        user_has_browsed: true,
+        browsingExpired: true,
+      },
+    });
+    await el.updateComplete;
+
+    el.autoRenewExpiredLoan();
+    expect(el.loanRenewInProgress).toBe(true);
+    expect(el.recoveringFromLoanExpiry).toBe(true);
+
+    // detached before the deferred renewNow fires
+    el.remove();
+
+    expect(el.loanRenewInProgress).toBe(false);
+    expect(el.recoveringFromLoanExpiry).toBe(false);
+  });
+});
+
+describe('fetchHandler', () => {
+  test('sends the loan actions its action group makes through the handler it was given', async () => {
+    const { fetchHandler, calls } = mockLoanFetchHandler({ success: true });
+    const el = await create({
+      userid: '@user1',
+      identifier: 'inject-handler',
+      lendingStatus: { is_lendable: true, available_to_browse: true },
+    });
+    el.fetchHandler = fetchHandler;
+    await el.updateComplete;
+
+    const group = el.shadowRoot!.querySelector(
+      'ia-book-actions-collapsible-action-group',
+    ) as unknown as { handleBorrowIt: () => void };
+    group.handleBorrowIt();
+    await aTimeout(50);
+
+    expect(calls).toHaveLength(1);
+    const { requestInit } = calls[0].options as { requestInit: RequestInit };
+    expect((requestInit.body as FormData).get('action')).toBe('borrow_book');
   });
 });

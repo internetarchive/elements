@@ -8,7 +8,11 @@ import {
   analyticsActions,
   analyticsLabels,
 } from '../../config/analytics-event-and-category';
-import { stubLoanFetch } from '../../../loan-fetch-stub.test-helper';
+import {
+  mockLoanFetchHandler,
+  stubLoanFetch,
+} from '../../../loan-fetch-stub.test-helper';
+import type { FetchOptions } from '@src/services/fetch-handler/fetch-options';
 import type { LoanAutoRenewedDetail } from '../../../models';
 
 // Define a temporary tag for this element for testing
@@ -103,19 +107,6 @@ describe('ActionsHandler#handleLoanRenewNow', () => {
   beforeEach(async () => {
     stubLoanFetch();
 
-    // Make sure no other test in this run left ?error=true in the URL.
-    // ActionsHandlerService reads it directly off window.location.
-    const params = new URLSearchParams(window.location.search);
-    if (params.has('error')) {
-      params.delete('error');
-      const query = params.toString();
-      window.history.replaceState(
-        {},
-        '',
-        `${window.location.pathname}${query ? `?${query}` : ''}`,
-      );
-    }
-
     el = await fixture<ActionsHandler>(`<${TEST_TAG}></${TEST_TAG}>`);
     el.identifier = identifier;
     el.loanTotalTime = 3600;
@@ -125,8 +116,6 @@ describe('ActionsHandler#handleLoanRenewNow', () => {
   });
 
   test('awaits the loanTime cache write before dispatching loanAutoRenewed, and fires the renew analytics event only on success', async () => {
-    // The test environment's ActionsHandlerService fakes a renew_loan
-    // success after a 5s delay to simulate a real network round-trip.
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'Date'] });
 
     const storeStatsSpy = vi.spyOn(el.loanAnanlytics, 'storeLoanStatsCount');
@@ -166,32 +155,43 @@ describe('ActionsHandler#handleLoanRenewNow', () => {
     const sendEventSpy = vi.spyOn(el.loanAnanlytics, 'sendEvent');
     const storeStatsSpy = vi.spyOn(el.loanAnanlytics, 'storeLoanStatsCount');
 
-    // Force ActionsHandlerService's shouldReturnError branch for this call.
-    const originalSearch = window.location.search;
-    const params = new URLSearchParams(originalSearch);
-    params.set('error', 'true');
-    window.history.pushState({}, '', `?${params.toString()}`);
+    el.fetchHandler = mockLoanFetchHandler({
+      error: 'This book is not available to borrow at this time.',
+    }).fetchHandler;
 
-    try {
-      const errored = oneEvent(el, 'lendingActionError');
-      el.handleLoanRenewNow('auto');
-      const { detail } = (await errored) as CustomEvent<{ action: string }>;
+    const errored = oneEvent(el, 'lendingActionError');
+    el.handleLoanRenewNow('auto');
+    const { detail } = (await errored) as CustomEvent<{ action: string }>;
 
-      expect(detail.action).to.equal('renew_loan');
-      // dispatchActionError fires its own 'LendingServiceError' analytics
-      // event on any error, which is expected. What must NOT fire is the
-      // renew-success event, which is gated on `isRenewal`.
-      expect(sendEventSpy).not.toHaveBeenCalledWith(
-        analyticsCategories.browse,
-        analyticsActions.browseRenew,
-      );
-      expect(storeStatsSpy).not.toHaveBeenCalledWith(identifier, 'autorenew');
-    } finally {
-      window.history.pushState(
-        {},
-        '',
-        `${window.location.pathname}${originalSearch}`,
-      );
-    }
+    expect(detail.action).to.equal('renew_loan');
+    // dispatchActionError fires its own 'LendingServiceError' analytics
+    // event on any error, which is expected. What must NOT fire is the
+    // renew-success event, which is gated on `isRenewal`.
+    expect(sendEventSpy).not.toHaveBeenCalledWith(
+      analyticsCategories.browse,
+      analyticsActions.browseRenew,
+    );
+    expect(storeStatsSpy).not.toHaveBeenCalledWith(identifier, 'autorenew');
+  });
+
+  test('sends loan actions once, with no retries', async () => {
+    const { fetchHandler, calls } = mockLoanFetchHandler({
+      success: true,
+      loan: { renewal: true },
+    });
+    el.fetchHandler = fetchHandler;
+
+    const renewed = oneEvent(el, 'loanAutoRenewed');
+    el.handleLoanRenewNow('auto');
+    await renewed;
+
+    expect(calls).to.have.length(1);
+    expect(calls[0].url).to.equal('/services/loans/loan');
+    const { requestInit, retryConfig } = calls[0].options as FetchOptions;
+    expect(requestInit?.method).to.equal('POST');
+    expect((requestInit?.body as FormData).get('action')).to.equal(
+      'renew_loan',
+    );
+    expect(retryConfig?.shouldRetry(null, 0, new Error('x'))).to.equal(false);
   });
 });

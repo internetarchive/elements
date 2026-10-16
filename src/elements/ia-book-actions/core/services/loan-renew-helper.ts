@@ -1,7 +1,9 @@
 import { nothing } from 'lit';
-import log from './log';
+import { createLogger } from './logger';
 import type { LoanRenewResult, LoanRenewTimeConfig } from '../../models';
 import type { LocalCacheInterface } from '@internetarchive/local-cache';
+
+const log = createLogger('renew');
 
 /**
  * This class is used to determine if use is eligible for auto renew loan.
@@ -46,7 +48,11 @@ export class LoanRenewHelper {
       }
       return this.autoChecker(); // auto checker at last 10th minute
     } catch (error) {
-      log(error);
+      log.error('handleLoanRenew threw', {
+        identifier: this.identifier,
+        hasPageChanged: this.hasPageChanged,
+        error,
+      });
     }
 
     return nothing;

@@ -1,7 +1,26 @@
+import { FetchHandler } from '@src/services/fetch-handler/fetch-handler';
+import type { FetchHandlerInterface } from '@src/services/fetch-handler/fetch-handler-interface';
+import { NoRetryConfiguration } from '@src/services/fetch-handler/fetch-retry/configuration/no-retry-configuration';
 import { sentryLogs } from '../../config/sentry-events';
-import log from '../log';
+import { createLogger } from '../logger';
+import { sentryCaptureException, sentryCaptureMessage } from '../sentry-report';
 import type { LoanServiceResponse } from '../../../models';
 import '../../../globals';
+
+const log = createLogger('service');
+
+const LOAN_SERVICE_PATH = '/services/loans/loan';
+
+/**
+ * Patron-facing messages for failures that never reached the lending
+ * service's own JSON error handling.
+ */
+export const unexpectedResponseError = (status: number): string =>
+  `Unexpected response from the lending service (HTTP ${status}). Please try again.`;
+export const networkError =
+  'Could not reach the lending service. Please check your connection and try again.';
+export const unexpectedError =
+  'Something went wrong handling the lending service response. Please try again.';
 
 export interface ActionsHandlerServiceOptions {
   /** the lending service action, like `browse_book` or `renew_loan` */
@@ -9,7 +28,15 @@ export interface ActionsHandlerServiceOptions {
   identifier: string;
   success?: (data: LoanServiceResponse) => void;
   error?: (data: LoanServiceResponse) => void;
+  /**
+   * Makes the request. Loan actions change state on the server, so they are
+   * sent once with no retries.
+   */
+  fetchHandler?: FetchHandlerInterface;
 }
+
+/** Numbers each request so overlapping calls can be told apart in the log. */
+let requestCounter = 0;
 
 /**
  * Helper to call loan service
@@ -22,107 +49,139 @@ export default async function ActionsHandlerService(
     error() {},
     ...options,
   };
-
-  let baseHost = '/services/loans/loan';
-  const location = window?.location;
-
-  const tokenError = 'loan token not found. please try again later.';
-  const borrowError =
-    'This book is not available to borrow at this time. Please try again later.';
-  const erroneousActions = [
-    'browse_book',
-    'borrow_book',
-    'create_token',
-    'renew_loan',
-    'return_loan',
-  ];
-  const searchParams = new URLSearchParams(location?.search);
-  // ?error=true fails every erroneous action (e.g. simulates the book
-  // already being borrowed by someone else). ?failAction=create_token (or
-  // any action name) fails ONLY that action, so a renew_loan can succeed
-  // and the immediately-following create_token can be made to fail,
-  // reproducing the "renewed, but create_token failed" case without
-  // needing a real book.
-  const shouldReturnError =
-    location?.hostname !== 'archive.org' &&
-    erroneousActions.includes(option?.action ?? '') &&
-    (searchParams.get('error') === 'true' ||
-      searchParams.get('failAction') === option?.action);
-
-  const testHostname = ['localhost', 'internetarchive.github.io'];
-  let isTest = false;
-  if (testHostname.includes(location.hostname)) {
-    isTest = true;
-    baseHost = location.href;
-  }
+  const fetchHandler = option.fetchHandler ?? new FetchHandler();
 
   const formData = new FormData();
   formData.append('action', String(option.action));
   formData.append('identifier', option.identifier);
 
+  requestCounter += 1;
+  const requestId = `${option.action} #${requestCounter}`;
+  const startedAt = performance.now();
+  const elapsed = (): string =>
+    `${Math.round(performance.now() - startedAt)}ms`;
+
+  // Set once a response arrives, so the catch below can tell a failed fetch
+  // (a real network problem) from anything thrown afterwards, including by
+  // the caller's own success/error callback, which run inside this try.
+  let reachedResponse = false;
+
+  log.debug(`→ ${requestId} ${option.identifier}`);
+
   try {
-    await fetch(baseHost, {
-      method: 'POST',
-      body: formData,
-    })
-      .then(async (response): Promise<LoanServiceResponse> => {
-        // intentional error on localhost
-        if (shouldReturnError) {
-          return {
-            success: false,
-            error: option?.action === 'create_token' ? tokenError : borrowError,
-          };
-        }
+    const response = await fetchHandler.fetch(LOAN_SERVICE_PATH, {
+      requestInit: { method: 'POST', body: formData },
+      retryConfig: NoRetryConfiguration.shared,
+    });
+    reachedResponse = true;
 
-        // return success response for localhost server...
-        if (isTest) {
-          if (
-            option?.action == 'renew_loan' ||
-            option?.action == 'return_loan'
-          ) {
-            // wait a few seconds so that the user can see the loading state
-            await new Promise((resolve) => setTimeout(resolve, 5000));
-            return {
-              success: true,
-              loan: { renewal: true },
-            };
-          }
-          return {
-            success: true,
-            message: 'operation executed successfully!',
-          };
-        }
+    const data = await parseServiceResponse(response, option);
 
-        // The response is a Response instance.
-        // You parse the data into a useable format using `.json()`
-        return response.json();
-      })
-      .then((data) => {
-        // `data` is the parsed version of the JSON returned from the above endpoint.
-        if (!data?.error) {
-          log(`[IABookActions] ✓ ${option.action} succeeded`, data);
-          option?.success(data);
-        } else {
-          log(`[IABookActions] ✗ ${option.action} failed`, data);
-          option?.error(data);
-        }
-      });
+    // `data` is the parsed version of the JSON returned from the endpoint.
+    if (!data?.error) {
+      log.debug(`← ${requestId} ${response.status} ${elapsed()} ok`, data);
+      option.success(data);
+    } else {
+      log.warn(`← ${requestId} ${response.status} ${elapsed()} failed`, data);
+      option.error(data);
+    }
   } catch (error) {
-    window?.Sentry?.captureException(
-      `${sentryLogs.actionsHandlerService} - Error: ${error}`,
-    );
+    sentryCaptureException(error, {
+      identifier: option.identifier,
+      action: option.action,
+      extra: {
+        message: `${sentryLogs.actionsHandlerService} - ${option.action} ${
+          reachedResponse ? 'threw' : 'fetch failed'
+        }`,
+      },
+    });
 
     /**
-     * Reports the failure through `error`. A rejected fetch (offline, dropped
-     * connection) or a non-JSON body (a 405 returning HTML) lands here, and
-     * a caller whose callbacks never fire would wait forever.
+     * Reports the failure through `error`. A rejected fetch (offline,
+     * dropped or blocked connection) and anything thrown after the response
+     * arrived, including by the caller's own callbacks, land here. Non-JSON
+     * bodies are handled in parseServiceResponse() and don't reach here. A
+     * caller whose callbacks never fire would wait forever.
      *
      * For renew_loan that matters beyond a missing modal: IABookActions
      * clears its loanRenewInProgress guard from these callbacks, so without
      * one every later renewal attempt would be a no-op. Backgrounding a tab
-     * on a flaky mobile connection is exactly when this fires.
+     * on a flaky mobile connection is exactly when this fires. Only a
+     * rejected fetch is a network problem, so only that one says so.
      */
-    log(`[IABookActions] ✗ ${option.action} threw`, error);
-    option?.error?.({ error: String(error) });
+    log.error(
+      `✗ ${requestId} ${elapsed()} ${reachedResponse ? 'threw' : 'fetch failed'}`,
+      error,
+    );
+    // networkFailure marks "the service never answered" (like
+    // nonJsonResponse in parseServiceResponse). See
+    // IABookActions.handleLendingActionError.
+    option.error({
+      error: reachedResponse ? unexpectedError : networkError,
+      detail: String(error),
+      ...(reachedResponse ? {} : { networkFailure: true }),
+    });
   }
+}
+
+/**
+ * Parse a lending service response without ever surfacing a raw
+ * `SyntaxError` to the patron. Anything in front of PHP (the WAF, or nginx
+ * swapping in a 4xx or 5xx page) can answer with HTML instead of the
+ * service's JSON. That becomes a readable error carrying the HTTP status,
+ * and is reported to Sentry with the identifier and action.
+ */
+export async function parseServiceResponse(
+  response: Response,
+  option: Pick<ActionsHandlerServiceOptions, 'action' | 'identifier'>,
+): Promise<LoanServiceResponse> {
+  const { status } = response;
+  const contentType = response.headers?.get('content-type') || '';
+
+  // The service always answers with JSON, so a body that doesn't parse never
+  // came from it. It's parsed whatever the Content-Type, so a valid answer
+  // is never mistaken for an error page if a header is ever missing.
+  const body = await response.text();
+  let data: unknown;
+  try {
+    data = JSON.parse(body);
+  } catch {
+    data = undefined;
+  }
+
+  if (data === undefined) {
+    sentryCaptureMessage(
+      `${sentryLogs.actionsHandlerService} - ${option.action}: non-JSON response (HTTP ${status})`,
+      {
+        identifier: option.identifier,
+        action: option.action,
+        extra: { status, contentType, bodySnippet: body.slice(0, 300) },
+      },
+    );
+    // nonJsonResponse lets callers tell "something in front of PHP answered"
+    // apart from the service's own error. See
+    // IABookActions.handleLendingActionError.
+    return {
+      success: false,
+      error: unexpectedResponseError(status),
+      status,
+      nonJsonResponse: true,
+    };
+  }
+
+  const parsed = data as LoanServiceResponse | null;
+
+  // Carry the HTTP status on the service's own JSON errors too, so it
+  // reaches Sentry. A JSON error status without the service's usual `error`
+  // field would otherwise be treated as a success.
+  if (!response.ok) {
+    return {
+      ...(parsed && typeof parsed === 'object' ? parsed : {}),
+      success: false,
+      error: parsed?.error || unexpectedResponseError(status),
+      status,
+    };
+  }
+
+  return parsed as LoanServiceResponse;
 }

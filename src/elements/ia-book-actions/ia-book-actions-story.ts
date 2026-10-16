@@ -8,6 +8,8 @@ import { tagFromHash } from '@demo/element-hash';
 import type { PropInputSettings } from '@demo/story-components/story-prop-settings';
 import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
 
+import type { FetchHandlerInterface } from '@src/services/fetch-handler/fetch-handler-interface';
+import type { FetchOptions } from '@src/services/fetch-handler/fetch-options';
 import './ia-book-actions';
 import type { IABookActions } from './ia-book-actions';
 import type { IAModalManager } from '../modal-manager/modal-manager';
@@ -250,9 +252,6 @@ const SCENARIOS: Record<string, Scenario> = {
   },
 };
 
-/** The path the element posts lending actions to on archive.org. */
-const LOAN_SERVICE_PATH = '/services/loans/loan';
-
 /** The lending service actions the element posts to the loans endpoint. */
 const LENDING_ACTIONS = [
   'browse_book',
@@ -275,6 +274,14 @@ const FAILING_ACTIONS = LENDING_ACTIONS.filter(
 
 const FAIL_MESSAGE = 'The demo is set to fail lending requests.';
 
+/** The error the lending service gives for the `?error=true` and `?failAction=` URL options. */
+const BORROW_ERROR =
+  'This book is not available to borrow at this time. Please try again later.';
+const TOKEN_ERROR = 'loan token not found. please try again later.';
+
+/** How long a renew or return takes, so the loading state can be seen. */
+const SLOW_ACTION_MS = 1500;
+
 const ARCHIVE_ROOT_FONT_SIZE = '10px';
 
 const MAX_LOG_ENTRIES = 100;
@@ -295,10 +302,10 @@ interface NavigateEventLike extends Event {
 /**
  * Demo of the lending action bar. Nothing here reaches the network:
  *
- * - `window.fetch` is wrapped while the story is on the page. Posts to the
- *   lending service (`create_token`, `browse_book`, `renew_loan` and the rest)
- *   are answered locally and listed in the log, and every other request goes
- *   to the real `fetch`. The wrapper is removed when the story is removed.
+ * - The bar gets a fetch handler that answers the lending service posts
+ *   (`create_token`, `browse_book`, `renew_loan` and the rest) locally and
+ *   lists them in the log. `?error=true` fails every lending action and
+ *   `?failAction=<action>` fails just that one.
  * - `window.archive_analytics` and `window.Sentry` are replaced with versions
  *   that write to the log, and put back afterward.
  * - The loader image is a data URI.
@@ -347,10 +354,6 @@ export class IABookActionsStory extends LitElement {
 
   private rootFontSizeBefore?: string;
 
-  private originalFetch?: typeof window.fetch;
-
-  private fetchStub?: typeof window.fetch;
-
   private previousAnalytics?: Window['archive_analytics'];
 
   private previousSentry?: Window['Sentry'];
@@ -382,7 +385,6 @@ export class IABookActionsStory extends LitElement {
   connectedCallback(): void {
     super.connectedCallback();
     this.applyScenario();
-    this.installFetchStub();
     this.installGlobalStubs();
     this.installModalManager();
     this.installNavigationGuards();
@@ -393,7 +395,6 @@ export class IABookActionsStory extends LitElement {
     this.removeNavigationGuards();
     this.removeModalManager();
     this.removeGlobalStubs();
-    this.removeFetchStub();
     this.removeLoanCookies();
     this.restoreRootFontSize();
   }
@@ -414,66 +415,61 @@ export class IABookActionsStory extends LitElement {
       0,
       MAX_LOG_ENTRIES,
     );
+    console.log(`[ia-book-actions-demo:${kind}] ${text}`);
   }
 
-  private installFetchStub(): void {
-    const originalFetch = window.fetch;
-    this.originalFetch = originalFetch;
-
-    this.fetchStub = async (input, init) => {
-      const body = init?.body;
-      const action =
-        body instanceof FormData ? String(body.get('action')) : undefined;
-      const isLendingCall =
-        init?.method?.toUpperCase() === 'POST' &&
-        action !== undefined &&
-        LENDING_ACTIONS.includes(action);
-      if (!isLendingCall) return originalFetch.call(window, input, init);
-
-      const url =
-        typeof input === 'string'
-          ? input
-          : input instanceof URL
-            ? input.href
-            : input.url;
-      const identifier = (body as FormData).get('identifier');
-      // Hosts the element treats as test hosts get the page URL instead of
-      // the lending service path.
-      const target =
-        new URL(url, window.location.href).href === window.location.href
-          ? `${LOAN_SERVICE_PATH} (the page URL on a test host)`
-          : url;
+  /**
+   * Answers the lending service posts in place of the network. Only `fetch`
+   * is used by the element.
+   */
+  private readonly demoFetchHandler: FetchHandlerInterface = {
+    fetch: async (request, options) => {
+      const requestInit = (options as FetchOptions | undefined)?.requestInit;
+      const body = requestInit?.body;
+      const action = body instanceof FormData ? String(body.get('action')) : '';
+      const identifier = body instanceof FormData ? body.get('identifier') : '';
+      const url = typeof request === 'string' ? request : request.url;
       this.log(
         'request',
-        `POST ${target} action=${action} identifier=${identifier}`,
+        `POST ${url} action=${action} identifier=${identifier}`,
       );
 
-      if (this.failRequests && FAILING_ACTIONS.includes(action!)) {
-        // Rejecting the request fails it on every host. The element ignores a
-        // stubbed response on test hosts but reports a rejected request.
-        const failure = new Error(FAIL_MESSAGE);
-        failure.toString = () => FAIL_MESSAGE;
-        throw failure;
+      const params = new URLSearchParams(window.location.search);
+      const failedByUrl =
+        LENDING_ACTIONS.includes(action) &&
+        (params.get('error') === 'true' || params.get('failAction') === action);
+      const failedByToggle =
+        this.failRequests && FAILING_ACTIONS.includes(action);
+      if (failedByUrl || failedByToggle) {
+        const error = failedByToggle
+          ? FAIL_MESSAGE
+          : action === 'create_token'
+            ? TOKEN_ERROR
+            : BORROW_ERROR;
+        return this.jsonResponse({ success: false, error });
       }
 
-      const response =
+      if (action === 'renew_loan' || action === 'return_loan') {
+        await new Promise((resolve) => {
+          setTimeout(resolve, SLOW_ACTION_MS);
+        });
+      }
+      return this.jsonResponse(
         action === 'renew_loan'
           ? { success: true, loan: { renewal: true } }
-          : { success: true };
-      return new Response(JSON.stringify(response), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    };
-    window.fetch = this.fetchStub;
-  }
+          : { success: true },
+      );
+    },
+    fetchApiResponse: async <T>() => ({ success: true }) as T,
+    fetchApiPathResponse: async <T>() => ({ success: true }) as T,
+    fetchIAApiResponse: async <T>() => ({ success: true }) as T,
+  };
 
-  private removeFetchStub(): void {
-    if (this.originalFetch && window.fetch === this.fetchStub) {
-      window.fetch = this.originalFetch;
-    }
-    this.originalFetch = undefined;
-    this.fetchStub = undefined;
+  private jsonResponse(body: Record<string, unknown>): Response {
+    return new Response(JSON.stringify(body), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   private installGlobalStubs(): void {
@@ -602,45 +598,41 @@ export class IABookActionsStory extends LitElement {
     window.dispatchEvent(new CustomEvent('BookReader:userAction'));
   }
 
-  private selectRow(
+  private selectField(
     label: string,
     value: string,
     options: Record<string, { label: string }>,
     onChange: (value: string) => void,
   ) {
     return html`
-      <tr>
-        <td><label>${label}</label></td>
-        <td>
-          <select
-            .value=${value}
-            @change=${(event: Event) =>
-              onChange((event.target as HTMLSelectElement).value)}
-          >
-            ${Object.entries(options).map(
-              ([key, option]) =>
-                html`<option value=${key} ?selected=${key === value}>
-                  ${option.label}
-                </option>`,
-            )}
-          </select>
-        </td>
-      </tr>
+      <label class="field">
+        <span>${label}</span>
+        <select
+          .value=${value}
+          @change=${(event: Event) =>
+            onChange((event.target as HTMLSelectElement).value)}
+        >
+          ${Object.entries(options).map(
+            ([key, option]) =>
+              html`<option value=${key} ?selected=${key === value}>
+                ${option.label}
+              </option>`,
+          )}
+        </select>
+      </label>
     `;
   }
 
-  private checkRow(
+  private checkField(
     label: string,
     checked: boolean,
     onChange: (event: Event) => void,
   ) {
     return html`
-      <tr>
-        <td><label>${label}</label></td>
-        <td>
-          <input type="checkbox" .checked=${checked} @change=${onChange} />
-        </td>
-      </tr>
+      <label class="field check">
+        <input type="checkbox" .checked=${checked} @change=${onChange} />
+        <span>${label}</span>
+      </label>
     `;
   }
 
@@ -663,6 +655,7 @@ export class IABookActionsStory extends LitElement {
             .lendingStatus=${this.status}
             .loanRenewTimeConfig=${this.loanConfig}
             .loaderIcon=${'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'}
+            .fetchHandler=${this.demoFetchHandler}
             .lendingBarPostInit=${this.onPostInit}
             .reloadPageImages=${this.onReloadPageImages}
             @IABookReader:BrowsingHasExpired=${() =>
@@ -671,6 +664,47 @@ export class IABookActionsStory extends LitElement {
               this.log('event', `lendingActionError ${event.detail?.action}`)}
           ></ia-book-actions>`,
         )}
+
+        <div slot="demo" class="toolbar">
+          ${this.selectField(
+            'Lending status',
+            this.scenario,
+            SCENARIOS,
+            (v) => {
+              this.scenario = v;
+              this.applyScenario();
+            },
+          )}
+          ${this.selectField(
+            '1 hour loan length',
+            this.loanLength,
+            LOAN_LENGTHS,
+            (v) => {
+              this.loanLength = v;
+              this.applyScenario();
+            },
+          )}
+          ${this.checkField('Logged in', this.loggedIn, (event) => {
+            this.loggedIn = (event.target as HTMLInputElement).checked;
+            this.applyScenario();
+          })}
+          ${this.checkField('Admin', this.admin, (event) => {
+            this.admin = (event.target as HTMLInputElement).checked;
+            this.applyScenario();
+          })}
+          ${this.checkField('Print disabled', this.printDisabled, (event) => {
+            this.printDisabled = (event.target as HTMLInputElement).checked;
+            this.applyScenario();
+          })}
+          ${this.checkField(
+            'Fail lending requests (not create_token)',
+            this.failRequests,
+            this.onFailChange,
+          )}
+          <button @click=${this.simulatePageTurn}>
+            Simulate a BookReader page turn
+          </button>
+        </div>
 
         <div slot="demo" class="log">
           <h4>What the element would have sent</h4>
@@ -690,66 +724,21 @@ export class IABookActionsStory extends LitElement {
 
         <div slot="settings">
           <table>
-            ${this.selectRow(
-              'Lending status',
-              this.scenario,
-              SCENARIOS,
-              (v) => {
-                this.scenario = v;
-                this.applyScenario();
-              },
-            )}
-            ${this.selectRow(
-              '1 hour loan length',
-              this.loanLength,
-              LOAN_LENGTHS,
-              (v) => {
-                this.loanLength = v;
-                this.applyScenario();
-              },
-            )}
-            ${this.checkRow('Logged in', this.loggedIn, (event) => {
-              this.loggedIn = (event.target as HTMLInputElement).checked;
-              this.applyScenario();
-            })}
-            ${this.checkRow('Admin', this.admin, (event) => {
-              this.admin = (event.target as HTMLInputElement).checked;
-              this.applyScenario();
-            })}
-            ${this.checkRow('Print disabled', this.printDisabled, (event) => {
-              this.printDisabled = (event.target as HTMLInputElement).checked;
-              this.applyScenario();
-            })}
-            ${this.checkRow(
-              'Fail lending requests (not create_token)',
-              this.failRequests,
-              this.onFailChange,
-            )}
-            ${this.checkRow(
-              'archive.org font size',
-              this.archiveFontSize,
-              (event) => {
-                this.archiveFontSize = (
-                  event.target as HTMLInputElement
-                ).checked;
-              },
-            )}
+            <tr>
+              <td><label>archive.org font size</label></td>
+              <td>
+                <input
+                  type="checkbox"
+                  .checked=${this.archiveFontSize}
+                  @change=${(event: Event) => {
+                    this.archiveFontSize = (
+                      event.target as HTMLInputElement
+                    ).checked;
+                  }}
+                />
+              </td>
+            </tr>
           </table>
-          <p>
-            <button @click=${this.simulatePageTurn}>
-              Simulate a BookReader page turn
-            </button>
-          </p>
-          <p class="hint">
-            Pick a 1 hour loan with a short length to reach the warning modal,
-            the automatic renewal and the auto-return in under two minutes. Fail
-            lending requests makes borrow, return, renew and waitlist calls
-            fail. create_token still succeeds, since it repeats for as long as a
-            loan is active. archive.org font size sets the page's root font size
-            to 10px, which the bar is built for. It applies to the whole demo
-            page, so it's on by default only when this element is the one being
-            viewed.
-          </p>
         </div>
 
         <div slot="usage-notes">
@@ -758,6 +747,21 @@ export class IABookActionsStory extends LitElement {
             tag name and uses it for the loan warning and for errors. The bar
             sends loan actions to <code>/services/loans/loan</code>, so it
             belongs on archive.org or behind a proxy for it.
+          </p>
+          <p>
+            Pick a 1 hour loan with a short length to reach the warning modal,
+            the automatic renewal and the auto-return in under two minutes. Fail
+            lending requests makes borrow, return, renew and waitlist calls
+            fail. create_token still succeeds, since it repeats for as long as a
+            loan is active. archive.org font size, under the settings, sets the
+            page's root font size to 10px, which the bar is built for. It
+            applies to the whole demo page, so it's on by default only when this
+            element is the one being viewed.
+          </p>
+          <p>
+            Pass a <code>fetchHandler</code> to the bar to control how it
+            reaches the lending service. Loan actions are sent once, with no
+            retries, and this demo's handler answers them locally.
           </p>
           <p>
             This demo makes no requests to archive.org. Lending calls,
@@ -817,8 +821,16 @@ export class IABookActionsStory extends LitElement {
       }
 
       .log .kind {
-        flex: 0 0 6rem;
+        flex: 0 0 11ch;
         color: #8ec5ff;
+      }
+
+      .log li.request .kind {
+        color: #7fe0d0;
+      }
+
+      .log li.analytics .kind {
+        color: #c9a7ff;
       }
 
       .log li.sentry .kind {
@@ -837,8 +849,22 @@ export class IABookActionsStory extends LitElement {
         padding-right: 1rem;
       }
 
-      .hint {
-        font-size: 1.2rem;
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 1.5rem;
+        margin-top: 1rem;
+        padding: 0.75rem 1rem;
+        background: #f2f2f2;
+        font-size: 1.3rem;
+        text-align: left;
+      }
+
+      .toolbar .field {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
       }
     `;
   }
