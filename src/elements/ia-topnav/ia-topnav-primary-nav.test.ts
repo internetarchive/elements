@@ -9,7 +9,7 @@ import './ia-topnav-primary-nav';
 import { IATopNavConfig, IATopNavSecondIdentitySlotMode } from './models';
 import { PrimaryNav } from './ia-topnav-primary-nav';
 
-import { afterEach, describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 const component = ({
   baseHost = 'archive.org',
   username = '',
@@ -49,6 +49,78 @@ describe('<ia-topnav-primary-nav>', () => {
 
     expect(customElements.get('ia-sr-only-text')).to.exist;
     expect(label?.textContent).to.contain('Donate to the archive');
+  });
+
+  test('renders a language-picker slot in the right side section on desktop', async () => {
+    const el = await fixture<PrimaryNav>(component({}));
+    el['mobileLayout'] = false;
+    await elementUpdated(el);
+    const slot = el.shadowRoot?.querySelector(
+      '.right-side-section slot[name="language-picker"]',
+    );
+
+    expect(slot).to.exist;
+    expect(
+      el.shadowRoot?.querySelector(
+        'ia-topnav-media-menu slot[name="language-picker"]',
+      ),
+    ).to.not.exist;
+  });
+
+  test('stops listening to the breakpoint when removed', async () => {
+    const el = await fixture<PrimaryNav>(component({}));
+    const removeListener = vi.spyOn(el['mobileQuery'], 'removeEventListener');
+
+    el.remove();
+
+    expect(removeListener).toHaveBeenCalledWith('change', expect.any(Function));
+  });
+
+  test('puts the language-picker slot in the media menu on mobile', async () => {
+    const el = await fixture<PrimaryNav>(component({}));
+    el['mobileLayout'] = true;
+    await elementUpdated(el);
+
+    expect(
+      el.shadowRoot?.querySelector(
+        'ia-topnav-media-menu > slot[name="language-picker"][slot="language-picker"]',
+      ),
+    ).to.exist;
+    expect(
+      el.shadowRoot?.querySelector(
+        '.right-side-section slot[name="language-picker"]',
+      ),
+    ).to.not.exist;
+  });
+
+  test('takes no room while the language-picker slot is empty', async () => {
+    const el = await fixture<PrimaryNav>(component({}));
+    el['mobileLayout'] = false;
+    await elementUpdated(el);
+    const slot = el.shadowRoot?.querySelector<HTMLSlotElement>(
+      'slot[name="language-picker"]',
+    );
+
+    const rect = (slot as HTMLSlotElement).getBoundingClientRect();
+    expect(rect.width).toBe(0);
+    expect(rect.height).toBe(0);
+  });
+
+  test('shows the language-picker slot once something is slotted', async () => {
+    const el = await fixture<PrimaryNav>(component({}));
+    el['mobileLayout'] = false;
+    await elementUpdated(el);
+    const picker = document.createElement('div');
+    picker.slot = 'language-picker';
+    picker.textContent = 'English';
+    el.appendChild(picker);
+    await elementUpdated(el);
+
+    await vi.waitFor(() => {
+      const rect = picker.getBoundingClientRect();
+      expect(rect.width).toBeGreaterThan(0);
+      expect(rect.height).toBeGreaterThan(0);
+    });
   });
 
   test('names the hamburger button for the state it will change to', async () => {
