@@ -41,6 +41,31 @@ export class PrimaryNav extends TrackedElement {
     | undefined;
   signedOutMenuToggled: unknown;
 
+  /** True below the topnav breakpoint, where the language picker lives in the main menu. */
+  @state() private mobileLayout = false;
+
+  private mobileQuery = window.matchMedia(
+    `(max-width: ${TOPNAV_MOBILE_BREAKPOINT - 1}px)`,
+  );
+
+  private readonly handleMobileQueryChange = () => {
+    this.mobileLayout = this.mobileQuery.matches;
+  };
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.mobileLayout = this.mobileQuery.matches;
+    this.mobileQuery.addEventListener('change', this.handleMobileQueryChange);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.mobileQuery.removeEventListener(
+      'change',
+      this.handleMobileQueryChange,
+    );
+  }
+
   @query('button.user-menu') private userMenuButton?: HTMLButtonElement;
   @query('ia-topnav-login-button') private loginButton?: HTMLElement;
 
@@ -129,11 +154,14 @@ export class PrimaryNav extends TrackedElement {
           .selectedMenuOption=${this.selectedMenuOption}
           .openMenu=${this.openMenu}
           .currentTab=${this.currentTab}
-        ></ia-topnav-media-menu>
+        >
+          ${this.mobileLanguagePickerSlot}
+        </ia-topnav-media-menu>
         ${this.searchSlotContainer}
         <div class="right-side-section">
-          ${this.mobileDonateHeart} ${this.userStateTemplate}
-          ${this.uploadButtonTemplate} ${this.searchMenu}
+          ${this.desktopLanguagePickerSlot} ${this.mobileDonateHeart}
+          ${this.userStateTemplate} ${this.uploadButtonTemplate}
+          ${this.searchMenu}
         </div>
       </nav>
     `;
@@ -261,15 +289,6 @@ export class PrimaryNav extends TrackedElement {
     `;
   }
 
-  /** True once the consumer has slotted something into `language-picker`. */
-  @state() private hasLanguagePicker = false;
-
-  private languagePickerChanged(e: Event) {
-    const slot = e.target as HTMLSlotElement;
-    this.hasLanguagePicker =
-      slot.assignedElements({ flatten: true }).length > 0;
-  }
-
   get mobileDonateHeart() {
     return html`
       <a
@@ -280,13 +299,21 @@ export class PrimaryNav extends TrackedElement {
         )}
       >
         ${icons.donateUnpadded}
-        <ia-sr-only-text>${msg('Donate to the archive')}</ia-sr-only-text> </a
-      ><slot
-        name="language-picker"
-        class=${this.hasLanguagePicker ? '' : 'empty'}
-        @slotchange=${this.languagePickerChanged}
-      ></slot>
+        <ia-sr-only-text>${msg('Donate to the archive')}</ia-sr-only-text>
+      </a>
     `;
+  }
+
+  /** The picker sits at the far right of the bar on desktop. */
+  get desktopLanguagePickerSlot() {
+    if (this.mobileLayout) return nothing;
+    return html`<slot name="language-picker"></slot>`;
+  }
+
+  /** On mobile the picker is the last row of the main menu. */
+  get mobileLanguagePickerSlot() {
+    if (!this.mobileLayout) return nothing;
+    return html`<slot name="language-picker" slot="language-picker"></slot>`;
   }
 
   get uploadButtonTemplate() {
@@ -428,15 +455,8 @@ export class PrimaryNav extends TrackedElement {
           fill: rgb(255, 0, 0);
         }
 
-        slot[name='language-picker'].empty {
-          display: none;
-        }
-
-        slot[name='language-picker']::slotted(*) {
-          display: inline-flex;
-          align-items: center;
-          height: calc(40 * var(--topnavUnit--));
-          vertical-align: top;
+        slot[name='language-picker'] {
+          display: contents;
         }
 
         .search-trigger {
@@ -558,15 +578,10 @@ export class PrimaryNav extends TrackedElement {
           }
 
           .right-side-section {
-            display: flex;
-            align-items: flex-start;
+            display: initial;
           }
           .right-side-section .user-info {
-            order: 1;
-          }
-
-          .mobile-donate-link {
-            margin-right: calc(4.5 * var(--topnavUnit--));
+            float: right;
           }
         }
 
@@ -599,6 +614,9 @@ export class PrimaryNav extends TrackedElement {
           }
 
           slot[name='language-picker']::slotted(*) {
+            display: inline-flex;
+            float: right;
+            align-items: center;
             height: 100%;
           }
 
