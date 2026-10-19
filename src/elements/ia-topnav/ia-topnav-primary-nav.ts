@@ -624,7 +624,7 @@ export class PrimaryNav extends TrackedElement {
           }
 
           slot[name='language-picker']::slotted([hidden]) {
-            display: none;
+            display: none !important;
           }
 
           .user-info {

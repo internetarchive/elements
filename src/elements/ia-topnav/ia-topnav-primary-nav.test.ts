@@ -68,13 +68,14 @@ describe('<ia-topnav-primary-nav>', () => {
     ).to.not.exist;
   });
 
-  test('hides a slotted language picker that has the hidden attribute on desktop', async () => {
+  test('hides a slotted language picker with the hidden attribute even when it sets its own display', async () => {
     const el = await fixture<PrimaryNav>(component({}));
     el['mobileLayout'] = false;
     await elementUpdated(el);
     const picker = document.createElement('div');
     picker.slot = 'language-picker';
     picker.textContent = 'English';
+    picker.style.display = 'inline-flex';
     picker.hidden = true;
     el.appendChild(picker);
     await elementUpdated(el);
