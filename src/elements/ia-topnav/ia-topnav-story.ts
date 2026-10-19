@@ -171,11 +171,12 @@ export class IATopNavStory extends LitElement {
             and up the media buttons can wrap at desktop widths.
           </p>
           <p>
-            The <code>language-picker</code> slot sits left of the user menu on
-            desktop and between the donate heart and the user icon on phones. It
-            takes up no room while it's empty. The demo fills it with a sample
-            globe over a native select. Turn off Language picker slot to see the
-            empty state.
+            The <code>language-picker</code> slot sits at the far right of the
+            bar on desktop, after Upload and the user menu, and is the last row
+            of the hamburger menu on phones. It takes up no room while it's
+            empty, and an element with the <code>hidden</code> attribute is
+            hidden. The demo fills it with a sample globe over a native select.
+            Turn off Language picker slot to see the empty state.
           </p>
           <p>
             A search bar goes in the <code>search</code> slot. Offshoot slots an

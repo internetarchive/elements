@@ -10,6 +10,7 @@ import { IATopNavConfig, IATopNavSecondIdentitySlotMode } from './models';
 import { PrimaryNav } from './ia-topnav-primary-nav';
 
 import { afterEach, describe, expect, test, vi } from 'vitest';
+import { page } from 'vitest/browser';
 const component = ({
   baseHost = 'archive.org',
   username = '',
@@ -65,6 +66,27 @@ describe('<ia-topnav-primary-nav>', () => {
         'ia-topnav-media-menu slot[name="language-picker"]',
       ),
     ).to.not.exist;
+  });
+
+  test('hides a slotted language picker that has the hidden attribute on desktop', async () => {
+    const el = await fixture<PrimaryNav>(component({}));
+    el['mobileLayout'] = false;
+    await elementUpdated(el);
+    const picker = document.createElement('div');
+    picker.slot = 'language-picker';
+    picker.textContent = 'English';
+    picker.hidden = true;
+    el.appendChild(picker);
+    await elementUpdated(el);
+
+    await page.viewport(1400, 800);
+    try {
+      expect(getComputedStyle(picker).display).toBe('none');
+      picker.hidden = false;
+      expect(getComputedStyle(picker).display).not.toBe('none');
+    } finally {
+      await page.viewport(414, 896);
+    }
   });
 
   test('stops listening to the breakpoint when removed', async () => {
