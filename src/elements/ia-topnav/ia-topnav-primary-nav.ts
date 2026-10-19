@@ -623,6 +623,10 @@ export class PrimaryNav extends TrackedElement {
             height: 100%;
           }
 
+          slot[name='language-picker']::slotted([hidden]) {
+            display: none;
+          }
+
           .user-info {
             display: block;
             float: right;
