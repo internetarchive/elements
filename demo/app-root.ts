@@ -406,7 +406,7 @@ export class AppRoot extends LitElement {
       <div id="ia-content" class=${classMap(contentClasses)}>
         <div id="ia-content-header">
           ${this._narrow ? nothing : this._renderNavToggle()}
-          <h1>Internet Archive Elements</h1>
+          <h1>Components</h1>
           ${this._narrow ? nothing : this._renderLocaleSwitch()}
         </div>
         ${this._focused

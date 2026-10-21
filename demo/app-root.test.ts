@@ -949,6 +949,9 @@ describe('AppRoot', () => {
         setHash('#elem-ia-radio-player');
         stubNarrowViewport(true);
         const el = await appRoot();
+        // Laid out at a phone's width, as the stubbed viewport claims, so the
+        // story runs long enough to scroll past.
+        el.style.width = '375px';
         await waitUntil(
           () => el.querySelector('ia-radio-player-story'),
           '<ia-radio-player-story> was never rendered',

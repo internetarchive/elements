@@ -98,10 +98,12 @@ export class ServiceTemplate extends LitElement {
       themeStyles,
       css`
         #container {
-          background: #f0f0f0;
-          padding: 0 10px 10px;
+          background: var(--ia-color-surface-raised--);
+          padding: 0 var(--ia-space-3--) var(--ia-space-3--);
           margin-bottom: 1.6rem;
-          border: 1px solid #ccc;
+          border: var(--ia-border-card--);
+          border-radius: var(--ia-radius-default--);
+          box-shadow: var(--ia-shadow-raised--);
         }
 
         #details {
@@ -131,7 +133,7 @@ export class ServiceTemplate extends LitElement {
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.06em;
-          color: #666;
+          color: var(--ia-color-text-secondary--);
           margin: 8px 0 4px;
         }
 
@@ -144,7 +146,7 @@ export class ServiceTemplate extends LitElement {
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.06em;
-          color: #595959;
+          color: var(--ia-color-text-secondary--);
           cursor: pointer;
           user-select: none;
           border: none;
