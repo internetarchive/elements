@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Icons — Internet Archive Elements</title>
+<style>
+  .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(21rem, 1fr)); gap: var(--ia-space-3); }
+  .icon-card {
+    display: flex; flex-direction: column; gap: var(--ia-space-2);
+    padding: var(--ia-space-3);
+    border: var(--ia-size-border-width) solid var(--ia-color-border-subtle);
+    border-radius: var(--ia-radius-default);
+    background-color: var(--ia-color-surface-raised);
+  }
+  .icon-card__glyph {
+    display: grid; place-content: center;
+    block-size: 8rem;
+    border-radius: var(--ia-radius-default);
+    background-color: var(--ia-color-surface-sunken);
+    color: var(--ia-color-text-primary);
+  }
+  .icon-card__slug { font-family: var(--ia-font-family-mono); font-weight: var(--ia-font-weight-bold); }
+  .icon-card__meta { display: flex; flex-direction: column; gap: 0.2rem; font-size: var(--ia-font-size-xs); color: var(--ia-color-text-secondary); }
+  .icon-source {
+    align-self: flex-start;
+    padding: 0.2rem var(--ia-space-1);
+    border-radius: var(--ia-radius-sm);
+    font-size: var(--ia-font-size-xs); font-weight: var(--ia-font-weight-bold);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    background-color: var(--ia-color-surface-sunken); color: var(--ia-color-text-primary);
+  }
+  .icon-source--proposed { background-color: var(--ia-color-status-warning); color: var(--ia-color-text-inverse); }
+  .icon-source--component { background-color: var(--ia-color-action-primary-fill); color: var(--ia-color-action-primary-text); }
+  .icon-sizes { display: flex; align-items: flex-end; gap: var(--ia-space-3); }
+  .icon-sizes figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: var(--ia-space-1); }
+  .icon-sizes figcaption { font-size: var(--ia-font-size-xs); color: var(--ia-color-text-secondary); font-family: var(--ia-font-family-mono); }
+  .icon-on { display: flex; gap: var(--ia-space-3); flex-wrap: wrap; }
+  .icon-on > div { display: grid; place-content: center; inline-size: 8rem; block-size: 6rem; border-radius: var(--ia-radius-default); }
+</style>
+  <script type="module" crossorigin src="./assets/icons-D2Qrfp6l.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/site-BzgLb0QC.js">
+  <link rel="stylesheet" crossorigin href="./assets/site-DIhXg_0M.css">
+  <link rel="stylesheet" crossorigin href="./assets/site-CFAMaqln.css">
+</head>
+<body>
+<main class="doc-main" id="main">
+  <div class="doc-lede">
+    <h1 class="doc-h1">Icons</h1>
+    <p>
+      <strong>The icons that ship are in <code>icons/</code></strong>, imported one at a time
+      from <code>@internetarchive/elements/icons/&lt;name&gt;</code> or drawn with
+      <code>&lt;ia-icon&gt;</code>. Browse them, with their import lines, in the
+      <a href="index.html#elem-ia-icon-gallery">icon gallery</a> on the Components tab.
+    </p>
+    <p>
+      This page is the system's guidance for them: sizes, color, media-type accents, the
+      webfont glyphs still in use, and proposed additions. The set below is the one the
+      style guide lifted from archive.org's inline SVG, shape geometry only, so every
+      glyph inherits <code>currentColor</code>. Most of it is already in
+      <code>icons/</code> under its own name; a glyph here that isn't is a candidate to add.
+    </p>
+    <p id="summary" class="ia-type-meta"></p>
+  </div>
+
+  <div class="doc-toolbar">
+    <label for="f-source">Source</label>
+    <select class="ia-select ia-input--sm" id="f-source" style="inline-size:auto">
+      <option value="">All sources</option>
+      <option value="inline SVG">Inline SVG</option>
+      <option value="ia-icon component">ia-icon component</option>
+      <option value="offshoot">offshoot SVG file</option>
+      <option value="proposed">Proposed</option>
+    </select>
+    <label class="ia-choice">
+      <input class="ia-choice__control" type="checkbox" id="f-inverse">
+      <span class="ia-choice__label">On dark chrome</span>
+    </label>
+  </div>
+
+  <section class="doc-section" id="set" style="margin-block-start:var(--ia-space-6)">
+    <h2>Lifted from archive.org</h2>
+    <p>Each card shows the slug you call it by, where the geometry came from, the name
+       the site gives it, and the sizes it renders at live.</p>
+    <div class="icon-grid" id="grid"></div>
+  </section>
+
+  <section class="doc-section" id="sizes">
+    <h2>Sizes</h2>
+    <p>Five steps on a 4px grid. Icons are square; the source viewBoxes vary
+       (<code>0 0 40 40</code> for the topnav, <code>0 0 100 100</code> for the tiles,
+       <code>0 0 300 300</code> for media types) and all normalize to these.</p>
+    <div class="doc-panel icon-sizes" id="size-scale"></div>
+  </section>
+
+  <section class="doc-section" id="color">
+    <h2>Color</h2>
+    <p>Every icon is drawn with <code>currentColor</code>, so it takes the text color of
+       whatever it sits in and re-points inside <code>.ia-inverse</code> without being
+       told to. Live colors many glyphs through the CSS <code>fill</code> property instead
+       — <code>#999</code> in the topnav's media menu, <code>#333</code> for a tile's
+       counters beside <code>#2c2c2c</code> numbers — and none of that carries over.</p>
+    <div class="doc-panel icon-on" id="color-demo"></div>
+    <h3>Media-type accents</h3>
+    <p>The one exception. An item tile's media-type glyph takes its type's accent, from
+       the tile component's own color map. Live's hues are kept; the six that fall below
+       3:1 on the white card are darkened just far enough to reach it
+       (<a href="https://github.com/internetarchive/elements/blob/main/docs/DECISIONS.md#d-43">D-43</a>), because the glyph's shape is what tells a
+       text from a film.</p>
+    <div id="mediatype-colors"></div>
+  </section>
+
+  <section class="doc-section" id="font">
+    <h2>Icons drawn with a webfont</h2>
+    <p>
+      Some icons are Iconochive glyphs rather than SVG. Glyph outlines in a font cannot
+      be lifted as path data, so these are recorded as usage only. They are also the
+      reason the set has gaps: a flag, a plus-circle and a share arrow exist on the
+      site, but only as characters in a font.
+    </p>
+    <div class="doc-note">
+      An icon font renders as text. It disappears under <code>forced-colors</code>, it is
+      replaced by user font-override stylesheets and by some content blockers, and it
+      blocks on a font download. New work uses the SVG set —
+      see <a href="https://github.com/internetarchive/elements/blob/main/docs/foundations/iconography.md"><code>foundations/iconography.md</code></a>.
+    </div>
+    <div id="font-table"></div>
+  </section>
+
+  <section class="doc-section" id="missing">
+    <h2>Proposed additions</h2>
+    <p>Affordances the system needs that archive.org has no usable SVG for, drawn to
+       match the set and marked so nobody mistakes them for lifted geometry.</p>
+    <div class="icon-grid" id="proposed-grid"></div>
+  </section>
+</main>
+
+</body>
+</html>
