@@ -25,6 +25,7 @@
     "clean": "wireit",
     "lint": "wireit",
     "icons:lint": "wireit",
+    "tokens": "wireit",
     "typecheck": "wireit",
     "format": "wireit",
     "circular": "wireit",
@@ -124,7 +125,8 @@
       "command": "tsc --build --pretty && tsc-alias && rsync -zarvm --prune-empty-dirs --include \"*/\" --include \"*.svg\" --exclude=\"*\" src dist",
       "dependencies": [
         "circular",
-        "icons"
+        "icons",
+        "tokens"
       ],
       "files": [
         "src/**/*.ts",
@@ -143,7 +145,8 @@
     "dev": {
       "command": "vite",
       "dependencies": [
-        "icons"
+        "icons",
+        "tokens"
       ]
     },
     "lint": {
@@ -169,7 +172,8 @@
       ],
       "output": [],
       "dependencies": [
-        "icons"
+        "icons",
+        "tokens"
       ]
     },
     "test": {
@@ -182,7 +186,8 @@
     "ghpages:build": {
       "command": "vite build --config vite.config.ghpages.ts && touch ./ghpages/.nojekyll",
       "dependencies": [
-        "icons"
+        "icons",
+        "tokens"
       ]
     },
     "strings:extract": {
@@ -222,6 +227,16 @@
       ],
       "output": [
         "src/icons/**"
+      ]
+    },
+    "tokens": {
+      "command": "node scripts/build-tokens.mts",
+      "files": [
+        "tokens/tokens.json",
+        "scripts/build-tokens.mts"
+      ],
+      "output": [
+        "src/themes/tokens.ts"
       ]
     }
   }

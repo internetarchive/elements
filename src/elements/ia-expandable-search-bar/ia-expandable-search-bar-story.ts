@@ -149,10 +149,10 @@ export class IAExpandableSearchBarStory extends LitElement {
       .search-bar {
         display: block;
         background-color: #151515;
-        padding: 1rem;
+        padding: 1.6rem;
         border-radius: 4px;
         /* Room for the quick search list to drop into. */
-        padding-bottom: 4rem;
+        padding-bottom: 6.4rem;
       }
 
       .panel {

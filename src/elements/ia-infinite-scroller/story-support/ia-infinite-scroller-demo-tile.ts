@@ -25,7 +25,7 @@ export class IAInfiniteScrollerDemoTile extends LitElement {
         box-sizing: border-box;
         outline: 1px solid var(--tile-color);
         height: 100%;
-        padding: 0.5rem;
+        padding: 0.8rem;
         color: var(--tile-color);
       }
 
