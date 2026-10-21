@@ -175,7 +175,9 @@ body {
 }
 
 .doc-lede { max-inline-size: var(--ia-container-prose); }
-.doc-lede p { color: var(--ia-color-text-primary); font-size: var(--ia-font-size-lg); line-height: var(--ia-font-line-height-relaxed); }
+/* Prose paragraphs in the page's own copy. :where() keeps these at element
+   specificity, so a component's own text color inside a demo wins. */
+:where(.doc-lede) p { color: var(--ia-color-text-primary); font-size: var(--ia-font-size-lg); line-height: var(--ia-font-line-height-relaxed); }
 
 h1, h2, h3, h4 { margin: 0; }
 .doc-h1 { font: var(--ia-font-weight-bold) var(--ia-font-size-4xl)/var(--ia-font-line-height-tight) var(--ia-font-family-base); }
@@ -204,7 +206,7 @@ h1, h2, h3, h4 { margin: 0; }
   color: var(--ia-color-text-secondary);
 }
 .doc-group__title + .doc-section { margin-block-start: var(--ia-space-4); }
-.doc-section p { max-inline-size: 75ch; color: var(--ia-color-text-primary); }
+:where(.doc-section) p { max-inline-size: 75ch; color: var(--ia-color-text-primary); }
 .doc-note {
   margin-block: var(--ia-space-3);
   padding: var(--ia-space-3);
