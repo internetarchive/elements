@@ -23,6 +23,11 @@ body {
 
 /* ------------------------------------------------------------- header --- */
 
+/* The header's one-row height, so what sticks under it is placed right on the
+   first paint. wireHeader() replaces it with the measured height, which
+   differs when the header wraps. */
+:root { --doc-header-h: 8.8rem; }
+
 .doc-header {
   position: sticky;
   inset-block-start: 0;

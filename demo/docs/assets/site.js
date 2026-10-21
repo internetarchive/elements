@@ -7,16 +7,6 @@
  * tokens/tokens.json defines. If a token changes, these pages change with it.
  * ======================================================================== */
 
-export const PAGES = [
-  ['principles.html',  'Principles'],
-  ['foundations.html', 'Foundations'],
-  ['index.html',       'Components'],
-  ['specs.html',       'Specs'],
-  ['screens.html',     'Screens'],
-  ['icons.html',       'Icons'],
-  ['playground.html',  'Playground']
-];
-
 /* Where the docs live, for links from the pages to the markdown. */
 export const DOCS_URL = 'https://github.com/internetarchive/elements/blob/main/docs/';
 
@@ -56,23 +46,13 @@ const tocItems = (entries, page) => entries.map(e => `<li>${e.children.length
   : `<a href="#${e.id}">${escapeHtml(e.title)}</a>`}</li>`).join('');
 
 /**
- * The header and its page tabs, prepended to the body. `menu` adds the
- * Sections button that opens a narrow page's sidebar. The Components page
- * (index.html) has its own sidebar and uses this on its own.
+ * Wires the header that demo/docs/chrome-plugin.ts writes into every page:
+ * keeps the current tab in view on a narrow screen, and publishes the header's
+ * height for what sticks under it.
  */
-export function mountHeader(current, { menu = false, skipTarget = '#main' } = {}) {
-  const header = document.createElement('header');
-  header.className = 'doc-header';
-  header.innerHTML = `
-    <div class="doc-header__inner">
-      ${menu ? `<button class="doc-menu-button" type="button" aria-expanded="false" aria-controls="doc-sidebar">
-        ${icon('hamburger', { size: 'sm' })}Sections</button>` : ''}
-      <p class="doc-header__title">Internet Archive <span>elements</span></p>
-    </div>
-    <nav class="doc-tabs" aria-label="Design system">
-      <div class="ia-tabs">${PAGES.map(([href, label]) =>
-        `<a class="ia-tab" href="${href}" data-label="${label}"${href === current ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</div>
-    </nav>`;
+export function wireHeader() {
+  const header = document.querySelector('.doc-header');
+  if (!header) return null;
 
   // On a narrow screen the tabs scroll; start with the current one in view.
   const strip = header.querySelector('.ia-tabs');
@@ -80,13 +60,6 @@ export function mountHeader(current, { menu = false, skipTarget = '#main' } = {}
     const tab = strip.querySelector('[aria-current="page"]');
     if (tab && tab.offsetLeft + tab.offsetWidth > strip.clientWidth) strip.scrollLeft = tab.offsetLeft - strip.offsetLeft;
   });
-
-  const skip = document.createElement('a');
-  skip.className = 'doc-skip';
-  skip.href = skipTarget;
-  skip.textContent = 'Skip to main content';
-  document.body.prepend(header);
-  document.body.prepend(skip);
 
   // The header wraps to two rows on narrow viewports, so anything that sticks
   // below it or scrolls to an anchor needs its measured height, not a guess.
@@ -98,23 +71,21 @@ export function mountHeader(current, { menu = false, skipTarget = '#main' } = {}
 
 export function mountChrome(current) {
   // The pages are tabs under the header; the sidebar lists the current page's
-  // sections. A page with no sections has no sidebar.
+  // sections. The header, the sidebar and the shell around them are already in
+  // the HTML (demo/docs/chrome-plugin.ts); this fills in the sidebar. A page
+  // with no sections has no sidebar.
   const main = document.querySelector('main');
+  const shell = main.parentElement;
   const toolbar = main.querySelector(':scope > .doc-toolbar');
   const toc = pageToc(main);
-  const header = mountHeader(current, { menu: toc.length > 0 });
-
-  // Below lg the sidebar is a panel behind the header's Sections button.
-  const sidebar = document.createElement('nav');
-  sidebar.className = 'doc-sidebar';
-  sidebar.id = 'doc-sidebar';
-  sidebar.setAttribute('aria-label', 'On this page');
-  sidebar.innerHTML = `<ul>${tocItems(toc, current)}</ul>`;
-  const shell = document.createElement('div');
-  shell.className = toc.length ? 'doc-shell' : 'doc-shell doc-shell--full';
-  main.before(shell);
-  if (toc.length) shell.append(sidebar);
-  shell.append(main);
+  const header = wireHeader();
+  const sidebar = document.getElementById('doc-sidebar');
+  if (toc.length) sidebar.innerHTML = `<ul>${tocItems(toc, current)}</ul>`;
+  else {
+    sidebar.remove();
+    header.querySelector('.doc-menu-button')?.remove();
+    shell.classList.add('doc-shell--full');
+  }
 
   const menu = header.querySelector('.doc-menu-button');
   const setOpen = open => {

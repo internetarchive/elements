@@ -266,6 +266,32 @@ describe('AppRoot', () => {
       }
     });
 
+    test('keeps the page at the top when a story focuses its element on load', async () => {
+      // ia-otp-input focuses its first box as it renders, which would scroll
+      // the page down to it before the reader has done anything.
+      const removeCss = applyDemoCss();
+      try {
+        const el = await appRoot();
+        await waitUntil(
+          () =>
+            el
+              .querySelector('ia-otp-input-story')
+              ?.shadowRoot?.querySelector('ia-otp-input')
+              ?.shadowRoot?.querySelector('input'),
+          '<ia-otp-input> never rendered',
+        );
+        // The focus scroll's scroll event comes a frame later.
+        await new Promise((r) => requestAnimationFrame(() => setTimeout(r)));
+
+        expect(window.scrollY).to.equal(0);
+        expect(
+          el.querySelector('#ia-content')?.contains(document.activeElement),
+        ).to.be.false;
+      } finally {
+        removeCss();
+      }
+    });
+
     test('lists the services in their own sidebar group, after the elements', async () => {
       const el = await appRoot();
 

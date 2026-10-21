@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitest/config';
 import { readdirSync } from 'fs';
 import path from 'path';
+import { docChrome } from './demo/docs/chrome-plugin';
 
 // Every page of the demo: the components page, the design system pages beside
 // it, and the screens they frame.
@@ -14,6 +15,7 @@ const pages = [
 // https://vitejs.dev/config/
 export default defineConfig({
   base: './',
+  plugins: [docChrome()],
   resolve: {
     alias: {
       '@src': path.resolve(__dirname, './src'),
