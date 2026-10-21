@@ -279,6 +279,9 @@ code, .doc-mono {
 }
 .doc-ratio--pass { color: var(--ia-color-status-success); }
 .doc-ratio--fail { color: var(--ia-color-status-danger); }
+/* The status colors are for light surfaces. On a dark one the badge takes the
+   inverse text color, and its check or alert glyph carries pass or fail. */
+.ia-inverse .doc-ratio { color: var(--ia-color-text-inverse); }
 
 /* ------------------------------------------------------------ controls --- */
 

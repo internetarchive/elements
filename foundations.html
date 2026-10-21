@@ -194,8 +194,10 @@ const swatch = (t, textOn) => {
   </div>`;
 };
 
+// The scrim is a layer over a page, not a surface text sits on, so it gets no sample.
 el('surfaces').innerHTML = tokensMatching('color-surface-')
-  .map(t => swatch(t, /chrome|inverse|collection|theater/.test(t.name) ? token('color-text-inverse') : token('color-text-primary')))
+  .map(t => /scrim/.test(t.name) ? swatch(t)
+    : swatch(t, /chrome|inverse|collection|theater/.test(t.name) ? token('color-text-inverse') : token('color-text-primary')))
   .join('');
 
 el('palette').innerHTML = tokensMatching('color-palette-').map(t => swatch(t)).join('');
