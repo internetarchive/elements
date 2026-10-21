@@ -131,14 +131,14 @@ export class PromisedSingletonStory extends LitElement {
         display: flex;
         flex-wrap: wrap;
         align-items: flex-end;
-        gap: 0.5rem;
+        gap: 0.8rem;
       }
 
       label {
         display: flex;
         flex-direction: column;
         gap: 2px;
-        font-size: 0.8rem;
+        font-size: 1.28rem;
       }
 
       label.check {
@@ -148,12 +148,12 @@ export class PromisedSingletonStory extends LitElement {
       }
 
       input[type='number'] {
-        width: 5rem;
+        width: 8rem;
       }
 
       .runs {
         flex-basis: 100%;
-        font-size: 0.8rem;
+        font-size: 1.28rem;
       }
 
       .result[hidden] {
@@ -165,15 +165,15 @@ export class PromisedSingletonStory extends LitElement {
         flex-basis: 100%;
         min-width: 0;
         max-width: 100%;
-        padding: 0.5rem;
+        padding: 0.8rem;
         background: #fff;
         border: 1px solid #ccc;
-        font-size: 0.85rem;
+        font-size: 1.36rem;
       }
 
       .lines {
         margin: 4px 0 0;
-        padding-left: 1.2rem;
+        padding-left: 1.92rem;
         overflow-wrap: anywhere;
       }
     `;

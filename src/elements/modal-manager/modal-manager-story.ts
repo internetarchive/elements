@@ -349,11 +349,11 @@ export class ModalManagerStory extends LitElement {
       .actions {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.5rem;
+        gap: 0.8rem;
       }
 
       td {
-        padding: 0.15rem 0.5rem 0.15rem 0;
+        padding: 0.24rem 0.8rem 0.24rem 0;
       }
     `;
   }

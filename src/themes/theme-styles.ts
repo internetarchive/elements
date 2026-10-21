@@ -1,46 +1,42 @@
 import { css } from 'lit';
+import { tokenStyles } from './tokens';
 
 const themeStyles = css`
+  ${tokenStyles}
+
   :host {
     /*
     BASE STYLES
-    Default fallback values for theme styles. Assumes 16px root font size.
-    To adjust values, use theme styles below.
+    Default fallback values for theme styles, taken from the design tokens in
+    tokens/tokens.json. Assumes a 10px root font size (html { font-size: 62.5% }).
+    To adjust values, use theme styles below, or set the --ia-* tokens.
     */
 
     /* Typography */
-    --default-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --default-font-family: var(--ia-font-family-base--);
 
     /* Sizing */
-    --default-icon-width: 1.25rem;
-    --default-padding-sm: 5px;
+    --default-icon-width: var(--ia-size-icon-md--); /* 20px */
+    --default-padding-sm: var(--ia-space-1--); /* 5px */
     --default-combo-box-width: auto;
     --default-search-bar-width: auto;
-    --default-search-bar-height: 30px;
-    --default-button-padding: 0 1.875rem; /* 0 30px with 16px root font size */
-    --default-button-height: 2.25rem; /* 36px with 16px root font size */
+    --default-search-bar-height: var(--ia-size-control-sm--); /* 30px */
+    --default-button-padding: 0 var(--ia-space-6--); /* 0 30px */
+    --default-button-height: var(--ia-size-control-md--); /* 36px */
     --default-button-width: fit-content;
-    --default-button-border-width: 1px;
-    --default-button-border-radius: 0.25rem; /* 4px with 16px root font size */
-    --default-font-size-standard: 0.875rem; /* 14px with 16px root font size */
-    --default-font-size-lg: 2.25rem; /* 36px with 16px root font size */
+    --default-button-border-width: var(--ia-size-border-width--);
+    --default-button-border-radius: var(--ia-radius-default--); /* 4px */
+    --default-font-size-standard: var(--ia-font-size-md--); /* 14px */
+    --default-font-size-lg: var(--ia-font-size-4xl--); /* 36px */
 
-    /* Colors */
-    --true-white: #fff;
-    --off-white: #fbfbfd;
-    --dark-gray: #2c2c2c;
-    --mid-gray: #333;
-    --light-gray: #666;
-    --lighter-gray: #999;
-    --lightest-gray: #c5d1df;
-    --classic-red: #e51c23;
-    --brick: #d43f3a;
-    --coral: #d9534f;
-    --dark-cantaloupe: #ec7939;
-    --cantaloupe: #ee8950;
-    --mint-green: #31a481;
-    --navy-blue: #194880;
-    --bright-blue: #4b64ff;
+    /*
+    Colors. Some components read these by name. New code uses the tokens.
+    */
+    --true-white: var(--ia-color-palette-white--);
+    --mid-gray: var(--ia-color-palette-gray-800--);
+    --lighter-gray: var(--ia-color-palette-gray-500--);
+    --lightest-gray: var(--ia-color-palette-navy-100--);
+    --navy-blue: var(--ia-color-palette-navy-700--);
     --default-icon-color: currentColor;
     --default-icon-filter: none;
     --default-icon-transition: none;
@@ -55,12 +51,15 @@ const themeStyles = css`
       --ia-theme-base-font-family,
       var(--default-font-family)
     );
-    --primary-text-color: var(--ia-theme-primary-text-color, var(--dark-gray));
+    --primary-text-color: var(
+      --ia-theme-primary-text-color,
+      var(--ia-color-text-primary--)
+    );
     --secondary-text-color: var(
       --ia-theme-secondary-text-color,
-      var(--light-gray)
+      var(--ia-color-text-secondary--)
     );
-    --link-color: var(--ia-theme-link-color, var(--bright-blue));
+    --link-color: var(--ia-theme-link-color, var(--ia-color-text-link--));
 
     /* Sizing */
     --icon-width: var(--ia-theme-icon-width, var(--default-icon-width));
@@ -111,69 +110,93 @@ const themeStyles = css`
     );
     --primary-background-color: var(
       --ia-theme-primary-background-color,
-      var(--off-white)
+      var(--ia-color-surface-page--)
     );
     --secondary-background-color: var(
       --ia-theme-secondary-background-color,
-      var(--true-white)
+      var(--ia-color-surface-raised--)
     );
 
     /* State colors */
     /* Primary */
-    --primary-cta-fill: var(--ia-theme-primary-cta-fill, var(--navy-blue));
+    --primary-cta-fill: var(
+      --ia-theme-primary-cta-fill,
+      var(--ia-color-action-primary-fill--)
+    );
     --primary-cta-text-color: var(
       --ia-theme-primary-cta-text-color,
-      var(--true-white)
+      var(--ia-color-action-primary-text--)
     );
     --primary-cta-border: var(
       --ia-theme-primary-cta-border,
-      var(--lightest-gray)
+      var(--ia-color-action-primary-border--)
     );
 
     /* Secondary */
     --secondary-cta-text-color: var(
       --ia-theme-secondary-cta-text-color,
-      var(--true-white)
+      var(--ia-color-action-secondary-text--)
     );
-    --secondary-cta-fill: var(--ia-theme-secondary-cta-fill, var(--mid-gray));
+    --secondary-cta-fill: var(
+      --ia-theme-secondary-cta-fill,
+      var(--ia-color-action-secondary-fill--)
+    );
     --secondary-cta-border: var(
       --ia-theme-secondary-cta-border,
-      var(--lighter-gray)
+      var(--ia-color-action-secondary-border--)
     );
 
     /* Danger */
     --danger-cta-text-color: var(
       --ia-theme-danger-cta-text-color,
-      var(--true-white)
+      var(--ia-color-action-danger-text--)
     );
-    --danger-cta-fill: var(--ia-theme-danger-cta-fill, var(--coral));
-    --danger-cta-border: var(--ia-theme-danger-cta-border, var(--brick));
+    --danger-cta-fill: var(
+      --ia-theme-danger-cta-fill,
+      var(--ia-color-action-danger-fill--)
+    );
+    --danger-cta-border: var(
+      --ia-theme-danger-cta-border,
+      var(--ia-color-action-danger-border--)
+    );
 
     /* Warning */
     --warning-cta-text-color: var(
       --ia-theme-warning-cta-text-color,
-      var(--true-white)
+      var(--ia-color-action-warning-text--)
     );
-    --warning-cta-fill: var(--ia-theme-warning-cta-fill, var(--cantaloupe));
+    --warning-cta-fill: var(
+      --ia-theme-warning-cta-fill,
+      var(--ia-color-action-warning-fill--)
+    );
     --warning-cta-border: var(
       --ia-theme-warning-cta-border,
-      var(--dark-cantaloupe)
+      var(--ia-color-action-warning-border--)
     );
 
     /* Disabled */
     --disabled-cta-text-color: var(
       --ia-theme-disabled-cta-text-color,
-      var(--true-white)
+      var(--ia-color-action-disabled-text--)
     );
-    --disabled-cta-fill: var(--ia-theme-disabled-cta-fill, var(--light-gray));
+    --disabled-cta-fill: var(
+      --ia-theme-disabled-cta-fill,
+      var(--ia-color-action-disabled-fill--)
+    );
     --disabled-cta-border: var(
       --ia-theme-disabled-cta-border,
-      var(--lighter-gray)
+      var(--ia-color-action-disabled-border--)
     );
 
     /* Standalone colors */
-    --color-success: var(--ia-theme-color-success, var(--mint-green));
-    --color-danger: var(--ia-theme-color-danger, var(--classic-red));
+    --color-success: var(
+      --ia-theme-color-success,
+      var(--ia-color-status-success--)
+    );
+    --color-danger: var(
+      --ia-theme-color-danger,
+      var(--ia-color-status-danger--)
+    );
   }
 `;
 
