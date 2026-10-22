@@ -397,6 +397,17 @@ describe('AppRoot', () => {
       );
     });
 
+    test('stays on the focused element when the skip link is followed', async () => {
+      setHash('#elem-ia-button');
+      const el = await appRoot();
+      expect(anchorIds(el)).to.deep.equal(['elem-ia-button']);
+
+      window.location.hash = '#ia-content';
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      await el.updateComplete;
+      expect(anchorIds(el)).to.deep.equal(['elem-ia-button']);
+    });
+
     test('keeps following the hash after a disconnect and reconnect', async () => {
       const el = await appRoot();
       const parent = el.parentElement as HTMLElement;
