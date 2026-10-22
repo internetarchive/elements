@@ -17,6 +17,7 @@ import disclosureIcon from './assets/disclosure';
 import magnifyingGlassIcon from './assets/magnifying-glass';
 
 import './ia-quick-search';
+import { tokenStyles } from '@src/themes/tokens';
 
 /**
  * Event names emitted by this component
@@ -197,170 +198,183 @@ export class IAExpandableSearchBar extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        --search-bar-background-color--: var(
-          --ia-theme-search-bar-background-color,
-          #000
-        );
-        --search-bar-text-color--: var(--ia-theme-search-bar-text-color, #fff);
-        --search-bar-font-size--: var(--ia-theme-search-bar-font-size, 1em);
-        --search-bar-border--: var(
-          --ia-theme-search-bar-border,
-          1px solid #fff
-        );
-        --search-bar-min-width--: var(--ia-theme-search-bar-min-width, 5em);
-        --search-bar-max-expansion-height--: var(
-          --ia-theme-search-bar-max-expansion-height,
-          150px
-        );
-        --search-bar-clear-disc-color--: var(
-          --ia-theme-search-bar-clear-disc-color,
-          #fff
-        );
-        --search-bar-clear-cross-color--: var(
-          --ia-theme-search-bar-clear-cross-color,
-          #000
-        );
+    return [
+      tokenStyles,
+      css`
+        :host {
+          --search-bar-background-color--: var(
+            --ia-theme-search-bar-background-color,
+            var(--ia-color-surface-theater--)
+          );
+          --search-bar-text-color--: var(
+            --ia-theme-search-bar-text-color,
+            var(--ia-color-text-inverse--)
+          );
+          --search-bar-font-size--: var(--ia-theme-search-bar-font-size, 1em);
+          --search-bar-border--: var(
+            --ia-theme-search-bar-border,
+            var(--ia-size-border-width--) solid var(--ia-color-text-inverse--)
+          );
+          --search-bar-min-width--: var(--ia-theme-search-bar-min-width, 5em);
+          --search-bar-max-expansion-height--: var(
+            --ia-theme-search-bar-max-expansion-height,
+            150px
+          );
+          --search-bar-clear-disc-color--: var(
+            --ia-theme-search-bar-clear-disc-color,
+            var(--ia-color-text-inverse--)
+          );
+          --search-bar-clear-cross-color--: var(
+            --ia-theme-search-bar-clear-cross-color,
+            var(--ia-color-surface-theater--)
+          );
 
-        color: var(--search-bar-text-color--);
-      }
+          color: var(--search-bar-text-color--);
+        }
 
-      .container {
-        position: relative;
-      }
+        .container {
+          position: relative;
+        }
 
-      .search-bar {
-        display: flex;
-        justify-content: flex-start;
-      }
+        .search-bar {
+          display: flex;
+          justify-content: flex-start;
+        }
 
-      .endcap {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: calc(var(--search-bar-font-size--) * 2);
-        border: var(--search-bar-border--);
-        padding: 0 calc(var(--search-bar-font-size--) / 2);
-      }
+        .endcap {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: calc(var(--search-bar-font-size--) * 2);
+          border: var(--search-bar-border--);
+          padding: 0 calc(var(--search-bar-font-size--) / 2);
+        }
 
-      .endcap svg {
-        height: var(--search-bar-font-size--);
-        width: var(--search-bar-font-size--);
-      }
+        .endcap svg {
+          height: var(--search-bar-font-size--);
+          width: var(--search-bar-font-size--);
+        }
 
-      .clear-disc {
-        fill: var(--search-bar-clear-disc-color--);
-      }
+        .clear-disc {
+          fill: var(--search-bar-clear-disc-color--);
+        }
 
-      .clear-cross {
-        stroke: var(--search-bar-clear-cross-color--);
-      }
+        .clear-cross {
+          stroke: var(--search-bar-clear-cross-color--);
+        }
 
-      .clear-search-container {
-        border-left: 0;
-        border-radius: 0 var(--search-bar-font-size--)
-          var(--search-bar-font-size--) 0;
-      }
+        .clear-search-container {
+          border-left: 0;
+          border-radius: 0 var(--search-bar-font-size--)
+            var(--search-bar-font-size--) 0;
+        }
 
-      .search-bar.is-searching .clear-search-container {
-        padding: 0 calc(var(--search-bar-font-size--) / 2) 0 0;
-      }
+        .search-bar.is-searching .clear-search-container {
+          padding: 0 calc(var(--search-bar-font-size--) / 2) 0 0;
+        }
 
-      .search-bar.is-searching .clear-search-container button {
-        display: block;
-      }
+        .search-bar.is-searching .clear-search-container button {
+          display: block;
+        }
 
-      .clear-search-container button {
-        display: none;
-      }
+        .clear-search-container button {
+          display: none;
+        }
 
-      .magnifier-container {
-        border-radius: var(--search-bar-font-size--) 0 0
-          var(--search-bar-font-size--);
-        border-right: 0;
-      }
+        .magnifier-container {
+          border-radius: var(--search-bar-font-size--) 0 0
+            var(--search-bar-font-size--);
+          border-right: 0;
+        }
 
-      .container.is-open .magnifier-container {
-        border-radius: var(--search-bar-font-size--) 0 0 0;
-      }
+        .container.is-open .magnifier-container {
+          border-radius: var(--search-bar-font-size--) 0 0 0;
+        }
 
-      .container.shows-disclosure .clear-search-container {
-        border-radius: 0;
-        border-right: 0;
-      }
+        .container.shows-disclosure .clear-search-container {
+          border-radius: 0;
+          border-right: 0;
+        }
 
-      .disclosure-container {
-        border-radius: 0 var(--search-bar-font-size--)
-          var(--search-bar-font-size--) 0;
-        display: none;
-      }
+        .disclosure-container {
+          border-radius: 0 var(--search-bar-font-size--)
+            var(--search-bar-font-size--) 0;
+          display: none;
+        }
 
-      .container.shows-disclosure .disclosure-container {
-        display: flex;
-      }
+        .container.shows-disclosure .disclosure-container {
+          display: flex;
+        }
 
-      .container.is-open .disclosure-container {
-        border-radius: 0 var(--search-bar-font-size--) 0 0;
-      }
+        .container.is-open .disclosure-container {
+          border-radius: 0 var(--search-bar-font-size--) 0 0;
+        }
 
-      .disclosure-container button {
-        border: 0;
-        background: none;
-      }
+        .disclosure-container button {
+          border: 0;
+          background: none;
+        }
 
-      #search-input {
-        border-top: var(--search-bar-border--);
-        border-bottom: var(--search-bar-border--);
-        border-left: 0;
-        border-right: 0;
-        border-radius: 0;
-        background-color: var(--search-bar-background-color--);
-        color: var(--search-bar-text-color--);
-        padding: 0;
-        margin: 0;
-        font-size: var(--search-bar-font-size--);
-        flex: 1 1 auto;
-        min-width: var(--search-bar-min-width--);
-      }
+        #search-input {
+          border-top: var(--search-bar-border--);
+          border-bottom: var(--search-bar-border--);
+          border-left: 0;
+          border-right: 0;
+          border-radius: 0;
+          background-color: var(--search-bar-background-color--);
+          color: var(--search-bar-text-color--);
+          padding: 0;
+          margin: 0;
+          font-size: var(--search-bar-font-size--);
+          flex: 1 1 auto;
+          min-width: var(--search-bar-min-width--);
+        }
 
-      #search-input:focus {
-        outline: none;
-      }
+        #search-input:focus {
+          outline: none;
+        }
 
-      .quick-search {
-        border-radius: 0 0 var(--search-bar-font-size--)
-          var(--search-bar-font-size--);
-        display: none;
-        position: absolute;
-        left: 0;
-        right: 0;
-        background-color: var(--search-bar-background-color--);
-        z-index: 1;
-        max-height: var(--search-bar-max-expansion-height--);
-        overflow-y: auto;
-        scrollbar-width: none;
-        padding: 0 calc(var(--search-bar-font-size--) / 2);
-      }
+        /* The ring in its dark-surface color, on keyboard focus. */
+        #search-input:focus-visible {
+          outline: var(--ia-size-focus-ring--) solid
+            var(--ia-color-border-focus-inverse--);
+          outline-offset: var(--ia-size-focus-ring-offset--);
+        }
 
-      .quick-search::-webkit-scrollbar {
-        display: none;
-      }
+        .quick-search {
+          border-radius: 0 0 var(--search-bar-font-size--)
+            var(--search-bar-font-size--);
+          display: none;
+          position: absolute;
+          left: 0;
+          right: 0;
+          background-color: var(--search-bar-background-color--);
+          z-index: 1;
+          max-height: var(--search-bar-max-expansion-height--);
+          overflow-y: auto;
+          scrollbar-width: none;
+          padding: 0 calc(var(--search-bar-font-size--) / 2);
+        }
 
-      .container.is-open.shows-disclosure .quick-search {
-        border: var(--search-bar-border--);
-        border-top: 0;
-        display: block;
-      }
+        .quick-search::-webkit-scrollbar {
+          display: none;
+        }
 
-      button {
-        background: none;
-        border: none;
-        margin: 0;
-        padding: 0;
-        color: inherit;
-        cursor: pointer;
-      }
-    `;
+        .container.is-open.shows-disclosure .quick-search {
+          border: var(--search-bar-border--);
+          border-top: 0;
+          display: block;
+        }
+
+        button {
+          background: none;
+          border: none;
+          margin: 0;
+          padding: 0;
+          color: inherit;
+          cursor: pointer;
+        }
+      `,
+    ];
   }
 }
