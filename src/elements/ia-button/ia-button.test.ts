@@ -1,5 +1,6 @@
 import { fixture } from '@open-wc/testing-helpers';
 import { describe, expect, test, vi } from 'vitest';
+import { userEvent } from 'vitest/browser';
 import { html } from 'lit';
 
 import { IAButton } from './ia-button';
@@ -194,6 +195,41 @@ describe('IA button', () => {
     await el.updateComplete;
     el.shadowRoot?.querySelector('button')?.click();
     expect(onSubmit).toHaveBeenCalledOnce();
+  });
+
+  test('does not submit its form on Enter or el.click() while inactive', async () => {
+    const onSubmit = vi.fn((e: Event) => e.preventDefault());
+    const form = await fixture<HTMLFormElement>(html`
+      <form @submit=${onSubmit}>
+        <input name="q" />
+        <ia-button type="submit" ?loading=${true}>Submit</ia-button>
+      </form>
+    `);
+    const el = form.querySelector('ia-button') as IAButton;
+    await el.updateComplete;
+
+    // Enter in a field submits through the form's default button.
+    form.querySelector('input')?.focus();
+    await userEvent.keyboard('{Enter}');
+    el.click();
+    expect(onSubmit).not.toHaveBeenCalled();
+
+    el.loading = false;
+    await el.updateComplete;
+    await userEvent.keyboard('{Enter}');
+    expect(onSubmit).toHaveBeenCalledOnce();
+    el.click();
+    expect(onSubmit).toHaveBeenCalledTimes(2);
+  });
+
+  test('keeps a disabled ghost button flat', async () => {
+    const el = await fixture<IAButton>(
+      html`<ia-button mode="ghost" ?disabled=${true}>Submit</ia-button>`,
+    );
+    const style = getComputedStyle(
+      el.shadowRoot?.querySelector('button') as HTMLElement,
+    );
+    expect(style.backgroundColor).to.equal('rgba(0, 0, 0, 0)');
   });
 
   test('takes the disabled colors when disabled', async () => {

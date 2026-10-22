@@ -80,6 +80,11 @@ export class IAButton extends LitElement {
     if (changed.has('type')) {
       this.setButtonTypeEmulation();
     }
+    // Disabled too, so pressing Enter in the form can't submit through it
+    const hiddenButton = this.querySelector<HTMLInputElement>(
+      'input.hidden-button',
+    );
+    if (hiddenButton) hiddenButton.disabled = this.inactive;
   }
 
   /* Whether the button ignores activation: disabled, or busy loading */
@@ -184,7 +189,7 @@ export class IAButton extends LitElement {
    * and if actions not already in progress
    */
   private handleComponentClick(e: Event): void {
-    if (this.type === 'button') return;
+    if (this.type === 'button' || this.inactive) return;
 
     // No need to submit/reset the form if it's already submitting/resetting
     const formActionsInProgress =
@@ -528,7 +533,7 @@ export class IAButton extends LitElement {
           box-shadow: none;
         }
 
-        .is-disabled:is(.link, .danger-link) {
+        .is-disabled:is(.link, .danger-link, .ghost) {
           color: var(--ia-color-text-disabled--);
           background: none;
         }
