@@ -199,6 +199,8 @@ export class IAItemNavigatorStory extends LitElement {
 
   @state() private viewAvailable = true;
 
+  @state() private mediatypeKnown = false;
+
   @state() private customLoading = false;
 
   @state() private headerOn = true;
@@ -470,6 +472,9 @@ export class IAItemNavigatorStory extends LitElement {
               .viewportInFullscreen=${this.fullscreen || null}
               ?loaded=${this.loaded}
               ?viewAvailable=${this.viewAvailable}
+              .mediatype=${this.mediatypeKnown
+                ? DEMO_LOADING_GLYPHS[this.selectedFile.mediatype]
+                : undefined}
               @fileListSorted=${this.handleFileListSorted}
             >
               ${this.headerTemplate} ${this.theaterTemplate}
@@ -481,6 +486,7 @@ export class IAItemNavigatorStory extends LitElement {
         <div slot="settings">
           <table>
             ${this.toggleRow('Loaded', 'loaded')}
+            ${this.toggleRow('Mediatype known', 'mediatypeKnown')}
             ${this.toggleRow('Custom loading view', 'customLoading')}
             ${this.toggleRow('View available (theater)', 'viewAvailable')}
             ${this.toggleRow('Header', 'headerOn')}
@@ -488,11 +494,12 @@ export class IAItemNavigatorStory extends LitElement {
             ${this.toggleRow('Animate', 'animationsOn')}
           </table>
           <p class="hint">
-            Turn "Loaded" off to see the loading view, and "Custom loading view"
-            on to slot a consumer's own indicator in its place. Turn "View
-            available" off to show the no-theater placeholder. Open "Viewable
-            Files" and use the sort button in its header. Narrow the demo below
-            600px to see the drawer switch from shift to overlay.
+            Turn "Loaded" off to see the loading view. "Mediatype known" swaps
+            its dots for the selected file's glyph, and "Custom loading view"
+            slots a consumer's own indicator in its place. Turn "View available"
+            off to show the no-theater placeholder. Open "Viewable Files" and
+            use the sort button in its header. Narrow the demo below 600px to
+            see the drawer switch from shift to overlay.
           </p>
         </div>
 
@@ -506,10 +513,12 @@ export class IAItemNavigatorStory extends LitElement {
           </p>
           <p>
             Until <code>loaded</code> is set, the navigator shows a loading
-            indicator with a "Loading viewer" caption. To replace both, project
-            your own content into <code>slot="loading"</code>, for example an
-            <code>ia-status-indicator</code> with a <code>mediatype</code> or
-            its own <code>slot="icon"</code> glyph.
+            indicator with a "Loading viewer" caption. Set
+            <code>mediatype</code> once you know it to put the item's glyph in
+            the ring. To replace the whole view, project your own content into
+            <code>slot="loading"</code>, for example an
+            <code>ia-status-indicator</code> with its own
+            <code>slot="icon"</code> glyph.
           </p>
         </div>
       </story-template>
@@ -521,6 +530,7 @@ export class IAItemNavigatorStory extends LitElement {
     label: string,
     field:
       | 'loaded'
+      | 'mediatypeKnown'
       | 'customLoading'
       | 'viewAvailable'
       | 'headerOn'
@@ -609,11 +619,12 @@ export class IAItemNavigatorStory extends LitElement {
   .menuContents=\${this.menuProviders}
   .menuShortcuts=\${this.menuShortcuts}
   ?loaded=\${this.loaded}
+  .mediatype=\${this.mediatypeIcon}
 >
   <div slot="header">…your header…</div>
   <div slot="main">…your theater…</div>
   <!-- Optional: replaces the default loading view -->
-  <ia-status-indicator slot="loading" mediatype="texts"></ia-status-indicator>
+  <div slot="loading">…your loading view…</div>
 </ia-item-navigator>`;
   }
 

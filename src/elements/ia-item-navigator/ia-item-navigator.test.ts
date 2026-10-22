@@ -211,6 +211,68 @@ describe('IAItemNavigator', () => {
       expect(caption?.getAttribute('aria-hidden')).to.equal('true');
     });
 
+    describe('mediatype glyph', () => {
+      const defaultIndicator = async (el: IAItemNavigator) => {
+        const indicator = loadingArea(el)!.querySelector<IAStatusIndicator>(
+          'ia-status-indicator',
+        )!;
+        await indicator.updateComplete;
+        return indicator;
+      };
+      const glyph = (indicator: IAStatusIndicator) =>
+        indicator.shadowRoot?.querySelector('.center .ia-icon svg');
+      const dots = (indicator: IAStatusIndicator) =>
+        indicator.shadowRoot?.querySelector('.loading-dots:not(.hidden)');
+
+      test('shows the dots while the mediatype is unknown', async () => {
+        const el = await fixture<IAItemNavigator>(
+          html`<ia-item-navigator></ia-item-navigator>`,
+        );
+        const indicator = await defaultIndicator(el);
+
+        expect(dots(indicator)).to.exist;
+        expect(glyph(indicator)).to.not.exist;
+      });
+
+      test('swaps the dots for the glyph once the mediatype is known', async () => {
+        const el = await fixture<IAItemNavigator>(
+          html`<ia-item-navigator></ia-item-navigator>`,
+        );
+
+        // The consumer usually learns the mediatype after the navigator is
+        // already on screen, e.g. once item metadata arrives.
+        el.mediatype = 'video';
+        await el.updateComplete;
+        const indicator = await defaultIndicator(el);
+
+        expect(indicator.mediatype).to.equal('video');
+        expect(glyph(indicator)).to.exist;
+        expect(dots(indicator)).to.not.exist;
+      });
+
+      test('takes the mediatype from the attribute', async () => {
+        const el = await fixture<IAItemNavigator>(
+          html`<ia-item-navigator mediatype="texts"></ia-item-navigator>`,
+        );
+        const indicator = await defaultIndicator(el);
+
+        expect(indicator.mediatype).to.equal('texts');
+        expect(glyph(indicator)).to.exist;
+      });
+
+      test('falls back to the dots for a mediatype with no glyph', async () => {
+        // `movies` is an archive.org value, not an icon name, so it maps to
+        // nothing. The consumer should have translated it to `video`.
+        const el = await fixture<IAItemNavigator>(
+          html`<ia-item-navigator mediatype="movies"></ia-item-navigator>`,
+        );
+        const indicator = await defaultIndicator(el);
+
+        expect(dots(indicator)).to.exist;
+        expect(glyph(indicator)).to.not.exist;
+      });
+    });
+
     test('the no-theater placeholder clears the indicator on its own', async () => {
       const el = await fixture<IAItemNavigator>(
         html`<ia-item-navigator

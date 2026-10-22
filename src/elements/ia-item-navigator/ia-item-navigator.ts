@@ -16,6 +16,7 @@ import { iconBox, iconBoxStyles } from '@src/util/icon-box';
 import './ia-itemnav-menu-slider';
 import './ia-itemnav-no-theater-available';
 import '@src/elements/ia-status-indicator/ia-status-indicator';
+import type { MediaTypeIcon } from '@src/elements/ia-status-indicator/ia-status-indicator';
 import type { IAItemNavMenuSlider } from './ia-itemnav-menu-slider';
 
 import {
@@ -69,12 +70,21 @@ export class IAItemNavigator extends LitElement {
    * hidden and the `loading` slot shows in its place.
    *
    * The slot's default is the shared `ia-status-indicator` with a "Loading
-   * viewer" caption. A shell shouldn't decide what loading looks like, so a
-   * consumer replaces the whole thing by slotting its own content, e.g. an
-   * indicator with a `mediatype` or its own `slot="icon"` glyph.
+   * viewer" caption, showing the `mediatype` glyph once that's known. A shell
+   * shouldn't decide what loading looks like, so a consumer replaces the whole
+   * thing by slotting its own content, e.g. an indicator with its own
+   * `slot="icon"` glyph.
    */
   @property({ type: Boolean, reflect: true, attribute: true }) loaded: boolean =
     false;
+
+  /**
+   * The item's glyph for the default loading indicator. Until it's known, or
+   * when it has no glyph, the indicator shows its dots. These are icon names,
+   * so a consumer translates archive.org values first (e.g. `movies` ->
+   * `video`).
+   */
+  @property({ type: String }) mediatype?: MediaTypeIcon;
 
   /**
    * Set for the render where the drawer opens straight to a panel, so the
@@ -136,6 +146,7 @@ export class IAItemNavigator extends LitElement {
           <ia-status-indicator
             mode="loading"
             loadingTitle="Loading viewer"
+            .mediatype=${this.mediatype}
           ></ia-status-indicator>
           <p class="loading-caption" aria-hidden="true">Loading viewer</p>
         </slot>
