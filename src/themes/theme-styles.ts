@@ -174,6 +174,20 @@ const themeStyles = css`
       var(--ia-color-action-warning-border--)
     );
 
+    /* Donate */
+    --donate-cta-text-color: var(
+      --ia-theme-donate-cta-text-color,
+      var(--ia-color-action-donate-text--)
+    );
+    --donate-cta-fill: var(
+      --ia-theme-donate-cta-fill,
+      var(--ia-color-action-donate-fill--)
+    );
+    --donate-cta-border: var(
+      --ia-theme-donate-cta-border,
+      var(--ia-color-action-donate-border--)
+    );
+
     /* Disabled */
     --disabled-cta-text-color: var(
       --ia-theme-disabled-cta-text-color,
