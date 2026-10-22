@@ -9,6 +9,7 @@ import { MediaButton } from './ia-topnav-media-button';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import themeStyles from '@src/themes/theme-styles';
 import { localized, msg } from '@lit/localize';
+import topnavFocusStyles from './focus-styles';
 
 type MediaMenuOption = {
   icon: string;
@@ -157,11 +158,8 @@ export class MediaMenu extends LitElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      topnavFocusStyles,
       css`
-        :host {
-          outline: none;
-        }
-
         .media-menu-inner {
           z-index: -1;
           top: calc(-400 * var(--topnavUnit--));

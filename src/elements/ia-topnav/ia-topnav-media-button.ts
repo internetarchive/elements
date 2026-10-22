@@ -15,6 +15,7 @@ import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
 import { localized, msg } from '@lit/localize';
+import topnavFocusStyles from './focus-styles';
 
 const icons: Record<string, TemplateResult> = {
   audio,
@@ -151,6 +152,7 @@ export class MediaButton extends TrackedElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      topnavFocusStyles,
       css`
         a {
           display: inline-block;
@@ -169,8 +171,9 @@ export class MediaButton extends TrackedElement {
           align-items: center;
         }
 
-        .menu-item:focus {
-          outline: none;
+        /* The bar would clip a ring drawn outside its items. */
+        :host {
+          --topnav-focus-offset: calc(-1 * var(--ia-size-focus-ring--));
         }
 
         .label {
@@ -205,15 +208,15 @@ export class MediaButton extends TrackedElement {
         }
 
         .icon svg {
-          color: #999;
+          color: var(--iconFill, var(--ia-color-text-inverse-secondary--));
         }
 
         .icon.active svg {
-          color: #fff;
+          color: var(--activeColor, var(--ia-color-text-inverse--));
         }
 
         .donate svg {
-          color: #f00;
+          color: var(--ia-color-brand-donate--);
         }
 
         @media (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) {
@@ -268,29 +271,29 @@ export class MediaButton extends TrackedElement {
             background: transparent;
           }
 
-          /* selected state icon colors */
+          /* An open media type's glyph takes its media type's color (D-43). */
           .web.selected svg {
-            color: #ffcd27;
+            color: var(--ia-color-mediatype-web--);
           }
 
           .texts.selected svg {
-            color: #faab3c;
+            color: var(--ia-color-mediatype-texts--);
           }
 
           .video.selected svg {
-            color: #f1644b;
+            color: var(--ia-color-mediatype-movies--);
           }
 
           .audio.selected svg {
-            color: #00adef;
+            color: var(--ia-color-mediatype-audio--);
           }
 
           .software.selected svg {
-            color: #9ecc4f;
+            color: var(--ia-color-mediatype-software--);
           }
 
           .images.selected svg {
-            color: #aa99c9;
+            color: var(--ia-color-mediatype-image--);
           }
         }
 

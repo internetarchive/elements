@@ -17,6 +17,7 @@ import { defaultTopNavConfig } from './data/menus';
 import { subnavListCSS } from './subnav-list-styles';
 import themeStyles from '@src/themes/theme-styles';
 import { localized, msg } from '@lit/localize';
+import topnavFocusStyles from './focus-styles';
 
 @customElement('ia-topnav-media-subnav')
 @localized()
@@ -141,6 +142,7 @@ export class MediaSubnav extends TrackedElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      topnavFocusStyles,
       subnavListCSS,
       css`
         img {

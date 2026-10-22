@@ -65,13 +65,13 @@ export class IATopNavWaybackSearch extends IAWaybackSearchForm {
           padding-left: calc(30 * var(--topnavUnit--));
           margin-top: calc(3 * var(--topnavUnit--));
           font-size: calc(14 * var(--topnavUnit--));
-          border-color: #bca38e;
-          background: #fff;
+          border-color: var(--ia-color-border-strong--);
+          background: var(--ia-color-surface-raised--);
         }
 
         input::placeholder,
         input::-webkit-input-placeholder {
-          color: #8e8e8e;
+          color: var(--ia-color-text-secondary--);
         }
 
         .search-field svg {

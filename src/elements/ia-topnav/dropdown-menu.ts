@@ -21,6 +21,7 @@ import { ifDefined } from 'lit/directives/if-defined.js';
 import KeyboardNavigation from './lib/keyboard-navigation';
 import themeStyles from '@src/themes/theme-styles';
 import { localized, msg, str } from '@lit/localize';
+import topnavFocusStyles from './focus-styles';
 
 @localized()
 export default class DropdownMenu extends TrackedElement {
@@ -135,6 +136,7 @@ export default class DropdownMenu extends TrackedElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      topnavFocusStyles,
       css`
         :host {
           /*
@@ -249,9 +251,10 @@ export default class DropdownMenu extends TrackedElement {
             z-index: 5;
             transition: opacity 0.2s ease-in-out;
             font-size: calc(14 * var(--topnavUnit--));
-            border-radius: 2px;
-            background: var(--primaryTextColor);
-            box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.15);
+            /* The menu spec's dark panel, one family with the dropdown (D-41). */
+            border-radius: var(--ia-radius-default--);
+            background: var(--ia-color-surface-inverse--);
+            box-shadow: var(--ia-shadow-overlay--);
           }
 
           nav:after {
@@ -261,7 +264,7 @@ export default class DropdownMenu extends TrackedElement {
             width: 12px;
             height: 7px;
             box-sizing: border-box;
-            color: var(--white);
+            color: var(--ia-color-surface-inverse--);
             content: '';
             border-bottom: 7px solid currentColor;
             border-left: 6px solid transparent;
@@ -282,27 +285,32 @@ export default class DropdownMenu extends TrackedElement {
           }
 
           a {
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+            min-height: var(--ia-size-control-sm--);
             padding: calc(5 * var(--topnavUnit--))
               calc(20 * var(--topnavUnit--));
-            color: var(--inverseTextColor);
-            transition:
-              background 0.1s ease-out,
-              color 0.1s ease-out;
+            color: var(--ia-color-text-inverse--);
+            --topnav-focus-offset: calc(-1 * var(--ia-size-focus-ring--));
           }
 
           .info-item {
             padding: calc(5 * var(--topnavUnit--))
               calc(20 * var(--topnavUnit--));
             font-size: 0.8em;
-            color: var(--inverseDropdownMenuInfoItem);
+            color: var(--dropdownMenuInfoItem);
           }
 
+          /* Hover lays the overlay on the row, instantly (D-54). */
           a:hover,
           a:active,
-          a:focus {
+          a:focus-visible {
             color: var(--linkHoverColor);
-            background: var(--linkColor);
-            outline: none;
+            background-image: linear-gradient(
+              var(--ia-color-hover-overlay-inverse--),
+              var(--ia-color-hover-overlay-inverse--)
+            );
           }
 
           .initial,
@@ -318,6 +326,13 @@ export default class DropdownMenu extends TrackedElement {
 
           a.mobile-upload {
             display: none;
+          }
+        }
+
+        /* Every row is at least 44px tall to a finger. */
+        @media (pointer: coarse) {
+          a {
+            min-height: var(--ia-size-target-min--);
           }
         }
       `,

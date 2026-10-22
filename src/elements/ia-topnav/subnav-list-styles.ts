@@ -22,9 +22,16 @@ export const subnavListCSS = css`
   }
 
   @media (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) {
+    /* A column's heading, as the menu spec's group heading: small, bold,
+       uppercase and secondary, so it labels the links rather than competing
+       with them. */
     h4 {
       margin: 0 0 calc(10 * var(--topnavUnit--)) 0;
-      font-weight: 100;
+      font-size: calc(11 * var(--topnavUnit--));
+      font-weight: var(--ia-font-weight-bold--);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ia-color-text-inverse-secondary--);
     }
 
     ul {

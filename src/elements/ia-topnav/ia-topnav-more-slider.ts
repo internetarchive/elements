@@ -7,6 +7,7 @@ import { formatUrl, toSentenceCase } from './lib/helpers';
 import { IATopNavConfig, IATopNavLink } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
+import topnavFocusStyles from './focus-styles';
 
 @customElement('ia-topnav-more-slider')
 export class MoreSlider extends TrackedElement {
@@ -41,6 +42,7 @@ export class MoreSlider extends TrackedElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      topnavFocusStyles,
       css`
         ul {
           padding: 0;
