@@ -433,7 +433,7 @@ export class IATranscriptView extends LitElement {
 
           --transcript-normal-text-color--: var(
             --ia-theme-transcript-normal-text-color,
-            gray
+            var(--ia-color-text-inverse-tertiary--)
           );
           --transcript-active-text-color--: var(
             --ia-theme-transcript-active-text-color,
@@ -441,12 +441,12 @@ export class IATranscriptView extends LitElement {
           );
           --transcript-hover-text-color--: var(
             --ia-theme-transcript-hover-text-color,
-            silver
+            var(--ia-color-text-inverse-secondary--)
           );
 
           --transcript-music-normal-text-color--: var(
             --ia-theme-transcript-music-normal-text-color,
-            gray
+            var(--ia-color-text-inverse-tertiary--)
           );
           --transcript-music-active-text-color--: var(
             --ia-theme-transcript-music-active-text-color,
@@ -454,16 +454,16 @@ export class IATranscriptView extends LitElement {
           );
           --transcript-music-hover-text-color--: var(
             --ia-theme-transcript-music-hover-text-color,
-            silver
+            var(--ia-color-text-inverse-secondary--)
           );
 
           --transcript-search-result-inactive-border-color--: var(
             --ia-theme-transcript-search-result-inactive-border-color,
-            gray
+            var(--ia-color-text-inverse-tertiary--)
           );
           --transcript-search-result-active-border-color--: var(
             --ia-theme-transcript-search-result-active-border-color,
-            green
+            var(--ia-color-text-inverse-link--)
           );
 
           --transcript-time-color--: var(
