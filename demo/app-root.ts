@@ -196,7 +196,13 @@ export class AppRoot extends LitElement {
   };
 
   private _onHashChange = () => {
-    const focused = entryFromHash(window.location.hash);
+    const { hash } = window.location;
+    // A hash naming something on the page rather than an element, like the
+    // skip link's #ia-content, is a jump within the current view.
+    if (!tagFromHash(hash) && document.getElementById(hash.slice(1))) {
+      return;
+    }
+    const focused = entryFromHash(hash);
     if (focused === this._focused) return;
     this._focused = focused;
     // Cleared alongside _focused so both land in a single render: whichever
