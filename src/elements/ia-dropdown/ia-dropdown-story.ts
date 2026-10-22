@@ -357,6 +357,8 @@ export class IADropdownStory extends LitElement {
         padding: 10px;
         background: #2c2c2c;
         border-radius: 4px;
+        /* A dark host, so the trigger's focus ring takes the dark-surface color. */
+        --dropdownFocusRingColor: #9aa8ff;
       }
 
       .demo-readout {

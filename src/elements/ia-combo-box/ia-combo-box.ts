@@ -1230,25 +1230,27 @@ export class IAComboBox extends LitElement {
         display: inline-flex;
         align-items: stretch;
         flex-wrap: nowrap;
-        background: white;
-        border: 1px solid black;
+        background: var(--ia-color-surface-raised--);
+        border: var(--ia-border-control--);
+        border-radius: var(--ia-radius-default--);
         width: 100%;
       }
 
       #main-widget-row:not(.focused, .disabled):hover,
       #main-widget-row:not(.focused, .disabled):active {
-        background: #fafafa;
+        border-color: var(--ia-color-text-primary--);
       }
 
       #main-widget-row.focused {
-        outline: black auto 1px;
-        outline-offset: 3px;
+        outline: var(--ia-size-focus-ring--) solid
+          var(--ia-color-border-focus--);
+        outline-offset: var(--ia-size-focus-ring-offset--);
       }
 
       #main-widget-row.disabled {
-        background: #f4f4f4;
-        border-color: #a0a0a0;
-        color: #404040;
+        background: var(--ia-color-surface-sunken--);
+        border-color: var(--ia-color-border-default--);
+        color: var(--ia-color-text-disabled--);
       }
 
       #text-input {
@@ -1283,12 +1285,18 @@ export class IAComboBox extends LitElement {
         background: transparent;
         border: none;
         padding: var(--combo-box-padding--) 5px;
-        outline: none;
         font-size: inherit;
         font-family: inherit;
         font-weight: inherit;
         font-style: inherit;
         cursor: pointer;
+      }
+
+      #clear-button:focus-visible,
+      #caret-button:focus-visible {
+        outline: var(--ia-size-focus-ring--) solid
+          var(--ia-color-border-focus--);
+        outline-offset: calc(-1 * var(--ia-size-focus-ring--));
       }
 
       #clear-button {
@@ -1309,10 +1317,11 @@ export class IAComboBox extends LitElement {
         margin: 1px 0 0;
         border: none;
         padding: 0;
-        background: white;
+        background: var(--ia-color-surface-raised--);
+        border-radius: var(--ia-radius-default--);
         width: var(--combo-box-list-width--);
         max-height: 400px;
-        box-shadow: 0 0 1px 1px #ddd;
+        box-shadow: var(--ia-shadow-overlay--);
         opacity: 0;
         transition: opacity var(--combo-box-list-fade-duration--) ease;
       }
@@ -1323,7 +1332,7 @@ export class IAComboBox extends LitElement {
 
       #empty-options {
         padding: 5px;
-        color: #606060;
+        color: var(--ia-color-text-secondary--);
         font-style: italic;
         text-align: center;
       }
@@ -1331,7 +1340,7 @@ export class IAComboBox extends LitElement {
       /* The svg fills this box, so its width and height are the glyph's size. */
       .icon {
         display: inline-block;
-        color: #000;
+        color: var(--ia-color-text-primary--);
       }
 
       .icon > svg {
@@ -1360,8 +1369,9 @@ export class IAComboBox extends LitElement {
         cursor: pointer;
       }
 
+      /* The option the keyboard is on: the soft selected tier. */
       .highlight {
-        background-color: #dbe0ff;
+        background-color: var(--ia-color-selected-soft-fill--);
       }
 
       .disabled,
