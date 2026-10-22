@@ -6,6 +6,29 @@ import type { IADropdown, OptionInterface } from './ia-dropdown';
 import './ia-dropdown';
 
 describe('IADropdown', () => {
+  test('pads a plain-text option the same as one with its own markup', async () => {
+    const options: OptionInterface[] = [
+      { id: 'text', label: 'Books & Documents' },
+      { id: 'markup', label: html`<span>Video</span>` },
+    ];
+    const el = await fixture<IADropdown>(
+      html`<ia-dropdown .options=${options} open></ia-dropdown>`,
+    );
+    const [text, markup] = Array.from(
+      el.shadowRoot!.querySelectorAll<HTMLElement>(
+        '#dropdown-main li > * > :first-child',
+      ),
+    );
+    expect(text?.textContent?.trim()).to.equal('Books & Documents');
+    expect(getComputedStyle(text).paddingLeft).to.equal('10px');
+    // Plus the option's own inset, as the search bar's picker has it.
+    expect(getComputedStyle(text.parentElement!).paddingLeft).to.equal('10px');
+    expect(getComputedStyle(text).fontSize).to.equal('14px');
+    expect(getComputedStyle(text).paddingLeft).to.equal(
+      getComputedStyle(markup).paddingLeft,
+    );
+  });
+
   test('is closed at default', async () => {
     const el = await fixture<IADropdown>(html`<ia-dropdown></ia-dropdown>`);
     expect(el.open).to.be.false;

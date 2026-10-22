@@ -104,26 +104,30 @@ export class IAWaybackSearchForm extends LitElement {
       css`
         :host {
           --wayback-search-input-text-color--: var(
-            --ia-theme-secondary-text-color,
-            #666
+            --ia-theme-primary-text-color,
+            var(--ia-color-text-primary--)
           );
           --wayback-search-input-bg--: var(
             --ia-theme-secondary-background-color,
-            #fff
+            var(--ia-color-surface-raised--)
           );
           /*
            * Darker than the mobile glyph, which follows --iconFill. The topnav
-           * declares this alongside its other color knobs. The literal covers
-           * mounting this search on its own, where none of those greys exist,
-           * and it has to be a literal because fill inherits: an unresolved
-           * value paints black rather than falling through to another rule.
+           * declares this alongside its other color knobs. The token covers
+           * mounting this search on its own, where none of those greys exist;
+           * it always resolves, which matters because fill inherits and an
+           * unresolved value would paint black.
            */
           --wayback-search-desktop-icon-fill--: var(
             --desktopSearchIconFill,
-            #333
+            var(--ia-color-text-primary--)
+          );
+          --wayback-search-font-family--: var(
+            --themeFontFamily,
+            var(--ia-font-family-base--)
           );
 
-          font: normal 1.2rem/1.5 var(--themeFontFamily);
+          font: normal 1.2rem/1.5 var(--wayback-search-font-family--);
         }
 
         form {
@@ -132,11 +136,11 @@ export class IAWaybackSearchForm extends LitElement {
 
         p {
           margin-top: 0;
-          font-weight: 200;
+          font-weight: var(--ia-font-weight-regular--);
         }
 
         a {
-          font-weight: 500;
+          font-weight: var(--ia-font-weight-bold--);
           text-decoration: none;
           color: var(--activeColor);
         }
@@ -147,9 +151,9 @@ export class IAWaybackSearchForm extends LitElement {
           box-sizing: border-box;
           text-align: center;
           border: none;
-          border-radius: 7px;
-          background-color: #fcf5e6;
-          box-shadow: 3px 3px 0 0 #c3ad97;
+          /* The cream is the panel; no offset shadow (D-14). */
+          border-radius: var(--ia-radius-lg--);
+          background-color: var(--ia-color-brand-wayback--);
         }
 
         fieldset a {
@@ -174,17 +178,27 @@ export class IAWaybackSearchForm extends LitElement {
           width: 100%;
           height: 3rem;
           padding: 0.5rem 1rem 0.5rem 3rem;
-          font: normal 1.2rem/1.5 var(--themeFontFamily);
+          font: normal 1.2rem/1.5 var(--wayback-search-font-family--);
           color: var(--wayback-search-input-text-color--);
           box-sizing: border-box;
-          border: 1px solid var(--grey80);
-          border-radius: 2rem;
+          border: var(--ia-border-control--);
+          border-radius: var(--ia-radius-pill--);
           background: var(--wayback-search-input-bg--);
         }
 
+        input::placeholder {
+          color: var(--ia-color-text-secondary--);
+        }
+
         input:focus {
-          border-color: #66afe9;
           outline: none;
+        }
+
+        /* Inside the edge: the field's wrapper clips anything outside it. */
+        input:focus-visible {
+          outline: var(--ia-size-focus-ring--) solid
+            var(--ia-color-border-focus--);
+          outline-offset: calc(-1 * var(--ia-size-focus-ring--));
         }
 
         .search-field {
@@ -198,7 +212,7 @@ export class IAWaybackSearchForm extends LitElement {
           left: 3px;
           width: 2.4rem;
           height: 2.4rem;
-          color: var(--iconFill, #000);
+          color: var(--iconFill, var(--ia-color-text-primary--));
         }
 
         @media (min-width: ${WAYBACK_SEARCH_DESKTOP_BREAKPOINT}px) {
