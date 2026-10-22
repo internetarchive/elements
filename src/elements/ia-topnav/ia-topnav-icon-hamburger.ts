@@ -24,7 +24,7 @@ export class HamBurger extends Icon {
         </desc>
         <path
           d="m30.5 26.5c.8284271 0 1.5.6715729 1.5 1.5s-.6715729 1.5-1.5 1.5h-21c-.82842712 0-1.5-.6715729-1.5-1.5s.67157288-1.5 1.5-1.5zm0-8c.8284271 0 1.5.6715729 1.5 1.5s-.6715729 1.5-1.5 1.5h-21c-.82842712 0-1.5-.6715729-1.5-1.5s.67157288-1.5 1.5-1.5zm0-8c.8284271 0 1.5.6715729 1.5 1.5s-.6715729 1.5-1.5 1.5h-21c-.82842712 0-1.5-.6715729-1.5-1.5s.67157288-1.5 1.5-1.5z"
-          fill="#999"
+          fill="currentColor"
           fill-rule="evenodd"
         />
       </svg>
@@ -37,7 +37,7 @@ export class HamBurger extends Icon {
         display: block;
         height: calc(40 * var(--topnavUnit--));
         width: calc(40 * var(--topnavUnit--));
-        color: var(--activeColor);
+        color: var(--iconFill, var(--ia-color-text-inverse-secondary--));
       }
     `;
   }

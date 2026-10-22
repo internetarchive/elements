@@ -21,6 +21,7 @@ import {
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
 import { localized, msg, str } from '@lit/localize';
+import topnavFocusStyles from './focus-styles';
 
 @customElement('ia-topnav-primary-nav')
 @localized()
@@ -320,10 +321,11 @@ export class PrimaryNav extends TrackedElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      topnavFocusStyles,
       css`
-        button:focus,
-        input:focus {
-          outline: none;
+        /* The bar would clip a ring drawn outside its items. */
+        :host {
+          --topnav-focus-offset: calc(-1 * var(--ia-size-focus-ring--));
         }
 
         nav {
@@ -419,7 +421,7 @@ export class PrimaryNav extends TrackedElement {
         .mobile-donate-link svg {
           height: calc(40 * var(--topnavUnit--));
           width: calc(40 * var(--topnavUnit--));
-          color: rgb(255, 0, 0);
+          color: var(--ia-color-brand-donate--);
         }
 
         .search-trigger {
@@ -495,9 +497,8 @@ export class PrimaryNav extends TrackedElement {
         }
 
         button.user-menu:hover,
-        button.user-menu:focus {
+        button.user-menu:focus-visible {
           color: var(--linkHoverColor);
-          outline: none;
         }
 
         .user-menu.active {
@@ -516,9 +517,8 @@ export class PrimaryNav extends TrackedElement {
           text-decoration: none;
           display: inline-flex;
         }
-        a.link-home:focus,
-        a.link-home:focus-visible {
-          outline-offset: 1px;
+        a.link-home {
+          color: var(--ia-color-text-inverse--);
         }
 
         @media only screen and (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) and (max-device-width: 905px) {
@@ -611,12 +611,9 @@ export class PrimaryNav extends TrackedElement {
             color: var(--lightTextColor);
           }
           .upload:active,
-          .upload:focus,
+          .upload:focus-visible,
           .upload:hover {
             color: var(--linkHoverColor);
-          }
-          .upload:focus-visible {
-            outline: none;
           }
 
           .upload svg {
