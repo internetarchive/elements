@@ -6,6 +6,7 @@ import { IAItemNavigator } from './ia-item-navigator';
 import './ia-item-navigator';
 import type { IAItemNavMenuSlider } from './ia-itemnav-menu-slider';
 import type { IAItemNavNoTheaterAvailable } from './ia-itemnav-no-theater-available';
+import type { IAStatusIndicator } from '@src/elements/ia-status-indicator/ia-status-indicator';
 import type {
   MenuProviderInterface,
   MenuShortcutInterface,
@@ -145,6 +146,160 @@ describe('IAItemNavigator', () => {
       }) as never,
     );
     expect(el.loaded).to.equal(true);
+  });
+
+  describe('loading state', () => {
+    const loadingArea = (el: IAItemNavigator) =>
+      el.shadowRoot?.querySelector('.loading-area');
+    const frame = (el: IAItemNavigator) =>
+      el.shadowRoot?.querySelector('#frame');
+    const reader = (el: IAItemNavigator) =>
+      el.shadowRoot?.querySelector('#reader');
+
+    test('shows a loading indicator in place of the reader until loaded', async () => {
+      const el = await fixture<IAItemNavigator>(
+        html`<ia-item-navigator>
+          <div slot="main">theater</div>
+        </ia-item-navigator>`,
+      );
+
+      const indicator = loadingArea(el)?.querySelector<IAStatusIndicator>(
+        'ia-status-indicator',
+      );
+      expect(indicator).to.exist;
+      expect(indicator?.mode).to.equal('loading');
+      expect(reader(el)?.classList.contains('hidden')).to.equal(true);
+      expect(frame(el)?.getAttribute('aria-busy')).to.equal('true');
+
+      el.loaded = true;
+      await el.updateComplete;
+
+      expect(loadingArea(el)).to.not.exist;
+      expect(reader(el)?.classList.contains('hidden')).to.equal(false);
+      expect(frame(el)?.hasAttribute('aria-busy')).to.equal(false);
+    });
+
+    test('brings the indicator back if the theater unloads', async () => {
+      const el = await fixture<IAItemNavigator>(
+        html`<ia-item-navigator loaded></ia-item-navigator>`,
+      );
+      expect(loadingArea(el)).to.not.exist;
+
+      el.loaded = false;
+      await el.updateComplete;
+
+      expect(loadingArea(el)?.querySelector('ia-status-indicator')).to.exist;
+    });
+
+    test('announces "Loading viewer" once, with a matching visible caption', async () => {
+      const el = await fixture<IAItemNavigator>(
+        html`<ia-item-navigator></ia-item-navigator>`,
+      );
+      const indicator = loadingArea(el)?.querySelector<IAStatusIndicator>(
+        'ia-status-indicator',
+      );
+      await indicator?.updateComplete;
+
+      // The indicator is the announced status; the caption repeats it for
+      // sighted users only, so a screen reader doesn't hear it twice.
+      const status = indicator?.shadowRoot?.querySelector('[role="status"]');
+      expect(status?.querySelector('title')?.textContent).to.equal(
+        'Loading viewer',
+      );
+      const caption = loadingArea(el)?.querySelector('.loading-caption');
+      expect(caption?.textContent).to.equal('Loading viewer');
+      expect(caption?.getAttribute('aria-hidden')).to.equal('true');
+    });
+
+    test('the no-theater placeholder clears the indicator on its own', async () => {
+      const el = await fixture<IAItemNavigator>(
+        html`<ia-item-navigator
+          identifier="abc123"
+          .viewAvailable=${false}
+        ></ia-item-navigator>`,
+      );
+      await el.updateComplete;
+
+      expect(el.loaded).to.equal(true);
+      expect(loadingArea(el)).to.not.exist;
+    });
+
+    test('a slotted loading view replaces the default entirely', async () => {
+      const el = await fixture<IAItemNavigator>(
+        html`<ia-item-navigator>
+          <div slot="loading" id="custom-loading">Fetching the book…</div>
+        </ia-item-navigator>`,
+      );
+
+      const slot = loadingArea(el)?.querySelector(
+        'slot[name="loading"]',
+      ) as HTMLSlotElement;
+      expect(slot.assignedElements().map((n) => n.id)).to.deep.equal([
+        'custom-loading',
+      ]);
+      // Fallback content stays in the shadow tree but isn't rendered once
+      // something is slotted, so the default doesn't show alongside it.
+      const fallbackIndicator = slot.querySelector('ia-status-indicator')!;
+      const fallbackCaption = slot.querySelector('.loading-caption')!;
+      expect(fallbackIndicator.checkVisibility()).to.equal(false);
+      expect(fallbackCaption.checkVisibility()).to.equal(false);
+      expect(el.querySelector('#custom-loading')!.checkVisibility()).to.equal(
+        true,
+      );
+
+      el.loaded = true;
+      await el.updateComplete;
+      expect(loadingArea(el)).to.not.exist;
+    });
+
+    test('a slotted indicator can carry its own center glyph', async () => {
+      const el = await fixture<IAItemNavigator>(
+        html`<ia-item-navigator>
+          <ia-status-indicator slot="loading" mode="loading">
+            <span slot="icon" id="book-glyph"></span>
+          </ia-status-indicator>
+        </ia-item-navigator>`,
+      );
+      const indicator = el.querySelector<IAStatusIndicator>(
+        'ia-status-indicator',
+      )!;
+      // The icon slot reports its content on slotchange, a task later.
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      await indicator.updateComplete;
+
+      const slot = loadingArea(el)?.querySelector(
+        'slot[name="loading"]',
+      ) as HTMLSlotElement;
+      expect(slot.assignedElements()).to.deep.equal([indicator]);
+      expect(
+        indicator.shadowRoot?.querySelector('.loading-indicator.icon-ring'),
+      ).to.exist;
+      expect(indicator.shadowRoot?.querySelector('.loading-dots')).to.not.exist;
+    });
+
+    test('a slotted indicator can show a mediatype glyph', async () => {
+      const el = await fixture<IAItemNavigator>(
+        html`<ia-item-navigator>
+          <ia-status-indicator
+            slot="loading"
+            mode="loading"
+            mediatype="texts"
+          ></ia-status-indicator>
+        </ia-item-navigator>`,
+      );
+      const indicator = el.querySelector<IAStatusIndicator>(
+        'ia-status-indicator',
+      )!;
+      await indicator.updateComplete;
+
+      const slot = loadingArea(el)?.querySelector(
+        'slot[name="loading"]',
+      ) as HTMLSlotElement;
+      expect(slot.assignedElements()).to.deep.equal([indicator]);
+      expect(indicator.shadowRoot?.querySelector('.center .ia-icon svg')).to
+        .exist;
+      expect(indicator.shadowRoot?.querySelector('.loading-dots')).to.not.exist;
+    });
   });
 
   test('slotChange re-dispatches a slotChange event with the slot type', async () => {
