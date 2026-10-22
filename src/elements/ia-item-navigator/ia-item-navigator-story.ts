@@ -493,14 +493,27 @@ export class IAItemNavigatorStory extends LitElement {
             ${this.toggleRow('Fullscreen', 'fullscreen')}
             ${this.toggleRow('Animate', 'animationsOn')}
           </table>
-          <p class="hint">
-            Turn "Loaded" off to see the loading view. "Mediatype known" swaps
-            its dots for the selected file's glyph, and "Custom loading view"
-            slots a consumer's own indicator in its place. Turn "View available"
-            off to show the no-theater placeholder. Open "Viewable Files" and
-            use the sort button in its header. Narrow the demo below 600px to
-            see the drawer switch from shift to overlay.
-          </p>
+          <ul class="hint">
+            <li>Turn "Loaded" off to see the loading view.</li>
+            <li>
+              "Mediatype known" swaps the loading view's dots for the selected
+              file's glyph.
+            </li>
+            <li>
+              "Custom loading view" slots a consumer's own indicator in place of
+              the default.
+            </li>
+            <li>
+              Turn "View available" off to show the no-theater placeholder.
+            </li>
+            <li>
+              Open "Viewable Files" and use the sort button in its header.
+            </li>
+            <li>
+              Narrow the demo below 600px to see the drawer switch from shift to
+              overlay.
+            </li>
+          </ul>
         </div>
 
         <div slot="usage-notes">
@@ -702,6 +715,8 @@ export class IAItemNavigatorStory extends LitElement {
       .hint {
         font-size: 0.78rem;
         color: #555;
+        margin: 0.5rem 0;
+        padding-left: 1.25rem;
       }
 
       table {
