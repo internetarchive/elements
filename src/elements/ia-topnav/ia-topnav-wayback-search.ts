@@ -33,6 +33,13 @@ export class IATopNavWaybackSearch extends IAWaybackSearchForm {
           border-radius: calc(20 * var(--topnavUnit--));
         }
 
+        /* Inside the field, which clips anything drawn outside it. */
+        input:focus-visible {
+          outline: var(--ia-size-focus-ring--) solid
+            var(--ia-color-border-focus--);
+          outline-offset: calc(-1 * var(--ia-size-focus-ring--));
+        }
+
         .search-field svg {
           width: calc(24 * var(--topnavUnit--));
           height: calc(24 * var(--topnavUnit--));

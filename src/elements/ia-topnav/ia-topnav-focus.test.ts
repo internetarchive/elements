@@ -4,6 +4,7 @@ import { html } from 'lit';
 
 import type { IATopNav } from './ia-topnav';
 import './ia-topnav';
+import './ia-topnav-wayback-search';
 
 /** Every focusable, rendered element inside the topnav, through its shadow roots. */
 function focusables(root: ShadowRoot | Element): HTMLElement[] {
@@ -43,5 +44,14 @@ describe('ia-topnav focus', () => {
       }
     }
     expect(missing, 'stops with no focus ring').to.deep.equal([]);
+  });
+
+  test('shows the focus ring in the Wayback search field', async () => {
+    const el = await fixture(
+      html`<ia-topnav-wayback-search></ia-topnav-wayback-search>`,
+    );
+    const input = el.shadowRoot?.querySelector('input') as HTMLInputElement;
+    input.focus();
+    expect(getComputedStyle(input).outlineStyle).to.equal('solid');
   });
 });

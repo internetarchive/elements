@@ -213,6 +213,12 @@ export default class DropdownMenu extends TrackedElement {
           padding: calc(10 * var(--topnavUnit--)) calc(20 * var(--topnavUnit--));
         }
 
+        /* A row's ring sits inside it: the scrolling list would clip one
+           drawn outside. */
+        a {
+          --topnav-focus-offset: calc(-1 * var(--ia-size-focus-ring--));
+        }
+
         .info-item {
           font-size: 0.8em;
           color: var(--dropdownMenuInfoItem);
@@ -252,7 +258,7 @@ export default class DropdownMenu extends TrackedElement {
             transition: opacity 0.2s ease-in-out;
             font-size: calc(14 * var(--topnavUnit--));
             /* The menu spec's dark panel, one family with the dropdown (D-41). */
-            border-radius: var(--ia-radius-default--);
+            border-radius: calc(4 * var(--topnavUnit--));
             background: var(--ia-color-surface-inverse--);
             box-shadow: var(--ia-shadow-overlay--);
           }
@@ -288,11 +294,16 @@ export default class DropdownMenu extends TrackedElement {
             display: flex;
             align-items: center;
             box-sizing: border-box;
-            min-height: var(--ia-size-control-sm--);
+            min-height: calc(30 * var(--topnavUnit--));
             padding: calc(5 * var(--topnavUnit--))
               calc(20 * var(--topnavUnit--));
             color: var(--ia-color-text-inverse--);
-            --topnav-focus-offset: calc(-1 * var(--ia-size-focus-ring--));
+          }
+
+          /* In flow beside the label: absolute in a flex row lands it over
+             the label's start. */
+          .callout {
+            position: static;
           }
 
           .info-item {
@@ -332,7 +343,7 @@ export default class DropdownMenu extends TrackedElement {
         /* Every row is at least 44px tall to a finger. */
         @media (pointer: coarse) {
           a {
-            min-height: var(--ia-size-target-min--);
+            min-height: calc(44 * var(--topnavUnit--));
           }
         }
       `,
