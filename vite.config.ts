@@ -3,7 +3,6 @@ import { defineConfig } from 'vitest/config';
 import path from 'path';
 import { playwright } from '@vitest/browser-playwright';
 import type { Plugin } from 'vite';
-import { docChrome } from './demo/docs/chrome-plugin';
 
 /**
  * Adds `/__test__/fail-once.js?id=<id>` to the dev server for the lazy-loader
@@ -47,8 +46,6 @@ const exclude = ['**/node_modules/**', '**/dist/**', '.claude/**'];
 // https://vitejs.dev/config/
 export default defineConfig({
   resolve: { alias },
-  // The dev server's pages get their header written in, as the build's do.
-  plugins: [docChrome()],
   test: {
     coverage: {
       // Stories are demo scaffolding, not shipped code. A demo test loads one
@@ -90,7 +87,7 @@ export default defineConfig({
         test: {
           name: 'node',
           environment: 'node',
-          include: ['src/**/*.node.test.ts'],
+          include: ['src/**/*.node.test.ts', 'demo/**/*.node.test.ts'],
           exclude,
         },
       },

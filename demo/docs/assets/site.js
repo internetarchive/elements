@@ -46,7 +46,7 @@ const tocItems = (entries, page) => entries.map(e => `<li>${e.children.length
   : `<a href="#${e.id}">${escapeHtml(e.title)}</a>`}</li>`).join('');
 
 /**
- * Wires the header that demo/docs/chrome-plugin.ts writes into every page:
+ * Wires the header written into every page's HTML:
  * keeps the current tab in view on a narrow screen, and publishes the header's
  * height for what sticks under it.
  */
@@ -71,9 +71,9 @@ export function wireHeader() {
 
 export function mountChrome(current) {
   // The pages are tabs under the header; the sidebar lists the current page's
-  // sections. The header, the sidebar and the shell around them are already in
-  // the HTML (demo/docs/chrome-plugin.ts); this fills in the sidebar. A page
-  // with no sections has no sidebar.
+  // sections. The header, the sidebar and the shell around them are written
+  // into each page's HTML, so the page paints in its final layout; this fills
+  // in the sidebar. A page with no sections has no sidebar.
   const main = document.querySelector('main');
   const shell = main.parentElement;
   const toolbar = main.querySelector(':scope > .doc-toolbar');
