@@ -34,15 +34,18 @@ beside the fill, the goal after it.
 
 ### The live component
 
-`ia-donation-thermometer` draws its own colors, which miss the system's donate green:
+`ia-donation-thermometer` takes its defaults from the tokens: the fill is
+`--ia-color-action-donate-fill`, the track `--ia-color-action-donate-subtle`, the radius
+`--ia-radius-pill`, the goal padding `0 var(--ia-space-2)`, and 2rem tall. Its own
+variables override each:
 
-| Variable | Live default | This system |
-| --- | --- | --- |
-| `--ia-donation-thermometer-fill-color` | `#23765d` | `--ia-color-action-donate-fill` (`#20705a`) |
-| `--ia-donation-thermometer-track-color` | `#b8f5e2` | `--ia-color-action-donate-subtle`, the same mint |
-| `--ia-donation-thermometer-height` | 20px | 2rem |
-| `--ia-donation-thermometer-border-radius` | 9999px | `--ia-radius-pill` |
-| `--ia-donation-thermometer-goal-padding` | `0 10px` | `0 var(--ia-space-2)` |
+| Variable | Default |
+| --- | --- |
+| `--ia-donation-thermometer-fill-color` | `--ia-color-action-donate-fill` (`#20705a`) |
+| `--ia-donation-thermometer-track-color` | `--ia-color-action-donate-subtle` (`#b8f5e2`) |
+| `--ia-donation-thermometer-height` | 2rem |
+| `--ia-donation-thermometer-border-radius` | `--ia-radius-pill` |
+| `--ia-donation-thermometer-goal-padding` | `0 var(--ia-space-2)` |
 
 Set them on the element (or an ancestor; these are read straight, not through the theme
 layer).
@@ -69,10 +72,9 @@ gains a heading level.
 
 ### The live component
 
-`ia-donation-section` sizes everything from `--ia-donation-section-base-font-size`
-(10px), so its badge is 24px and its text 18px — off the type scale, between `lg` and
-`xl`. Its badge fill is `--mid-gray` (`#333`). The badge eases on a 0.25s transition,
-off the motion scale.
+`ia-donation-section` takes its badge colors, weights and motion from the tokens. It
+still sizes everything from `--ia-donation-section-base-font-size` (10px), so its badge
+is 24px and its text 18px — off the type scale, between `lg` and `xl`.
 
 ## Don't
 

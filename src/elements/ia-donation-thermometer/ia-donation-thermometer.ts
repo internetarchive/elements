@@ -265,28 +265,28 @@ export class IADonationThermometer extends LitElement {
         :host {
           --donation-thermometer-height--: var(
             --ia-donation-thermometer-height,
-            20px
+            2rem
           );
           --donation-thermometer-fill-color--: var(
             --ia-donation-thermometer-fill-color,
-            #23765d
+            var(--ia-color-action-donate-fill--)
           );
           --donation-thermometer-track-color--: var(
             --ia-donation-thermometer-track-color,
-            #b8f5e2
+            var(--ia-color-action-donate-subtle--)
           );
           --donation-thermometer-border--: var(
             --ia-donation-thermometer-border,
-            1px solid var(--donation-thermometer-fill-color--)
+            var(--ia-size-border-width--) solid
+              var(--donation-thermometer-fill-color--)
           );
-          /* Large enough to round any height into a pill */
           --donation-thermometer-border-radius--: var(
             --ia-donation-thermometer-border-radius,
-            9999px
+            var(--ia-radius-pill--)
           );
           --donation-thermometer-value-on-fill-color--: var(
             --ia-donation-thermometer-value-on-fill-color,
-            var(--true-white)
+            var(--ia-color-action-donate-text--)
           );
           --donation-thermometer-value-on-track-color--: var(
             --ia-donation-thermometer-value-on-track-color,
@@ -295,7 +295,7 @@ export class IADonationThermometer extends LitElement {
           --donation-thermometer-goal-color--: var(--primary-text-color);
           --donation-thermometer-goal-padding--: var(
             --ia-donation-thermometer-goal-padding,
-            0 10px
+            0 var(--ia-space-2--)
           );
 
           display: block;
@@ -361,7 +361,7 @@ export class IADonationThermometer extends LitElement {
           width: max-content;
           display: flex;
           align-items: center;
-          font-weight: bold;
+          font-weight: var(--ia-font-weight-bold--);
           white-space: nowrap;
         }
 
@@ -384,7 +384,7 @@ export class IADonationThermometer extends LitElement {
           text-align: left;
           padding: var(--donation-thermometer-goal-padding--);
           text-transform: uppercase;
-          font-weight: bold;
+          font-weight: var(--ia-font-weight-bold--);
           color: var(--donation-thermometer-goal-color--);
         }
       `,

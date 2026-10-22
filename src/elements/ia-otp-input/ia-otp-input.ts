@@ -218,18 +218,34 @@ export class IAOTPInput extends LitElement {
           display: flex;
           flex-direction: row;
           flex-wrap: nowrap;
-          gap: 5px;
+          gap: var(--ia-space-1--);
         }
 
+        /* Each box is an input, so it follows the input spec: the control
+           border, the default radius and the shared focus ring. */
         input {
+          box-sizing: content-box;
           color: var(--primary-text-color--);
+          background-color: var(--ia-color-surface-raised--);
           font-size: var(--font-size-lg--);
           width: var(--font-size-lg--);
-          font-weight: bold;
+          font-weight: var(--ia-font-weight-bold--);
           height: calc(var(--font-size-lg--) + 2rem);
           text-align: center;
           text-transform: uppercase;
-          padding: 0;
+          padding: 0 var(--ia-space-1--);
+          border: var(--ia-border-control--);
+          border-radius: var(--ia-radius-default--);
+        }
+
+        input:hover {
+          border-color: var(--ia-color-text-primary--);
+        }
+
+        input:focus-visible {
+          outline: var(--ia-size-focus-ring--) solid
+            var(--ia-color-border-focus--);
+          outline-offset: var(--ia-size-focus-ring-offset--);
         }
       `,
     ];

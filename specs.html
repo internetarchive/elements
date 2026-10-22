@@ -811,11 +811,16 @@ const ELEMENTS = {
   loading: ['ia-status-indicator'],
   topnav: ['ia-topnav'],
 };
+/* Where an element matches part of its spec, what it covers and what is still CSS only. */
+const MATCHED = {
+  button: `It matches the intents, sizes and states here. The icon-only, circle, block,
+    floating and stacked shapes are still CSS only, and stay on this page until it has them.`,
+};
 for (const [id, tags] of Object.entries(ELEMENTS)) {
   const note = document.createElement('p');
   note.className = 'doc-note';
   note.innerHTML = `Element: ${tags.map(t => `<a href="index.html#elem-${t}"><code>&lt;${t}&gt;</code></a>`).join(', ')}.
-    Where the two differ, this section is the target.`;
+    ${MATCHED[id] ?? 'Where the two differ, this section is the target.'}`;
   document.querySelector(`#${id} > .doc-section__title`)?.after(note);
 }
 
