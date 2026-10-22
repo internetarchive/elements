@@ -76,6 +76,24 @@ gains a heading level.
 still sizes everything from `--ia-donation-section-base-font-size` (10px), so its badge
 is 24px and its text 18px — off the type scale, between `lg` and `xl`.
 
+## Amount picker
+
+The amounts a donor picks from, one button each, and a custom amount field. Its own
+look, which stands apart from the system's selected tiers: the chosen amount is gold
+([D-62](../DECISIONS.md#d-62)).
+
+| Part | Token |
+| --- | --- |
+| Amount | `--ia-color-donation-amount-fill` (white), `--ia-color-donation-amount-text`, bold |
+| Edge | 1px `--ia-color-donation-amount-border` (`#333`), `--ia-radius-default` |
+| Chosen amount | `--ia-color-donation-amount-selected-fill` (gold, `#f9bf3b`), `--ia-color-donation-amount-selected-text` (8.40:1) |
+| Focus | the shared ring, on keyboard focus |
+| Custom amount field | `var(--ia-border-control)` |
+
+Each amount is a radio, so the chosen one carries `aria-checked` as well as the gold:
+the color is never the only cue. `ia-donation-edit-donation` reads these through its own
+`--ia-donation-edit-button-*` variables, which override each.
+
 ## Don't
 
 - Don't draw a donate fill in any green but `--ia-color-action-donate-fill`.

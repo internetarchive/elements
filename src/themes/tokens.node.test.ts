@@ -214,6 +214,26 @@ for (const type of ['web', 'texts', 'movies', 'audio', 'software', 'image']) {
     `open ${type} menu in the topnav`,
   );
 }
+// The donation amount picker: its amounts, the chosen one in gold, and the
+// edge that marks each amount as a control.
+add(
+  'color.donation.amount-text',
+  'color.donation.amount-fill',
+  TEXT,
+  'an amount in the donation picker',
+);
+add(
+  'color.donation.amount-selected-text',
+  'color.donation.amount-selected-fill',
+  TEXT,
+  'the chosen amount, on gold',
+);
+add(
+  'color.donation.amount-border',
+  'color.surface.page',
+  UI,
+  'an amount button edge',
+);
 // The dropdown panel's selected option, and the collection tile.
 add(
   'color.text.inverse',

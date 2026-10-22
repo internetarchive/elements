@@ -667,7 +667,7 @@ export class IADonationEditDonation extends LitElement {
 
           --donation-edit-button-border-color--: var(
             --ia-donation-edit-button-border-color,
-            var(--mid-gray)
+            var(--ia-color-donation-amount-border--)
           );
           --donation-edit-button-grid-gap--: var(
             --ia-donation-edit-button-grid-gap,
@@ -679,15 +679,15 @@ export class IADonationEditDonation extends LitElement {
           );
           --donation-edit-button-font-color--: var(
             --ia-donation-edit-button-font-color,
-            var(--ia-color-text-primary--)
+            var(--ia-color-donation-amount-text--)
           );
           --donation-edit-button-selected-font-color--: var(
             --ia-donation-edit-button-selected-font-color,
-            var(--ia-color-text-primary--)
+            var(--ia-color-donation-amount-selected-text--)
           );
           --donation-edit-button-selected-color--: var(
             --ia-donation-edit-button-selected-color,
-            #f9bf3b
+            var(--ia-color-donation-amount-selected-fill--)
           );
           --donation-edit-button-focused-outline-color--: var(
             --ia-donation-edit-button-focused-outline-color,
@@ -695,7 +695,7 @@ export class IADonationEditDonation extends LitElement {
           );
           --donation-edit-button-color--: var(
             --ia-donation-edit-button-color,
-            var(--true-white)
+            var(--ia-color-donation-amount-fill--)
           );
           --donation-edit-cover-fees-font-size--: var(
             --ia-donation-edit-cover-fees-font-size,
