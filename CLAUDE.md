@@ -22,6 +22,10 @@ spacing and the rest. `src/themes/tokens.ts` is generated from it and gitignored
 components read tokens as private aliases (`var(--ia-color-text-primary--)`) via
 `themeStyles`. See README "Design tokens".
 
+The design system's docs are in `docs/`, and the demo's pages for them (every
+`*.html` at the root besides `index.html`, plus `demo/docs/`) are demo-only. See
+[docs/README.md](docs/README.md).
+
 CI runs `lint`, `typecheck` and `test` as separate jobs. Nothing but `typecheck`
 checks types: vitest transpiles without checking and eslint isn't type-aware
 here, so run it before pushing rather than finding out from the PR.

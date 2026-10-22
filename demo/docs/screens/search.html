@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Search Results — Internet Archive Elements screens</title>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/ia.css">
+<style>body { margin: 0; }</style>
+</head>
+<body class="ia-page">
+<a class="ia-skip-link" href="#maincontent">Skip to Main Content</a>
+<header class="ia-topnav ia-inverse" id="topnav"></header>
+
+<main id="maincontent" tabindex="-1">
+  <div class="ia-search-band">
+    <div class="ia-search-band__inner">
+      <h1 class="ia-search-band__title ia-type-page-title">Search</h1>
+      <div class="ia-search-band__bar" id="search-bar"></div>
+      <div class="ia-search-band__links"><a class="ia-link" href="#maincontent">Advanced Search</a></div>
+      <div class="ia-search-band__actions">
+        <button class="ia-button ia-button--sm ia-button--ghost" type="button" data-icon-before="share" data-icon-size="sm">Share</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ia-shell">
+    <div id="search-type"></div>
+
+    <div class="ia-facets" role="tabpanel" id="results-panel" aria-labelledby="st-0" style="margin-block-start:var(--ia-space-4)">
+      <div class="ia-facets__layout">
+        <aside class="ia-facet-rail" aria-label="Filters" id="rail"></aside>
+        <div class="ia-facets__results">
+          <section class="ia-suggestions" aria-labelledby="suggestions-title">
+            <div class="ia-carousel">
+              <div class="ia-carousel__header">
+                <h2 class="ia-type-section" id="suggestions-title" style="margin:0">Look Inside</h2>
+                <div class="ia-carousel__controls">
+                  <button class="ia-button ia-button--ghost ia-button--icon ia-button--sm" type="button" data-carousel="prev" aria-label="Previous Page" data-icon="chevron-left"></button>
+                  <button class="ia-button ia-button--ghost ia-button--icon ia-button--sm" type="button" data-carousel="next" aria-label="Next Page" data-icon="chevron-right"></button>
+                </div>
+              </div>
+              <ul class="ia-carousel__viewport" id="suggestions" tabindex="0" aria-label="Look Inside, scrollable"></ul>
+            </div>
+          </section>
+          <h2 class="ia-results-heading" aria-live="polite"><span class="ia-results-heading__scope" id="scope">All</span>1,228 Results</h2>
+          <div id="sort-bar"></div>
+          <div class="ia-tile-grid" id="results" style="margin-block-start:var(--ia-space-4)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script type="module">
+import { tileThumb, tileStats, topnavMarkup, facetRows, facetGroup, facetRailHeader, wireFacets, sortBarMarkup, searchBarMarkup,
+         searchTypeTabs, wireTabs, wireCarousels, hydrateIcons } from '../assets/site.js';
+
+// Live hides the topnav's search here: the page has its own bar.
+document.getElementById('topnav').innerHTML = topnavMarkup('topnav', false, { search: false });
+document.getElementById('sort-bar').innerHTML = sortBarMarkup('sort', 'Relevance');
+document.getElementById('search-bar').innerHTML = searchBarMarkup('main', { value: 'buster keaton' });
+document.getElementById('search-type').innerHTML = searchTypeTabs('st', 'results-panel');
+wireTabs(document.getElementById('search-type'));
+// One setting, two controls: the tabs and the search bar's dropdown always agree.
+{
+  const picker = document.getElementById('main-type');
+  const tabs = [...document.querySelectorAll('#search-type [role=tab]')];
+  document.getElementById('search-type').addEventListener('click', e => {
+    const t = e.target.closest('[role=tab]');
+    if (t) picker.value = document.getElementById('scope').textContent = t.textContent;
+  });
+  picker.addEventListener('change', () => tabs.find(t => t.textContent === picker.value)?.click());
+}
+
+// First ten results for "buster keaton", as the live search page returned them.
+const RESULTS = [
+  ['TheGeneral_201312', '"The General" (1926) starring Buster Keaton', '', 'movies', 31959, 107, 3],
+  ['busterkeaton00robi', 'Buster Keaton', 'Robinson, David, 1930-', 'texts', 456, 19, 0],
+  ['cig_0430-Salt_Lake_City_History_Minute_-_Buster_Keaton', 'Salt Lake City History Minute - Buster Keaton', 'SLCTV', 'movies', 216, 0, 0],
+  ['my-movie_202208', '"Seven Chances" (1925) starring Buster Keaton', '', 'movies', 5492, 27, 1],
+  ['mymovie_202004', '"The Navigator" (1924) starring Buster Keaton', '', 'movies', 17425, 40, 1],
+  ['MyMovie_20190318', '"Sherlock Jr." (1924) starring Buster Keaton', '', 'movies', 29454, 123, 1],
+  ['OneWeek512kb', 'One Week 512kb', 'Buster Keaton', 'movies', 1759, 16, 1],
+  ['yorkmba99_hotmail_Vids', '"The Saphead" (1920) starring Buster Keaton', '', 'movies', 12960, 13, 0],
+  ['SteamboatBillJr_201411', '"Steamboat Bill, Jr." (1928) starring Buster Keaton', '', 'movies', 8160, 33, 1],
+  ['GoodNightNurse1918', 'GOOD NIGHT, NURSE! (1918) -- Roscoe Arbuckle, Buster Keaton, Al St. John',
+   'Wm. Thomas Sherman', 'movies', 1920, 9, 0]
+];
+const compact = n => n >= 1000 ? (n / 1000).toFixed(n >= 10000 ? 0 : 1).replace(/\.0$/, '') + 'K' : String(n);
+document.getElementById('results').replaceChildren(...RESULTS.map(([id, title, by, kind, v, f, r]) => {
+  const tile = document.createElement('article');
+  tile.className = 'ia-tile ia-tile--item';
+  tile.innerHTML = `
+    <a class="ia-tile__link" href="#maincontent">
+      <h3 class="ia-tile__title">${title}</h3>
+      ${by ? `<p class="ia-tile__creator">by ${by}</p>` : ''}
+    </a>
+    ${tileStats(kind, compact(v), f, r)}`;
+  tile.prepend(tileThumb(id, kind));
+  return tile;
+}));
+
+// Live's group order, six values each; the histogram first.
+const more = what => `<button class="ia-button ia-button--link ia-facet-more" type="button" aria-haspopup="dialog">Show More ${what}</button>`;
+const group = (name, title, rows, plural, links) => facetGroup(`f-${name}`, title, facetRows(name, rows, { links }) + more(plural));
+// A representative distribution, not data: the histogram bars are decorative.
+const bars = [1, 2, 6, 12, 22, 30, 26, 14, 8, 5, 4, 3, 4, 6, 9, 12, 16, 22, 28, 34, 30, 24, 18, 12]
+  .map(h => `<span class="ia-facet-histogram__bar" style="block-size:${h / 34 * 100}%"></span>`).join('');
+document.getElementById('rail').innerHTML = facetRailHeader('rail-body') + `
+  <div class="ia-facet-rail__body" id="rail-body">
+    <fieldset class="ia-facet-group">
+      <legend class="ia-facet-group__legend ia-type-subsection">Year Published</legend>
+      <div class="ia-facet-histogram" aria-hidden="true">${bars}</div>
+      <div class="ia-facet-range">
+        <label class="ia-visually-hidden" for="yr-from">From Year</label>
+        <input class="ia-input ia-input--sm" id="yr-from" inputmode="numeric" value="1901">
+        <span aria-hidden="true">–</span>
+        <label class="ia-visually-hidden" for="yr-to">To Year</label>
+        <input class="ia-input ia-input--sm" id="yr-to" inputmode="numeric" value="2025">
+      </div>
+    </fieldset>
+    ${group('mediatype', 'Media Type', [['Movies', 913], ['Texts', 158], ['Audio', 83], ['Image', 60], ['Software', 5], ['Data', 3]], 'Media Types')}
+    ${group('year', 'Year', [['1926', 41], ['1925', 37], ['1924', 33], ['1928', 30], ['1927', 28], ['1923', 21]], 'Years')}
+    ${group('subject', 'Subject', [['Buster Keaton', 524], ['Charlie Chaplin', 200], ['Harold Lloyd', 185], ['Fatty Arbuckle', 166], ['1920s', 158], ['Comedy', 140]], 'Subjects')}
+    ${group('collection', 'Collection', [['Community Video', 455], ['Movies', 244], ['Feature Films', 222], ['Silent Films', 130], ['Comedy Films', 77], ['Short Films', 61]], 'Collections', true)}
+    ${group('creator', 'Creator', [['Buster Keaton', 301], ['Roscoe Arbuckle', 88], ['Edward F. Cline', 54], ['Clyde Bruckman', 32], ['SLCTV', 21], ['Charles Reisner', 12]], 'Creators')}
+    ${group('language', 'Language', [['English', 477], ['Spanish', 40], ['Handwritten English', 19], ['French', 10], ['German', 10], ['Italian', 6]], 'Languages')}
+  </div>`;
+wireFacets();
+
+// Look Inside: full-text matches, each tile with its passage.
+const SUGGESTIONS = [
+  ['busterkeaton00robi', 'Buster Keaton', 'the films of {Buster Keaton} were made between'],
+  ['keatonbusterkeat00blesrich', 'Keaton', 'when {Keaton} left Arbuckle in 1920'],
+  ['silentclowns00kerr', 'The Silent Clowns', 'Chaplin, Lloyd and {Keaton} each built'],
+  ['photoplay2930chic', 'Photoplay', 'a new {Buster Keaton} comedy, The General'],
+  ['motionpicturenew35moti', 'Motion Picture News', '{Keaton} has finished shooting College']
+];
+document.getElementById('suggestions').innerHTML = SUGGESTIONS.map(([id, title, snippet]) => `<li>
+  <article class="ia-tile ia-tile--item" data-id="${id}">
+    <a class="ia-tile__link" href="#maincontent"><h3 class="ia-tile__title">${title}</h3></a>
+    <p class="ia-tile__snippet">… ${snippet.replace(/\{(.+?)\}/g, '<mark>$1</mark>')} …</p>
+  </article></li>`).join('');
+for (const tile of document.querySelectorAll('#suggestions .ia-tile')) tile.prepend(tileThumb(tile.dataset.id, 'texts'));
+wireCarousels();
+
+for (const f of document.querySelectorAll('form')) f.addEventListener('submit', e => e.preventDefault());
+hydrateIcons();
+</script>
+</body>
+</html>

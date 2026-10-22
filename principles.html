@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Principles — Internet Archive Elements</title>
+<link rel="stylesheet" href="demo/docs/assets/tokens.css">
+<link rel="stylesheet" href="demo/docs/assets/ia.css">
+<link rel="stylesheet" href="demo/docs/assets/site.css">
+<style>
+  /* Each principle: a live figure built from ia.css, then its number, title,
+     body and what it decides. The figure is illustration: inert and hidden. */
+  .principle {
+    display: flex; flex-direction: column; gap: var(--ia-space-2);
+    scroll-margin-block-start: calc(var(--doc-header-h, 8rem) + var(--doc-toolbar-h, 0px) + var(--ia-space-4));
+  }
+  .principle__figure {
+    display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+    gap: var(--ia-space-3);
+    min-block-size: 20rem;
+    margin-block-end: var(--ia-space-2);
+    padding: var(--ia-space-4);
+    border: var(--ia-border-card);
+    border-radius: var(--ia-radius-default);
+    background-color: var(--ia-color-surface-sunken);
+    overflow: hidden;
+  }
+  .principle__number {
+    font: var(--ia-font-weight-bold) var(--ia-font-size-sm)/var(--ia-font-line-height-tight) var(--ia-font-family-mono);
+    color: var(--ia-color-text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+  .principle p { margin: 0; }
+  .principle__label {
+    margin-block-start: var(--ia-space-2) !important;
+    font: var(--ia-font-weight-bold) var(--ia-font-size-xs)/var(--ia-font-line-height-tight) var(--ia-font-family-base);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--ia-color-text-secondary);
+  }
+  .principle__decides { font-size: var(--ia-font-size-sm); color: var(--ia-color-text-secondary); }
+  .principle-grid { display: grid; gap: var(--ia-space-8) var(--ia-space-6); margin-block-start: var(--ia-space-6); grid-template-columns: repeat(auto-fill, minmax(min(32rem, 100%), 1fr)); }
+
+  /* Figure parts. */
+  .pf-stack { display: flex; flex-direction: column; align-items: center; gap: var(--ia-space-1); }
+  .pf-caption {
+    font: var(--ia-font-weight-bold) var(--ia-font-size-xs)/var(--ia-font-line-height-tight) var(--ia-font-family-base);
+    text-transform: uppercase; letter-spacing: 0.05em; color: var(--ia-color-text-secondary);
+  }
+  .pf-card {
+    display: flex; flex-direction: column; gap: var(--ia-space-1);
+    inline-size: 13.5rem; padding: var(--ia-space-2);
+    border: var(--ia-border-card); border-radius: var(--ia-radius-default);
+    background-color: var(--ia-color-surface-raised);
+  }
+  .pf-card .ia-tile__stats { margin: 0; }
+  .pf-card .ia-tile__title { font-size: var(--ia-font-size-sm); }
+  .pf-page { inline-size: 26rem; border: var(--ia-border-card); border-radius: var(--ia-radius-default); overflow: hidden; background-color: var(--ia-color-surface-page); }
+  .pf-page__chrome { display: flex; align-items: center; gap: var(--ia-space-2); block-size: 3.6rem; padding-inline: var(--ia-space-2); background-color: var(--ia-color-surface-chrome); }
+  .pf-page__body { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--ia-space-1); padding: var(--ia-space-2); }
+  .pf-page__body span { block-size: 4.4rem; border-radius: var(--ia-radius-sm); background-color: var(--ia-color-surface-sunken); }
+  .pf-page__menu { position: absolute; inset-block-start: 0; inset-inline-end: var(--ia-space-2); display: flex; flex-direction: column; gap: var(--ia-space-1); padding: var(--ia-space-2); border-radius: var(--ia-radius-default); background-color: var(--ia-color-surface-inverse); box-shadow: var(--ia-shadow-overlay); }
+  .pf-page__menu i { display: block; inline-size: 6rem; block-size: 0.6rem; border-radius: var(--ia-radius-sm); background-color: var(--ia-color-text-inverse-secondary); }
+  .pf-rows { inline-size: 15rem; padding: var(--ia-space-1); border-radius: var(--ia-radius-default); background-color: var(--ia-color-surface-raised); }
+  .pf-rows--touch .ia-facet-row { min-block-size: var(--ia-size-target-min); }
+  .pf-hover { background-image: linear-gradient(var(--ia-color-hover-overlay), var(--ia-color-hover-overlay)); }
+  .pf-press { filter: brightness(0.8); transform: scale(var(--ia-motion-press-scale-default)); }
+  .pf-focus { outline: var(--ia-size-focus-ring) solid var(--ia-color-border-focus); outline-offset: var(--ia-size-focus-ring-offset); }
+  .pf-key {
+    display: inline-grid; place-content: center; min-inline-size: 4.4rem; block-size: 3.2rem; padding-inline: var(--ia-space-2);
+    border: var(--ia-border-control); border-block-end-width: 3px; border-radius: var(--ia-radius-default);
+    background-color: var(--ia-color-surface-raised); font: var(--ia-font-weight-bold) var(--ia-font-size-sm)/1 var(--ia-font-family-base);
+  }
+  .pf-skeleton { display: flex; flex-direction: column; gap: var(--ia-space-1); inline-size: 12rem; padding: var(--ia-space-2); border: var(--ia-border-card); border-radius: var(--ia-radius-default); background-color: var(--ia-color-surface-raised); }
+  .pf-field { inline-size: 13rem; }
+  .pf-field--hairline { border-color: var(--ia-color-palette-gray-300); }
+  .pf-ratio { font: var(--ia-font-weight-bold) var(--ia-font-size-sm)/var(--ia-font-line-height-tight) var(--ia-font-family-base); font-variant-numeric: tabular-nums; }
+  .pf-ratio--fail { color: var(--ia-color-text-danger); }
+  .pf-titles { display: flex; flex-direction: column; gap: var(--ia-space-1); inline-size: 24rem; }
+  .pf-titles p { padding: var(--ia-space-2); border: var(--ia-border-card); border-radius: var(--ia-radius-default); background-color: var(--ia-color-surface-raised); font-weight: var(--ia-font-weight-bold); line-height: var(--ia-font-line-height-tight); overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+<a class="doc-skip" href="#main">Skip to main content</a>
+<header class="doc-header">
+  <div class="doc-header__inner">
+    <button class="doc-menu-button" type="button" aria-expanded="false" aria-controls="doc-sidebar"><span data-icon="hamburger" data-icon-size="sm"></span>Sections</button>
+    <p class="doc-header__title">Internet Archive <span>elements</span></p>
+  </div>
+  <nav class="doc-tabs" aria-label="Design system">
+    <div class="ia-tabs">
+      <a class="ia-tab" href="principles.html" data-label="Principles" aria-current="page">Principles</a>
+      <a class="ia-tab" href="foundations.html" data-label="Foundations">Foundations</a>
+      <a class="ia-tab" href="index.html" data-label="Components">Components</a>
+      <a class="ia-tab" href="specs.html" data-label="Specs">Specs</a>
+      <a class="ia-tab" href="screens.html" data-label="Screens">Screens</a>
+      <a class="ia-tab" href="icons.html" data-label="Icons">Icons</a>
+      <a class="ia-tab" href="playground.html" data-label="Playground">Playground</a>
+    </div>
+  </nav>
+</header>
+<div class="doc-shell">
+<nav class="doc-sidebar" id="doc-sidebar" aria-label="On this page"></nav>
+<main class="doc-main" id="main">
+  <div class="doc-lede">
+    <h1 class="doc-h1">Principles</h1>
+    <div id="intro"></div>
+    <p class="ia-type-meta">
+      Rendered from <a href="https://github.com/internetarchive/elements/blob/main/docs/foundations/principles.md">docs/foundations/principles.md</a>,
+      so this page and the doc cannot disagree.
+    </p>
+  </div>
+
+  <section class="doc-section" id="principles">
+    <h2>Ten principles</h2>
+    <div class="principle-grid" id="cards"></div>
+  </section>
+
+  <section class="doc-section" id="tensions">
+    <h2>Tensions</h2>
+    <div id="tension-body"></div>
+  </section>
+</main>
+</div>
+
+<script type="module">
+import { mountChrome, escapeHtml, table, icon, facetRows, tileStats, BRAND, DOCS_URL } from './demo/docs/assets/site.js';
+import md from './docs/foundations/principles.md?raw';
+mountChrome('principles.html');
+
+/* One live figure per principle, from ia.css and the tokens, so the
+   illustrations can't drift from the system they illustrate. */
+const stack = (inner, caption) => `<div class="pf-stack">${inner}<span class="pf-caption">${caption}</span></div>`;
+const FIGURES = {
+  // The media type's color is on its glyph and nowhere else.
+  1: [['A Visit to the Library', 'texts', '4.9K', 35, 2], ['Live at the Fillmore', 'audio', '2.3K', 13, 1]]
+    .map(([title, kind, v, f, r]) => `<div class="pf-card"><span class="ia-tile__title">${title}</span>${tileStats(kind, v, f, r)}</div>`).join(''),
+  // The dark chrome and its dark menus around a light, neutral page.
+  2: `<div class="pf-page"><div class="pf-page__chrome"><img src="${BRAND['ia-logo-white']}" alt="" height="18"></div>
+      <div class="pf-page__body">${'<span></span>'.repeat(6)}<div class="pf-page__menu"><i></i><i></i><i></i></div></div></div>`,
+  // The same facet rows for a mouse and for a thumb.
+  3: stack(`<div class="pf-rows">${facetRows('pf-mouse', [['Texts', 812], ['Audio', 96]])}</div>`, 'Mouse · 30px') +
+     stack(`<div class="pf-rows pf-rows--touch">${facetRows('pf-touch', [['Texts', 812], ['Audio', 96]])}</div>`, 'Touch · 44px'),
+  // Rest, hover snapping in, press squeezing.
+  4: [['', 'Rest'], ['pf-hover', 'Hover'], ['pf-press', 'Press']]
+    .map(([cls, caption]) => stack(`<button class="ia-button ia-button--secondary ia-button--sm ${cls}" type="button">Favorite</button>`, caption)).join(''),
+  // A skeleton shaped like what is coming; a button that keeps its label while it works.
+  5: stack(`<div class="pf-skeleton"><div class="ia-skeleton" style="block-size:7rem"></div>
+       <div class="ia-skeleton" style="block-size:1.4rem"></div><div class="ia-skeleton" style="block-size:1.4rem;inline-size:60%"></div></div>`, 'Loading') +
+     stack(`<button class="ia-button ia-button--primary" type="button" aria-busy="true">Saving</button>`, 'Working'),
+  // Tab lands on a control and the ring shows.
+  6: `<span class="pf-key">Tab</span>${icon('chevron-right', { size: 'sm' })}<button class="ia-button ia-button--primary pf-focus" type="button">Save Changes</button>`,
+  // One selected look in two tiers: strong where the state is the content, soft among neutral options.
+  7: stack(`<label class="ia-choice"><input class="ia-choice__control" type="checkbox" checked><span class="ia-choice__label">Texts</span></label>`, 'Strong') +
+     stack(`<div class="ia-segmented ia-segmented--sm"><button class="ia-segmented__option" type="button" aria-checked="true" role="radio">Metadata</button><button class="ia-segmented__option" type="button" aria-checked="false" role="radio">Text Contents</button></div>`, 'Soft'),
+  // The bold selected tab keeps its width reserved, so nothing moves.
+  8: ['Uploads', 'Favorites'].map(chosen => `<div class="ia-tabs" style="inline-size:fit-content">${['Uploads', 'Loans', 'Favorites']
+       .map(t => `<button class="ia-tab" role="tab" aria-selected="${t === chosen}" data-label="${t}">${t}</button>`).join('')}</div>`).join(''),
+  // A control's edge clears 3:1; the live hairline doesn't.
+  9: stack(`<input class="ia-input pf-field" value="brewster" aria-label="Screen Name"><span class="pf-ratio">5.74:1</span>`, 'Spec · #666') +
+     stack(`<input class="ia-input pf-field pf-field--hairline" value="brewster" aria-label="Screen Name"><span class="pf-ratio pf-ratio--fail">1.61:1</span>`, 'Live · #ccc'),
+  // Any script, any direction, any length.
+  10: `<div class="pf-titles"><p dir="auto">أرشيف Prelinger للأفلام التاريخية</p><p dir="auto">東京の古地図コレクション</p>
+       <p dir="auto">Donaudampfschifffahrtsgesellschaftskapitänsmütze</p></div>`
+};
+
+/* The doc's links are relative to docs/foundations/, so they resolve against
+   the docs on GitHub. */
+const href = h => new URL(h, `${DOCS_URL}foundations/`).href;
+
+const inline = text => escapeHtml(text)
+  .replace(/`([^`]+)`/g, '<code>$1</code>')
+  .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+  .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+  .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, h) => `<a href="${href(h)}">${label}</a>`);
+
+/* Blank-line-separated blocks; a block is a paragraph, a "> " quote or a table. */
+const blocks = text => text.trim().split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
+const paragraph = b => `<p>${inline(b.replace(/\n/g, ' '))}</p>`;
+const cells = row => row.trim().replace(/^\||\|$/g, '').split('|').map(c => inline(c.trim()));
+
+{
+  // Split on level-2 headings: [intro, title, body, title, body, …].
+  const [head, ...rest] = md.split(/^## (.+)$/m);
+  const intro = head.replace(/^# .+$/m, '');
+  document.getElementById('intro').innerHTML = blocks(intro).map(paragraph).join('');
+
+  const principles = [];
+  let tensions = '';
+  for (let i = 0; i < rest.length; i += 2) {
+    const m = rest[i].match(/^(\d+)\.\s+(.+)$/);
+    if (m) principles.push({ n: m[1], title: m[2], body: rest[i + 1] });
+    else if (rest[i] === 'Tensions') tensions = rest[i + 1];
+  }
+
+  document.getElementById('cards').innerHTML = principles.map(p => {
+    const body = blocks(p.body).map(b => b.startsWith('>')
+      ? `<p class="principle__label">Decides</p>
+         <p class="principle__decides">${inline(b.replace(/^>\s?/gm, '').replace(/^\*\*Decides:\*\*\s*/, '').replace(/\n/g, ' '))}</p>`
+      : paragraph(b)).join('');
+    return `<article class="principle" id="p-${p.n}">
+      ${FIGURES[p.n] ? `<div class="principle__figure" aria-hidden="true" inert>${FIGURES[p.n]}</div>` : ''}
+      <span class="principle__number">${p.n.padStart(2, '0')}</span>
+      <h3 class="ia-type-section">${inline(p.title)}</h3>
+      ${body}
+    </article>`;
+  }).join('');
+
+  document.getElementById('tension-body').innerHTML = blocks(tensions).map(b => {
+    if (!b.startsWith('|')) return paragraph(b);
+    const [headRow, , ...rows] = b.split('\n');
+    return table(cells(headRow), rows.map(cells));
+  }).join('');
+}
+
+if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+</script>
+</body>
+</html>
