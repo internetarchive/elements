@@ -33,8 +33,11 @@ export class IAIconLabel extends LitElement {
       }
 
       :host(.selected) {
-        background-color: var(--selectedBgColor, #fff);
-        color: var(--selectedTextColor, #2c2c2c);
+        background-color: var(
+          --selectedBgColor,
+          var(--ia-color-selected-soft-fill-inverse--)
+        );
+        color: var(--selectedTextColor, var(--ia-color-text-inverse--));
       }
 
       :host(.invert-icon-at-selected.selected) slot[name='icon'] {

@@ -1168,7 +1168,8 @@ describe('IA Combo Box', () => {
       const { width, height } = svg.getBoundingClientRect();
       expect(width).to.be.closeTo(fontSize * 0.875, 0.01);
       expect(height).to.be.closeTo(fontSize * 0.875, 0.01);
-      expect(getComputedStyle(svg).fill).to.equal('rgb(0, 0, 0)');
+      // The icon's color is the primary text color, which the glyph fills with.
+      expect(getComputedStyle(svg).fill).to.equal('rgb(44, 44, 44)');
     });
 
     test('draws the clear glyph at 1em, and lets a part rule recolor it', async () => {
