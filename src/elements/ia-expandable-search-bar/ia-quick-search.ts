@@ -9,6 +9,7 @@ import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 
 import type { QuickSearchEntry } from './models';
+import { tokenStyles } from '@src/themes/tokens';
 
 /**
  * Event names emitted by this component
@@ -71,55 +72,58 @@ export class IAQuickSearch extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        --quick-search-list-padding--: var(
-          --ia-theme-quick-search-list-padding,
-          0 0 0.5em 0
-        );
-        --quick-search-list-item-padding--: var(
-          --ia-theme-quick-search-list-item-padding,
-          0.5em 0 0 0
-        );
-        --quick-search-link-color--: var(
-          --ia-theme-quick-search-link-color,
-          rgb(68, 132, 202)
-        );
-        --quick-search-link-decoration--: var(
-          --ia-theme-quick-search-link-decoration,
-          none
-        );
-      }
+    return [
+      tokenStyles,
+      css`
+        :host {
+          --quick-search-list-padding--: var(
+            --ia-theme-quick-search-list-padding,
+            0 0 0.5em 0
+          );
+          --quick-search-list-item-padding--: var(
+            --ia-theme-quick-search-list-item-padding,
+            0.5em 0 0 0
+          );
+          --quick-search-link-color--: var(
+            --ia-theme-quick-search-link-color,
+            var(--ia-color-text-inverse-link--)
+          );
+          --quick-search-link-decoration--: var(
+            --ia-theme-quick-search-link-decoration,
+            none
+          );
+        }
 
-      ul {
-        padding: var(--quick-search-list-padding--);
-        margin: 0;
-        list-style: none;
-      }
+        ul {
+          padding: var(--quick-search-list-padding--);
+          margin: 0;
+          list-style: none;
+        }
 
-      ul li {
-        padding: var(--quick-search-list-item-padding--);
-        margin: 0;
-        display: block;
-      }
+        ul li {
+          padding: var(--quick-search-list-item-padding--);
+          margin: 0;
+          display: block;
+        }
 
-      /*
+        /*
         A button rather than a link, since picking an entry runs a search in
         place rather than navigating. Stripped back so it reads as plain text
         while staying focusable and keyboard-operable.
       */
-      ul li button {
-        display: block;
-        width: 100%;
-        padding: 0;
-        border: none;
-        background: none;
-        font: inherit;
-        text-align: left;
-        color: var(--quick-search-link-color--);
-        text-decoration: var(--quick-search-link-decoration--);
-        cursor: pointer;
-      }
-    `;
+        ul li button {
+          display: block;
+          width: 100%;
+          padding: 0;
+          border: none;
+          background: none;
+          font: inherit;
+          text-align: left;
+          color: var(--quick-search-link-color--);
+          text-decoration: var(--quick-search-link-decoration--);
+          cursor: pointer;
+        }
+      `,
+    ];
   }
 }

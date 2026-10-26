@@ -17,6 +17,7 @@ import type { TranscriptConfig, TranscriptEntryConfig } from './models';
 import type { IATranscriptEntry } from './ia-transcript-entry';
 
 import './ia-transcript-entry';
+import { tokenStyles } from '@src/themes/tokens';
 
 /**
  * Event names emitted by this component
@@ -424,205 +425,212 @@ export class IATranscriptView extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        --transcript-height--: var(--ia-theme-transcript-height, 200px);
+    return [
+      tokenStyles,
+      css`
+        :host {
+          --transcript-height--: var(--ia-theme-transcript-height, 200px);
 
-        --transcript-normal-text-color--: var(
-          --ia-theme-transcript-normal-text-color,
-          gray
-        );
-        --transcript-active-text-color--: var(
-          --ia-theme-transcript-active-text-color,
-          white
-        );
-        --transcript-hover-text-color--: var(
-          --ia-theme-transcript-hover-text-color,
-          silver
-        );
+          --transcript-normal-text-color--: var(
+            --ia-theme-transcript-normal-text-color,
+            var(--ia-color-text-inverse-tertiary--)
+          );
+          --transcript-active-text-color--: var(
+            --ia-theme-transcript-active-text-color,
+            var(--ia-color-text-inverse--)
+          );
+          --transcript-hover-text-color--: var(
+            --ia-theme-transcript-hover-text-color,
+            var(--ia-color-text-inverse-secondary--)
+          );
 
-        --transcript-music-normal-text-color--: var(
-          --ia-theme-transcript-music-normal-text-color,
-          gray
-        );
-        --transcript-music-active-text-color--: var(
-          --ia-theme-transcript-music-active-text-color,
-          white
-        );
-        --transcript-music-hover-text-color--: var(
-          --ia-theme-transcript-music-hover-text-color,
-          silver
-        );
+          --transcript-music-normal-text-color--: var(
+            --ia-theme-transcript-music-normal-text-color,
+            var(--ia-color-text-inverse-tertiary--)
+          );
+          --transcript-music-active-text-color--: var(
+            --ia-theme-transcript-music-active-text-color,
+            var(--ia-color-text-inverse--)
+          );
+          --transcript-music-hover-text-color--: var(
+            --ia-theme-transcript-music-hover-text-color,
+            var(--ia-color-text-inverse-secondary--)
+          );
 
-        --transcript-search-result-inactive-border-color--: var(
-          --ia-theme-transcript-search-result-inactive-border-color,
-          gray
-        );
-        --transcript-search-result-active-border-color--: var(
-          --ia-theme-transcript-search-result-active-border-color,
-          green
-        );
+          --transcript-search-result-inactive-border-color--: var(
+            --ia-theme-transcript-search-result-inactive-border-color,
+            var(--ia-color-text-inverse-tertiary--)
+          );
+          --transcript-search-result-active-border-color--: var(
+            --ia-theme-transcript-search-result-active-border-color,
+            var(--ia-color-text-inverse-link--)
+          );
 
-        --transcript-time-color--: var(--ia-theme-transcript-time-color, white);
-        --transcript-time-column-width--: var(
-          --ia-theme-transcript-time-column-width,
-          3rem
-        );
-        --transcript-time-font-size--: var(
-          --ia-theme-transcript-time-font-size,
-          1em
-        );
-        --transcript-time-line-height--: var(
-          --ia-theme-transcript-time-line-height,
-          1em
-        );
-        --transcript-time-display--: var(
-          --ia-theme-transcript-time-display,
-          block
-        );
+          --transcript-time-color--: var(
+            --ia-theme-transcript-time-color,
+            var(--ia-color-text-inverse--)
+          );
+          --transcript-time-column-width--: var(
+            --ia-theme-transcript-time-column-width,
+            3rem
+          );
+          --transcript-time-font-size--: var(
+            --ia-theme-transcript-time-font-size,
+            1em
+          );
+          --transcript-time-line-height--: var(
+            --ia-theme-transcript-time-line-height,
+            1em
+          );
+          --transcript-time-display--: var(
+            --ia-theme-transcript-time-display,
+            block
+          );
 
-        --transcript-auto-scroll-button-color--: var(
-          --ia-theme-transcript-auto-scroll-button-color,
-          black
-        );
-        --transcript-auto-scroll-button-background--: var(
-          --ia-theme-transcript-auto-scroll-button-background,
-          white
-        );
-        --transcript-auto-scroll-button-width--: var(
-          --ia-theme-transcript-auto-scroll-button-width,
-          12rem
-        );
-        --transcript-auto-scroll-button-font-size--: var(
-          --ia-theme-transcript-auto-scroll-button-font-size,
-          1em
-        );
+          --transcript-auto-scroll-button-color--: var(
+            --ia-theme-transcript-auto-scroll-button-color,
+            var(--ia-color-surface-theater--)
+          );
+          --transcript-auto-scroll-button-background--: var(
+            --ia-theme-transcript-auto-scroll-button-background,
+            var(--ia-color-surface-raised--)
+          );
+          --transcript-auto-scroll-button-width--: var(
+            --ia-theme-transcript-auto-scroll-button-width,
+            12rem
+          );
+          --transcript-auto-scroll-button-font-size--: var(
+            --ia-theme-transcript-auto-scroll-button-font-size,
+            1em
+          );
 
-        color: var(--transcript-normal-text-color--);
-      }
+          color: var(--transcript-normal-text-color--);
+        }
 
-      .container {
-        position: relative;
-      }
+        .container {
+          position: relative;
+        }
 
-      .auto-scroll-button {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 1rem;
-        margin: auto;
-        width: var(--transcript-auto-scroll-button-width--);
-        border-radius: 1em;
-        border: 0;
-        display: inline-block;
-        color: var(--transcript-auto-scroll-button-color--);
-        background-color: var(--transcript-auto-scroll-button-background--);
-        font-size: var(--transcript-auto-scroll-button-font-size--);
-        cursor: pointer;
-        z-index: 10;
-      }
+        .auto-scroll-button {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: 1rem;
+          margin: auto;
+          width: var(--transcript-auto-scroll-button-width--);
+          border-radius: 1em;
+          border: 0;
+          display: inline-block;
+          color: var(--transcript-auto-scroll-button-color--);
+          background-color: var(--transcript-auto-scroll-button-background--);
+          font-size: var(--transcript-auto-scroll-button-font-size--);
+          cursor: pointer;
+          z-index: 10;
+        }
 
-      .auto-scroll-button.hidden {
-        display: none;
-      }
+        .auto-scroll-button.hidden {
+          display: none;
+        }
 
-      .context-overlay {
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: 0;
-        /* Purely a guide. It sits over the top and bottom of the scroll area,
+        .context-overlay {
+          position: absolute;
+          left: 0;
+          width: 100%;
+          height: 0;
+          /* Purely a guide. It sits over the top and bottom of the scroll area,
            so without this it would swallow the wheel and the entry clicks
            there, breaking the scrolling it exists to help you look at. */
-        pointer-events: none;
-      }
+          pointer-events: none;
+        }
 
-      .context-overlay.top {
-        top: 0;
-        border-bottom: 1px solid green;
-      }
+        .context-overlay.top {
+          top: 0;
+          border-bottom: 1px solid green;
+        }
 
-      .context-overlay.bottom {
-        bottom: 0;
-        border-top: 1px solid green;
-      }
+        .context-overlay.bottom {
+          bottom: 0;
+          border-top: 1px solid green;
+        }
 
-      .time {
-        display: var(--transcript-time-display--);
-        flex: 0 0 var(--transcript-time-column-width--);
-        color: var(--transcript-time-color--);
-        position: relative;
-      }
+        .time {
+          display: var(--transcript-time-display--);
+          flex: 0 0 var(--transcript-time-column-width--);
+          color: var(--transcript-time-color--);
+          position: relative;
+        }
 
-      .time-display {
-        position: absolute;
-        top: 0;
-        font-size: var(--transcript-time-font-size--);
-        line-height: var(--transcript-time-line-height--);
-        transition: top 1s;
-      }
+        .time-display {
+          position: absolute;
+          top: 0;
+          font-size: var(--transcript-time-font-size--);
+          line-height: var(--transcript-time-line-height--);
+          transition: top 1s;
+        }
 
-      .scroll-container {
-        display: flex;
-        overflow-y: auto;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-        height: var(--transcript-height--);
-      }
+        .scroll-container {
+          display: flex;
+          overflow-y: auto;
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+          height: var(--transcript-height--);
+        }
 
-      .scroll-container::-webkit-scrollbar {
-        display: none;
-      }
+        .scroll-container::-webkit-scrollbar {
+          display: none;
+        }
 
-      ia-transcript-entry {
-        cursor: pointer;
-      }
+        ia-transcript-entry {
+          cursor: pointer;
+        }
 
-      ia-transcript-entry:hover {
-        color: var(--transcript-hover-text-color--);
-      }
+        ia-transcript-entry:hover {
+          color: var(--transcript-hover-text-color--);
+        }
 
-      ia-transcript-entry[ismusicentry] {
-        color: var(--transcript-music-normal-text-color--);
-        display: block;
-        font-style: italic;
-      }
+        ia-transcript-entry[ismusicentry] {
+          color: var(--transcript-music-normal-text-color--);
+          display: block;
+          font-style: italic;
+        }
 
-      ia-transcript-entry[ismusicentry]:hover {
-        color: var(--transcript-music-hover-text-color--);
-      }
+        ia-transcript-entry[ismusicentry]:hover {
+          color: var(--transcript-music-hover-text-color--);
+        }
 
-      ia-transcript-entry[ismusicentry][isactive] {
-        color: var(--transcript-music-active-text-color--);
-      }
+        ia-transcript-entry[ismusicentry][isactive] {
+          color: var(--transcript-music-active-text-color--);
+        }
 
-      ia-transcript-entry[isactive] {
-        color: var(--transcript-active-text-color--);
-      }
+        ia-transcript-entry[isactive] {
+          color: var(--transcript-active-text-color--);
+        }
 
-      ia-transcript-entry[issearchresult] {
-        /* Inline-block, or the outline adds a space to the right of the text */
-        display: inline-block;
-        padding: 0 5px;
-        position: relative;
-      }
+        ia-transcript-entry[issearchresult] {
+          /* Inline-block, or the outline adds a space to the right of the text */
+          display: inline-block;
+          padding: 0 5px;
+          position: relative;
+        }
 
-      ia-transcript-entry[issearchresult]:after {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        border: 2px solid
-          var(--transcript-search-result-inactive-border-color--);
-        border-radius: 5px;
-      }
+        ia-transcript-entry[issearchresult]:after {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          border: 2px solid
+            var(--transcript-search-result-inactive-border-color--);
+          border-radius: 5px;
+        }
 
-      ia-transcript-entry[issearchresult][isselected]:after {
-        border: 2px solid var(--transcript-search-result-active-border-color--);
-      }
-    `;
+        ia-transcript-entry[issearchresult][isselected]:after {
+          border: 2px solid
+            var(--transcript-search-result-active-border-color--);
+        }
+      `,
+    ];
   }
 }

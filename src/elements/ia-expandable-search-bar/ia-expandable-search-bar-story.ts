@@ -34,7 +34,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Quick search link colour',
     cssVariable: '--ia-theme-quick-search-link-color',
-    defaultValue: '#4484ca',
+    defaultValue: '#9aa8ff',
     inputType: 'color',
   },
   {

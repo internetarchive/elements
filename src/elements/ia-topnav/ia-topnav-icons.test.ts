@@ -92,7 +92,7 @@ describe('ia-topnav icons', () => {
       }
     });
 
-    test('are grey, red for donate, and white when selected', async () => {
+    test('are light grey, red for donate, and their own color when selected', async () => {
       const menu = await fixture<MediaMenu>(
         html`<ia-topnav-media-menu
           selectedMenuOption="texts"
@@ -106,9 +106,9 @@ describe('ia-topnav icons', () => {
         return getComputedStyle(path).fill;
       };
 
-      expect(colorOf('video')).to.equal('rgb(153, 153, 153)');
+      expect(colorOf('video')).to.equal('rgb(204, 204, 204)');
       expect(colorOf('donate')).to.equal('rgb(255, 0, 0)');
-      expect(colorOf('texts')).to.not.equal('rgb(153, 153, 153)');
+      expect(colorOf('texts')).to.not.equal('rgb(204, 204, 204)');
     });
   });
 
