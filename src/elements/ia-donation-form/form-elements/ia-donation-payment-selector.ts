@@ -116,6 +116,8 @@ export class IADonationPaymentSelector extends LitElement {
               <button
                 class="paypal-local-button"
                 aria-label=${msg('Pay with PayPal')}
+                tabindex=${this.donationInfoValid ? '-1' : '0'}
+                aria-hidden=${this.donationInfoValid ? 'true' : 'false'}
                 @click=${() => {
                   this.paymentModeSelected = 'paypal';
                   this.localPaypalButtonClicked();

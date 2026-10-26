@@ -59,19 +59,26 @@ export class ApplePayFlowHandler
   ): Promise<void> {
     this.donationFlowModalManager.showProcessingModal();
 
-    const response = await this.braintreeManager.submitUpsellDonation({
-      oneTimeDonationResponse,
-      amount,
-    });
-
-    if (response.success) {
-      this.donationFlowModalManager.showThankYouModal({
-        successResponse: oneTimeDonationResponse,
-        upsellSuccessResponse: response.value as SuccessResponse,
+    try {
+      const response = await this.braintreeManager.submitUpsellDonation({
+        oneTimeDonationResponse,
+        amount,
       });
-    } else {
-      const error = response.value as ErrorResponse;
-      this.donationFlowModalManager.showErrorModal({ message: error.message });
+
+      if (response.success) {
+        this.donationFlowModalManager.showThankYouModal({
+          successResponse: oneTimeDonationResponse,
+          upsellSuccessResponse: response.value as SuccessResponse,
+        });
+      } else {
+        const error = response.value as ErrorResponse;
+        this.donationFlowModalManager.showErrorModal({
+          message: error.message,
+        });
+      }
+    } catch (error) {
+      this.donationFlowModalManager.showErrorModal({ message: `${error}` });
+      console.error('error getting a response', error);
     }
   }
 

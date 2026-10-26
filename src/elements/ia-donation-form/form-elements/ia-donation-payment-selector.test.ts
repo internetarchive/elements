@@ -66,6 +66,20 @@ describe('IADonationPaymentSelector', () => {
     expect(await selected).to.exist;
   });
 
+  test('takes the PayPal cover out of the tab order and a11y tree when the amount is valid', async () => {
+    const el = await fixture<IADonationPaymentSelector>(
+      html`<ia-donation-payment-selector></ia-donation-payment-selector>`,
+    );
+    const cover = button(el, '.paypal-local-button');
+    expect(cover.getAttribute('tabindex')).to.equal('-1');
+    expect(cover.getAttribute('aria-hidden')).to.equal('true');
+
+    el.donationInfoValid = false;
+    await elementUpdated(el);
+    expect(cover.getAttribute('tabindex')).to.equal('0');
+    expect(cover.getAttribute('aria-hidden')).to.equal('false');
+  });
+
   test('emits applePaySelected with the click event', async () => {
     const el = await fixture<IADonationPaymentSelector>(
       html`<ia-donation-payment-selector></ia-donation-payment-selector>`,

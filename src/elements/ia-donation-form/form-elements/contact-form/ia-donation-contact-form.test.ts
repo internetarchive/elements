@@ -230,10 +230,9 @@ describe('IADonationContactForm', () => {
       expect(el.emailField.validationMessage).to.not.equal('');
       expect(el.firstNameBadgedInput.error).to.be.true;
       expect(el.lastNameBadgedInput.error).to.be.true;
-      // The browser focuses the first invalid field, and focusing a field
-      // clears its error state, so the email field is already clear again
+      // The browser focuses the first invalid field, which stays marked
       expect(document.activeElement).to.equal(el.emailField);
-      expect(el.emailBadgedInput.error).to.be.false;
+      expect(el.emailBadgedInput.error).to.be.true;
     });
 
     test('is true once every required field is filled in', async () => {
@@ -245,12 +244,15 @@ describe('IADonationContactForm', () => {
       expect(el.errorMessage.textContent).to.equal('');
     });
 
-    test('clears a field error when the donor returns to it', async () => {
+    test('clears a field error when the donor types in it', async () => {
       const el = await setup();
       el.reportValidity();
       expect(el.firstNameBadgedInput.error).to.be.true;
 
       el.firstNameField.focus();
+      expect(el.firstNameBadgedInput.error).to.be.true;
+
+      el.firstNameField.dispatchEvent(new Event('input', { bubbles: true }));
       expect(el.firstNameBadgedInput.error).to.be.false;
       expect(el.errorMessage.textContent).to.equal('');
     });

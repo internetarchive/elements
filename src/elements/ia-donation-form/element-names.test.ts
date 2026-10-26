@@ -49,6 +49,7 @@ const NAMES_TO_AVOID = [
   'donation-summary',
   'donation-form-total-amount',
   'contact-form',
+  'credit-card-fields',
   'confirm-donation-modal',
   'donation-form-error-modal-content',
   'upsell-modal-content',

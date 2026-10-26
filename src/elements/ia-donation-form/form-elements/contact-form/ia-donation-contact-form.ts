@@ -128,19 +128,21 @@ export class IADonationContactForm extends LitElement {
 
   /** At least two non-whitespace characters */
   private minTwoCharPattern = '.*\\S{2,}.*';
-  private minTwoCharValidationMessage = msg('Enter at least two characters');
+  private get minTwoCharValidationMessage(): string {
+    return msg('Enter at least two characters');
+  }
 
   /** At least two non-whitespace characters with at least two characters between them */
   private streetAddressPattern = '.*?\\S.{2,}\\S.*?';
-  private streetAddressValidationMessage = msg(
-    'Enter at least four characters',
-  );
+  private get streetAddressValidationMessage(): string {
+    return msg('Enter at least four characters');
+  }
 
   /** 12345, 12345-6789 or 123456789 */
   private usZipCodePattern = '^\\d{5}(-?\\d{4})?$';
-  private usZipCodeValidationMessage = msg(
-    'Enter a valid 5 or 9 digit zip/postal code',
-  );
+  private get usZipCodeValidationMessage(): string {
+    return msg('Enter a valid 5 or 9 digit zip/postal code');
+  }
 
   render(): TemplateResult {
     return html`
@@ -282,8 +284,8 @@ export class IADonationContactForm extends LitElement {
     return this;
   }
 
-  /** Clears the error state once the donor comes back to a field */
-  private inputFocused(e: FocusEvent): void {
+  /** Clears the error state once the donor starts fixing a field */
+  private inputChanged(e: Event): void {
     this.errorMessage.textContent = '';
     const input = e.target as HTMLInputElement;
     const badgedInput = this.querySelector<IADonationBadgedInput>(
@@ -329,7 +331,7 @@ export class IADonationContactForm extends LitElement {
             autocomplete=${options.autocomplete ?? 'on'}
             pattern=${ifDefined(options.validationPattern)}
             title=${ifDefined(options.validationMessage)}
-            @focus=${this.inputFocused}
+            @input=${this.inputChanged}
             ?required=${required}
           />
         </ia-donation-badged-input>

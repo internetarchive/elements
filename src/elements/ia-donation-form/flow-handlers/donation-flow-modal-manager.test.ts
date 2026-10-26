@@ -255,4 +255,38 @@ describe('DonationFlowModalManager', () => {
       templateText(modalManager.showModalOptions?.config.message),
     ).to.equal('oh no');
   });
+
+  test('logs and reports the donation once when the upsell is accepted', async () => {
+    const { manager, braintreeManager, analytics } = await setup();
+    let yesSelected: ((amount: number) => void) | undefined;
+    manager.showUpsellModal = async (options) => {
+      yesSelected = options.yesSelected;
+    };
+    let successCalls = 0;
+    const donationSuccessful =
+      braintreeManager.donationSuccessful.bind(braintreeManager);
+    braintreeManager.donationSuccessful = (options) => {
+      successCalls += 1;
+      donationSuccessful(options);
+    };
+
+    await manager.startDonationSubmissionFlow({
+      nonce: 'foo',
+      paymentProvider: PaymentProvider.CreditCard,
+      donationInfo: fiveDollars(),
+      billingInfo: mockBillingInfo,
+      customerInfo: mockCustomerInfo,
+    });
+    expect(yesSelected).to.exist;
+
+    yesSelected?.(8);
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
+
+    expect(successCalls).to.equal(1);
+    expect(braintreeManager.donationSuccessfulOptions?.upsellSuccessResponse).to
+      .exist;
+    expect(analytics.flowEvents).to.have.length(1);
+  });
 });

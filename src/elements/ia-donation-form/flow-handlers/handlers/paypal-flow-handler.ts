@@ -173,8 +173,9 @@ export class PayPalFlowHandler
       this.upsellButtonDataSourceContainer?.oneTimeSuccessResponse
         .transaction_id;
 
-    const response: DonationResponse =
-      await this.braintreeManager.submitDonation({
+    let response: DonationResponse;
+    try {
+      response = await this.braintreeManager.submitDonation({
         nonce: payload.nonce,
         paymentProvider: PaymentProvider.PayPal,
         donationInfo: dataSource.donationInfo,
@@ -182,6 +183,11 @@ export class PayPalFlowHandler
         billingInfo,
         upsellOnetimeTransactionId: oneTimeTransaction,
       });
+    } catch (error) {
+      this.donationFlowModalManager.showErrorModal({ message: `${error}` });
+      console.error('error getting a response', error);
+      return;
+    }
 
     if (!response.success) {
       const error = response.value as ErrorResponse;
