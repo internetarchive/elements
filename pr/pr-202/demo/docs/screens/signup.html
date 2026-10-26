@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Sign Up — Internet Archive Elements screens</title>
+<style>body { margin: 0; }</style>
+  <script type="module" crossorigin src="../../../assets/demo/docs/screens/signup-DTMLu691.js"></script>
+  <link rel="modulepreload" crossorigin href="../../../assets/site-BBoxMElT.js">
+  <link rel="stylesheet" crossorigin href="../../../assets/site-Jhh7o9Wo.css">
+</head>
+<body class="ia-page">
+<a class="ia-skip-link" href="#maincontent">Skip to Main Content</a>
+<header class="ia-topnav ia-inverse" id="topnav"></header>
+
+<main class="ia-shell ia-shell--task" id="maincontent" tabindex="-1">
+  <form class="ia-task-card" id="signup" novalidate>
+    <div class="ia-task-card__head">
+      <img class="ia-task-card__logo" id="logo" alt="Internet Archive" width="72" height="80">
+      <h1 class="ia-shell__title ia-type-page-title">Sign Up for an Account</h1>
+      <p class="ia-shell__lede">Get your virtual library card and access 65+ million free and borrowable books,
+        movies, audio, images, software, and more.</p>
+      <p class="ia-type-body" style="margin:var(--ia-space-2) 0 0">Already have an account?
+        <a class="ia-link" href="login.html">Log in!</a></p>
+    </div>
+
+    <button class="ia-button ia-button--secondary ia-button--lg" type="button">Sign In with Google</button>
+    <button class="ia-button ia-button--secondary ia-button--lg" type="button" data-icon-before="email">Email Me a Code to Sign Up</button>
+    <p class="ia-divider-text" style="margin:0">Or</p>
+
+    <div id="summary" tabindex="-1"></div>
+
+    <div class="ia-field">
+      <label class="ia-field__label" for="email">Email Address</label>
+      <p class="ia-field__hint ia-type-meta" id="email-hint">Up to 127 characters</p>
+      <input class="ia-input ia-input--lg" id="email" name="username" type="email" autocomplete="email"
+             maxlength="127" aria-describedby="email-hint" required>
+      <p class="ia-field__error" id="email-error" hidden></p>
+    </div>
+    <div class="ia-field">
+      <label class="ia-field__label" for="screenname">Screen Name</label>
+      <p class="ia-field__hint ia-type-meta" id="screenname-hint">3 to 40 characters</p>
+      <input class="ia-input ia-input--lg" id="screenname" name="screenname" type="text" autocomplete="username"
+             minlength="3" maxlength="40" aria-describedby="screenname-hint" required>
+      <p class="ia-field__error" id="screenname-error" hidden></p>
+    </div>
+    <div class="ia-field">
+      <label class="ia-field__label" for="password">Password</label>
+      <p class="ia-field__hint ia-type-meta" id="password-hint">8 to 100 characters</p>
+      <div class="ia-password">
+        <input class="ia-input ia-input--lg" id="password" name="password" type="password" autocomplete="new-password"
+               minlength="8" maxlength="100" aria-describedby="password-hint" required>
+        <button class="ia-password__toggle" type="button" aria-label="Show Password" aria-pressed="false"></button>
+      </div>
+      <p class="ia-field__error" id="password-error" hidden></p>
+    </div>
+
+    <fieldset style="margin:0; padding:0; border:0; min-inline-size:0">
+      <legend class="ia-field__label" style="padding:0; margin-block-end:var(--ia-space-1)">Choose Announcements</legend>
+      <label class="ia-choice">
+        <input class="ia-choice__control" type="checkbox" name="ml_best_of">
+        <span class="ia-choice__label">Best of the Archive: useful resources, unique stories, and fun finds from our collections</span>
+      </label>
+      <label class="ia-choice">
+        <input class="ia-choice__control" type="checkbox" name="ml_events">
+        <span class="ia-choice__label">Event Notices: invitations to and news about our events</span>
+      </label>
+    </fieldset>
+
+    <button class="ia-button ia-button--primary ia-button--lg" type="submit">Sign Up</button>
+    <p class="ia-type-meta" style="margin:0">By signing up, you agree to the Internet Archive's
+      <a class="ia-link" href="#maincontent">Terms of Service</a>.</p>
+  </form>
+</main>
+
+</body>
+</html>

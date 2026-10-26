@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Screens — Internet Archive Elements</title>
+<style>
+  .screen-frame {
+    display: block;
+    inline-size: 100%;
+    block-size: 72rem;
+    border: var(--ia-size-border-width) solid var(--ia-color-border-default);
+    border-radius: var(--ia-radius-default);
+    background-color: var(--ia-color-surface-page);
+    transition: inline-size var(--ia-motion-duration-base) var(--ia-motion-easing-standard);
+  }
+  #stage[data-width='375'] .screen-frame { inline-size: 375px; }
+  #stage[data-width='375'] { max-inline-size: none; }
+</style>
+  <script type="module" crossorigin src="./assets/screens-ClxBTCOk.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/site-BBoxMElT.js">
+  <link rel="stylesheet" crossorigin href="./assets/site-Jhh7o9Wo.css">
+  <link rel="stylesheet" crossorigin href="./assets/site-B3fo78Zx.css">
+</head>
+<body>
+<a class="doc-skip" href="#main">Skip to main content</a>
+<header class="doc-header">
+  <div class="doc-header__inner">
+    <button class="doc-menu-button" type="button" aria-expanded="false" aria-controls="doc-sidebar"><span data-icon="hamburger" data-icon-size="sm"></span>Sections</button>
+    <p class="doc-header__title">Internet Archive <span>elements</span></p>
+  </div>
+  <nav class="doc-tabs" aria-label="Design system">
+    <div class="ia-tabs">
+      <a class="ia-tab" href="principles.html" data-label="Principles">Principles</a>
+      <a class="ia-tab" href="foundations.html" data-label="Foundations">Foundations</a>
+      <a class="ia-tab" href="index.html" data-label="Components">Components</a>
+      <a class="ia-tab" href="specs.html" data-label="Specs">Specs</a>
+      <a class="ia-tab" href="screens.html" data-label="Screens" aria-current="page">Screens</a>
+      <a class="ia-tab" href="icons.html" data-label="Icons">Icons</a>
+      <a class="ia-tab" href="playground.html" data-label="Playground">Playground</a>
+    </div>
+  </nav>
+</header>
+<div class="doc-shell">
+<nav class="doc-sidebar" id="doc-sidebar" aria-label="On this page"></nav>
+<main class="doc-main" id="main">
+  <div class="doc-lede">
+    <h1 class="doc-h1">Screens</h1>
+    <p>
+      Seven archive.org pages composed from the components and nothing else, covering
+      the page shells in <code>docs/patterns/page-shells.md</code>. The content is real, read from
+      the reference pages. Each screen responds to its own width, so the preview switch
+      shows the 375px layout.
+    </p>
+    <p>
+      They are drawn with the reference CSS from the <a href="specs.html">Specs</a> tab,
+      not with the elements. As elements match their specs, the screens switch to the
+      real thing, starting with the topnav, buttons and search bar.
+    </p>
+  </div>
+
+  <div class="doc-toolbar"><div id="vp"></div></div>
+
+  <div id="stage">
+    <section class="doc-section" id="search" style="margin-block-start:0">
+      <h2>Search results</h2>
+      <p>The browse shell: the search band, the search-type tabs, the facet rail beside
+         suggested matches, the results heading, the sort bar and a grid of item tiles. <a class="ia-link" href="demo/docs/screens/search.html">Open full page</a></p>
+      <iframe class="screen-frame" src="demo/docs/screens/search.html" title="Search results screen" loading="lazy"></iframe>
+    </section>
+    <section class="doc-section" id="collection">
+      <h2>Collection landing</h2>
+      <p>The browse shell with a collection masthead, its actions and page tabs, the
+         collection's own search, and a rail with Part Of, over collection tiles.
+         <a class="ia-link" href="demo/docs/screens/collection.html">Open full page</a></p>
+      <iframe class="screen-frame" src="demo/docs/screens/collection.html" title="Collection landing screen" loading="lazy"></iframe>
+    </section>
+    <section class="doc-section" id="item">
+      <h2>Item page</h2>
+      <p>The record shell, as offshoot builds it: the theater, the title with its actions,
+         metadata and reviews beside a sidebar of boxes, then similar items.
+         <a class="ia-link" href="demo/docs/screens/item.html">Open full page</a></p>
+      <iframe class="screen-frame" src="demo/docs/screens/item.html" title="Item page screen" loading="lazy"></iframe>
+    </section>
+    <section class="doc-section" id="profile">
+      <h2>Profile</h2>
+      <p>The browse shell under a navy header: the patron, their page's actions and eight
+         tabs that swap the panel in place. Loans adds the loan filter and Return actions.
+         <a class="ia-link" href="demo/docs/screens/profile.html">Open full page</a></p>
+      <iframe class="screen-frame" src="demo/docs/screens/profile.html" title="Profile screen" loading="lazy"></iframe>
+    </section>
+    <section class="doc-section" id="settings">
+      <h2>Account settings</h2>
+      <p>One 700px column of sections under a sticky header with Cancel and Save Changes;
+         preferences in three-column rows. <a class="ia-link" href="demo/docs/screens/settings.html">Open full page</a></p>
+      <iframe class="screen-frame" src="demo/docs/screens/settings.html" title="Account settings screen" loading="lazy"></iframe>
+    </section>
+    <section class="doc-section" id="login">
+      <h2>Log In</h2>
+      <p>The focused-task shell in offshoot's order: logo, title, Google and Email Me a Code,
+         then the form. <a class="ia-link" href="demo/docs/screens/login.html">Open full page</a></p>
+      <iframe class="screen-frame" src="demo/docs/screens/login.html" title="Log in screen" loading="lazy"></iframe>
+    </section>
+    <section class="doc-section" id="signup">
+      <h2>Sign Up</h2>
+      <p>The focused-task shell: one centered form, in the same order as Log In.
+         <a class="ia-link" href="demo/docs/screens/signup.html">Open full page</a></p>
+      <iframe class="screen-frame" src="demo/docs/screens/signup.html" title="Sign up screen" loading="lazy"></iframe>
+    </section>
+  </div>
+</main>
+</div>
+
+</body>
+</html>

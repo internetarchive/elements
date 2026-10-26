@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Profile — Internet Archive Elements screens</title>
+<style>body { margin: 0; }</style>
+  <script type="module" crossorigin src="../../../assets/demo/docs/screens/profile-fCu__TSY.js"></script>
+  <link rel="modulepreload" crossorigin href="../../../assets/site-BBoxMElT.js">
+  <link rel="stylesheet" crossorigin href="../../../assets/site-Jhh7o9Wo.css">
+</head>
+<body class="ia-page">
+<a class="ia-skip-link" href="#maincontent">Skip to Main Content</a>
+<header class="ia-topnav ia-inverse" id="topnav"></header>
+
+<main id="maincontent" tabindex="-1">
+  <header class="ia-profile-header ia-inverse">
+    <div class="ia-profile-header__inner">
+      <img class="ia-avatar ia-avatar--xl ia-profile-header__avatar" src="https://archive.org/services/img/@brewster" alt="">
+      <div class="ia-profile-header__summary">
+        <h1 class="ia-profile-header__name ia-type-display">brewster</h1>
+        <p class="ia-profile-header__since">Archivist since 2001</p>
+        <p class="ia-profile-header__bio">Digital Librarian, Internet Archive. <a href="#maincontent">archive.org/about</a></p>
+      </div>
+      <div class="ia-profile-header__actions" id="actions"></div>
+      <div class="ia-tabs" role="tablist" aria-label="Profile Sections" id="tabs"></div>
+    </div>
+  </header>
+
+  <div class="ia-shell">
+    <div role="tabpanel" id="panel" tabindex="0"></div>
+  </div>
+</main>
+
+
+<dialog class="ia-modal ia-modal--sm" id="return-modal" aria-labelledby="return-title">
+  <header class="ia-modal__header">
+    <h2 class="ia-modal__title" id="return-title">Return Item</h2>
+    <form method="dialog"><button class="ia-modal__close" aria-label="Close" data-icon="close" data-icon-size="sm"></button></form>
+  </header>
+  <form class="ia-modal__body" method="dialog">
+    <p class="ia-type-body" style="margin-block-start:0"></p>
+    <div class="ia-modal__actions">
+      <button class="ia-button ia-button--secondary" value="cancel">Cancel</button>
+      <button class="ia-button ia-button--danger" value="confirm">Yes, return it</button>
+    </div>
+  </form>
+</dialog>
+</body>
+</html>

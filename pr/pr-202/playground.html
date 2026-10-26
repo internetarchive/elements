@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Playground — Internet Archive Elements</title>
+<style>
+  .pg-cases { display: grid; grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr)); gap: var(--ia-space-3); }
+  .pg-case {
+    display: flex; flex-direction: column; gap: var(--ia-space-2);
+    min-inline-size: 0;
+    padding: var(--ia-space-3);
+    border: var(--ia-border-card);
+    border-radius: var(--ia-radius-default);
+    background-color: var(--ia-color-surface-raised);
+  }
+  .pg-case--narrow .pg-case__stage { inline-size: 20rem; max-inline-size: 100%; }
+  .pg-case__title { margin: 0; font-size: var(--ia-font-size-sm); font-weight: var(--ia-font-weight-bold); color: var(--ia-color-text-secondary); }
+  .pg-case__stage { display: flex; flex-direction: column; align-items: flex-start; gap: var(--ia-space-2); min-inline-size: 0; }
+  .pg-case__stage > .ia-facet-row { align-self: stretch; }   /* full width, as in the rail */
+  .pg-verdict { align-self: flex-start; }
+  .pg-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--ia-space-2); }
+  .pg-row > * { flex: none; }
+  .pg-measure { display: flex; flex-direction: column; align-items: flex-start; gap: var(--ia-space-1); }
+  .pg-measure > .doc-ratio { font-size: var(--ia-font-size-xs); }
+  .pg-states { display: grid; grid-template-columns: 16rem repeat(4, minmax(0, 1fr)); gap: var(--ia-space-2) var(--ia-space-3); align-items: center; }
+  .pg-states > .pg-head { font-size: var(--ia-font-size-xs); font-weight: var(--ia-font-weight-bold); text-transform: uppercase; letter-spacing: 0.05em; color: var(--ia-color-text-secondary); }
+  .pg-states > .pg-name { font-size: var(--ia-font-size-sm); color: var(--ia-color-text-secondary); }
+  @media (max-width: 767px) { .pg-states { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pg-states > .pg-head { display: none; } .pg-states > .pg-name { grid-column: 1 / -1; } }
+</style>
+  <script type="module" crossorigin src="./assets/playground-ZACW9tQT.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/site-BBoxMElT.js">
+  <link rel="stylesheet" crossorigin href="./assets/site-Jhh7o9Wo.css">
+  <link rel="stylesheet" crossorigin href="./assets/site-B3fo78Zx.css">
+</head>
+<body>
+<a class="doc-skip" href="#main">Skip to main content</a>
+<header class="doc-header">
+  <div class="doc-header__inner">
+    <button class="doc-menu-button" type="button" aria-expanded="false" aria-controls="doc-sidebar"><span data-icon="hamburger" data-icon-size="sm"></span>Sections</button>
+    <p class="doc-header__title">Internet Archive <span>elements</span></p>
+  </div>
+  <nav class="doc-tabs" aria-label="Design system">
+    <div class="ia-tabs">
+      <a class="ia-tab" href="principles.html" data-label="Principles">Principles</a>
+      <a class="ia-tab" href="foundations.html" data-label="Foundations">Foundations</a>
+      <a class="ia-tab" href="index.html" data-label="Components">Components</a>
+      <a class="ia-tab" href="specs.html" data-label="Specs">Specs</a>
+      <a class="ia-tab" href="screens.html" data-label="Screens">Screens</a>
+      <a class="ia-tab" href="icons.html" data-label="Icons">Icons</a>
+      <a class="ia-tab" href="playground.html" data-label="Playground" aria-current="page">Playground</a>
+    </div>
+  </nav>
+</header>
+<div class="doc-shell">
+<nav class="doc-sidebar" id="doc-sidebar" aria-label="On this page"></nav>
+<main class="doc-main" id="main">
+  <div class="doc-lede">
+    <h1 class="doc-h1">Playground</h1>
+    <p>
+      The components from <code>demo/docs/assets/ia.css</code> under the conditions they fail in:
+      mismatched heights, every state at once, labels far longer than anyone designed for,
+      right-to-left scripts, dark chrome and touch. Each case checks itself where it can
+      and says <strong>pass</strong> or <strong>fail</strong>; the rest are for looking at.
+      Anything that overflows its box, clips its text, misaligns or points the wrong way is
+      a bug in the component, not in the content.
+    </p>
+  </div>
+
+  <div class="doc-toolbar"><div id="vp"></div></div>
+
+  <div class="doc-frame" id="stage">
+
+    <section class="doc-section" id="alignment" style="margin-block-start:0">
+      <h2>Control alignment</h2>
+      <p>Every control sets its height from a <code>--ia-size-control-*</code> token with
+         border-box sizing, so same-size controls line up whatever their font, border or
+         content. Each control below is measured; a height that isn't the row's token fails.</p>
+      <h3>Small — <code>--ia-size-control-sm</code></h3>
+      <div class="doc-panel pg-row" data-align="control-sm">
+        <button class="ia-button ia-button--sm ia-button--primary">Apply</button>
+        <button class="ia-button ia-button--sm ia-button--ghost ia-button--icon" aria-label="Close" data-icon="close"></button>
+        <input class="ia-input ia-input--sm" aria-label="From Year" value="1893" style="inline-size:10rem">
+        <button class="ia-sort-bar__direction" type="button" aria-label="Change to Ascending Sort" data-icon="sort" data-icon-size="sm"></button>
+        <select class="ia-dropdown" aria-label="Sort By"><option>Relevance</option><option>Title</option></select>
+        <div class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Result View">
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="true" aria-label="Grid View" data-icon="view-grid"></button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1" aria-label="List View" data-icon="view-list"></button>
+        </div>
+        <button class="ia-chip" type="button" aria-pressed="false">Texts</button>
+      </div>
+      <h3>Medium — <code>--ia-size-control-md</code></h3>
+      <div class="doc-panel pg-row" data-align="control-md">
+        <button class="ia-button ia-button--primary">Save Changes</button>
+        <button class="ia-button ia-button--ghost ia-button--icon" aria-label="Close" data-icon="close"></button>
+        <input class="ia-input" aria-label="Email Address" value="you@example.org" style="inline-size:18rem">
+        <div class="ia-segmented" role="radiogroup" aria-label="Search In">
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="true">Metadata</button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1">Text Contents</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="states">
+      <h2>Control states</h2>
+      <p>Every interactive control in each of its states, side by side. Focus shows only
+         under keyboard focus — Tab through the grid rather than clicking.</p>
+      <div class="doc-panel pg-states">
+        <span class="pg-head">Control</span><span class="pg-head">Rest</span><span class="pg-head">Selected / checked</span>
+        <span class="pg-head">Disabled</span><span class="pg-head">Busy</span>
+
+        <span class="pg-name">Button, primary</span>
+        <span><button class="ia-button ia-button--sm ia-button--primary">Save</button></span>
+        <span class="doc-empty">—</span>
+        <span><button class="ia-button ia-button--sm ia-button--primary" aria-disabled="true">Save</button></span>
+        <span><button class="ia-button ia-button--sm ia-button--primary" aria-busy="true">Saving</button></span>
+
+        <span class="pg-name">Button, ghost</span>
+        <span><button class="ia-button ia-button--sm ia-button--ghost" data-icon-before="share">Share</button></span>
+        <span class="doc-empty">—</span>
+        <span><button class="ia-button ia-button--sm ia-button--ghost" aria-disabled="true" data-icon-before="share">Share</button></span>
+        <span class="doc-empty">—</span>
+
+        <span class="pg-name">Chip</span>
+        <span><button class="ia-chip" aria-pressed="false">English</button></span>
+        <span><button class="ia-chip" aria-pressed="true">English</button></span>
+        <span class="doc-empty">—</span><span class="doc-empty">—</span>
+
+        <span class="pg-name">Segmented option</span>
+        <span class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Rest"><button class="ia-segmented__option" type="button" role="radio" aria-checked="false">Grid</button></span>
+        <span class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Selected"><button class="ia-segmented__option" type="button" role="radio" aria-checked="true">Grid</button></span>
+        <span class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Disabled"><button class="ia-segmented__option" type="button" role="radio" aria-checked="false" aria-disabled="true">Grid</button></span>
+        <span class="doc-empty">—</span>
+
+        <span class="pg-name">Switch</span>
+        <span><button class="ia-switch" type="button" role="switch" aria-checked="false" aria-label="Rest"><span class="ia-switch__track"></span></button></span>
+        <span><button class="ia-switch" type="button" role="switch" aria-checked="true" aria-label="Checked"><span class="ia-switch__track"></span></button></span>
+        <span><button class="ia-switch" type="button" role="switch" aria-checked="false" aria-disabled="true" aria-label="Disabled"><span class="ia-switch__track"></span></button></span>
+        <span class="doc-empty">—</span>
+
+        <span class="pg-name">Checkbox</span>
+        <span><label class="ia-choice"><input class="ia-choice__control" type="checkbox"><span class="ia-choice__label">Texts</span></label></span>
+        <span><label class="ia-choice"><input class="ia-choice__control" type="checkbox" checked><span class="ia-choice__label">Texts</span></label></span>
+        <span><label class="ia-choice"><input class="ia-choice__control" type="checkbox" disabled><span class="ia-choice__label">Texts</span></label></span>
+        <span class="doc-empty">—</span>
+
+        <span class="pg-name">Input</span>
+        <span><input class="ia-input ia-input--sm" aria-label="Rest" value="1893"></span>
+        <span><input class="ia-input ia-input--sm" aria-label="Invalid" aria-invalid="true" value="18933"></span>
+        <span><input class="ia-input ia-input--sm" aria-label="Disabled" disabled value="1893"></span>
+        <span class="doc-empty">—</span>
+
+        <span class="pg-name">Pagination</span>
+        <span><ul class="ia-pagination"><li><a href="#states">4</a></li></ul></span>
+        <span><ul class="ia-pagination"><li><a href="#states" aria-current="page">5</a></li></ul></span>
+        <span><ul class="ia-pagination"><li><span aria-disabled="true">6</span></li></ul></span>
+        <span class="doc-empty">—</span>
+      </div>
+    </section>
+
+    <section class="doc-section" id="density">
+      <h2>Density</h2>
+      <p>A realistic results toolbar and facet group together, the way a search page uses
+         them. The compact controls have to stay usable side by side, not just alone.</p>
+      <div class="doc-panel doc-stack" style="align-items:stretch">
+        <div id="density-sort"></div>
+        <button class="ia-button ia-button--link" type="button" style="align-self:flex-start">Clear All Filters</button>
+        <fieldset class="ia-facet-group" id="density-facets" style="max-inline-size:21rem">
+          <legend class="ia-facet-group__legend ia-type-subsection">Media Type</legend>
+        </fieldset>
+      </div>
+    </section>
+
+    <section class="doc-section" id="long-content">
+      <h2>Long content</h2>
+      <p>Labels far longer than anyone assumed: long translations, unbroken strings, CJK and
+         a title that is one URL — the metadata archive.org actually receives. Each stage is
+         20rem wide; a case fails if anything inside it overflows that width.</p>
+      <div class="pg-cases" id="long-cases"></div>
+    </section>
+
+    <section class="doc-section" id="rtl">
+      <h2>Right-to-left</h2>
+      <p>The same components under <code>dir="rtl"</code>, carrying Arabic, Hebrew and Persian
+         metadata. Anything laid out with logical properties mirrors on its own; an icon,
+         chevron or close button left on the wrong side, text that still aligns left, or a
+         Latin name or number scrambled inside an Arabic title is a bug. Titles carry
+         <code>dir="auto"</code>, so a Latin title in an Arabic page keeps its own order.</p>
+      <div class="doc-toolbar">
+        <div class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Direction" id="dir-switch">
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="true" data-value="rtl">Right to Left</button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1" data-value="ltr">Left to Right</button>
+        </div>
+      </div>
+      <div class="doc-panel doc-stack" id="rtl-stage" dir="rtl" lang="ar" style="align-items:stretch"></div>
+    </section>
+
+    <section class="doc-section" id="dark">
+      <h2>Dark chrome</h2>
+      <p>Everything inside <code>.ia-inverse</code> — text, borders, focus, hover and the soft
+         selected look re-point themselves. Tab through for the inverse focus ring.</p>
+      <div class="doc-panel doc-panel--inverse ia-inverse doc-stack">
+        <div class="pg-row" style="align-items:center">
+          <button class="ia-button ia-button--ghost ia-button--sm" data-icon-before="share">Share</button>
+          <button class="ia-button ia-button--ghost ia-button--icon" aria-label="More Actions" data-icon="ellipses"></button>
+          <a class="ia-link" href="#dark" style="color:var(--ia-color-text-link)">A link on chrome</a>
+          <span class="ia-env-badge" data-env="staging">Staging</span>
+        </div>
+        <div class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Media Type">
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="true">Texts</button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1">Video</button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1">Audio</button>
+        </div>
+        <button class="ia-switch" type="button" role="switch" aria-checked="true"><span class="ia-switch__track"></span><span>Autoplay</span></button>
+        <ul class="ia-menu" role="menu" aria-label="Account">
+          <li role="none"><a class="ia-menu__item" role="menuitem" href="#dark" tabindex="-1">My Uploads</a></li>
+          <li role="none"><a class="ia-menu__item" role="menuitem" href="#dark" tabindex="-1">My Favorites</a></li>
+          <li role="none"><a class="ia-menu__item" role="menuitem" href="#dark" tabindex="-1">Log Out</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="doc-section" id="coarse">
+      <h2>Coarse pointer</h2>
+      <p>The same controls with the stylesheet's own <code>@media (pointer: coarse)</code>
+         rules applied, as a touch screen gets them. Each target is measured; anything under
+         44&times;44 fails. Text links in running prose are exempt and are not in this grid.</p>
+      <div class="doc-panel pg-row" id="coarse-stage">
+        <button class="ia-button ia-button--sm ia-button--primary">Apply</button>
+        <button class="ia-button ia-button--sm ia-button--ghost ia-button--icon" aria-label="Close" data-icon="close"></button>
+        <button class="ia-chip" type="button" aria-pressed="false">Texts</button>
+        <button class="ia-sort-bar__direction" type="button" aria-label="Change to Ascending Sort" data-icon="sort" data-icon-size="sm"></button>
+        <div class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Result View">
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="true" aria-label="Grid View" data-icon="view-grid"></button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1" aria-label="List View" data-icon="view-list"></button>
+        </div>
+        <button class="ia-switch" type="button" role="switch" aria-checked="false" aria-label="Autoplay"><span class="ia-switch__track"></span></button>
+        <label class="ia-choice"><input class="ia-choice__control" type="checkbox"><span class="ia-choice__label">Texts</span></label>
+        <input class="ia-input ia-input--sm" aria-label="From Year" value="1893" style="inline-size:10rem">
+      </div>
+    </section>
+
+    <section class="doc-section" id="extremes">
+      <h2>Metadata extremes</h2>
+      <p>Tiles at the edges of what the data allows: no views and 230 million, no creator,
+         no thumbnail, a title that is one URL, a creator list that runs on.</p>
+      <div class="doc-panel"><div class="ia-tile-grid" id="extreme-tiles"></div></div>
+    </section>
+
+  </div>
+</main>
+</div>
+
+</body>
+</html>
