@@ -357,10 +357,19 @@ Outside lit, use the raw file at `@internetarchive/elements/icons/search.svg`.
 
 To see every icon, run `pnpm run dev` and open the Icons entry (`ia-icon-gallery`) in the demo. It lists each icon with its import line, and is built from `icons/`, so a new icon appears with no extra work.
 
+The offshoot assets were ported from offshoot commit `a6199f5db22d3908d856033da8bfa8777867d86c`.
+
+`ia-topnav` and `ia-wayback-search-form` render the `topnav-*` icons.
+
+The collection-browser icons were ported from `@internetarchive/collection-browser@4.8.0`.
+
+The BookReader icons were ported from `@internetarchive/bookreader@5.0.0-87`.
+
 - **Decorative by default.** The root `<svg>` has `aria-hidden="true"` and `focusable="false"`. If an icon is the only content of a control, label the control (`aria-label`), or wrap the icon in an element with `role="img"` and an `aria-label`.
 - **Color and size.** Icons are filled with `currentColor` and sized `1em` by `width`/`height` on the root, so they follow the surrounding text. Set `font-size` or override `width`/`height` in CSS to resize.
 - **Lint.** `pnpm run lint` (and CI) runs `scripts/lint-icons.mts` over the sources, or run it alone with `pnpm run icons:lint`. Each icon needs a `viewBox` and no `width`/`height` on the root, only `currentColor`, `none` or `url(#...)` for `fill`, `stroke` and `stop-color` (attribute, inline `style` or `<style>`), no `id` attributes (they'd collide when icons share a page), and no `<script>`, `on*` handlers, `<foreignObject>` or external `href`. A logo that needs its own colors goes in `icons/.multicolor`, one icon name per line (`#` for comments). Listed icons are exempt from the color and `id` rules only. A listed icon still gets `currentColor` painted by the build's root `fill`, so give each of its shapes an explicit `fill`.
 - **Used by.** `ia-item-navigator`, `ia-status-indicator`, `ia-combo-box`, `ia-dropdown-search-bar` and `ia-scrubber-bar` draw their icons from this folder. Recolor one with `color`, since the glyph paints with `currentColor`.
+- **iaux-icons.** The `@internetarchive/icon-*` set (the `ia-icons` package) lives here too, ported from version 1.4.1. `bookmark` is split into `bookmark`, `bookmark-hollow`, `bookmark-plus` and `bookmark-minus`, one per state of the old element. Icons that keep their own colours (payment brands, `calendar`, `credit-card`, `info`) are listed in `icons/.multicolor`.
 - **No barrel.** There's deliberately no `icons/index`. Every icon is its own module, so a page that imports one loads one.
 - **`sideEffects`.** `package.json` lists the trees that do work at import time (`dist/src/elements/**`, `dist/src/labs/**`, `dist/src/locales/**`). Elements register themselves when imported, so a package-wide `"sideEffects": false` would let a bundler drop `import '@internetarchive/elements/ia-button/ia-button'`. Everything else, including `dist/src/icons/**`, is safe to tree-shake. `src/util/icons-bundle.node.test.ts` bundles the built package to check both.
 

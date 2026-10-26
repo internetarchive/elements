@@ -1,3 +1,45 @@
 # Icons that keep their own colors (logos and the like), one name per line,
 # without the .svg. Listed icons are exempt from the currentColor and id
 # rules. Width, height and viewBox are still checked.
+applepay
+googlepay
+paypal
+venmo
+credit-card
+calendar
+info
+
+# Ported from offshoot: fixed colours.
+dismiss
+dismiss-dark
+ia-logo-gray-circle
+license-by
+license-cc
+license-nc
+license-nc-eu
+license-nc-jp
+license-nd
+license-remix
+license-sa
+license-sampling
+license-sampling-plus
+license-share
+license-zero
+
+# Ported from the topnav: fixed colours.
+topnav-ia-logo
+topnav-wayback-logo
+topnav-wordmark-stacked
+
+# Ported from collection-browser: two-tone sort arrows, one arrow lit.
+sort-toggle-up
+sort-toggle-down
+sort-toggle-disabled
+
+# Ported from bookreader: play and pause buttons are a white disc with a dark
+# glyph, and the chapter and search markers are pins in fixed state colours.
+pause-circle
+play-circle
+marker-chapter-off
+marker-chapter-on
+marker-search-on
