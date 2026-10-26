@@ -11,7 +11,7 @@ import type { LoginButton } from './ia-topnav-login-button';
 import './ia-topnav-media-menu';
 import '@src/elements/ia-sr-only-text/ia-sr-only-text';
 import { formatUrl } from './lib/helpers';
-import { property, query } from 'lit/decorators.js';
+import { property, query, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import {
   IATopNavConfig,
@@ -43,6 +43,31 @@ export class PrimaryNav extends TrackedElement {
     | { mediatype: string; moveTo: string }
     | undefined;
   signedOutMenuToggled: unknown;
+
+  /** True below the topnav breakpoint, where the language picker lives in the main menu. */
+  @state() private mobileLayout = false;
+
+  private mobileQuery = window.matchMedia(
+    `(max-width: ${TOPNAV_MOBILE_BREAKPOINT - 1}px)`,
+  );
+
+  private readonly handleMobileQueryChange = () => {
+    this.mobileLayout = this.mobileQuery.matches;
+  };
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.mobileLayout = this.mobileQuery.matches;
+    this.mobileQuery.addEventListener('change', this.handleMobileQueryChange);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.mobileQuery.removeEventListener(
+      'change',
+      this.handleMobileQueryChange,
+    );
+  }
 
   @query('button.user-menu') private userMenuButton?: HTMLButtonElement;
   @query('ia-topnav-login-button') private loginButton?: HTMLElement;
@@ -138,11 +163,14 @@ export class PrimaryNav extends TrackedElement {
           .selectedMenuOption=${this.selectedMenuOption}
           .openMenu=${this.openMenu}
           .currentTab=${this.currentTab}
-        ></ia-topnav-media-menu>
+        >
+          ${this.mobileLanguagePickerSlot}
+        </ia-topnav-media-menu>
         ${this.searchSlotContainer}
         <div class="right-side-section">
           ${this.mobileDonateHeart} ${this.userStateTemplate}
           ${this.uploadButtonTemplate} ${this.searchMenu}
+          ${this.desktopLanguagePickerSlot}
         </div>
       </nav>
     `;
@@ -286,6 +314,18 @@ export class PrimaryNav extends TrackedElement {
     `;
   }
 
+  /** The picker sits at the far right of the bar on desktop. */
+  get desktopLanguagePickerSlot() {
+    if (this.mobileLayout) return nothing;
+    return html`<slot name="language-picker"></slot>`;
+  }
+
+  /** On mobile the picker is the last row of the main menu. */
+  get mobileLanguagePickerSlot() {
+    if (!this.mobileLayout) return nothing;
+    return html`<slot name="language-picker" slot="language-picker"></slot>`;
+  }
+
   get uploadButtonTemplate() {
     return html` <a
       .href="${formatUrl('/upload' as string & Location, this.baseHost)}"
@@ -420,6 +460,10 @@ export class PrimaryNav extends TrackedElement {
           height: calc(40 * var(--topnavUnit--));
           width: calc(40 * var(--topnavUnit--));
           color: rgb(255, 0, 0);
+        }
+
+        slot[name='language-picker'] {
+          display: contents;
         }
 
         .search-trigger {
@@ -571,6 +615,16 @@ export class PrimaryNav extends TrackedElement {
           .search-trigger,
           .mobile-donate-link {
             display: none;
+          }
+
+          slot[name='language-picker']::slotted(*) {
+            display: inline-flex;
+            align-items: center;
+            height: 100%;
+          }
+
+          slot[name='language-picker']::slotted([hidden]) {
+            display: none !important;
           }
 
           .user-info {
