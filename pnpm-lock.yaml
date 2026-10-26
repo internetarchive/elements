@@ -188,8 +188,8 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1
       '@internetarchive/recaptcha-manager':
-        specifier: ^2.0.1
-        version: 2.0.1
+        specifier: ^1.0.0
+        version: 1.0.0
       '@internetarchive/shared-resize-observer':
         specifier: ^0.2.0
         version: 0.2.0
@@ -624,8 +624,8 @@ packages:
   '@internetarchive/promised-singleton@0.2.1':
     resolution: {integrity: sha512-HR0bg3AuY0ffJ3m2vQyFo1qXhg12olAlef0L2nD05xr+7z3qZb5K3/NBcN16k523f9Y6z5T/ELf3U+IVHAVF7w==}
 
-  '@internetarchive/recaptcha-manager@2.0.1':
-    resolution: {integrity: sha512-/WYU/yJeQEzi4tqrKEu6BhRoGxO/V9XNRdLw6+pHRQbWN1HlayVbXWR/apabVWHbXkcATCOeMuz+riKr8wwf9A==}
+  '@internetarchive/recaptcha-manager@1.0.0':
+    resolution: {integrity: sha512-/L5QQB88gz88NblU8n+sRFbH1ye1QBdNkBL7eDOPrKqkshnUrL/E5O6u5/v8CDoYJ2EA+0Qadd3TSiFPZTzvmA==}
 
   '@internetarchive/result-type@0.0.1':
     resolution: {integrity: sha512-sWahff5oP1xAK1CwAu1/5GTG2RXsdx/sQKn4SSOWH0r0vU2QoX9kAom/jSXeBsmgK0IjTc+9Ty9407SMORi+nQ==}
@@ -866,6 +866,9 @@ packages:
 
   '@types/googlepay@0.7.13':
     resolution: {integrity: sha512-Tj9Y/UfYxUHepJe84AXeLLeBaNHySq9NorRTQ0M2uzqEBS+mmzdJYJeK2Z4XhO58gtkndC0915DM7eIn90DCPA==}
+
+  '@types/grecaptcha@2.0.36':
+    resolution: {integrity: sha512-SfzcAJPls94/Lz1FznWe6Vm9NLkakhGmk3EO7g2QdkDDR2OU4FH63YILnDpGIU6l7gPnsf5WQ81Kr05JOYAlZw==}
 
   '@types/grecaptcha@3.0.9':
     resolution: {integrity: sha512-fFxMtjAvXXMYTzDFK5NpcVB7WHnrHVLl00QzEGpuFxSAC789io6M+vjcn+g5FTEamIJtJr/IHkCDsqvJxeWDyw==}
@@ -3073,9 +3076,10 @@ snapshots:
 
   '@internetarchive/promised-singleton@0.2.1': {}
 
-  '@internetarchive/recaptcha-manager@2.0.1':
+  '@internetarchive/recaptcha-manager@1.0.0':
     dependencies:
       '@internetarchive/lazy-loader-service': 0.2.0
+      '@types/grecaptcha': 2.0.36
       lit: 2.8.0
 
   '@internetarchive/result-type@0.0.1': {}
@@ -3265,6 +3269,8 @@ snapshots:
   '@types/estree@1.0.9': {}
 
   '@types/googlepay@0.7.13': {}
+
+  '@types/grecaptcha@2.0.36': {}
 
   '@types/grecaptcha@3.0.9': {}
 

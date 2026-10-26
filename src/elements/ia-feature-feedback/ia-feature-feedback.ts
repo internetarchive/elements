@@ -15,10 +15,8 @@ import type {
   SharedResizeObserverInterface,
   SharedResizeObserverResizeHandlerInterface,
 } from '@internetarchive/shared-resize-observer';
-import type {
-  RecaptchaManagerInterface,
-  RecaptchaWidgetInterface,
-} from '@internetarchive/recaptcha-manager';
+import type { RecaptchaManagerInterface } from '@src/services/recaptcha-manager/recaptcha-manager';
+import type { RecaptchaWidgetInterface } from '@src/services/recaptcha-manager/recaptcha-widget';
 import type { FeatureFeedbackServiceInterface } from './feature-feedback-service';
 import type {
   FeatureFeedbackDisplayMode,
@@ -137,6 +135,7 @@ export class IAFeatureFeedback
   disconnectedCallback(): void {
     super.disconnectedCallback();
     this.removeEscapeListener();
+    this.stopScrollObserver();
     this.disconnectResizeObserver(this.resizeObserver);
   }
 

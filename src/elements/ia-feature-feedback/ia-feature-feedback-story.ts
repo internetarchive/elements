@@ -38,7 +38,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Popup background',
     cssVariable: '--featureFeedbackPopupBackgroundColor',
-    defaultValue: '#F5F5F7',
+    defaultValue: '#FBFBFD',
     inputType: 'color',
   },
   {

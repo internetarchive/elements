@@ -135,12 +135,3 @@ export function hasSurveyResponse(
 
   return hasValidResponseProp;
 }
-
-/**
- * The outcome of an operation: `success` holds the result when it worked and
- * `error` holds the failure when it didn't.
- */
-export interface Result<T, E extends Error> {
-  success?: T;
-  error?: E;
-}

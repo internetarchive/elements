@@ -60,6 +60,7 @@ export const templates = {
   se645d473fbdc4705: `Imagen siguiente`,
   se67b8c9591861e7a: `Responde a las preguntas indicadas.`,
   se7c56a68f0ecf6e9: `Enviando...`,
+  se97f65ed39f494fa: `Se requiere un comentario.`,
   se9d11cd23b249157: `Posición de reproducción`,
   sef8fe7093f5298c7: `¿Te resulta útil esta función?`,
   sfcae9f83f7f25e25: `Imagen anterior`,

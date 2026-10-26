@@ -1,7 +1,5 @@
-import type {
-  RecaptchaManagerInterface,
-  RecaptchaWidgetInterface,
-} from '@internetarchive/recaptcha-manager';
+import type { RecaptchaManagerInterface } from '@src/services/recaptcha-manager/recaptcha-manager';
+import type { RecaptchaWidgetInterface } from '@src/services/recaptcha-manager/recaptcha-widget';
 import { MockRecaptchaWidget } from './mock-recaptcha-widget';
 
 type GetWidgetOptions = Parameters<

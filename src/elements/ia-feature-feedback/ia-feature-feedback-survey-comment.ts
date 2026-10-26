@@ -121,7 +121,7 @@ export class IAFeatureFeedbackSurveyComment
     } else {
       this.internals.setValidity(
         { valueMissing: true },
-        'A comment is required.',
+        msg('A comment is required.'),
       );
     }
     return this.internals.reportValidity();

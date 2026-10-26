@@ -1,6 +1,6 @@
 import { aTimeout, fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 
 import './ia-feature-feedback';
 import type { IAFeatureFeedback } from './ia-feature-feedback';
@@ -299,5 +299,21 @@ describe('IAFeatureFeedback', () => {
     await el.updateComplete;
     expect(classes.contains('open')).to.be.true;
     expect(classes.contains('closed')).to.be.false;
+  });
+
+  test('removes the scroll listener when disconnected while open', async () => {
+    const el = (await fixture(html`
+      <ia-feature-feedback></ia-feature-feedback>
+    `)) as IAFeatureFeedback;
+    (el.shadowRoot!.querySelector('#beta-button') as HTMLButtonElement).click();
+    await el.updateComplete;
+
+    const positionPopup = vi.spyOn(
+      el as unknown as { positionPopup(): void },
+      'positionPopup',
+    );
+    el.remove();
+    document.dispatchEvent(new Event('scroll'));
+    expect(positionPopup).not.toHaveBeenCalled();
   });
 });

@@ -1,5 +1,6 @@
 import type { FeatureFeedbackServiceInterface } from '../feature-feedback-service';
-import type { IASurveyQuestionResponse, Result, Vote } from '../models';
+import type { Result } from '@src/services/result-type/result-type';
+import type { IASurveyQuestionResponse, Vote } from '../models';
 
 export class MockFeatureFeedbackService
   implements FeatureFeedbackServiceInterface
