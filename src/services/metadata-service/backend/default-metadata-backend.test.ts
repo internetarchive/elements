@@ -229,4 +229,47 @@ describe('DefaultMetadataBackend writeMetadata', () => {
 
     expect(result.error?.type).to.equal(MetadataServiceErrorType.networkError);
   });
+
+  it('encodes the identifier in the write URL', async () => {
+    let requestUrl = '';
+    window.fetch = async (input: RequestInfo | URL): Promise<Response> => {
+      requestUrl = String(input);
+      return new Response('{ "success": true }');
+    };
+
+    const backend = new DefaultMetadataBackend();
+    await backend.writeMetadata('a/b?c', 'metadata', []);
+
+    expect(requestUrl).to.equal('https://archive.org/metadata/a%2Fb%3Fc');
+  });
+
+  it('refuses identifiers that would climb out of /metadata/', async () => {
+    let called = false;
+    window.fetch = async (): Promise<Response> => {
+      called = true;
+      return new Response('{ "success": true }');
+    };
+
+    const backend = new DefaultMetadataBackend();
+    for (const identifier of ['', '.', '..']) {
+      const result = await backend.writeMetadata(identifier, 'metadata', []);
+      expect(result.error?.type).to.equal(
+        MetadataServiceErrorType.itemNotFound,
+      );
+    }
+    expect(called).to.equal(false);
+  });
+
+  it('does not send a scope param on writes', async () => {
+    let requestUrl = '';
+    window.fetch = async (input: RequestInfo | URL): Promise<Response> => {
+      requestUrl = String(input);
+      return new Response('{ "success": true }');
+    };
+
+    const backend = new DefaultMetadataBackend({ scope: 'other' });
+    await backend.writeMetadata('foo', 'metadata', []);
+
+    expect(requestUrl).to.equal('https://archive.org/metadata/foo');
+  });
 });

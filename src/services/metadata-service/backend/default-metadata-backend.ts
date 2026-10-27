@@ -86,13 +86,22 @@ export class DefaultMetadataBackend implements MetadataBackendInterface {
     target: string,
     patch: MetadataPatchOperation[],
   ): Promise<Result<any, MetadataServiceError>> {
-    const url = `https://${this.baseUrl}/metadata/${identifier}`;
+    if (!identifier || identifier === '.' || identifier === '..') {
+      return this.getErrorResult(
+        MetadataServiceErrorType.itemNotFound,
+        'Invalid identifier',
+      );
+    }
+    const url = `https://${this.baseUrl}/metadata/${encodeURIComponent(
+      identifier,
+    )}`;
     const body = new URLSearchParams({
       '-target': target,
       '-patch': JSON.stringify(patch),
     });
 
     const result = await this.fetchUrl(url, {
+      skipScope: true,
       requestOptions: {
         method: 'POST',
         credentials: this.includeCredentials ? 'include' : 'same-origin',
@@ -130,10 +139,12 @@ export class DefaultMetadataBackend implements MetadataBackendInterface {
     url: string,
     options?: {
       requestOptions?: RequestInit;
+      /** Leaves the page's `scope` param off the request (used for writes) */
+      skipScope?: boolean;
     },
   ): Promise<Result<any, MetadataServiceError>> {
     const finalUrl = new URL(url);
-    if (this.requestScope) {
+    if (this.requestScope && !options?.skipScope) {
       finalUrl.searchParams.set('scope', this.requestScope);
     }
 
