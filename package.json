@@ -35,6 +35,7 @@
     "strings:build": "wireit"
   },
   "dependencies": {
+    "@internetarchive/analytics-manager": "^0.1.5",
     "@internetarchive/fetch-handler": "^1.4.0",
     "@internetarchive/ia-dropdown": "^2.2.0",
     "@internetarchive/icon-close": "^1.4.0",
