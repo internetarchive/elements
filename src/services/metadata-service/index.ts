@@ -13,4 +13,12 @@ export {
   MetadataServiceError,
   MetadataServiceErrorType,
 } from './metadata-service-error';
-export type { MetadataServiceInterface } from './metadata-service-interface';
+export type {
+  MetadataServiceInterface,
+  MetadataWriteResult,
+} from './metadata-service-interface';
+export { buildMetadataFieldPatch } from './metadata-patch';
+export type {
+  MetadataFieldValue,
+  MetadataPatchOperation,
+} from './metadata-patch';
