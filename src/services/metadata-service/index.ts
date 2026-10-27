@@ -4,8 +4,13 @@ export type {
   AlternateLocations,
 } from './responses/metadata-response';
 
-export { File, Review } from '../item-metadata/item-metadata';
-export type { SpeechMusicASREntry } from '../item-metadata/item-metadata';
+export { File, Review, runningTask } from '../item-metadata/item-metadata';
+export type {
+  SpeechMusicASREntry,
+  Task,
+  TaskColor,
+  TaskStatus,
+} from '../item-metadata/item-metadata';
 
 export { DefaultMetadataBackend } from './backend/default-metadata-backend';
 export { MetadataService } from './metadata-service';
