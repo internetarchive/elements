@@ -5,6 +5,7 @@ import {
   MetadataServiceErrorType,
 } from '../metadata-service-error';
 import { MetadataBackendInterface } from './metadata-backend-interface';
+import type { MetadataPatchOperation } from '../metadata-patch';
 
 /**
  * The DefaultSearchBackend performs a `window.fetch` request to archive.org
@@ -72,6 +73,52 @@ export class DefaultMetadataBackend implements MetadataBackendInterface {
       identifier,
     )}${path}`;
     return this.fetchUrl(url);
+  }
+
+  /**
+   * @inheritdoc
+   *
+   * Makes a single attempt: a write that timed out may still have queued its
+   * task, and retrying would queue another.
+   */
+  async writeMetadata(
+    identifier: string,
+    target: string,
+    patch: MetadataPatchOperation[],
+  ): Promise<Result<any, MetadataServiceError>> {
+    const url = `https://${this.baseUrl}/metadata/${identifier}`;
+    const body = new URLSearchParams({
+      '-target': target,
+      '-patch': JSON.stringify(patch),
+    });
+
+    const result = await this.fetchUrl(url, {
+      requestOptions: {
+        method: 'POST',
+        credentials: this.includeCredentials ? 'include' : 'same-origin',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        },
+        body,
+      },
+    });
+
+    // MDAPI reports a rejected write as `{ success: false, error }`
+    if (result.error?.type === MetadataServiceErrorType.searchEngineError) {
+      return this.getErrorResult(
+        MetadataServiceErrorType.writeError,
+        result.error.message,
+        result.error.details,
+      );
+    }
+    if (result.success && result.success.success !== true) {
+      return this.getErrorResult(
+        MetadataServiceErrorType.writeError,
+        'Metadata write was not accepted',
+        result.success,
+      );
+    }
+    return result;
   }
 
   /**
