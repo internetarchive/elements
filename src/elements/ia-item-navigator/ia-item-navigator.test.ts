@@ -151,8 +151,6 @@ describe('IAItemNavigator', () => {
   describe('loading state', () => {
     const loadingArea = (el: IAItemNavigator) =>
       el.shadowRoot?.querySelector('.loading-area');
-    const frame = (el: IAItemNavigator) =>
-      el.shadowRoot?.querySelector('#frame');
     const reader = (el: IAItemNavigator) =>
       el.shadowRoot?.querySelector('#reader');
 
@@ -169,14 +167,80 @@ describe('IAItemNavigator', () => {
       expect(indicator).to.exist;
       expect(indicator?.mode).to.equal('loading');
       expect(reader(el)?.classList.contains('hidden')).to.equal(true);
-      expect(frame(el)?.getAttribute('aria-busy')).to.equal('true');
+      expect(reader(el)?.getAttribute('aria-busy')).to.equal('true');
 
       el.loaded = true;
       await el.updateComplete;
 
       expect(loadingArea(el)).to.not.exist;
       expect(reader(el)?.classList.contains('hidden')).to.equal(false);
-      expect(frame(el)?.hasAttribute('aria-busy')).to.equal(false);
+      expect(reader(el)?.hasAttribute('aria-busy')).to.equal(false);
+    });
+
+    test('only the reader is busy, so the status and rail are not held back', async () => {
+      // A screen reader may hold back updates inside an aria-busy subtree,
+      // which would swallow the indicator's "Loading viewer" status. The
+      // rail beside it also stays usable while the theater loads.
+      const el = await fixture<IAItemNavigator>(
+        html`<ia-item-navigator
+          .menuContents=${[provider('files')]}
+        ></ia-item-navigator>`,
+      );
+
+      const busy = el.shadowRoot!.querySelectorAll('[aria-busy]');
+      expect([...busy].map((n) => n.id)).to.deep.equal(['reader']);
+      expect(loadingArea(el)!.closest('[aria-busy]')).to.equal(null);
+      expect(
+        el.shadowRoot!.querySelector('nav')!.closest('[aria-busy]'),
+      ).to.equal(null);
+    });
+
+    describe('following the drawer', () => {
+      // Real layout again, as in the drawer column test: animation off so the
+      // values read are the settled ones.
+      const openNavigator = async (width: number) => {
+        const el = await fixture<IAItemNavigator>(
+          html`<ia-item-navigator
+            style="display: block; width: ${width}px; height: 300px; --item-navigator-animation-timing: 0ms;"
+            .menuContents=${[provider('files')]}
+          ></ia-item-navigator>`,
+        );
+        el.menuOpened = true;
+        await el.updateComplete;
+        return el;
+      };
+      const rects = (el: IAItemNavigator) => {
+        const shadow = el.shadowRoot!;
+        return {
+          frame: el.getBoundingClientRect(),
+          menu: shadow.querySelector('#menu')!.getBoundingClientRect(),
+          area: shadow.querySelector('.loading-area')!.getBoundingClientRect(),
+          ring: shadow
+            .querySelector('.loading-area ia-status-indicator')!
+            .getBoundingClientRect(),
+        };
+      };
+
+      test('clears an open drawer where it would otherwise cover the ring', async () => {
+        // 660px is the case from review: centered on the whole frame the ring
+        // would sit at 305–355px, under a drawer that runs to 320px.
+        const el = await openNavigator(660);
+        const { frame, menu, area, ring } = rects(el);
+
+        expect(area.left).to.equal(menu.right);
+        expect(ring.left).to.be.greaterThan(menu.right);
+        // Centered on the theater's column, not on the whole frame.
+        const ringCenter = ring.left + ring.width / 2;
+        expect(ringCenter).to.be.closeTo((menu.right + frame.right) / 2, 1);
+      });
+
+      test('stays full width when the drawer overlays a narrow frame', async () => {
+        const el = await openNavigator(400);
+        const { frame, area } = rects(el);
+
+        expect(area.left).to.equal(frame.left);
+        expect(area.width).to.equal(frame.width);
+      });
     });
 
     test('brings the indicator back if the theater unloads', async () => {

@@ -114,18 +114,18 @@ export class IAItemNavigator extends LitElement {
   render(): TemplateResult {
     const displayReaderClass = this.loaded ? '' : 'hidden';
     return html`
-      <div
-        id="frame"
-        class=${this.menuClass}
-        aria-busy=${this.loaded ? nothing : 'true'}
-      >
+      <div id="frame" class=${this.menuClass}>
         <slot
           name="header"
           @slotchange=${(e: Event) => this.slotChange(e, 'header')}
         ></slot>
         <div class="menu-and-reader">
           ${this.shouldRenderMenu ? this.renderSideMenu : nothing}
-          <div id="reader" class=${displayReaderClass}>
+          <div
+            id="reader"
+            class=${displayReaderClass}
+            aria-busy=${this.loaded ? nothing : 'true'}
+          >
             ${this.renderViewport}
           </div>
           ${this.loaded ? nothing : this.loadingArea}
@@ -138,6 +138,10 @@ export class IAItemNavigator extends LitElement {
    * Stands in for the reader until it loads. The caption is hidden from
    * assistive tech because the indicator already announces the same words
    * through its `role="status"` title.
+   *
+   * Only the reader is marked `aria-busy` while it loads. On the frame it
+   * would also cover the still-usable rail and this area, and could hold back
+   * the status announcement.
    */
   get loadingArea(): TemplateResult {
     return html`
@@ -587,17 +591,25 @@ export class IAItemNavigator extends LitElement {
           fill: var(--item-navigator-icon-color--);
         }
 
-        /* Fills the space the hidden reader would take, centering its content. */
+        /* Fills the space the hidden reader would take, centering its content.
+           It moves with the drawer the same way the reader does (see the
+           shift and overlay rules below), so it stays centered on the theater. */
         .loading-area {
           flex: 1;
+          box-sizing: border-box;
           display: flex;
           align-items: center;
           justify-content: center;
           text-align: center;
+          transition:
+            width ${transitionTiming} ease-out,
+            margin-left ${transitionTiming} ease-out;
         }
 
-        /* Undo the generic slot rules above, which stretch slotted content to
-           the slot's height — that would pull the indicator out of shape. */
+        /* The generic slot rules above stretch the slot's children to its
+           height. Inside the shadow root those children are only the default
+           indicator and caption (light-DOM content slotted in by a consumer
+           isn't matched), so this undoes the stretch on the default. */
         .loading-area slot {
           display: flex;
           flex-direction: column;
@@ -664,7 +676,8 @@ export class IAItemNavigator extends LitElement {
          * transitioned, so it snaps away on open — letting the reader box track
          * the drawer's edge exactly during the shift, rather than trailing it.
          */
-        .has-menu:not(.open) #reader > * {
+        .has-menu:not(.open) #reader > *,
+        .has-menu:not(.open) .loading-area {
           box-sizing: border-box;
           padding-left: ${menuMargin};
         }
@@ -685,7 +698,8 @@ export class IAItemNavigator extends LitElement {
         }
 
         /* Shift: the drawer pushes the theater aside. */
-        .open #reader {
+        .open #reader,
+        .open .loading-area {
           width: calc(100% - ${subnavWidth});
           margin-left: ${subnavWidth};
         }
@@ -696,7 +710,8 @@ export class IAItemNavigator extends LitElement {
          * tracks resizes instantly instead of easing behind them.
          */
         @container navframe (max-width: 600px) {
-          .open #reader {
+          .open #reader,
+          .open .loading-area {
             width: 100%;
             margin-left: 0;
             transition: none;
