@@ -10,6 +10,7 @@ export type {
 export { Review } from './models/review';
 export type { SpeechMusicASREntry } from './models/speech-music-asr-entry';
 export type { Task, TaskColor, TaskStatus } from './models/task';
+export { runningTask } from './models/task';
 
 // metadata field types
 export {

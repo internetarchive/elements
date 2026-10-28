@@ -344,6 +344,18 @@ describe('<ia-topnav>', () => {
     });
   });
 
+  describe('language picker slot', () => {
+    test('forwards the language-picker slot to ia-topnav-primary-nav', async () => {
+      const el = await fixture<IATopNav>(html`<ia-topnav></ia-topnav>`);
+      await el.updateComplete;
+
+      const slot = el.shadowRoot
+        ?.querySelector('ia-topnav-primary-nav')
+        ?.querySelector('slot[name="language-picker"]');
+      expect(slot).to.exist;
+    });
+  });
+
   describe('slot pass throughs', () => {
     describe('slot for <ia-topnav-primary-nav>', () => {
       test('opens a slot with `secondIdentitySlotMode`', async () => {
