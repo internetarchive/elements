@@ -26,6 +26,29 @@ CI runs `lint`, `typecheck` and `test` as separate jobs. Nothing but `typecheck`
 checks types: vitest transpiles without checking and eslint isn't type-aware
 here, so run it before pushing rather than finding out from the PR.
 
+## Backwards compatibility
+
+Try really hard to keep every change backwards compatible. Consumers
+(offshoot, collection-browser, petabox, the iaux repos) take this package with a
+`^1.x` range and don't get to review what a minor release changes.
+
+- **Within a major version, changes are additive only.** A new field on a type
+  the library returns is fine. A new required field on a type consumers build
+  (mocks, object literals) and a new required method on an interface consumers
+  implement both break their typecheck. Make them optional, or put them on a new
+  interface that extends the old one. 1.6.0 added `patchMetadata` and
+  `updateMetadataField` to `MetadataServiceInterface` and broke every
+  implementer. 1.6.1 moved them to `MetadataWritableServiceInterface`.
+- **Don't remove or rename exports, props, attributes, events, CSS custom
+  properties or tag names.** Deprecate them instead: add a JSDoc `@deprecated`,
+  log a console warning where that makes sense, and keep them working.
+- **Check the consumers before a release.** Look for anything the change breaks
+  in offshoot, collection-browser, petabox `ia-reviews` and the iaux repos.
+  A prerelease installed in the real consumer is the best check (see
+  "Migrating a package in").
+- **A real breaking change needs a major version and the team's sign-off.**
+  Release notes call out any type-level change, even a small one.
+
 ## Publishing
 
 Publishing is driven entirely by **GitHub Releases**. Publishing a release fires

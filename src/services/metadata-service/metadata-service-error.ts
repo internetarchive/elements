@@ -3,6 +3,8 @@ export const MetadataServiceErrorType = {
   itemNotFound: 'MetadataService.ItemNotFound',
   decodingError: 'MetadataService.DecodingError',
   searchEngineError: 'MetadataService.SearchEngineError',
+  writeError: 'MetadataService.WriteError',
+  writeNotSupported: 'MetadataService.WriteNotSupported',
 } as const;
 
 export type MetadataServiceErrorType =
