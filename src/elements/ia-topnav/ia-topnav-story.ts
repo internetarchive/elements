@@ -1,4 +1,4 @@
-import { css, html, LitElement, type CSSResultGroup } from 'lit';
+import { css, html, LitElement, nothing, svg, type CSSResultGroup } from 'lit';
 import { state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 
@@ -17,6 +17,16 @@ const DEMO_ITEM_IDENTIFIER = 'goody';
 const DEMO_UPLOADER = 'uploader@archive.org';
 const DEMO_BIBLIO = 'https://openlibrary.org/search/inside?q=';
 
+const globeIcon = svg`
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="9.25" />
+    <path d="M2.75 12h18.5" />
+    <path d="M12 2.75c2.4 2.5 3.6 5.6 3.6 9.25s-1.2 6.75-3.6 9.25" />
+    <path d="M12 2.75c-2.4 2.5-3.6 5.6-3.6 9.25s1.2 6.75 3.6 9.25" />
+  </svg>
+`;
+
 @customElement('ia-topnav-story')
 export class IATopNavStory extends LitElement {
   @state() private signedIn = false;
@@ -28,6 +38,8 @@ export class IATopNavStory extends LitElement {
   @state() private canManageFlags = false;
 
   @state() private hideSearch = false;
+
+  @state() private languagePicker = true;
 
   @state() private lastEvent = '';
 
@@ -52,7 +64,13 @@ export class IATopNavStory extends LitElement {
 
   private toggleRow(
     label: string,
-    key: 'signedIn' | 'onAnItem' | 'admin' | 'canManageFlags' | 'hideSearch',
+    key:
+      | 'signedIn'
+      | 'onAnItem'
+      | 'admin'
+      | 'canManageFlags'
+      | 'hideSearch'
+      | 'languagePicker',
   ) {
     return html`
       <tr>
@@ -67,6 +85,18 @@ export class IATopNavStory extends LitElement {
           />
         </td>
       </tr>
+    `;
+  }
+
+  private get sampleLanguagePicker() {
+    return html`
+      <div slot="language-picker" class="sample-language-picker">
+        ${globeIcon}
+        <select aria-label="Language">
+          <option>English</option>
+          <option>Español</option>
+        </select>
+      </div>
     `;
   }
 
@@ -95,7 +125,10 @@ export class IATopNavStory extends LitElement {
           ?hideSearch=${this.hideSearch}
           @analyticsClick=${this.onAnalyticsClick}
           @analyticsSubmit=${this.onAnalyticsSubmit}
-        ></ia-topnav>
+          >${this.languagePicker
+            ? this.sampleLanguagePicker
+            : nothing}</ia-topnav
+        >
 
         <div slot="settings">
           <p class="event-log">${this.lastEvent || 'No events yet.'}</p>
@@ -105,6 +138,7 @@ export class IATopNavStory extends LitElement {
             ${this.toggleRow('Admin on the item', 'admin')}
             ${this.toggleRow('Can manage flags', 'canManageFlags')}
             ${this.toggleRow('Hide search', 'hideSearch')}
+            ${this.toggleRow('Language picker slot', 'languagePicker')}
           </table>
           <p class="hint">
             The admin sections of the user menu need all three of Signed in,
@@ -137,6 +171,14 @@ export class IATopNavStory extends LitElement {
             and up the media buttons can wrap at desktop widths.
           </p>
           <p>
+            The <code>language-picker</code> slot sits at the far right of the
+            bar on desktop, after Upload and the user menu, and is the last row
+            of the hamburger menu on phones. It takes up no room while it's
+            empty, and an element with the <code>hidden</code> attribute is
+            hidden. The demo fills it with a sample globe over a native select.
+            Turn off Language picker slot to see the empty state.
+          </p>
+          <p>
             A search bar goes in the <code>search</code> slot. Offshoot slots an
             <code>ia-dropdown-search-bar</code> in there. It sizes its own text,
             so it follows the page's <code>html</code> font size rather than the
@@ -161,6 +203,35 @@ export class IATopNavStory extends LitElement {
 
       td {
         padding-right: 10px;
+      }
+
+      .sample-language-picker {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: calc(40 * var(--topnavUnit--));
+        color: var(--iconFill);
+      }
+
+      .sample-language-picker:hover {
+        color: var(--linkHoverColor);
+      }
+
+      .sample-language-picker svg {
+        width: calc(24 * var(--topnavUnit--));
+        height: calc(24 * var(--topnavUnit--));
+        pointer-events: none;
+      }
+
+      .sample-language-picker select {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        appearance: none;
       }
     `;
   }
