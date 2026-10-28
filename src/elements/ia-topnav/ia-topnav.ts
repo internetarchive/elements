@@ -170,7 +170,7 @@ export class IATopNav extends LitElement {
           @trackSubmit=${this.trackSubmit}
           @menuToggled=${this.menuToggled}
         >
-          ${this.secondLogoSlot} ${this.searchSlot}
+          ${this.secondLogoSlot} ${this.searchSlot} ${this.languagePickerSlot}
         </ia-topnav-primary-nav>
         <ia-topnav-media-slider
           .baseHost=${this.normalizedBaseHost}
@@ -385,6 +385,10 @@ export class IATopNav extends LitElement {
 
   get searchSlot() {
     return html`<slot name="search" slot="search"></slot>`;
+  }
+
+  get languagePickerSlot() {
+    return html`<slot name="language-picker" slot="language-picker"></slot>`;
   }
 
   get secondLogoSlot() {

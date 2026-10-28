@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/elements",
-  "version": "1.4.0",
+  "version": "1.6.1",
   "description": "A web component library from the Internet Archive.",
   "license": "AGPL-3.0-only",
   "type": "module",
@@ -36,6 +36,7 @@
     "strings:build": "wireit"
   },
   "dependencies": {
+    "@internetarchive/analytics-manager": "^0.1.5",
     "@internetarchive/fetch-handler": "^1.4.0",
     "@internetarchive/ia-dropdown": "^2.2.0",
     "@internetarchive/icon-close": "^1.4.0",

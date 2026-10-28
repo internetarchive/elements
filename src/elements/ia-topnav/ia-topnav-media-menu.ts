@@ -1,5 +1,5 @@
 import { CSSResultGroup, LitElement, PropertyValues, css, html } from 'lit';
-import { property, queryAll } from 'lit/decorators.js';
+import { property, queryAll, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 
 import { defaultTopNavConfig } from './data/menus';
@@ -88,6 +88,24 @@ export class MediaMenu extends LitElement {
 
   @queryAll('ia-topnav-media-button') mediaButtons?: MediaButton[];
 
+  /** True while a visible element is slotted into `language-picker`. */
+  @state() private hasLanguagePicker = false;
+
+  private languagePickerObserver?: MutationObserver;
+
+  connectedCallback() {
+    super.connectedCallback();
+    const slot = this.shadowRoot?.querySelector<HTMLSlotElement>(
+      'slot[name="language-picker"]',
+    );
+    if (slot) this.observeLanguagePicker(slot);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.languagePickerObserver?.disconnect();
+  }
+
   updated(props: PropertyValues) {
     if (props.has('currentTab')) {
       const mediaButtons = Array.from(this.mediaButtons ?? []);
@@ -114,10 +132,20 @@ export class MediaMenu extends LitElement {
 
   render() {
     return html`
-      <div class="media-menu-container ${this.menuClass}">
+      <div
+        class="media-menu-container ${this.menuClass} ${this.hasLanguagePicker
+          ? 'has-language-picker'
+          : ''}"
+      >
         <div class="overflow-clip">
           <nav class="media-menu-inner" aria-expanded="${this.menuOpened}">
             <div class="menu-group">${this.mediaMenuOptionsTemplate}</div>
+            <div class="language-picker-row">
+              <slot
+                name="language-picker"
+                @slotchange=${this.languagePickerSlotChanged}
+              ></slot>
+            </div>
           </nav>
         </div>
       </div>
@@ -145,6 +173,28 @@ export class MediaMenu extends LitElement {
       },
     );
     return buttons;
+  }
+
+  private languagePickerSlotChanged(e: Event) {
+    this.observeLanguagePicker(e.currentTarget as HTMLSlotElement);
+  }
+
+  /** Tracks whether a visible element is slotted, following its `hidden` attribute. */
+  private observeLanguagePicker(slot: HTMLSlotElement) {
+    const update = () => {
+      this.hasLanguagePicker = slot
+        .assignedElements({ flatten: true })
+        .some((el) => !el.hasAttribute('hidden'));
+    };
+    this.languagePickerObserver?.disconnect();
+    this.languagePickerObserver = new MutationObserver(update);
+    slot.assignedElements({ flatten: true }).forEach((el) => {
+      this.languagePickerObserver?.observe(el, {
+        attributes: true,
+        attributeFilter: ['hidden'],
+      });
+    });
+    update();
   }
 
   get menuOpened() {
@@ -176,6 +226,10 @@ export class MediaMenu extends LitElement {
           line-height: normal;
         }
 
+        .language-picker-row {
+          display: none;
+        }
+
         /* Mobile view styles */
         @media (max-width: ${TOPNAV_MOBILE_BREAKPOINT - 1}px) {
           .media-menu-inner {
@@ -201,6 +255,20 @@ export class MediaMenu extends LitElement {
 
           .open .overflow-clip {
             height: calc(400 * var(--topnavUnit--));
+          }
+          .open.has-language-picker .overflow-clip {
+            height: calc(450 * var(--topnavUnit--));
+          }
+          .has-language-picker .language-picker-row {
+            display: flex;
+            align-items: stretch;
+            height: calc(50 * var(--topnavUnit--));
+            --languagePickerSize: calc(50 * var(--topnavUnit--));
+            --languagePickerJustify: flex-start;
+            --languagePickerPadding: 0 calc(10 * var(--topnavUnit--));
+          }
+          .language-picker-row ::slotted(*) {
+            flex: 1;
           }
         }
 

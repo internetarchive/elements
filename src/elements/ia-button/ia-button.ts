@@ -70,10 +70,11 @@ export class IAButton extends LitElement {
   @property({ type: Boolean }) openLinksNewTab: boolean = false;
 
   render(): TemplateResult {
-    return html`
-      ${this.href ? this.linkTemplate : this.buttonTemplate}
-      <slot name="hidden-button"></slot>
-    `;
+    // No whitespace between the top-level nodes: a text node in the shadow
+    // root renders as a space when the host is display:inline.
+    return html`${this.href ? this.linkTemplate : this.buttonTemplate}<slot
+        name="hidden-button"
+      ></slot>`;
   }
 
   protected willUpdate(changed: PropertyValues): void {
@@ -108,34 +109,30 @@ export class IAButton extends LitElement {
 
   /* The native button to render */
   private get buttonTemplate(): TemplateResult {
-    return html`
-      <button
-        part="button"
-        class=${this.classes}
-        aria-disabled=${this.inactive ? 'true' : nothing}
-        aria-busy=${this.loading ? 'true' : nothing}
-        @click=${this.handleInactiveClick}
-      >
-        ${this.contentTemplate}
-      </button>
-    `;
+    return html`<button
+      part="button"
+      class=${this.classes}
+      aria-disabled=${this.inactive ? 'true' : nothing}
+      aria-busy=${this.loading ? 'true' : nothing}
+      @click=${this.handleInactiveClick}
+    >
+      ${this.contentTemplate}
+    </button>`;
   }
 
   /* A link styled as a button, for an href */
   private get linkTemplate(): TemplateResult {
-    return html`
-      <a
-        part="button"
-        class=${this.classes}
-        href=${this.href ?? ''}
-        target=${this.openLinksNewTab ? '_blank' : '_self'}
-        rel=${ifDefined(this.openLinksNewTab ? 'noopener' : undefined)}
-        aria-disabled=${this.inactive ? 'true' : nothing}
-        aria-busy=${this.loading ? 'true' : nothing}
-        @click=${this.handleInactiveClick}
-        >${this.contentTemplate}</a
-      >
-    `;
+    return html`<a
+      part="button"
+      class=${this.classes}
+      href=${this.href ?? ''}
+      target=${this.openLinksNewTab ? '_blank' : '_self'}
+      rel=${ifDefined(this.openLinksNewTab ? 'noopener' : undefined)}
+      aria-disabled=${this.inactive ? 'true' : nothing}
+      aria-busy=${this.loading ? 'true' : nothing}
+      @click=${this.handleInactiveClick}
+      >${this.contentTemplate}</a
+    >`;
   }
 
   /*
