@@ -33,11 +33,20 @@ const themeStyles = css`
     Colors. Some components read these by name. New code uses the tokens.
     */
     --true-white: var(--ia-color-palette-white--);
+    --off-white: var(--ia-color-palette-gray-50--);
+    --dark-gray: var(--ia-color-palette-gray-850--);
     --mid-gray: var(--ia-color-palette-gray-800--);
+    --light-gray: var(--ia-color-palette-gray-600--);
     --lighter-gray: var(--ia-color-palette-gray-500--);
     --lightest-gray: var(--ia-color-palette-navy-100--);
-    --navy-blue: var(--ia-color-palette-navy-700--);
+    --classic-red: var(--ia-color-palette-red-500--);
+    --brick: var(--ia-color-legacy-brick--);
+    --coral: var(--ia-color-legacy-coral--);
+    --dark-cantaloupe: var(--ia-color-legacy-orange-500--);
+    --cantaloupe: var(--ia-color-legacy-orange-400--);
     --mint-green: var(--ia-color-palette-green-700--); /* D-10 */
+    --navy-blue: var(--ia-color-palette-navy-700--);
+    --bright-blue: var(--ia-color-legacy-blue-500--);
     --default-icon-color: currentColor;
     --default-icon-filter: none;
     --default-icon-transition: none;
