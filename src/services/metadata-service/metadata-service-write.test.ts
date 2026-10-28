@@ -4,6 +4,8 @@ import { describe, it, expect } from 'vitest';
 import { Result } from '../result-type/result-type';
 import { MetadataBackendInterface } from './backend/metadata-backend-interface';
 import { MetadataService } from './metadata-service';
+import type { MetadataServiceInterface } from './metadata-service-interface';
+import type { MetadataResponse } from './responses/metadata-response';
 import {
   MetadataServiceError,
   MetadataServiceErrorType,
@@ -134,5 +136,16 @@ describe('MetadataService writes', () => {
       expect(result.error?.message).to.equal("Couldn't locate item 'foo'");
       expect(backend.writes).to.be.empty;
     });
+  });
+});
+
+describe('MetadataServiceInterface', () => {
+  it('can be implemented without the write methods', async () => {
+    const readOnly: MetadataServiceInterface = {
+      fetchMetadata: async () => ({ success: {} as MetadataResponse }),
+      fetchMetadataValue: async () => ({ success: {} as any }),
+    };
+    const result = await readOnly.fetchMetadata('foo');
+    expect(result.success).to.exist;
   });
 });

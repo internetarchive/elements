@@ -59,7 +59,15 @@ export interface MetadataServiceInterface {
     identifier: string,
     keypath: string,
   ): Promise<Result<T, MetadataServiceError>>;
+}
 
+/**
+ * A metadata service that can also write. Kept separate from
+ * `MetadataServiceInterface` so read-only implementations and mocks don't have
+ * to provide the write methods.
+ */
+export interface MetadataWritableServiceInterface
+  extends MetadataServiceInterface {
   /**
    * Apply a JSON Patch to an item's metadata as the logged-in user.
    *
