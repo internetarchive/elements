@@ -7,6 +7,7 @@ import {
 } from './metadata-service-error';
 import type {
   MetadataServiceInterface,
+  MetadataWritableServiceInterface,
   MetadataWriteResult,
 } from './metadata-service-interface';
 import {
@@ -20,7 +21,7 @@ import { MetadataResponse } from './responses/metadata-response';
  * The Metadata Service is responsible for taking the raw response provided by
  * the backend and modeling it as a `MetadataResponse` object.
  */
-export class MetadataService implements MetadataServiceInterface {
+export class MetadataService implements MetadataWritableServiceInterface {
   public static default: MetadataServiceInterface = new MetadataService(
     new DefaultMetadataBackend(),
   );

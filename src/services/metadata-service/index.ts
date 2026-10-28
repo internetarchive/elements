@@ -20,6 +20,7 @@ export {
 } from './metadata-service-error';
 export type {
   MetadataServiceInterface,
+  MetadataWritableServiceInterface,
   MetadataWriteResult,
 } from './metadata-service-interface';
 export { buildMetadataFieldPatch } from './metadata-patch';
