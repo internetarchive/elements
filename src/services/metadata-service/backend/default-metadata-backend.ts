@@ -5,6 +5,7 @@ import {
   MetadataServiceErrorType,
 } from '../metadata-service-error';
 import { MetadataBackendInterface } from './metadata-backend-interface';
+import type { MetadataPatchOperation } from '../metadata-patch';
 
 /**
  * The DefaultSearchBackend performs a `window.fetch` request to archive.org
@@ -75,6 +76,61 @@ export class DefaultMetadataBackend implements MetadataBackendInterface {
   }
 
   /**
+   * @inheritdoc
+   *
+   * Makes a single attempt: a write that timed out may still have queued its
+   * task, and retrying would queue another.
+   */
+  async writeMetadata(
+    identifier: string,
+    target: string,
+    patch: MetadataPatchOperation[],
+  ): Promise<Result<any, MetadataServiceError>> {
+    if (!identifier || identifier === '.' || identifier === '..') {
+      return this.getErrorResult(
+        MetadataServiceErrorType.itemNotFound,
+        'Invalid identifier',
+      );
+    }
+    const url = `https://${this.baseUrl}/metadata/${encodeURIComponent(
+      identifier,
+    )}`;
+    const body = new URLSearchParams({
+      '-target': target,
+      '-patch': JSON.stringify(patch),
+    });
+
+    const result = await this.fetchUrl(url, {
+      skipScope: true,
+      requestOptions: {
+        method: 'POST',
+        credentials: this.includeCredentials ? 'include' : 'same-origin',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        },
+        body,
+      },
+    });
+
+    // MDAPI reports a rejected write as `{ success: false, error }`
+    if (result.error?.type === MetadataServiceErrorType.searchEngineError) {
+      return this.getErrorResult(
+        MetadataServiceErrorType.writeError,
+        result.error.message,
+        result.error.details,
+      );
+    }
+    if (result.success && result.success.success !== true) {
+      return this.getErrorResult(
+        MetadataServiceErrorType.writeError,
+        'Metadata write was not accepted',
+        result.success,
+      );
+    }
+    return result;
+  }
+
+  /**
    * Fires a request to the URL (with this backend's options applied) and
    * asynchronously returns a Result object containing either the raw response
    * JSON or a MetadataServiceError.
@@ -83,10 +139,12 @@ export class DefaultMetadataBackend implements MetadataBackendInterface {
     url: string,
     options?: {
       requestOptions?: RequestInit;
+      /** Leaves the page's `scope` param off the request (used for writes) */
+      skipScope?: boolean;
     },
   ): Promise<Result<any, MetadataServiceError>> {
     const finalUrl = new URL(url);
-    if (this.requestScope) {
+    if (this.requestScope && !options?.skipScope) {
       finalUrl.searchParams.set('scope', this.requestScope);
     }
 
