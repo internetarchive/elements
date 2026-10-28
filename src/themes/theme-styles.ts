@@ -37,6 +37,7 @@ const themeStyles = css`
     --lighter-gray: var(--ia-color-palette-gray-500--);
     --lightest-gray: var(--ia-color-palette-navy-100--);
     --navy-blue: var(--ia-color-palette-navy-700--);
+    --mint-green: var(--ia-color-palette-green-700--); /* D-10 */
     --default-icon-color: currentColor;
     --default-icon-filter: none;
     --default-icon-transition: none;

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
+import { runningTask, Task } from '../../item-metadata/item-metadata';
 import { MetadataResponse } from './metadata-response';
 
 describe('MetadataResponse', () => {
@@ -51,5 +52,58 @@ describe('MetadataResponse', () => {
     expect(response.plays).to.be.undefined;
     expect(response.simplelists).to.be.undefined;
     expect(response.solo).to.be.undefined;
+  });
+
+  describe('tasks', () => {
+    const task = (status: string, cmd: string) => ({
+      task_id: 1,
+      cmd,
+      priority: 0,
+      wait_admin: 0,
+      args: {},
+      color: 'blue',
+      status,
+    });
+
+    it('defaults to an empty list when absent', async () => {
+      const response = new MetadataResponse({
+        metadata: { identifier: 'foo' },
+      });
+      expect(response.tasks).to.deep.equal([]);
+      expect(response.runningTask).to.be.undefined;
+    });
+
+    it('exposes the tasks list', async () => {
+      const response = new MetadataResponse({
+        metadata: { identifier: 'foo' },
+        tasks: [task('queued', 'derive.php')],
+      });
+      expect(response.tasks).to.have.lengthOf(1);
+    });
+
+    it('runningTask returns the first running task without .php', async () => {
+      const response = new MetadataResponse({
+        metadata: { identifier: 'foo' },
+        tasks: [
+          task('queued', 'archive.php'),
+          task('running', 'derive.php'),
+          task('running', 'book.php'),
+        ],
+      });
+      expect(response.runningTask?.cmd).to.equal('derive');
+      expect(response.runningTask?.status).to.equal('running');
+      expect(response.tasks[1].cmd).to.equal('derive.php');
+    });
+
+    it('runningTask leaves a cmd without .php alone', async () => {
+      expect(runningTask([task('running', 'derive')] as Task[])?.cmd).to.equal(
+        'derive',
+      );
+    });
+
+    it('runningTask is undefined when nothing is running', async () => {
+      expect(runningTask([task('queued', 'derive.php')] as Task[])).to.be
+        .undefined;
+    });
   });
 });
