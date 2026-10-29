@@ -104,7 +104,7 @@ export class IAWaybackSearchForm extends LitElement {
       css`
         :host {
           --wayback-search-input-text-color--: var(
-            --ia-theme-primary-text-color,
+            --ia-theme-secondary-text-color,
             var(--ia-color-text-primary--)
           );
           --wayback-search-input-bg--: var(
