@@ -312,7 +312,7 @@ export class IAScrubberBar extends LitElement {
           );
           --scrubber-track-fill-color--: var(
             --ia-theme-scrubber-track-fill-color,
-            var(--ia-color-text-inverse-link--)
+            var(--ia-color-text-link--)
           );
 
           /*
