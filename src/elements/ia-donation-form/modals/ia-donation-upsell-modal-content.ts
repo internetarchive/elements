@@ -186,7 +186,7 @@ export class IADonationUpsellModalContent extends LitElement {
 
         .monthly-amount {
           background-color: var(--true-white);
-          padding: var(--padding-sm) 0.625rem; /* 10px at a 16px root */
+          padding: var(--padding-sm) 0.625rem; /* 6.25px at a 10px root */
           border-radius: 5px;
           text-align: center;
           margin-bottom: var(--padding-sm);
