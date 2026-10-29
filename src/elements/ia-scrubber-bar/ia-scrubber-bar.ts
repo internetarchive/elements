@@ -13,6 +13,7 @@ import { localized, msg } from '@lit/localize';
 import { SectionMarkerMode } from './models';
 
 import './ia-section-marker';
+import { tokenStyles } from '@src/themes/tokens';
 
 /**
  * Event names emitted by this component
@@ -246,165 +247,184 @@ export class IAScrubberBar extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        --scrubber-bar-height--: var(--ia-theme-scrubber-bar-height, 20px);
-        --scrubber-marker-inset--: var(--ia-theme-scrubber-marker-inset, 10px);
+    return [
+      tokenStyles,
+      css`
+        :host {
+          --scrubber-bar-height--: var(--ia-theme-scrubber-bar-height, 20px);
+          --scrubber-marker-inset--: var(
+            --ia-theme-scrubber-marker-inset,
+            var(--ia-space-2--)
+          );
 
-        --scrubber-thumb-color--: var(--ia-theme-scrubber-thumb-color, #fff);
-        --scrubber-thumb-diameter--: var(
-          --ia-theme-scrubber-thumb-diameter,
-          20px
-        );
-        --scrubber-thumb-border--: var(
-          --ia-theme-scrubber-thumb-border,
-          1px solid #000
-        );
-        --scrubber-thumb-border-radius--: var(
-          --ia-theme-scrubber-thumb-border-radius,
-          50%
-        );
-        /*
+          --scrubber-thumb-color--: var(
+            --ia-theme-scrubber-thumb-color,
+            var(--ia-color-text-inverse--)
+          );
+          --scrubber-thumb-diameter--: var(
+            --ia-theme-scrubber-thumb-diameter,
+            20px
+          );
+          --scrubber-thumb-border--: var(
+            --ia-theme-scrubber-thumb-border,
+            var(--ia-size-border-width--) solid
+              var(--ia-color-surface-theater--)
+          );
+          --scrubber-thumb-border-radius--: var(
+            --ia-theme-scrubber-thumb-border-radius,
+            var(--ia-radius-circle--)
+          );
+          /*
           Centres the thumb on the track. The thumb is content-box, so its
           border adds 1px above and below the diameter, hence the extra -1px.
           Comes out at -6px for the default track and thumb sizes.
         */
-        --scrubber-thumb-top-margin--: var(
-          --ia-theme-scrubber-thumb-top-margin,
-          calc(
-            (
-                var(--scrubber-track-height--) - var(
-                    --scrubber-thumb-diameter--
-                  )
-              ) /
-              2 - 1px
-          )
-        );
+          --scrubber-thumb-top-margin--: var(
+            --ia-theme-scrubber-thumb-top-margin,
+            calc(
+              (
+                  var(--scrubber-track-height--) - var(
+                      --scrubber-thumb-diameter--
+                    )
+                ) /
+                2 - 1px
+            )
+          );
 
-        --scrubber-track-height--: var(--ia-theme-scrubber-track-height, 10px);
-        --scrubber-track-border--: var(
-          --ia-theme-scrubber-track-border,
-          1px solid #fff
-        );
-        --scrubber-track-border-radius--: var(
-          --ia-theme-scrubber-track-border-radius,
-          5px
-        );
-        --scrubber-track-color--: var(
-          --ia-theme-scrubber-track-color,
-          rgba(0, 0, 0, 0.1)
-        );
-        --scrubber-track-fill-color--: var(
-          --ia-theme-scrubber-track-fill-color,
-          #3272b6
-        );
+          --scrubber-track-height--: var(
+            --ia-theme-scrubber-track-height,
+            10px
+          );
+          --scrubber-track-border--: var(
+            --ia-theme-scrubber-track-border,
+            var(--ia-size-border-width--) solid var(--ia-color-text-inverse--)
+          );
+          --scrubber-track-border-radius--: var(
+            --ia-theme-scrubber-track-border-radius,
+            var(--ia-radius-pill--)
+          );
+          --scrubber-track-color--: var(
+            --ia-theme-scrubber-track-color,
+            rgba(0, 0, 0, 0.1)
+          );
+          --scrubber-track-fill-color--: var(
+            --ia-theme-scrubber-track-fill-color,
+            var(--ia-color-text-inverse-link--)
+          );
 
-        /*
+          /*
           How far off the bottom the track sits. The fill and the section
           markers both line up against this, so they follow the track when its
           height is themed. Comes out at 7px for the default sizes.
         */
-        --scrubber-track-offset--: calc(
-          (var(--scrubber-bar-height--) - var(--scrubber-track-height--)) / 2 +
-            2px
-        );
-      }
+          --scrubber-track-offset--: calc(
+            (var(--scrubber-bar-height--) - var(--scrubber-track-height--)) /
+              2 + 2px
+          );
+        }
 
-      .container {
-        position: relative;
-        height: var(--scrubber-bar-height--);
-      }
+        .container {
+          position: relative;
+          height: var(--scrubber-bar-height--);
+        }
 
-      /*
+        /*
         The fill is a plain element rather than a track pseudo-element, so the
         played portion is just a hard gradient stop driven by a custom property.
       */
-      .color-fill {
-        height: var(--scrubber-track-height--);
-        border-radius: 1em;
-        position: absolute;
-        bottom: var(--scrubber-track-offset--);
-        left: 2px;
-        right: -2px;
-        background: linear-gradient(
-          to right,
-          var(--scrubber-track-fill-color--) 0%,
-          var(--scrubber-track-fill-color--) var(--fill-percent--),
-          var(--scrubber-track-color--) var(--fill-percent--),
-          var(--scrubber-track-color--) 100%
-        );
-      }
+        .color-fill {
+          height: var(--scrubber-track-height--);
+          border-radius: 1em;
+          position: absolute;
+          bottom: var(--scrubber-track-offset--);
+          left: 2px;
+          right: -2px;
+          background: linear-gradient(
+            to right,
+            var(--scrubber-track-fill-color--) 0%,
+            var(--scrubber-track-fill-color--) var(--fill-percent--),
+            var(--scrubber-track-color--) var(--fill-percent--),
+            var(--scrubber-track-color--) 100%
+          );
+        }
 
-      .marker-container {
-        position: absolute;
-        left: var(--scrubber-marker-inset--);
-        right: var(--scrubber-marker-inset--);
-        height: 100%;
-      }
+        .marker-container {
+          position: absolute;
+          left: var(--scrubber-marker-inset--);
+          right: var(--scrubber-marker-inset--);
+          height: 100%;
+        }
 
-      ia-section-marker {
-        position: absolute;
-        width: 2rem;
-        height: var(--scrubber-track-height--);
-        bottom: var(--scrubber-track-offset--);
-        /*
+        ia-section-marker {
+          position: absolute;
+          width: 2rem; /* 20px at a 10px root */
+          height: var(--scrubber-track-height--);
+          bottom: var(--scrubber-track-offset--);
+          /*
           The left offset puts the marker where it belongs, but the divider runs
           down the middle of the marker, so it shifts back by half its own width
           to line the divider up with that point.
         */
-        transform: translateX(-50%);
-      }
+          transform: translateX(-50%);
+        }
 
-      input[type='range'] {
-        -webkit-appearance: none;
-        appearance: none;
-        height: var(--scrubber-bar-height--);
-        padding: 0;
-        width: 100%;
-        background: none;
-        outline: none;
-        position: absolute;
-        bottom: 0;
-      }
+        input[type='range'] {
+          -webkit-appearance: none;
+          appearance: none;
+          height: var(--scrubber-bar-height--);
+          padding: 0;
+          width: 100%;
+          background: none;
+          position: absolute;
+          bottom: 0;
+        }
 
-      input[type='range']::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        box-sizing: content-box;
-        margin-top: var(--scrubber-thumb-top-margin--);
-        background-color: var(--scrubber-thumb-color--);
-        height: var(--scrubber-thumb-diameter--);
-        width: var(--scrubber-thumb-diameter--);
-        border-radius: var(--scrubber-thumb-border-radius--);
-        border: var(--scrubber-thumb-border--);
-        cursor: pointer;
-      }
+        /* The ring in its dark-surface color, on keyboard focus. */
+        input[type='range']:focus-visible {
+          outline: var(--ia-size-focus-ring--) solid
+            var(--ia-color-border-focus-inverse--);
+          outline-offset: var(--ia-size-focus-ring-offset--);
+        }
 
-      input[type='range']::-moz-range-thumb {
-        background-color: var(--scrubber-thumb-color--);
-        height: var(--scrubber-thumb-diameter--);
-        width: var(--scrubber-thumb-diameter--);
-        border-radius: var(--scrubber-thumb-border-radius--);
-        border: var(--scrubber-thumb-border--);
-        cursor: pointer;
-      }
+        input[type='range']::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          box-sizing: content-box;
+          margin-top: var(--scrubber-thumb-top-margin--);
+          background-color: var(--scrubber-thumb-color--);
+          height: var(--scrubber-thumb-diameter--);
+          width: var(--scrubber-thumb-diameter--);
+          border-radius: var(--scrubber-thumb-border-radius--);
+          border: var(--scrubber-thumb-border--);
+          cursor: pointer;
+        }
 
-      input[type='range']::-webkit-slider-runnable-track {
-        border: var(--scrubber-track-border--);
-        height: var(--scrubber-track-height--);
-        border-radius: var(--scrubber-track-border-radius--);
-      }
+        input[type='range']::-moz-range-thumb {
+          background-color: var(--scrubber-thumb-color--);
+          height: var(--scrubber-thumb-diameter--);
+          width: var(--scrubber-thumb-diameter--);
+          border-radius: var(--scrubber-thumb-border-radius--);
+          border: var(--scrubber-thumb-border--);
+          cursor: pointer;
+        }
 
-      input[type='range']::-moz-range-track {
-        border: var(--scrubber-track-border--);
-        height: var(--scrubber-track-height--);
-        border-radius: var(--scrubber-track-border-radius--);
-      }
+        input[type='range']::-webkit-slider-runnable-track {
+          border: var(--scrubber-track-border--);
+          height: var(--scrubber-track-height--);
+          border-radius: var(--scrubber-track-border-radius--);
+        }
 
-      input[type='range']::-moz-range-progress {
-        height: var(--scrubber-track-height--);
-        border-radius: var(--scrubber-track-border-radius--);
-      }
-    `;
+        input[type='range']::-moz-range-track {
+          border: var(--scrubber-track-border--);
+          height: var(--scrubber-track-height--);
+          border-radius: var(--scrubber-track-border-radius--);
+        }
+
+        input[type='range']::-moz-range-progress {
+          height: var(--scrubber-track-height--);
+          border-radius: var(--scrubber-track-border-radius--);
+        }
+      `,
+    ];
   }
 }
