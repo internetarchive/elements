@@ -210,7 +210,7 @@ ia-button { inline-size: var(--ia-theme-button-width); }
 .ia-button--link {
   --_padding: 0;
   --_text: var(--ia-color-text-link);
-  min-block-size: var(--ia-size-control-sm);
+  min-block-size: var(--ia-size-control-md);
 }
 
 .ia-button--secondary {
