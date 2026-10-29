@@ -265,7 +265,7 @@ export class IADonationThermometer extends LitElement {
         :host {
           --donation-thermometer-height--: var(
             --ia-donation-thermometer-height,
-            2rem
+            2rem /* 20px at a 10px root */
           );
           --donation-thermometer-fill-color--: var(
             --ia-donation-thermometer-fill-color,
@@ -372,12 +372,12 @@ export class IADonationThermometer extends LitElement {
         .value-left .thermometer-value {
           transform: translateX(-100%);
           color: var(--donation-thermometer-value-on-fill-color--);
-          padding: 0 0.5rem 0 1rem;
+          padding: 0 var(--ia-space-1--) 0 var(--ia-space-2--);
         }
 
         .value-right .thermometer-value {
           color: var(--donation-thermometer-value-on-track-color--);
-          padding: 0 1rem 0 0.5rem;
+          padding: 0 var(--ia-space-2--) 0 var(--ia-space-1--);
         }
 
         .donate-goal {
