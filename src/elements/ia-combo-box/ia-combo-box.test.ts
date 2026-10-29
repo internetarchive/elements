@@ -161,6 +161,21 @@ describe('IA Combo Box', () => {
       expect(highlightedOption.textContent.trim()).to.equal('Baz');
     });
 
+    test('marks the highlighted option with a bar, not just a soft fill', async () => {
+      const el = await fixture<IAComboBox>(html`
+        <ia-combo-box .options=${BASIC_OPTIONS} value="baz"></ia-combo-box>
+      `);
+      el.open = true;
+      await el.updateComplete;
+
+      const highlighted = el.shadowRoot!.querySelector(
+        '.option.highlight',
+      ) as HTMLElement;
+      expect(getComputedStyle(highlighted).boxShadow).to.equal(
+        'rgb(58, 79, 214) 3px 0px 0px 0px inset',
+      );
+    });
+
     test('clears the selection & text when a null value is set', async () => {
       const el = await fixture<IAComboBox>(html`
         <ia-combo-box .options=${BASIC_OPTIONS} value="foo"></ia-combo-box>

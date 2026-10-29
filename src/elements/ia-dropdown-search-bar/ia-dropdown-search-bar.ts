@@ -269,6 +269,8 @@ export class IADropdownSearchBar extends LitElement {
         border-radius: var(--ia-radius-default--) 0 0 var(--ia-radius-default--);
 
         --dropdownMainButtonPadding: 0 var(--search-bar-internal-padding--, 5px);
+        /* The trigger sits on the light sunken surface. */
+        --dropdownFocusRingColor: var(--ia-color-border-focus--);
         /* The open picker is the dark dropdown panel. */
         --dropdownBgColor: var(--ia-color-surface-inverse--);
         --dropdownTextColor: var(--ia-color-text-inverse--);

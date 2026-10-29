@@ -562,13 +562,17 @@ export class IADropdown extends LitElement {
           );
         }
 
-        /* The trigger usually sits on a light surface; a host on a dark one
-           sets --dropdownFocusRingColor to the dark-surface focus color. The
-           ring is inside the trigger's edge, so it lines up with the panel
-           that opens under it. */
+        /* The ring defaults to the dark-surface focus color, since the
+           trigger's own defaults (white text and caret) assume a dark host. A
+           host on a light surface sets --dropdownFocusRingColor to
+           --ia-color-border-focus. The ring is inside the trigger's edge, so
+           it lines up with the panel that opens under it. */
         button.click-main:focus-visible {
           outline: var(--ia-size-focus-ring--) solid
-            var(--dropdownFocusRingColor, var(--ia-color-border-focus--));
+            var(
+              --dropdownFocusRingColor,
+              var(--ia-color-border-focus-inverse--)
+            );
           outline-offset: calc(-1 * var(--ia-size-focus-ring--));
         }
 
@@ -761,6 +765,13 @@ export class IADropdown extends LitElement {
           outline-offset: calc(-1 * var(--ia-size-focus-ring--));
         }
 
+        /* On the selected row the ring takes the row's text color, which
+           contrasts with its fill whether that is the default dark one or a
+           light one a host brings back. The blue ring is 2.58:1 on #666. */
+        #dropdown-main li.selected > *:focus-visible {
+          outline-color: currentColor;
+        }
+
         #dropdown-main li a {
           text-decoration: none;
           display: block;
@@ -798,10 +809,12 @@ export class IADropdown extends LitElement {
           align-content: center;
           flex-wrap: nowrap;
           height: 100%;
+          /* The option's whole inset: 20px at the sides, from this padding
+             alone, so an override of --dropdownItemPadding* is exact. */
           padding: var(--dropdownItemPaddingTop, 5px)
-            var(--dropdownItemPaddingRight, 10px)
+            var(--dropdownItemPaddingRight, var(--ia-space-4--))
             var(--dropdownItemPaddingBottom, 5px)
-            var(--dropdownItemPaddingLeft, 10px);
+            var(--dropdownItemPaddingLeft, var(--ia-space-4--));
           box-sizing: border-box;
         }
 
@@ -810,7 +823,7 @@ export class IADropdown extends LitElement {
           height: inherit;
           color: ${dropdownTextColor};
           background: var(--dropdownItemButtonBgColor, transparent);
-          padding: var(--dropdownItemButtonPadding, 0 var(--ia-space-2--));
+          padding: var(--dropdownItemButtonPadding, 0);
           text-align: ${dropdownTextAlign};
         }
       `,
