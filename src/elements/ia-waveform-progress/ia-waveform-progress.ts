@@ -174,7 +174,7 @@ export class IAWaveformProgress extends LitElement {
         :host {
           --waveform-fill-color--: var(
             --ia-theme-waveform-fill-color,
-            var(--ia-color-text-inverse-link--)
+            var(--ia-color-text-link--)
           );
           --waveform-zone-of-silence-color--: var(
             --ia-theme-waveform-zone-of-silence-color,
