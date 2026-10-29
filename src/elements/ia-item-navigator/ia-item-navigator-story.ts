@@ -15,6 +15,7 @@ import type {
   MenuShortcutInterface,
 } from './interfaces/menu-interfaces';
 import type { FileSortOption, ViewableFileInfo } from './menus/models';
+import type { MediaTypeIcon } from '@src/elements/ia-status-indicator/ia-status-indicator';
 import type {
   StyleInputData,
   StylePalette,
@@ -183,11 +184,24 @@ const DEMO_FILES: DemoFile[] = [
   demoFile('sounds-78-03', 'Sounds, 3/78', 'pdf', 5, 'sounds-78-03.pdf'),
 ];
 
+/** The indicator glyph for each demo file kind, as a consumer would map it. */
+const DEMO_LOADING_GLYPHS: Record<DemoMediaType, MediaTypeIcon> = {
+  image: 'images',
+  pdf: 'texts',
+  video: 'video',
+  audio: 'audio',
+  book: 'texts',
+};
+
 @customElement('ia-item-navigator-story')
 export class IAItemNavigatorStory extends LitElement {
   @state() private loaded = true;
 
   @state() private viewAvailable = true;
+
+  @state() private mediatypeKnown = false;
+
+  @state() private customLoading = false;
 
   @state() private headerOn = true;
 
@@ -348,6 +362,16 @@ export class IAItemNavigatorStory extends LitElement {
           unit: 'px',
         },
         {
+          label: 'Loading indicator width',
+          cssVariable: '--item-navigator-loading-indicator-width',
+          defaultValue: 5,
+          inputType: 'range',
+          min: 3,
+          max: 12,
+          step: 0.5,
+          unit: 'em',
+        },
+        {
           label: 'Animation timing',
           cssVariable: '--item-navigator-animation-timing',
           defaultValue: 200,
@@ -448,9 +472,13 @@ export class IAItemNavigatorStory extends LitElement {
               .viewportInFullscreen=${this.fullscreen || null}
               ?loaded=${this.loaded}
               ?viewAvailable=${this.viewAvailable}
+              .mediatype=${this.mediatypeKnown
+                ? DEMO_LOADING_GLYPHS[this.selectedFile.mediatype]
+                : undefined}
               @fileListSorted=${this.handleFileListSorted}
             >
               ${this.headerTemplate} ${this.theaterTemplate}
+              ${this.loadingTemplate}
             </ia-item-navigator>
           </div>
         </div>
@@ -458,16 +486,34 @@ export class IAItemNavigatorStory extends LitElement {
         <div slot="settings">
           <table>
             ${this.toggleRow('Loaded', 'loaded')}
+            ${this.toggleRow('Mediatype known', 'mediatypeKnown')}
+            ${this.toggleRow('Custom loading view', 'customLoading')}
             ${this.toggleRow('View available (theater)', 'viewAvailable')}
             ${this.toggleRow('Header', 'headerOn')}
             ${this.toggleRow('Fullscreen', 'fullscreen')}
             ${this.toggleRow('Animate', 'animationsOn')}
           </table>
-          <p class="hint">
-            Turn "View available" off to show the no-theater placeholder. Open
-            "Viewable Files" and use the sort button in its header. Narrow the
-            demo below 600px to see the drawer switch from shift to overlay.
-          </p>
+          <ul class="hint">
+            <li>Turn "Loaded" off to see the loading view.</li>
+            <li>
+              "Mediatype known" swaps the loading view's dots for the selected
+              file's glyph.
+            </li>
+            <li>
+              "Custom loading view" slots a consumer's own indicator in place of
+              the default.
+            </li>
+            <li>
+              Turn "View available" off to show the no-theater placeholder.
+            </li>
+            <li>
+              Open "Viewable Files" and use the sort button in its header.
+            </li>
+            <li>
+              Narrow the demo below 600px to see the drawer switch from shift to
+              overlay.
+            </li>
+          </ul>
         </div>
 
         <div slot="usage-notes">
@@ -477,6 +523,15 @@ export class IAItemNavigatorStory extends LitElement {
             <code>slot="header"</code>, then drive the drawer with the
             <code>menuContents</code> provider array (and the minimized rail
             with <code>menuShortcuts</code>). It never renders a viewer itself.
+          </p>
+          <p>
+            Until <code>loaded</code> is set, the navigator shows a loading
+            indicator with a "Loading viewer" caption. Set
+            <code>mediatype</code> once you know it to put the item's glyph in
+            the ring. To replace the whole view, project your own content into
+            <code>slot="loading"</code>, for example an
+            <code>ia-status-indicator</code> with its own
+            <code>slot="icon"</code> glyph.
           </p>
         </div>
       </story-template>
@@ -488,6 +543,8 @@ export class IAItemNavigatorStory extends LitElement {
     label: string,
     field:
       | 'loaded'
+      | 'mediatypeKnown'
+      | 'customLoading'
       | 'viewAvailable'
       | 'headerOn'
       | 'fullscreen'
@@ -549,6 +606,25 @@ export class IAItemNavigatorStory extends LitElement {
     `;
   }
 
+  /**
+   * What a consumer might slot over the default loading view: the indicator
+   * with a glyph for the selected file's kind, and its own caption.
+   */
+  private get loadingTemplate() {
+    if (!this.customLoading) return nothing;
+    const file = this.selectedFile;
+    return html`
+      <div slot="loading" class="demo-loading">
+        <ia-status-indicator
+          mode="loading"
+          mediatype=${DEMO_LOADING_GLYPHS[file.mediatype]}
+          loadingTitle="Opening ${file.title}"
+        ></ia-status-indicator>
+        <p aria-hidden="true">Opening ${file.title}</p>
+      </div>
+    `;
+  }
+
   private get exampleUsage(): string {
     return `<ia-item-navigator
   baseHost="archive.org"
@@ -556,9 +632,12 @@ export class IAItemNavigatorStory extends LitElement {
   .menuContents=\${this.menuProviders}
   .menuShortcuts=\${this.menuShortcuts}
   ?loaded=\${this.loaded}
+  .mediatype=\${this.mediatypeIcon}
 >
   <div slot="header">…your header…</div>
   <div slot="main">…your theater…</div>
+  <!-- Optional: replaces the default loading view -->
+  <div slot="loading">…your loading view…</div>
 </ia-item-navigator>`;
   }
 
@@ -615,9 +694,29 @@ export class IAItemNavigatorStory extends LitElement {
         display: block;
       }
 
+      .demo-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        color: #fff;
+      }
+
+      .demo-loading ia-status-indicator {
+        --ia-theme-primary-text-color: #6cb2ff;
+        width: 64px;
+      }
+
+      .demo-loading p {
+        margin: 0;
+        font-size: 0.9rem;
+      }
+
       .hint {
         font-size: 0.78rem;
         color: #555;
+        margin: 0.5rem 0;
+        padding-left: 1.25rem;
       }
 
       table {
