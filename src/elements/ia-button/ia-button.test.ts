@@ -275,6 +275,23 @@ describe('IA button', () => {
     expect(button?.classList.contains('ghost')).to.be.true;
   });
 
+  test('keeps its label whole in a flex row too narrow for it', async () => {
+    const row = await fixture<HTMLDivElement>(
+      html`<div style="display: flex; width: 1px">
+        <ia-button>Cancel</ia-button>
+      </div>`,
+    );
+    const el = row.querySelector('ia-button') as IAButton;
+    await el.updateComplete;
+
+    const label = el.shadowRoot!.querySelector('button')!;
+    // One line: the label breaks only at spaces, and has none.
+    expect(label.getBoundingClientRect().height).to.be.below(
+      2 * parseFloat(getComputedStyle(label).fontSize) + 2 * 16,
+    );
+    expect(el.getBoundingClientRect().width).to.be.above(30);
+  });
+
   test('keeps the link mode at the small height', async () => {
     const el = await fixture<IAButton>(
       html`<ia-button mode="link">Display Reviews</ia-button>`,

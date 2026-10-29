@@ -354,7 +354,10 @@ export class IAButton extends LitElement {
           line-height: var(--ia-font-line-height-tight--);
           text-align: center;
           text-decoration: none;
-          overflow-wrap: anywhere;
+          /* break-word, not anywhere: anywhere also shrinks the host's
+             min-content width, so a host in a tight flex row would break
+             its label letter by letter. */
+          overflow-wrap: break-word;
           text-wrap: balance;
 
           cursor: pointer;
