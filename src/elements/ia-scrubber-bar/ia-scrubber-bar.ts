@@ -252,9 +252,12 @@ export class IAScrubberBar extends LitElement {
       css`
         :host {
           --scrubber-bar-height--: var(--ia-theme-scrubber-bar-height, 20px);
+          /* Half the 20px thumb, so markers line up with its travel. In px
+             like the thumb: a rem spacing token would drift off it on any
+             root but 10px. */
           --scrubber-marker-inset--: var(
             --ia-theme-scrubber-marker-inset,
-            var(--ia-space-2--)
+            10px
           );
 
           --scrubber-thumb-color--: var(
