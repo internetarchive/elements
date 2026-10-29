@@ -72,7 +72,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Button padding',
     cssVariable: '--ia-theme-button-padding',
-    defaultValue: '0 1.875rem',
+    defaultValue: '0 3rem',
     inputType: 'text',
   },
   {
@@ -84,7 +84,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Button height',
     cssVariable: '--ia-theme-button-height',
-    defaultValue: '2.25rem',
+    defaultValue: '3.6rem',
     inputType: 'text',
   },
   {
@@ -126,13 +126,13 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Text color (secondary)',
     cssVariable: '--ia-theme-secondary-cta-text-color',
-    defaultValue: '#ffffff',
+    defaultValue: '#2c2c2c',
     inputType: 'color',
   },
   {
     label: 'Background color (secondary)',
     cssVariable: '--ia-theme-secondary-cta-fill',
-    defaultValue: '#333333',
+    defaultValue: '#ffffff',
     inputType: 'color',
   },
   {
@@ -150,31 +150,31 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Background color (danger)',
     cssVariable: '--ia-theme-danger-cta-fill',
-    defaultValue: '#d9534f',
+    defaultValue: '#e51c23',
     inputType: 'color',
   },
   {
     label: 'Border color (danger)',
     cssVariable: '--ia-theme-danger-cta-border',
-    defaultValue: '#d43f3a',
+    defaultValue: '#b8161c',
     inputType: 'color',
   },
   {
     label: 'Text color (warning)',
     cssVariable: '--ia-theme-warning-cta-text-color',
-    defaultValue: '#ffffff',
+    defaultValue: '#2c2c2c',
     inputType: 'color',
   },
   {
     label: 'Background color (warning)',
     cssVariable: '--ia-theme-warning-cta-fill',
-    defaultValue: '#ee8950',
+    defaultValue: '#ffb000',
     inputType: 'color',
   },
   {
     label: 'Border color (warning)',
     cssVariable: '--ia-theme-warning-cta-border',
-    defaultValue: '#ec7939',
+    defaultValue: '#cc7a00',
     inputType: 'color',
   },
   {
@@ -234,13 +234,13 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Link color',
     cssVariable: '--ia-theme-link-color',
-    defaultValue: '#4b64ff',
+    defaultValue: '#3a4fd6',
     inputType: 'color',
   },
   {
     label: 'Danger color',
     cssVariable: '--ia-theme-color-danger',
-    defaultValue: '#e51c23',
+    defaultValue: '#b8161c',
     inputType: 'color',
   },
 ];

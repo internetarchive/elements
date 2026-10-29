@@ -1,3 +1,8 @@
+/* archive.org's root font size, which the components and tokens assume: 1rem = 10px. */
+html {
+  font-size: 62.5%;
+}
+
 :root {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -41,7 +46,7 @@ app-root {
   top: 0;
   height: 100vh;
   border-right: 1px solid #ddd;
-  padding: 1rem 0;
+  padding: 1.6rem 0;
   box-sizing: border-box;
   overflow-y: auto;
 }
@@ -54,13 +59,13 @@ app-root {
    anchor like the element links below it do. */
 #ia-all-link {
   display: block;
-  margin: 0 1rem 1.5rem;
-  padding: 0.4rem 0.75rem;
+  margin: 0 1.6rem 2.4rem;
+  padding: 0.64rem 1.2rem;
   border: 1px solid #bbb;
   border-radius: 4px;
   background: #fff;
   color: #213547;
-  font-size: 0.8rem;
+  font-size: 1.28rem;
   font-weight: 600;
   text-align: center;
   text-decoration: none;
@@ -77,13 +82,13 @@ app-root {
 }
 
 #ia-sidebar h2 {
-  font-size: 0.7rem;
+  font-size: 1.12rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #767676;
-  padding: 0 1rem;
-  margin: 1.5rem 0 0.5rem;
+  padding: 0 1.6rem;
+  margin: 2.4rem 0 0.8rem;
 }
 
 #ia-sidebar h2:first-of-type {
@@ -92,11 +97,11 @@ app-root {
 
 #ia-sidebar .ia-elem-link {
   display: block;
-  font-size: 0.82rem;
+  font-size: 1.312rem;
   font-weight: 400;
   color: #444;
   text-decoration: none;
-  padding: 0.3rem 1rem;
+  padding: 0.48rem 1.6rem;
   border-left: 3px solid transparent;
   transition:
     background 0.1s,
@@ -136,13 +141,13 @@ app-root {
 
 #ia-content {
   flex: 1;
-  padding: 0.75rem 1rem;
+  padding: 1.2rem 1.6rem;
   padding-bottom: 100vh; /* lets scroll-spy activate on the last element */
   min-width: 0;
 }
 
 #ia-content.ia-focused {
-  padding-bottom: 2rem;
+  padding-bottom: 3.2rem;
 }
 
 /* A demo wider than the phone would otherwise widen the whole page, and a
@@ -341,14 +346,14 @@ app-root {
 
 .ia-anchor > * {
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
 }
 
 #ia-content-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.25rem;
+  gap: 1.2rem;
+  margin-bottom: 0.4rem;
 }
 
 /* Sits in the content column rather than in the sidebar, so it is still on
@@ -356,13 +361,13 @@ app-root {
    #ia-all-link, so the demo's two controls read as a pair. */
 #ia-nav-toggle {
   flex-shrink: 0;
-  padding: 0.4rem 0.75rem;
+  padding: 0.64rem 1.2rem;
   border: 1px solid #bbb;
   border-radius: 4px;
   background: #fff;
   color: #213547;
   font-family: inherit;
-  font-size: 0.8rem;
+  font-size: 1.28rem;
   font-weight: 600;
   cursor: pointer;
   transition:
@@ -376,7 +381,7 @@ app-root {
 }
 
 #ia-content h1 {
-  font-size: 1.4rem;
+  font-size: 2.24rem;
   margin: 0;
   display: flex;
   align-items: center;
@@ -387,17 +392,17 @@ app-root {
 #ia-locale-switch {
   display: flex;
   flex-shrink: 0;
-  gap: 0.25rem;
+  gap: 0.4rem;
   margin-left: auto;
 }
 
 .ia-locale-btn {
-  padding: 0.3rem 0.6rem;
+  padding: 0.48rem 0.96rem;
   border: 1px solid #bbb;
   border-radius: 4px;
   background: #fff;
   color: #213547;
-  font-size: 0.8rem;
+  font-size: 1.28rem;
   font-weight: 600;
   cursor: pointer;
   transition:
@@ -435,13 +440,13 @@ app-root {
 }
 
 #ia-content h2 {
-  font-size: 1.1rem;
+  font-size: 1.76rem;
   font-weight: 600;
-  margin: 0.75rem 0 0.25rem;
+  margin: 1.2rem 0 0.4rem;
 }
 
 .ia-story-message {
-  font-size: 0.9rem;
+  font-size: 1.44rem;
   color: #767676;
-  margin: 0.5rem 0;
+  margin: 0.8rem 0;
 }

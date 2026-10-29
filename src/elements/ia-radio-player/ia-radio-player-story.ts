@@ -310,7 +310,7 @@ export class IARadioPlayerStory extends LitElement {
       .player {
         display: block;
         background-color: #151515;
-        padding: 1rem;
+        padding: 1.6rem;
         border-radius: 4px;
       }
 

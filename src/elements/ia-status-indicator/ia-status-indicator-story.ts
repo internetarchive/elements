@@ -13,11 +13,11 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Width',
     cssVariable: '--ia-theme-icon-width',
-    defaultValue: '1.25rem',
+    defaultValue: '2rem',
     /* The widths real consumers render the indicator at */
     presets: [
-      { label: 'Default', value: '1.25rem', note: '--default-icon-width' },
-      { label: 'OTP form', value: '3rem', note: 'font-size-lg x 1.33' },
+      { label: 'Default', value: '2rem', note: '--default-icon-width' },
+      { label: 'OTP form', value: '4.8rem', note: 'font-size-lg x 1.33' },
       { label: 'Page', value: '4rem', note: 'home, details router' },
       { label: 'Theater', value: '5rem', note: 'theater, bookreader' },
       { label: 'Account settings', value: '6rem', note: 'account settings' },
@@ -39,14 +39,14 @@ const styleInputSettings: StyleInputSettings[] = [
     section: 'Color',
     label: 'Success',
     cssVariable: '--ia-theme-color-success',
-    defaultValue: '#31a481',
+    defaultValue: '#20705a',
     inputType: 'color',
   },
   {
     section: 'Color',
     label: 'Error',
     cssVariable: '--ia-theme-color-danger',
-    defaultValue: '#e51c23',
+    defaultValue: '#b8161c',
     inputType: 'color',
   },
 ];
@@ -171,7 +171,7 @@ export class IAStatusIndicatorStory extends LitElement {
    */
   private get demoStyles(): string {
     if (!this.darkSurface) return '';
-    return 'background-color: #000000;padding: 1rem';
+    return 'background-color: #000000;padding: 1.6rem';
   }
 
   /*
@@ -219,21 +219,21 @@ export class IAStatusIndicatorStory extends LitElement {
     return css`
       fieldset {
         border: 1px solid var(--medium-gray, #999);
-        margin-bottom: 1rem;
+        margin-bottom: 1.6rem;
       }
 
       .row {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.5rem;
+        gap: 0.8rem;
       }
 
       button {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.15rem;
-        padding: 0.4rem 0.6rem;
+        gap: 0.24rem;
+        padding: 0.64rem 0.96rem;
         cursor: pointer;
       }
 
@@ -250,7 +250,7 @@ export class IAStatusIndicatorStory extends LitElement {
       label {
         display: flex;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.64rem;
       }
 
       .reset {

@@ -231,18 +231,18 @@ export class IAInfiniteScrollerDemo
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: 1rem;
-        margin-bottom: 1rem;
+        gap: 1.6rem;
+        margin-bottom: 1.6rem;
       }
 
       #controls form {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.8rem;
       }
 
       #scroll-to-index {
-        width: 6rem;
+        width: 9.6rem;
       }
 
       #scroll-box {
