@@ -24,17 +24,44 @@ describe('IaClearableTextInput', () => {
     expect(getComputedStyle(input).borderTopColor).to.equal('rgb(44, 44, 44)');
   });
 
-  test('keeps a border color the page sets when hovered', async () => {
+  test('borders in its light text color on hover on a dark surface', async () => {
     const el = await fixture<IaClearableTextInput>(
       html`<ia-clearable-text-input
-        style="--input-border-color: rgb(204, 204, 204)"
+        style="--input-border-color: rgb(204, 204, 204); --input-color: rgb(255, 255, 255); --input-background-color: rgb(51, 51, 51)"
+      ></ia-clearable-text-input>`,
+    );
+    const input = el.shadowRoot!.querySelector('#text-input') as HTMLElement;
+    expect(getComputedStyle(input).borderTopColor).to.equal(
+      'rgb(204, 204, 204)',
+    );
+    await userEvent.hover(input);
+    expect(getComputedStyle(input).borderTopColor).to.equal(
+      'rgb(255, 255, 255)',
+    );
+  });
+
+  test('borders in white on hover under .ia-inverse', async () => {
+    const el = await fixture<IaClearableTextInput>(
+      html`<ia-clearable-text-input
+        class="ia-inverse"
       ></ia-clearable-text-input>`,
     );
     const input = el.shadowRoot!.querySelector('#text-input') as HTMLElement;
     await userEvent.hover(input);
     expect(getComputedStyle(input).borderTopColor).to.equal(
-      'rgb(204, 204, 204)',
+      'rgb(255, 255, 255)',
     );
+  });
+
+  test('takes --input-hover-border-color over its text color', async () => {
+    const el = await fixture<IaClearableTextInput>(
+      html`<ia-clearable-text-input
+        style="--input-hover-border-color: rgb(1, 2, 3)"
+      ></ia-clearable-text-input>`,
+    );
+    const input = el.shadowRoot!.querySelector('#text-input') as HTMLElement;
+    await userEvent.hover(input);
+    expect(getComputedStyle(input).borderTopColor).to.equal('rgb(1, 2, 3)');
   });
 
   test('has a clear button, initially hidden', async () => {
