@@ -369,7 +369,7 @@ export class IAItemNavSharePanel extends LitElement {
           height: 3em;
           padding: 0.5em 1em;
           box-sizing: border-box;
-          font: normal 1.2em/2em var(--base-font-family);
+          font: normal 1.2em/2 var(--base-font-family);
           color: var(--item-navigator-share-embed-bg--);
           background: var(--item-navigator-text-color--);
           opacity: 0;

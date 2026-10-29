@@ -307,7 +307,7 @@ export class IAModalManagerTemplate extends LitElement {
       .close-button {
         position: absolute;
         right: 1.2rem; /* 12px at a 10px root */
-        top: 1.2rem;
+        top: 1.2rem; /* 12px at a 10px root */
         width: var(--ia-size-icon-md--);
         height: var(--ia-size-icon-md--);
         border-radius: 100%;
@@ -323,7 +323,7 @@ export class IAModalManagerTemplate extends LitElement {
       .back-button {
         position: absolute;
         left: 1.2rem; /* 12px at a 10px root */
-        top: 1.2rem;
+        top: 1.2rem; /* 12px at a 10px root */
         height: var(--ia-size-icon-md--);
         background-color: transparent;
         outline: none;

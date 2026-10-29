@@ -1445,6 +1445,7 @@ export class IAInfiniteScroller
             // incorrect position with the collapsed cells.
             const row = Math.floor(index / this.cachedColumnsPerRow);
             const rowHeight = this.rowHeightCache.rowHeightFor(row);
+            // The 22.5rem fallback is 225px at a 10px root.
             return html`<article
               class="cell-container"
               aria-posinset=${index + 1}
