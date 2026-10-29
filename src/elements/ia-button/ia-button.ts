@@ -458,9 +458,10 @@ export class IAButton extends LitElement {
           border-color: var(--ia-button-custom-active-border--);
         }
 
+        /* Link mode keeps the default button height, so it lines up with
+           the buttons beside it and --ia-theme-button-height still sets it. */
         .link,
         .danger-link {
-          --_height: var(--ia-size-control-sm--);
           --_padding: 0;
           border-width: 0;
         }

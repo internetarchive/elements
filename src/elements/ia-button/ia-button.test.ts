@@ -292,12 +292,12 @@ describe('IA button', () => {
     expect(el.getBoundingClientRect().width).to.be.above(30);
   });
 
-  test('keeps the link mode at the small height', async () => {
+  test('keeps the link mode at the default button height', async () => {
     const el = await fixture<IAButton>(
       html`<ia-button mode="link">Display Reviews</ia-button>`,
     );
     const button = el.shadowRoot?.querySelector('button') as HTMLElement;
-    expect(button.getBoundingClientRect().height).to.equal(30);
+    expect(button.getBoundingClientRect().height).to.equal(36);
   });
 
   describe('shadow root text nodes', () => {
