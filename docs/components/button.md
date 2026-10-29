@@ -211,20 +211,23 @@ Before `ia-button` upgrades, a server-rendered one is an unstyled inline element
 `ia-button:not(:defined)` in the page's blocking stylesheet so it takes its final box on
 first paint — see [the component contract](README.md#before-it-upgrades).
 
-`ia-button` (from `@internetarchive/elements`, 1.1.2 in offshoot) is the button Lit pages
-ship, and the Claude Design card `IAButton` renders it. Its fills, borders, height,
-padding, radius and font size all come from `--ia-theme-*`, so under this system's tokens
-they already match the table above. What it draws itself still differs:
+`ia-button` is the button Lit pages ship. It follows this spec: the intents, the three
+sizes (`size="sm" | "md" | "lg"`, default `md`), hover, press, the focus ring, disabled
+and loading.
 
-| Part | `ia-button` | This spec |
-| --- | --- | --- |
-| Disabled | the enabled colors at 50% opacity, `cursor: not-allowed` | `--ia-color-action-disabled-*` fill, border and text |
-| Loading | the enabled colors at 50% opacity; the status indicator replaces the label (or sits beside `loadingText`) | width held, indicator in place of the label |
-| Focus | 80% opacity and the browser's `double` outline | the shared 2px `--ia-color-border-focus` ring, offset 2px |
-| With `href` | an `<a>` wrapping a `<button>`: two nested interactive elements, one focus stop too many | a real link, styled as a button |
+| Spec | `ia-button` |
+| --- | --- |
+| Intents | `mode`: `primary`, `secondary`, `danger`, `warning`, `donate`, `ghost`, `link`. `transparent` is the old name for `ghost`; `custom` and `danger-link` are its own |
+| Disabled | `disabled`: the `--ia-color-action-disabled-*` colors and `aria-disabled`, so it stays in the tab order (D-32). Its clicks stop inside the element, so neither a listener on it nor its form sees them |
+| Loading | `loading`: the indicator over the label, which stays in place hidden so the width holds; `aria-busy` and `aria-disabled`. `loadingText` sits beside the indicator |
+| With `href` | one `<a>`, styled as the button |
+| `mode="disabled"` | the disabled look on a button that still works, kept for existing callers |
 
-The modes map one to one otherwise: `primary`, `secondary`, `danger`, `warning` and
-`disabled` are this spec's intents.
+Where it still differs:
+
+- `ghost` takes the surrounding text color rather than `--ia-color-text-primary`, so it
+  stays legible when it sits on a dark surface.
+- The `--ia-theme-button-*` hooks set the `md` size. `sm` and `lg` use their tokens.
 
 Its size comes from `--ia-theme-button-width` (default `fit-content`) and
 `--ia-theme-button-height`. Setting `width` on the element does nothing to the button
