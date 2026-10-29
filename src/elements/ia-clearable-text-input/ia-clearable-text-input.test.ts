@@ -1,4 +1,5 @@
 import { describe, expect, test, vi } from 'vitest';
+import { userEvent } from 'vitest/browser';
 import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
 
@@ -14,6 +15,28 @@ const inputOf = (el: IaClearableTextInput): HTMLInputElement =>
   el.shadowRoot?.querySelector('#text-input') as HTMLInputElement;
 
 describe('IaClearableTextInput', () => {
+  test('darkens its border on hover by default', async () => {
+    const el = await fixture<IaClearableTextInput>(
+      html`<ia-clearable-text-input></ia-clearable-text-input>`,
+    );
+    const input = el.shadowRoot!.querySelector('#text-input') as HTMLElement;
+    await userEvent.hover(input);
+    expect(getComputedStyle(input).borderTopColor).to.equal('rgb(44, 44, 44)');
+  });
+
+  test('keeps a border color the page sets when hovered', async () => {
+    const el = await fixture<IaClearableTextInput>(
+      html`<ia-clearable-text-input
+        style="--input-border-color: rgb(204, 204, 204)"
+      ></ia-clearable-text-input>`,
+    );
+    const input = el.shadowRoot!.querySelector('#text-input') as HTMLElement;
+    await userEvent.hover(input);
+    expect(getComputedStyle(input).borderTopColor).to.equal(
+      'rgb(204, 204, 204)',
+    );
+  });
+
   test('has a clear button, initially hidden', async () => {
     const el = await fixture<IaClearableTextInput>(
       html`<ia-clearable-text-input></ia-clearable-text-input>`,
