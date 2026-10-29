@@ -2,13 +2,15 @@ import { html, css } from 'lit';
 import Icon from './assets/img/icon';
 import closeIcon from '@src/icons/topnav-close';
 import { customElement } from '@src/util/custom-element';
+import themeStyles from '@src/themes/theme-styles';
 import { localized, msg } from '@lit/localize';
 
 @customElement('ia-topnav-icon-hamburger')
 @localized()
 export class HamBurger extends Icon {
   render() {
-    if (this.active) return closeIcon;
+    // The wrapper only gives the close icon the active color.
+    if (this.active) return html`<span class="active">${closeIcon}</span>`;
 
     return html`
       <svg
@@ -24,7 +26,7 @@ export class HamBurger extends Icon {
         </desc>
         <path
           d="m30.5 26.5c.8284271 0 1.5.6715729 1.5 1.5s-.6715729 1.5-1.5 1.5h-21c-.82842712 0-1.5-.6715729-1.5-1.5s.67157288-1.5 1.5-1.5zm0-8c.8284271 0 1.5.6715729 1.5 1.5s-.6715729 1.5-1.5 1.5h-21c-.82842712 0-1.5-.6715729-1.5-1.5s.67157288-1.5 1.5-1.5zm0-8c.8284271 0 1.5.6715729 1.5 1.5s-.6715729 1.5-1.5 1.5h-21c-.82842712 0-1.5-.6715729-1.5-1.5s.67157288-1.5 1.5-1.5z"
-          fill="#999"
+          fill="currentColor"
           fill-rule="evenodd"
         />
       </svg>
@@ -32,13 +34,24 @@ export class HamBurger extends Icon {
   }
 
   static get styles() {
-    return css`
-      svg {
-        display: block;
-        height: calc(40 * var(--topnavUnit--));
-        width: calc(40 * var(--topnavUnit--));
-        color: var(--activeColor);
-      }
-    `;
+    return [
+      themeStyles,
+      css`
+        svg {
+          display: block;
+          height: calc(40 * var(--topnavUnit--));
+          width: calc(40 * var(--topnavUnit--));
+          color: var(--iconFill, var(--ia-color-text-inverse-secondary--));
+        }
+
+        .active {
+          display: contents;
+        }
+
+        .active svg {
+          color: var(--activeColor, var(--ia-color-text-inverse--));
+        }
+      `,
+    ];
   }
 }
