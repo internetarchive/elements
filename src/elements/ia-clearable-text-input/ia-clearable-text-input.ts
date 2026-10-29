@@ -177,14 +177,11 @@ export class IaClearableTextInput extends LitElement {
         color: var(--input-placeholder-color, var(--ia-color-text-secondary--));
       }
 
-      /* Darkens on hover, unless the page set its own border color: then
-         the border keeps it, rather than taking a default meant for the
-         default border. */
+      /* Hover takes the input's own text color, which contrasts with its
+         background on any surface: #2c2c2c on light, the light text a dark
+         theme sets on dark. */
       #text-input:hover {
-        border-color: var(
-          --input-hover-border-color,
-          var(--input-border-color, var(--ia-color-text-primary--))
-        );
+        border-color: var(--input-hover-border-color, currentColor);
       }
 
       /* The shared focus ring; the border stays as it is. */
