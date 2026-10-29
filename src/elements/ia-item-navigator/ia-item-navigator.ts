@@ -15,6 +15,8 @@ import ellipsesIcon from '@src/icons/ellipses';
 import { iconBox, iconBoxStyles } from '@src/util/icon-box';
 import './ia-itemnav-menu-slider';
 import './ia-itemnav-no-theater-available';
+import '@src/elements/ia-status-indicator/ia-status-indicator';
+import type { MediaTypeIcon } from '@src/elements/ia-status-indicator/ia-status-indicator';
 import type { IAItemNavMenuSlider } from './ia-itemnav-menu-slider';
 
 import {
@@ -65,16 +67,24 @@ export class IAItemNavigator extends LitElement {
 
   /**
    * Whether the slotted theater is ready. While false the reader stays
-   * hidden and the frame is empty.
+   * hidden and the `loading` slot shows in its place.
    *
-   * The navigator used to fill that gap with its own spinner, but a shell
-   * shouldn't decide what loading looks like — and its glyph and fullscreen
-   * caption were branding a consumer couldn't override. An indicator returns
-   * once WEBDEV-8951 moves the shared status indicators into elements, so the
-   * navigator can use that one instead of carrying its own.
+   * The slot's default is the shared `ia-status-indicator` with a "Loading
+   * viewer" caption, showing the `mediatype` glyph once that's known. A shell
+   * shouldn't decide what loading looks like, so a consumer replaces the whole
+   * thing by slotting its own content, e.g. an indicator with its own
+   * `slot="icon"` glyph.
    */
   @property({ type: Boolean, reflect: true, attribute: true }) loaded: boolean =
     false;
+
+  /**
+   * The item's glyph for the default loading indicator. Until it's known, or
+   * when it has no glyph, the indicator shows its dots. These are icon names,
+   * so a consumer translates archive.org values first (e.g. `movies` ->
+   * `video`).
+   */
+  @property({ type: String }) mediatype?: MediaTypeIcon;
 
   /**
    * Set for the render where the drawer opens straight to a panel, so the
@@ -111,10 +121,39 @@ export class IAItemNavigator extends LitElement {
         ></slot>
         <div class="menu-and-reader">
           ${this.shouldRenderMenu ? this.renderSideMenu : nothing}
-          <div id="reader" class=${displayReaderClass}>
+          <div
+            id="reader"
+            class=${displayReaderClass}
+            aria-busy=${this.loaded ? nothing : 'true'}
+          >
             ${this.renderViewport}
           </div>
+          ${this.loaded ? nothing : this.loadingArea}
         </div>
+      </div>
+    `;
+  }
+
+  /**
+   * Stands in for the reader until it loads. The caption is hidden from
+   * assistive tech because the indicator already announces the same words
+   * through its `role="status"` title.
+   *
+   * Only the reader is marked `aria-busy` while it loads. On the frame it
+   * would also cover the still-usable rail and this area, and could hold back
+   * the status announcement.
+   */
+  get loadingArea(): TemplateResult {
+    return html`
+      <div class="loading-area">
+        <slot name="loading">
+          <ia-status-indicator
+            mode="loading"
+            loadingTitle="Loading viewer"
+            .mediatype=${this.mediatype}
+          ></ia-status-indicator>
+          <p class="loading-caption" aria-hidden="true">Loading viewer</p>
+        </slot>
       </div>
     `;
   }
@@ -369,6 +408,10 @@ export class IAItemNavigator extends LitElement {
           );
           /* Every glyph is square, so one knob sizes both axes. */
           --item-navigator-icon-size--: var(--item-navigator-icon-size, 2.4em);
+          --item-navigator-loading-indicator-width--: var(
+            --item-navigator-loading-indicator-width,
+            5em
+          );
           /* Icons follow the adjustable text color by default. */
           --item-navigator-icon-color--: var(
             --item-navigator-icon-color,
@@ -548,6 +591,48 @@ export class IAItemNavigator extends LitElement {
           fill: var(--item-navigator-icon-color--);
         }
 
+        /* Fills the space the hidden reader would take, centering its content.
+           It moves with the drawer the same way the reader does (see the
+           shift and overlay rules below), so it stays centered on the theater. */
+        .loading-area {
+          flex: 1;
+          box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          transition:
+            width ${transitionTiming} ease-out,
+            margin-left ${transitionTiming} ease-out;
+        }
+
+        /* The generic slot rules above stretch the slot's children to its
+           height. Inside the shadow root those children are only the default
+           indicator and caption (light-DOM content slotted in by a consumer
+           isn't matched), so this undoes the stretch on the default. */
+        .loading-area slot {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1em;
+        }
+
+        .loading-area slot * {
+          height: auto;
+        }
+
+        /* The default ring follows the navigator's icon color knob. */
+        .loading-area ia-status-indicator {
+          --ia-theme-primary-text-color: var(--item-navigator-icon-color--);
+          width: var(--item-navigator-loading-indicator-width--);
+        }
+
+        .loading-caption {
+          margin: 0;
+          font-size: 1.6em;
+          color: var(--item-navigator-text-color, var(--true-white));
+        }
+
         #menu {
           position: absolute;
           top: 0;
@@ -591,7 +676,8 @@ export class IAItemNavigator extends LitElement {
          * transitioned, so it snaps away on open — letting the reader box track
          * the drawer's edge exactly during the shift, rather than trailing it.
          */
-        .has-menu:not(.open) #reader > * {
+        .has-menu:not(.open) #reader > *,
+        .has-menu:not(.open) .loading-area {
           box-sizing: border-box;
           padding-left: ${menuMargin};
         }
@@ -612,7 +698,8 @@ export class IAItemNavigator extends LitElement {
         }
 
         /* Shift: the drawer pushes the theater aside. */
-        .open #reader {
+        .open #reader,
+        .open .loading-area {
           width: calc(100% - ${subnavWidth});
           margin-left: ${subnavWidth};
         }
@@ -623,7 +710,8 @@ export class IAItemNavigator extends LitElement {
          * tracks resizes instantly instead of easing behind them.
          */
         @container navframe (max-width: 600px) {
-          .open #reader {
+          .open #reader,
+          .open .loading-area {
             width: 100%;
             margin-left: 0;
             transition: none;
