@@ -406,7 +406,7 @@ export class StoryStylesSettings extends LitElement {
           margin-left: 0.75em;
           font-family: monospace;
           font-size: 1.152rem;
-          color: #767676;
+          color: var(--ia-color-text-secondary--);
           white-space: nowrap;
         }
 
@@ -418,7 +418,7 @@ export class StoryStylesSettings extends LitElement {
         .applied-palette {
           margin-left: 0.75em;
           font-size: 1.248rem;
-          color: #595959;
+          color: var(--ia-color-text-secondary--);
         }
       `,
     ];

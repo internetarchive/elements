@@ -240,7 +240,8 @@
         "scripts/build-tokens.mts"
       ],
       "output": [
-        "src/themes/tokens.ts"
+        "src/themes/tokens.ts",
+        "demo/docs/assets/tokens.css"
       ]
     }
   }

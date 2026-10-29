@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Profile — Internet Archive Elements screens</title>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/ia.css">
+<style>body { margin: 0; }</style>
+</head>
+<body class="ia-page">
+<a class="ia-skip-link" href="#maincontent">Skip to Main Content</a>
+<header class="ia-topnav ia-inverse" id="topnav"></header>
+
+<main id="maincontent" tabindex="-1">
+  <header class="ia-profile-header ia-inverse">
+    <div class="ia-profile-header__inner">
+      <img class="ia-avatar ia-avatar--xl ia-profile-header__avatar" src="https://archive.org/services/img/@brewster" alt="">
+      <div class="ia-profile-header__summary">
+        <h1 class="ia-profile-header__name ia-type-display">brewster</h1>
+        <p class="ia-profile-header__since">Archivist since 2001</p>
+        <p class="ia-profile-header__bio">Digital Librarian, Internet Archive. <a href="#maincontent">archive.org/about</a></p>
+      </div>
+      <div class="ia-profile-header__actions" id="actions"></div>
+      <div class="ia-tabs" role="tablist" aria-label="Profile Sections" id="tabs"></div>
+    </div>
+  </header>
+
+  <div class="ia-shell">
+    <div role="tabpanel" id="panel" tabindex="0"></div>
+  </div>
+</main>
+
+<script type="module">
+import { topnavMarkup, icon, tileThumb, tileStats, sortBarMarkup, dropdownMarkup, hydrateIcons } from '../assets/site.js';
+
+// Signed in as the profile's owner, so Play All, Edit and Settings show; an
+// owner can't favorite their own profile.
+document.getElementById('topnav').innerHTML = topnavMarkup('topnav', false, { user: 'brewster' });
+document.getElementById('actions').innerHTML = [['share', 'Share'], ['rss', 'RSS'], ['play', 'Play All'],
+  ['edit', 'Edit'], ['gear', 'Settings']].map(([glyph, label]) =>
+  `<button class="ia-button ia-button--ghost ia-button--sm" type="button">${icon(glyph, { size: 'sm' })}${label}</button>`).join('');
+
+// Eight tabs. Lists carries a "New" badge. Each swaps the panel in place and
+// updates the URL, so a tab can be linked to and reloaded.
+const TABS = [['uploads', 'Uploads'], ['loans', 'Loans'], ['favorites', 'Favorites'], ['lists', 'Lists', 'New'],
+              ['posts', 'Posts'], ['reviews', 'Reviews'], ['collections', 'Collections'], ['web-archive', 'Web Archives', null, 'Web']];
+const tabs = document.getElementById('tabs');
+// A short label (Web) shows on narrow screens; the tab keeps its full name.
+tabs.innerHTML = TABS.map(([id, label, badge, short], i) => `<button class="ia-tab" role="tab" id="tab-${id}" aria-controls="panel"
+    aria-selected="${i === 0}"${i ? ' tabindex="-1"' : ''} data-label="${label}" data-tab="${id}"${
+    badge ? ` aria-label="${label}, new feature"` : short ? ` aria-label="${label}"` : ''}>${
+    short ? `<span class="ia-tab__long">${label}</span><span class="ia-tab__short">${short}</span>` : label}${
+    badge ? `<span class="ia-badge ia-badge--new" aria-hidden="true">${badge}</span>` : ''}</button>`).join('');
+
+const UPLOADS = [['goody', 'The history of Little Goody Two-Shoes', 'texts', '2.5K', 22, 6],
+                 ['TheGeneral_201312', '"The General" (1926) starring Buster Keaton', 'movies', '32K', 107, 3],
+                 ['OneWeek512kb', 'One Week', 'movies', '1.8K', 16, 1],
+                 ['busterkeaton00robi', 'Buster Keaton', 'texts', '456', 19, 0]];
+const LOANS = [['historyoflittleg00goldiala', 'The history of little Goody Two-Shoes', 'texts', '6.1K', 4, 0],
+               ['GoodyTwoShoes00CranA', 'Goody Two Shoes', 'texts', '2K', 3, 0]];
+const grid = (rows, actions = '') => `<div class="ia-tile-grid" style="margin-block-start:var(--ia-space-4)">${rows.map(([id, title, kind, v, f, r]) => `
+  <article class="ia-tile ia-tile--item" data-id="${id}" data-kind="${kind}">
+    <a class="ia-tile__link" href="#maincontent"><h3 class="ia-tile__title">${title}</h3></a>
+    ${tileStats(kind, v, f, r)}
+    ${actions ? `<div class="ia-tile__actions">${actions(title)}</div>` : ''}
+  </article>`).join('')}</div>`;
+
+const panels = {
+  uploads: () => `<h2 class="ia-results-heading" aria-live="polite">4 Results</h2>${sortBarMarkup('sort', 'Date Archived')}${grid(UPLOADS)}`,
+  loans: () => `<h2 class="ia-results-heading" aria-live="polite">2 Results</h2>
+    <div class="ia-sort-bar">
+      <div class="ia-sort-bar__sort">
+        <label class="ia-sort-bar__label" for="loan-status">Show:</label>
+        ${dropdownMarkup('loan-status', ['On Loan', 'Waiting List', 'History'], 'On Loan')}
+      </div>
+      <button class="ia-button ia-button--danger ia-button--sm" type="button" data-confirm="all">Return All</button>
+    </div>
+    ${grid(LOANS, title => `<button class="ia-button ia-button--danger ia-button--sm" type="button" data-confirm="${title}"
+        aria-label="Return ${title}">Return</button>`)}`,
+  posts: () => '<p class="ia-type-body" style="text-align:center;padding-block:var(--ia-space-12)">brewster hasn’t posted in the forums.</p>'
+};
+const show = id => {
+  const panel = document.getElementById('panel');
+  panel.setAttribute('aria-labelledby', `tab-${id}`);
+  panel.innerHTML = (panels[id] ?? panels.uploads)();
+  for (const tile of panel.querySelectorAll('.ia-tile')) tile.prepend(tileThumb(tile.dataset.id, tile.dataset.kind));
+  hydrateIcons(panel);
+};
+tabs.addEventListener('click', e => {
+  const tab = e.target.closest('[role=tab]');
+  if (!tab) return;
+  for (const t of tabs.querySelectorAll('[role=tab]')) {
+    t.setAttribute('aria-selected', String(t === tab));
+    t.tabIndex = t === tab ? 0 : -1;
+  }
+  history.replaceState(null, '', `#${tab.dataset.tab}`);
+  show(tab.dataset.tab);
+});
+tabs.addEventListener('keydown', e => {
+  const list = [...tabs.querySelectorAll('[role=tab]')], i = list.indexOf(document.activeElement);
+  const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: list.length - 1 }[e.key];
+  if (next === undefined) return;
+  e.preventDefault();
+  const target = list[(next + list.length) % list.length];
+  target.focus();
+  target.click();
+});
+
+// Returning asks first, in a modal.
+document.getElementById('panel').addEventListener('click', e => {
+  const b = e.target.closest('[data-confirm]');
+  if (!b) return;
+  const all = b.dataset.confirm === 'all';
+  const dialog = document.getElementById('return-modal');
+  dialog.querySelector('h2').textContent = all ? 'Return All Items' : 'Return Item';
+  dialog.querySelector('p').textContent = all ? 'Are you sure you want to return all 2 loaned items?'
+                                              : `Are you sure you want to return “${b.dataset.confirm}”?`;
+  dialog.querySelector('[value=confirm]').textContent = all ? 'Yes, return all' : 'Yes, return it';
+  dialog.showModal();
+});
+
+(tabs.querySelector(`[data-tab="${location.hash.slice(1)}"]`) ?? tabs.querySelector('[role=tab]')).click();
+hydrateIcons();
+</script>
+
+<dialog class="ia-modal ia-modal--sm" id="return-modal" aria-labelledby="return-title">
+  <header class="ia-modal__header">
+    <h2 class="ia-modal__title" id="return-title">Return Item</h2>
+    <form method="dialog"><button class="ia-modal__close" aria-label="Close" data-icon="close" data-icon-size="sm"></button></form>
+  </header>
+  <form class="ia-modal__body" method="dialog">
+    <p class="ia-type-body" style="margin-block-start:0"></p>
+    <div class="ia-modal__actions">
+      <button class="ia-button ia-button--secondary" value="cancel">Cancel</button>
+      <button class="ia-button ia-button--danger" value="confirm">Yes, return it</button>
+    </div>
+  </form>
+</dialog>
+</body>
+</html>

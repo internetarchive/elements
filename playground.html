@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Playground — Internet Archive Elements</title>
+<link rel="stylesheet" href="demo/docs/assets/tokens.css">
+<link rel="stylesheet" href="demo/docs/assets/ia.css">
+<link rel="stylesheet" href="demo/docs/assets/site.css">
+<style>
+  .pg-cases { display: grid; grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr)); gap: var(--ia-space-3); }
+  .pg-case {
+    display: flex; flex-direction: column; gap: var(--ia-space-2);
+    min-inline-size: 0;
+    padding: var(--ia-space-3);
+    border: var(--ia-border-card);
+    border-radius: var(--ia-radius-default);
+    background-color: var(--ia-color-surface-raised);
+  }
+  .pg-case--narrow .pg-case__stage { inline-size: 20rem; max-inline-size: 100%; }
+  .pg-case__title { margin: 0; font-size: var(--ia-font-size-sm); font-weight: var(--ia-font-weight-bold); color: var(--ia-color-text-secondary); }
+  .pg-case__stage { display: flex; flex-direction: column; align-items: flex-start; gap: var(--ia-space-2); min-inline-size: 0; }
+  .pg-case__stage > .ia-facet-row { align-self: stretch; }   /* full width, as in the rail */
+  .pg-verdict { align-self: flex-start; }
+  .pg-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--ia-space-2); }
+  .pg-row > * { flex: none; }
+  .pg-measure { display: flex; flex-direction: column; align-items: flex-start; gap: var(--ia-space-1); }
+  .pg-measure > .doc-ratio { font-size: var(--ia-font-size-xs); }
+  .pg-states { display: grid; grid-template-columns: 16rem repeat(4, minmax(0, 1fr)); gap: var(--ia-space-2) var(--ia-space-3); align-items: center; }
+  .pg-states > .pg-head { font-size: var(--ia-font-size-xs); font-weight: var(--ia-font-weight-bold); text-transform: uppercase; letter-spacing: 0.05em; color: var(--ia-color-text-secondary); }
+  .pg-states > .pg-name { font-size: var(--ia-font-size-sm); color: var(--ia-color-text-secondary); }
+  @media (max-width: 767px) { .pg-states { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pg-states > .pg-head { display: none; } .pg-states > .pg-name { grid-column: 1 / -1; } }
+</style>
+</head>
+<body>
+<a class="doc-skip" href="#main">Skip to main content</a>
+<header class="doc-header">
+  <div class="doc-header__inner">
+    <button class="doc-menu-button" type="button" aria-expanded="false" aria-controls="doc-sidebar"><span data-icon="hamburger" data-icon-size="sm"></span>Sections</button>
+    <p class="doc-header__title">Internet Archive <span>elements</span></p>
+  </div>
+  <nav class="doc-tabs" aria-label="Design system">
+    <div class="ia-tabs">
+      <a class="ia-tab" href="principles.html" data-label="Principles">Principles</a>
+      <a class="ia-tab" href="foundations.html" data-label="Foundations">Foundations</a>
+      <a class="ia-tab" href="index.html" data-label="Components">Components</a>
+      <a class="ia-tab" href="specs.html" data-label="Specs">Specs</a>
+      <a class="ia-tab" href="screens.html" data-label="Screens">Screens</a>
+      <a class="ia-tab" href="icons.html" data-label="Icons">Icons</a>
+      <a class="ia-tab" href="playground.html" data-label="Playground" aria-current="page">Playground</a>
+    </div>
+  </nav>
+</header>
+<div class="doc-shell">
+<nav class="doc-sidebar" id="doc-sidebar" aria-label="On this page"></nav>
+<main class="doc-main" id="main">
+  <div class="doc-lede">
+    <h1 class="doc-h1">Playground</h1>
+    <p>
+      The components from <code>demo/docs/assets/ia.css</code> under the conditions they fail in:
+      mismatched heights, every state at once, labels far longer than anyone designed for,
+      right-to-left scripts, dark chrome and touch. Each case checks itself where it can
+      and says <strong>pass</strong> or <strong>fail</strong>; the rest are for looking at.
+      Anything that overflows its box, clips its text, misaligns or points the wrong way is
+      a bug in the component, not in the content.
+    </p>
+  </div>
+
+  <div class="doc-toolbar"><div id="vp"></div></div>
+
+  <div class="doc-frame" id="stage">
+
+    <section class="doc-section" id="alignment" style="margin-block-start:0">
+      <h2>Control alignment</h2>
+      <p>Every control sets its height from a <code>--ia-size-control-*</code> token with
+         border-box sizing, so same-size controls line up whatever their font, border or
+         content. Each control below is measured; a height that isn't the row's token fails.</p>
+      <h3>Small — <code>--ia-size-control-sm</code></h3>
+      <div class="doc-panel pg-row" data-align="control-sm">
+        <button class="ia-button ia-button--sm ia-button--primary">Apply</button>
+        <button class="ia-button ia-button--sm ia-button--ghost ia-button--icon" aria-label="Close" data-icon="close"></button>
+        <input class="ia-input ia-input--sm" aria-label="From Year" value="1893" style="inline-size:10rem">
+        <button class="ia-sort-bar__direction" type="button" aria-label="Change to Ascending Sort" data-icon="sort" data-icon-size="sm"></button>
+        <select class="ia-dropdown" aria-label="Sort By"><option>Relevance</option><option>Title</option></select>
+        <div class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Result View">
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="true" aria-label="Grid View" data-icon="view-grid"></button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1" aria-label="List View" data-icon="view-list"></button>
+        </div>
+        <button class="ia-chip" type="button" aria-pressed="false">Texts</button>
+      </div>
+      <h3>Medium — <code>--ia-size-control-md</code></h3>
+      <div class="doc-panel pg-row" data-align="control-md">
+        <button class="ia-button ia-button--primary">Save Changes</button>
+        <button class="ia-button ia-button--ghost ia-button--icon" aria-label="Close" data-icon="close"></button>
+        <input class="ia-input" aria-label="Email Address" value="you@example.org" style="inline-size:18rem">
+        <div class="ia-segmented" role="radiogroup" aria-label="Search In">
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="true">Metadata</button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1">Text Contents</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="states">
+      <h2>Control states</h2>
+      <p>Every interactive control in each of its states, side by side. Focus shows only
+         under keyboard focus — Tab through the grid rather than clicking.</p>
+      <div class="doc-panel pg-states">
+        <span class="pg-head">Control</span><span class="pg-head">Rest</span><span class="pg-head">Selected / checked</span>
+        <span class="pg-head">Disabled</span><span class="pg-head">Busy</span>
+
+        <span class="pg-name">Button, primary</span>
+        <span><button class="ia-button ia-button--sm ia-button--primary">Save</button></span>
+        <span class="doc-empty">—</span>
+        <span><button class="ia-button ia-button--sm ia-button--primary" aria-disabled="true">Save</button></span>
+        <span><button class="ia-button ia-button--sm ia-button--primary" aria-busy="true">Saving</button></span>
+
+        <span class="pg-name">Button, ghost</span>
+        <span><button class="ia-button ia-button--sm ia-button--ghost" data-icon-before="share">Share</button></span>
+        <span class="doc-empty">—</span>
+        <span><button class="ia-button ia-button--sm ia-button--ghost" aria-disabled="true" data-icon-before="share">Share</button></span>
+        <span class="doc-empty">—</span>
+
+        <span class="pg-name">Chip</span>
+        <span><button class="ia-chip" aria-pressed="false">English</button></span>
+        <span><button class="ia-chip" aria-pressed="true">English</button></span>
+        <span class="doc-empty">—</span><span class="doc-empty">—</span>
+
+        <span class="pg-name">Segmented option</span>
+        <span class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Rest"><button class="ia-segmented__option" type="button" role="radio" aria-checked="false">Grid</button></span>
+        <span class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Selected"><button class="ia-segmented__option" type="button" role="radio" aria-checked="true">Grid</button></span>
+        <span class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Disabled"><button class="ia-segmented__option" type="button" role="radio" aria-checked="false" aria-disabled="true">Grid</button></span>
+        <span class="doc-empty">—</span>
+
+        <span class="pg-name">Switch</span>
+        <span><button class="ia-switch" type="button" role="switch" aria-checked="false" aria-label="Rest"><span class="ia-switch__track"></span></button></span>
+        <span><button class="ia-switch" type="button" role="switch" aria-checked="true" aria-label="Checked"><span class="ia-switch__track"></span></button></span>
+        <span><button class="ia-switch" type="button" role="switch" aria-checked="false" aria-disabled="true" aria-label="Disabled"><span class="ia-switch__track"></span></button></span>
+        <span class="doc-empty">—</span>
+
+        <span class="pg-name">Checkbox</span>
+        <span><label class="ia-choice"><input class="ia-choice__control" type="checkbox"><span class="ia-choice__label">Texts</span></label></span>
+        <span><label class="ia-choice"><input class="ia-choice__control" type="checkbox" checked><span class="ia-choice__label">Texts</span></label></span>
+        <span><label class="ia-choice"><input class="ia-choice__control" type="checkbox" disabled><span class="ia-choice__label">Texts</span></label></span>
+        <span class="doc-empty">—</span>
+
+        <span class="pg-name">Input</span>
+        <span><input class="ia-input ia-input--sm" aria-label="Rest" value="1893"></span>
+        <span><input class="ia-input ia-input--sm" aria-label="Invalid" aria-invalid="true" value="18933"></span>
+        <span><input class="ia-input ia-input--sm" aria-label="Disabled" disabled value="1893"></span>
+        <span class="doc-empty">—</span>
+
+        <span class="pg-name">Pagination</span>
+        <span><ul class="ia-pagination"><li><a href="#states">4</a></li></ul></span>
+        <span><ul class="ia-pagination"><li><a href="#states" aria-current="page">5</a></li></ul></span>
+        <span><ul class="ia-pagination"><li><span aria-disabled="true">6</span></li></ul></span>
+        <span class="doc-empty">—</span>
+      </div>
+    </section>
+
+    <section class="doc-section" id="density">
+      <h2>Density</h2>
+      <p>A realistic results toolbar and facet group together, the way a search page uses
+         them. The compact controls have to stay usable side by side, not just alone.</p>
+      <div class="doc-panel doc-stack" style="align-items:stretch">
+        <div id="density-sort"></div>
+        <button class="ia-button ia-button--link" type="button" style="align-self:flex-start">Clear All Filters</button>
+        <fieldset class="ia-facet-group" id="density-facets" style="max-inline-size:21rem">
+          <legend class="ia-facet-group__legend ia-type-subsection">Media Type</legend>
+        </fieldset>
+      </div>
+    </section>
+
+    <section class="doc-section" id="long-content">
+      <h2>Long content</h2>
+      <p>Labels far longer than anyone assumed: long translations, unbroken strings, CJK and
+         a title that is one URL — the metadata archive.org actually receives. Each stage is
+         20rem wide; a case fails if anything inside it overflows that width.</p>
+      <div class="pg-cases" id="long-cases"></div>
+    </section>
+
+    <section class="doc-section" id="rtl">
+      <h2>Right-to-left</h2>
+      <p>The same components under <code>dir="rtl"</code>, carrying Arabic, Hebrew and Persian
+         metadata. Anything laid out with logical properties mirrors on its own; an icon,
+         chevron or close button left on the wrong side, text that still aligns left, or a
+         Latin name or number scrambled inside an Arabic title is a bug. Titles carry
+         <code>dir="auto"</code>, so a Latin title in an Arabic page keeps its own order.</p>
+      <div class="doc-toolbar">
+        <div class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Direction" id="dir-switch">
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="true" data-value="rtl">Right to Left</button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1" data-value="ltr">Left to Right</button>
+        </div>
+      </div>
+      <div class="doc-panel doc-stack" id="rtl-stage" dir="rtl" lang="ar" style="align-items:stretch"></div>
+    </section>
+
+    <section class="doc-section" id="dark">
+      <h2>Dark chrome</h2>
+      <p>Everything inside <code>.ia-inverse</code> — text, borders, focus, hover and the soft
+         selected look re-point themselves. Tab through for the inverse focus ring.</p>
+      <div class="doc-panel doc-panel--inverse ia-inverse doc-stack">
+        <div class="pg-row" style="align-items:center">
+          <button class="ia-button ia-button--ghost ia-button--sm" data-icon-before="share">Share</button>
+          <button class="ia-button ia-button--ghost ia-button--icon" aria-label="More Actions" data-icon="ellipses"></button>
+          <a class="ia-link" href="#dark" style="color:var(--ia-color-text-link)">A link on chrome</a>
+          <span class="ia-env-badge" data-env="staging">Staging</span>
+        </div>
+        <div class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Media Type">
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="true">Texts</button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1">Video</button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1">Audio</button>
+        </div>
+        <button class="ia-switch" type="button" role="switch" aria-checked="true"><span class="ia-switch__track"></span><span>Autoplay</span></button>
+        <ul class="ia-menu" role="menu" aria-label="Account">
+          <li role="none"><a class="ia-menu__item" role="menuitem" href="#dark" tabindex="-1">My Uploads</a></li>
+          <li role="none"><a class="ia-menu__item" role="menuitem" href="#dark" tabindex="-1">My Favorites</a></li>
+          <li role="none"><a class="ia-menu__item" role="menuitem" href="#dark" tabindex="-1">Log Out</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="doc-section" id="coarse">
+      <h2>Coarse pointer</h2>
+      <p>The same controls with the stylesheet's own <code>@media (pointer: coarse)</code>
+         rules applied, as a touch screen gets them. Each target is measured; anything under
+         44&times;44 fails. Text links in running prose are exempt and are not in this grid.</p>
+      <div class="doc-panel pg-row" id="coarse-stage">
+        <button class="ia-button ia-button--sm ia-button--primary">Apply</button>
+        <button class="ia-button ia-button--sm ia-button--ghost ia-button--icon" aria-label="Close" data-icon="close"></button>
+        <button class="ia-chip" type="button" aria-pressed="false">Texts</button>
+        <button class="ia-sort-bar__direction" type="button" aria-label="Change to Ascending Sort" data-icon="sort" data-icon-size="sm"></button>
+        <div class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Result View">
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="true" aria-label="Grid View" data-icon="view-grid"></button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1" aria-label="List View" data-icon="view-list"></button>
+        </div>
+        <button class="ia-switch" type="button" role="switch" aria-checked="false" aria-label="Autoplay"><span class="ia-switch__track"></span></button>
+        <label class="ia-choice"><input class="ia-choice__control" type="checkbox"><span class="ia-choice__label">Texts</span></label>
+        <input class="ia-input ia-input--sm" aria-label="From Year" value="1893" style="inline-size:10rem">
+      </div>
+    </section>
+
+    <section class="doc-section" id="extremes">
+      <h2>Metadata extremes</h2>
+      <p>Tiles at the edges of what the data allows: no views and 230 million, no creator,
+         no thumbnail, a title that is one URL, a creator list that runs on.</p>
+      <div class="doc-panel"><div class="ia-tile-grid" id="extreme-tiles"></div></div>
+    </section>
+
+  </div>
+</main>
+</div>
+
+<script type="module">
+import { mountChrome, viewportSwitch, tileThumb, tileStats, facetRows, sortBarMarkup, hydrateIcons,
+         wireRadioGroups, wireSwitches, token } from './demo/docs/assets/site.js';
+mountChrome('playground.html');
+document.getElementById('vp').append(viewportSwitch(document.getElementById('stage')));
+
+const verdict = (pass, text) =>
+  `<span class="doc-ratio doc-ratio--${pass ? 'pass' : 'fail'}">${pass ? 'pass' : 'fail'} · ${text}</span>`;
+const px = name => parseFloat(token(name)) * parseFloat(getComputedStyle(document.documentElement).fontSize);
+
+/* ---- density ---------------------------------------------------------- */
+document.getElementById('density-sort').innerHTML = sortBarMarkup('density', 'Weekly Views');
+document.getElementById('density-facets').insertAdjacentHTML('beforeend',
+  facetRows('mt', [['Movies', 912, 'in'], ['Texts', 158], ['Audio', 83], ['Software', 5, 'out']]));
+
+/* ---- long content ------------------------------------------------------ */
+const LONG = [
+  ['Button, German label', `<button class="ia-button ia-button--secondary">Zustandsänderungsbenachrichtigungseinstellungen</button>`],
+  ['Button, Spanish label', `<button class="ia-button ia-button--primary">Continuar con la configuración de la cuenta</button>`],
+  ['Chip, long collection name', `<button class="ia-chip" type="button" aria-pressed="true">Prelinger Archives: Ephemeral and Industrial Films</button>`],
+  ['Segmented control, long options', `<div class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Scope">
+      <button class="ia-segmented__option" type="button" role="radio" aria-checked="true">Wissenschaftliche Abhandlungen</button>
+      <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1">Zeitschriften</button></div>`],
+  ['Facet row, long label and count', facetRows('long', [['Prelinger Archives: Ephemeral and Industrial Films', 6412]])],
+  ['Message, unbroken URL', `<div class="ia-message ia-message--warning"><span class="ia-message__icon" data-icon="alert"></span>
+      <span class="ia-message__body" style="overflow-wrap:anywhere">This item mirrors https://example.org/collections/very-long-path/without/any/breaks/at/all/index.html and may change.</span></div>`],
+  ['Tile title, one URL', null],
+  ['Tile title, CJK', null]
+];
+const cases = document.getElementById('long-cases');
+for (const [title, html] of LONG) {
+  const c = document.createElement('div');
+  c.className = 'pg-case pg-case--narrow';
+  c.innerHTML = `<p class="pg-case__title">${title}</p><div class="pg-case__stage">${html ?? ''}</div><span class="pg-verdict"></span>`;
+  cases.append(c);
+}
+const tileCase = (stage, id, heading, by, lang) => {
+  const tile = document.createElement('article');
+  tile.className = 'ia-tile ia-tile--item';
+  tile.style.inlineSize = '100%';
+  tile.innerHTML = `<a class="ia-tile__link" href="#long-content"><h3 class="ia-tile__title" dir="auto"${lang ? ` lang="${lang}"` : ''}>${heading}</h3>
+    <p class="ia-tile__creator" dir="auto">${by}</p></a>${tileStats('texts', '1,204', 3, 0)}`;
+  tile.prepend(tileThumb(id, 'texts'));
+  stage.append(tile);
+};
+const stages = cases.querySelectorAll('.pg-case__stage');
+tileCase(stages[6], 'no-such-item-url', 'https://www.example.org/archive/2003/scans/batch-0117/volume-12-part-3-appendix.pdf', 'by Unknown');
+tileCase(stages[7], 'no-such-item-cjk', '国立国会図書館デジタルコレクション所蔵 近代日本文学資料集成 第十二巻 明治期翻訳小説', 'by 日本近代文学館', 'ja');
+
+/* ---- right-to-left ------------------------------------------------------ */
+const rtl = document.getElementById('rtl-stage');
+rtl.innerHTML = `
+  ${sortBarMarkup('rtl-sort', 'Weekly Views')}
+  <div class="ia-tile-grid" id="rtl-tiles"></div>
+  <fieldset class="ia-facet-group" id="rtl-facets" style="max-inline-size:21rem">
+    <legend class="ia-facet-group__legend ia-type-subsection">اللغة</legend>
+  </fieldset>
+  <div class="ia-message ia-message--success"><span class="ia-message__icon" data-icon="check"></span>
+    <span class="ia-message__body">تم حفظ التغييرات. سيتم تحديث <bdi>Solr</bdi> خلال بضع دقائق.</span></div>
+  <div class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="عرض">
+    <button class="ia-segmented__option" type="button" role="radio" aria-checked="true">شبكة</button>
+    <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1">قائمة</button>
+  </div>
+  <button class="ia-switch" type="button" role="switch" aria-checked="true"><span class="ia-switch__track"></span><span>تشغيل تلقائي</span></button>
+  <nav aria-label="صفحات النتائج"><ul class="ia-pagination">
+    <li><a href="#rtl" aria-label="الصفحة السابقة" rel="prev" data-icon="chevron-left"></a></li>
+    <li class="ia-pagination__number"><a href="#rtl">1</a></li>
+    <li class="ia-pagination__number" data-current><a href="#rtl" aria-current="page">2</a></li>
+    <li class="ia-pagination__number"><a href="#rtl">3</a></li>
+    <li><a href="#rtl" aria-label="الصفحة التالية" rel="next" data-icon="chevron-right"></a></li>
+  </ul></nav>`;
+document.getElementById('rtl-facets').insertAdjacentHTML('beforeend',
+  facetRows('lang', [['العربية', 4210, 'in'], ['עברית', 812], ['فارسی', 390], ['English', 22]]));
+const RTL_TILES = [
+  ['alf-layla', 'ألف ليلة وليلة — طبعة بولاق 1835', 'مؤلف مجهول', 'ar'],
+  ['amos-oz', 'סיפור על אהבה וחושך', 'עמוס עוז', 'he'],
+  ['shahnameh', 'شاهنامه فردوسی، جلد ۲', 'ابوالقاسم فردوسی', 'fa'],
+  ['keaton', 'College (1927)', 'Buster Keaton', 'en']
+];
+document.getElementById('rtl-tiles').replaceChildren(...RTL_TILES.map(([id, heading, by, lang]) => {
+  const tile = document.createElement('article');
+  tile.className = 'ia-tile ia-tile--item';
+  tile.innerHTML = `<button class="ia-tile__info" aria-label="معلومات" aria-expanded="false" data-icon="info"></button>
+    <a class="ia-tile__link" href="#rtl"><h3 class="ia-tile__title" dir="auto" lang="${lang}">${heading}</h3>
+    <p class="ia-tile__creator" dir="auto" lang="${lang}">${by}</p></a>${tileStats('texts', '12,408', 35, 2)}`;
+  tile.prepend(tileThumb(`no-such-${id}`, 'texts'));
+  return tile;
+}));
+// The chevrons point the way the page reads, so they flip with the direction.
+document.getElementById('dir-switch').addEventListener('change', e => {
+  rtl.dir = e.detail.value;
+  rtl.lang = e.detail.value === 'rtl' ? 'ar' : 'en';
+});
+
+/* ---- metadata extremes -------------------------------------------------- */
+const EXTREMES = [
+  ['A newly uploaded item nobody has seen yet', '', '0', 0, 0, 'movies'],
+  ['The most-viewed item on the site', 'by Internet Archive', '230.2M', '1.2K', 812, 'texts'],
+  ['Untitled', '', '4', 0, 0, 'data'],
+  ['http://www.example.com/1997/09/archive/index.html', 'by Wayback Machine', '31', 1, 0, 'web'],
+  ['Collected speeches, volume 1', 'by Smith, John; Jones, Mary; Brown, Robert; Garcia, Maria; Chen, Wei; Okafor, Chidi', '1,904', 12, 3, 'texts']
+];
+document.getElementById('extreme-tiles').replaceChildren(...EXTREMES.map(([heading, by, v, f, r, kind], i) => {
+  const tile = document.createElement('article');
+  tile.className = 'ia-tile ia-tile--item';
+  tile.innerHTML = `<a class="ia-tile__link" href="#extremes"><h3 class="ia-tile__title" dir="auto">${heading}</h3>
+    ${by ? `<p class="ia-tile__creator" dir="auto">${by}</p>` : ''}</a>${tileStats(kind, v, f, r)}`;
+  tile.prepend(tileThumb(`no-such-extreme-${i}`, kind));
+  return tile;
+}));
+
+/* ---- coarse pointer: reuse the stylesheet's own rules, scoped ----------- */
+{
+  const scoped = [];
+  for (const sheet of document.styleSheets) {
+    let rules; try { rules = sheet.cssRules; } catch { continue; }
+    for (const rule of rules ?? []) {
+      if (!(rule instanceof CSSMediaRule) || !/pointer:\s*coarse/.test(rule.conditionText)) continue;
+      for (const inner of rule.cssRules) {
+        if (!inner.selectorText) continue;
+        const sel = inner.selectorText.split(',').map(s => `#coarse-stage ${s.trim()}`).join(', ');
+        scoped.push(`${sel} { ${inner.style.cssText} }`);
+      }
+    }
+  }
+  const style = document.createElement('style');
+  style.textContent = scoped.join('\n');
+  document.head.append(style);
+}
+
+hydrateIcons();
+wireRadioGroups();
+wireSwitches();
+
+/* ---- the checks, once everything is drawn ------------------------------- */
+// A timeout rather than requestAnimationFrame, so the checks also run in a
+// background tab.
+setTimeout(() => {
+  // Alignment: each control's height against its row's token.
+  for (const row of document.querySelectorAll('[data-align]')) {
+    const want = px(`size-${row.dataset.align}`);
+    for (const el of [...row.children]) {
+      const h = Math.round(el.getBoundingClientRect().height * 10) / 10;
+      const wrap = document.createElement('span');
+      wrap.className = 'pg-measure';
+      el.replaceWith(wrap);
+      wrap.append(el);
+      wrap.insertAdjacentHTML('beforeend', verdict(Math.abs(h - want) < 0.5, `${h}px`));
+    }
+  }
+  // Long content: nothing may extend past its 20rem stage.
+  for (const c of cases.children) {
+    const stage = c.querySelector('.pg-case__stage');
+    const box = stage.getBoundingClientRect();
+    const over = [...stage.querySelectorAll('*')].some(el => {
+      const r = el.getBoundingClientRect();
+      return r.width && (r.right > box.right + 1 || r.left < box.left - 1);
+    });
+    c.querySelector('.pg-verdict').innerHTML = verdict(!over, over ? 'overflows its box' : 'fits');
+  }
+  // Coarse pointer: every target at least 44 by 44.
+  const min = px('size-target-min');
+  for (const el of document.querySelectorAll('#coarse-stage > *')) {
+    const targets = el.matches('[role=radiogroup]') ? [...el.children] : [el];
+    const small = targets.some(t => { const r = t.getBoundingClientRect(); return r.width < min - 0.5 || r.height < min - 0.5; });
+    const r = el.getBoundingClientRect();
+    const wrap = document.createElement('span');
+    wrap.className = 'pg-measure';
+    el.replaceWith(wrap);
+    wrap.append(el);
+    wrap.insertAdjacentHTML('beforeend', verdict(!small, `${Math.round(r.width)}×${Math.round(r.height)}`));
+  }
+}, 100);
+</script>
+</body>
+</html>
