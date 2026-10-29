@@ -453,7 +453,7 @@ export class IATopNav extends LitElement {
 
           --mediaMenuBg: var(--grey13);
           --mediaLabelDesktopColor: var(--grey80);
-          --activeDesktopMenuIcon: var(--grey20);
+          --activeDesktopMenuIcon: var(--grey28);
 
           --mediaSliderBg: var(--grey20);
           --mediaSliderDesktopBg: var(--grey28);
@@ -465,7 +465,7 @@ export class IATopNav extends LitElement {
 
           --dropdownMenuBg: var(--grey20);
           --dropdownMenuInfoItem: var(--greya0);
-          --dropdownMenuDivider: var(--grey28);
+          --dropdownMenuDivider: var(--grey40);
 
           /* Deprecated: the wide dropdown's light panel read these, and its
              dark panel (D-41) doesn't. Still declared, at their old values,
