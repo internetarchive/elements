@@ -127,7 +127,8 @@ export class IAWaybackSearchForm extends LitElement {
             var(--ia-font-family-base--)
           );
 
-          font: normal 1.2rem/1.5 var(--wayback-search-font-family--);
+          font: normal var(--ia-font-size-sm--) / 1.5
+            var(--wayback-search-font-family--);
         }
 
         form {
@@ -146,8 +147,8 @@ export class IAWaybackSearchForm extends LitElement {
         }
 
         fieldset {
-          padding: 0.7rem 2rem;
-          margin: 1.5rem 0;
+          padding: 0.7rem var(--ia-space-4--); /* 7px at a 10px root */
+          margin: var(--ia-space-3--) 0;
           box-sizing: border-box;
           text-align: center;
           border: none;
@@ -169,16 +170,18 @@ export class IAWaybackSearchForm extends LitElement {
           width: 100%;
           max-width: 215px;
           max-height: 60px;
-          margin-bottom: 1.3rem;
+          margin-bottom: 1.3rem; /* 13px at a 10px root */
           vertical-align: middle;
         }
 
         input {
           display: block;
           width: 100%;
-          height: 3rem;
-          padding: 0.5rem 1rem 0.5rem 3rem;
-          font: normal 1.2rem/1.5 var(--wayback-search-font-family--);
+          height: var(--ia-size-control-sm--);
+          padding: var(--ia-space-1--) var(--ia-space-2--) var(--ia-space-1--)
+            var(--ia-space-6--);
+          font: normal var(--ia-font-size-sm--) / 1.5
+            var(--wayback-search-font-family--);
           color: var(--wayback-search-input-text-color--);
           box-sizing: border-box;
           border: var(--ia-border-control--);
@@ -210,8 +213,8 @@ export class IAWaybackSearchForm extends LitElement {
           position: absolute;
           top: 3px;
           left: 3px;
-          width: 2.4rem;
-          height: 2.4rem;
+          width: var(--ia-size-icon-lg--);
+          height: var(--ia-size-icon-lg--);
           color: var(--iconFill, var(--ia-color-text-primary--));
         }
 
@@ -221,8 +224,8 @@ export class IAWaybackSearchForm extends LitElement {
           }
 
           p {
-            margin-bottom: 3rem;
-            font-size: 1.6rem;
+            margin-bottom: var(--ia-space-6--);
+            font-size: var(--ia-font-size-lg--);
             text-align: center;
           }
 
