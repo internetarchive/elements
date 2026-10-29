@@ -442,14 +442,9 @@ export class IATopNav extends LitElement {
           --grey6f: var(--ia-color-legacy-gray-550--);
           --errorYellow: var(--ia-color-action-warning-fill--);
 
-          --linkColor: var(
-            --ia-theme-link-color,
-            var(--ia-color-text-inverse-link--)
-          );
           --linkHoverColor: var(--white);
           --subnavLinkColor: var(--grey80);
           --primaryTextColor: var(--white);
-          --inverseTextColor: var(--grey20);
           --lightTextColor: var(--grey80);
           --activeColor: var(--white);
           --activeButtonBg: var(--grey20);
@@ -471,6 +466,13 @@ export class IATopNav extends LitElement {
           --dropdownMenuBg: var(--grey20);
           --dropdownMenuInfoItem: var(--greya0);
           --dropdownMenuDivider: var(--grey28);
+
+          /* Deprecated: the wide dropdown's light panel read these, and its
+             dark panel (D-41) doesn't. Still declared, at their old values,
+             for anything else that reads them; setting them restyles nothing
+             in the topnav. */
+          --linkColor: var(--ia-color-legacy-blue-500--);
+          --inverseTextColor: var(--grey20);
           --inverseDropdownMenuInfoItem: var(--grey6f);
 
           --loginTextColor: var(--grey80);
