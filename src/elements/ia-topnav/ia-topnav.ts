@@ -29,6 +29,7 @@ import {
   applyTopnavUnitFallback,
   registerTopnavUnit,
 } from './lib/register-topnav-unit';
+import topnavFocusStyles from './focus-styles';
 
 const topnavUnitRegistered = registerTopnavUnit();
 
@@ -406,6 +407,7 @@ export class IATopNav extends LitElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      topnavFocusStyles,
       css`
         :host {
           /**
@@ -426,31 +428,31 @@ export class IATopNav extends LitElement {
           font-size: var(--topnavFontSize, medium);
           --topnavUnit--: calc(1em / 16);
 
-          --white: #fff;
-          --grey13: #222;
-          --grey20: #333;
-          --grey40: #666;
-          --grey28: #474747;
-          --grey60: #999;
-          --grey66: #aaa;
-          --grey80: #ccc;
-          --greya0: #a0a0a0;
-          --grey6f: #6f6f6f;
-          --errorYellow: #ffcd27;
+          /* The topnav's palette, on the design tokens. The roles below read
+             it; set any of them on <ia-topnav> to restyle a part. */
+          --white: var(--ia-color-text-inverse--);
+          --grey13: var(--ia-color-surface-chrome--);
+          --grey20: var(--ia-color-surface-chrome-secondary--);
+          --grey40: var(--ia-color-palette-gray-600--);
+          --grey28: var(--ia-color-border-inverse--);
+          --grey60: var(--ia-color-text-inverse-tertiary--);
+          --grey66: var(--ia-color-palette-gray-400--);
+          --grey80: var(--ia-color-text-inverse-secondary--);
+          --greya0: var(--ia-color-text-inverse-secondary--);
+          --grey6f: var(--ia-color-legacy-gray-550--);
+          --errorYellow: var(--ia-color-action-warning-fill--);
 
-          --linkColor: #4b64ff;
           --linkHoverColor: var(--white);
-          --subnavLinkColor: var(--grey66);
+          --subnavLinkColor: var(--grey80);
           --primaryTextColor: var(--white);
-          --inverseTextColor: var(--grey20);
-          --lightTextColor: var(--grey60);
+          --lightTextColor: var(--grey80);
           --activeColor: var(--white);
           --activeButtonBg: var(--grey20);
-          --iconFill: var(--grey60);
+          --iconFill: var(--grey80);
           --desktopSearchIconFill: var(--grey20);
 
           --mediaMenuBg: var(--grey13);
-          --mediaLabelDesktopColor: var(--grey60);
+          --mediaLabelDesktopColor: var(--grey80);
           --activeDesktopMenuIcon: var(--grey28);
 
           --mediaSliderBg: var(--grey20);
@@ -464,11 +466,18 @@ export class IATopNav extends LitElement {
           --dropdownMenuBg: var(--grey20);
           --dropdownMenuInfoItem: var(--greya0);
           --dropdownMenuDivider: var(--grey40);
+
+          /* Deprecated: the wide dropdown's light panel read these, and its
+             dark panel (D-41) doesn't. Still declared, at their old values,
+             for anything else that reads them; setting them restyles nothing
+             in the topnav. */
+          --linkColor: var(--ia-color-legacy-blue-500--);
+          --inverseTextColor: var(--grey20);
           --inverseDropdownMenuInfoItem: var(--grey6f);
 
-          --loginTextColor: var(--grey60);
+          --loginTextColor: var(--grey80);
 
-          --themeFontFamily: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+          --themeFontFamily: var(--ia-font-family-base--);
           --logoWidthTablet: 263px;
 
           --savePageSubmitBg: var(--grey13);
@@ -478,10 +487,6 @@ export class IATopNav extends LitElement {
 
           color: var(--primaryTextColor);
           font-family: var(--themeFontFamily);
-        }
-
-        ia-topnav-primary-nav:focus {
-          outline: none !important;
         }
 
         #close-layer {

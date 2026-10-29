@@ -42,6 +42,15 @@ describe('IA Dropdown Search Bar', () => {
     expect(el.shadowRoot?.querySelector('#search-button')).to.exist;
   });
 
+  test('rings its category picker in the light-surface focus color', async () => {
+    const dropdown = el.shadowRoot!.querySelector('#category-dropdown')!;
+    expect(
+      getComputedStyle(dropdown)
+        .getPropertyValue('--dropdownFocusRingColor')
+        .trim(),
+    ).to.equal('#3a4fd6');
+  });
+
   test('default selected category is first in list', async () => {
     // selectedCategory is not explicitly set, so it resolves to
     // the first category in the provided list

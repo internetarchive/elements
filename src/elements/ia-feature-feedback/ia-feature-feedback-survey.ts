@@ -41,6 +41,7 @@ import { thumbsDown } from './assets/img/thumb-down';
 import './ia-feature-feedback-survey-vote';
 import './ia-feature-feedback-survey-comment';
 import './ia-feature-feedback-survey-extra';
+import { tokenStyles } from '@src/themes/tokens';
 
 @customElement('ia-feature-feedback-survey')
 @localized()
@@ -811,12 +812,12 @@ export class IAFeatureFeedbackSurvey
 
     const buttonStyles = css`
       .ia-button {
-        min-height: 3rem;
+        min-height: var(--ia-size-control-sm--);
         cursor: pointer;
         color: ${whiteColor};
         line-height: normal;
-        border-radius: 0.4rem;
-        font-size: 1.4rem;
+        border-radius: var(--ia-radius-default--);
+        font-size: var(--ia-font-size-md--);
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         border: 1px solid transparent;
         white-space: nowrap;
@@ -826,7 +827,7 @@ export class IAFeatureFeedbackSurvey
         align-items: center;
         transition: all 0.1s ease 0s;
         vertical-align: middle;
-        padding: 0 3rem;
+        padding: 0 var(--ia-space-6--);
         outline-color: ${whiteColor};
         outline-offset: -4px;
         user-select: none;
@@ -901,7 +902,7 @@ export class IAFeatureFeedbackSurvey
       }
 
       .beta-button-icon {
-        line-height: 100%;
+        line-height: 1;
       }
 
       .beta-button-icon svg {
@@ -998,7 +999,7 @@ export class IAFeatureFeedbackSurvey
       }
     `;
 
-    return [buttonStyles, surveyStyles];
+    return [tokenStyles, buttonStyles, surveyStyles];
   }
 }
 

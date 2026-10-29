@@ -11,6 +11,7 @@ import { property, query, state } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 
 import type { ZoneOfSilence } from './models';
+import { tokenStyles } from '@src/themes/tokens';
 
 /**
  * Event names emitted by this component
@@ -167,58 +168,66 @@ export class IAWaveformProgress extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        --waveform-fill-color--: var(--ia-theme-waveform-fill-color, #3272b6);
-        --waveform-zone-of-silence-color--: var(
-          --ia-theme-waveform-zone-of-silence-color,
-          #f6e652
-        );
-        --waveform-side-margin--: var(--ia-theme-waveform-side-margin, 10px);
+    return [
+      tokenStyles,
+      css`
+        :host {
+          --waveform-fill-color--: var(
+            --ia-theme-waveform-fill-color,
+            var(--ia-color-text-link--)
+          );
+          --waveform-zone-of-silence-color--: var(
+            --ia-theme-waveform-zone-of-silence-color,
+            var(--ia-color-action-warning-fill--)
+          );
+          /* Matches the scrubber's marker inset (half its 20px thumb) when
+             stacked over it in the radio player, so it stays in px. */
+          --waveform-side-margin--: var(--ia-theme-waveform-side-margin, 10px);
 
-        display: inline-block;
-      }
+          display: inline-block;
+        }
 
-      #dragcover {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        touch-action: none;
-      }
+        #dragcover {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          touch-action: none;
+        }
 
-      .container {
-        display: block;
-        position: relative;
-        background-color: white;
-        height: 100%;
-        margin-left: var(--waveform-side-margin--);
-        margin-right: var(--waveform-side-margin--);
-      }
+        .container {
+          display: block;
+          position: relative;
+          background-color: var(--ia-color-surface-raised--);
+          height: 100%;
+          margin-left: var(--waveform-side-margin--);
+          margin-right: var(--waveform-side-margin--);
+        }
 
-      .waveform-image {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-      }
+        .waveform-image {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+        }
 
-      .zone-of-silence {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        background: linear-gradient(
-          #000,
-          #000 47%,
-          var(--waveform-zone-of-silence-color--) 50%,
-          #000 53%,
-          #000 100%
-        );
-      }
+        .zone-of-silence {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          background: linear-gradient(
+            var(--ia-color-surface-theater--),
+            var(--ia-color-surface-theater--) 47%,
+            var(--waveform-zone-of-silence-color--) 50%,
+            var(--ia-color-surface-theater--) 53%,
+            var(--ia-color-surface-theater--) 100%
+          );
+        }
 
-      #fill {
-        position: absolute;
-        height: 100%;
-        background-color: var(--waveform-fill-color--);
-      }
-    `;
+        #fill {
+          position: absolute;
+          height: 100%;
+          background-color: var(--waveform-fill-color--);
+        }
+      `,
+    ];
   }
 }

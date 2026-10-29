@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { userEvent } from 'vitest/browser';
 import { aTimeout, fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
 
@@ -6,6 +7,83 @@ import type { IADropdown, OptionInterface } from './ia-dropdown';
 import './ia-dropdown';
 
 describe('IADropdown', () => {
+  test('pads a plain-text option the same as one with its own markup', async () => {
+    const options: OptionInterface[] = [
+      { id: 'text', label: 'Books & Documents' },
+      { id: 'markup', label: html`<span>Video</span>` },
+    ];
+    const el = await fixture<IADropdown>(
+      html`<ia-dropdown .options=${options} open></ia-dropdown>`,
+    );
+    const [text, markup] = Array.from(
+      el.shadowRoot!.querySelectorAll<HTMLElement>(
+        '#dropdown-main li > * > :first-child',
+      ),
+    );
+    expect(text?.textContent?.trim()).to.equal('Books & Documents');
+    // The whole 20px inset comes from the label's padding alone.
+    expect(getComputedStyle(text).paddingLeft).to.equal('20px');
+    expect(getComputedStyle(text.parentElement!).paddingLeft).to.equal('0px');
+    expect(getComputedStyle(text).fontSize).to.equal('14px');
+    expect(getComputedStyle(text).paddingLeft).to.equal(
+      getComputedStyle(markup).paddingLeft,
+    );
+  });
+
+  test('insets an option by exactly the padding a host sets', async () => {
+    const options: OptionInterface[] = [{ id: 'text', label: 'Texts' }];
+    const el = await fixture<IADropdown>(
+      html`<ia-dropdown
+        .options=${options}
+        open
+        style="--dropdownItemPaddingLeft: 4px"
+      ></ia-dropdown>`,
+    );
+    const label = el.shadowRoot!.querySelector<HTMLElement>(
+      '#dropdown-main li > * > :first-child',
+    )!;
+    const option = label.parentElement!;
+    expect(
+      label.getBoundingClientRect().left +
+        parseFloat(getComputedStyle(label).paddingLeft) -
+        option.getBoundingClientRect().left,
+    ).to.equal(4);
+  });
+
+  test('rings a focused option in its own text color on the selected row', async () => {
+    const options: OptionInterface[] = [
+      { id: 'a', label: 'Relevance' },
+      { id: 'b', label: 'Date added' },
+    ];
+    const el = await fixture<IADropdown>(
+      html`<ia-dropdown
+        .options=${options}
+        .selectedOption=${'b'}
+        .includeSelectedOption=${true}
+        open
+      ></ia-dropdown>`,
+    );
+    const selected = el.shadowRoot!.querySelector<HTMLElement>(
+      '#dropdown-main li.selected > *',
+    )!;
+    await userEvent.keyboard('{Tab}');
+    selected.focus();
+    const style = getComputedStyle(selected);
+    expect(style.outlineColor).to.equal(style.color);
+    expect(style.outlineColor).to.equal('rgb(255, 255, 255)');
+  });
+
+  test('rings the trigger in the dark-surface focus color by default', async () => {
+    const el = await fixture<IADropdown>(html`<ia-dropdown></ia-dropdown>`);
+    const trigger =
+      el.shadowRoot!.querySelector<HTMLButtonElement>('button.click-main')!;
+    await userEvent.keyboard('{Tab}');
+    trigger.focus();
+    expect(getComputedStyle(trigger).outlineColor).to.equal(
+      'rgb(154, 168, 255)',
+    );
+  });
+
   test('is closed at default', async () => {
     const el = await fixture<IADropdown>(html`<ia-dropdown></ia-dropdown>`);
     expect(el.open).to.be.false;

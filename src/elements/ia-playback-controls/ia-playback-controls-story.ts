@@ -25,7 +25,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Play icon colour',
     cssVariable: '--ia-theme-playback-controls-play-icon-color',
-    defaultValue: '#333333',
+    defaultValue: '#2c2c2c',
     inputType: 'color',
   },
   {
@@ -121,7 +121,7 @@ export class IAPlaybackControlsStory extends LitElement {
     return css`
       .controls {
         background-color: #151515;
-        padding: 1rem 0.5rem;
+        padding: 1.6rem 0.8rem;
         border-radius: 4px;
       }
 

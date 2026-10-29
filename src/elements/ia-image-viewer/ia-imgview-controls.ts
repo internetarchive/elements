@@ -89,7 +89,7 @@ export class IAImageViewerControls extends LitElement {
           align-items: center;
           justify-content: space-between;
           width: 100%;
-          margin-top: 0.8rem;
+          margin-top: 0.8rem; /* 8px at a 10px root */
         }
 
         .nav-btn {
@@ -153,7 +153,7 @@ export class IAImageViewerControls extends LitElement {
           }
 
           .counter {
-            margin-top: 0.8rem;
+            margin-top: 0.8rem; /* 8px at a 10px root */
           }
         }
       `,

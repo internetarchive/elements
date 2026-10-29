@@ -8,7 +8,6 @@ import './ia-feature-feedback-survey';
 import type { PropInputSettings } from '@demo/story-components/story-prop-settings';
 import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
 import '@demo/story-template';
-import { tagFromHash } from '@demo/element-hash';
 
 import type { IAFeatureFeedback } from './ia-feature-feedback';
 import type { FeatureFeedbackServiceInterface } from './feature-feedback-service';
@@ -20,13 +19,6 @@ const DEMO_SURVEY_IDENTIFIER = 'demo-survey';
 
 /** How long the mock service takes to answer, so the processing state shows. */
 const SUBMISSION_DELAY_MS = 800;
-
-/**
- * The widgets size some text in rem against the 10px root font size that
- * archive.org and offshoot both set, so at the demo's 16px root it renders
- * 1.6x too big.
- */
-const ARCHIVE_ROOT_FONT_SIZE = '10px';
 
 const styleInputSettings: StyleInputSettings[] = [
   {
@@ -88,16 +80,6 @@ export class IAFeatureFeedbackStory extends LitElement {
 
   @state() private submissionLog: string[] = [];
 
-  /**
-   * Matches archive.org's root font size. On by default only when feature
-   * feedback is the element being viewed, since the root size applies to the
-   * whole demo page and would shrink every other story in the all-elements view.
-   */
-  @state() private archiveFontSize =
-    tagFromHash(window.location.hash) === 'ia-feature-feedback';
-
-  private rootFontSizeBefore?: string;
-
   private readonly recaptchaManager = new MockRecaptchaManager();
 
   private readonly resizeObserver = new SharedResizeObserver();
@@ -112,27 +94,6 @@ export class IAFeatureFeedbackStory extends LitElement {
       returnValue: { success: false },
     }),
   );
-
-  updated() {
-    const root = document.documentElement.style;
-    if (this.archiveFontSize && this.rootFontSizeBefore === undefined) {
-      this.rootFontSizeBefore = root.fontSize;
-      root.fontSize = ARCHIVE_ROOT_FONT_SIZE;
-    } else if (!this.archiveFontSize) {
-      this.restoreRootFontSize();
-    }
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.restoreRootFontSize();
-  }
-
-  private restoreRootFontSize() {
-    if (this.rootFontSizeBefore === undefined) return;
-    document.documentElement.style.fontSize = this.rootFontSizeBefore;
-    this.rootFontSizeBefore = undefined;
-  }
 
   private get service(): FeatureFeedbackServiceInterface {
     return this.failSubmissions ? this.failingService : this.succeedingService;
@@ -165,26 +126,6 @@ export class IAFeatureFeedbackStory extends LitElement {
         return result;
       },
     };
-  }
-
-  private toggleRow(
-    label: string,
-    checked: boolean,
-    onChange: (checked: boolean) => void,
-  ) {
-    return html`
-      <tr>
-        <td>${label}</td>
-        <td>
-          <input
-            type="checkbox"
-            .checked=${checked}
-            @change=${(e: Event) =>
-              onChange((e.target as HTMLInputElement).checked)}
-          />
-        </td>
-      </tr>
-    `;
   }
 
   render() {
@@ -260,24 +201,6 @@ export class IAFeatureFeedbackStory extends LitElement {
           </ul>
         </div>
 
-        <div slot="settings">
-          <table>
-            ${this.toggleRow(
-              'archive.org root font size',
-              this.archiveFontSize,
-              (checked) => {
-                this.archiveFontSize = checked;
-              },
-            )}
-          </table>
-          <p class="hint">
-            archive.org root font size sets the page's root font size to 10px,
-            which the widgets are built for. It applies to the whole demo page,
-            so it's on by default only when feature feedback is the element
-            being viewed.
-          </p>
-        </div>
-
         <div slot="usage-notes">
           <p>
             Nothing here talks to a server. The demo uses a mock Recaptcha
@@ -324,14 +247,6 @@ export class IAFeatureFeedbackStory extends LitElement {
         padding-left: 2rem;
         font-family: monospace;
         font-size: 1.2rem;
-      }
-
-      .hint {
-        font-size: 1.2rem;
-      }
-
-      td {
-        padding-right: 1rem;
       }
     `;
   }

@@ -1,6 +1,7 @@
 import {
   html,
   LitElement,
+  nothing,
   TemplateResult,
   CSSResultGroup,
   css,
@@ -8,6 +9,7 @@ import {
   render,
 } from 'lit';
 import { property } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { customElement } from '@src/util/custom-element';
 import themeStyles from '@src/themes/theme-styles';
 
@@ -16,7 +18,11 @@ import '../ia-status-indicator/ia-status-indicator';
 /**
  * Renders a standardized button built off the ia-button styling and the activity indicator, with the option to show
  * a loading indicator instead of the text or to customize the text, and the ability to pass in any
- * function to run on click.
+ * function to run on click. Follows the button spec in docs/components/button.md.
+ *
+ * A disabled or loading button stays in the tab order (`aria-disabled`, D-32)
+ * and swallows its own clicks, so neither a listener on the element nor a
+ * form submission sees them. With `href`, it renders a link styled as a button.
  *
  * Designed to behave exactly like a native type="submit" or type="reset" button if either type is supplied,
  * i.e. for an <ia-button type="submit" @click=${doSideEffects}></ia-button>,
@@ -31,11 +37,16 @@ export class IAButton extends LitElement {
     | 'secondary'
     | 'danger'
     | 'warning'
+    | 'donate'
     | 'disabled'
-    | 'transparent'
+    | 'ghost'
+    | 'transparent' // the old name for ghost
     | 'custom'
     | 'link'
     | 'danger-link' = 'primary';
+
+  /* The button's size: 30px, 36px (the default) or 44px tall */
+  @property({ type: String }) size: 'sm' | 'md' | 'lg' = 'md';
 
   /* Whether to show a loading indicator instead of the button */
   @property({ type: Boolean }) loading: boolean = false;
@@ -52,55 +63,108 @@ export class IAButton extends LitElement {
     | 'submit'
     | 'reset' = 'button';
 
-  /* An optional href to wrap around the button */
+  /* An optional href, which makes the button a link */
   @property({ type: String }) href?: string;
 
-  /* Whether to add a target="_blank" to any wrapping link */
+  /* Whether a link opens in a new tab */
   @property({ type: Boolean }) openLinksNewTab: boolean = false;
 
   render(): TemplateResult {
     // No whitespace between the top-level nodes: a text node in the shadow
     // root renders as a space when the host is display:inline.
-    return html`${this.href
-        ? html`<a
-            href=${this.href}
-            target=${this.openLinksNewTab ? '_blank' : '_self'}
-            >${this.buttonTemplate}</a
-          >`
-        : this.buttonTemplate}<slot name="hidden-button"></slot>`;
+    return html`${this.href ? this.linkTemplate : this.buttonTemplate}<slot
+        name="hidden-button"
+      ></slot>`;
   }
 
   protected willUpdate(changed: PropertyValues): void {
     if (changed.has('type')) {
       this.setButtonTypeEmulation();
     }
+    // Disabled too, so pressing Enter in the form can't submit through it
+    const hiddenButton = this.querySelector<HTMLInputElement>(
+      'input.hidden-button',
+    );
+    if (hiddenButton) hiddenButton.disabled = this.inactive;
+  }
+
+  /* Whether the button ignores activation: disabled, or busy loading */
+  private get inactive(): boolean {
+    return this.disabled || this.loading;
+  }
+
+  /* The classes the styles key off: mode, size and state */
+  private get classes(): string {
+    const mode = this.mode === 'transparent' ? 'ghost' : this.mode;
+    return [
+      'button',
+      mode,
+      `size-${this.size}`,
+      this.disabled ? 'is-disabled' : '',
+      this.loading ? 'is-loading' : '',
+    ]
+      .filter(Boolean)
+      .join(' ');
   }
 
   /* The native button to render */
   private get buttonTemplate(): TemplateResult {
     return html`<button
       part="button"
-      class=${this.mode}
-      ?disabled=${this.disabled || this.loading}
+      class=${this.classes}
+      aria-disabled=${this.inactive ? 'true' : nothing}
+      aria-busy=${this.loading ? 'true' : nothing}
+      @click=${this.handleInactiveClick}
     >
-      ${this.buttonTextTemplate}
+      ${this.contentTemplate}
     </button>`;
   }
 
-  /* The text to render within the button */
-  private get buttonTextTemplate(): TemplateResult {
-    return this.loading ? this.loadingStateTemplate : html`<slot></slot>`;
+  /* A link styled as a button, for an href */
+  private get linkTemplate(): TemplateResult {
+    return html`<a
+      part="button"
+      class=${this.classes}
+      href=${this.href ?? ''}
+      target=${this.openLinksNewTab ? '_blank' : '_self'}
+      rel=${ifDefined(this.openLinksNewTab ? 'noopener' : undefined)}
+      aria-disabled=${this.inactive ? 'true' : nothing}
+      aria-busy=${this.loading ? 'true' : nothing}
+      @click=${this.handleInactiveClick}
+      >${this.contentTemplate}</a
+    >`;
+  }
+
+  /*
+   * The label, and over it while loading, the indicator. The label stays in
+   * place but hidden, so the button keeps its width.
+   */
+  private get contentTemplate(): TemplateResult {
+    return html`
+      <span class="label"><slot></slot></span>
+      ${this.loading ? this.loadingStateTemplate : nothing}
+    `;
   }
 
   /* Content to render while button is loading */
   private get loadingStateTemplate(): TemplateResult {
     return html`
-      <span class="loading-indicator" alt="Loading indicator">
-        <ia-status-indicator mode="loading"></ia-status-indicator> ${this
-          .loadingText}
+      <span class="loading-indicator">
+        <ia-status-indicator mode="loading"></ia-status-indicator>
+        ${this.loadingText}
       </span>
     `;
   }
+
+  /**
+   * A disabled or loading button stays focusable, so it gets clicks. Stopped
+   * here, they never reach a listener on the element or the form.
+   */
+  private handleInactiveClick = (e: Event): void => {
+    if (!this.inactive) return;
+    e.preventDefault();
+    e.stopPropagation();
+  };
 
   /** Sets up or removes button type emulation as needed */
   private setButtonTypeEmulation(): void {
@@ -122,7 +186,7 @@ export class IAButton extends LitElement {
    * and if actions not already in progress
    */
   private handleComponentClick(e: Event): void {
-    if (this.type === 'button') return;
+    if (this.type === 'button' || this.inactive) return;
 
     // No need to submit/reset the form if it's already submitting/resetting
     const formActionsInProgress =
@@ -206,6 +270,10 @@ export class IAButton extends LitElement {
           --warning-cta-fill--: var(--warning-cta-fill);
           --warning-cta-border--: var(--warning-cta-border);
 
+          --donate-cta-text-color--: var(--donate-cta-text-color);
+          --donate-cta-fill--: var(--donate-cta-fill);
+          --donate-cta-border--: var(--donate-cta-border);
+
           --disabled-cta-text-color--: var(--disabled-cta-text-color);
           --disabled-cta-fill--: var(--disabled-cta-fill);
           --disabled-cta-border--: var(--disabled-cta-border);
@@ -221,9 +289,11 @@ export class IAButton extends LitElement {
           --base-font-family--: var(--base-font-family);
           --font-size-standard--: var(--font-size-standard);
 
+          /* Hover snaps (D-54); only the press moves. */
           --ia-button-transition--: var(
             --ia-button-transition,
-            all 0.1s ease 0s
+            transform var(--ia-motion-duration-instant--)
+              var(--ia-motion-easing-standard--)
           );
 
           --ia-button-custom-text-color--: var(
@@ -254,140 +324,232 @@ export class IAButton extends LitElement {
           display: inline-block; /* keeps host sized to button */
         }
 
-        button {
-          font-family: var(--base-font-family--);
-          font-size: var(--font-size-standard--);
-          height: var(--button-height--);
-          min-height: var(--button-height--);
-          width: var(--button-width--);
-          padding: var(--button-padding--);
-          border-width: var(--button-border-width--);
-          border-radius: var(--button-border-radius--);
-          transition: var(--ia-button-transition--);
+        .button {
+          --_height: var(--button-height--);
+          --_padding: var(--button-padding--);
+          --_font-size: var(--font-size-standard--);
+          --_press: var(--ia-motion-press-scale-default--);
 
-          outline-color: currentColor;
-          cursor: pointer;
-          line-height: normal;
-          border-style: solid;
-          white-space: nowrap;
-          appearance: auto;
+          /* The label and the loading indicator share one cell, so the
+             button is as wide as the wider of the two. */
+          display: inline-grid;
+          grid-template-areas: 'stack';
+          place-items: center;
           box-sizing: border-box;
-          display: flex;
+          width: var(--button-width--);
+          max-width: 100%;
+          /* A minimum, not a height: a label longer than its container wraps
+             inside the button instead of overflowing it (D-51). */
+          min-height: var(--_height);
+          margin: 0;
+          padding: var(--_padding);
+          border: var(--button-border-width--) solid transparent;
+          border-radius: var(--button-border-radius--);
+          background: none;
+          color: inherit;
+
+          font-family: var(--base-font-family--);
+          font-size: var(--_font-size);
+          font-weight: var(--ia-font-weight-regular--);
+          line-height: var(--ia-font-line-height-tight--);
+          text-align: center;
+          text-decoration: none;
+          /* break-word, not anywhere: anywhere also shrinks the host's
+             min-content width, so a host in a tight flex row would break
+             its label letter by letter. */
+          overflow-wrap: break-word;
+          text-wrap: balance;
+
+          cursor: pointer;
+          user-select: none;
+          -webkit-user-select: none;
+          transition: var(--ia-button-transition--);
+        }
+
+        .size-sm {
+          --_height: var(--ia-size-control-sm--);
+          --_padding: 0 var(--ia-space-4--);
+        }
+
+        .size-lg {
+          --_height: var(--ia-size-control-lg--);
+          --_padding: 0 var(--ia-space-6--);
+          --_font-size: var(--ia-font-size-lg--);
+        }
+
+        /* Every size is at least 44px tall to a finger. */
+        @media (pointer: coarse) {
+          .button {
+            min-height: max(var(--_height), var(--ia-size-target-min--));
+          }
+        }
+
+        .label,
+        .loading-indicator {
+          grid-area: stack;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
-          vertical-align: middle;
-          outline-offset: -4px;
-          user-select: none;
-          text-decoration: none;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          -o-user-select: none;
+          gap: var(--ia-space-1--);
         }
 
-        a {
-          text-decoration: none;
+        .is-loading .label {
+          visibility: hidden;
         }
 
-        button:disabled,
-        button.disabled {
-          cursor: not-allowed;
-          color: var(--disabled-cta-text-color--);
-          background-color: var(--disabled-cta-fill--);
-          border: 1px solid var(--disabled-cta-border--);
-          opacity: 0.5;
+        .button:focus-visible {
+          outline: var(--ia-size-focus-ring--) solid
+            var(--ia-color-border-focus--);
+          outline-offset: var(--ia-size-focus-ring-offset--);
         }
 
-        button:enabled:hover {
-          opacity: 0.9;
-        }
-
-        button:focus-visible {
-          opacity: 0.8;
-          outline-style: double;
-        }
-
-        button:active {
-          opacity: 0.7;
-        }
-
-        button.primary {
+        .primary {
           color: var(--primary-cta-text-color--);
           background-color: var(--primary-cta-fill--);
           border-color: var(--primary-cta-border--);
         }
 
-        button.secondary {
+        /* Light, so it never outweighs the primary (D-52); the shadow is what
+           sets it apart from ghost, which sits flat. */
+        .secondary {
           color: var(--secondary-cta-text-color--);
           background-color: var(--secondary-cta-fill--);
           border-color: var(--secondary-cta-border--);
+          box-shadow: var(--ia-shadow-raised--);
         }
 
-        button.danger {
+        .danger {
           color: var(--danger-cta-text-color--);
           background-color: var(--danger-cta-fill--);
           border-color: var(--danger-cta-border--);
         }
 
-        button.warning {
+        .warning {
           color: var(--warning-cta-text-color--);
           background-color: var(--warning-cta-fill--);
           border-color: var(--warning-cta-border--);
         }
 
-        button.transparent {
-          color: inherit;
-          border-width: 0;
-          background-color: transparent;
-          border-color: transparent;
+        .donate {
+          color: var(--donate-cta-text-color--);
+          background-color: var(--donate-cta-fill--);
+          border-color: var(--donate-cta-border--);
         }
 
-        button.custom {
+        /* No boundary: the label or icon identifies it (D-55). */
+        .ghost {
+          border-width: 0;
+        }
+
+        .custom {
           color: var(--ia-button-custom-text-color--);
           background-color: var(--ia-button-custom-fill--);
           border-color: var(--ia-button-custom-border--);
         }
 
-        button.custom:enabled:is(:hover, :focus, :active, .active) {
+        .custom:not([aria-disabled='true']):is(
+            :hover,
+            :focus-visible,
+            :active,
+            .active
+          ) {
           color: var(--ia-button-custom-active-text-color--);
           background-color: var(--ia-button-custom-active-fill--);
           border-color: var(--ia-button-custom-active-border--);
         }
 
-        :host(.fit-content) button {
-          padding: 0;
-          height: fit-content;
+        /* Link mode keeps the default button height, so it lines up with
+           the buttons beside it and --ia-theme-button-height still sets it. */
+        .link,
+        .danger-link {
+          --_padding: 0;
+          border-width: 0;
         }
 
-        button.link:enabled:hover,
-        button.danger-link:enabled:hover {
-          text-decoration: underline;
-        }
-
-        button.link,
-        button.danger-link {
-          margin: 0;
-          border: 0;
-          appearance: none;
-          background: none;
-          text-decoration: none;
-          cursor: pointer;
-          padding: 0;
-        }
-
-        button.link {
+        .link {
           color: var(--link-color--);
         }
 
-        button.danger-link {
+        .danger-link {
           color: var(--color-danger--);
         }
 
-        .loading-indicator {
-          display: flex;
-          flex-direction: row;
-          gap: 0.5rem;
-          align-items: center;
+        :host(.fit-content) .button {
+          padding: 0;
+          min-height: fit-content;
+        }
+
+        /* Hover darkens a filled button a step and lays the overlay on a light
+           one, instantly. */
+        .primary:hover,
+        .danger:hover,
+        .donate:hover {
+          filter: brightness(0.88);
+        }
+
+        .warning:hover {
+          filter: brightness(0.94);
+        }
+
+        .secondary:hover,
+        .ghost:hover {
+          background-image: linear-gradient(
+            var(--ia-color-hover-overlay--),
+            var(--ia-color-hover-overlay--)
+          );
+        }
+
+        .link:hover,
+        .danger-link:hover {
+          text-decoration: underline;
+        }
+
+        /* Press: darker again, and a squeeze sized so the edge travels about
+           1.5px. Links don't move. */
+        .button:active {
+          filter: brightness(0.8);
+          transform: scale(var(--_press));
+        }
+
+        .link:active,
+        .danger-link:active,
+        .custom:active {
+          filter: none;
+          transform: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .button:active {
+            transform: none;
+          }
+        }
+
+        /* Disabled takes the disabled colors; the label stays legible. The
+           disabled mode is the same look on a button that still works. */
+        .is-disabled,
+        .disabled {
+          color: var(--disabled-cta-text-color--);
+          background-color: var(--disabled-cta-fill--);
+          border-color: var(--disabled-cta-border--);
+          box-shadow: none;
+        }
+
+        .is-disabled:is(.link, .danger-link, .ghost) {
+          color: var(--ia-color-text-disabled--);
+          background: none;
+        }
+
+        /* Last, so no hover or press shows on a button that won't act. */
+        .button[aria-disabled='true'] {
+          cursor: not-allowed;
+          filter: none;
+          transform: none;
+          background-image: none;
+          text-decoration: none;
+        }
+
+        .is-loading {
+          cursor: progress;
         }
 
         ia-status-indicator {

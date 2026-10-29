@@ -26,6 +26,7 @@ import type {
 
 import { thumbsUp } from './assets/img/thumb-up';
 import { thumbsDown } from './assets/img/thumb-down';
+import { tokenStyles } from '@src/themes/tokens';
 
 @customElement('ia-feature-feedback')
 @localized()
@@ -582,10 +583,10 @@ export class IAFeatureFeedback
     const popupBackgroundColor = css`var(--featureFeedbackPopupBackgroundColor, #F5F5F7)`;
 
     const promptFontWeight = css`var(--featureFeedbackPromptFontWeight, bold)`;
-    const promptFontSize = css`var(--featureFeedbackPromptFontSize, 1.4rem)`;
+    const promptFontSize = css`var(--featureFeedbackPromptFontSize, var(--ia-font-size-md--))`;
 
     const commentButtonFontWeight = css`var(--featureFeedbackCommentButtonFontWeight, normal)`;
-    const commentButtonFontSize = css`var(--featureFeedbackCommentButtonFontWeight, 1.4rem)`;
+    const commentButtonFontSize = css`var(--featureFeedbackCommentButtonFontWeight, var(--ia-font-size-md--))`;
 
     const defaultColor = css`var(--defaultColor, ${darkGrayColor});`;
     const defaultColorSvgFilter = css`var(--defaultColorSvgFilter, ${darkGrayColorSvgFilter});`;
@@ -600,6 +601,8 @@ export class IAFeatureFeedback
     const unselectedColorSvgFilter = css`var(--unselectedColorSvgFilter, invert(100%) sepia(0%) saturate(107%) hue-rotate(138deg) brightness(89%) contrast(77%));`;
 
     return css`
+      ${tokenStyles}
+
       #container {
         display: inline-block;
       }

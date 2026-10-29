@@ -21,6 +21,7 @@ import skipAheadIcon from './assets/skip-ahead';
 import volumeFullIcon from './assets/volume-full';
 import volumeMediumIcon from './assets/volume-medium';
 import volumeMuteIcon from './assets/volume-mute';
+import { tokenStyles } from '@src/themes/tokens';
 
 /**
  * Event names emitted by this component
@@ -261,101 +262,104 @@ export class IAPlaybackControls extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        --playback-controls-icon-color--: var(
-          --ia-theme-playback-controls-icon-color,
-          #fff
-        );
-        --playback-controls-play-icon-color--: var(
-          --ia-theme-playback-controls-play-icon-color,
-          #333
-        );
-        --playback-controls-play-button-color--: var(
-          --ia-theme-playback-controls-play-button-color,
-          #fff
-        );
-        --playback-controls-play-button-diameter--: var(
-          --ia-theme-playback-controls-play-button-diameter,
-          4rem
-        );
+    return [
+      tokenStyles,
+      css`
+        :host {
+          --playback-controls-icon-color--: var(
+            --ia-theme-playback-controls-icon-color,
+            var(--ia-color-text-inverse--)
+          );
+          --playback-controls-play-icon-color--: var(
+            --ia-theme-playback-controls-play-icon-color,
+            var(--ia-color-text-primary--)
+          );
+          --playback-controls-play-button-color--: var(
+            --ia-theme-playback-controls-play-button-color,
+            var(--ia-color-surface-raised--)
+          );
+          --playback-controls-play-button-diameter--: var(
+            --ia-theme-playback-controls-play-button-diameter,
+            4rem /* 40px at a 10px root */
+          );
 
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding-left: 0.25rem;
-        padding-right: 0.25rem;
-      }
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding-left: 0.25rem; /* 2.5px at a 10px root */
+          padding-right: 0.25rem; /* 2.5px at a 10px root */
+        }
 
-      .container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: var(--playback-controls-icon-color--);
-        width: 100%;
-      }
+        .container {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          color: var(--playback-controls-icon-color--);
+          width: 100%;
+        }
 
-      .vertical-button-stack {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      }
+        .vertical-button-stack {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
 
-      .vertical-button-container {
-        text-align: center;
-      }
+        .vertical-button-container {
+          text-align: center;
+        }
 
-      .vertical-button-container button,
-      .vertical-button-container svg {
-        vertical-align: bottom;
-      }
+        .vertical-button-container button,
+        .vertical-button-container svg {
+          vertical-align: bottom;
+        }
 
-      .vertical-button-value {
-        font-size: 0.7em;
-        line-height: 1.4em;
-        text-align: center;
-      }
+        .vertical-button-value {
+          font-size: 0.7em;
+          line-height: 1.4;
+          text-align: center;
+        }
 
-      #play-pause-btn {
-        border-radius: 50%;
-        /* Buttons are border-box, so the UA's default padding would eat into
+        #play-pause-btn {
+          border-radius: var(--ia-radius-circle--);
+          /* Buttons are border-box, so the UA's default padding would eat into
            the icon's content box and shrink the glyph relative to the circle
            by a different amount at every diameter. */
-        padding: 0;
-        height: var(--playback-controls-play-button-diameter--);
-        width: var(--playback-controls-play-button-diameter--);
-        border: none;
-        background-color: var(--playback-controls-play-button-color--);
-        color: var(--playback-controls-play-icon-color--);
-        vertical-align: middle;
-      }
+          padding: 0;
+          height: var(--playback-controls-play-button-diameter--);
+          width: var(--playback-controls-play-button-diameter--);
+          border: none;
+          background-color: var(--playback-controls-play-button-color--);
+          color: var(--playback-controls-play-icon-color--);
+          vertical-align: middle;
+        }
 
-      #play-pause-btn:active {
-        opacity: 0.75;
-      }
+        #play-pause-btn:active {
+          opacity: 0.75;
+        }
 
-      #play-pause-btn svg {
-        width: 100%;
-        height: 100%;
-      }
+        #play-pause-btn svg {
+          width: 100%;
+          height: 100%;
+        }
 
-      .unstyled-button {
-        background: none;
-        border: none;
-        margin: 0;
-        padding: 0;
-        /* Buttons don't inherit color from their parent, so the icons'
+        .unstyled-button {
+          background: none;
+          border: none;
+          margin: 0;
+          padding: 0;
+          /* Buttons don't inherit color from their parent, so the icons'
            currentColor needs it passed down explicitly. */
-        color: inherit;
-      }
+          color: inherit;
+        }
 
-      button {
-        cursor: pointer;
-      }
+        button {
+          cursor: pointer;
+        }
 
-      .jump-btn:active {
-        opacity: 0.75;
-      }
-    `;
+        .jump-btn:active {
+          opacity: 0.75;
+        }
+      `,
+    ];
   }
 }

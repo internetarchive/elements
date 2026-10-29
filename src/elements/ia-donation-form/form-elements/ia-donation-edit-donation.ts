@@ -667,7 +667,7 @@ export class IADonationEditDonation extends LitElement {
 
           --donation-edit-button-border-color--: var(
             --ia-donation-edit-button-border-color,
-            var(--mid-gray)
+            var(--ia-color-donation-amount-border--)
           );
           --donation-edit-button-grid-gap--: var(
             --ia-donation-edit-button-grid-gap,
@@ -679,23 +679,23 @@ export class IADonationEditDonation extends LitElement {
           );
           --donation-edit-button-font-color--: var(
             --ia-donation-edit-button-font-color,
-            #000
+            var(--ia-color-donation-amount-text--)
           );
           --donation-edit-button-selected-font-color--: var(
             --ia-donation-edit-button-selected-font-color,
-            #000
+            var(--ia-color-donation-amount-selected-text--)
           );
           --donation-edit-button-selected-color--: var(
             --ia-donation-edit-button-selected-color,
-            #f9bf3b
+            var(--ia-color-donation-amount-selected-fill--)
           );
           --donation-edit-button-focused-outline-color--: var(
             --ia-donation-edit-button-focused-outline-color,
-            #7fb3f9
+            var(--ia-color-border-focus--)
           );
           --donation-edit-button-color--: var(
             --ia-donation-edit-button-color,
-            var(--true-white)
+            var(--ia-color-donation-amount-fill--)
           );
           --donation-edit-cover-fees-font-size--: var(
             --ia-donation-edit-cover-fees-font-size,
@@ -703,7 +703,7 @@ export class IADonationEditDonation extends LitElement {
           );
           --donation-edit-cover-fees-font-weight--: var(
             --ia-donation-edit-cover-fees-font-weight,
-            bold
+            var(--ia-font-weight-bold--)
           );
           --donation-edit-custom-amount-width--: var(
             --ia-donation-edit-custom-amount-width,
@@ -715,7 +715,7 @@ export class IADonationEditDonation extends LitElement {
           );
           --donation-edit-input-border--: var(
             --ia-donation-edit-input-border,
-            1px solid #d9d9d9
+            var(--ia-border-control--)
           );
           /* These two are set on the host by the element itself, from the number of amounts */
           --donation-edit-amount-column-count--: var(
@@ -791,9 +791,10 @@ export class IADonationEditDonation extends LitElement {
           cursor: pointer;
           text-align: center;
           font-size: var(--donation-edit-button-font-size--);
-          font-weight: bold;
-          border: 1px solid var(--donation-edit-button-border-color--);
-          border-radius: 5px;
+          font-weight: var(--ia-font-weight-bold--);
+          border: var(--ia-size-border-width--) solid
+            var(--donation-edit-button-border-color--);
+          border-radius: var(--ia-radius-default--);
           height: 100%;
           justify-content: center;
           align-items: center;
@@ -828,8 +829,10 @@ export class IADonationEditDonation extends LitElement {
           background-color: var(--donation-edit-button-selected-color--);
         }
 
-        input[type='radio']:focus + label {
-          outline: 2px solid var(--donation-edit-button-focused-outline-color--);
+        input[type='radio']:focus-visible + label {
+          outline: var(--ia-size-focus-ring--) solid
+            var(--donation-edit-button-focused-outline-color--);
+          outline-offset: var(--ia-size-focus-ring-offset--);
         }
 
         .checkbox-options {
@@ -855,7 +858,7 @@ export class IADonationEditDonation extends LitElement {
         #custom-amount-input {
           width: var(--donation-edit-custom-amount-width--);
           font-size: var(--donation-edit-button-font-size--);
-          font-weight: bold;
+          font-weight: var(--ia-font-weight-bold--);
           color: var(--donation-edit-input-font-color--);
           padding: calc(var(--donation-edit-base-font-size--) * 0.1);
           border: var(--donation-edit-input-border--);

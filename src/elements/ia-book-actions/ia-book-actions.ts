@@ -94,6 +94,7 @@ export const events = {
  * custom styling for modal-manager buttons
  * TODO: lets allow modal-manager to know ia-button classes
  */
+// Inline styles, so no tokens. At a 10px root: 35px min-height, 4px radius.
 export const modalButtonStyle = {
   iaButton:
     'min-height:3.5rem;cursor:pointer;color:white;border-radius:0.4rem;border:1px solid #c5d1df;padding:4px 8px;width:auto;user-select:none;',
@@ -1365,7 +1366,7 @@ export class IABookActions
       }
 
       #action-bar-modal {
-        --modalWidth: 36rem;
+        --modalWidth: 36rem; /* 360px at a 10px root */
       }
     `;
   }

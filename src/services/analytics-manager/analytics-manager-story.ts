@@ -184,19 +184,19 @@ export class AnalyticsManagerStory extends LitElement {
         display: flex;
         flex-wrap: wrap;
         align-items: flex-end;
-        gap: 0.5rem;
+        gap: 0.8rem;
       }
 
       label {
         display: flex;
         flex-direction: column;
         gap: 2px;
-        font-size: 0.8rem;
+        font-size: 1.28rem;
       }
 
       input[type='text'] {
         min-width: 0;
-        width: 10rem;
+        width: 16rem;
         max-width: 100%;
       }
 
@@ -212,10 +212,10 @@ export class AnalyticsManagerStory extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 4px;
-        padding: 0.5rem;
+        padding: 0.8rem;
         background: #fff;
         border: 1px solid #ccc;
-        font-size: 0.85rem;
+        font-size: 1.36rem;
       }
 
       .call,
@@ -229,7 +229,7 @@ export class AnalyticsManagerStory extends LitElement {
 
       table {
         border-collapse: collapse;
-        font-size: 0.8rem;
+        font-size: 1.28rem;
       }
 
       th,

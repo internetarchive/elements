@@ -23,6 +23,7 @@ import type {
   BarScalingPreset,
   BinSnappingInterval,
 } from './models';
+import { tokenStyles } from '@src/themes/tokens';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(fixFirstCenturyYears);
@@ -74,11 +75,11 @@ const barExcludedFill = css`var(--histogramDateRangeBarExcludedFill, #CCCCCC)`;
 const inputRowMargin = css`var(--histogramDateRangeInputRowMargin, 0)`;
 const inputBorder = css`var(--histogramDateRangeInputBorder, 0.5px solid #2C2C2C)`;
 const inputWidth = css`var(--histogramDateRangeInputWidth, 35px)`;
-const inputFontSize = css`var(--histogramDateRangeInputFontSize, 1.2rem)`;
+const inputFontSize = css`var(--histogramDateRangeInputFontSize, var(--ia-font-size-sm--))`;
 const inputFontFamily = css`var(--histogramDateRangeInputFontFamily, sans-serif)`;
 const tooltipBackgroundColor = css`var(--histogramDateRangeTooltipBackgroundColor, #2C2C2C)`;
 const tooltipTextColor = css`var(--histogramDateRangeTooltipTextColor, #FFFFFF)`;
-const tooltipFontSize = css`var(--histogramDateRangeTooltipFontSize, 1.1rem)`;
+const tooltipFontSize = css`var(--histogramDateRangeTooltipFontSize, var(--ia-font-size-xs--))`;
 const tooltipFontFamily = css`var(--histogramDateRangeTooltipFontFamily, sans-serif)`;
 
 @customElement('ia-histogram-date-range')
@@ -1042,6 +1043,8 @@ export class IAHistogramDateRange extends LitElement {
   }
 
   static styles = css`
+    ${tokenStyles}
+
     .missing-data-message {
       text-align: center;
     }

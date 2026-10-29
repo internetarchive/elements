@@ -80,7 +80,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Text colour',
     cssVariable: '--ia-theme-transcript-normal-text-color',
-    defaultValue: '#808080',
+    defaultValue: '#999999',
     inputType: 'color',
   },
   {
@@ -92,7 +92,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Selected result border',
     cssVariable: '--ia-theme-transcript-search-result-active-border-color',
-    defaultValue: '#008000',
+    defaultValue: '#9aa8ff',
     inputType: 'color',
   },
   {
@@ -300,7 +300,7 @@ export class IATranscriptViewStory extends LitElement {
       .transcript {
         display: block;
         background-color: #151515;
-        padding: 1rem;
+        padding: 1.6rem;
         border-radius: 4px;
       }
 

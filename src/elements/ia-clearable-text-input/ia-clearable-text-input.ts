@@ -3,6 +3,7 @@ import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 
 import closeIcon from './assets/close';
+import { tokenStyles } from '@src/themes/tokens';
 
 @customElement('ia-clearable-text-input')
 export class IaClearableTextInput extends LitElement {
@@ -137,119 +138,145 @@ export class IaClearableTextInput extends LitElement {
     this.dispatchEvent(inputEvent);
   }
 
-  static styles = css`
-    :host {
-      --input-height: 3rem;
-      --clear-button-top: 0;
-      --clear-button-right: 2px;
-    }
+  static styles = [
+    tokenStyles,
+    css`
+      :host {
+        --input-height: var(--ia-size-control-sm--);
+        --clear-button-top: 0;
+        --clear-button-right: 2px;
+      }
 
-    #container {
-      position: relative;
-      display: flex;
-      align-items: center;
-      width: 100%;
-      height: var(--input-height);
-    }
+      #container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: var(--input-height);
+      }
 
-    #text-input {
-      width: 100%;
-      height: 100%;
-      padding: var(--input-padding, 0 1rem);
-      padding-inline-end: var(--input-height);
-      border: var(--input-border-width, 1px) var(--input-border-style, solid)
-        var(--input-border-color, #ccc);
-      border-radius: var(--input-border-radius, 2rem);
-      background-image: var(--input-background-image, none);
-      background-color: var(--input-background-color, transparent);
-      color: var(--input-color, #555);
-      font-size: var(--input-font-size, 1.7rem);
-      line-height: var(--input-line-height, 1.5);
-      box-shadow: var(--input-box-shadow, inset 0 1px 1px rgba(0, 0, 0, 0.075));
-      -webkit-box-shadow: var(
-        --input-box-shadow,
-        inset 0 1px 1px rgba(0, 0, 0, 0.075)
-      );
-    }
-
-    #text-input:focus {
-      border-color: var(--input-focused-border-color, #66afe9);
-      outline: 0;
-      box-shadow: var(
-        --input-focused-box-shadow,
-        inset 0 1px 1px rgb(0 0 0 / 8%),
-        0 0 8px rgb(102 175 233 / 60%)
-      );
-      -webkit-box-shadow: var(
-        --input-focused-box-shadow,
-        inset 0 1px 1px rgb(0 0 0 / 8%),
-        0 0 8px rgb(102 175 233 / 60%)
-      );
-    }
-
-    #clear-button {
-      position: absolute;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      inset-block-start: var(--clear-button-top);
-      inset-inline-end: var(--clear-button-right);
-      height: var(--clear-button-height, var(--input-height));
-      width: var(--clear-button-width, var(--input-height));
-      padding: var(--clear-button-padding, 4px);
-      border: var(--clear-button-border, 0);
-      background: none;
-      appearance: none;
-      cursor: pointer;
-    }
-
-    #clear-button[hidden] {
-      display: none;
-    }
-
-    .clear-icon {
-      display: block;
-      width: 100%;
-      height: 100%;
-      background: var(--clear-button-icon-background, #2c2c2c);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .clear-icon svg {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-
-    .clear-icon .fill-color {
-      fill: var(--clear-button-icon-color, #fff);
-    }
-
-    /* Fallback support for older browsers without newer bidirectional rules */
-    @supports not ((inset-block-start: 0) and (padding-inline-end: 0)) {
       #text-input {
-        padding-right: var(--input-height);
+        width: 100%;
+        height: 100%;
+        padding: var(--input-padding, 0 var(--ia-space-2--));
+        padding-inline-end: var(--input-height);
+        border: var(--input-border-width, var(--ia-size-border-width--))
+          var(--input-border-style, solid)
+          var(--input-border-color, var(--ia-color-border-strong--));
+        /* A search field, the one place the pill radius is right. */
+        border-radius: var(--input-border-radius, var(--ia-radius-pill--));
+        background-image: var(--input-background-image, none);
+        background-color: var(--input-background-color, transparent);
+        color: var(--input-color, var(--ia-color-text-primary--));
+        font-size: var(--input-font-size, 1.7rem); /* 17px at a 10px root */
+        line-height: var(--input-line-height, 1.5);
+        box-shadow: var(--input-box-shadow, none);
+      }
+
+      #text-input::placeholder {
+        color: var(--input-placeholder-color, var(--ia-color-text-secondary--));
+      }
+
+      /* Hover takes the input's own text color, which contrasts with its
+         background on any surface: #2c2c2c on light, the light text a dark
+         theme sets on dark. */
+      #text-input:hover {
+        border-color: var(--input-hover-border-color, currentColor);
+      }
+
+      /* The shared focus ring; the border stays as it is. */
+      #text-input:focus {
+        outline: none;
+      }
+
+      #text-input:focus-visible {
+        border-color: var(
+          --input-focused-border-color,
+          var(--input-border-color, var(--ia-color-border-strong--))
+        );
+        box-shadow: var(--input-focused-box-shadow, none);
+        outline: var(--ia-size-focus-ring--) solid
+          var(--ia-color-border-focus--);
+        outline-offset: var(
+          --input-focus-ring-offset,
+          var(--ia-size-focus-ring-offset--)
+        );
       }
 
       #clear-button {
-        top: var(--clear-button-top);
-        right: var(--clear-button-right);
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        inset-block-start: var(--clear-button-top);
+        inset-inline-end: var(--clear-button-right);
+        height: var(--clear-button-height, var(--input-height));
+        width: var(--clear-button-width, var(--input-height));
+        padding: var(--clear-button-padding, 4px);
+        border: var(--clear-button-border, 0);
+        background: none;
+        appearance: none;
+        cursor: pointer;
       }
-    }
 
-    .sr-only {
-      position: absolute !important;
-      width: 1px !important;
-      height: 1px !important;
-      margin: -1px !important;
-      padding: 0 !important;
-      border: 0 !important;
-      overflow: hidden !important;
-      white-space: nowrap !important;
-      clip: rect(1px, 1px, 1px, 1px) !important;
-      -webkit-clip-path: inset(50%) !important;
-      clip-path: inset(50%) !important;
-    }
-  `;
+      #clear-button:focus-visible {
+        outline: var(--ia-size-focus-ring--) solid
+          var(--ia-color-border-focus--);
+        outline-offset: calc(-1 * var(--ia-size-focus-ring--));
+        border-radius: var(--ia-radius-circle--);
+      }
+
+      #clear-button[hidden] {
+        display: none;
+      }
+
+      .clear-icon {
+        display: block;
+        width: 100%;
+        height: 100%;
+        background: var(
+          --clear-button-icon-background,
+          var(--ia-color-text-primary--)
+        );
+        border-radius: var(--ia-radius-circle--);
+        pointer-events: none;
+      }
+
+      .clear-icon svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .clear-icon .fill-color {
+        fill: var(--clear-button-icon-color, var(--ia-color-surface-raised--));
+      }
+
+      /* Fallback support for older browsers without newer bidirectional rules */
+      @supports not ((inset-block-start: 0) and (padding-inline-end: 0)) {
+        #text-input {
+          padding-right: var(--input-height);
+        }
+
+        #clear-button {
+          top: var(--clear-button-top);
+          right: var(--clear-button-right);
+        }
+      }
+
+      .sr-only {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        margin: -1px !important;
+        padding: 0 !important;
+        border: 0 !important;
+        overflow: hidden !important;
+        white-space: nowrap !important;
+        clip: rect(1px, 1px, 1px, 1px) !important;
+        -webkit-clip-path: inset(50%) !important;
+        clip-path: inset(50%) !important;
+      }
+    `,
+  ];
 }

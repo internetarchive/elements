@@ -267,6 +267,32 @@ describe('AppRoot', () => {
       }
     });
 
+    test('keeps the page at the top when a story focuses its element on load', async () => {
+      // ia-otp-input focuses its first box as it renders, which would scroll
+      // the page down to it before the reader has done anything.
+      const removeCss = applyDemoCss();
+      try {
+        const el = await appRoot();
+        await waitUntil(
+          () =>
+            el
+              .querySelector('ia-otp-input-story')
+              ?.shadowRoot?.querySelector('ia-otp-input')
+              ?.shadowRoot?.querySelector('input'),
+          '<ia-otp-input> never rendered',
+        );
+        // The focus scroll's scroll event comes a frame later.
+        await new Promise((r) => requestAnimationFrame(() => setTimeout(r)));
+
+        expect(window.scrollY).to.equal(0);
+        expect(
+          el.querySelector('#ia-content')?.contains(document.activeElement),
+        ).to.be.false;
+      } finally {
+        removeCss();
+      }
+    });
+
     test('lists the services in their own sidebar group, after the elements', async () => {
       const el = await appRoot();
 
@@ -370,6 +396,17 @@ describe('AppRoot', () => {
         () => anchorIds(el).length > 1,
         'never returned to the all-elements view',
       );
+    });
+
+    test('stays on the focused element when the skip link is followed', async () => {
+      setHash('#elem-ia-button');
+      const el = await appRoot();
+      expect(anchorIds(el)).to.deep.equal(['elem-ia-button']);
+
+      window.location.hash = '#ia-content';
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      await el.updateComplete;
+      expect(anchorIds(el)).to.deep.equal(['elem-ia-button']);
     });
 
     test('keeps following the hash after a disconnect and reconnect', async () => {
@@ -950,6 +987,9 @@ describe('AppRoot', () => {
         setHash('#elem-ia-radio-player');
         stubNarrowViewport(true);
         const el = await appRoot();
+        // Laid out at a phone's width, as the stubbed viewport claims, so the
+        // story runs long enough to scroll past.
+        el.style.width = '375px';
         await waitUntil(
           () => el.querySelector('ia-radio-player-story'),
           '<ia-radio-player-story> was never rendered',
@@ -989,6 +1029,7 @@ describe('AppRoot', () => {
     test('keeps the bar and picker full size under a 10px root font', async () => {
       const removeCss = applyDemoCss();
       const root = document.documentElement;
+      const setupRootSize = root.style.fontSize;
       try {
         stubNarrowViewport(true);
         const el = await appRoot();
@@ -1018,6 +1059,9 @@ describe('AppRoot', () => {
           return sizes;
         };
 
+        // The test setup already sets a 10px root, so measure the browser
+        // default explicitly.
+        root.style.fontSize = '100%';
         const atDefault = await measure();
         // What a story does to suit an element sized for archive.org's root.
         root.style.fontSize = '10px';
@@ -1028,7 +1072,7 @@ describe('AppRoot', () => {
           expect(height, 'a tap target under 44px').to.be.at.least(44);
         }
       } finally {
-        root.style.fontSize = '';
+        root.style.fontSize = setupRootSize;
         removeCss();
       }
     });
