@@ -230,7 +230,7 @@ export class IAOTPInput extends LitElement {
           font-size: var(--font-size-lg--);
           width: var(--font-size-lg--);
           font-weight: var(--ia-font-weight-bold--);
-          height: calc(var(--font-size-lg--) + 2rem);
+          height: calc(var(--font-size-lg--) + var(--ia-space-4--));
           text-align: center;
           text-transform: uppercase;
           padding: 0 var(--ia-space-1--);
