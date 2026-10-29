@@ -42,6 +42,63 @@ app-root {
   display: none;
 }
 
+/* The header's page tabs. The other pages get these from ia.css, which this
+   page doesn't load: its global rules would reach the elements and their
+   stories, so the demo would show styling the package doesn't ship. */
+.ia-tabs {
+  display: flex;
+  border-block-end: var(--ia-size-border-width) solid
+    var(--ia-color-border-default);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ia-tabs::-webkit-scrollbar {
+  display: none;
+}
+.ia-tab {
+  flex: none;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  block-size: var(--ia-size-control-lg);
+  padding-inline: var(--ia-space-3);
+  border-block-end: 3px solid transparent;
+  color: var(--ia-color-text-secondary);
+  font-size: var(--ia-font-size-md);
+  line-height: var(--ia-font-line-height-tight);
+  white-space: nowrap;
+}
+/* Reserves the bold width, so selecting a tab moves nothing. */
+.ia-tab[data-label]::after {
+  content: attr(data-label);
+  content: attr(data-label) / '';
+  block-size: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: var(--ia-font-weight-bold);
+  user-select: none;
+  pointer-events: none;
+}
+.ia-tab:hover {
+  color: var(--ia-color-text-primary);
+}
+.ia-tab[aria-current='page'] {
+  color: var(--ia-color-text-primary);
+  font-weight: var(--ia-font-weight-bold);
+  border-block-end-color: var(--ia-color-selected-strong-fill);
+}
+
+/* Each story gets what an archive.org page gives it: 10px body text, and the
+   browser's own box-sizing rather than site.css's border-box reset. */
+.ia-anchor {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.ia-anchor :where(*, *::before, *::after) {
+  box-sizing: revert;
+}
+
 /* Styled as a button, since it swaps the whole view rather than jumping to an
    anchor like the element links below it do. */
 #ia-all-link {
