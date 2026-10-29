@@ -22,6 +22,7 @@ import { thumbsUp } from './assets/img/thumb-up';
 import { thumbsDown } from './assets/img/thumb-down';
 
 import './ia-feature-feedback-survey-comment';
+import { tokenStyles } from '@src/themes/tokens';
 
 @customElement('ia-feature-feedback-survey-vote')
 @localized()
@@ -364,9 +365,11 @@ export class IAFeatureFeedbackSurveyVote
     const unselectedColorSvgFilter = css`var(--unselectedColorSvgFilter, invert(100%) sepia(0%) saturate(107%) hue-rotate(138deg) brightness(89%) contrast(77%))`;
 
     const promptFontWeight = css`var(--featureFeedbackPromptFontWeight, bold)`;
-    const promptFontSize = css`var(--featureFeedbackPromptFontSize, 1.4rem)`;
+    const promptFontSize = css`var(--featureFeedbackPromptFontSize, var(--ia-font-size-md--))`;
 
     return css`
+      ${tokenStyles}
+
       #container {
         margin: ${questionMargin};
       }

@@ -961,6 +961,7 @@ export class IAInfiniteScroller
     if (this.estimatedCellHeight != null) return this.estimatedCellHeight;
     if (!this.container) return INITIAL_ROW_HEIGHT;
     const temp = document.createElement('div');
+    // 225px at a 10px root
     temp.style.height = 'var(--infiniteScrollerCellMinHeight, 22.5rem)';
     this.container.appendChild(temp);
     const height = temp.offsetHeight;
@@ -1555,12 +1556,12 @@ export class IAInfiniteScroller
   //
 
   static get styles(): CSSResultGroup {
-    const sentinelHeightCss = css`var(--infiniteScrollerSentinelDistanceFromEnd, 200rem)`;
-    const rowGapSizeCss = css`var(--infiniteScrollerRowGap, 1.7rem)`;
-    const colGapSizeCss = css`var(--infiniteScrollerColGap, 1.7rem)`;
-    const cellMinWidth = css`var(--infiniteScrollerCellMinWidth, 16rem)`;
+    const sentinelHeightCss = css`var(--infiniteScrollerSentinelDistanceFromEnd, 200rem)`; // 2000px at a 10px root
+    const rowGapSizeCss = css`var(--infiniteScrollerRowGap, 1.7rem)`; // 17px at a 10px root
+    const colGapSizeCss = css`var(--infiniteScrollerColGap, 1.7rem)`; // 17px at a 10px root
+    const cellMinWidth = css`var(--infiniteScrollerCellMinWidth, 16rem)`; // 160px at a 10px root
     const cellMaxWidth = css`var(--infiniteScrollerCellMaxWidth, 1fr)`;
-    const cellMinHeight = css`var(--infiniteScrollerCellMinHeight, 22.5rem)`;
+    const cellMinHeight = css`var(--infiniteScrollerCellMinHeight, 22.5rem)`; // 225px at a 10px root
     const cellMaxHeight = css`var(--infiniteScrollerCellMaxHeight, none)`;
     const cellOutline = css`var(--infiniteScrollerCellOutline, 0)`;
 
