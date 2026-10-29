@@ -180,10 +180,9 @@ export class IAWaveformProgress extends LitElement {
             --ia-theme-waveform-zone-of-silence-color,
             var(--ia-color-action-warning-fill--)
           );
-          --waveform-side-margin--: var(
-            --ia-theme-waveform-side-margin,
-            var(--ia-space-2--)
-          );
+          /* Matches the scrubber's marker inset (half its 20px thumb) when
+             stacked over it in the radio player, so it stays in px. */
+          --waveform-side-margin--: var(--ia-theme-waveform-side-margin, 10px);
 
           display: inline-block;
         }
