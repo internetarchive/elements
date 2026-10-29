@@ -221,7 +221,6 @@ they already match the table above. What it draws itself still differs:
 | Disabled | the enabled colors at 50% opacity, `cursor: not-allowed` | `--ia-color-action-disabled-*` fill, border and text |
 | Loading | the enabled colors at 50% opacity; the status indicator replaces the label (or sits beside `loadingText`) | width held, indicator in place of the label |
 | Focus | 80% opacity and the browser's `double` outline | the shared 2px `--ia-color-border-focus` ring, offset 2px |
-| Link intent | `mode="link"`, 36px tall | `ia-button--link`, 30px |
 | With `href` | an `<a>` wrapping a `<button>`: two nested interactive elements, one focus stop too many | a real link, styled as a button |
 
 The modes map one to one otherwise: `primary`, `secondary`, `danger`, `warning` and
