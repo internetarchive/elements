@@ -44,7 +44,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Progress fill colour',
     cssVariable: '--ia-theme-waveform-fill-color',
-    defaultValue: '#9aa8ff',
+    defaultValue: '#3a4fd6',
     inputType: 'color',
   },
   {
