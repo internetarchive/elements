@@ -703,17 +703,17 @@ export class IARadioPlayer extends LitElement {
           );
           --radio-player-logo-max-height--: var(
             --ia-theme-radio-player-logo-max-height,
-            8rem
+            8rem /* 80px at a 10px root */
           );
           --radio-player-waveform-height--: var(
             --ia-theme-radio-player-waveform-height,
-            5rem
+            5rem /* 50px at a 10px root */
           );
         }
 
         section[role='main'] {
           display: grid;
-          grid-gap: 0.5rem;
+          grid-gap: var(--ia-space-1--);
         }
 
         ia-status-indicator {

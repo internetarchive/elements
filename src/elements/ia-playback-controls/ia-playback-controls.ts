@@ -280,14 +280,14 @@ export class IAPlaybackControls extends LitElement {
           );
           --playback-controls-play-button-diameter--: var(
             --ia-theme-playback-controls-play-button-diameter,
-            4rem
+            4rem /* 40px at a 10px root */
           );
 
           display: flex;
           justify-content: center;
           align-items: center;
-          padding-left: 0.25rem;
-          padding-right: 0.25rem;
+          padding-left: 0.25rem; /* 2.5px at a 10px root */
+          padding-right: 0.25rem; /* 2.5px at a 10px root */
         }
 
         .container {

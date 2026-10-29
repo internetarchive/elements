@@ -472,7 +472,7 @@ export class IATranscriptView extends LitElement {
           );
           --transcript-time-column-width--: var(
             --ia-theme-transcript-time-column-width,
-            3rem
+            3rem /* 30px at a 10px root */
           );
           --transcript-time-font-size--: var(
             --ia-theme-transcript-time-font-size,
@@ -497,7 +497,7 @@ export class IATranscriptView extends LitElement {
           );
           --transcript-auto-scroll-button-width--: var(
             --ia-theme-transcript-auto-scroll-button-width,
-            12rem
+            12rem /* 120px at a 10px root */
           );
           --transcript-auto-scroll-button-font-size--: var(
             --ia-theme-transcript-auto-scroll-button-font-size,
@@ -515,7 +515,7 @@ export class IATranscriptView extends LitElement {
           position: absolute;
           left: 0;
           right: 0;
-          bottom: 1rem;
+          bottom: var(--ia-space-2--);
           margin: auto;
           width: var(--transcript-auto-scroll-button-width--);
           border-radius: 1em;
