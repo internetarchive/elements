@@ -179,7 +179,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Waveform fill',
     cssVariable: '--ia-theme-waveform-fill-color',
-    defaultValue: '#3272b6',
+    defaultValue: '#3a4fd6',
     inputType: 'color',
   },
   {

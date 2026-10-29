@@ -78,6 +78,16 @@ for (const bg of DARK) {
   add('color.text.inverse-link-hover', bg, TEXT, 'link hover on dark');
   add('color.border.focus-inverse', bg, UI, 'focus indicator on dark');
 }
+// Dim text on dark, only on the darkest surfaces: on chrome-secondary (#333)
+// it falls under 4.5:1, so it is never used there.
+for (const bg of ['chrome', 'inverse', 'theater']) {
+  add(
+    'color.text.inverse-tertiary',
+    `color.surface.${bg}`,
+    TEXT,
+    'dim text on the darkest surfaces',
+  );
+}
 // Every CTA label against its own fill.
 for (const intent of [
   'primary',

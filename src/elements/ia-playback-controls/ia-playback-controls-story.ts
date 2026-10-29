@@ -25,7 +25,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Play icon colour',
     cssVariable: '--ia-theme-playback-controls-play-icon-color',
-    defaultValue: '#333333',
+    defaultValue: '#2c2c2c',
     inputType: 'color',
   },
   {
