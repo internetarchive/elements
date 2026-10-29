@@ -1369,9 +1369,11 @@ export class IAComboBox extends LitElement {
         cursor: pointer;
       }
 
-      /* The option the keyboard is on: the soft selected tier. */
+      /* The option the keyboard is on: the soft selected tier, marked with
+         a bar in the focus color, since the fill alone is 1.18:1 on white. */
       .highlight {
         background-color: var(--ia-color-selected-soft-fill--);
+        box-shadow: inset 3px 0 0 var(--ia-color-border-focus--);
       }
 
       .disabled,
