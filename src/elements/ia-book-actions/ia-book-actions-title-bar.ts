@@ -9,6 +9,7 @@ import {
 import ActionsHandler from './core/services/actions-handler/actions-handler';
 
 import { archiveLogo } from './assets/data/archive-logo';
+import { tokenStyles } from '@src/themes/tokens';
 
 @customElement('ia-book-actions-title-bar')
 export class IABookActionsTitleBar extends ActionsHandler {
@@ -55,9 +56,11 @@ export class IABookActionsTitleBar extends ActionsHandler {
 
   static get styles(): CSSResultGroup {
     return css`
+      ${tokenStyles}
+
       :host {
         padding: 0 10px;
-        height: 3.4rem;
+        height: 3.4rem; /* 34px at a 10px root */
         display: flex;
       }
       .embed-link {
@@ -65,7 +68,7 @@ export class IABookActionsTitleBar extends ActionsHandler {
         align-items: center;
         text-decoration: none;
         color: var(--primaryTextColor, #fff);
-        font-size: 1.4rem;
+        font-size: var(--ia-font-size-md--);
       }
       .embed-link .title {
         display: -webkit-box;
@@ -76,7 +79,7 @@ export class IABookActionsTitleBar extends ActionsHandler {
         line-height: initial;
       }
       .embed-link svg {
-        margin-right: 0.5rem;
+        margin-right: var(--ia-space-1--);
         display: block;
       }
       .embed-link:hover {

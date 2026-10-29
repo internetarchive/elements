@@ -23,6 +23,7 @@ import type {
   AnalyticsEvent,
   BorrowType,
 } from './models';
+import { tokenStyles } from '@src/themes/tokens';
 
 @customElement('ia-book-actions-collapsible-action-group')
 export class IABookActionsCollapsibleActionGroup extends ActionsHandler {
@@ -332,7 +333,7 @@ export class IABookActionsCollapsibleActionGroup extends ActionsHandler {
   }
 
   static get styles(): CSSResultGroup {
-    return [buttonBaseStyle, CollapsibleActionGroupStyle];
+    return [tokenStyles, buttonBaseStyle, CollapsibleActionGroupStyle];
   }
 }
 
