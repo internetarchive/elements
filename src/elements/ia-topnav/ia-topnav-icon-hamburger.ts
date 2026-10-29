@@ -2,13 +2,15 @@ import { html, css } from 'lit';
 import Icon from './assets/img/icon';
 import closeIcon from '@src/icons/topnav-close';
 import { customElement } from '@src/util/custom-element';
+import themeStyles from '@src/themes/theme-styles';
 import { localized, msg } from '@lit/localize';
 
 @customElement('ia-topnav-icon-hamburger')
 @localized()
 export class HamBurger extends Icon {
   render() {
-    if (this.active) return closeIcon;
+    // The wrapper only gives the close icon the active color.
+    if (this.active) return html`<span class="active">${closeIcon}</span>`;
 
     return html`
       <svg
@@ -32,13 +34,24 @@ export class HamBurger extends Icon {
   }
 
   static get styles() {
-    return css`
-      svg {
-        display: block;
-        height: calc(40 * var(--topnavUnit--));
-        width: calc(40 * var(--topnavUnit--));
-        color: var(--iconFill, var(--ia-color-text-inverse-secondary--));
-      }
-    `;
+    return [
+      themeStyles,
+      css`
+        svg {
+          display: block;
+          height: calc(40 * var(--topnavUnit--));
+          width: calc(40 * var(--topnavUnit--));
+          color: var(--iconFill, var(--ia-color-text-inverse-secondary--));
+        }
+
+        .active {
+          display: contents;
+        }
+
+        .active svg {
+          color: var(--activeColor, var(--ia-color-text-inverse--));
+        }
+      `,
+    ];
   }
 }
