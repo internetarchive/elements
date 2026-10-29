@@ -26,6 +26,7 @@ import {
 } from './legacy-review-service';
 import './ia-review';
 import './ia-review-form';
+import { tokenStyles } from '@src/themes/tokens';
 
 /**
  * Renders the full IA reviews piece
@@ -373,6 +374,7 @@ export class IAReviews extends LitElement {
 
   static get styles(): CSSResultGroup {
     return [
+      tokenStyles,
       css`
         :host {
           font-family: var(
@@ -389,7 +391,7 @@ export class IAReviews extends LitElement {
         .reviews-list {
           display: flex;
           flex-direction: column;
-          gap: 2rem;
+          gap: var(--ia-space-4--);
           width: 100%;
         }
 

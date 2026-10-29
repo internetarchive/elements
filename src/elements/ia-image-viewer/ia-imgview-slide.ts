@@ -198,9 +198,9 @@ export class IAImageViewerSlide extends LitElement {
         .image-failed {
           position: absolute;
           margin: 0;
-          padding: 0 1.6rem;
+          padding: 0 1.6rem; /* 16px at a 10px root */
           color: var(--imgview-slide-text-color--);
-          font-size: 1.4rem;
+          font-size: var(--ia-font-size-md--);
           text-align: center;
         }
 

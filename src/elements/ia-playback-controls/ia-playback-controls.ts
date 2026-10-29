@@ -315,7 +315,7 @@ export class IAPlaybackControls extends LitElement {
 
         .vertical-button-value {
           font-size: 0.7em;
-          line-height: 1.4em;
+          line-height: 1.4;
           text-align: center;
         }
 

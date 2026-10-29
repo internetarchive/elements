@@ -11,6 +11,7 @@ import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
 import { localized, msg } from '@lit/localize';
 import { IASurveyQuestionInterface, IASurveyQuestionResponse } from './models';
+import { tokenStyles } from '@src/themes/tokens';
 
 @customElement('ia-feature-feedback-survey-comment')
 @localized()
@@ -212,9 +213,11 @@ export class IAFeatureFeedbackSurveyComment
     const questionMargin = css`var(--surveyQuestionMargin, 0 0 15px 0)`;
 
     const promptFontWeight = css`var(--featureFeedbackPromptFontWeight, bold)`;
-    const promptFontSize = css`var(--featureFeedbackPromptFontSize, 1.4rem)`;
+    const promptFontSize = css`var(--featureFeedbackPromptFontSize, var(--ia-font-size-md--))`;
 
     return css`
+      ${tokenStyles}
+
       #container {
         margin: ${questionMargin};
       }

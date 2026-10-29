@@ -9,6 +9,7 @@ import '@src/elements/ia-status-indicator/ia-status-indicator';
 import { ModalConfig } from './modal-config';
 import iaLogoIcon from './assets/ia-logo-icon';
 import arrowLeftIcon from './assets/arrow-left-icon';
+import { tokenStyles } from '@src/themes/tokens';
 
 /**
  * The visual shell of the modal: header, body and the buttons that report
@@ -151,25 +152,25 @@ export class IAModalManagerTemplate extends LitElement {
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const modalLogoSize = css`var(--modalLogoSize, 6.5rem)`;
+    const modalLogoSize = css`var(--modalLogoSize, 6.5rem)`; // 65px at a 10px root
 
-    const processingImageSize = css`var(--processingImageSize, 7.5rem)`;
+    const processingImageSize = css`var(--processingImageSize, 7.5rem)`; // 75px at a 10px root
 
-    const modalCornerRadius = css`var(--modalCornerRadius, 1rem)`;
+    const modalCornerRadius = css`var(--modalCornerRadius, 1rem)`; // 10px at a 10px root
     const modalBorder = css`var(--modalBorder, 2px solid black)`;
     // if the content of the modal is too big to fit on screen, this sets the bottom margin
     // it's not exact, but a close estimation
-    const modalBottomMarginCss = css`var(--modalBottomMargin, 2.5rem)`;
-    const modalTopMarginCss = css`var(--modalTopMargin, 5rem)`;
+    const modalBottomMarginCss = css`var(--modalBottomMargin, 2.5rem)`; // 25px at a 10px root
+    const modalTopMarginCss = css`var(--modalTopMargin, 5rem)`; // 50px at a 10px root
     const modalHeaderBottomPaddingCss = css`var(--modalHeaderBottomPadding, 0.5em)`;
 
-    const modalBottomPadding = css`var(--modalBottomPadding, 2rem)`;
+    const modalBottomPadding = css`var(--modalBottomPadding, var(--ia-space-4--))`;
     const scrollOffset = css`var(--modalScrollOffset, 5px)`;
 
-    const titleFontSize = css`var(--modalTitleFontSize, 1.8rem)`;
-    const subtitleFontSize = css`var(--modalSubtitleFontSize, 1.4rem)`;
-    const headlineFontSize = css`var(--modalHeadlineFontSize, 1.6rem)`;
-    const messageFontSize = css`var(--modalMessageFontSize, 1.4rem)`;
+    const titleFontSize = css`var(--modalTitleFontSize, 1.8rem)`; // 18px at a 10px root
+    const subtitleFontSize = css`var(--modalSubtitleFontSize, var(--ia-font-size-md--))`;
+    const headlineFontSize = css`var(--modalHeadlineFontSize, var(--ia-font-size-lg--))`;
+    const messageFontSize = css`var(--modalMessageFontSize, var(--ia-font-size-md--))`;
 
     const titleLineHeight = css`var(--modalTitleLineHeight, normal)`;
     const subtitleLineHeight = css`var(--modalSubtitleLineHeight, normal)`;
@@ -177,6 +178,8 @@ export class IAModalManagerTemplate extends LitElement {
     const messageLineHeight = css`var(--modalMessageLineHeight, normal)`;
 
     return css`
+      ${tokenStyles}
+
       .processing-logo {
         margin: auto;
         width: ${processingImageSize};
@@ -184,7 +187,7 @@ export class IAModalManagerTemplate extends LitElement {
       }
 
       .processing-logo.hidden {
-        height: 1rem;
+        height: var(--ia-space-2--);
       }
 
       .processing-logo.hidden ia-status-indicator {
@@ -241,16 +244,19 @@ export class IAModalManagerTemplate extends LitElement {
         border-radius: 0 0 calc(${modalCornerRadius}) calc(${modalCornerRadius});
         border: ${modalBorder};
         border-top: 0;
-        padding: 0 1rem calc(${modalBottomPadding} - ${scrollOffset}) 1rem;
+        padding: 0 var(--ia-space-2--)
+          calc(${modalBottomPadding} - ${scrollOffset}) var(--ia-space-2--);
         color: #333;
-        margin-bottom: 2.5rem;
-        min-height: 5rem;
+        margin-bottom: 2.5rem; /* 25px at a 10px root */
+        min-height: 5rem; /* 50px at a 10px root */
       }
 
       .content {
         overflow-y: auto;
-        max-height: calc(100vh - (16.5rem + ${modalBottomMarginCss}));
-        min-height: 5rem;
+        max-height: calc(
+          100vh - (16.5rem + ${modalBottomMarginCss})
+        ); /* 165px at a 10px root */
+        min-height: 5rem; /* 50px at a 10px root */
         padding: 0 0 calc(${scrollOffset}) 0;
       }
 
@@ -264,7 +270,7 @@ export class IAModalManagerTemplate extends LitElement {
       }
 
       .message {
-        margin: 1rem 0 0 0;
+        margin: var(--ia-space-2--) 0 0 0;
         text-align: center;
         font-size: ${messageFontSize};
         line-height: ${messageLineHeight};
@@ -278,7 +284,7 @@ export class IAModalManagerTemplate extends LitElement {
           0 2px 2px 0 rgba(0, 0, 0, 0.08);
         width: ${modalLogoSize};
         height: ${modalLogoSize};
-        margin: -2.9rem auto 0.5rem auto;
+        margin: -2.9rem auto var(--ia-space-1--) auto; /* -29px at a 10px root */
         background-color: black;
         display: flex;
         justify-content: center;
@@ -300,10 +306,10 @@ export class IAModalManagerTemplate extends LitElement {
 
       .close-button {
         position: absolute;
-        right: 1.2rem;
+        right: 1.2rem; /* 12px at a 10px root */
         top: 1.2rem;
-        width: 2rem;
-        height: 2rem;
+        width: var(--ia-size-icon-md--);
+        height: var(--ia-size-icon-md--);
         border-radius: 100%;
         border: 0;
         padding: 0;
@@ -316,9 +322,9 @@ export class IAModalManagerTemplate extends LitElement {
 
       .back-button {
         position: absolute;
-        left: 1.2rem;
+        left: 1.2rem; /* 12px at a 10px root */
         top: 1.2rem;
-        height: 2rem;
+        height: var(--ia-size-icon-md--);
         background-color: transparent;
         outline: none;
         border: none;
@@ -329,11 +335,11 @@ export class IAModalManagerTemplate extends LitElement {
         display: flex;
         flex-direction: row;
         align-items: center;
-        gap: 0.5rem;
+        gap: var(--ia-space-1--);
       }
 
       .back-button svg {
-        height: 1.5rem;
+        height: 1.5rem; /* 15px at a 10px root */
       }
 
       .sr-only {
