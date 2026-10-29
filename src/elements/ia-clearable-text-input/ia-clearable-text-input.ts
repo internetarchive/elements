@@ -142,7 +142,7 @@ export class IaClearableTextInput extends LitElement {
     tokenStyles,
     css`
       :host {
-        --input-height: 3rem;
+        --input-height: var(--ia-size-control-sm--);
         --clear-button-top: 0;
         --clear-button-right: 2px;
       }
@@ -158,7 +158,7 @@ export class IaClearableTextInput extends LitElement {
       #text-input {
         width: 100%;
         height: 100%;
-        padding: var(--input-padding, 0 1rem);
+        padding: var(--input-padding, 0 var(--ia-space-2--));
         padding-inline-end: var(--input-height);
         border: var(--input-border-width, var(--ia-size-border-width--))
           var(--input-border-style, solid)
@@ -168,7 +168,7 @@ export class IaClearableTextInput extends LitElement {
         background-image: var(--input-background-image, none);
         background-color: var(--input-background-color, transparent);
         color: var(--input-color, var(--ia-color-text-primary--));
-        font-size: var(--input-font-size, 1.7rem);
+        font-size: var(--input-font-size, 1.7rem); /* 17px at a 10px root */
         line-height: var(--input-line-height, 1.5);
         box-shadow: var(--input-box-shadow, none);
       }
