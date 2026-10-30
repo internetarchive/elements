@@ -1,9 +1,28 @@
-import { describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, test } from 'vitest';
 import { aTimeout, fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
+import { configureLocalization, str } from '@lit/localize';
+import { generateMsgId } from '@lit/localize/internal/id-generation.js';
 
 import type { IADropdown, OptionInterface } from './ia-dropdown';
 import './ia-dropdown';
+
+// This package never configures localization. The app that uses it does, once,
+// and this file stands in for that app.
+const { setLocale } = configureLocalization({
+  sourceLocale: 'en',
+  targetLocales: ['es'],
+  loadLocale: async () => ({
+    templates: {
+      [generateMsgId('Toggle options', false)]: 'Mostrar u ocultar opciones',
+      [generateMsgId(['Toggle ', ''], false)]: str`Mostrar u ocultar ${0}`,
+    },
+  }),
+});
+
+function toggleLabelOf(el: IADropdown): string | undefined {
+  return el.shadowRoot?.querySelector('#caret-label')?.textContent?.trim();
+}
 
 describe('IADropdown', () => {
   test('is closed at default', async () => {
@@ -440,5 +459,33 @@ describe('IADropdown', () => {
     const li = elements?.[0] as HTMLLIElement;
     expect(li).to.exist;
     expect(li?.querySelector('.foo')).to.exist;
+  });
+});
+
+describe('IADropdown localization', () => {
+  afterEach(async () => {
+    await setLocale('en');
+  });
+
+  test('switches the toggle label on a dropdown already on the page', async () => {
+    const el = await fixture<IADropdown>(html`<ia-dropdown></ia-dropdown>`);
+    expect(toggleLabelOf(el)).toBe('Toggle options');
+
+    await setLocale('es');
+    await el.updateComplete;
+
+    expect(toggleLabelOf(el)).toBe('Mostrar u ocultar opciones');
+  });
+
+  test('keeps a custom option group name in the translated label', async () => {
+    const el = await fixture<IADropdown>(
+      html`<ia-dropdown optionGroup="filtros"></ia-dropdown>`,
+    );
+    expect(toggleLabelOf(el)).toBe('Toggle filtros');
+
+    await setLocale('es');
+    await el.updateComplete;
+
+    expect(toggleLabelOf(el)).toBe('Mostrar u ocultar filtros');
   });
 });
