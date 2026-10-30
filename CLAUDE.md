@@ -12,6 +12,7 @@ pnpm run dev        # demo at the vite dev server
 pnpm run test       # vitest in real chromium
 pnpm run lint       # eslint + prettier --check
 pnpm run typecheck  # tsc --noEmit
+pnpm run exports    # regenerate the short import paths in package.json
 ```
 
 CI runs `lint`, `typecheck` and `test` as separate jobs. Nothing but `typecheck`
