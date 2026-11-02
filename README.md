@@ -393,6 +393,30 @@ Consumers import it by its own subpath, same as an element: `@internetarchive/el
 - **Demo.** A service has no UI, so its story is a small console: inputs, a Run button, and the result. It follows the same `-story.ts` naming so `demo/app-root.ts` finds it.
 - **Migrating one in.** Port it from the latest version on npm, not a local clone, and say which version in the ticket.
 
+## Download URLs
+
+File names in an item can contain `#`, `?`, `%`, spaces, non-Latin characters and subfolders, so a `/download/` URL has to be encoded one path segment at a time. `downloadUrl(identifier, fileName, baseHost = 'https://archive.org')` does that:
+
+```ts
+import { downloadUrl } from '@internetarchive/elements/services/download-url/download-url';
+
+downloadUrl('my-item', 'slides #2/page 1?.jpg');
+// https://archive.org/download/my-item/slides%20%232/page%201%3F.jpg
+```
+
+The package also ships an ESLint rule that flags a string or template literal containing `/download/`. To use it in another repo:
+
+```js
+import elements from '@internetarchive/elements/eslint-plugin';
+
+export default [
+  {
+    plugins: { elements },
+    rules: { 'elements/no-hand-built-download-url': 'error' },
+  },
+];
+```
+
 ## Component Inventory
 
 To kickstart our library, we are going to take inventory of what already exists
