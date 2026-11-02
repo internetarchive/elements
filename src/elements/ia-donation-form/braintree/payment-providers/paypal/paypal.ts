@@ -64,6 +64,10 @@ export class PayPalHandler implements PayPalHandlerInterface {
       paypalInstance,
     });
 
+    // Venmo has its own button, so keep it out of the PayPal one. The
+    // funding constants come from the PayPal script once it has loaded.
+    const venmoFunding = window.paypal?.FUNDING?.VENMO;
+
     this.paypalButtonGenerator.render(
       {
         env,
@@ -72,9 +76,7 @@ export class PayPalHandler implements PayPalHandlerInterface {
         onAuthorize: dataSource.onAuthorize.bind(dataSource),
         onCancel: dataSource.onCancel.bind(dataSource),
         onError: dataSource.onError.bind(dataSource),
-        funding: {
-          disallowed: [window.paypal.FUNDING.VENMO],
-        },
+        funding: venmoFunding ? { disallowed: [venmoFunding] } : undefined,
       },
       params.selector,
     );

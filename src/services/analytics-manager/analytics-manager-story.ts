@@ -1,6 +1,6 @@
 import { css, html, LitElement, nothing, type CSSResultGroup } from 'lit';
 import { state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import managerSource from './analytics-manager.ts?raw';
 import helpersSource from './analytics-helpers.ts?raw';
 import handlerSource from './analytics-handler.ts?raw';

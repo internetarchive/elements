@@ -1,6 +1,17 @@
 import type { Result } from '../result-type/result-type';
 import type { MetadataServiceError } from './metadata-service-error';
 import type { MetadataResponse } from './responses/metadata-response';
+import type {
+  MetadataFieldValue,
+  MetadataPatchOperation,
+} from './metadata-patch';
+
+export type MetadataWriteResult = {
+  /** Whether a write was sent. False when the field already had the value. */
+  changed: boolean;
+  /** The catalog task that will apply the change to the item */
+  taskId?: number;
+};
 
 export interface MetadataServiceInterface {
   /**
@@ -48,4 +59,57 @@ export interface MetadataServiceInterface {
     identifier: string,
     keypath: string,
   ): Promise<Result<T, MetadataServiceError>>;
+}
+
+/**
+ * A metadata service that can also write. Kept separate from
+ * `MetadataServiceInterface` so read-only implementations and mocks don't have
+ * to provide the write methods.
+ */
+export interface MetadataWritableServiceInterface
+  extends MetadataServiceInterface {
+  /**
+   * Apply a JSON Patch to an item's metadata as the logged-in user.
+   *
+   * MDAPI applies the change through a queued catalog task. MDAPI reads
+   * replay pending tasks' patches ("lookahead"), so they show the change right
+   * away, but caches built on MDAPI (search, page services) can lag it. MDAPI
+   * rejects a patch that doesn't change the item.
+   *
+   * ```ts
+   * await metadataService.patchMetadata('goody', [
+   *   { op: 'replace', path: '/title', value: 'Goody Two-Shoes' },
+   * ]);
+   * ```
+   *
+   * @param identifier
+   * @param patch JSON Patch operations against the item's metadata
+   * @param target MDAPI write target, `metadata` by default
+   */
+  patchMetadata(
+    identifier: string,
+    patch: MetadataPatchOperation[],
+    target?: string,
+  ): Promise<Result<MetadataWriteResult, MetadataServiceError>>;
+
+  /**
+   * Set one metadata field on an item as the logged-in user. An empty string
+   * or list removes the field.
+   *
+   * Reads the item's current metadata from MDAPI first and patches against
+   * that, so the right add / replace / remove goes out even when the caller's
+   * copy is stale. That read includes this user's still-queued writes through
+   * MDAPI's lookahead, except for tasks lookahead skips (e.g. ones held for an
+   * admin). Resolves with `changed: false`, without writing, when the field
+   * already has the value.
+   *
+   * @param identifier
+   * @param field The metadata key, e.g. `title`
+   * @param value
+   */
+  updateMetadataField(
+    identifier: string,
+    field: string,
+    value: MetadataFieldValue,
+  ): Promise<Result<MetadataWriteResult, MetadataServiceError>>;
 }

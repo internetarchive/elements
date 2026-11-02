@@ -371,7 +371,7 @@ The BookReader icons were ported from `@internetarchive/bookreader@5.0.0-87`.
 - **Used by.** `ia-item-navigator`, `ia-status-indicator`, `ia-combo-box`, `ia-dropdown-search-bar` and `ia-scrubber-bar` draw their icons from this folder. Recolor one with `color`, since the glyph paints with `currentColor`.
 - **iaux-icons.** The `@internetarchive/icon-*` set (the `ia-icons` package) lives here too, ported from version 1.4.1. `bookmark` is split into `bookmark`, `bookmark-hollow`, `bookmark-plus` and `bookmark-minus`, one per state of the old element. Icons that keep their own colours (payment brands, `calendar`, `credit-card`, `info`) are listed in `icons/.multicolor`.
 - **No barrel.** There's deliberately no `icons/index`. Every icon is its own module, so a page that imports one loads one.
-- **`sideEffects`.** `package.json` lists the trees that do work at import time (`dist/src/elements/**`, `dist/src/labs/**`, `dist/src/locales/**`). Elements register themselves when imported, so a package-wide `"sideEffects": false` would let a bundler drop `import '@internetarchive/elements/ia-button/ia-button'`. Everything else, including `dist/src/icons/**`, is safe to tree-shake. `src/util/icons-bundle.node.test.ts` bundles the built package to check both.
+- **`sideEffects`.** `package.json` lists the trees that do work at import time (`dist/src/elements/**`, `dist/src/labs/**`, `dist/src/locales/**`). Elements register themselves when imported, so a package-wide `"sideEffects": false` would let a bundler drop `import '@internetarchive/elements/ia-button/ia-button'`. Everything else, including `dist/src/icons/**`, is safe to tree-shake. `src/utils/icons-bundle.node.test.ts` bundles the built package to check both.
 
 ## Adding a Service
 
@@ -392,6 +392,30 @@ Consumers import it by its own subpath, same as an element: `@internetarchive/el
 - **No tag name.** There's no custom element to register, so nothing goes in `HTMLElementTagNameMap` and the services are named after what they are, not `ia-`.
 - **Demo.** A service has no UI, so its story is a small console: inputs, a Run button, and the result. It follows the same `-story.ts` naming so `demo/app-root.ts` finds it.
 - **Migrating one in.** Port it from the latest version on npm, not a local clone, and say which version in the ticket.
+
+## Download URLs
+
+File names in an item can contain `#`, `?`, `%`, spaces, non-Latin characters and subfolders, so a `/download/` URL has to be encoded one path segment at a time. `downloadUrl(identifier, fileName, baseHost = 'https://archive.org')` does that:
+
+```ts
+import { downloadUrl } from '@internetarchive/elements/utils/download-url/download-url';
+
+downloadUrl('my-item', 'slides #2/page 1?.jpg');
+// https://archive.org/download/my-item/slides%20%232/page%201%3F.jpg
+```
+
+The package also ships an ESLint rule that flags a string or template literal containing `/download/`. To use it in another repo:
+
+```js
+import elements from '@internetarchive/elements/eslint-plugin';
+
+export default [
+  {
+    plugins: { elements },
+    rules: { 'elements/no-hand-built-download-url': 'error' },
+  },
+];
+```
 
 ## Component Inventory
 

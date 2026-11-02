@@ -7,7 +7,7 @@ import {
   nothing,
 } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { LOCALE_STATUS_EVENT } from '@lit/localize';
 
 import { buildTopNavMenus, defaultTopNavConfig } from './data/menus';
@@ -169,7 +169,7 @@ export class IATopNav extends LitElement {
           @trackSubmit=${this.trackSubmit}
           @menuToggled=${this.menuToggled}
         >
-          ${this.secondLogoSlot} ${this.searchSlot}
+          ${this.secondLogoSlot} ${this.searchSlot} ${this.languagePickerSlot}
         </ia-topnav-primary-nav>
         <ia-topnav-media-slider
           .baseHost=${this.normalizedBaseHost}
@@ -384,6 +384,10 @@ export class IATopNav extends LitElement {
 
   get searchSlot() {
     return html`<slot name="search" slot="search"></slot>`;
+  }
+
+  get languagePickerSlot() {
+    return html`<slot name="language-picker" slot="language-picker"></slot>`;
   }
 
   get secondLogoSlot() {

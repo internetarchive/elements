@@ -8,7 +8,7 @@ import {
   render,
 } from 'lit';
 import { property } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import themeStyles from '@src/themes/theme-styles';
 
 import '../ia-status-indicator/ia-status-indicator';
@@ -59,16 +59,15 @@ export class IAButton extends LitElement {
   @property({ type: Boolean }) openLinksNewTab: boolean = false;
 
   render(): TemplateResult {
-    return html`
-      ${this.href
+    // No whitespace between the top-level nodes: a text node in the shadow
+    // root renders as a space when the host is display:inline.
+    return html`${this.href
         ? html`<a
             href=${this.href}
             target=${this.openLinksNewTab ? '_blank' : '_self'}
             >${this.buttonTemplate}</a
           >`
-        : this.buttonTemplate}
-      <slot name="hidden-button"></slot>
-    `;
+        : this.buttonTemplate}<slot name="hidden-button"></slot>`;
   }
 
   protected willUpdate(changed: PropertyValues): void {
@@ -79,15 +78,13 @@ export class IAButton extends LitElement {
 
   /* The native button to render */
   private get buttonTemplate(): TemplateResult {
-    return html`
-      <button
-        part="button"
-        class=${this.mode}
-        ?disabled=${this.disabled || this.loading}
-      >
-        ${this.buttonTextTemplate}
-      </button>
-    `;
+    return html`<button
+      part="button"
+      class=${this.mode}
+      ?disabled=${this.disabled || this.loading}
+    >
+      ${this.buttonTextTemplate}
+    </button>`;
   }
 
   /* The text to render within the button */

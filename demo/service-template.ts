@@ -1,6 +1,6 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import './syntax-highlighter';
 import themeStyles from '@src/themes/theme-styles';

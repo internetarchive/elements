@@ -8,7 +8,7 @@ import {
   nothing,
 } from 'lit';
 import { property, query, queryAll, state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { keyed } from 'lit/directives/keyed.js';
 import { map } from 'lit/directives/map.js';
 import {

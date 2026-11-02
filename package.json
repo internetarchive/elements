@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/elements",
-  "version": "1.4.0",
+  "version": "1.9.0",
   "description": "A web component library from the Internet Archive.",
   "license": "AGPL-3.0-only",
   "type": "module",
@@ -36,14 +36,18 @@
     "strings:translate": "node scripts/translate-xliff.mts"
   },
   "dependencies": {
+    "@internetarchive/analytics-manager": "^0.1.5",
     "@internetarchive/fetch-handler": "^1.4.0",
     "@internetarchive/ia-dropdown": "^2.2.0",
     "@internetarchive/icon-close": "^1.4.0",
+    "@internetarchive/icon-info": "^1.4.1",
     "@internetarchive/icon-user": "^1.4.0",
     "@internetarchive/lazy-loader-service": "^0.2.0",
+    "@internetarchive/local-cache": "^0.2.1",
     "@internetarchive/metadata-service": "^1.0.4",
     "@internetarchive/promised-singleton": "^0.2.1",
     "@internetarchive/recaptcha-manager": "^1.0.0",
+    "@internetarchive/shared-resize-observer": "^0.2.0",
     "@lit/localize": "^0.12.2",
     "@types/applepayjs": "^14.0.9",
     "@types/braintree-web": "^3.143.0",
@@ -100,6 +104,8 @@
     "./icons/*.svg": "./dist/src/icons/*.svg",
     "./labs/*": "./dist/src/labs/*.js",
     "./services/*": "./dist/src/services/*.js",
+    "./utils/*": "./dist/src/utils/*.js",
+    "./eslint-plugin": "./eslint/index.mjs",
     "./locales/*.js": "./dist/src/locales/*.js"
   },
   "sideEffects": [
@@ -114,6 +120,8 @@
   "files": [
     "README.md",
     "dist",
+    "eslint",
+    "!eslint/**/*.test*",
     "!dist/**/*.test*",
     "!dist/**/*-story*",
     "!dist/demo",

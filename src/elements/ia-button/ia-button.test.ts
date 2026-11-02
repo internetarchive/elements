@@ -136,4 +136,27 @@ describe('IA button', () => {
     const button = el.shadowRoot?.querySelector('button');
     expect(button?.disabled).to.equal(true);
   });
+
+  describe('shadow root text nodes', () => {
+    // A text node at the top of the shadow root renders as a space when the
+    // host is display:inline, so there must be none.
+    const textNodes = (el: IAButton) =>
+      Array.from(el.shadowRoot!.childNodes).filter(
+        (node) => node.nodeType === Node.TEXT_NODE,
+      );
+
+    test('has none for a plain button', async () => {
+      const el = await fixture<IAButton>(
+        html`<ia-button style="display: inline">Write</ia-button>`,
+      );
+      expect(textNodes(el)).toHaveLength(0);
+    });
+
+    test('has none when wrapped in a link', async () => {
+      const el = await fixture<IAButton>(
+        html`<ia-button href="/foo">Write</ia-button>`,
+      );
+      expect(textNodes(el)).toHaveLength(0);
+    });
+  });
 });

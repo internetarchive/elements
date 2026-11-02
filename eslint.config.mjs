@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
+import elementsPlugin from './eslint/index.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -22,13 +23,13 @@ const customElementRestrictedImports = [
     name: 'lit/decorators.js',
     importNames: ['customElement'],
     message:
-      "Import customElement from '@src/util/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
+      "Import customElement from '@src/utils/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
   },
   {
     name: 'lit/decorators/custom-element.js',
     importNames: ['customElement'],
     message:
-      "Import customElement from '@src/util/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
+      "Import customElement from '@src/utils/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
   },
 ];
 
@@ -37,6 +38,7 @@ export default [
   {
     plugins: {
       '@typescript-eslint': typescriptEslint,
+      elements: elementsPlugin,
       html,
     },
 
@@ -57,6 +59,8 @@ export default [
       '@typescript-eslint/no-unsafe-function-type': 'warn',
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
+
+      'elements/no-hand-built-download-url': 'error',
 
       'no-restricted-imports': [
         'error',
@@ -86,7 +90,13 @@ export default [
     files: ['**/*.test.ts'],
     rules: {
       '@typescript-eslint/no-unused-expressions': 'off',
+      'elements/no-hand-built-download-url': 'off',
     },
+  },
+  {
+    // The helper is the one place that spells out /download/.
+    files: ['src/utils/download-url/download-url.ts'],
+    rules: { 'elements/no-hand-built-download-url': 'off' },
   },
   {
     // Only the demo app calls configureLocalization (demo/demo-localization.ts).

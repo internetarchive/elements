@@ -2,7 +2,9 @@ import {
   File,
   Metadata,
   Review,
+  runningTask,
   SpeechMusicASREntry,
+  Task,
 } from '../../item-metadata/item-metadata';
 
 /**
@@ -72,6 +74,9 @@ export class MetadataResponse {
 
   readonly solo?: boolean;
 
+  /** Tasks on the item. Empty when the response has none. */
+  readonly tasks: Task[];
+
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   constructor(json: Record<string, any>) {
     this.rawResponse = json;
@@ -98,5 +103,11 @@ export class MetadataResponse {
     this.plays = json.plays;
     this.simplelists = json.simplelists;
     this.solo = json.solo;
+    this.tasks = json.tasks ?? [];
+  }
+
+  /** The first running task, with `.php` dropped from `cmd`. */
+  get runningTask(): Task | undefined {
+    return runningTask(this.tasks);
   }
 }

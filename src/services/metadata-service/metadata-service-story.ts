@@ -1,6 +1,6 @@
 import { css, html, LitElement, nothing, type CSSResultGroup } from 'lit';
 import { state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import serviceSource from './metadata-service.ts?raw';
 import interfaceSource from './metadata-service-interface.ts?raw';
 import errorSource from './metadata-service-error.ts?raw';

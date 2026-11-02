@@ -114,13 +114,14 @@ function stubNarrowViewport(narrow: boolean) {
  * rebuild the scroll spy on its own, hiding whether the thing under test
  * rebuilt it. A story that fails to import keeps a message too, so this waits
  * on the console as much as on the clock. The timeout covers loading all the
- * modules cold, which is what happens when one of these tests runs on its own.
+ * modules cold, which is what happens when one of these tests runs on its own
+ * or on a loaded CI runner, and stays under the browser test timeout.
  */
 async function settleScrollSpy(el: AppRoot, firstId: string) {
   await waitUntil(
     () => el.querySelectorAll('.ia-story-message').length === 0,
     'the stories never all settled; check the console for one that failed to import',
-    { timeout: 5000 },
+    { timeout: 12_000 },
   );
   await el.updateComplete;
 
