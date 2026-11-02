@@ -870,6 +870,202 @@
   <source>search category</source>
 <target>catégorie de recherche</target>
 </trans-unit>
+<trans-unit id="s21f68e65dbf5b5a4">
+  <source>Processing...</source>
+</trans-unit>
+<trans-unit id="s98ce2bd73b910e5b">
+  <source>Thank You!</source>
+</trans-unit>
+<trans-unit id="s7d0148b99f987f74">
+  <source>Processing error</source>
+</trans-unit>
+<trans-unit id="s13653e99bba87d4c">
+  <source>There's been a problem completing your donation.</source>
+</trans-unit>
+<trans-unit id="sc78e631879dc2f68">
+  <source>Confirm monthly donation</source>
+</trans-unit>
+<trans-unit id="s905d744ee89b8d4a">
+  <source>Donation received</source>
+</trans-unit>
+<trans-unit id="s1a48fb64b48125fe">
+  <source>Payment failed</source>
+</trans-unit>
+<trans-unit id="sa01aedf1499a36cc">
+  <source>Recaptcha failure</source>
+</trans-unit>
+<trans-unit id="sb7f183a3569b99fb">
+  <source>Error setting up monthly donation</source>
+</trans-unit>
+<trans-unit id="s166eb3ac954fd902">
+  <source>Error restoring donation session</source>
+</trans-unit>
+<trans-unit id="s034029ce33a61b25">
+  <source>Error setting up the donation</source>
+</trans-unit>
+<trans-unit id="sfb976f2d07677d66">
+  <source>There was a problem loading your donation information. Please try again.</source>
+</trans-unit>
+<trans-unit id="seb6e0a8569e9575c">
+  <source>Please enter any missing or invalid contact information below</source>
+</trans-unit>
+<trans-unit id="sf968a1b8e11a61db">
+  <source>Enter at least two characters</source>
+</trans-unit>
+<trans-unit id="sd235a81aa694050f">
+  <source>Enter at least four characters</source>
+</trans-unit>
+<trans-unit id="s47114b888d97214a">
+  <source>Enter a valid 5 or 9 digit zip/postal code</source>
+</trans-unit>
+<trans-unit id="sd1f44f1a8bc20e67">
+  <source>Email</source>
+</trans-unit>
+<trans-unit id="sab459038e3c6bcb8">
+  <source>First name</source>
+</trans-unit>
+<trans-unit id="s6e8059179423bfa0">
+  <source>Last name</source>
+</trans-unit>
+<trans-unit id="sfcdd8e672c75b713">
+  <source>Address</source>
+</trans-unit>
+<trans-unit id="s2468b69d10791c82">
+  <source>City</source>
+</trans-unit>
+<trans-unit id="s9d0e8f5c7db6fe95">
+  <source>State / Province</source>
+</trans-unit>
+<trans-unit id="s5ea489a0498fdc5d">
+  <source>Zip / Postal Code</source>
+</trans-unit>
+<trans-unit id="s9cf7402fe920f7d1">
+  <source>Country</source>
+</trans-unit>
+<trans-unit id="s6c3fcbcd9ddba028">
+  <source>Card Number</source>
+</trans-unit>
+<trans-unit id="s086b3b099bb311f2">
+  <source>Expiration (MM / YY)</source>
+</trans-unit>
+<trans-unit id="s0b4bfc19aa153afd">
+  <source>CVC</source>
+</trans-unit>
+<trans-unit id="s23f5e19870334f0d">
+  <source>Pay with Apple Pay</source>
+</trans-unit>
+<trans-unit id="s9b304ef58dd8be08">
+  <source>Pay with Google Pay</source>
+</trans-unit>
+<trans-unit id="sd3796671b94fe0d6">
+  <source>Pay with Venmo</source>
+</trans-unit>
+<trans-unit id="s505636e8ede55f02">
+  <source>Pay with PayPal</source>
+</trans-unit>
+<trans-unit id="s49d9f0805e17f262">
+  <source>Credit Card</source>
+</trans-unit>
+<trans-unit id="s50bf30bd981c33ac">
+  <source>Change payment method</source>
+</trans-unit>
+<trans-unit id="s33c70c33d00ddccd">
+  <source>Edit this amount</source>
+</trans-unit>
+<trans-unit id="sf14e9ba96f59f306">
+  <source><x id="0" equiv-text="${displayAmount}"/> Monthly Donation</source>
+</trans-unit>
+<trans-unit id="s0611b8fbefc5f32d">
+  <source><x id="0" equiv-text="${displayAmount}"/> Donation</source>
+</trans-unit>
+<trans-unit id="s381d9645b95c884a">
+  <source>Total: <x id="0" equiv-text="${amount}"/>/month</source>
+</trans-unit>
+<trans-unit id="s27ca7d4da1a0def3">
+  <source>Total: <x id="0" equiv-text="${amount}"/></source>
+</trans-unit>
+<trans-unit id="s66df49b292a11e4e">
+  <source>Choose a payment method</source>
+</trans-unit>
+<trans-unit id="se91c884c087015e5">
+  <source>Help us stay in touch</source>
+</trans-unit>
+<trans-unit id="sdea174e3fec92e07">
+  <source>Enter contact information</source>
+</trans-unit>
+<trans-unit id="s8bf765946a155e41">
+  <source>Your payment will be securely processed</source>
+</trans-unit>
+<trans-unit id="s374cfbe25c1f1d77">
+  <source>Please enter contact info.</source>
+</trans-unit>
+<trans-unit id="s7990abec2352a07c">
+  <source>Please enter a valid donation amount.</source>
+</trans-unit>
+<trans-unit id="h33a6ec5964686e4c">
+  <source>
+      <x id="0" equiv-text="&lt;p&gt;"/>
+        You are about to make a <x id="1" equiv-text="&lt;b&gt;${this.donationType}&lt;/b&gt;"/> donation of
+        <x id="2" equiv-text="&lt;b&gt;${this.formattedAmount} ${this.currencyType}&lt;/b&gt;"/> to the Internet
+        Archive.
+      <x id="3" equiv-text="&lt;/p&gt;&#10;    "/></source>
+</trans-unit>
+<trans-unit id="h88dff80333b0962c">
+  <source>
+      <x id="0" equiv-text="&lt;p&gt;"/>
+        You are about to begin making <x id="1" equiv-text="&lt;b&gt;"/>monthly<x id="2" equiv-text="&lt;/b&gt;"/> donations of
+        <x id="3" equiv-text="&lt;b&gt;${this.formattedAmount} ${this.currencyType}&lt;/b&gt;"/> to the Internet
+        Archive. (Your first recurring contribution will be next month.)
+      <x id="4" equiv-text="&lt;/p&gt;&#10;    "/></source>
+</trans-unit>
+<trans-unit id="sd5cbf9fee1a51a18">
+  <source>Start monthly donation</source>
+</trans-unit>
+<trans-unit id="s7a557cf86155eb44">
+  <source>Complete donation</source>
+</trans-unit>
+<trans-unit id="s73b125aabf2a94c7">
+  <source>Questions?</source>
+</trans-unit>
+<trans-unit id="s9b24633aab387054">
+  <source>Thank you for donating!</source>
+</trans-unit>
+<trans-unit id="s81ecf2d4386b8e84">
+  <source>Continue</source>
+</trans-unit>
+<trans-unit id="s08b05407b5565ca4">
+  <source>or</source>
+</trans-unit>
+<trans-unit id="s9dd749c8150240f4">
+  <source>Join our Monthly Giving Circle</source>
+</trans-unit>
+<trans-unit id="sf3e47ad58cd9b595">
+  <source>Monthly support helps us reliably plan for the future.</source>
+</trans-unit>
+<trans-unit id="s4f6204a02028e1af">
+  <source>Enter your monthly amount</source>
+</trans-unit>
+<trans-unit id="s0d1c47fc7b3a6e5e">
+  <source>Monthly amount in dollars</source>
+</trans-unit>
+<trans-unit id="sa5639b33fec73666">
+  <source>YES, I'll donate monthly</source>
+</trans-unit>
+<trans-unit id="s699a20db8d8f8202">
+  <source>Please enter a valid amount.</source>
+</trans-unit>
+<trans-unit id="h1b6c0f4149e6b703">
+  <source>
+        To make a donation of $10,000 or more, please contact our philanthropy
+        department at
+        <x id="0" equiv-text="&lt;a href=&quot;mailto:donations@archive.org&quot;&gt;"/>donations@archive.org<x id="1" equiv-text="&lt;/a&gt;&#10;      "/></source>
+</trans-unit>
+<trans-unit id="sc51197ca5353dfb5">
+  <source>The minimum donation amount is $1.</source>
+</trans-unit>
+<trans-unit id="s3aa2789183447d53">
+  <source>Toggle <x id="0" equiv-text="${this.optionGroup}"/></source>
+</trans-unit>
 </body>
 </file>
 </xliff>
