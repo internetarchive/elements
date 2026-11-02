@@ -110,6 +110,7 @@ export class IADropdownSearchBar extends LitElement {
         closeOnEscape
         closeOnBackdropClick
         openViaButton
+        optionGroup=${msg('search category')}
         .selectedOption=${this.resolvedCategory}
         .options=${this.categories}
         @optionSelected=${this.handleCategorySelected}

@@ -17,6 +17,7 @@ export const templates = {
   s175316679436f7e1: `Logo de l’Internet Archive`,
   s1b2081893dc26d5a: `Laisser un commentaire`,
   s1c9c386a1a79feef: str`Résultat de recherche ${0} sur ${1}`,
+  s28c608536b2744cf: `catégorie de recherche`,
   s290adadea9c2979c: `Impossible de charger cette image.`,
   s2ceb11be2290bb1b: `Annuler`,
   s370e44cc8c6c311b: `Afficher ou masquer les options`,
