@@ -1,5 +1,5 @@
 import { msg } from '@lit/localize';
-import { downloadUrl } from '@src/util/download-url/download-url';
+import { downloadUrl } from '@src/utils/download-url/download-url';
 import { IATopNavConfig, IATopNavMenuConfig } from '../models';
 
 export const defaultTopNavConfig: IATopNavConfig = {

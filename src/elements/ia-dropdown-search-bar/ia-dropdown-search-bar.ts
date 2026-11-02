@@ -8,7 +8,7 @@ import {
   TemplateResult,
 } from 'lit';
 import { property, query } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import type { IaClearableTextInput } from '@src/elements/ia-clearable-text-input/ia-clearable-text-input';
 import type {
   IADropdown,

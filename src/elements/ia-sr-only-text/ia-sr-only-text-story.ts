@@ -1,6 +1,6 @@
 import { html, LitElement } from 'lit';
 import { state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import './ia-sr-only-text';
 import '@demo/story-template';

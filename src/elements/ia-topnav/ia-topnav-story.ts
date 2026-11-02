@@ -1,6 +1,6 @@
 import { css, html, LitElement, nothing, svg, type CSSResultGroup } from 'lit';
 import { state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import './ia-topnav';
 import type { PropInputSettings } from '@demo/story-components/story-prop-settings';

@@ -6,9 +6,9 @@ import {
   TemplateResult,
 } from 'lit';
 import { property } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import themeStyles from '@src/themes/theme-styles';
-import { iconBox, iconBoxStyles } from '@src/util/icon-box';
+import { iconBox, iconBoxStyles } from '@src/utils/icon-box';
 import sortAsc from '@src/icons/sort-asc';
 import sortDesc from '@src/icons/sort-desc';
 import sortNeutral from '@src/icons/sort-neutral';
