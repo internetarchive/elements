@@ -1,6 +1,6 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { state, query } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { StyleInputSettings } from '@demo/story-components/story-styles-settings';
 import {
   IAComboBoxBehavior,

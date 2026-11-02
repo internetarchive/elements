@@ -4,7 +4,7 @@ import {
   type ModalManagerInterface,
 } from '@src/elements/modal-manager/models';
 import { html, LitElement, type TemplateResult } from 'lit';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 /** Records what it was asked to show instead of rendering a modal. */
 @customElement('test-mock-modal-manager')

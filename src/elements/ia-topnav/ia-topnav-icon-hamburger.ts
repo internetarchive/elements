@@ -1,7 +1,7 @@
 import { html, css } from 'lit';
 import Icon from './assets/img/icon';
 import closeIcon from '@src/icons/topnav-close';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { localized, msg } from '@lit/localize';
 
 @customElement('ia-topnav-icon-hamburger')

@@ -7,8 +7,8 @@ import {
   type TemplateResult,
 } from 'lit';
 import { property } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
-import { iconBoxStyles } from '@src/util/icon-box';
+import { customElement } from '@src/utils/custom-element';
+import { iconBoxStyles } from '@src/utils/icon-box';
 
 import themeStyles from '@src/themes/theme-styles';
 

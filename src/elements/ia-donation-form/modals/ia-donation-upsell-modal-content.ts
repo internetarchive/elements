@@ -7,7 +7,7 @@ import {
   type TemplateResult,
 } from 'lit';
 import { property, query } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { msg } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';

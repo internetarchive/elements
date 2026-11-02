@@ -371,7 +371,7 @@ The BookReader icons were ported from `@internetarchive/bookreader@5.0.0-87`.
 - **Used by.** `ia-item-navigator`, `ia-status-indicator`, `ia-combo-box`, `ia-dropdown-search-bar` and `ia-scrubber-bar` draw their icons from this folder. Recolor one with `color`, since the glyph paints with `currentColor`.
 - **iaux-icons.** The `@internetarchive/icon-*` set (the `ia-icons` package) lives here too, ported from version 1.4.1. `bookmark` is split into `bookmark`, `bookmark-hollow`, `bookmark-plus` and `bookmark-minus`, one per state of the old element. Icons that keep their own colours (payment brands, `calendar`, `credit-card`, `info`) are listed in `icons/.multicolor`.
 - **No barrel.** There's deliberately no `icons/index`. Every icon is its own module, so a page that imports one loads one.
-- **`sideEffects`.** `package.json` lists the trees that do work at import time (`dist/src/elements/**`, `dist/src/labs/**`, `dist/src/locales/**`). Elements register themselves when imported, so a package-wide `"sideEffects": false` would let a bundler drop `import '@internetarchive/elements/ia-button/ia-button'`. Everything else, including `dist/src/icons/**`, is safe to tree-shake. `src/util/icons-bundle.node.test.ts` bundles the built package to check both.
+- **`sideEffects`.** `package.json` lists the trees that do work at import time (`dist/src/elements/**`, `dist/src/labs/**`, `dist/src/locales/**`). Elements register themselves when imported, so a package-wide `"sideEffects": false` would let a bundler drop `import '@internetarchive/elements/ia-button/ia-button'`. Everything else, including `dist/src/icons/**`, is safe to tree-shake. `src/utils/icons-bundle.node.test.ts` bundles the built package to check both.
 
 ## Adding a Service
 
