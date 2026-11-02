@@ -398,7 +398,7 @@ Consumers import it by its own subpath, same as an element: `@internetarchive/el
 File names in an item can contain `#`, `?`, `%`, spaces, non-Latin characters and subfolders, so a `/download/` URL has to be encoded one path segment at a time. `downloadUrl(identifier, fileName, baseHost = 'https://archive.org')` does that:
 
 ```ts
-import { downloadUrl } from '@internetarchive/elements/services/download-url/download-url';
+import { downloadUrl } from '@internetarchive/elements/utils/download-url/download-url';
 
 downloadUrl('my-item', 'slides #2/page 1?.jpg');
 // https://archive.org/download/my-item/slides%20%232/page%201%3F.jpg

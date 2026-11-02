@@ -1,5 +1,5 @@
 const MESSAGE =
-  "Don't build /download/ URLs by hand. File names can contain #, ?, %, spaces and subfolders, so use downloadUrl() from '@internetarchive/elements/services/download-url/download-url'.";
+  "Don't build /download/ URLs by hand. File names can contain #, ?, %, spaces and subfolders, so use downloadUrl() from '@internetarchive/elements/utils/download-url/download-url'.";
 
 /**
  * ESLint rule that flags template literals and string literals containing

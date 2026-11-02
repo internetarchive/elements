@@ -95,7 +95,7 @@ export default [
   },
   {
     // The helper is the one place that spells out /download/.
-    files: ['src/services/download-url/download-url.ts'],
+    files: ['src/utils/download-url/download-url.ts'],
     rules: { 'elements/no-hand-built-download-url': 'off' },
   },
   {

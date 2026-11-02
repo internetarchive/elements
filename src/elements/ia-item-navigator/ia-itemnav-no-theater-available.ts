@@ -8,7 +8,7 @@ import {
 } from 'lit';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/util/custom-element';
-import { downloadUrl } from '@src/services/download-url/download-url';
+import { downloadUrl } from '@src/utils/download-url/download-url';
 import themeStyles from '@src/themes/theme-styles';
 
 /**

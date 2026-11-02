@@ -103,6 +103,7 @@
     "./icons/*.svg": "./dist/src/icons/*.svg",
     "./labs/*": "./dist/src/labs/*.js",
     "./services/*": "./dist/src/services/*.js",
+    "./utils/*": "./dist/src/utils/*.js",
     "./eslint-plugin": "./eslint/index.mjs",
     "./locales/*.js": "./dist/src/locales/*.js"
   },
