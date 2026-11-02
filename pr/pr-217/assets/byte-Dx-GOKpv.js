@@ -1,1 +1,0 @@
-const e=class e{parseValue(s){if(typeof s=="number")return s;if(typeof s=="boolean")return;const a=parseFloat(s);if(!Number.isNaN(a))return a}};e.shared=new e;let n=e;const t=class t{parseValue(s){return n.shared.parseValue(s)}};t.shared=new t;let r=t;export{r as B,n as N};
