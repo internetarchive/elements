@@ -103,6 +103,8 @@
     "./icons/*.svg": "./dist/src/icons/*.svg",
     "./labs/*": "./dist/src/labs/*.js",
     "./services/*": "./dist/src/services/*.js",
+    "./utils/*": "./dist/src/utils/*.js",
+    "./eslint-plugin": "./eslint/index.mjs",
     "./locales/*.js": "./dist/src/locales/*.js"
   },
   "sideEffects": [
@@ -117,6 +119,8 @@
   "files": [
     "README.md",
     "dist",
+    "eslint",
+    "!eslint/**/*.test*",
     "!dist/**/*.test*",
     "!dist/**/*-story*",
     "!dist/demo",
