@@ -32,7 +32,9 @@
     "test": "wireit",
     "ghpages:build": "wireit",
     "strings:extract": "wireit",
-    "strings:build": "wireit"
+    "strings:build": "wireit",
+    "exports": "wireit",
+    "exports:check": "wireit"
   },
   "dependencies": {
     "@internetarchive/analytics-manager": "^0.1.5",
@@ -98,6 +100,33 @@
     "wireit": "^0.14.12"
   },
   "exports": {
+    "./ia-audio-element": "./dist/src/elements/ia-audio-element/ia-audio-element.js",
+    "./ia-button": "./dist/src/elements/ia-button/ia-button.js",
+    "./ia-clearable-text-input": "./dist/src/elements/ia-clearable-text-input/ia-clearable-text-input.js",
+    "./ia-combo-box": "./dist/src/elements/ia-combo-box/ia-combo-box.js",
+    "./ia-donation-thermometer": "./dist/src/elements/ia-donation-thermometer/ia-donation-thermometer.js",
+    "./ia-dropdown": "./dist/src/elements/ia-dropdown/ia-dropdown.js",
+    "./ia-dropdown-search-bar": "./dist/src/elements/ia-dropdown-search-bar/ia-dropdown-search-bar.js",
+    "./ia-expandable-search-bar": "./dist/src/elements/ia-expandable-search-bar/ia-expandable-search-bar.js",
+    "./ia-histogram-date-range": "./dist/src/elements/ia-histogram-date-range/ia-histogram-date-range.js",
+    "./ia-icon": "./dist/src/elements/ia-icon/ia-icon.js",
+    "./ia-image-viewer": "./dist/src/elements/ia-image-viewer/ia-image-viewer.js",
+    "./ia-infinite-scroller": "./dist/src/elements/ia-infinite-scroller/ia-infinite-scroller.js",
+    "./ia-item-navigator": "./dist/src/elements/ia-item-navigator/ia-item-navigator.js",
+    "./ia-otp-form": "./dist/src/elements/ia-otp-form/ia-otp-form.js",
+    "./ia-otp-input": "./dist/src/elements/ia-otp-input/ia-otp-input.js",
+    "./ia-playback-controls": "./dist/src/elements/ia-playback-controls/ia-playback-controls.js",
+    "./ia-radio-player": "./dist/src/elements/ia-radio-player/ia-radio-player.js",
+    "./ia-reviews": "./dist/src/elements/ia-reviews/ia-reviews.js",
+    "./ia-scrubber-bar": "./dist/src/elements/ia-scrubber-bar/ia-scrubber-bar.js",
+    "./ia-sr-only-text": "./dist/src/elements/ia-sr-only-text/ia-sr-only-text.js",
+    "./ia-status-indicator": "./dist/src/elements/ia-status-indicator/ia-status-indicator.js",
+    "./ia-topnav": "./dist/src/elements/ia-topnav/ia-topnav.js",
+    "./ia-transcript-view": "./dist/src/elements/ia-transcript-view/ia-transcript-view.js",
+    "./ia-waveform-progress": "./dist/src/elements/ia-waveform-progress/ia-waveform-progress.js",
+    "./ia-wayback-search-form": "./dist/src/elements/ia-wayback-search-form/ia-wayback-search-form.js",
+    "./modal-manager": "./dist/src/elements/modal-manager/modal-manager.js",
+    "./labs/ia-snow": "./dist/src/labs/ia-snow/ia-snow.js",
     "./*": "./dist/src/elements/*.js",
     "./icons/*": "./dist/src/icons/*.js",
     "./icons/*.svg": "./dist/src/icons/*.svg",
@@ -128,7 +157,8 @@
       "command": "tsc --build --pretty && tsc-alias && rsync -zarvm --prune-empty-dirs --include \"*/\" --include \"*.svg\" --exclude=\"*\" src dist",
       "dependencies": [
         "circular",
-        "icons"
+        "icons",
+        "exports:check"
       ],
       "files": [
         "src/**/*.ts",
@@ -153,7 +183,8 @@
     "lint": {
       "command": "eslint . && prettier \"**/*.ts\" --check",
       "dependencies": [
-        "icons:lint"
+        "icons:lint",
+        "exports:check"
       ]
     },
     "format": {
@@ -206,6 +237,19 @@
         "lit-localize.json",
         "scripts/build-locales.mts"
       ]
+    },
+    "exports": {
+      "command": "node scripts/build-exports.mts"
+    },
+    "exports:check": {
+      "command": "node scripts/build-exports.mts --check",
+      "files": [
+        "package.json",
+        "src/elements/*/*.ts",
+        "src/labs/*/*.ts",
+        "scripts/build-exports.mts"
+      ],
+      "output": []
     },
     "icons:lint": {
       "command": "node scripts/lint-icons.mts",
