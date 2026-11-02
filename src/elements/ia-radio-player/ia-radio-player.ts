@@ -8,7 +8,7 @@ import {
   type TemplateResult,
 } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { localized, msg, str } from '@lit/localize';
 
 import type { AudioSource } from '@src/elements/ia-audio-element/models';

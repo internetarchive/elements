@@ -1,7 +1,7 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { query, state } from 'lit/decorators.js';
 import { localized } from '@lit/localize';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { StyleInputSettings } from '@demo/story-components/story-styles-settings';
 
 import type { IADropdown, OptionInterface } from './ia-dropdown';
