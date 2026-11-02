@@ -1,6 +1,6 @@
 import type { ReactiveController, ReactiveControllerHost } from 'lit';
 
-import { prefersReducedMotion } from '@src/util/prefers-reduced-motion';
+import { prefersReducedMotion } from '@src/utils/prefers-reduced-motion';
 import type { SlideDirection } from './models';
 
 /** What the gesture controller needs from the viewer it drives. */

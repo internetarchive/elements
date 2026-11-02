@@ -1,6 +1,6 @@
 import { css, html, LitElement, nothing, type CSSResultGroup } from 'lit';
 import { state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import fieldSource from './models/metadata-fields/metadata-field.ts?raw';
 import keySource from './models/metadata-field-key.ts?raw';
 

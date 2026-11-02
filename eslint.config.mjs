@@ -22,13 +22,13 @@ const customElementRestrictedImports = [
     name: 'lit/decorators.js',
     importNames: ['customElement'],
     message:
-      "Import customElement from '@src/util/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
+      "Import customElement from '@src/utils/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
   },
   {
     name: 'lit/decorators/custom-element.js',
     importNames: ['customElement'],
     message:
-      "Import customElement from '@src/util/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
+      "Import customElement from '@src/utils/custom-element' instead, so a tag already claimed by another bundle of this package is skipped rather than throwing.",
   },
 ];
 

@@ -1,6 +1,6 @@
 import { css, html, LitElement, nothing, type CSSResultGroup } from 'lit';
 import { state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import './ia-item-navigator';
 import './menus/ia-itemnav-viewable-files-panel';
@@ -9,7 +9,7 @@ import './menus/ia-itemnav-share-panel';
 import { viewableFilesIcon } from './menus/ia-itemnav-viewable-files-panel';
 import { shareIcon } from './menus/ia-itemnav-share-panel';
 import list from '@src/icons/list';
-import { iconBox } from '@src/util/icon-box';
+import { iconBox } from '@src/utils/icon-box';
 import type {
   MenuProviderInterface,
   MenuShortcutInterface,

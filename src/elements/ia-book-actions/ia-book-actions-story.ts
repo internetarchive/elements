@@ -1,7 +1,7 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { state } from 'lit/decorators.js';
 import { keyed } from 'lit/directives/keyed.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import '@demo/story-template';
 import { tagFromHash } from '@demo/element-hash';

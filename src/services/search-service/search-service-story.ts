@@ -1,6 +1,6 @@
 import { css, html, LitElement, nothing, type CSSResultGroup } from 'lit';
 import { state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import serviceSource from './search-service.ts?raw';
 import interfaceSource from './search-service-interface.ts?raw';
 import paramsSource from './search-params.ts?raw';
