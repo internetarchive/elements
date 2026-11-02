@@ -17,6 +17,7 @@ export const templates = {
   s175316679436f7e1: `Logotipo de Internet Archive`,
   s1b2081893dc26d5a: `Deja un comentario`,
   s1c9c386a1a79feef: str`Resultado ${0} de ${1}`,
+  s28c608536b2744cf: `categoría de búsqueda`,
   s290adadea9c2979c: `No se pudo cargar esta imagen.`,
   s2ceb11be2290bb1b: `Cancelar`,
   s370e44cc8c6c311b: `Mostrar u ocultar opciones`,
