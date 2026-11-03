@@ -78,6 +78,19 @@ for (const bg of DARK) {
   add('color.text.inverse-link-hover', bg, TEXT, 'link hover on dark');
   add('color.border.focus-inverse', bg, UI, 'focus indicator on dark');
 }
+// An inset ring sits on the control's fill, so it carries its own band.
+add(
+  'color.border.focus',
+  'color.border.focus-band',
+  UI,
+  'inset ring on its band',
+);
+add(
+  'color.border.focus-inverse',
+  'color.border.focus-band-inverse',
+  UI,
+  'inset ring on its band, on dark',
+);
 // Every CTA label against its own fill.
 for (const intent of [
   'primary',
