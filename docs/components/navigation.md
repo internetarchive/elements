@@ -123,15 +123,15 @@ Live does none of this yet, and each of these goes:
 ### Open media type
 
 While a media type's menu is open, its button is the chosen one: `aria-expanded="true"`,
-background `--ia-color-surface-chrome-secondary` (`#333`), and its glyph in that type's
-color — `--ia-color-mediatype-web`, `-texts`, `-movies` (Video), `-audio`, `-software`,
-`-image`. On `#333` those clear 4.0:1 (video, the lowest, 4.01:1). The selector reads
-`data-type` on the button.
+background `--ia-color-surface-chrome-tertiary` (`#474747`), the same as the panel it
+opens, so the tab and the panel read as one piece. Its glyph takes that type's color —
+`--ia-color-mediatype-web`, `-texts`, `-movies` (Video), `-audio`, `-software`, `-image`
+([D-43](../DECISIONS.md#d-43)). The selector reads `data-type` on the button.
 
-Live marks it `.selected`: a `#474747` background and the pre-[D-43](../DECISIONS.md#d-43)
-hues (`#ffcd27`, `#faab3c`, `#f1644b`, `#00adef`, `#9ecc4f`, `#aa99c9`). On `#474747` the
-D-43 colors fall to about 3.0:1, and live's video glyph is 2.95:1 — so the background
-moves to `#333` rather than the glyphs moving back.
+The glyph is decorative: it is `aria-hidden` and the button's label names the type, so
+its color has no contrast minimum. On `#474747` the D-43 colors are about 3:1, and video
+is 2.95:1. Live has the same background with the pre-D-43 hues (`#ffcd27`, `#faab3c`,
+`#f1644b`, `#00adef`, `#9ecc4f`, `#aa99c9`).
 
 ### Wide tiers
 
