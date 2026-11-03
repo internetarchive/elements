@@ -30,7 +30,7 @@ describe('<ia-topnav-test-dropdown-menu>', () => {
     expect(el.shadowRoot?.querySelector('.closed')).to.exist;
   });
 
-  test("draws a row's focus ring inside the row", async () => {
+  test("draws a row's focus ring inside the row, with its band", async () => {
     const el = await fixture<DropdownMenu>(html`
       <ia-topnav-test-dropdown-menu
         .menuItems=${[{ title: 'Upload', url: '/create' }]}
@@ -39,7 +39,9 @@ describe('<ia-topnav-test-dropdown-menu>', () => {
     `);
     const link = el.shadowRoot?.querySelector('a') as HTMLElement;
     link.focus();
-    expect(getComputedStyle(link).outlineOffset).to.equal('-2px');
+    const style = getComputedStyle(link);
+    expect(style.outlineOffset).to.equal('-2px');
+    expect(style.boxShadow).to.equal('rgb(44, 44, 44) 0px 0px 0px 4px inset');
   });
 
   test('puts a callout after its label in the wide menu', async () => {

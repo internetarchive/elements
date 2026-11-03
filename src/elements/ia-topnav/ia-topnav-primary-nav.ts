@@ -363,9 +363,11 @@ export class PrimaryNav extends TrackedElement {
       themeStyles,
       topnavFocusStyles,
       css`
-        /* The bar would clip a ring drawn outside its items. */
+        /* The bar would clip a ring drawn outside its items, so it goes inside,
+           with its band. */
         :host {
           --topnav-focus-offset: calc(-1 * var(--ia-size-focus-ring--));
+          --topnav-focus-band: var(--ia-shadow-focus-band-inverse--);
         }
 
         nav {

@@ -4,7 +4,9 @@ import { css } from 'lit';
  * The shared focus ring, in its dark-surface color, for every part of the
  * topnav. Focus styles don't cross a shadow boundary, so each part includes
  * this itself. Parts that fill the bar or a menu row draw the ring inside
- * their edge (`--topnav-focus-offset`), where the bar would otherwise clip it.
+ * their edge (`--topnav-focus-offset`), where the bar would otherwise clip it,
+ * and set `--topnav-focus-band` with it: inside, the ring sits on the part's
+ * own fill, so it carries the band.
  */
 const topnavFocusStyles = css`
   :focus-visible {
@@ -14,6 +16,7 @@ const topnavFocusStyles = css`
       --topnav-focus-offset,
       var(--ia-size-focus-ring-offset--)
     );
+    box-shadow: var(--topnav-focus-band, none);
   }
 `;
 
