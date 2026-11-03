@@ -86,7 +86,7 @@ look, which stands apart from the system's selected tiers: the chosen amount is 
 | --- | --- |
 | Amount | `--ia-color-donation-amount-fill` (white), `--ia-color-donation-amount-text`, bold |
 | Edge | 1px `--ia-color-donation-amount-border` (`#333`), `--ia-radius-default` |
-| Chosen amount | `--ia-color-donation-amount-selected-fill` (gold, `#f9bf3b`), `--ia-color-donation-amount-selected-text` (8.40:1) |
+| Chosen amount | `--ia-color-donation-amount-selected-fill` (gold, `#f9bf3b`), `--ia-color-donation-amount-selected-text` (8.34:1) |
 | Focus | the shared ring, on keyboard focus |
 | Custom amount field | `var(--ia-border-control)` |
 

@@ -3,7 +3,7 @@
 # Decisions
 
 Every judgment call made while deriving this style guide from the live site.
-60 in total.
+61 in total.
 
 Each entry records what is live, what the conflict is, what
 was decided, why, and what it costs to implement. Nothing here has been applied to
@@ -336,7 +336,7 @@ JSON to hand back.
 
 **Status:** `accepted` · **Area:** color
 
-**What's live.** --ia-theme-color-success / --mint-green #31a481. White on it is 3.11:1; as text on the page background it is 4.37:1.
+**What's live.** --ia-theme-color-success / --mint-green #31a481. White on it is 3.11:1; as text on the page background it is 3.01:1.
 
 **The conflict.** Fails as a fill with a white label and fails as text on the page background.
 
@@ -1342,6 +1342,6 @@ JSON to hand back.
 
 **Why.** The donation form has its own appearance, and the gold is part of it. Naming it as tokens puts it in the system, where it is checked for contrast and changed in one place, instead of leaving a one-off value in a component.
 
-**Blast radius.** None visible: the picker renders as before. `tokens.json` gains the palette entry and the group; the contrast test gains three pairs.
+**Blast radius.** The gold, white fill and `#333` border are unchanged, but the picker moves onto the system's tokens, which shows: amount text `#000` → `#2c2c2c`, radius `5px` → `4px`, focus ring `#7fb3f9` → `#3a4fd6`, and the custom amount field's border `#d9d9d9` → `#666`. `tokens.json` gains the palette entry and the group; the contrast test gains three pairs.
 
 *See:* [`components/donation.md#amount-picker`](components/donation.md#amount-picker)

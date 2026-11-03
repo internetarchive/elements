@@ -25,7 +25,6 @@ One focus style, everywhere, non-negotiable:
 :focus-visible {
   outline: var(--ia-size-focus-ring) solid var(--ia-color-border-focus);
   outline-offset: var(--ia-size-focus-ring-offset);
-  border-radius: inherit;
 }
 ```
 

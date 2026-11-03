@@ -24,7 +24,7 @@ selected look re-point themselves.
 | Panel | `--ia-color-surface-inverse`, `--ia-radius-default`, `--ia-shadow-overlay`, `--ia-space-1` above and below the rows |
 | Placement | below the trigger, `--ia-space-1` away, start-aligned with it: the trigger and menu share a `.ia-menu-anchor`. `.ia-menu-anchor--end` aligns it to the trigger's end, for a trigger at the end of a bar |
 | Layer | `--ia-z-index-dropdown` |
-| Row | `--ia-size-control-sm` (30px) **minimum** height (44px on coarse pointers); padding `0 --ia-space-4 0 --ia-space-2`; 1.4rem |
+| Row | `--ia-size-control-sm` (30px) **minimum** height (44px on coarse pointers); padding `0 --ia-space-4`; 1.4rem |
 | Row hover | `--ia-color-hover-overlay` (white at 12% on the dark panel) |
 | Row focus | the inverse focus ring, inset, with its band |
 | Current item | soft selected tier and a check, for menus whose items are states (a sort order) |

@@ -14,7 +14,9 @@
 
 Inside `.ia-inverse` the link tokens re-point themselves, hover included, so a link in
 dark chrome or the theater needs no class of its own. The light link `#3a4fd6` is 3.27:1 on
-`#000` and never appears there.
+`#000` and never appears there as text. It does appear there as a graphic, the waveform
+and scrubber fill on the black theater, where 3.27:1 meets the 3:1 non-text minimum (and
+it is 6.42:1 against the white unplayed bars).
 
 The live `#4b64ff` (offshoot's light theme `--ia-theme-link-color`, and collection-browser's
 fallback) fails on the surfaces it is actually used on — 4.45:1 on the

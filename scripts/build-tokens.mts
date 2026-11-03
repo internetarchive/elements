@@ -187,8 +187,8 @@ const module = `${HEADER}import { css } from 'lit';
  * (\`--ia-color-text-primary\`) on the page to override it. Assumes a 10px root
  * font size.
  *
- * Inside a shadow root, \`.ia-inverse\` re-points the text, border, surface,
- * hover and selected aliases for a dark surface; \`:host(.ia-inverse)\` does
+ * Inside a shadow root, \`.ia-inverse\` re-points the text, border, focus,
+ * focus band, surface, hover and selected aliases for a dark surface; \`:host(.ia-inverse)\` does
  * the same for the whole element.
  */
 export const tokenStyles = css\`

@@ -12,7 +12,10 @@ Live has unrelated shadows and no scale. The commonest:
 
 The commonest is opaque and offset down-right, which reads as a border drawn on two
 sides rather than as a raised surface. Four translucent shadows replace the set, each
-named for the job it does. [D-14](../DECISIONS.md#d-14)
+named for the job it does. [D-14](../DECISIONS.md#d-14) Two more tokens are shadows only
+in form: the focus bands, `--ia-shadow-focus-band` and `--ia-shadow-focus-band-inverse`,
+used only with an inset focus ring (see [accessibility.md](accessibility.md)). That makes
+six in all.
 
 ## The four shadows
 

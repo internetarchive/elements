@@ -215,8 +215,9 @@ The "ABOUT / BLOG / EVENTS / PROJECTS / HELP / DONATE / CONTACT / JOBS / VOLUNTE
 | Link height | `--ia-size-control-sm` (30px); `--ia-size-target-min` on a coarse pointer. Live rows are 33px with 14px-tall links |
 
 Live uses `#aaa` on `#333` (5.44:1) which passes, but the same `#aaa` also appears on
-`#474747` (4.00:1) which does not. `#ccc` clears every dark surface in the system, so
-it is the single inverse-secondary value.
+`#474747` (4.00:1) which does not. `#ccc` clears every dark surface in the system
+except the `#666` collection surface (3.58:1), so it is the single inverse-secondary
+value.
 
 `DONATE` keeps the red heart in `--ia-color-brand-donate` (`#f00`, live's value for this
 heart and the mobile one); it is 3.98:1 on `#222` and 3.16:1 on the `#333` subnav, both

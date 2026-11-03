@@ -103,8 +103,13 @@ still shows live's version of each:
 | Picker | `#f5f5f7`, 1px `#999`, radius `5px 0 0 5px` | `--ia-color-surface-sunken`, 1px `--ia-color-border-strong`, `--ia-radius-default` |
 | Field and submit borders | 1px `#999` | 1px `--ia-color-border-strong` |
 | Field text | `#555` | `--ia-color-text-primary` |
-| Open picker | a custom list of `<button>`s: `#2c2c2c`, 1px `#ddd`, 4px corners, no shadow. Options padded `0 10px` where the placement sets it (search page, homepage) and flush against the edge in the topnav, which doesn't; the selected one tinted white at 30%, no check | the native picker from [dropdown.md](dropdown.md): `--ia-color-surface-inverse`, `--ia-shadow-overlay`, rows padded `--ia-space-2`/`--ia-space-4`, a check on the selected one |
+| Open picker | a custom list of `<button>`s: `#2c2c2c`, 1px `#ddd`, 4px corners, no shadow. Options padded `0 10px` where the placement sets it (search page, homepage) and flush against the edge in the topnav, which doesn't; the selected one tinted white at 30%, no check | the native picker from [dropdown.md](dropdown.md): `--ia-color-surface-inverse`, `--ia-shadow-overlay`, rows padded `--ia-space-4`, a check on the selected one |
 | Large field text | 17px | `--ia-font-size-lg` (16px) |
+
+The table describes live. Elements' `ia-dropdown-search-bar` on tokens (PR #201) now
+uses the spec's picker (`--ia-color-surface-sunken`, 1px `--ia-color-border-strong`,
+`--ia-radius-default`), `--ia-color-border-strong` borders and `--ia-color-text-primary`
+field text.
 
 `#999`, `#555` and `#f5f5f7` have no token; each is a value this spec retires.
 

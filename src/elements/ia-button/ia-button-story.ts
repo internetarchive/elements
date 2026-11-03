@@ -104,13 +104,13 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Font',
     cssVariable: '--ia-theme-base-font-family',
-    defaultValue: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+    defaultValue: "'Helvetica Neue', Helvetica, Arial, 'Noto Sans', sans-serif",
     inputType: 'text',
   },
   {
     label: 'Transition',
     cssVariable: '--ia-button-transition',
-    defaultValue: 'all 0.1s ease 0s',
+    defaultValue: 'transform 50ms cubic-bezier(0.4, 0, 0.2, 1)',
     inputType: 'text',
   },
   {

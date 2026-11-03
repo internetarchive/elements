@@ -108,7 +108,7 @@ acceptable; give it the same height as `--ia-size-control-lg` so the stack is ev
 
 | Part | `ia-otp-form` |
 | --- | --- |
-| Entry | six single-character boxes, 40×53, text `--ia-theme-font-size-lg` (36px), a 2px browser-default border, square corners |
+| Entry | six single-character boxes, 48×58 at a 10px root (all rem, so it scales with the root), text `--ia-theme-font-size-lg` (36px), a `--ia-border-control` border (1px `#666`, primary text color on hover) on `--ia-color-surface-raised`, `--ia-radius-default` (4px) corners, the shared focus ring |
 | States | `ready` (first box focused); `loading` and `success` lock the boxes and show the status indicator; `error` adds an "!" and "The code entered is invalid or expired" in `--ia-color-text-danger` |
 | New code | an `ia-button` in `link` mode, "Email me another code"; disabled while the code is being checked or has been accepted, and in its loading state while a new code sends (`newCodeSending`) |
 | Input hints | `inputmode="numeric"`; `autocomplete="one-time-code"` on the first box only |
