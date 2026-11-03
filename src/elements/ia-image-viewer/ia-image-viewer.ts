@@ -8,13 +8,13 @@ import {
   type TemplateResult,
 } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { classMap } from 'lit/directives/class-map.js';
 import { keyed } from 'lit/directives/keyed.js';
 import { localized, msg, str } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
-import { prefersReducedMotion } from '@src/util/prefers-reduced-motion';
+import { prefersReducedMotion } from '@src/utils/prefers-reduced-motion';
 import { ImageViewerGestures } from './image-viewer-gestures';
 import type { ImageViewerImage, SlideDirection, WrapEdge } from './models';
 import type { IAImageViewerSlide } from './ia-imgview-slide';

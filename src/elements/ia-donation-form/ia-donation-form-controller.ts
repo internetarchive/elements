@@ -6,7 +6,7 @@ import {
   type TemplateResult,
 } from 'lit';
 import { property, query } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import currency from 'currency.js';
 import {
   LazyLoaderService,

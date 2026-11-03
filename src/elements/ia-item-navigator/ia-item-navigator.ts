@@ -7,12 +7,12 @@ import {
   type CSSResultGroup,
 } from 'lit';
 import { property, state, query } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { classMap } from 'lit/directives/class-map.js';
 import themeStyles from '@src/themes/theme-styles';
 
 import ellipsesIcon from '@src/icons/ellipses';
-import { iconBox, iconBoxStyles } from '@src/util/icon-box';
+import { iconBox, iconBoxStyles } from '@src/utils/icon-box';
 import './ia-itemnav-menu-slider';
 import './ia-itemnav-no-theater-available';
 import '@src/elements/ia-status-indicator/ia-status-indicator';

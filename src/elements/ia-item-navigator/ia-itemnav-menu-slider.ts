@@ -8,10 +8,10 @@ import {
   type CSSResultGroup,
 } from 'lit';
 import { property, query } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import themeStyles from '@src/themes/theme-styles';
 import collapseSidebar from '@src/icons/collapse-sidebar';
-import { iconBox, iconBoxStyles } from '@src/util/icon-box';
+import { iconBox, iconBoxStyles } from '@src/utils/icon-box';
 import './ia-itemnav-menu-button';
 import type { IAItemNavMenuButton } from './ia-itemnav-menu-button';
 import { MenuProviderInterface } from './interfaces/menu-interfaces';

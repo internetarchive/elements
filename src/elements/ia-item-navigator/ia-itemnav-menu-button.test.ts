@@ -5,7 +5,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { IAItemNavMenuButton } from './ia-itemnav-menu-button';
 import './ia-itemnav-menu-button';
 import list from '@src/icons/list';
-import { iconBox } from '@src/util/icon-box';
+import { iconBox } from '@src/utils/icon-box';
 
 describe('IAItemNavMenuButton', () => {
   test('renders a <button> by default', async () => {

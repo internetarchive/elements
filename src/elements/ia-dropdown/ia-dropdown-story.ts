@@ -1,6 +1,7 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { query, state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { localized } from '@lit/localize';
+import { customElement } from '@src/utils/custom-element';
 import { StyleInputSettings } from '@demo/story-components/story-styles-settings';
 
 import type { IADropdown, OptionInterface } from './ia-dropdown';
@@ -101,6 +102,7 @@ const LINK_OPTIONS: OptionInterface[] = [
 ];
 
 @customElement('ia-dropdown-story')
+@localized()
 export class IADropdownStory extends LitElement {
   // Story component state
 
@@ -124,9 +126,24 @@ export class IADropdownStory extends LitElement {
 
   @state() private lastSelectedLabel = '(none yet)';
 
+  @state() private toggleLabel = '';
+
   // Shadow DOM queries
 
   @query('#custom-list-dropdown') private customDropdown?: IADropdown;
+
+  @query('#basic-dropdown') private basicDropdown?: IADropdown;
+
+  async updated() {
+    // The toggle label is screen-reader-only text, so read it back from the
+    // dropdown to show it. It changes with the demo's EN/ES switch.
+    await this.basicDropdown?.updateComplete;
+    const label =
+      this.basicDropdown?.shadowRoot
+        ?.querySelector('#caret-label')
+        ?.textContent?.trim() ?? '';
+    if (label !== this.toggleLabel) this.toggleLabel = label;
+  }
 
   private get options(): OptionInterface[] {
     return this.useLinkOptions ? LINK_OPTIONS : MEDIA_OPTIONS;
@@ -166,6 +183,9 @@ export class IADropdownStory extends LitElement {
 
           <p class="demo-readout">
             Last selected: <strong>${this.lastSelectedLabel}</strong>
+          </p>
+          <p class="demo-readout">
+            Screen reader toggle label: <strong>${this.toggleLabel}</strong>
           </p>
 
           <hr />
@@ -359,6 +379,10 @@ export class IADropdownStory extends LitElement {
         border-radius: 4px;
         /* A dark host, so the trigger's focus ring takes the dark-surface color. */
         --dropdownFocusRingColor: #9aa8ff;
+      }
+
+      #basic-dropdown {
+        --dropdownWhiteSpace: nowrap;
       }
 
       .demo-readout {

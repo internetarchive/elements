@@ -2,7 +2,7 @@ import { CSSResultGroup, LitElement, PropertyValues, css, html } from 'lit';
 import './ia-topnav-media-subnav';
 import KeyboardNavigation from './lib/keyboard-navigation';
 import { property } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import {
   IATopNavConfig,
   IATopNavMenuConfig,

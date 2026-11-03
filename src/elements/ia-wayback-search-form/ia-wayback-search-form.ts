@@ -1,6 +1,6 @@
 import { css, CSSResultGroup, LitElement, html } from 'lit';
 import { property, query } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import { localized, msg } from '@lit/localize';
 

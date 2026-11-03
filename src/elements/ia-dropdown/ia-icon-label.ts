@@ -1,5 +1,5 @@
 import { html, css, LitElement, TemplateResult, CSSResultGroup } from 'lit';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import themeStyles from '@src/themes/theme-styles';
 
