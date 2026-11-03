@@ -6,7 +6,7 @@ import {
   type PropertyValues,
 } from 'lit';
 import { property } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { state } from 'lit/decorators/state.js';
 
 import type Snowflakes from 'magic-snowflakes';
@@ -16,7 +16,7 @@ import flakeIcon from './flake.svg';
 import {
   lazyLoadTemplate,
   type LazyLoadedTemplate,
-} from '@src/util/lazy-load-template';
+} from '@src/utils/lazy-load-template';
 
 /**
  * An element that shows snowflakes to demo the elements library

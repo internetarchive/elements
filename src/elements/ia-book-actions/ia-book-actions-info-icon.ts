@@ -1,7 +1,7 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { property } from 'lit/decorators.js';
 import { localized, msg } from '@lit/localize';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import '@internetarchive/icon-info/icon-info.js';
 
 @customElement('ia-book-actions-info-icon')
