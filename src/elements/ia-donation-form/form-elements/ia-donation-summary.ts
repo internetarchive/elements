@@ -7,8 +7,8 @@ import {
 } from 'lit';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
-import { msg, str } from '@lit/localize';
-import currency from 'currency.js';
+import { localized, msg, str } from '@lit/localize';
+import { formatUsd } from '../localized-format';
 
 import themeStyles from '@src/themes/theme-styles';
 import type { DonationPaymentInfo } from '../models/donation-payment-info';
@@ -16,6 +16,7 @@ import { DonationType } from '../models/donation-type';
 
 /** The collapsed view of the chosen donation, with a button to go back and edit it. */
 @customElement('ia-donation-summary')
+@localized()
 export class IADonationSummary extends LitElement {
   @property({ type: Object }) donationInfo?: DonationPaymentInfo;
 
@@ -34,7 +35,7 @@ export class IADonationSummary extends LitElement {
     const amount = this.donationInfo.amount;
     // Whole dollars don't need the cents
     const precision = amount === Math.round(amount) ? 0 : 2;
-    const displayAmount = currency(amount, { symbol: '$', precision }).format();
+    const displayAmount = formatUsd(amount, precision);
 
     return this.donationInfo.donationType === DonationType.Monthly
       ? msg(str`${displayAmount} Monthly Donation`)
