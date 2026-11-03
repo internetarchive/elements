@@ -88,6 +88,19 @@ for (const bg of ['chrome', 'inverse', 'theater']) {
     'dim text on the darkest surfaces',
   );
 }
+// An inset ring sits on the control's fill, so it carries its own band.
+add(
+  'color.border.focus',
+  'color.border.focus-band',
+  UI,
+  'inset ring on its band',
+);
+add(
+  'color.border.focus-inverse',
+  'color.border.focus-band-inverse',
+  UI,
+  'inset ring on its band, on dark',
+);
 // Every CTA label against its own fill.
 for (const intent of [
   'primary',
