@@ -11,7 +11,7 @@ import { property, query, state } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
 import { localized, msg, str } from '@lit/localize';
 import currency from 'currency.js';
-import { formatUsd } from '../localized-format';
+import { formatUsd, parseAmount } from '../localized-format';
 
 import themeStyles from '@src/themes/theme-styles';
 import { CurrencyValidator } from '../currency-validator';
@@ -527,7 +527,7 @@ export class IADonationEditDonation extends LitElement {
   }
 
   private handleCustomAmountInput(value: string): void {
-    const amount = parseFloat(value);
+    const amount = parseAmount(value);
     if (isNaN(amount)) {
       this.dispatchEditDonationError(
         EditDonationInfoStatus.InvalidDonationAmount,

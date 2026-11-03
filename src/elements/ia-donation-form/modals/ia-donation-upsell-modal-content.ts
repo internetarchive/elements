@@ -12,6 +12,7 @@ import { msg } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
 import { CurrencyValidator } from '../currency-validator';
+import { parseAmount } from '../localized-format';
 
 /** How the "yes" side of the upsell is offered: our own button, or a slot for the PayPal button. */
 export const UpsellModalCTAMode = {
@@ -113,7 +114,7 @@ export class IADonationUpsellModalContent extends LitElement {
   }
 
   private handleCustomAmountInput(value: string): void {
-    const amount = parseFloat(value);
+    const amount = parseAmount(value);
     if (isNaN(amount)) {
       this.error = html`${msg('Please enter a valid amount.')}`;
     } else {

@@ -28,6 +28,29 @@ function isEnglish(locale: string): boolean {
   return locale === 'en' || locale.startsWith('en-');
 }
 
+/** True when the current language writes decimals with a comma, like Spanish. */
+export function usesCommaDecimal(): boolean {
+  const locale = currentLocale();
+  if (isEnglish(locale)) return false;
+  try {
+    const decimal = new Intl.NumberFormat(locale)
+      .formatToParts(1.1)
+      .find((part) => part.type === 'decimal');
+    return decimal?.value === ',';
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Reads a typed or pasted amount as a number. In a language that writes
+ * decimals with a comma, `10,50` is 10.50. Returns `NaN` when there is no
+ * number to read.
+ */
+export function parseAmount(value: string): number {
+  return parseFloat(usesCommaDecimal() ? value.replace(',', '.') : value);
+}
+
 /**
  * Formats a US dollar amount for the current language. English keeps the
  * `$10.00` form. Other languages get `Intl.NumberFormat`'s USD form, like
