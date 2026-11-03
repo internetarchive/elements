@@ -58,11 +58,13 @@ The **whole row** is the target, not just the 20px box. Wrapping the control in 
 .ia-choice:has(:focus-visible) {
   outline: var(--ia-size-focus-ring) solid var(--ia-color-border-focus);
   outline-offset: calc(var(--ia-size-focus-ring-offset) * -1);
+  box-shadow: var(--ia-shadow-focus-band);
 }
 ```
 
 The focus ring uses a **negative** offset here so it sits inside the row rather than
-overlapping the neighboring rows in a dense list.
+overlapping the neighboring rows in a dense list. Inside the row it would sit on the
+row's own fill, so it carries the focus band just inside it.
 
 44px rows in a long facet list is a lot of vertical space. That is what the
 facet panel's scroll container and "Show More" affordance are for — see

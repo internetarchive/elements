@@ -378,6 +378,7 @@ ia-button { inline-size: var(--ia-theme-button-width); }
 .ia-choice:has(:focus-visible) {
   outline: var(--ia-size-focus-ring) solid var(--ia-color-border-focus);
   outline-offset: calc(var(--ia-size-focus-ring-offset) * -1);
+  box-shadow: var(--ia-shadow-focus-band);
 }
 .ia-choice__control {
   appearance: none;
@@ -473,6 +474,7 @@ ia-button { inline-size: var(--ia-theme-button-width); }
 .ia-search-bar__field:has(.ia-search-bar__input:focus-visible) {
   outline: var(--ia-size-focus-ring) solid var(--ia-color-border-focus);
   outline-offset: calc(var(--ia-size-focus-ring) * -1);
+  box-shadow: var(--ia-shadow-focus-band);
 }
 /* Without a picker (a collection's own search), the field takes the start cap. */
 .ia-search-bar__field:first-child {
@@ -1026,6 +1028,7 @@ ia-button { inline-size: var(--ia-theme-button-width); }
   .ia-dropdown option:focus-visible {
     outline: var(--ia-size-focus-ring) solid var(--ia-color-border-focus-inverse);
     outline-offset: calc(var(--ia-size-focus-ring) * -1);
+    box-shadow: var(--ia-shadow-focus-band-inverse);
   }
 }
 
@@ -1250,6 +1253,7 @@ ia-button { inline-size: var(--ia-theme-button-width); }
 .ia-facet-row:has(.ia-choice__control:focus-visible) {
   outline: var(--ia-size-focus-ring) solid var(--ia-color-border-focus);
   outline-offset: calc(var(--ia-size-focus-ring-offset) * -1);
+  box-shadow: var(--ia-shadow-focus-band);
 }
 .ia-facet-row__label {
   flex: 1;
@@ -2475,7 +2479,10 @@ main[tabindex='-1']:focus { outline: none; }
   cursor: pointer;
 }
 .ia-menu__item:hover { background-image: linear-gradient(var(--ia-color-hover-overlay), var(--ia-color-hover-overlay)); }
-.ia-menu__item:focus-visible { outline-offset: calc(var(--ia-size-focus-ring) * -1); }
+.ia-menu__item:focus-visible {
+  outline-offset: calc(var(--ia-size-focus-ring) * -1);
+  box-shadow: var(--ia-shadow-focus-band);
+}
 .ia-menu__item .ia-icon { color: var(--ia-color-text-secondary); }
 .ia-menu__item[aria-checked='true'] { background-color: var(--ia-color-selected-soft-fill); color: var(--ia-color-selected-soft-text); }
 .ia-menu__item:is([role='menuitemradio'], [role='menuitemcheckbox'])::before {      /* the check's slot, so labels line up */

@@ -26,7 +26,7 @@ selected look re-point themselves.
 | Layer | `--ia-z-index-dropdown` |
 | Row | `--ia-size-control-sm` (30px) **minimum** height (44px on coarse pointers); padding `0 --ia-space-4 0 --ia-space-2`; 1.4rem |
 | Row hover | `--ia-color-hover-overlay` (white at 12% on the dark panel) |
-| Row focus | the inverse focus ring, inset |
+| Row focus | the inverse focus ring, inset, with its band |
 | Current item | soft selected tier and a check, for menus whose items are states (a sort order) |
 | Separator | `--ia-border-divider`, `--ia-space-1` above and below |
 | Group heading | `.ia-menu__heading`: `--ia-font-size-xs` / bold, uppercase through `text-transform`, `--ia-color-text-secondary`, the row's inline padding. Text, not an item: arrows skip it |

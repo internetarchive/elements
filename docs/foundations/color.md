@@ -218,6 +218,8 @@ White text on each clears 4.5:1. The badge never renders in production — see
 | `--ia-color-border-strong` | `#666666` | **any border that defines a control** — 5.74:1 |
 | `--ia-color-border-focus` | `#3a4fd6` | the focus ring on light surfaces |
 | `--ia-color-border-focus-inverse` | `#9aa8ff` | the focus ring on dark chrome |
+| `--ia-color-border-focus-band` | `#ffffff` | the band inside an inset focus ring — 6.42:1 with the ring |
+| `--ia-color-border-focus-band-inverse` | `#2c2c2c` | the band inside an inset ring on dark chrome — 6.26:1 |
 
 If a border is the only thing telling a user where an input or a control begins, it must
 be `strong`. `subtle` and `default` are for edges that are decoration — remove them and
