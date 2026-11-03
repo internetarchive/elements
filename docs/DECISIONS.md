@@ -335,7 +335,7 @@ JSON to hand back.
 
 **Status:** `accepted` · **Area:** color
 
-**What's live.** --ia-theme-color-success / --mint-green #31a481. White on it is 3.11:1; as text on the page background it is 4.37:1.
+**What's live.** --ia-theme-color-success / --mint-green #31a481. White on it is 3.11:1; as text on the page background it is 3.01:1.
 
 **The conflict.** Fails as a fill with a white label and fails as text on the page background.
 

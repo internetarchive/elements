@@ -72,9 +72,11 @@ thumbnail's image also takes `--ia-radius-default` (4px) — live rounds it at 8
 
 The collection variant's `#666` on white text is 5.74:1, so it passes as-is and is kept
 as `--ia-color-surface-collection`. Wrap its text in `.ia-inverse` so the title and any links
-re-point rather than hard-coding white.
+re-point rather than hard-coding white. On this surface, links and secondary text use
+`--ia-color-text-inverse` (white): `#9aa8ff` is 2.58:1 and `#ccc` 3.58:1 on `#666`. Links
+keep their underline.
 
-Its live border is `#555`, a 1.15:1 line on a `#666` surface — decorative, not a
+Its live border is `#555`, a 1.30:1 line on a `#666` surface — decorative, not a
 boundary. It normalizes to `--ia-color-border-inverse` (`#474747`) rather than adding a
 token for an all-but-invisible difference.
 
