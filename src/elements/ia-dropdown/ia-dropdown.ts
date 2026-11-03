@@ -576,9 +576,9 @@ export class IADropdown extends LitElement {
            trigger's own defaults (white text and caret) assume a dark host. A
            host on a light surface sets --dropdownFocusRingColor to
            --ia-color-border-focus. The ring is inside the trigger's edge, so
-           it lines up with the panel that opens under it. It has no band: the
-           trigger has no fill of its own by default, so the ring sits on the
-           host's surface, which is what its color is chosen against. */
+           it lines up with the panel that opens under it, and carries its band.
+           The band follows the ring, so a host that sets
+           --dropdownFocusRingColor sets --dropdownFocusBand with it. */
         button.click-main:focus-visible {
           outline: var(--ia-size-focus-ring--) solid
             var(
@@ -586,6 +586,10 @@ export class IADropdown extends LitElement {
               var(--ia-color-border-focus-inverse--)
             );
           outline-offset: calc(-1 * var(--ia-size-focus-ring--));
+          box-shadow: var(
+            --dropdownFocusBand,
+            var(--ia-shadow-focus-band-inverse--)
+          );
         }
 
         button.click-main:active {
