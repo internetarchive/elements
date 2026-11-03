@@ -41,7 +41,7 @@ A native `<select>` with the live look.
 | Option | `--ia-size-control-sm` (30px) minimum height, padding `0 --ia-space-4 0 --ia-space-2`, `--ia-font-size-md` / regular, inverse text — the [menu-row contract](menu.md#the-menu-row-contract) |
 | Hovered option | `--ia-color-hover-overlay`, which re-points to white at 12% on the dark panel |
 | Selected option | the soft selected tier ([D-45](../DECISIONS.md#d-45)), which on the dark panel is `--ia-color-selected-soft-fill-inverse` (`#666`); plus a check |
-| Option focus | the inverse focus ring, inset |
+| Option focus | the inverse focus ring, inset, with its band |
 
 One dark and one radius in every host — [D-41](../DECISIONS.md#d-41). The check makes
 the selection readable without color (WCAG 1.4.1).
@@ -87,7 +87,7 @@ focus ring — stays as the table shows:
 | Panel | `#333`, square top corners, rounded bottom, no shadow, flush under the trigger | `--ia-color-surface-inverse`, `--ia-radius-default` all round, `--ia-shadow-overlay`, `--ia-space-1` below the trigger |
 | Option | 30px, padded `5px 10px` | `--ia-size-control-sm` minimum, padded `0 --ia-space-4 0 --ia-space-2` |
 | Selected option | white at 30% over the panel, no mark | `--ia-color-selected-soft-fill-inverse` fill and a check |
-| Option focus | no ring of its own | the inverse focus ring, inset |
+| Option focus | no ring of its own | the inverse focus ring, inset, with its band |
 
 One detail of the API matters to anyone building with it: the component pads each
 option's *first child element*, not the option itself. A plain-text label has no element,

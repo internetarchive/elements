@@ -33,10 +33,21 @@ One focus style, everywhere, non-negotiable:
   `--ia-color-border-focus` to `#9aa8ff` automatically.
 - Both values clear 3:1 against every surface in the system (WCAG 1.4.11).
 - The offset is what makes the ring visible on a dark button — without it the ring sits
-  on the fill and disappears.
+  on the fill and disappears. The gap shows the surface, so the ring always has the
+  surface on both sides.
 - Where a container clips or wraps the control — a facet row, a choice, the search
   field, a menu item — the ring is inset instead (a negative offset), so it is drawn
-  inside the edge rather than cut off.
+  inside the edge rather than cut off. An inset ring sits on the control's own fill,
+  which no single ring color can clear on every fill (`#9aa8ff` is 2.58:1 on a `#666`
+  selected row), so it carries a band in its surface color just inside it:
+
+  ```css
+  outline-offset: calc(var(--ia-size-focus-ring) * -1);
+  box-shadow: var(--ia-shadow-focus-band);
+  ```
+
+  The band is white inside `#3a4fd6` (6.42:1) and `#2c2c2c` inside `#9aa8ff` (6.26:1),
+  and `.ia-inverse` re-points it with the ring.
 - `:focus-visible`, not `:focus`, so mouse users don't see rings on click.
 
 **`outline: none` is only ever acceptable when the same rule provides a replacement
