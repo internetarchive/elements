@@ -175,7 +175,7 @@ registry, the published tarball (`npm pack @internetarchive/<pkg>@<version>`),
 which needs no clone at all.
 
 Re-derive the element from the upstream source and re-apply the elements-specific
-changes on top (tag and class rename, `customElement` from `@src/util/custom-element`,
+changes on top (tag and class rename, `customElement` from `@src/utils/custom-element`,
 shared types into `models.ts`, elements' own `ia-status-indicator` in place of a
 standalone one). Hand-patching an older copy forward loses things quietly. Where
 upstream has already fixed a bug you also hit, take upstream's fix: that's what the

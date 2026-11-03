@@ -1,7 +1,7 @@
 import { LitElement, html, css, CSSResult, TemplateResult, nothing } from 'lit';
 import { property } from 'lit/decorators.js';
 import { localized, msg } from '@lit/localize';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import '@internetarchive/icon-close';
 import '@src/elements/ia-status-indicator/ia-status-indicator';

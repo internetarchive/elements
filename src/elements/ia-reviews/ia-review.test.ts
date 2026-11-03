@@ -515,6 +515,8 @@ describe('IAReview', () => {
   });
 
   test('reports a failure when it has no service to delete through', async () => {
+    vi.spyOn(window, 'fetch').mockRejectedValue(new Error('offline'));
+    vi.spyOn(console, 'error').mockImplementation(() => {});
     const el = await fixture<IAReview>(
       html`<ia-review
         .review=${mockReview}

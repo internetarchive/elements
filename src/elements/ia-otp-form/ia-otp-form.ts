@@ -9,7 +9,7 @@ import {
 } from 'lit';
 import { localized, msg } from '@lit/localize';
 import { property, query } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import themeStyles from '@src/themes/theme-styles';
 

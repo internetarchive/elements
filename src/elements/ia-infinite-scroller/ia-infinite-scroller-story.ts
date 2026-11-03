@@ -7,7 +7,7 @@ import {
   type TemplateResult,
 } from 'lit';
 import { property, query } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import type { PropInputSettings } from '@demo/story-components/story-prop-settings';
 import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';

@@ -5,7 +5,7 @@ import {
   html,
 } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import { syntaxStyles } from './syntax-style-light';
 

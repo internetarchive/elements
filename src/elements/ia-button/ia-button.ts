@@ -10,7 +10,7 @@ import {
 } from 'lit';
 import { property } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import themeStyles from '@src/themes/theme-styles';
 
 import '../ia-status-indicator/ia-status-indicator';

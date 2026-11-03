@@ -11,11 +11,11 @@ import {
   TemplateResult,
 } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { localized, msg } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
-import { iconBox, iconBoxStyles } from '@src/util/icon-box';
+import { iconBox, iconBoxStyles } from '@src/utils/icon-box';
 
 import audioIcon from '@src/icons/mediatype-audio';
 import collectionIcon from '@src/icons/mediatype-collection';

@@ -8,7 +8,7 @@ import {
   type CSSResultGroup,
 } from 'lit';
 import { property } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import themeStyles from '@src/themes/theme-styles';
 import share from '@src/icons/share';
 import twitter from '@src/icons/twitter';
@@ -17,7 +17,7 @@ import tumblr from '@src/icons/tumblr';
 import pinterest from '@src/icons/pinterest';
 import email from '@src/icons/email';
 import link from '@src/icons/link';
-import { iconBox, iconBoxStyles } from '@src/util/icon-box';
+import { iconBox, iconBoxStyles } from '@src/utils/icon-box';
 
 type ShareOption = {
   name: string;

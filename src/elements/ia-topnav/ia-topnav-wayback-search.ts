@@ -1,5 +1,5 @@
 import { css, CSSResultGroup } from 'lit';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import { IAWaybackSearchForm } from '@src/elements/ia-wayback-search-form/ia-wayback-search-form';
 import { TOPNAV_MOBILE_BREAKPOINT } from './models';

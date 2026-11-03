@@ -7,7 +7,7 @@ import {
   nothing,
 } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { LOCALE_STATUS_EVENT } from '@lit/localize';
 
 import { buildTopNavMenus, defaultTopNavConfig } from './data/menus';
