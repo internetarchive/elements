@@ -144,12 +144,14 @@ const INVERSE: [string, string][] = [
   ['color-border-default', 'color-border-inverse'],
   ['color-border-strong', 'color-palette-gray-400'],
   ['color-border-focus', 'color-border-focus-inverse'],
+  ['color-border-focus-band', 'color-border-focus-band-inverse'],
   ['color-surface-page', 'color-surface-chrome'],
   ['color-surface-raised', 'color-surface-chrome-secondary'],
   ['color-hover-overlay', 'color-hover-overlay-inverse'],
   ['color-selected-soft-fill', 'color-selected-soft-fill-inverse'],
   ['color-selected-soft-border', 'color-border-inverse'],
   ['color-selected-soft-text', 'color-text-inverse'],
+  ['shadow-focus-band', 'shadow-focus-band-inverse'],
 ];
 const INVERSE_BORDERS: [string, string][] = [
   ['border-control', 'color-border-strong'],
