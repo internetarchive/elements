@@ -9,7 +9,7 @@ import {
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
 import { ifDefined } from 'lit/directives/if-defined.js';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 
 import {
   BillingInfo,
@@ -23,6 +23,7 @@ import {
 import '../ia-donation-badged-input';
 import type { AutoCompleteFieldOptions } from './autocomplete-field-options';
 import { countries } from './countries';
+import { localizedCountries } from '../../localized-format';
 
 /**
  * The donor's name, email and billing address.
@@ -33,6 +34,7 @@ import { countries } from './countries';
  * the tag name, and its field ids are unique across the page.
  */
 @customElement('ia-donation-contact-form')
+@localized()
 export class IADonationContactForm extends LitElement {
   @query('ia-donation-badged-input.donation-contact-form-email')
   emailBadgedInput!: IADonationBadgedInput;
@@ -265,8 +267,7 @@ export class IADonationContactForm extends LitElement {
               if (countries[newValue]) this.selectedCountry = newValue;
             }}
           >
-            ${Object.keys(countries).map((key) => {
-              const name = countries[key];
+            ${localizedCountries().map(([key, name]) => {
               return html`
                 <option value=${key} ?selected=${key === this.selectedCountry}>
                   ${name}
