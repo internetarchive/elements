@@ -1,13 +1,16 @@
 /**
  * @file Muted icon, a speaker with a cross beside it
  *
- * Inline so the button can recolor it with `currentColor`, which is not
- * possible on the contents of an `<img>`.
+ * Decorative: the button around it carries the accessible name, so the icon
+ * is hidden from assistive tech. Inline so the button can recolor it with
+ * `currentColor`, which is not possible on the contents of an `<img>`.
  */
 import { svg } from 'lit';
 
 export default svg`
-<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"
+  aria-hidden="true"
+>
   <g fill="none" fill-rule="evenodd">
     <path
       stroke="currentColor"
