@@ -1,6 +1,7 @@
 import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
+import { page } from 'vitest/browser';
 
 import './ia-topnav-primary-nav';
 import './ia-topnav-media-menu';
@@ -93,22 +94,29 @@ describe('ia-topnav icons', () => {
     });
 
     test('are light grey, red for donate, and their own color when selected', async () => {
-      const menu = await fixture<MediaMenu>(
-        html`<ia-topnav-media-menu
-          selectedMenuOption="texts"
-        ></ia-topnav-media-menu>`,
-      );
-      const colorOf = (name: string) => {
-        const button = menu.shadowRoot?.querySelector(
-          `[data-mediatype=${name}]`,
+      // The media-type colors are the wide layout's.
+      await page.viewport(1200, 800);
+      try {
+        const menu = await fixture<MediaMenu>(
+          html`<ia-topnav-media-menu
+            selectedMenuOption="texts"
+          ></ia-topnav-media-menu>`,
         );
-        const path = svgIn(button?.shadowRoot, '.icon svg path');
-        return getComputedStyle(path).fill;
-      };
+        const colorOf = (name: string) => {
+          const button = menu.shadowRoot?.querySelector(
+            `[data-mediatype=${name}]`,
+          );
+          const path = svgIn(button?.shadowRoot, '.icon svg path');
+          return getComputedStyle(path).fill;
+        };
 
-      expect(colorOf('video')).to.equal('rgb(204, 204, 204)');
-      expect(colorOf('donate')).to.equal('rgb(255, 0, 0)');
-      expect(colorOf('texts')).to.not.equal('rgb(204, 204, 204)');
+        expect(colorOf('video')).to.equal('rgb(204, 204, 204)');
+        expect(colorOf('donate')).to.equal('rgb(255, 0, 0)');
+        // --ia-color-mediatype-texts, #c5872f
+        expect(colorOf('texts')).to.equal('rgb(197, 135, 47)');
+      } finally {
+        await page.viewport(414, 896);
+      }
     });
   });
 
