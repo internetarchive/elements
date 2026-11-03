@@ -208,7 +208,7 @@ add(
   UI,
   'donate heart on the subnav',
 );
-// A media-type glyph on a tile's white card, and in the topnav's open menu.
+// A media-type glyph on a tile's white card.
 for (const type of [
   'texts',
   'movies',
@@ -227,14 +227,6 @@ for (const type of [
     'color.surface.raised',
     UI,
     `${type} glyph on a tile`,
-  );
-}
-for (const type of ['web', 'texts', 'movies', 'audio', 'software', 'image']) {
-  add(
-    `color.mediatype.${type}`,
-    'color.surface.chrome-secondary',
-    UI,
-    `open ${type} menu in the topnav`,
   );
 }
 // The donation amount picker: its amounts, the chosen one in gold, and the
@@ -256,6 +248,20 @@ add(
   'color.surface.page',
   UI,
   'an amount button edge',
+);
+// Text on the wide topnav's open media panel. The media-type glyph on its tab
+// is decorative (the tab's label names the type), so it has no minimum there.
+add(
+  'color.text.inverse',
+  'color.surface.chrome-tertiary',
+  TEXT,
+  'media panel text',
+);
+add(
+  'color.text.inverse-secondary',
+  'color.surface.chrome-tertiary',
+  TEXT,
+  'media panel secondary text',
 );
 // The dropdown panel's selected option, and the collection tile.
 add(
