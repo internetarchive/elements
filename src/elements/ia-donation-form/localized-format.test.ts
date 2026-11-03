@@ -81,8 +81,17 @@ describe('donation form number and country localization', () => {
         .querySelector<HTMLOptionElement>('option[value="US"]')
         ?.textContent?.trim();
     expect(option()).to.equal('United States');
+    const select = el.querySelector<HTMLSelectElement>('select');
+    if (select) {
+      select.value = 'DE';
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    }
     await setLocale('es');
     await el.updateComplete;
     expect(option()).to.equal('Estados Unidos');
+    expect(select?.value).to.equal('DE');
+    expect(select?.selectedOptions[0]?.textContent?.trim()).to.equal(
+      'Alemania',
+    );
   });
 });

@@ -23,6 +23,7 @@ import {
 import '../ia-donation-badged-input';
 import type { AutoCompleteFieldOptions } from './autocomplete-field-options';
 import { countries } from './countries';
+import { repeat } from 'lit/directives/repeat.js';
 import { localizedCountries } from '../../localized-format';
 
 /**
@@ -267,13 +268,15 @@ export class IADonationContactForm extends LitElement {
               if (countries[newValue]) this.selectedCountry = newValue;
             }}
           >
-            ${localizedCountries().map(([key, name]) => {
-              return html`
+            ${repeat(
+              localizedCountries(),
+              ([key]) => key,
+              ([key, name]) => html`
                 <option value=${key} ?selected=${key === this.selectedCountry}>
                   ${name}
                 </option>
-              `;
-            })}
+              `,
+            )}
           </select>
         </ia-donation-badged-input>
       </div>

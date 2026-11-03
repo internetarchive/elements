@@ -19,7 +19,9 @@ if (typeof window !== 'undefined') {
  * this package never does, so the locale is read from its status event.
  */
 export function currentLocale(): string {
-  return readyLocale || document.documentElement.lang || 'en';
+  if (readyLocale) return readyLocale;
+  if (typeof document === 'undefined') return 'en';
+  return document.documentElement.lang || 'en';
 }
 
 function isEnglish(locale: string): boolean {
