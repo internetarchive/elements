@@ -1,7 +1,7 @@
 import type { TemplateResult, CSSResultGroup } from 'lit';
 import { html, LitElement, css, nothing } from 'lit';
 import { property } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import themeStyles from '@src/themes/theme-styles';
 

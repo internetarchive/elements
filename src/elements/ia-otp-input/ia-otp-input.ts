@@ -7,7 +7,7 @@ import {
   PropertyValues,
 } from 'lit';
 import { property, queryAll } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import themeStyles from '@src/themes/theme-styles';
 
 /**

@@ -1,4 +1,5 @@
 import { msg } from '@lit/localize';
+import { downloadUrl } from '@src/utils/download-url/download-url';
 import { IATopNavConfig, IATopNavMenuConfig } from '../models';
 
 export const defaultTopNavConfig: IATopNavConfig = {
@@ -667,7 +668,7 @@ export function buildTopNavMenus(
         analyticsEvent: 'AdminUserEditFiles',
       },
       {
-        url: `${baseHost}/download/${itemIdentifier}/`,
+        url: `${downloadUrl(itemIdentifier, '', baseHost)}/`,
         title: 'download',
         analyticsEvent: 'AdminUserDownload',
       },
@@ -717,6 +718,9 @@ export function buildTopNavMenus(
             analyticsEvent: 'AdminUserBookView',
           },
           {
+            // `format=...` is a download query that archive.org parses from the
+            // path, not a file name, so it stays unencoded.
+            // eslint-disable-next-line elements/no-hand-built-download-url
             url: `${baseHost}/download/${itemIdentifier}/format=Single Page Processed JP2 ZIP`,
             title: 'jp2 zip',
             analyticsEvent: 'AdminUserJP2Zip',
