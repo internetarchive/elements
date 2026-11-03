@@ -6,6 +6,7 @@ import { afterEach, describe, expect, test } from 'vitest';
 import './form-elements/ia-donation-edit-donation';
 import './form-elements/contact-form/ia-donation-contact-form';
 import './modals/ia-donation-confirm-modal';
+import './modals/ia-donation-upsell-modal-content';
 import { CurrencyValidator } from './currency-validator';
 import { DonationPaymentInfo } from './models/donation-payment-info';
 import { DonationType } from './models/donation-type';
@@ -131,6 +132,24 @@ describe('comma in the custom amount', () => {
     input.focus();
     typeInto(input, '10.50');
     expect(last.amount).to.equal(10.5);
+  });
+});
+
+describe('comma in the upsell amount', () => {
+  afterEach(async () => {
+    await setLocale('en');
+  });
+
+  test('Spanish reads a pasted 10,50 as 10.50', async () => {
+    await setLocale('es');
+    const el = await fixture<HTMLElement & { amount: number }>(
+      html`<ia-donation-upsell-modal-content></ia-donation-upsell-modal-content>`,
+    );
+    const input =
+      el.shadowRoot!.querySelector<HTMLInputElement>('#amount-input')!;
+    input.value = '10,50';
+    input.dispatchEvent(new Event('input'));
+    expect(el.amount).to.equal(10.5);
   });
 });
 

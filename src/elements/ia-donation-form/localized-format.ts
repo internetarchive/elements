@@ -43,6 +43,15 @@ export function usesCommaDecimal(): boolean {
 }
 
 /**
+ * Reads a typed or pasted amount as a number. In a language that writes
+ * decimals with a comma, `10,50` is 10.50. Returns `NaN` when there is no
+ * number to read.
+ */
+export function parseAmount(value: string): number {
+  return parseFloat(usesCommaDecimal() ? value.replace(',', '.') : value);
+}
+
+/**
  * Formats a US dollar amount for the current language. English keeps the
  * `$10.00` form. Other languages get `Intl.NumberFormat`'s USD form, like
  * `10,00 US$` in Spanish.
