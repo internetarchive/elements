@@ -34,6 +34,7 @@ import '@src/elements/ia-status-indicator/ia-status-indicator';
 import '@src/elements/ia-transcript-view/ia-transcript-view';
 import '@src/elements/ia-waveform-progress/ia-waveform-progress';
 import './ia-search-results-switcher';
+import { tokenStyles } from '@src/themes/tokens';
 
 /**
  * Event names emitted by this component
@@ -680,173 +681,178 @@ export class IARadioPlayer extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        --radio-player-title-color--: var(
-          --ia-theme-radio-player-title-color,
-          #fff
-        );
-        --radio-player-title-font--: var(
-          --ia-theme-radio-player-title-font,
-          1.5em sans-serif
-        );
-        --radio-player-date-color--: var(
-          --ia-theme-radio-player-date-color,
-          #fff
-        );
-        --radio-player-date-font--: var(
-          --ia-theme-radio-player-date-font,
-          1em sans-serif
-        );
-        --radio-player-logo-max-height--: var(
-          --ia-theme-radio-player-logo-max-height,
-          8rem
-        );
-        --radio-player-waveform-height--: var(
-          --ia-theme-radio-player-waveform-height,
-          5rem
-        );
-      }
+    return [
+      tokenStyles,
+      css`
+        :host {
+          --radio-player-title-color--: var(
+            --ia-theme-radio-player-title-color,
+            var(--ia-color-text-inverse--)
+          );
+          --radio-player-title-font--: var(
+            --ia-theme-radio-player-title-font,
+            1.5em var(--ia-font-family-base--)
+          );
+          --radio-player-date-color--: var(
+            --ia-theme-radio-player-date-color,
+            var(--ia-color-text-inverse--)
+          );
+          --radio-player-date-font--: var(
+            --ia-theme-radio-player-date-font,
+            1em var(--ia-font-family-base--)
+          );
+          --radio-player-logo-max-height--: var(
+            --ia-theme-radio-player-logo-max-height,
+            8rem /* 80px at a 10px root */
+          );
+          --radio-player-waveform-height--: var(
+            --ia-theme-radio-player-waveform-height,
+            5rem /* 50px at a 10px root */
+          );
+        }
 
-      section[role='main'] {
-        display: grid;
-        grid-gap: 0.5rem;
-      }
-
-      ia-status-indicator {
-        --ia-theme-icon-width: 1.5em;
-        --ia-theme-primary-text-color: #999;
-
-        display: block;
-        margin: auto;
-      }
-
-      /* mobile view */
-      @media (max-width: 770px) {
         section[role='main'] {
-          grid-template-columns: 25% 1fr;
-          grid-template-areas:
-            'collection-logo title-date'
-            'waveform-scrubber waveform-scrubber'
-            'playback-controls playback-controls'
-            'search-section search-section'
-            'transcript-container transcript-container';
+          display: grid;
+          grid-gap: var(--ia-space-1--);
         }
 
-        .date {
-          text-align: left;
-        }
+        ia-status-indicator {
+          --ia-theme-icon-width: 1.5em;
+          --ia-theme-primary-text-color: var(
+            --ia-color-text-inverse-secondary--
+          );
 
-        ia-transcript-view {
-          --ia-theme-transcript-time-display: none;
-        }
-
-        ia-playback-controls {
-          width: 75%;
+          display: block;
           margin: auto;
         }
 
-        .search-section {
-          width: 75%;
-          margin: auto;
-        }
-      }
+        /* mobile view */
+        @media (max-width: 770px) {
+          section[role='main'] {
+            grid-template-columns: 25% 1fr;
+            grid-template-areas:
+              'collection-logo title-date'
+              'waveform-scrubber waveform-scrubber'
+              'playback-controls playback-controls'
+              'search-section search-section'
+              'transcript-container transcript-container';
+          }
 
-      /* wide view */
-      @media (min-width: 770px) {
-        section[role='main'] {
-          grid-template-columns: 192px 0 250px 1fr;
-          grid-template-areas:
-            'title-date title-date title-date title-date'
-            'collection-logo . playback-controls waveform-scrubber'
-            'search-section transcript-container transcript-container transcript-container';
+          .date {
+            text-align: left;
+          }
+
+          ia-transcript-view {
+            --ia-theme-transcript-time-display: none;
+          }
+
+          ia-playback-controls {
+            width: 75%;
+            margin: auto;
+          }
+
+          .search-section {
+            width: 75%;
+            margin: auto;
+          }
+        }
+
+        /* wide view */
+        @media (min-width: 770px) {
+          section[role='main'] {
+            grid-template-columns: 192px 0 250px 1fr;
+            grid-template-areas:
+              'title-date title-date title-date title-date'
+              'collection-logo . playback-controls waveform-scrubber'
+              'search-section transcript-container transcript-container transcript-container';
+          }
+
+          .title-date {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+          }
+
+          ia-transcript-view {
+            --ia-theme-transcript-time-display: block;
+          }
         }
 
         .title-date {
-          display: flex;
-          justify-content: space-between;
-          align-items: baseline;
+          grid-area: title-date;
+        }
+
+        .title {
+          color: var(--radio-player-title-color--);
+          font: var(--radio-player-title-font--);
+        }
+
+        .date {
+          color: var(--radio-player-date-color--);
+          font: var(--radio-player-date-font--);
+        }
+
+        ia-waveform-progress {
+          width: 100%;
+          height: var(--radio-player-waveform-height--);
+        }
+
+        ia-playback-controls {
+          grid-area: playback-controls;
+        }
+
+        .transcript-container {
+          grid-area: transcript-container;
         }
 
         ia-transcript-view {
-          --ia-theme-transcript-time-display: block;
+          max-width: 600px;
+          display: block;
         }
-      }
 
-      .title-date {
-        grid-area: title-date;
-      }
+        .collection-logo {
+          width: 100%;
+          max-height: var(--radio-player-logo-max-height--);
+          object-fit: contain;
+          grid-area: collection-logo;
+          align-self: center;
+        }
 
-      .title {
-        color: var(--radio-player-title-color--);
-        font: var(--radio-player-title-font--);
-      }
+        .waveform-scrubber-container {
+          width: 100%;
+          height: 100%;
+          grid-area: waveform-scrubber;
+        }
 
-      .date {
-        color: var(--radio-player-date-color--);
-        font: var(--radio-player-date-font--);
-      }
+        .search-section {
+          grid-area: search-section;
+        }
 
-      ia-waveform-progress {
-        width: 100%;
-        height: var(--radio-player-waveform-height--);
-      }
+        .search-results-info {
+          margin-top: 0.5em;
+        }
 
-      ia-playback-controls {
-        grid-area: playback-controls;
-      }
+        ia-expandable-search-bar {
+          display: block;
+          margin: auto;
+        }
 
-      .transcript-container {
-        grid-area: transcript-container;
-      }
+        .no-search-results-message {
+          text-align: center;
+        }
 
-      ia-transcript-view {
-        max-width: 600px;
-        display: block;
-      }
-
-      .collection-logo {
-        width: 100%;
-        max-height: var(--radio-player-logo-max-height--);
-        object-fit: contain;
-        grid-area: collection-logo;
-        align-self: center;
-      }
-
-      .waveform-scrubber-container {
-        width: 100%;
-        height: 100%;
-        grid-area: waveform-scrubber;
-      }
-
-      .search-section {
-        grid-area: search-section;
-      }
-
-      .search-results-info {
-        margin-top: 0.5em;
-      }
-
-      ia-expandable-search-bar {
-        display: block;
-        margin: auto;
-      }
-
-      .no-search-results-message {
-        text-align: center;
-      }
-
-      .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-      }
-    `;
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+      `,
+    ];
   }
 }
