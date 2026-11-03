@@ -989,6 +989,7 @@ describe('AppRoot', () => {
     test('keeps the bar and picker full size under a 10px root font', async () => {
       const removeCss = applyDemoCss();
       const root = document.documentElement;
+      const setupRootSize = root.style.fontSize;
       try {
         stubNarrowViewport(true);
         const el = await appRoot();
@@ -1018,6 +1019,9 @@ describe('AppRoot', () => {
           return sizes;
         };
 
+        // The test setup already sets a 10px root, so measure the browser
+        // default explicitly.
+        root.style.fontSize = '100%';
         const atDefault = await measure();
         // What a story does to suit an element sized for archive.org's root.
         root.style.fontSize = '10px';
@@ -1028,7 +1032,7 @@ describe('AppRoot', () => {
           expect(height, 'a tap target under 44px').to.be.at.least(44);
         }
       } finally {
-        root.style.fontSize = '';
+        root.style.fontSize = setupRootSize;
         removeCss();
       }
     });

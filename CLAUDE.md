@@ -14,6 +14,14 @@ pnpm run lint       # eslint + prettier --check
 pnpm run typecheck  # tsc --noEmit
 ```
 
+Components assume a 10px root font size (`html { font-size: 62.5% }`), as on
+archive.org, so `1rem` is `10px`. The demo and the browser tests set it too.
+
+Design tokens live in `tokens/tokens.json`, the source of truth for colors, type,
+spacing and the rest. `src/themes/tokens.ts` is generated from it and gitignored;
+components read tokens as private aliases (`var(--ia-color-text-primary--)`) via
+`themeStyles`. See README "Design tokens".
+
 CI runs `lint`, `typecheck` and `test` as separate jobs. Nothing but `typecheck`
 checks types: vitest transpiles without checking and eslint isn't type-aware
 here, so run it before pushing rather than finding out from the PR.

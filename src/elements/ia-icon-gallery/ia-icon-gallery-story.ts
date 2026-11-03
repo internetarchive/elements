@@ -273,12 +273,12 @@ export class IAIconGalleryStory extends LitElement {
 
         #container {
           padding: 0 10px 10px;
-          margin-bottom: 1rem;
+          margin-bottom: 1.6rem;
           border: 1px solid rgba(128, 128, 128, 0.5);
         }
 
         h2 {
-          font-size: 0.85rem;
+          font-size: 1.36rem;
           font-weight: 600;
           margin: 10px 0 8px;
         }
@@ -294,7 +294,7 @@ export class IAIconGalleryStory extends LitElement {
           display: flex;
           flex-direction: column;
           gap: 4px;
-          font-size: 0.8rem;
+          font-size: 1.28rem;
         }
 
         .inline {
@@ -304,7 +304,7 @@ export class IAIconGalleryStory extends LitElement {
         }
 
         input[type='search'] {
-          min-width: 14rem;
+          min-width: 22.4rem;
         }
 
         input,
@@ -318,8 +318,8 @@ export class IAIconGalleryStory extends LitElement {
         }
 
         input[type='color'] {
-          width: 3rem;
-          height: 1.9rem;
+          width: 4.8rem;
+          height: 3.04rem;
           padding: 2px;
         }
 
@@ -343,7 +343,7 @@ export class IAIconGalleryStory extends LitElement {
 
         #count,
         #empty {
-          font-size: 0.8rem;
+          font-size: 1.28rem;
           margin: 10px 0;
         }
 
@@ -352,7 +352,7 @@ export class IAIconGalleryStory extends LitElement {
           margin: 0;
           padding: 0;
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
           gap: 10px;
         }
 
@@ -375,17 +375,17 @@ export class IAIconGalleryStory extends LitElement {
         }
 
         .name {
-          font-size: 0.9rem;
+          font-size: 1.44rem;
           font-weight: 600;
         }
 
         .import {
-          font-size: 0.7rem;
+          font-size: 1.12rem;
           overflow-wrap: anywhere;
         }
 
         .copy-btn {
-          font-size: 0.7rem;
+          font-size: 1.12rem;
           line-height: 1.4;
           padding: 1px 7px;
         }

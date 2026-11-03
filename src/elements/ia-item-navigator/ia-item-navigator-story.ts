@@ -661,7 +661,7 @@ export class IAItemNavigatorStory extends LitElement {
         background: #1a1a1a;
         color: #fff;
         padding: 8px 12px;
-        font-size: 0.9rem;
+        font-size: 1.44rem;
       }
 
       .demo-header .brand {
@@ -713,14 +713,14 @@ export class IAItemNavigatorStory extends LitElement {
       }
 
       .hint {
-        font-size: 0.78rem;
+        font-size: 1.248rem;
         color: #555;
         margin: 0.5rem 0;
         padding-left: 1.25rem;
       }
 
       table {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.8rem;
       }
     `;
   }

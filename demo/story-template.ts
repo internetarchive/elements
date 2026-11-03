@@ -331,7 +331,7 @@ export class StoryTemplate extends LitElement {
         #container {
           background: #f0f0f0;
           padding: 0 10px 10px;
-          margin-bottom: 1rem;
+          margin-bottom: 1.6rem;
           border: 1px solid #ccc;
         }
 
@@ -352,7 +352,7 @@ export class StoryTemplate extends LitElement {
         }
 
         h2 {
-          font-size: 0.85rem;
+          font-size: 1.36rem;
           font-weight: 600;
           margin: 10px 0 8px;
           display: flex;
@@ -361,7 +361,7 @@ export class StoryTemplate extends LitElement {
         }
 
         h3 {
-          font-size: 0.7rem;
+          font-size: 1.12rem;
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.06em;
@@ -379,7 +379,7 @@ export class StoryTemplate extends LitElement {
           align-items: center;
           gap: 5px;
           margin-top: 6px;
-          font-size: 0.7rem;
+          font-size: 1.12rem;
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.06em;
@@ -393,7 +393,7 @@ export class StoryTemplate extends LitElement {
 
         .details-toggle::before {
           content: '▾';
-          font-size: 0.65rem;
+          font-size: 1.04rem;
           display: inline-block;
           transition: transform 0.15s;
         }
@@ -407,7 +407,7 @@ export class StoryTemplate extends LitElement {
           border: 1px solid #bbb;
           border-radius: 3px;
           padding: 1px 7px;
-          font-size: 0.7rem;
+          font-size: 1.12rem;
           cursor: pointer;
           color: #555;
           line-height: 1.4;
@@ -455,7 +455,7 @@ export class StoryTemplate extends LitElement {
         }
 
         .section-placeholder {
-          font-size: 0.78rem;
+          font-size: 1.248rem;
           color: #767676;
           margin: 4px 0;
           font-style: italic;
@@ -463,7 +463,7 @@ export class StoryTemplate extends LitElement {
 
         .details-inner syntax-highlighter {
           display: block;
-          --syntax-max-height: 5.5rem;
+          --syntax-max-height: 8.8rem;
         }
 
         /* One element on the page means nothing else is competing for the

@@ -18,31 +18,31 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Input font size',
     cssVariable: '--ia-theme-font-size-lg',
-    defaultValue: '2.25rem',
+    defaultValue: '3.6rem',
     inputType: 'text',
   },
   {
     label: 'Link and error font size',
     cssVariable: '--ia-theme-font-size-standard',
-    defaultValue: '0.875rem',
+    defaultValue: '1.4rem',
     inputType: 'text',
   },
   {
     label: 'Link font color',
     cssVariable: '--ia-theme-link-color',
-    defaultValue: '#4b64ff',
+    defaultValue: '#3a4fd6',
     inputType: 'color',
   },
   {
     label: 'Error message/indicator color',
     cssVariable: '--ia-theme-color-danger',
-    defaultValue: '#e51c23',
+    defaultValue: '#b8161c',
     inputType: 'color',
   },
   {
     label: 'Success indicator color',
     cssVariable: '--ia-theme-color-success',
-    defaultValue: '#31a481',
+    defaultValue: '#20705a',
     inputType: 'color',
   },
 ];

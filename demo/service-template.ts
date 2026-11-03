@@ -100,7 +100,7 @@ export class ServiceTemplate extends LitElement {
         #container {
           background: #f0f0f0;
           padding: 0 10px 10px;
-          margin-bottom: 1rem;
+          margin-bottom: 1.6rem;
           border: 1px solid #ccc;
         }
 
@@ -121,13 +121,13 @@ export class ServiceTemplate extends LitElement {
         }
 
         h2 {
-          font-size: 0.85rem;
+          font-size: 1.36rem;
           font-weight: 600;
           margin: 10px 0 8px;
         }
 
         h3 {
-          font-size: 0.7rem;
+          font-size: 1.12rem;
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.06em;
@@ -140,7 +140,7 @@ export class ServiceTemplate extends LitElement {
           align-items: center;
           gap: 5px;
           margin-top: 6px;
-          font-size: 0.7rem;
+          font-size: 1.12rem;
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.06em;
@@ -154,7 +154,7 @@ export class ServiceTemplate extends LitElement {
 
         .details-toggle::before {
           content: '▾';
-          font-size: 0.65rem;
+          font-size: 1.04rem;
           display: inline-block;
           transition: transform 0.15s;
         }
@@ -170,7 +170,7 @@ export class ServiceTemplate extends LitElement {
 
         .details-inner syntax-highlighter {
           display: block;
-          --syntax-max-height: 8rem;
+          --syntax-max-height: 12.8rem;
         }
 
         .details-inner.focused syntax-highlighter {
