@@ -161,7 +161,7 @@ describe('IA Combo Box', () => {
       expect(highlightedOption.textContent.trim()).to.equal('Baz');
     });
 
-    test('marks the highlighted option with a bar, not just a soft fill', async () => {
+    test('rings the highlighted option, not just a soft fill', async () => {
       const el = await fixture<IAComboBox>(html`
         <ia-combo-box .options=${BASIC_OPTIONS} value="baz"></ia-combo-box>
       `);
@@ -171,8 +171,11 @@ describe('IA Combo Box', () => {
       const highlighted = el.shadowRoot!.querySelector(
         '.option.highlight',
       ) as HTMLElement;
-      expect(getComputedStyle(highlighted).boxShadow).to.equal(
-        'rgb(58, 79, 214) 3px 0px 0px 0px inset',
+      const style = getComputedStyle(highlighted);
+      expect(style.outlineColor).to.equal('rgb(58, 79, 214)');
+      expect(style.outlineOffset).to.equal('-2px');
+      expect(style.boxShadow).to.equal(
+        'rgb(255, 255, 255) 0px 0px 0px 4px inset',
       );
     });
 

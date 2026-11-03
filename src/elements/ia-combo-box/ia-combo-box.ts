@@ -1297,6 +1297,7 @@ export class IAComboBox extends LitElement {
         outline: var(--ia-size-focus-ring--) solid
           var(--ia-color-border-focus--);
         outline-offset: calc(-1 * var(--ia-size-focus-ring--));
+        box-shadow: var(--ia-shadow-focus-band--);
       }
 
       #clear-button {
@@ -1370,10 +1371,14 @@ export class IAComboBox extends LitElement {
       }
 
       /* The option the keyboard is on: the soft selected tier, marked with
-         a bar in the focus color, since the fill alone is 1.18:1 on white. */
+         the inset focus ring and its band, since the fill alone is 1.18:1 on
+         white. */
       .highlight {
         background-color: var(--ia-color-selected-soft-fill--);
-        box-shadow: inset 3px 0 0 var(--ia-color-border-focus--);
+        outline: var(--ia-size-focus-ring--) solid
+          var(--ia-color-border-focus--);
+        outline-offset: calc(-1 * var(--ia-size-focus-ring--));
+        box-shadow: var(--ia-shadow-focus-band--);
       }
 
       .disabled,

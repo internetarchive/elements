@@ -50,7 +50,7 @@ describe('IADropdown', () => {
     ).to.equal(4);
   });
 
-  test('rings a focused option in its own text color on the selected row', async () => {
+  test('keeps the blue ring on the selected row, with its dark band', async () => {
     const options: OptionInterface[] = [
       { id: 'a', label: 'Relevance' },
       { id: 'b', label: 'Date added' },
@@ -69,8 +69,8 @@ describe('IADropdown', () => {
     await userEvent.keyboard('{Tab}');
     selected.focus();
     const style = getComputedStyle(selected);
-    expect(style.outlineColor).to.equal(style.color);
-    expect(style.outlineColor).to.equal('rgb(255, 255, 255)');
+    expect(style.outlineColor).to.equal('rgb(154, 168, 255)');
+    expect(style.boxShadow).to.equal('rgb(44, 44, 44) 0px 0px 0px 4px inset');
   });
 
   test('rings the trigger in the dark-surface focus color by default', async () => {
