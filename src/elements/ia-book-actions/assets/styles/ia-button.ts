@@ -21,12 +21,12 @@ const warningButtonBorderColor = css`#ec7939`;
 
 export default css`
   .ia-button {
-    min-height: 3rem;
+    min-height: var(--ia-size-control-sm--);
     cursor: pointer;
     color: ${whiteColor};
     line-height: normal;
-    border-radius: 0.4rem;
-    font-size: 1.4rem;
+    border-radius: var(--ia-radius-default--);
+    font-size: var(--ia-font-size-md--);
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     border: 1px solid transparent;
     white-space: nowrap;
@@ -36,7 +36,7 @@ export default css`
     align-items: center;
     transition: all 0.1s ease 0s;
     vertical-align: middle;
-    padding: 0 1rem;
+    padding: 0 var(--ia-space-2--);
     outline-color: ${whiteColor};
     outline-offset: -4px;
     user-select: none;

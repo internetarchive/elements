@@ -110,7 +110,7 @@ export class IADonationBadgedInput extends LitElement {
           );
           --donation-badged-input-required-margin--: var(
             --ia-donation-badged-input-required-margin,
-            0 0.25rem 0 0
+            0 0.25rem 0 0 /* 2.5px at a 10px root */
           );
           --donation-badged-input-required-font-size--: var(
             --ia-donation-badged-input-required-font-size,

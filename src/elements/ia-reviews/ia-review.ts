@@ -25,6 +25,7 @@ import linkUrlsInText from './utils/link-urls-in-text';
 import collapseSpace from './utils/collapse-space';
 
 import deleteIcon from './assets/delete-icon.svg';
+import { tokenStyles } from '@src/themes/tokens';
 
 /** What became of a deletion: queued, or failed with the server's message if it sent one */
 type DeleteOutcome =
@@ -336,6 +337,8 @@ export class IAReview extends LitElement {
 
   static get styles(): CSSResultGroup {
     return css`
+      ${tokenStyles}
+
       :host {
         font-family: var(
           --ia-font-stack,
@@ -360,7 +363,7 @@ export class IAReview extends LitElement {
       }
 
       .top-line {
-        margin-bottom: 0.5rem;
+        margin-bottom: var(--ia-space-1--);
       }
 
       .top-line > * {
@@ -368,7 +371,7 @@ export class IAReview extends LitElement {
       }
 
       .review-star {
-        width: 1rem;
+        width: 1rem; /* 10px at a 10px root */
         display: inline-block;
       }
 
@@ -393,7 +396,7 @@ export class IAReview extends LitElement {
       }
 
       .subject {
-        margin-bottom: 0.5rem;
+        margin-bottom: var(--ia-space-1--);
       }
 
       .delete-btn {
