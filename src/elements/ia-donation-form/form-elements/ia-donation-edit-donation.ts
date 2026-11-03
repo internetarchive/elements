@@ -15,6 +15,7 @@ import { formatUsd } from '../localized-format';
 
 import themeStyles from '@src/themes/theme-styles';
 import { CurrencyValidator } from '../currency-validator';
+import { parseAmount } from '../parse-amount';
 import {
   DonationPaymentInfo,
   defaultDonationAmounts,
@@ -462,7 +463,10 @@ export class IADonationEditDonation extends LitElement {
 
   private get customAmountDisplayValue(): string {
     if (!this.isCustomAmount) return '';
-    return currency(this.donationInfo.amount, { symbol: '' }).format();
+    return currency(this.donationInfo.amount, {
+      symbol: '',
+      separator: '',
+    }).format();
   }
 
   private get customAmountTemplate(): TemplateResult {
@@ -527,7 +531,7 @@ export class IADonationEditDonation extends LitElement {
   }
 
   private handleCustomAmountInput(value: string): void {
-    const amount = parseFloat(value);
+    const amount = parseAmount(value);
     if (isNaN(amount)) {
       this.dispatchEditDonationError(
         EditDonationInfoStatus.InvalidDonationAmount,

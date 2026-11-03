@@ -184,6 +184,52 @@ describe('IADonationEditDonation', () => {
     );
   });
 
+  test('keeps a custom amount of 1000 or more after the field is blurred and focused again', async () => {
+    const el = await fixture<IADonationEditDonation>(html`
+      <ia-donation-edit-donation
+        .donationInfo=${fiveDollars()}
+      ></ia-donation-edit-donation>
+    `);
+    const input = customInput(el);
+    input.focus();
+    typeCustomAmount(el, '1234.50');
+    await elementUpdated(el);
+    expect(el.donationInfo.amount).to.equal(1234.5);
+
+    input.dispatchEvent(new FocusEvent('blur'));
+    await elementUpdated(el);
+    expect(input.value).to.equal('1234.50');
+
+    input.dispatchEvent(new FocusEvent('focus'));
+    await elementUpdated(el);
+    expect(el.donationInfo.amount).to.equal(1234.5);
+    expect(input.value).to.equal('1234.50');
+  });
+
+  test('shows a custom amount of 2500 without a thousands separator', async () => {
+    const el = await fixture<IADonationEditDonation>(html`
+      <ia-donation-edit-donation
+        .donationInfo=${new DonationPaymentInfo({
+          donationType: DonationType.OneTime,
+          amount: 2500,
+          coverFees: false,
+        })}
+      ></ia-donation-edit-donation>
+    `);
+    expect(customInput(el).value).to.equal('2500.00');
+  });
+
+  test('reads a pasted 1,234.50 as 1234.50', async () => {
+    const el = await fixture<IADonationEditDonation>(html`
+      <ia-donation-edit-donation
+        .donationInfo=${fiveDollars()}
+      ></ia-donation-edit-donation>
+    `);
+    typeCustomAmount(el, '1,234.50');
+    await elementUpdated(el);
+    expect(el.donationInfo.amount).to.equal(1234.5);
+  });
+
   test('selects the custom radio when the custom amount changes', async () => {
     const el = await fixture<IADonationEditDonation>(html`
       <ia-donation-edit-donation
