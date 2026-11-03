@@ -2,7 +2,7 @@ import { html, LitElement, type TemplateResult } from 'lit';
 import { query } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import {
   HostedFieldContainer,

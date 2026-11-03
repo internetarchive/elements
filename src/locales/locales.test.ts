@@ -4,7 +4,9 @@ import { html } from 'lit';
 import { afterEach, describe, expect, test } from 'vitest';
 
 import xliff from '../../xliff/es.xlf?raw';
+import frXliff from '../../xliff/fr.xlf?raw';
 import { templates } from './es';
+import { templates as frTemplates } from './fr';
 import type { IAPlaybackControls } from '@src/elements/ia-playback-controls/ia-playback-controls';
 import '@src/elements/ia-playback-controls/ia-playback-controls';
 import type { IAStatusIndicator } from '@src/elements/ia-status-indicator/ia-status-indicator';
@@ -17,19 +19,25 @@ import { TranscriptEntryConfig } from '@src/elements/ia-transcript-view/models';
 // and this file stands in for that app.
 const { setLocale } = configureLocalization({
   sourceLocale: 'en',
-  targetLocales: ['es'],
-  loadLocale: () => import('./es'),
+  targetLocales: ['es', 'fr'],
+  loadLocale: (locale) => import(`./${locale}.ts`),
 });
 
 /** Units in the XLIFF with a non-blank target. */
-const translatedIds = [
-  ...xliff.matchAll(/<trans-unit id="([^"]+)"[^>]*>([\s\S]*?)<\/trans-unit>/g),
-]
-  .filter(([, , unit]) => {
-    const target = /<target>([\s\S]*?)<\/target>/.exec(unit);
-    return target !== null && target[1].trim() !== '';
-  })
-  .map(([, id]) => id);
+function translatedUnits(source: string): string[] {
+  return [
+    ...source.matchAll(
+      /<trans-unit id="([^"]+)"[^>]*>([\s\S]*?)<\/trans-unit>/g,
+    ),
+  ]
+    .filter(([, , unit]) => {
+      const target = /<target>([\s\S]*?)<\/target>/.exec(unit);
+      return target !== null && target[1].trim() !== '';
+    })
+    .map(([, id]) => id);
+}
+
+const translatedIds = translatedUnits(xliff);
 
 function labelOf(el: IAPlaybackControls, id: string): string | null {
   return el.shadowRoot?.getElementById(id)?.getAttribute('aria-label') ?? null;
@@ -90,5 +98,29 @@ describe('published es locale', () => {
     expect(labelOf(controls, 'back-btn')).toBe('Retroceder diez segundos');
     expect(titleOf(indicator)).toBe('Cargando...');
     expect(music.shadowRoot?.textContent).toBe('[Transcripción no disponible]');
+  });
+});
+
+describe('published fr locale', () => {
+  afterEach(async () => {
+    await setLocale('en');
+  });
+
+  test('has exactly the translated units in the XLIFF', () => {
+    expect(Object.keys(frTemplates).sort()).toEqual(
+      translatedUnits(frXliff).sort(),
+    );
+  });
+
+  test('renders an element in French once the app sets the locale', async () => {
+    await setLocale('fr');
+    const el = await fixture<IAPlaybackControls>(
+      html`<ia-playback-controls .volume=${0.5}></ia-playback-controls>`,
+    );
+
+    expect(labelOf(el, 'back-btn')).toBe('Reculer de dix secondes');
+    expect(labelOf(el, 'volume-control-btn')).toBe(
+      'Volume, actuellement à 50 pour cent',
+    );
   });
 });

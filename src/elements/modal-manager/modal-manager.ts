@@ -7,7 +7,7 @@ import {
   PropertyValues,
 } from 'lit';
 import { property, query } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import Modal from './shoelace/modal';
 import { getDeepestActiveElement } from './shoelace/active-elements';

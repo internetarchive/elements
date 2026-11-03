@@ -1,4 +1,5 @@
 import type { AnalyticsManagerInterface } from './analytics-manager';
+import { getVisitorStatus } from './visitor-status';
 
 export interface AnalyticsHelperInterface {
   /**
@@ -16,7 +17,7 @@ export interface AnalyticsHelperInterface {
    * Tracks a page view
    *
    * Appends several environmental values like
-   * locale, timezone, referrer, and others.
+   * locale, timezone, referrer, new or returning visitor, and others.
    *
    * @param {{
    *     mediaType?: string;
@@ -70,6 +71,11 @@ export class AnalyticsHelpers implements AnalyticsHelperInterface {
     event.timediff = (new Date().getTimezoneOffset() / 60) * -1; // *timezone* diff from UTC
     event.locale = navigator.language;
     event.referrer = document.referrer === '' ? '-' : document.referrer;
+
+    const visitor = getVisitorStatus();
+    if (visitor) {
+      event.visitor = visitor;
+    }
 
     const { domInteractive, defaultFontSize } = this;
     if (domInteractive) {

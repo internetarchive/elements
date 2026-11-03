@@ -10,7 +10,7 @@ import video from '@src/icons/topnav-video';
 import web from '@src/icons/topnav-web';
 import { toSentenceCase } from './lib/helpers';
 import { property } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';

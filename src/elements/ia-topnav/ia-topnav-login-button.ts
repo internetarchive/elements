@@ -3,7 +3,7 @@ import TrackedElement from './tracked-element';
 import userIcon from '@src/icons/topnav-user';
 import { formatUrl, makeBooleanString } from './lib/helpers';
 import { property, query } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';

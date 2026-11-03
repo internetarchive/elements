@@ -1,6 +1,6 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { SharedResizeObserver } from '@internetarchive/shared-resize-observer';
 
 import './ia-feature-feedback';
