@@ -9,7 +9,7 @@ import {
 } from 'lit';
 import { property } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import {
   SharedResizeObserver,

@@ -7,7 +7,7 @@ import {
   type TemplateResult,
 } from 'lit';
 import { property, state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { localized, msg } from '@lit/localize';
 
 import { SectionMarkerMode } from './models';

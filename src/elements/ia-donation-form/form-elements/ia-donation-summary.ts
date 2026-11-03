@@ -6,7 +6,7 @@ import {
   type TemplateResult,
 } from 'lit';
 import { property } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { msg, str } from '@lit/localize';
 import currency from 'currency.js';
 

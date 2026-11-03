@@ -13,7 +13,7 @@ import {
   query,
   queryAssignedElements,
 } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { styleMap } from 'lit/directives/style-map.js';
 import { localized, msg } from '@lit/localize';
 

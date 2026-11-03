@@ -8,7 +8,7 @@ import {
   PropertyValues,
 } from 'lit';
 import { property, query } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { classMap } from 'lit/directives/class-map.js';
 import { localized, msg } from '@lit/localize';
 import {

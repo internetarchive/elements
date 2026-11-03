@@ -7,7 +7,7 @@ import {
   type TemplateResult,
 } from 'lit';
 import { property } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { localized, msg, str } from '@lit/localize';
 
 import nextResultIcon from './assets/next-result';

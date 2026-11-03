@@ -7,7 +7,8 @@ import {
   type CSSResultGroup,
 } from 'lit';
 import { property } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
+import { downloadUrl } from '@src/utils/download-url/download-url';
 import themeStyles from '@src/themes/theme-styles';
 
 /**
@@ -34,7 +35,7 @@ export class IAItemNavNoTheaterAvailable extends LitElement {
   }
 
   get downloadUrl(): string {
-    return `/download/${this.identifier}`;
+    return downloadUrl(this.identifier ?? '', '', '');
   }
 
   render(): TemplateResult {

@@ -12,7 +12,7 @@ import './ia-topnav-media-menu';
 import '@src/elements/ia-sr-only-text/ia-sr-only-text';
 import { formatUrl } from './lib/helpers';
 import { property, query, state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import {
   IATopNavConfig,
   IATopNavSecondIdentitySlotMode,

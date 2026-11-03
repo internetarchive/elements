@@ -1,6 +1,6 @@
 import { css, html, LitElement, nothing, type CSSResultGroup } from 'lit';
 import { state } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { getCookie, removeCookie, setCookie } from 'typescript-cookie';
 import serviceSource from './user-service.ts?raw';
 import errorSource from './user-service-error.ts?raw';
