@@ -29,17 +29,14 @@ afterEach(() => {
 });
 
 describe('<ia-topnav>', () => {
-  test('draws the menu divider in #666 and the open media tab in its panel color', async () => {
+  test('draws the menu divider in #666 and the open media tab in #333', async () => {
     const el = await fixture<IATopNav>(html`<ia-topnav></ia-topnav>`);
     const style = getComputedStyle(el);
     const value = (name: string) => style.getPropertyValue(name).trim();
 
     expect(value('--dropdownMenuDivider')).to.equal('#666666');
-    // The selected desktop media tab blends into the slider it opens.
-    expect(value('--activeDesktopMenuIcon')).to.equal(
-      value('--mediaSliderDesktopBg'),
-    );
-    expect(value('--activeDesktopMenuIcon')).to.equal('#474747');
+    // #333, where the open tab's media-type glyph clears 3:1.
+    expect(value('--activeDesktopMenuIcon')).to.equal('#333333');
   });
 
   test('dispatches an analyticsClick event when trackClick event fired', async () => {
