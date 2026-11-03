@@ -28,6 +28,20 @@ function isEnglish(locale: string): boolean {
   return locale === 'en' || locale.startsWith('en-');
 }
 
+/** True when the current language writes decimals with a comma, like Spanish. */
+export function usesCommaDecimal(): boolean {
+  const locale = currentLocale();
+  if (isEnglish(locale)) return false;
+  try {
+    const decimal = new Intl.NumberFormat(locale)
+      .formatToParts(1.1)
+      .find((part) => part.type === 'decimal');
+    return decimal?.value === ',';
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Formats a US dollar amount for the current language. English keeps the
  * `$10.00` form. Other languages get `Intl.NumberFormat`'s USD form, like

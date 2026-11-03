@@ -1,3 +1,5 @@
+import { usesCommaDecimal } from './localized-format';
+
 /** Something that can veto a keystroke in a text field. */
 export interface FieldValidatorInterface {
   keydown(e: KeyboardEvent): void;
@@ -10,6 +12,9 @@ export interface FieldValidatorInterface {
  *
  * Because it checks the value the keystroke *would* produce, it accounts for
  * the cursor position and any selected text being replaced.
+ *
+ * In a language that writes decimals with a comma, a comma keystroke is typed
+ * as a decimal point.
  */
 export class CurrencyValidator implements FieldValidatorInterface {
   keydown(e: KeyboardEvent): void {
@@ -33,8 +38,23 @@ export class CurrencyValidator implements FieldValidatorInterface {
     const value = input.value;
     const prefix = value.slice(0, input.selectionStart ?? 0);
     const suffix = value.slice(input.selectionEnd ?? 0);
-    const newValue = `${prefix}${char}${suffix}`;
     const regex = /^[0-9]+(\.[0-9]{0,2})?$/; // xxxxx.xx
+
+    if (char === ',' && usesCommaDecimal()) {
+      e.preventDefault();
+      if (regex.test(`${prefix}.${suffix}`)) {
+        input.setRangeText(
+          '.',
+          input.selectionStart ?? 0,
+          input.selectionEnd ?? 0,
+          'end',
+        );
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      return;
+    }
+
+    const newValue = `${prefix}${char}${suffix}`;
     const valid = regex.test(newValue);
 
     if (!valid) {
