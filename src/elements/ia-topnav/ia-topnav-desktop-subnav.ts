@@ -7,6 +7,7 @@ import donateIcon from '@src/icons/topnav-donate';
 import { formatUrl } from './lib/helpers';
 import { IATopNavLink } from './models';
 import themeStyles from '@src/themes/theme-styles';
+import topnavFocusStyles from './focus-styles';
 
 @customElement('ia-topnav-desktop-subnav')
 export class DesktopSubnav extends TrackedElement {
@@ -44,6 +45,7 @@ export class DesktopSubnav extends TrackedElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      topnavFocusStyles,
       css`
         ul {
           position: relative;
@@ -64,7 +66,6 @@ export class DesktopSubnav extends TrackedElement {
         a {
           text-decoration: none;
           color: var(--subnavLinkColor);
-          outline: none;
         }
 
         a:hover,
@@ -77,7 +78,7 @@ export class DesktopSubnav extends TrackedElement {
           width: calc(16 * var(--topnavUnit--));
           height: calc(16 * var(--topnavUnit--));
           vertical-align: top;
-          color: #f00;
+          color: var(--ia-color-brand-donate--);
         }
       `,
     ];
