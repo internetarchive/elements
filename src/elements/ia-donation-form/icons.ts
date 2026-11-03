@@ -5,7 +5,7 @@ import googlePay from '@src/icons/googlepay';
 import lock from '@src/icons/lock';
 import paypal from '@src/icons/paypal';
 import venmo from '@src/icons/venmo';
-import { iconBox } from '@src/util/icon-box';
+import { iconBox } from '@src/utils/icon-box';
 
 /**
  * The form's icons, wrapped in a box the host sizes (see `iconBoxStyles`).

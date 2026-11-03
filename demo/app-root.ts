@@ -1,7 +1,7 @@
 import { html, LitElement, nothing, type TemplateResult } from 'lit';
 import { query, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 // unsafeHTML is needed to render dynamic custom-element tag names;
 // Lit's html`` tag cannot render variable tag names directly.
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';

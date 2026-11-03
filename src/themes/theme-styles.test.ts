@@ -1,7 +1,7 @@
 import { fixture } from '@open-wc/testing-helpers';
 import { afterEach, describe, expect, test } from 'vitest';
 import { html, LitElement } from 'lit';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import themeStyles from './theme-styles';
 
