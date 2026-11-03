@@ -1,5 +1,6 @@
 import { fixture } from '@open-wc/testing-helpers';
-import { describe, expect, test } from 'vitest';
+import { configureLocalization } from '@lit/localize';
+import { afterEach, describe, expect, test } from 'vitest';
 import { html } from 'lit';
 
 import { DonationType } from '../models/donation-type';
@@ -81,5 +82,46 @@ describe('IADonationConfirmModal', () => {
 
     expect(confirmed).to.equal(1);
     expect(cancelled).to.equal(1);
+  });
+});
+
+// The host app configures localization once. This stands in for it.
+const { setLocale } = configureLocalization({
+  sourceLocale: 'en',
+  targetLocales: ['es'],
+  loadLocale: () => import('@src/locales/es'),
+});
+
+describe('IADonationConfirmModal donation type', () => {
+  afterEach(async () => {
+    await setLocale('en');
+  });
+
+  const modal = (donationType: DonationType) =>
+    fixture<IADonationConfirmModal>(
+      html`<ia-donation-confirm-modal
+        .amount=${33}
+        .currencyType=${'USD'}
+        .donationType=${donationType}
+      ></ia-donation-confirm-modal>`,
+    );
+
+  test('says one-time and monthly in English', async () => {
+    expect(text(await modal(DonationType.OneTime))).to.contain(
+      'make a one-time donation',
+    );
+    expect(text(await modal(DonationType.Monthly))).to.contain(
+      'make a monthly donation',
+    );
+  });
+
+  test('says the donation type in Spanish', async () => {
+    await setLocale('es');
+    expect(text(await modal(DonationType.OneTime))).to.contain(
+      'una donación única',
+    );
+    expect(text(await modal(DonationType.Monthly))).to.contain(
+      'una donación mensual',
+    );
   });
 });
