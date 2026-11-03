@@ -33,7 +33,9 @@
     "ghpages:build": "wireit",
     "strings:extract": "wireit",
     "strings:build": "wireit",
-    "strings:translate": "node scripts/translate-xliff.mts"
+    "strings:translate": "node scripts/translate-xliff.mts",
+    "i18n:draft": "pnpm run strings:extract && pnpm run strings:translate",
+    "i18n:status": "node scripts/i18n-status.mts"
   },
   "dependencies": {
     "@internetarchive/analytics-manager": "^0.1.5",
