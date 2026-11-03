@@ -16,7 +16,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Menu background',
     cssVariable: '--dropdownBgColor',
-    defaultValue: '#333333',
+    defaultValue: '#2c2c2c',
     inputType: 'color',
   },
   {
@@ -34,19 +34,19 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Border color',
     cssVariable: '--dropdownBorderColor',
-    defaultValue: '#ffffff',
+    defaultValue: '#474747',
     inputType: 'color',
   },
   {
     label: 'Selected option background',
     cssVariable: '--dropdownSelectedBgColor',
-    defaultValue: '#ffffff',
+    defaultValue: '#666666',
     inputType: 'color',
   },
   {
     label: 'Selected option text',
     cssVariable: '--dropdownSelectedTextColor',
-    defaultValue: '#2c2c2c',
+    defaultValue: '#ffffff',
     inputType: 'color',
   },
   {
@@ -377,8 +377,6 @@ export class IADropdownStory extends LitElement {
         padding: 10px;
         background: #2c2c2c;
         border-radius: 4px;
-        /* A dark host, so the trigger's focus ring takes the dark-surface color. */
-        --dropdownFocusRingColor: #9aa8ff;
       }
 
       #basic-dropdown {
