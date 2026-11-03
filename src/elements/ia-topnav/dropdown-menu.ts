@@ -217,6 +217,7 @@ export default class DropdownMenu extends TrackedElement {
            drawn outside. */
         a {
           --topnav-focus-offset: calc(-1 * var(--ia-size-focus-ring--));
+          --topnav-focus-band: var(--ia-shadow-focus-band-inverse--);
         }
 
         .info-item {
