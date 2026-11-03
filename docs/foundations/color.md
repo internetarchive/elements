@@ -254,6 +254,22 @@ with a white label (5.95:1), the one green that carries white text
 track; donate green on it is 4.88:1. It is never a background for body text.
 Don't use the donate red for generic errors — use `--ia-color-status-danger`.
 
+## Donation
+
+The donation form's amount picker keeps its own look, gold for the chosen amount, rather
+than the soft selected tier ([D-62](../DECISIONS.md#d-62)):
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `--ia-color-donation-amount-fill` | `#ffffff` | each amount button |
+| `--ia-color-donation-amount-text` | `#2c2c2c` | the amount's label — 13.97:1 on white |
+| `--ia-color-donation-amount-border` | `#333333` | each amount's edge — 12.22:1 against the page |
+| `--ia-color-donation-amount-selected-fill` | `#f9bf3b` | the chosen amount |
+| `--ia-color-donation-amount-selected-text` | `#2c2c2c` | the chosen amount's label — 8.34:1 on the gold |
+| `--ia-color-palette-gold-400` | `#f9bf3b` | the palette value behind `-selected-fill`; 1.67:1 against white, so the border carries the boundary. Never referenced directly |
+
+The chosen amount pairs the gold with `aria-checked` on its radio, never color alone.
+
 ## Checking your work
 
 ```bash

@@ -21,7 +21,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Border',
     cssVariable: '--ia-donation-thermometer-border',
-    defaultValue: '1px solid #23765d',
+    defaultValue: '1px solid #20705a',
     inputType: 'text',
     presets: [{ label: 'None', value: '0', note: 'donation banner' }],
     presetsInline: true,
@@ -29,7 +29,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Border radius',
     cssVariable: '--ia-donation-thermometer-border-radius',
-    defaultValue: '9999px',
+    defaultValue: '999rem',
     inputType: 'text',
     presets: [{ label: 'Square', value: '0' }],
     presetsInline: true,
@@ -46,7 +46,7 @@ const styleInputSettings: StyleInputSettings[] = [
     section: 'Color',
     label: 'Fill',
     cssVariable: '--ia-donation-thermometer-fill-color',
-    defaultValue: '#23765d',
+    defaultValue: '#20705a',
     inputType: 'color',
   },
   {
@@ -67,7 +67,7 @@ const styleInputSettings: StyleInputSettings[] = [
     section: 'Color',
     label: 'Value on track',
     cssVariable: '--ia-donation-thermometer-value-on-track-color',
-    defaultValue: '#23765d',
+    defaultValue: '#20705a',
     inputType: 'color',
   },
   {

@@ -227,6 +227,9 @@ Where it still differs:
 
 - `ghost` takes the surrounding text color rather than `--ia-color-text-primary`, so it
   stays legible when it sits on a dark surface.
+- A disabled `ghost`, `link` or `danger-link` button keeps no fill and no border: it stays
+  transparent with `--ia-color-text-disabled` (`#666`) text, where the spec gives every
+  disabled button the `#666` disabled fill. `mode="disabled"` still takes the fill.
 - The `--ia-theme-button-*` hooks set the `md` size. `sm` and `lg` use their tokens.
 
 Its size comes from `--ia-theme-button-width` (default `fit-content`) and
