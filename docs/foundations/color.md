@@ -35,7 +35,7 @@ Most role names say what they are for. The ones that don't:
 
 ## Surfaces
 
-Four surfaces, all already live.
+Eight surfaces, all already live.
 
 | Token | Value | Where it is live today |
 | --- | --- | --- |
@@ -80,12 +80,18 @@ and focus tokens re-point automatically.
 | --- | --- | --- | --- | --- | --- |
 | `--ia-color-text-inverse` | `#ffffff` | 21:1 | 15.91:1 | 13.97:1 | 9.29:1 |
 | `--ia-color-text-inverse-secondary` | `#cccccc` | 13.08:1 | 9.91:1 | 8.70:1 | 5.79:1 |
+| `--ia-color-text-inverse-tertiary` | `#999999` | 7.37:1 | 5.58:1 | 4.90:1 | — |
 | `--ia-color-text-inverse-link` | `#9aa8ff` **[changed]** | 9.42:1 | 7.14:1 | 6.26:1 | — |
 | `--ia-color-text-inverse-link-hover` | `#ffffff` | 21:1 | 15.91:1 | 13.97:1 | 9.29:1 |
 
 The live `#aaa` subnav link is 5.44:1 on `#333` and fine there, but only 4.00:1 on
 `#474747` — which is also a live surface. `#ccc` clears every dark surface, so it is the
-single inverse-secondary value.
+single inverse-secondary value. The exception is the `#666` collection surface, where
+`#ccc` is 3.58:1: there, secondary text and links use `--ia-color-text-inverse` (white,
+5.74:1).
+
+`#999` (`-tertiary`) is dim text on the darkest surfaces only: `#222`, `#2c2c2c` and
+`#000`. Never use it on chrome-secondary `#333`, where it is 4.43:1.
 
 ## Links
 
@@ -115,7 +121,7 @@ Five CTA intents, already named in live as `--ia-theme-*-cta-*` (offshoot's
 | donate | `#20705a` | `#20705a` | `#ffffff` | 5.95:1 |
 | disabled | `#666666` | `#999999` | `#ffffff` | 5.74:1 |
 
-Three notes on the changes:
+Four notes on the changes:
 
 - **Danger.** Live had three near-identical reds: `#d9534f` fill, `#d43f3a` border and
   `#e51c23` as `--classic-red`. The fill failed with white text (3.96:1). Consolidating
@@ -146,7 +152,7 @@ Three notes on the changes:
 | `--ia-color-status-info` | `#194880` | neutral notices |
 
 Each of these clears 4.5:1 as text on all three light surfaces. The live `#31a481`
-mint green is 3.11:1 with white and 4.37:1 as text on the page background; it is kept
+mint green is 3.11:1 with white and 3.01:1 as text on the page background; it is kept
 as a [legacy](#legacy) value for reference but is not a text or fill color.
 [D-10](../DECISIONS.md#d-10)
 
@@ -229,14 +235,15 @@ the interface still makes sense.
 
 Live values that no role points at, kept so a live name can still be traced to a value:
 `--ia-color-legacy-gray-550` (`#6f6f6f`), `-blue-500` (`#4b64ff`, the live link color),
-`-orange-400` (`#ee8950`, the old warning fill), `-orange-500` (`#ec7939`) and
-`-green-500` (`#31a481`). New code never uses them. A value is
+`-orange-400` (`#ee8950`, the old warning fill), `-orange-500` (`#ec7939`),
+`-green-500` (`#31a481`), `-brick` (`#d43f3a`, the old danger border) and `-coral`
+(`#d9534f`, the old danger fill). New code never uses them. A value is
 deleted once nothing on the live site declares it.
 
-The `--ia-theme-*` hooks in `src/themes/theme-styles.ts` work the same way: they
-map the names archive.org's components read today onto the new roles, and each line goes
-once its consumers read `--ia-*` directly. New code never writes a `--ia-theme-*` name;
-code touched for another reason migrates the names it uses.
+The `--ia-theme-*` hooks in `src/themes/theme-styles.ts` stay as the compatibility layer
+for consumers ([D-01](../DECISIONS.md#d-01)): they map the names archive.org's components
+read today onto the new roles, and a name goes once its consumers read `--ia-*` directly.
+New components read `--ia-*` tokens and don't add new `--ia-theme-*` hooks.
 
 ## Brand
 
@@ -276,6 +283,6 @@ The chosen amount pairs the gold with `aria-checked` on its radio, never color a
 pnpm exec vitest run src/themes/tokens.node.test.ts
 ```
 
-Eighty pairings, every one the guide recommends, checked against WCAG 2.2 AA. It
+Every pairing the guide recommends, checked against WCAG 2.2 AA. It
 exits non-zero on any failure, so it belongs in CI. If you add a color role, add its
 pairings to the check in the same commit.

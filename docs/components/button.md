@@ -249,7 +249,7 @@ The "Help" button pinned to the corner of the page, from iaux's `ia-zendesk-help
 
 | Part | Value |
 | --- | --- |
-| Look | `ia-button` primary, `--ia-radius-pill`, a help glyph and the label "Help" |
+| Look | `ia-button` primary, `--ia-radius-default`, a help glyph and the label "Help" |
 | Place | `position: fixed`, `--ia-space-4` from the bottom and inline-end edges |
 | Layer | `--ia-z-index-sticky`: above the page, under every menu, scrim and modal |
 | Narrow | below `md` the label hides and the glyph stays; `aria-label="Help"` names it at every width |

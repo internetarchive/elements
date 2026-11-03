@@ -37,8 +37,8 @@ A native `<select>` with the live look.
 | --- | --- |
 | Trigger | `--ia-size-control-sm` tall, transparent, `--ia-radius-default`; `--ia-font-size-md` / bold, primary text; the lifted `caret` glyph at `--ia-size-icon-xs` (12px) |
 | Trigger hover | `--ia-color-hover-overlay` |
-| Panel | `--ia-color-surface-inverse`, `--ia-radius-default` on all four corners, `--ia-shadow-overlay`, `--ia-space-1` above the trigger |
-| Option | `--ia-size-control-sm` (30px) minimum height, padding `0 --ia-space-4 0 --ia-space-2`, `--ia-font-size-md` / regular, inverse text — the [menu-row contract](menu.md#the-menu-row-contract) |
+| Panel | `--ia-color-surface-inverse`, `--ia-radius-default` on all four corners, `--ia-shadow-overlay`, `--ia-space-1` below the trigger |
+| Option | `--ia-size-control-sm` (30px) minimum height, padding `0 --ia-space-4`, `--ia-font-size-md` / regular, inverse text — the [menu-row contract](menu.md#the-menu-row-contract) |
 | Hovered option | `--ia-color-hover-overlay`, which re-points to white at 12% on the dark panel |
 | Selected option | the soft selected tier ([D-45](../DECISIONS.md#d-45)), which on the dark panel is `--ia-color-selected-soft-fill-inverse` (`#666`); plus a check |
 | Option focus | the inverse focus ring, inset, with its band |
@@ -85,9 +85,15 @@ focus ring — stays as the table shows:
 | Element | a custom list of `<button>`s | a native `<select>` |
 | Trigger | 28px, transparent; the label bold 14px on a 28px line | `--ia-size-control-sm` (30px), `--ia-radius-default`, hover `--ia-color-hover-overlay` |
 | Panel | `#333`, square top corners, rounded bottom, no shadow, flush under the trigger | `--ia-color-surface-inverse`, `--ia-radius-default` all round, `--ia-shadow-overlay`, `--ia-space-1` below the trigger |
-| Option | 30px, padded `5px 10px` | `--ia-size-control-sm` minimum, padded `0 --ia-space-4 0 --ia-space-2` |
+| Option | 30px, padded `5px 10px` | `--ia-size-control-sm` minimum, padded `0 --ia-space-4` |
 | Selected option | white at 30% over the panel, no mark | `--ia-color-selected-soft-fill-inverse` fill and a check |
 | Option focus | no ring of its own | the inverse focus ring, inset, with its band |
+
+Elements' own `ia-dropdown` (on tokens, PR #201) now follows this spec's panel color
+(`--ia-color-surface-inverse`), radius, option height, 20px option inset, soft selected
+fill (`#666`), hover overlay and the inverse focus ring with its band. It still draws a
+1px `--ia-color-border-inverse` panel border and no shadow or check, and pads plain-text
+labels itself: it wraps them in a span.
 
 One detail of the API matters to anyone building with it: the component pads each
 option's *first child element*, not the option itself. A plain-text label has no element,

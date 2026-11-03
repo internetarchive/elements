@@ -57,7 +57,7 @@ The **whole row** is the target, not just the 20px box. Wrapping the control in 
 }
 .ia-choice:has(:focus-visible) {
   outline: var(--ia-size-focus-ring) solid var(--ia-color-border-focus);
-  outline-offset: calc(var(--ia-size-focus-ring-offset) * -1);
+  outline-offset: calc(var(--ia-size-focus-ring) * -1);
   box-shadow: var(--ia-shadow-focus-band);
 }
 ```

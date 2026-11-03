@@ -225,7 +225,7 @@ ia-button { inline-size: var(--ia-theme-button-width); }
 .ia-button--link:hover    { text-decoration: underline; }
 
 .ia-button:active:not([disabled]):not([aria-disabled='true']) { filter: brightness(0.8); transform: scale(var(--_press)); }
-.ia-button--link:active { transform: none; }
+.ia-button--link:active:not([disabled]):not([aria-disabled='true']) { filter: none; transform: none; }
 
 /* Square icon-only shapes: the side is the size's control height. Always carry
    an aria-label. */
@@ -377,7 +377,7 @@ ia-button { inline-size: var(--ia-theme-button-width); }
 .ia-choice:hover { background-image: linear-gradient(var(--ia-color-hover-overlay), var(--ia-color-hover-overlay)); }
 .ia-choice:has(:focus-visible) {
   outline: var(--ia-size-focus-ring) solid var(--ia-color-border-focus);
-  outline-offset: calc(var(--ia-size-focus-ring-offset) * -1);
+  outline-offset: calc(var(--ia-size-focus-ring) * -1);
   box-shadow: var(--ia-shadow-focus-band);
 }
 .ia-choice__control {
@@ -704,7 +704,7 @@ ia-button { inline-size: var(--ia-theme-button-width); }
 }
 .ia-tile--search .ia-tile__title { -webkit-line-clamp: 4; }
 .ia-tile:hover .ia-tile__title { color: var(--ia-color-text-link); }
-:is(.ia-tile--collection, .ia-tile--search):hover .ia-tile__title { color: var(--ia-color-text-inverse-link); }
+:is(.ia-tile--collection, .ia-tile--search):hover .ia-tile__title { color: var(--ia-color-text-inverse); text-decoration: underline; }
 
 /* The byline, and the lines that stand in for it: a sort-driven date ("published
    1926"), volume and issue, an account's "Archivist since". One line each. */
@@ -717,7 +717,7 @@ ia-button { inline-size: var(--ia-theme-button-width); }
   color: var(--ia-color-text-secondary);
   display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
 }
-.ia-tile--collection :is(.ia-tile__creator, .ia-tile__detail) { color: var(--ia-color-text-inverse-secondary); }
+.ia-tile--collection :is(.ia-tile__creator, .ia-tile__detail) { color: var(--ia-color-text-inverse); }
 
 /* Full-text search matches: up to three lines, a navy rule at the start, the
    query's terms marked. */
@@ -1017,7 +1017,7 @@ ia-button { inline-size: var(--ia-theme-button-width); }
     align-items: center;
     gap: var(--ia-space-2);
     min-block-size: var(--ia-size-control-sm);
-    padding-inline: var(--ia-space-2) var(--ia-space-4);
+    padding-inline: var(--ia-space-4);
     background: none;
     color: inherit;
     font-weight: var(--ia-font-weight-regular);
@@ -1053,7 +1053,7 @@ ia-button { inline-size: var(--ia-theme-button-width); }
   align-items: center;
   gap: var(--ia-space-2);
   min-block-size: var(--ia-size-control-sm);
-  padding-inline: var(--ia-space-2) var(--ia-space-4);
+  padding-inline: var(--ia-space-4);
   white-space: nowrap;
 }
 .ia-dropdown-preview li::before {                 /* the checkmark's slot */
@@ -1252,7 +1252,7 @@ ia-button { inline-size: var(--ia-theme-button-width); }
 .ia-facet-row:hover { background-image: linear-gradient(var(--ia-color-hover-overlay), var(--ia-color-hover-overlay)); }
 .ia-facet-row:has(.ia-choice__control:focus-visible) {
   outline: var(--ia-size-focus-ring) solid var(--ia-color-border-focus);
-  outline-offset: calc(var(--ia-size-focus-ring-offset) * -1);
+  outline-offset: calc(var(--ia-size-focus-ring) * -1);
   box-shadow: var(--ia-shadow-focus-band);
 }
 .ia-facet-row__label {
@@ -2456,7 +2456,7 @@ main[tabindex='-1']:focus { outline: none; }
 .ia-menu ul { margin: 0; padding: 0; list-style: none; }
 .ia-menu__heading {
   display: block;
-  padding: var(--ia-space-1) var(--ia-space-4) var(--ia-space-1) var(--ia-space-2);
+  padding: var(--ia-space-1) var(--ia-space-4);
   color: var(--ia-color-text-secondary);
   font-size: var(--ia-font-size-xs);
   font-weight: var(--ia-font-weight-bold);
@@ -2467,7 +2467,7 @@ main[tabindex='-1']:focus { outline: none; }
   display: flex; align-items: center; gap: var(--ia-space-2);
   inline-size: 100%;
   min-block-size: var(--ia-size-control-sm);
-  padding-inline: var(--ia-space-2) var(--ia-space-4);
+  padding-inline: var(--ia-space-4);
   border: 0;
   background: none;
   color: inherit;
