@@ -1,6 +1,6 @@
 import { CSSResultGroup, TemplateResult, css, html } from 'lit';
 import { property } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 
 import TrackedElement from './tracked-element';
 import donateIcon from '@src/icons/topnav-donate';

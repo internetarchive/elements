@@ -8,11 +8,11 @@ import {
   type CSSResultGroup,
 } from 'lit';
 import { property } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { repeat } from 'lit/directives/repeat.js';
 import themeStyles from '@src/themes/theme-styles';
 import viewableFiles from '@src/icons/viewable-files';
-import { iconBox } from '@src/util/icon-box';
+import { iconBox } from '@src/utils/icon-box';
 import type { FileSortOption, ViewableFileInfo } from './models';
 
 /** Icon for the viewable-files menu shortcut / menu entry. */

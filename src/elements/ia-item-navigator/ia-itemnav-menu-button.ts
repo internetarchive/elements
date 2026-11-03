@@ -6,10 +6,10 @@ import {
   type CSSResultGroup,
 } from 'lit';
 import { property } from 'lit/decorators.js';
-import { customElement } from '@src/util/custom-element';
+import { customElement } from '@src/utils/custom-element';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import themeStyles from '@src/themes/theme-styles';
-import { iconBoxStyles } from '@src/util/icon-box';
+import { iconBoxStyles } from '@src/utils/icon-box';
 
 /**
  * A single entry in the item navigator's side menu. Renders either a button

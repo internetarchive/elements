@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/elements",
-  "version": "1.6.1",
+  "version": "1.9.1",
   "description": "A web component library from the Internet Archive.",
   "license": "AGPL-3.0-only",
   "type": "module",
@@ -33,7 +33,8 @@
     "test": "wireit",
     "ghpages:build": "wireit",
     "strings:extract": "wireit",
-    "strings:build": "wireit"
+    "strings:build": "wireit",
+    "strings:translate": "node scripts/translate-xliff.mts"
   },
   "dependencies": {
     "@internetarchive/analytics-manager": "^0.1.5",
@@ -104,6 +105,8 @@
     "./icons/*.svg": "./dist/src/icons/*.svg",
     "./labs/*": "./dist/src/labs/*.js",
     "./services/*": "./dist/src/services/*.js",
+    "./utils/*": "./dist/src/utils/*.js",
+    "./eslint-plugin": "./eslint/index.mjs",
     "./locales/*.js": "./dist/src/locales/*.js"
   },
   "sideEffects": [
@@ -118,6 +121,8 @@
   "files": [
     "README.md",
     "dist",
+    "eslint",
+    "!eslint/**/*.test*",
     "!dist/**/*.test*",
     "!dist/**/*-story*",
     "!dist/demo",
