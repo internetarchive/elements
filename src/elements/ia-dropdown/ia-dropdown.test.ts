@@ -92,15 +92,15 @@ describe('IADropdown', () => {
     expect(style.boxShadow).to.equal('rgb(44, 44, 44) 0px 0px 0px 4px inset');
   });
 
-  test('rings the trigger in the dark-surface focus color by default', async () => {
+  test('rings the trigger in the dark-surface focus color, with its band, by default', async () => {
     const el = await fixture<IADropdown>(html`<ia-dropdown></ia-dropdown>`);
     const trigger =
       el.shadowRoot!.querySelector<HTMLButtonElement>('button.click-main')!;
     await userEvent.keyboard('{Tab}');
     trigger.focus();
-    expect(getComputedStyle(trigger).outlineColor).to.equal(
-      'rgb(154, 168, 255)',
-    );
+    const style = getComputedStyle(trigger);
+    expect(style.outlineColor).to.equal('rgb(154, 168, 255)');
+    expect(style.boxShadow).to.equal('rgb(44, 44, 44) 0px 0px 0px 4px inset');
   });
 
   test('is closed at default', async () => {
