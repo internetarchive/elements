@@ -86,6 +86,21 @@ describe('IaClearableTextInput', () => {
     expect(clearButtonOf(el).hidden).to.equal(false);
   });
 
+  test("bands the clear button's inset focus ring", async () => {
+    const el = await fixture<IaClearableTextInput>(
+      html`<ia-clearable-text-input
+        forceClearButton
+      ></ia-clearable-text-input>`,
+    );
+    await userEvent.keyboard('{Tab}');
+    clearButtonOf(el).focus();
+    const style = getComputedStyle(clearButtonOf(el));
+    expect(style.outlineOffset).to.equal('-2px');
+    expect(style.boxShadow).to.equal(
+      'rgb(255, 255, 255) 0px 0px 0px 4px inset',
+    );
+  });
+
   test('shows the clear button when the input field has initial text', async () => {
     const el = await fixture<IaClearableTextInput>(
       html`<ia-clearable-text-input .value=${'a'}></ia-clearable-text-input>`,

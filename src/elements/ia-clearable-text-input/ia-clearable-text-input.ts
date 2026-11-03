@@ -223,6 +223,7 @@ export class IaClearableTextInput extends LitElement {
         outline: var(--ia-size-focus-ring--) solid
           var(--ia-color-border-focus--);
         outline-offset: calc(-1 * var(--ia-size-focus-ring--));
+        box-shadow: var(--ia-shadow-focus-band--);
         border-radius: var(--ia-radius-circle--);
       }
 
