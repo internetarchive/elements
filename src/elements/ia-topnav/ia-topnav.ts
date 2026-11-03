@@ -453,13 +453,11 @@ export class IATopNav extends LitElement {
 
           --mediaMenuBg: var(--grey13);
           --mediaLabelDesktopColor: var(--grey80);
-          /* The open media tab is #333, not the #474747 slider: its glyph
-             takes the media type's color, which clears 3:1 on #333 (video,
-             the lowest, 4.01:1) and not on #474747 (2.95:1). */
-          --activeDesktopMenuIcon: var(--grey20);
+          /* The open media tab matches the panel it opens. */
+          --activeDesktopMenuIcon: var(--ia-color-surface-chrome-tertiary--);
 
           --mediaSliderBg: var(--grey20);
-          --mediaSliderDesktopBg: var(--grey28);
+          --mediaSliderDesktopBg: var(--ia-color-surface-chrome-tertiary--);
 
           --primaryNavBg: var(--grey13);
           --primaryNavBottomBorder: var(--grey20);
