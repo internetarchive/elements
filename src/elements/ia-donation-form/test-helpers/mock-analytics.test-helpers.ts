@@ -1,7 +1,7 @@
 import type {
   AnalyticsEvent,
   AnalyticsManagerInterface,
-} from '@internetarchive/analytics-manager';
+} from '@src/services/analytics-manager/analytics-manager';
 
 import type { DonationEventLoggerInterface } from '../analytics';
 
