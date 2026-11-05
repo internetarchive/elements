@@ -527,8 +527,7 @@ export class IADropdown extends LitElement {
         button.click-main {
           background: ${dropdownMainButtonBgColor};
           color: inherit;
-          /* Room for the focus ring, which is drawn inside the edge. */
-          padding: var(--dropdownMainButtonPadding, 0 var(--ia-space-1--));
+          padding: var(--dropdownMainButtonPadding, 0px);
           border: var(--dropdownMainButtonBorder, none);
           border-radius: var(--dropdownMainButtonBorderRadius, none);
           cursor: pointer;

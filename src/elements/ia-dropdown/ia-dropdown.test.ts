@@ -103,6 +103,13 @@ describe('IADropdown', () => {
     expect(style.boxShadow).to.equal('rgb(44, 44, 44) 0px 0px 0px 4px inset');
   });
 
+  test('adds no padding of its own around the trigger by default', async () => {
+    const el = await fixture<IADropdown>(html`<ia-dropdown></ia-dropdown>`);
+    const trigger =
+      el.shadowRoot!.querySelector<HTMLButtonElement>('button.click-main')!;
+    expect(getComputedStyle(trigger).padding).to.equal('0px');
+  });
+
   test('is closed at default', async () => {
     const el = await fixture<IADropdown>(html`<ia-dropdown></ia-dropdown>`);
     expect(el.open).to.be.false;
