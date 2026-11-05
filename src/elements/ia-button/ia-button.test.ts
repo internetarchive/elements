@@ -77,6 +77,20 @@ describe('IA button', () => {
     expect(loadingIndicator).to.exist;
   });
 
+  test('lets full-width slotted content fill a full-width button', async () => {
+    const el = await fixture<IAButton>(html`
+      <div style="width: 200px">
+        <ia-button
+          style="display: block; --ia-theme-button-width: 100%; --ia-theme-button-padding: 0; --ia-theme-button-border-width: 0"
+        >
+          <div style="width: 100%">Short</div>
+        </ia-button>
+      </div>
+    `);
+    const content = el.querySelector('ia-button > div')!;
+    expect(content.getBoundingClientRect().width).to.equal(200);
+  });
+
   test('keeps its width while loading', async () => {
     const el = await fixture<IAButton>(
       html`<ia-button>Save Changes</ia-button>`,

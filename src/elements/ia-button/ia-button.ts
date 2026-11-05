@@ -393,6 +393,12 @@ export class IAButton extends LitElement {
           gap: var(--ia-space-1--);
         }
 
+        /* Full width, so slotted content with width: 100% fills the button.
+           The label's own content stays centered. */
+        .label {
+          justify-self: stretch;
+        }
+
         .is-loading .label {
           visibility: hidden;
         }
