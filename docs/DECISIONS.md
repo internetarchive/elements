@@ -3,7 +3,7 @@
 # Decisions
 
 Every judgment call made while deriving this style guide from the live site.
-60 in total.
+61 in total.
 
 Each entry records what is live, what the conflict is, what
 was decided, why, and what it costs to implement. Nothing here has been applied to
@@ -80,6 +80,7 @@ JSON to hand back.
 | D-59 | [The item page follows offshoot's details page](#d-59) | components |  |
 | D-60 | [Profile, account settings and login follow offshoot](#d-60) | components |  |
 | D-61 | [Banners go above the topnav; the chrome gains offshoot's footer and loading bar](#d-61) | components |  |
+| D-62 | [The donation amount picker keeps its gold, as its own tokens](#d-62) | components |  |
 
 ---
 
@@ -1325,3 +1326,22 @@ JSON to hand back.
 
 *See:* [`foundations/content-voice.md#capitalization`](foundations/content-voice.md#capitalization)
 
+---
+
+<a id="d-62"></a>
+
+### D-62 · The donation amount picker keeps its gold, as its own tokens
+
+**Status:** `accepted` · **Area:** components
+
+**What's live.** The donation form's amount picker draws each amount as a white button with a `#333` border and the chosen one in gold, `#f9bf3b`, hard-coded in `ia-donation-edit-donation`. Nothing else on the site uses the gold.
+
+**The conflict.** The system's selected look for one choice among neutral options is the soft tier: `--ia-color-selected-soft-fill` (pale navy) with navy text. By that rule the chosen amount would turn navy.
+
+**The decision.** Keep the gold. The picker gets its own tokens in `color.donation`: `amount-fill`, `amount-text`, `amount-border`, `amount-selected-fill` (the new `palette.gold-400`, `#f9bf3b`) and `amount-selected-text`. The chosen amount still pairs the gold with `aria-checked` on its radio, never color alone.
+
+**Why.** The donation form has its own appearance, and the gold is part of it. Naming it as tokens puts it in the system, where it is checked for contrast and changed in one place, instead of leaving a one-off value in a component.
+
+**Blast radius.** The gold, white fill and `#333` border are unchanged, but the picker moves onto the system's tokens, which shows: amount text `#000` → `#2c2c2c`, radius `5px` → `4px`, focus ring `#7fb3f9` → `#3a4fd6`, and the custom amount field's border `#d9d9d9` → `#666`. `tokens.json` gains the palette entry and the group; the contrast test gains three pairs.
+
+*See:* [`components/donation.md#amount-picker`](components/donation.md#amount-picker)

@@ -229,6 +229,26 @@ for (const type of [
     `${type} glyph on a tile`,
   );
 }
+// The donation amount picker: its amounts, the chosen one in gold, and the
+// edge that marks each amount as a control.
+add(
+  'color.donation.amount-text',
+  'color.donation.amount-fill',
+  TEXT,
+  'an amount in the donation picker',
+);
+add(
+  'color.donation.amount-selected-text',
+  'color.donation.amount-selected-fill',
+  TEXT,
+  'the chosen amount, on gold',
+);
+add(
+  'color.donation.amount-border',
+  'color.surface.page',
+  UI,
+  'an amount button edge',
+);
 // Text on the wide topnav's open media panel. The media-type glyph on its tab
 // is decorative (the tab's label names the type), so it has no minimum there.
 add(
