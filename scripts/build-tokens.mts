@@ -12,7 +12,11 @@
  * because `--ia-x: var(--ia-x, ...)` is a cycle, and a plain `--ia-x: ...` on
  * `:host` would shadow the page's value.
  *
- * Token values assume a 10px root font size (`html { font-size: 62.5% }`).
+ * Lengths are px at the browser's default 16px font size. A group marked
+ * `$extensions.ia.scale: true` emits `calc(N * var(--ia-unit, 1px))`, so it
+ * grows with the user's font-size setting (see src/themes/unit.ts); one marked
+ * `false` stays fixed. Neither depends on the page's root font size, and every
+ * length has to sit under one or the other.
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -32,8 +36,8 @@ interface TokenNode {
 }
 
 interface TokenExtension {
-  px?: number;
   decision?: string;
+  scale?: boolean;
   responsive?: { below: string; value: string };
 }
 
@@ -41,6 +45,8 @@ interface Token {
   path: string[];
   value: string;
   ext: TokenExtension;
+  /** The nearest group's `scale`, if any group above the token sets one. */
+  scale?: boolean;
 }
 
 function fail(message: string): never {
@@ -63,7 +69,11 @@ function resolveRefs(value: string, known: Set<string>): string {
   });
 }
 
-function* walk(node: TokenNode, path: string[] = []): Generator<Token> {
+function* walk(
+  node: TokenNode,
+  path: string[] = [],
+  scale?: boolean,
+): Generator<Token> {
   for (const [key, child] of Object.entries(node)) {
     if (key.startsWith('$') || child === null || typeof child !== 'object') {
       continue;
@@ -74,18 +84,32 @@ function* walk(node: TokenNode, path: string[] = []): Generator<Token> {
         path: [...path, key],
         value: String(token.$value),
         ext: token.$extensions?.ia ?? {},
+        scale,
       };
     } else {
-      yield* walk(token, [...path, key]);
+      yield* walk(
+        token,
+        [...path, key],
+        token.$extensions?.ia?.scale ?? scale,
+      );
     }
   }
 }
 
+/** A bare px length in a scaling group becomes a multiple of --ia-unit. */
+function scaled({ path, value, scale }: Token): string {
+  if (/\d(px|rem|em)\b/.test(value) && scale === undefined) {
+    fail(`${path.join('.')} is a length outside any group with a scale flag`);
+  }
+  if (/\d(rem|em)\b/.test(value)) {
+    fail(`${path.join('.')} is in rem or em; lengths are px`);
+  }
+  const px = /^(-?[\d.]+)px$/.exec(value);
+  return scale && px ? `calc(${px[1]} * var(--ia-unit, 1px))` : value;
+}
+
 function note(ext: TokenExtension): string {
-  const bits = [];
-  if (ext.px !== undefined) bits.push(`${ext.px}px`);
-  if (ext.decision) bits.push(ext.decision);
-  return bits.length ? ` /* ${bits.join(', ')} */` : '';
+  return ext.decision ? ` /* ${ext.decision} */` : '';
 }
 
 const alias = (name: string, fallback: string) =>
@@ -102,16 +126,17 @@ for (const { path, value } of tokens) {
 }
 
 const declarations = tokens.map(
-  ({ path, value, ext }) =>
-    `    ${alias(cssName(path), resolveRefs(value, known))}${note(ext)}`,
+  (token) =>
+    `    ${alias(cssName(token.path), resolveRefs(scaled(token), known))}${note(token.ext)}`,
 );
 
 /* Tokens that re-point below a breakpoint, grouped by breakpoint. */
 const breakpoints = source.breakpoint as Record<string, { $value: string }>;
 const responsive = new Map<string, string[]>();
-for (const { path, ext } of tokens) {
+for (const { path, ext, scale } of tokens) {
   if (!ext.responsive) continue;
-  const { below, value } = ext.responsive;
+  const { below } = ext.responsive;
+  const value = scaled({ path, value: ext.responsive.value, ext, scale });
   if (!breakpoints[below]) {
     fail(`${path.join('.')} is responsive below unknown breakpoint "${below}"`);
   }
@@ -173,11 +198,13 @@ const inverseLines = [
 ];
 
 const module = `${HEADER}import { css } from 'lit';
+import './unit';
 
 /**
  * Every design token as a private alias on \`:host\`, e.g.
  * \`var(--ia-color-text-primary--)\`. Set the public name
- * (\`--ia-color-text-primary\`) on the page to override it. Assumes a 10px root
+ * (\`--ia-color-text-primary\`) on the page to override it. Lengths that scale
+ * are multiples of \`--ia-unit\`, which \`./unit\` sets from the user's default
  * font size.
  *
  * Inside a shadow root, \`.ia-inverse\` re-points the text, border, focus,

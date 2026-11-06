@@ -85,7 +85,7 @@ describe('themeStyles', () => {
     expect(read(el, '--ia-color-text-primary--')).to.equal('#ffffff');
   });
 
-  test('sizes the default button for a 10px root', async () => {
+  test('sizes the default button at 36px', async () => {
     const el = await fixture<ThemeStylesTestElement>(
       html`<theme-styles-test-element
         style="display: block; height: var(--button-height)"
