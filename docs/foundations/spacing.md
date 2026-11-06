@@ -9,18 +9,18 @@ So the scale is the one already in use.
 
 ## The scale
 
-Base unit **5px**. With `1rem = 10px`, that is `0.5rem`.
+Base unit **5px**. Spacing grows with the reader's browser font-size setting, so padding keeps pace with the text it surrounds ([D-37](../DECISIONS.md#d-37)).
 
-| Token | rem | px | Typical use |
-| --- | --- | --- | --- |
-| `--ia-space-1` | 0.5 | 5 | icon-to-label gaps, tight chips |
-| `--ia-space-2` | 1 | 10 | inside compact controls, list-item gaps |
-| `--ia-space-3` | 1.5 | 15 | card padding on mobile, form field gaps |
-| `--ia-space-4` | 2 | 20 | card padding, grid gutters, section inner padding |
-| `--ia-space-6` | 3 | 30 | button horizontal padding, gaps between blocks |
-| `--ia-space-8` | 4 | 40 | space between page sections |
-| `--ia-space-12` | 6 | 60 | major section separation |
-| `--ia-space-16` | 8 | 80 | page top and bottom margins |
+| Token | px | Typical use |
+| --- | --- | --- |
+| `--ia-space-1` | 5 | icon-to-label gaps, tight chips |
+| `--ia-space-2` | 10 | inside compact controls, list-item gaps |
+| `--ia-space-3` | 15 | card padding on mobile, form field gaps |
+| `--ia-space-4` | 20 | card padding, grid gutters, section inner padding |
+| `--ia-space-6` | 30 | button horizontal padding, gaps between blocks |
+| `--ia-space-8` | 40 | space between page sections |
+| `--ia-space-12` | 60 | major section separation |
+| `--ia-space-16` | 80 | page top and bottom margins |
 
 The numbering is the multiple of the base unit, so `--ia-space-4` is four 5px units,
 20px. There is no `5`, `7`, `9`… on purpose — the gaps force a choice between two

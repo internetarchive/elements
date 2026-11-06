@@ -5,14 +5,14 @@ Live ships border-radius values of `0`, `2`, `3`, `3.25`, `4`, `5`, `7`, `8`, `1
 `4px 4px 0 0` and `3px 0 0 3px`. `3.25px` is not a design decision; it is a rounding
 artifact.
 
-Five values replace them. [D-13](../DECISIONS.md#d-13)
+Five values replace them. [D-13](../DECISIONS.md#d-13) Corners stay the same at any browser font-size setting ([D-37](../DECISIONS.md#d-37)).
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `--ia-radius-sm` | 0.2rem (2px) | checkboxes, tags, and corners nested tight inside another control |
-| `--ia-radius-default` | 0.4rem (4px) | **the default** — buttons, inputs, selects, cards, tiles, messages, modals, drawers, dropdown and menu panels, tooltips, segments |
-| `--ia-radius-lg` | 0.8rem (8px) | media cards, the hero panel, the segmented control's track |
-| `--ia-radius-pill` | 999rem | search fields, chips, badges, the switch track |
+| `--ia-radius-sm` | 2px | checkboxes, tags, and corners nested tight inside another control |
+| `--ia-radius-default` | 4px | **the default** — buttons, inputs, selects, cards, tiles, messages, modals, drawers, dropdown and menu panels, tooltips, segments |
+| `--ia-radius-lg` | 8px | media cards, the hero panel, the segmented control's track |
+| `--ia-radius-pill` | 999px | search fields, chips, badges, the switch track |
 | `--ia-radius-circle` | 50% | avatars, round icon-only buttons, the switch knob |
 
 A flush edge — a full-bleed panel, a table cell — has no radius: write `0`.
