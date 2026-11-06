@@ -8,7 +8,7 @@ const themeStyles = css`
     /*
     BASE STYLES
     Default fallback values for theme styles, taken from the design tokens in
-    tokens/tokens.json. Assumes a 10px root font size (html { font-size: 62.5% }).
+    tokens/tokens.json, so they don't depend on the page's root font size.
     To adjust values, use theme styles below, or set the --ia-* tokens.
     */
 
