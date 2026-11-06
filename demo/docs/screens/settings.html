@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Account Settings — Internet Archive Elements screens</title>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/ia.css">
+<style>body { margin: 0; }</style>
+</head>
+<body class="ia-page">
+<a class="ia-skip-link" href="#maincontent">Skip to Main Content</a>
+<header class="ia-topnav ia-inverse" id="topnav"></header>
+
+<main class="ia-shell" id="maincontent" tabindex="-1" style="padding-block-start:0">
+  <form class="ia-settings" id="settings" novalidate>
+    <div class="ia-settings__header">
+      <h1 class="ia-settings__title ia-type-section">Account Settings</h1>
+      <a class="ia-button ia-button--secondary" href="#maincontent">Cancel</a>
+      <button class="ia-button ia-button--primary" type="submit">Save Changes</button>
+      <div class="ia-settings__summary" id="summary" tabindex="-1"></div>
+    </div>
+
+    <section class="ia-settings__section" aria-labelledby="picture-title">
+      <h2 class="ia-type-subsection" id="picture-title">Change Profile Picture</h2>
+      <div class="ia-settings__picture">
+        <img class="ia-avatar ia-avatar--lg" src="https://archive.org/services/img/@brewster" alt="">
+        <div class="ia-field">
+          <label class="ia-field__label" for="picture">Choose an Image</label>
+          <p class="ia-field__hint ia-type-meta" id="picture-hint">JPEG, PNG or GIF, up to 5MB</p>
+          <input class="ia-input" id="picture" type="file" accept="image/*" aria-describedby="picture-hint">
+        </div>
+      </div>
+    </section>
+
+    <section class="ia-settings__section" aria-labelledby="account-title">
+      <h2 class="ia-type-subsection" id="account-title">Account</h2>
+      <div class="ia-field">
+        <label class="ia-field__label" for="screenname">Screen Name</label>
+        <p class="ia-field__hint ia-type-meta" id="screenname-hint">Changing your screen name will not change your user ID.
+          You cannot reuse a screen name once it has been changed.</p>
+        <input class="ia-input" id="screenname" name="screenname" type="text" autocomplete="username" value="brewster"
+               aria-describedby="screenname-hint" required>
+        <p class="ia-field__error" id="screenname-error" hidden></p>
+      </div>
+      <div class="ia-field">
+        <label class="ia-field__label" for="email">Email Address</label>
+        <p class="ia-field__hint ia-type-meta" id="email-hint">You cannot reuse an email address once it has been changed.</p>
+        <input class="ia-input" id="email" name="email" type="email" autocomplete="email" value="brewster@example.org"
+               aria-describedby="email-hint" required>
+        <p class="ia-field__error" id="email-error" hidden></p>
+      </div>
+      <div class="ia-field">
+        <label class="ia-field__label" for="password">New Internet Archive / Open Library Password</label>
+        <div class="ia-password">
+          <input class="ia-input" id="password" name="password" type="password" autocomplete="new-password" minlength="8">
+          <button class="ia-password__toggle" type="button" aria-label="Show Password" aria-pressed="false"></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="ia-settings__section" aria-labelledby="giving-title">
+      <h2 class="ia-type-subsection" id="giving-title">Monthly Giving Circle</h2>
+      <p class="ia-type-body" style="margin:0">Become a monthly donor to keep the Archive free for everyone.</p>
+      <a class="ia-button ia-button--donate" href="#maincontent" style="align-self:flex-start">Join the Monthly Giving Circle</a>
+    </section>
+
+    <section class="ia-settings__section" aria-labelledby="display-title">
+      <h2 class="ia-type-subsection" id="display-title">Display Settings</h2>
+      <div class="ia-pref-row">
+        <span class="ia-pref-row__name"><label for="pref-loans">Public Borrowing History</label>
+          <button class="ia-button ia-button--ghost ia-button--icon ia-button--sm ia-pref-row__info" type="button"
+                  aria-expanded="false" aria-controls="pref-loans-desc" aria-label="About Public Borrowing History" data-icon="info"></button></span>
+        <input class="ia-choice__control ia-pref-row__control" type="checkbox" id="pref-loans" aria-describedby="pref-loans-desc">
+        <p class="ia-pref-row__desc" id="pref-loans-desc">Allow the public to see your borrowing history</p>
+      </div>
+    </section>
+
+    <section class="ia-settings__section" aria-labelledby="news-title">
+      <h2 class="ia-type-subsection" id="news-title">Newsletter Subscriptions</h2>
+      <div class="ia-pref-row">
+        <span class="ia-pref-row__name"><label for="ml-best">Best of the Archive</label>
+          <button class="ia-button ia-button--ghost ia-button--icon ia-button--sm ia-pref-row__info" type="button"
+                  aria-expanded="false" aria-controls="ml-best-desc" aria-label="About Best of the Archive" data-icon="info"></button></span>
+        <input class="ia-choice__control ia-pref-row__control" type="checkbox" id="ml-best" checked aria-describedby="ml-best-desc">
+        <p class="ia-pref-row__desc" id="ml-best-desc">Useful resources, unique stories, and fun finds from our collections</p>
+      </div>
+      <div class="ia-pref-row">
+        <span class="ia-pref-row__name"><label for="ml-events">Event Notices</label>
+          <button class="ia-button ia-button--ghost ia-button--icon ia-button--sm ia-pref-row__info" type="button"
+                  aria-expanded="false" aria-controls="ml-events-desc" aria-label="About Event Notices" data-icon="info"></button></span>
+        <input class="ia-choice__control ia-pref-row__control" type="checkbox" id="ml-events" aria-describedby="ml-events-desc">
+        <p class="ia-pref-row__desc" id="ml-events-desc">Invitations to and news about our events</p>
+      </div>
+    </section>
+
+    <section class="ia-settings__section" aria-labelledby="linked-title">
+      <h2 class="ia-type-subsection" id="linked-title">Linked Third-Party Accounts</h2>
+      <p class="ia-type-body" style="margin:0">You have no linked accounts.</p>
+    </section>
+
+    <section class="ia-settings__section" aria-labelledby="delete-title">
+      <h2 class="ia-type-subsection" id="delete-title">Delete Internet Archive / Open Library Account</h2>
+      <button class="ia-button ia-button--danger" type="button" style="align-self:flex-start">Delete Your Account</button>
+    </section>
+  </form>
+</main>
+
+<script type="module">
+import { topnavMarkup, icon, validateForm, wirePasswordToggles, hydrateIcons } from '../assets/site.js';
+document.getElementById('topnav').innerHTML = topnavMarkup('topnav', false, { user: 'brewster' });
+wirePasswordToggles();
+
+// The description behind each info button, on narrow screens.
+for (const b of document.querySelectorAll('.ia-pref-row__info'))
+  b.addEventListener('click', () => b.setAttribute('aria-expanded', String(b.getAttribute('aria-expanded') !== 'true')));
+
+// Save stays enabled and validates on submit: what failed, or that it saved,
+// at the head of the form, with focus moved there.
+const summary = document.getElementById('summary');
+document.getElementById('settings').addEventListener('submit', e => {
+  e.preventDefault();
+  const ok = validateForm(summary, [
+    ['screenname', 'Enter a screen name', v => v.length > 0],
+    ['email', 'Enter an email address that includes an @', v => v.includes('@')]
+  ], { title: 'Your changes weren’t saved.' });
+  if (ok) {
+    summary.innerHTML = `<div class="ia-message ia-message--success" role="status"><span class="ia-message__icon">${icon('check')}</span>
+      <div class="ia-message__body">Your settings were saved.</div></div>`;
+    summary.focus();
+  }
+});
+hydrateIcons();
+</script>
+</body>
+</html>

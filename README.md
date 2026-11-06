@@ -4,6 +4,10 @@
 
 <https://internetarchive.github.io/elements>
 
+Alongside the elements, the demo shows the design system they implement: its
+principles, foundations and tokens, a reference spec for every component, whole
+screens, icons and stress tests. The docs behind it are in [docs/](docs/README.md).
+
 ## Installation
 
 ```zsh
