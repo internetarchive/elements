@@ -117,16 +117,16 @@ systems" problem again.
 ## Sizes
 
 Live renders icons at 12×8, 16, 20, 24, 30, 32 and 40 — including one non-square size.
-Six sizes on a 4px grid:
+Six sizes on a 4px grid. They grow with the reader's browser font-size setting, alongside the text they sit beside ([D-37](../DECISIONS.md#d-37)):
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `--ia-size-icon-xs` | 1.2rem (12px) | carets and disclosure chevrons beside small text — the dropdown trigger, a collapsible list |
-| `--ia-size-icon-sm` | 1.6rem (16px) | inline with 1.2rem text, dense table rows |
-| `--ia-size-icon-md` | 2rem (20px) | **the default** — inline with body text, buttons. Already `--ia-theme-icon-width` |
-| `--ia-size-icon-lg` | 2.4rem (24px) | standalone icon buttons, toolbar actions |
-| `--ia-size-icon-xl` | 3.2rem (32px) | avatars, user menu. Already `--userIconWidth` |
-| `--ia-size-icon-2xl` | 4rem (40px) | the topnav media buttons, empty-state illustrations |
+| `--ia-size-icon-xs` | 12px | carets and disclosure chevrons beside small text — the dropdown trigger, a collapsible list |
+| `--ia-size-icon-sm` | 16px | inline with 12px text, dense table rows |
+| `--ia-size-icon-md` | 20px | **the default** — inline with body text, buttons. Already `--ia-theme-icon-width` |
+| `--ia-size-icon-lg` | 24px | standalone icon buttons, toolbar actions |
+| `--ia-size-icon-xl` | 32px | avatars, user menu. Already `--userIconWidth` |
+| `--ia-size-icon-2xl` | 40px | the topnav media buttons, empty-state illustrations |
 
 Icons are **square**. The live `12×8` caret is drawn inside a square viewBox at
 `--ia-size-icon-xs`, and the glyph is whatever shape it needs to be.

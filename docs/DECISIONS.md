@@ -55,7 +55,7 @@ JSON to hand back.
 | D-34 | [Tile titles move from a 1.07 line-height to 1.25](#d-34) | typography |  |
 | D-35 | [Do not style :visited](#d-35) | color |  |
 | D-36 | [The display and page-title roles step down below 890px](#d-36) | typography |  |
-| D-37 | [Keep 1rem = 10px](#d-37) | architecture |  |
+| D-37 | [Size from the user's font setting, not the root](#d-37) | architecture |  |
 | D-38 | [WCAG 2.2 level AA is the bar](#d-38) | accessibility |  |
 | D-39 | [The result grid uses auto-fill, not counted columns](#d-39) | layout |  |
 | D-40 | [Tile footers keep their two layouts, with two glyph sizes](#d-40) | components |  |
@@ -107,21 +107,21 @@ JSON to hand back.
 
 <a id="d-37"></a>
 
-### D-37 · Keep 1rem = 10px
+### D-37 · Size from the user's font setting, not the root
 
 **Status:** `accepted` · **Area:** architecture
 
-**What's live.** offshoot sets html { font-size: 10px } (public/offshoot_assets/index.css), so 1rem = 10px site-wide, at a fixed size that ignores the reader's browser font-size setting. <body> is also 10px, so nothing inherits a usable size and every component sets its own.
+**What's live.** offshoot sets html { font-size: 10px } (public/offshoot_assets/index.css), so 1rem = 10px site-wide, at a fixed size that ignores the reader's browser font-size setting. <body> is also 10px, so nothing inherits a usable size and every component sets its own. elements' components are used on pages with and without that reset, and a rem written for a 10px root renders 1.6 times larger on a 16px one.
 
-**The conflict.** A 10px root makes rem readable, but a fixed pixel root overrides the reader's font-size preference, and a 62.5% root is sometimes argued against as less predictable than a 100% base.
+**The conflict.** rem ties every length to whatever root the page sets, so a component can't look the same on every page and also follow the reader's setting. em ties it to wherever the component is placed and compounds through nested font sizes. A fixed pixel root ignores the reader's preference altogether.
 
-**The decision.** Keep 1rem = 10px, written as html { font-size: 62.5% }. Every token in this guide is expressed in rem against that base.
+**The decision.** Token lengths are px at the browser's default 16px. Each token group says whether it scales: text, spacing, control heights, icons and containers are multiples of `--ia-unit`, which grows with the reader's browser font-size setting; borders, focus rings, corners, the 44px touch minimum, shadows, blur and breakpoints stay fixed. elements sets `--ia-unit` on `<html>` when it loads, from a `font-size: medium` probe: `1px` at the default 16px, `1.25px` at 20px. A page can set `--ia-unit` itself, on `:root` or on one element. em is kept for sizes that track the text right beside them, such as an icon next to its label. Breakpoints in em are a separate change.
 
-**Why.** It is universal on the site and makes rem values readable (1.4rem = 14px). Written as 62.5% rather than 10px, it is the same at the default setting and still scales with the reader's browser font-size setting. Changing the base would mean rewriting every length on the site for no user-visible benefit. <body> takes the body role, so unstyled text inherits something sane.
+**Why.** It is the only arrangement that is both independent of the page's root and respects the reader's setting: `font-size: medium` is the one CSS value that means the reader's default size whatever the page sets. Measuring it once in JS, rather than resetting every component to `medium`, leaves text that inherits its size from the page alone. Hairlines, rings and corners don't need to grow with text, and growing them makes large-text layouts heavier without making them more readable.
 
-**Blast radius.** offshoot's root changes from 10px to 62.5%: identical at the default setting, larger for readers who set a larger default. <body> already takes the body role, which also fixes the 13.333px unstyled-button text.
+**Blast radius.** Nothing changes at the default setting: `--ia-unit` is 1px there, which is what a 10px-root rem gave. A page without the 10px reset no longer gets components 1.6 times too big. At a larger reader setting, elements components grow while offshoot's own px-rooted content doesn't, until offshoot's root becomes 62.5%. ia-topnav's own unit becomes `--ia-unit`, and `--topnavFontSize` is replaced by setting `--ia-unit` on it. A rem value still written into a component, rather than read from a token, keeps assuming the 10px root until it moves onto a token.
 
-*See:* [`foundations/typography.md#the-rem-basis`](foundations/typography.md#the-rem-basis)
+*See:* [`foundations/typography.md#sizes-and-the-readers-setting`](foundations/typography.md#sizes-and-the-readers-setting)
 
 
 ## Typography
@@ -218,7 +218,7 @@ JSON to hand back.
 
 **The decision.** 1.1 / 1.2 / 1.4 / 1.6 / 2.0 / 2.4 / 2.8 / 3.6 rem. The two anchors already exist as tokens: 1.4rem is --ia-theme-font-size-standard and 3.6rem is --ia-theme-font-size-lg.
 
-**Why.** Building outward from the two declared tokens means the body size — by far the most-used value on the site — does not move at all. Nothing below 1.1rem: the 8px and 9px item-page stats are too small to read and are not preserved.
+**Why.** Building outward from the two declared tokens means the body size — by far the most-used value on the site — does not move at all. Nothing below 11px: the 8px and 9px item-page stats are too small to read and are not preserved.
 
 **Blast radius.** Small shifts almost everywhere; the largest single change is 9px stats moving to 11px.
 

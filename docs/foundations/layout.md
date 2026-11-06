@@ -6,12 +6,12 @@ Live media queries hit dozens of distinct pixel breakpoints, several of which di
 at exactly one pixel: 767 / 768 / 769, 880 / 889 / 890, 990 / 991 / 992, 1199 / 1200 /
 1201, 390 / 391.
 
-Four replace them. [D-15](../DECISIONS.md#d-15)
+Four replace them. [D-15](../DECISIONS.md#d-15) They are fixed px, whatever the reader's font-size setting ([D-37](../DECISIONS.md#d-37)).
 
 | Token | Value | What changes here |
 | --- | --- | --- |
 | `--ia-breakpoint-sm` | 480px | single-column layouts gain a second column; compact chrome relaxes |
-| `--ia-breakpoint-md` | 768px | tablet layout; page gutters widen; inputs drop from 16px to 1.4rem |
+| `--ia-breakpoint-md` | 768px | tablet layout; page gutters widen; inputs drop from 16px to 14px |
 | `--ia-breakpoint-lg` | 890px | **the big one** — the topnav switches to desktop, sidebars appear, `display` and `page-title` step up |
 | `--ia-breakpoint-xl` | 1200px | the widest grid tier; the page container stops growing |
 
@@ -35,13 +35,13 @@ grid's 880px and 360px column steps are collection-browser's own and stay with t
 
 ## Containers
 
-Live uses max-widths of 1350, 1170, 1000, 600, 570, 440, 430 and 300. Three remain.
+Live uses max-widths of 1350, 1170, 1000, 600, 570, 440, 430 and 300. Three remain. They grow with the reader's browser font-size setting, so a line keeps the same number of characters ([D-37](../DECISIONS.md#d-37)).
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `--ia-container-page` | 135rem (1350px) | the default page container — already `--app-page-max-width` (offshoot's `index.css`) |
-| `--ia-container-prose` | 100rem (1000px) | anything read as continuous text: item descriptions, help, policy pages |
-| `--ia-container-form` | 60rem (600px) | forms — signup, login, upload metadata |
+| `--ia-container-page` | 1350px | the default page container — already `--app-page-max-width` (offshoot's `index.css`) |
+| `--ia-container-prose` | 1000px | anything read as continuous text: item descriptions, help, policy pages |
+| `--ia-container-form` | 600px | forms — signup, login, upload metadata |
 
 Account settings is the one page-specific width: 70rem (700px), as offshoot sets it, since
 its preference rows need three columns ([account-settings.md](../patterns/account-settings.md#width)).

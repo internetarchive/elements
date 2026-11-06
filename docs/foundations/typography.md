@@ -5,14 +5,19 @@ two of which are unstyled browser defaults. Two body line-heights competing at t
 14px on the same page. Typography is where archive.org's three UI generations collide
 most visibly.
 
-## The rem basis
+## Sizes and the reader's setting
 
-archive.org sets the root font size to 10px (`html { font-size: 10px }` in offshoot's
-`index.css`), so **1rem = 10px**. Every value in this
-guide assumes that. It is a good convention — `1.4rem` reads as 14px — and it is not
-changing, but the system writes it as `html { font-size: 62.5% }`: the same at the default
-setting, and unlike a fixed 10px it follows the reader's browser font-size setting
+Every size in this guide is in px at the browser's default 16px font size. The
+token sizes don't depend on the page's root font size, so a component looks the same on
+archive.org's 10px root and on a page with the browser's default. Type, spacing, control
+heights, icons and containers grow with the reader's browser font-size setting through
+`--ia-unit`; borders, focus rings, corners and shadows stay fixed
 ([D-37](../DECISIONS.md#d-37)).
+
+archive.org itself sets the root to 10px (`html { font-size: 10px }` in offshoot's
+`index.css`). That px value ignores the reader's setting for offshoot's own rem-sized
+content; written as `html { font-size: 62.5% }` it would be the same at the default and
+follow the reader's setting too.
 
 Two things about the base need fixing, and between them they account for four of the
 twenty live font sizes:
@@ -72,22 +77,22 @@ Monospace, for identifiers, API responses and file names, is unchanged from live
 
 ## The scale
 
-Eight steps. Both ends already existed as tokens — `1.4rem` is
-`--ia-theme-font-size-standard` and `3.6rem` is `--ia-theme-font-size-lg` — so the scale
+Eight steps. Both ends already existed as tokens — `14px` is
+`--ia-theme-font-size-standard` and `36px` is `--ia-theme-font-size-lg` — so the scale
 fills in between rather than replacing anything.
 
-| Token | rem | px | Absorbs these live sizes |
-| --- | --- | --- | --- |
-| `--ia-font-size-xs` | 1.1 | 11 | 10, 11 |
-| `--ia-font-size-sm` | 1.2 | 12 | 12, 13, 13.333 |
-| `--ia-font-size-md` | 1.4 | 14 | 14 — unchanged, the body size everywhere |
-| `--ia-font-size-lg` | 1.6 | 16 | 16, 17 |
-| `--ia-font-size-xl` | 2.0 | 20 | 18, 20, 21, 22 |
-| `--ia-font-size-2xl` | 2.4 | 24 | 24, 26 |
-| `--ia-font-size-3xl` | 2.8 | 28 | 28, 30 |
-| `--ia-font-size-4xl` | 3.6 | 36 | 35, 36 |
+| Token | px | Absorbs these live sizes |
+| --- | --- | --- |
+| `--ia-font-size-xs` | 11 | 10, 11 |
+| `--ia-font-size-sm` | 12 | 12, 13, 13.333 |
+| `--ia-font-size-md` | 14 | 14 — unchanged, the body size everywhere |
+| `--ia-font-size-lg` | 16 | 16, 17 |
+| `--ia-font-size-xl` | 20 | 18, 20, 21, 22 |
+| `--ia-font-size-2xl` | 24 | 24, 26 |
+| `--ia-font-size-3xl` | 28 | 28, 30 |
+| `--ia-font-size-4xl` | 36 | 35, 36 |
 
-There is no step below 1.1rem. The live `8px` and `9px` text — the view/favorite counts
+There is no step below 11px. The live `8px` and `9px` text — the view/favorite counts
 on item pages — is too small to read and is not preserved. Use `xs`.
 
 ## Two weights
@@ -145,16 +150,16 @@ wrapped two-line titles. `tight` (1.25) is the replacement.
 
 | Role | Size | Weight | Line-height | Steps down below 890px |
 | --- | --- | --- | --- | --- |
-| `.ia-type-display` | 3.6rem | 400 | 1.25 | 2.8rem |
-| `.ia-type-page-title` | 2.8rem | 700 | 1.25 | 2.4rem |
-| `.ia-type-section` | 2.0rem | 700 | 1.25 | — |
-| `.ia-type-subsection` | 1.6rem | 700 | 1.25 | — |
-| `.ia-type-overline` | 1.4rem | 700 | 1.25 | — (uppercase, 0.05em tracking) |
-| `.ia-type-body` | 1.4rem | 400 | 1.45 | — |
-| `.ia-type-body-strong` | 1.4rem | 700 | 1.45 | — |
-| `.ia-type-prose` | 1.6rem | 400 | 1.6 | — |
-| `.ia-type-meta` | 1.2rem | 400 | 1.45 | — |
-| `.ia-type-caption` | 1.1rem | 400 | 1.45 | — |
+| `.ia-type-display` | 36px | 400 | 1.25 | 28px |
+| `.ia-type-page-title` | 28px | 700 | 1.25 | 24px |
+| `.ia-type-section` | 20px | 700 | 1.25 | — |
+| `.ia-type-subsection` | 16px | 700 | 1.25 | — |
+| `.ia-type-overline` | 14px | 700 | 1.25 | — (uppercase, 0.05em tracking) |
+| `.ia-type-body` | 14px | 400 | 1.45 | — |
+| `.ia-type-body-strong` | 14px | 700 | 1.45 | — |
+| `.ia-type-prose` | 16px | 400 | 1.6 | — |
+| `.ia-type-meta` | 12px | 400 | 1.45 | — |
+| `.ia-type-caption` | 11px | 400 | 1.45 | — |
 
 `overline` corresponds to the live uppercase section labels — "DOWNLOAD OPTIONS",
 "SIMILAR ITEMS", "IN COLLECTIONS" — which offshoot's details page sets at 14px/700, two as
