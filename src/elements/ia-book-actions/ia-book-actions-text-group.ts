@@ -22,7 +22,7 @@ export class IABookActionsTextGroup extends LitElement {
       .variable-texts {
         margin-right: 10px;
         vertical-align: middle;
-        font-size: 1.7rem;
+        font-size: 1.7rem; /* 17px at a 10px root */
       }
       .hidden {
         display: none;

@@ -1,6 +1,7 @@
 import { describe, expect, test, beforeEach, afterEach, vi } from 'vitest';
 import { fixture } from '@open-wc/testing-helpers';
 import { html } from 'lit';
+import { userEvent } from 'vitest/browser';
 import type { IaClearableTextInput } from '@src/elements/ia-clearable-text-input/ia-clearable-text-input';
 import { IADropdownSearchBar } from './ia-dropdown-search-bar';
 import type { SearchRequestedDetail } from './models';
@@ -40,6 +41,28 @@ describe('IA Dropdown Search Bar', () => {
     expect(searchInput).to.exist;
     expect(el.shadowRoot?.querySelector('#category-dropdown')).to.exist;
     expect(el.shadowRoot?.querySelector('#search-button')).to.exist;
+  });
+
+  test('rings its category picker in the light-surface focus color', async () => {
+    const dropdown = el.shadowRoot!.querySelector('#category-dropdown')!;
+    expect(
+      getComputedStyle(dropdown)
+        .getPropertyValue('--dropdownFocusRingColor')
+        .trim(),
+    ).to.equal('#3a4fd6');
+  });
+
+  test("bands its category picker's ring in the light band", async () => {
+    const dropdown = el.shadowRoot!.querySelector('#category-dropdown')!;
+    const trigger =
+      dropdown.shadowRoot!.querySelector<HTMLButtonElement>(
+        'button.click-main',
+      )!;
+    await userEvent.keyboard('{Tab}');
+    trigger.focus();
+    expect(getComputedStyle(trigger).boxShadow).to.equal(
+      'rgb(255, 255, 255) 0px 0px 0px 4px inset',
+    );
   });
 
   test('default selected category is first in list', async () => {

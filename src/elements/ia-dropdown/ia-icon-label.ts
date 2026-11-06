@@ -33,12 +33,18 @@ export class IAIconLabel extends LitElement {
       }
 
       :host(.selected) {
-        background-color: var(--selectedBgColor, #fff);
-        color: var(--selectedTextColor, #2c2c2c);
+        background-color: var(
+          --selectedBgColor,
+          var(--ia-color-selected-soft-fill-inverse--)
+        );
+        color: var(--selectedTextColor, var(--ia-color-text-inverse--));
       }
 
+      /* The selected row is dark now, so a light icon stays as it is. A page
+         that brings back a light selected row can set --selectedIconFilter
+         to invert(1) for the old behavior. */
       :host(.invert-icon-at-selected.selected) slot[name='icon'] {
-        filter: invert(1);
+        filter: var(--selectedIconFilter, none);
       }
 
       div.icon-label-container {

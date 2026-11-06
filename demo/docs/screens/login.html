@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Log In — Internet Archive Elements screens</title>
+<link rel="stylesheet" href="../assets/tokens.css">
+<link rel="stylesheet" href="../assets/ia.css">
+<style>body { margin: 0; }</style>
+</head>
+<body class="ia-page">
+<a class="ia-skip-link" href="#maincontent">Skip to Main Content</a>
+<header class="ia-topnav ia-inverse" id="topnav"></header>
+
+<main class="ia-shell ia-shell--task" id="maincontent" tabindex="-1">
+  <form class="ia-task-card" id="login" novalidate>
+    <div class="ia-task-card__head">
+      <img class="ia-task-card__logo" id="logo" alt="Internet Archive" width="72" height="80">
+      <h1 class="ia-shell__title ia-type-page-title">Log In</h1>
+      <p class="ia-type-body" style="margin:var(--ia-space-2) 0 0">Don't have an account?
+        <a class="ia-link" href="signup.html">Sign up for free!</a></p>
+    </div>
+
+    <button class="ia-button ia-button--secondary ia-button--lg" type="button">Sign In with Google</button>
+    <button class="ia-button ia-button--secondary ia-button--lg" type="button" data-icon-before="email">Email Me a Code to Log In</button>
+    <p class="ia-divider-text" style="margin:0">Or</p>
+
+    <div id="summary" tabindex="-1"></div>
+
+    <div class="ia-field">
+      <label class="ia-field__label" for="email">Email Address</label>
+      <input class="ia-input ia-input--lg" id="email" name="username" type="email" autocomplete="username" required>
+      <p class="ia-field__error" id="email-error" hidden></p>
+    </div>
+    <div class="ia-field">
+      <label class="ia-field__label" for="password">Password</label>
+      <div class="ia-password">
+        <input class="ia-input ia-input--lg" id="password" name="password" type="password" autocomplete="current-password" required>
+        <button class="ia-password__toggle" type="button" aria-label="Show Password" aria-pressed="false"></button>
+      </div>
+      <p class="ia-field__error" id="password-error" hidden></p>
+      <a class="ia-link ia-type-meta" href="#maincontent" style="align-self:flex-start">Forgot password?</a>
+    </div>
+    <label class="ia-choice" style="padding-inline:0">
+      <input class="ia-choice__control" type="checkbox" name="remember" checked>
+      <span class="ia-choice__label">Keep me logged in</span>
+    </label>
+
+    <button class="ia-button ia-button--primary ia-button--lg" type="submit">Log In</button>
+  </form>
+</main>
+
+<script type="module">
+import { topnavMarkup, BRAND, validateForm, wirePasswordToggles, hydrateIcons } from '../assets/site.js';
+document.getElementById('topnav').innerHTML = topnavMarkup('topnav');
+document.getElementById('logo').src = BRAND['ia-mark-dark'];
+wirePasswordToggles();
+document.getElementById('login').addEventListener('submit', e => {
+  e.preventDefault();
+  validateForm(document.getElementById('summary'), [
+    ['email', 'Enter your email address', v => v.length > 0],
+    ['password', 'Enter your password', v => v.length > 0]
+  ], { title: 'Please enter an email and password.' });
+});
+hydrateIcons();
+</script>
+</body>
+</html>

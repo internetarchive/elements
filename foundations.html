@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Foundations — Internet Archive Elements</title>
+<link rel="stylesheet" href="demo/docs/assets/tokens.css">
+<link rel="stylesheet" href="demo/docs/assets/ia.css">
+<link rel="stylesheet" href="demo/docs/assets/site.css">
+</head>
+<body>
+<a class="doc-skip" href="#main">Skip to main content</a>
+<header class="doc-header">
+  <div class="doc-header__inner">
+    <button class="doc-menu-button" type="button" aria-expanded="false" aria-controls="doc-sidebar"><span data-icon="hamburger" data-icon-size="sm"></span>Sections</button>
+    <p class="doc-header__title">Internet Archive <span>elements</span></p>
+  </div>
+  <nav class="doc-tabs" aria-label="Design system">
+    <div class="ia-tabs">
+      <a class="ia-tab" href="principles.html" data-label="Principles">Principles</a>
+      <a class="ia-tab" href="foundations.html" data-label="Foundations" aria-current="page">Foundations</a>
+      <a class="ia-tab" href="index.html" data-label="Components">Components</a>
+      <a class="ia-tab" href="specs.html" data-label="Specs">Specs</a>
+      <a class="ia-tab" href="screens.html" data-label="Screens">Screens</a>
+      <a class="ia-tab" href="icons.html" data-label="Icons">Icons</a>
+      <a class="ia-tab" href="playground.html" data-label="Playground">Playground</a>
+    </div>
+  </nav>
+</header>
+<div class="doc-shell">
+<nav class="doc-sidebar" id="doc-sidebar" aria-label="On this page"></nav>
+<main class="doc-main" id="main">
+  <div class="doc-lede">
+    <h1 class="doc-h1">Foundations</h1>
+    <p>
+      Every token in the system, read at runtime from the stylesheet generated from <code>tokens/tokens.json</code>.
+      Contrast ratios are computed live in your browser, not transcribed — if a value
+      changes in <code>tokens.json</code>, this page changes with it.
+    </p>
+  </div>
+
+  <section class="doc-section" id="color">
+    <h2>Color</h2>
+    <p>Never reference the palette directly in product code. Use a semantic role —
+       roles can be re-pointed when a surface changes; raw hex values cannot. Each swatch
+       says which value its role points at. For which role a job needs, see
+       <a href="https://github.com/internetarchive/elements/blob/main/docs/foundations/color.md#which-token-do-i-use">Which token do I use?</a></p>
+
+    <h3>Surfaces</h3>
+    <div id="surfaces" class="doc-grid doc-grid--3"></div>
+
+    <h3>Text on every surface it can land on</h3>
+    <p>The lightest permitted text color on a light surface is <code>text-secondary</code>.
+       It clears 4.5:1 even on the sunken surface.</p>
+    <div id="text-matrix"></div>
+
+    <h3>Actions</h3>
+    <p>Label contrast is measured against the button's own fill. For the boundary,
+       what matters is the fill against the page — except for <code>warning</code>,
+       whose fill is only 2.44:1 against the page, so its border carries the boundary
+       and has to clear 3:1 on its own.</p>
+    <div id="actions" class="doc-grid doc-grid--3"></div>
+
+    <h3>Status</h3>
+    <div id="status" class="doc-grid doc-grid--3"></div>
+    <p>Each status also has a tint and an edge, for messages and banners. Message text stays
+       primary on every tint.</p>
+    <div id="status-tints" class="doc-grid doc-grid--2"></div>
+
+    <h3>Selected and hover</h3>
+    <p>One selected look in two tiers — <strong>strong</strong> where the state is the
+       content, <strong>soft</strong> where one option is chosen among neutral controls —
+       and one translucent hover that works on any surface, sunken included.</p>
+    <div id="selected" class="doc-grid doc-grid--3"></div>
+
+    <h3>Borders</h3>
+    <div id="borders" class="doc-grid doc-grid--3"></div>
+
+    <h3>Dark chrome</h3>
+    <p>Wrap a subtree in <code>.ia-inverse</code> and the text, border and focus tokens
+       re-point themselves.</p>
+    <div id="inverse"></div>
+
+    <h3>Palette</h3>
+    <p>The raw ramp, for reference.</p>
+    <div id="palette" class="doc-grid doc-grid--3"></div>
+
+    <h3>Legacy</h3>
+    <p>Live values no role points at, kept so a live name can still be traced. Never in new
+       code; each is deleted once nothing on the live site declares it.</p>
+    <div id="legacy" class="doc-grid doc-grid--3"></div>
+  </section>
+
+  <section class="doc-section" id="typography">
+    <h2>Typography</h2>
+    <p><code>html { font-size: 62.5% }</code>, so <strong>1rem = 10px</strong>.
+       Every value below assumes that.</p>
+
+    <h3>Type roles</h3>
+    <p>Heading <em>level</em> is document structure. Heading <em>appearance</em> is a role
+       class. Deciding them separately is what fixes the page with 32 <code>&lt;h1&gt;</code>
+       elements.</p>
+    <div class="doc-panel" id="roles"></div>
+
+    <h3>Scale</h3>
+    <div id="type-scale"></div>
+
+    <h3>Weights</h3>
+    <div class="doc-panel" id="weights"></div>
+
+    <h3>Line heights</h3>
+    <div class="doc-panel" id="line-heights"></div>
+  </section>
+
+  <section class="doc-section" id="spacing">
+    <h2>Spacing</h2>
+    <p>5px base — the scale the live CSS already clusters on.</p>
+    <div class="doc-panel" id="space-scale"></div>
+    <p><code>--ia-space-page-block</code>, above and below the page content, is 80px and
+       halves itself below <code>md</code>.</p>
+  </section>
+
+  <section class="doc-section" id="radius">
+    <h2>Radius</h2>
+    <p>Five values replace the fourteen measured live. A flush edge is <code>0</code>, not a
+       token.</p>
+    <div id="radii" class="doc-grid doc-grid--3"></div>
+  </section>
+
+  <section class="doc-section" id="elevation">
+    <h2>Elevation</h2>
+    <p>Four translucent shadows, all straight down, each named for its job. Opaque offset
+       shadows are retired.</p>
+    <div id="shadows" class="doc-grid doc-grid--3"></div>
+  </section>
+
+  <section class="doc-section" id="motion">
+    <h2>Motion</h2>
+    <p>Hover a swatch to see it move. Everything here is disabled under
+       <code>prefers-reduced-motion: reduce</code>.</p>
+    <div id="motion-demo" class="doc-grid doc-grid--3"></div>
+    <div id="easings"></div>
+    <h3>Press</h3>
+    <p>Press and hold. The scale is tiered by width, so each edge travels about the same
+       distance.</p>
+    <div class="doc-panel doc-row" id="press-demo">
+      <button class="ia-button ia-button--ghost ia-button--icon" aria-label="Favorite" data-icon="star"></button>
+      <button class="ia-button ia-button--primary">Borrow</button>
+      <button class="ia-button ia-button--secondary ia-button--block" style="max-inline-size:46rem">Search This Collection</button>
+    </div>
+  </section>
+
+  <section class="doc-section" id="layout">
+    <h2>Layout</h2>
+    <h3>Breakpoints</h3>
+    <p>Four replace the 30 distinct pixel breakpoints measured live. Media queries can't
+       read custom properties, so write the literal and cite the token in a comment.</p>
+    <div id="breakpoints"></div>
+    <h3>Containers</h3>
+    <div id="containers"></div>
+    <h3>Layering</h3>
+    <div id="zindex"></div>
+  </section>
+
+  <section class="doc-section" id="sizing">
+    <h2>Sizing</h2>
+    <div id="sizes"></div>
+  </section>
+
+  <section class="doc-section" id="everything">
+    <h2>Every token</h2>
+    <p>All <span id="token-count"></span> custom properties defined by
+       <code>tokens/tokens.json</code>, as declared and as resolved. Inside an element they
+       are read as private aliases, e.g. <code>var(--ia-color-text-primary--)</code>, and the
+       <code>--ia-theme-*</code> hooks in <code>src/themes/theme-styles.ts</code> still
+       override them, so existing consumers keep working
+       (<a href="https://github.com/internetarchive/elements/blob/main/docs/DECISIONS.md#d-01">D-01</a>).</p>
+    <div class="doc-toolbar">
+      <label for="tok-filter">Filter</label>
+      <input class="ia-input ia-input--sm" id="tok-filter" type="search"
+             placeholder="color, space, radius…" style="max-inline-size:28rem">
+    </div>
+    <div id="all-tokens"></div>
+  </section>
+</main>
+</div>
+
+<script type="module">
+import { mountChrome, allTokens, tokensMatching, token, contrast, hexOf,
+         ratioBadge, table, escapeHtml } from './demo/docs/assets/site.js';
+mountChrome('foundations.html');
+
+const short = n => n.replace('--ia-', '');
+const el = id => document.getElementById(id);
+
+/* ---- color swatches ------------------------------------------------- */
+/** "via palette-gray-600" for a role that points at another token; nothing for a raw value. */
+const via = t => {
+  const m = /^var\((--ia-[\w-]+)\)$/.exec(t.declared);
+  return m ? `<span class="doc-swatch__value">via ${short(m[1])}</span>` : '';
+};
+
+const swatch = (t, textOn) => {
+  const value = t.resolved;
+  return `<div class="doc-swatch">
+    <div class="doc-swatch__chip" style="background:${value};color:${textOn ?? 'var(--ia-color-text-primary)'}">
+      ${textOn ? 'Aa' : ''}
+    </div>
+    <div class="doc-swatch__meta">
+      <span class="doc-swatch__name">${short(t.name)}</span>
+      <span class="doc-swatch__value">${hexOf(value)}</span>
+      ${via(t)}
+    </div>
+  </div>`;
+};
+
+// The scrim is a layer over a page, not a surface text sits on, so it gets no sample.
+el('surfaces').innerHTML = tokensMatching('color-surface-')
+  .map(t => /scrim/.test(t.name) ? swatch(t)
+    : swatch(t, /chrome|inverse|collection|theater/.test(t.name) ? token('color-text-inverse') : token('color-text-primary')))
+  .join('');
+
+el('palette').innerHTML = tokensMatching('color-palette-').map(t => swatch(t)).join('');
+el('legacy').innerHTML = tokensMatching('color-legacy-').map(t => swatch(t)).join('');
+
+/* ---- text matrix ----------------------------------------------------- */
+{
+  const surfaces = ['color-surface-page', 'color-surface-raised', 'color-surface-sunken'];
+  const texts = ['color-text-primary', 'color-text-secondary', 'color-text-link',
+                 'color-text-link-hover', 'color-text-danger'];
+  el('text-matrix').innerHTML = table(
+    ['Token', 'Value', ...surfaces.map(s => ({ label: short(s).replace('color-surface-', ''), num: true }))],
+    texts.map(t => {
+      const fg = token(t);
+      return [`<code>${short('--ia-' + t)}</code>`, `<code>${hexOf(fg)}</code>`,
+              ...surfaces.map(s => `<span style="background:${token(s)};padding:0.3rem 0.6rem;border-radius:var(--ia-radius-sm);color:${fg}">Aa</span> ${ratioBadge(fg, token(s))}`)];
+    }));
+}
+
+/* ---- actions --------------------------------------------------------- */
+{
+  const intents = ['primary', 'secondary', 'danger', 'warning', 'donate', 'disabled'];
+  el('actions').innerHTML = intents.map(i => {
+    const fill = token(`color-action-${i}-fill`);
+    const text = token(`color-action-${i}-text`);
+    const border = token(`color-action-${i}-border`);
+    // A light secondary and the pale warning fill can't carry their own boundary;
+    // on those two the border does.
+    const borderCarries = i === 'warning' || i === 'secondary';
+    const boundary = borderCarries ? border : fill;
+    const boundaryLabel = borderCarries ? 'border vs page' : 'fill vs page';
+    return `<div class="doc-swatch">
+      <div class="doc-swatch__chip" style="background:${fill};border:2px solid ${border}">
+        <span style="color:${text};font-weight:var(--ia-font-weight-bold)">${i}</span>
+      </div>
+      <div class="doc-swatch__meta">
+        <span class="doc-swatch__value">fill ${hexOf(fill)} · border ${hexOf(border)}</span>
+        <span>label ${ratioBadge(text, fill)}</span>
+        <span>${boundaryLabel} ${i === 'disabled' ? '<span class="doc-ratio">exempt</span>' : ratioBadge(boundary, token('color-surface-page'), 3)}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ---- status + borders ------------------------------------------------ */
+el('status').innerHTML = tokensMatching('color-status-').filter(t => !/-(subtle|border)$/.test(t.name)).map(t => {
+  const v = t.resolved;
+  return `<div class="doc-swatch">
+    <div class="doc-swatch__chip" style="background:${token('color-surface-raised')};color:${v};font-weight:var(--ia-font-weight-bold)">Aa</div>
+    <div class="doc-swatch__meta">
+      <span class="doc-swatch__name">${short(t.name)}</span>
+      <span class="doc-swatch__value">${hexOf(v)}</span>
+      ${via(t)}
+      <span>as text on white ${ratioBadge(v, token('color-surface-raised'))}</span>
+      <span>on sunken ${ratioBadge(v, token('color-surface-sunken'))}</span>
+    </div></div>`;
+}).join('');
+
+el('status-tints').innerHTML = ['info', 'success', 'warning', 'danger'].map(s => {
+  const tint = token(`color-status-${s}-subtle`), edge = token(`color-status-${s}-border`), ink = token(`color-status-${s}`);
+  return `<div class="doc-swatch">
+    <div class="doc-swatch__chip" style="padding-inline:var(--ia-space-3)">
+      <span style="display:flex;align-items:center;gap:var(--ia-space-2);padding:var(--ia-space-2) var(--ia-space-3);background:${tint};border:var(--ia-size-border-width) solid ${edge};border-radius:var(--ia-radius-default)">
+        <span style="color:${ink};font-weight:var(--ia-font-weight-bold)">${s}</span>
+        <span style="color:var(--ia-color-text-primary)">Message text</span>
+      </span>
+    </div>
+    <div class="doc-swatch__meta">
+      <span class="doc-swatch__name">status-${s}-subtle · -border</span>
+      <span class="doc-swatch__value">${hexOf(tint)} · ${hexOf(edge)}</span>
+      <span>text ${ratioBadge(token('color-text-primary'), tint)} · ink ${ratioBadge(ink, tint)}</span>
+    </div></div>`;
+}).join('');
+
+el('selected').innerHTML = `
+  <div class="doc-swatch">
+    <div class="doc-swatch__chip" style="display:flex;align-items:center;justify-content:center;gap:var(--ia-space-1)">
+      <span style="display:grid;place-content:center;inline-size:var(--ia-size-control-md);block-size:var(--ia-size-control-md);color:var(--ia-color-text-link)">4</span>
+      <span style="display:grid;place-content:center;inline-size:var(--ia-size-control-md);block-size:var(--ia-size-control-md);border-radius:var(--ia-radius-default);background:var(--ia-color-selected-strong-fill);color:var(--ia-color-selected-strong-text);font-weight:var(--ia-font-weight-bold)">5</span>
+      <span style="display:grid;place-content:center;inline-size:var(--ia-size-control-md);block-size:var(--ia-size-control-md);color:var(--ia-color-text-link)">6</span>
+    </div>
+    <div class="doc-swatch__meta"><span class="doc-swatch__name">selected-strong-*</span>
+      <span>current page, applied filter, checked box</span>
+      <span>${ratioBadge(token('color-selected-strong-text'), token('color-selected-strong-fill'))}</span></div>
+  </div>
+  <div class="doc-swatch">
+    <div class="doc-swatch__chip" style="background:var(--ia-color-surface-sunken)">
+      <span style="padding:var(--ia-space-1) var(--ia-space-3);border:var(--ia-size-border-width) solid var(--ia-color-selected-soft-border);border-radius:var(--ia-radius-sm);background:var(--ia-color-selected-soft-fill);color:var(--ia-color-text-primary)">Grid</span>
+    </div>
+    <div class="doc-swatch__meta"><span class="doc-swatch__name">selected-soft-*</span>
+      <span>chosen view, segment, option; a segment's label stays ink</span>
+      <span>${ratioBadge(token('color-text-primary'), token('color-selected-soft-fill'))}</span></div>
+  </div>
+  <div class="doc-swatch">
+    <div class="doc-swatch__chip" style="background:var(--ia-color-surface-sunken);display:flex;align-items:center;justify-content:center;gap:var(--ia-space-2)">
+      <span style="padding:var(--ia-space-1) var(--ia-space-2);border-radius:var(--ia-radius-sm)">Rest</span>
+      <span style="padding:var(--ia-space-1) var(--ia-space-2);background-image:linear-gradient(var(--ia-color-hover-overlay),var(--ia-color-hover-overlay));border-radius:var(--ia-radius-sm)">Hover</span>
+    </div>
+    <div class="doc-swatch__meta"><span class="doc-swatch__name">hover-overlay</span>
+      <span class="doc-swatch__value">${token('color-hover-overlay')}</span>
+      <span>on the sunken surface — a sunken fill would not show</span></div>
+  </div>`;
+
+{
+  // Only borders that define a control need 3:1 (WCAG 1.4.11). subtle and default
+  // are decorative — they are shown with their ratio but not judged against it.
+  const structural = /-(strong|focus|focus-inverse)$/;
+  el('borders').innerHTML = tokensMatching('color-border-').map(t => {
+    const v = t.resolved;
+    const onDark = /inverse/.test(t.name);
+    const bg = onDark ? token('color-surface-chrome') : token('color-surface-raised');
+    const judged = structural.test(t.name);
+    return `<div class="doc-swatch">
+      <div class="doc-swatch__chip" style="background:${bg}">
+        <span style="display:block;inline-size:8rem;block-size:3rem;border:2px solid ${v};border-radius:var(--ia-radius-default)"></span>
+      </div>
+      <div class="doc-swatch__meta">
+        <span class="doc-swatch__name">${short(t.name)}</span>
+        <span class="doc-swatch__value">${hexOf(v)}</span>
+        <span>vs ${onDark ? 'chrome' : 'raised'} ${judged
+          ? ratioBadge(v, bg, 3)
+          : `<span class="doc-ratio">${contrast(v, bg).toFixed(2)}:1 · decorative, exempt</span>`}</span>
+      </div></div>`;
+  }).join('');
+}
+
+/* ---- inverse --------------------------------------------------------- */
+el('inverse').innerHTML = `<div class="doc-panel doc-panel--inverse ia-inverse">
+  <p class="ia-type-body" style="color:var(--ia-color-text-primary);margin-block-start:0">
+    Primary text on chrome ${ratioBadge(token('color-text-inverse'), token('color-surface-chrome'))}</p>
+  <p class="ia-type-body" style="color:var(--ia-color-text-secondary)">
+    Secondary text ${ratioBadge(token('color-text-inverse-secondary'), token('color-surface-chrome'))}</p>
+  <p class="ia-type-body"><a class="ia-link" href="#color" style="color:var(--ia-color-text-link)">
+    A link on dark chrome</a> ${ratioBadge(token('color-text-inverse-link'), token('color-surface-chrome'))}</p>
+  <button class="ia-button ia-button--secondary">Tab Here for the Inverse Focus Ring</button>
+</div>`;
+
+/* ---- typography ------------------------------------------------------ */
+{
+  const roles = ['display', 'page-title', 'section', 'subsection', 'overline',
+                 'body', 'body-strong', 'prose', 'meta', 'caption'];
+  el('roles').innerHTML = roles.map(r => `
+    <div style="padding-block:var(--ia-space-2);border-block-end:1px solid var(--ia-color-border-subtle)">
+      <div class="ia-type-${r}">The Internet Archive is a non-profit library</div>
+      <div class="doc-swatch__value">.ia-type-${r}</div>
+    </div>`).join('');
+  for (const sample of el('roles').querySelectorAll('[class^="ia-type-"]')) {
+    const cs = getComputedStyle(sample), size = parseFloat(cs.fontSize);
+    sample.nextElementSibling.textContent +=
+      ` — ${size / 10}rem / ${cs.fontWeight} / ${+(parseFloat(cs.lineHeight) / size).toFixed(2)}`;
+  }
+
+  el('type-scale').innerHTML = table(
+    ['Token', 'rem', 'px', 'Sample'],
+    tokensMatching('font-size-').map(t => [
+      `<code>${short(t.name)}</code>`, `<code>${t.resolved}</code>`,
+      `<span class="num">${parseFloat(t.resolved) * 10}</span>`,
+      `<span style="font-size:${t.resolved}">Buster Keaton</span>`]));
+
+  el('weights').innerHTML = tokensMatching('font-weight-').map(t =>
+    `<div style="font-weight:${t.resolved};font-size:var(--ia-font-size-xl);padding-block:var(--ia-space-1)">
+       ${t.resolved} — ${short(t.name).replace('font-weight-', '')} — The Internet Archive
+     </div>`).join('');
+
+  el('line-heights').innerHTML = tokensMatching('font-line-height-').map(t =>
+    `<div style="margin-block-end:var(--ia-space-3)">
+       <div class="doc-swatch__value">${short(t.name)} — ${t.resolved}</div>
+       <p style="line-height:${t.resolved};max-inline-size:60ch;margin:0;color:var(--ia-color-text-primary)">
+         The Internet Archive is a non-profit library of millions of free texts, movies,
+         software, music, websites, and more.</p>
+     </div>`).join('');
+}
+
+/* ---- spacing --------------------------------------------------------- */
+el('space-scale').innerHTML = tokensMatching('space-').filter(t => /^--ia-space-\d+$/.test(t.name)).map(t =>
+  `<div style="display:flex;align-items:center;gap:var(--ia-space-3);padding-block:0.4rem">
+     <code style="min-inline-size:12rem">${short(t.name)}</code>
+     <code style="min-inline-size:6rem">${t.resolved}</code>
+     <span style="display:block;block-size:1.6rem;inline-size:${t.resolved};background:var(--ia-color-action-primary-fill);border-radius:var(--ia-radius-sm)"></span>
+   </div>`).join('');
+
+/* ---- radius / shadow ------------------------------------------------- */
+el('radii').innerHTML = tokensMatching('radius-').map(t =>
+  `<div class="doc-swatch">
+     <div class="doc-swatch__chip">
+       <span style="display:block;inline-size:8rem;block-size:5rem;background:var(--ia-color-action-primary-fill);border-radius:${t.resolved}"></span>
+     </div>
+     <div class="doc-swatch__meta"><span class="doc-swatch__name">${short(t.name)}</span>
+       <span class="doc-swatch__value">${t.resolved}</span>${via(t)}</div>
+   </div>`).join('');
+
+el('shadows').innerHTML = tokensMatching('shadow-').map(t =>
+  `<div class="doc-swatch">
+     <div class="doc-swatch__chip" style="background:var(--ia-color-surface-page)">
+       <span style="display:block;inline-size:9rem;block-size:4rem;background:var(--ia-color-surface-raised);border-radius:var(--ia-radius-default);box-shadow:${t.resolved}"></span>
+     </div>
+     <div class="doc-swatch__meta"><span class="doc-swatch__name">${short(t.name)}</span>
+       <span class="doc-swatch__value">${t.resolved}</span>${via(t)}</div>
+   </div>`).join('');
+
+/* ---- motion ---------------------------------------------------------- */
+el('motion-demo').innerHTML = tokensMatching('motion-duration-').map(t =>
+  `<div class="doc-swatch">
+     <div class="doc-swatch__chip" style="background:var(--ia-color-surface-page)">
+       <span tabindex="0" style="display:block;inline-size:6rem;block-size:4.4rem;background:var(--ia-color-action-primary-fill);border-radius:var(--ia-radius-default);transition:translate ${t.resolved} var(--ia-motion-easing-standard)"
+             onmouseover="this.style.translate='4rem 0'" onmouseout="this.style.translate='0'"
+             onfocus="this.style.translate='4rem 0'" onblur="this.style.translate='0'"></span>
+     </div>
+     <div class="doc-swatch__meta"><span class="doc-swatch__name">${short(t.name)}</span>
+       <span class="doc-swatch__value">${t.resolved}</span></div>
+   </div>`).join('');
+
+el('easings').innerHTML = table(['Token', 'Value', 'Use'],
+  tokensMatching('motion-easing-').map(t => [`<code>${short(t.name)}</code>`, `<code>${t.resolved}</code>`,
+    { standard: 'anything that moves and stays', enter: 'appearing — decelerate in',
+      exit: 'leaving — accelerate out', linear: 'progress, spinners',
+      state: 'checked, selected, expanded, disabled'
+    }[short(t.name).replace('motion-easing-', '')] ?? '']));
+
+/* ---- layout ---------------------------------------------------------- */
+el('breakpoints').innerHTML = table(['Token', 'Value', 'What changes'],
+  tokensMatching('breakpoint-').map(t => [`<code>${short(t.name)}</code>`, `<code>${t.resolved}</code>`,
+    { sm: 'result grids gain a second column', md: 'wider gutters; inputs return to 1.4rem',
+      lg: 'topnav goes desktop; facet rail appears; display and page-title step up',
+      xl: 'widest grid tier; the container stops growing'
+    }[short(t.name).replace('breakpoint-', '')] ?? '']));
+
+el('containers').innerHTML = table(['Token', 'Value', 'Use'],
+  tokensMatching('container-').map(t => [`<code>${short(t.name)}</code>`, `<code>${t.resolved}</code>`,
+    { 'container-page': 'the default page container', 'container-prose': 'continuous text',
+      'container-form': 'forms', 'container-gutter': 'page gutter above md',
+      'container-gutter-narrow': 'page gutter at and below md'
+    }[short(t.name)] ?? '']));
+
+el('zindex').innerHTML = table([{ label: 'Token' }, { label: 'Value', num: true }],
+  tokensMatching('z-index-').map(t => [`<code>${short(t.name)}</code>`, t.resolved]));
+
+el('sizes').innerHTML = table(['Token', 'Value', 'px'],
+  tokensMatching('size-').map(t => [`<code>${short(t.name)}</code>`, `<code>${t.resolved}</code>`,
+    t.resolved.endsWith('rem') ? String(parseFloat(t.resolved) * 10) : t.resolved]));
+
+/* ---- every token ----------------------------------------------------- */
+{
+  const all = allTokens();
+  el('token-count').textContent = all.length;
+  const render = q => {
+    const rows = all.filter(t => !q || t.name.includes(q) || t.resolved.includes(q))
+      .map(t => [`<code>${short(t.name)}</code>`,
+                 `<code>${escapeHtml(t.declared)}</code>`,
+                 `<code>${escapeHtml(t.resolved)}</code>`,
+                 t.name.startsWith('--ia-theme-') ? 'compatibility alias'
+                   : t.name.startsWith('--ia-color-legacy-') ? 'legacy — not for new code' : '']);
+    el('all-tokens').innerHTML = rows.length
+      ? table(['Token', 'Declared', 'Resolved', ''], rows)
+      : '<p class="doc-empty">No tokens match that filter.</p>';
+  };
+  render('');
+  el('tok-filter').addEventListener('input', e => render(e.target.value.trim().toLowerCase()));
+}
+</script>
+</body>
+</html>

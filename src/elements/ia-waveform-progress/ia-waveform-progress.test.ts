@@ -59,6 +59,16 @@ describe('IA Waveform Progress', () => {
     expect(el.percentComplete).to.equal(0);
   });
 
+  test('fills the played part with the link blue by default', async () => {
+    const el = await fixture<IAWaveformProgress>(
+      html`<ia-waveform-progress></ia-waveform-progress>`,
+    );
+    const fill = getComputedStyle(el)
+      .getPropertyValue('--waveform-fill-color--')
+      .trim();
+    expect(fill).to.equal('#3a4fd6');
+  });
+
   test('does not have the draggable cover unless `interactive` is set', async () => {
     const el = await fixture<IAWaveformProgress>(
       html`<ia-waveform-progress></ia-waveform-progress>`,

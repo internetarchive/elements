@@ -282,7 +282,7 @@ export class IAModalManager
     const modalBackdropColor = css`var(--modalBackdropColor, rgba(10, 10, 10, 0.9))`;
     const modalBackdropZindex = css`var(--modalBackdropZindex, 1000)`;
 
-    const modalWidth = css`var(--modalWidth, 32rem)`;
+    const modalWidth = css`var(--modalWidth, 32rem)`; // 320px at a 10px root
     const modalMaxWidth = css`var(--modalMaxWidth, 95%)`;
     const modalZindex = css`var(--modalZindex, 2000)`;
 

@@ -28,6 +28,7 @@ import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
 import type { ReviewServiceInterface } from './models';
 import { createLegacyReviewService } from './legacy-review-service';
 import './ia-review';
+import { tokenStyles } from '@src/themes/tokens';
 
 /**
  * Renders a form to edit a given IA review.
@@ -682,6 +683,7 @@ export class IAReviewForm extends LitElement {
 
   static get styles(): CSSResultGroup {
     return [
+      tokenStyles,
       css`
         .form-heading {
           display: flex;
@@ -695,7 +697,7 @@ export class IAReviewForm extends LitElement {
         }
 
         .form-heading label {
-          font-size: 1.6rem;
+          font-size: var(--ia-font-size-lg--);
           font-weight: bold;
         }
 
@@ -813,7 +815,7 @@ export class IAReviewForm extends LitElement {
         }
 
         .recaptcha-disclaimer {
-          font-size: 1.2rem;
+          font-size: var(--ia-font-size-sm--);
         }
 
         @media only screen and (max-width: 350px) {

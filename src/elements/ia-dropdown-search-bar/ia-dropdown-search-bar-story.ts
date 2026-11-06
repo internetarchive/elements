@@ -235,7 +235,6 @@ export class IADropdownSearchBarStory extends LitElement {
     return css`
       ia-dropdown-search-bar {
         --dropdownFontSize: 14px;
-        --dropdownItemButtonPadding: 0 10px;
       }
 
       ia-dropdown-search-bar::part(category-dropdown-label) {

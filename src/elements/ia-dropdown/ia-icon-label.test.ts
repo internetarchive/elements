@@ -33,4 +33,17 @@ describe('IAIconLabel', () => {
     expect(labelSlotEls?.length).to.equal(1);
     expect(labelSlotEls[0].getAttribute('id')).to.equal('carrotcake');
   });
+
+  test('leaves a selected icon as it is unless the page asks to invert it', async () => {
+    const el = await fixture<IAIconLabel>(
+      html`<ia-icon-label class="invert-icon-at-selected selected">
+        <span slot="icon">*</span> label
+      </ia-icon-label>`,
+    );
+    const iconSlot = el.shadowRoot!.querySelector('slot[name="icon"]')!;
+    expect(getComputedStyle(iconSlot).filter).to.equal('none');
+
+    el.style.setProperty('--selectedIconFilter', 'invert(1)');
+    expect(getComputedStyle(iconSlot).filter).to.equal('invert(1)');
+  });
 });

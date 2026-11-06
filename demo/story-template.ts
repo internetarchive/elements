@@ -2,6 +2,7 @@ import {
   css,
   html,
   LitElement,
+  nothing,
   type CSSResultGroup,
   type PropertyValues,
 } from 'lit';
@@ -19,6 +20,7 @@ import type {
 } from './story-components/story-prop-settings';
 
 import { tagFromHash } from './element-hash';
+import { DOCS_URL, STORY_SPECS } from './story-specs';
 
 import testTube from './test-tube.svg';
 
@@ -107,6 +109,7 @@ export class StoryTemplate extends LitElement {
               />`,
           )}
         </h2>
+        ${this.specTemplate}
         <h3>Demo</h3>
         <div class="slot-container" style=${ifDefined(this.stringifiedStyles)}>
           <slot
@@ -132,6 +135,19 @@ export class StoryTemplate extends LitElement {
         </div>
       </div>
     `;
+  }
+
+  /** Links to the design system spec this element implements, if any. */
+  private get specTemplate() {
+    const spec = STORY_SPECS[this.elementTag];
+    if (!spec) return nothing;
+    return html`<p class="spec-links">
+      Spec:
+      ${spec.section
+        ? html`<a href="specs.html#${spec.section}">reference</a> ·`
+        : nothing}
+      <a href="${DOCS_URL}${spec.doc}">docs/${spec.doc}</a>
+    </p>`;
   }
 
   private get detailsTemplate() {
@@ -329,10 +345,12 @@ export class StoryTemplate extends LitElement {
       themeStyles,
       css`
         #container {
-          background: #f0f0f0;
-          padding: 0 10px 10px;
-          margin-bottom: 1rem;
-          border: 1px solid #ccc;
+          background: var(--ia-color-surface-raised--);
+          padding: 0 var(--ia-space-3--) var(--ia-space-3--);
+          margin-bottom: 1.6rem;
+          border: var(--ia-border-card--);
+          border-radius: var(--ia-radius-default--);
+          box-shadow: var(--ia-shadow-raised--);
         }
 
         #details {
@@ -352,7 +370,7 @@ export class StoryTemplate extends LitElement {
         }
 
         h2 {
-          font-size: 0.85rem;
+          font-size: 1.36rem;
           font-weight: 600;
           margin: 10px 0 8px;
           display: flex;
@@ -361,11 +379,11 @@ export class StoryTemplate extends LitElement {
         }
 
         h3 {
-          font-size: 0.7rem;
+          font-size: 1.12rem;
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.06em;
-          color: #666;
+          color: var(--ia-color-text-secondary--);
           display: flex;
           align-items: center;
           gap: 5px;
@@ -379,11 +397,11 @@ export class StoryTemplate extends LitElement {
           align-items: center;
           gap: 5px;
           margin-top: 6px;
-          font-size: 0.7rem;
+          font-size: 1.12rem;
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.06em;
-          color: #595959;
+          color: var(--ia-color-text-secondary--);
           cursor: pointer;
           user-select: none;
           border: none;
@@ -393,7 +411,7 @@ export class StoryTemplate extends LitElement {
 
         .details-toggle::before {
           content: '▾';
-          font-size: 0.65rem;
+          font-size: 1.04rem;
           display: inline-block;
           transition: transform 0.15s;
         }
@@ -404,25 +422,35 @@ export class StoryTemplate extends LitElement {
 
         .copy-btn {
           background: none;
-          border: 1px solid #bbb;
-          border-radius: 3px;
+          border: var(--ia-border-control--);
+          border-radius: var(--ia-radius-sm--);
           padding: 1px 7px;
-          font-size: 0.7rem;
+          font-size: 1.12rem;
           cursor: pointer;
-          color: #555;
+          color: var(--ia-color-text-secondary--);
           line-height: 1.4;
         }
 
         .copy-btn:hover {
-          background: #0f3e6e;
-          color: #fff;
-          border-color: #0f3e6e;
+          background: var(--ia-color-action-primary-fill--);
+          color: var(--ia-color-action-primary-text--);
+          border-color: var(--ia-color-action-primary-fill--);
         }
 
         .copy-btn.copied {
-          background: #2a7a2a;
-          color: #fff;
-          border-color: #2a7a2a;
+          background: var(--ia-color-status-success--);
+          color: var(--ia-color-text-inverse--);
+          border-color: var(--ia-color-status-success--);
+        }
+
+        .spec-links {
+          margin: -4px 0 8px;
+          font-size: 1.2rem;
+          color: var(--ia-color-text-secondary--);
+        }
+
+        .spec-links a {
+          color: var(--ia-color-text-link--);
         }
 
         .slot-container {
@@ -455,15 +483,15 @@ export class StoryTemplate extends LitElement {
         }
 
         .section-placeholder {
-          font-size: 0.78rem;
-          color: #767676;
+          font-size: 1.248rem;
+          color: var(--ia-color-text-secondary--);
           margin: 4px 0;
           font-style: italic;
         }
 
         .details-inner syntax-highlighter {
           display: block;
-          --syntax-max-height: 5.5rem;
+          --syntax-max-height: 8.8rem;
         }
 
         /* One element on the page means nothing else is competing for the

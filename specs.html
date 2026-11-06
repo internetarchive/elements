@@ -1,0 +1,1180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Specs — Internet Archive Elements</title>
+<link rel="stylesheet" href="demo/docs/assets/tokens.css">
+<link rel="stylesheet" href="demo/docs/assets/ia.css">
+<link rel="stylesheet" href="demo/docs/assets/site.css">
+</head>
+<body>
+<a class="doc-skip" href="#main">Skip to main content</a>
+<header class="doc-header">
+  <div class="doc-header__inner">
+    <button class="doc-menu-button" type="button" aria-expanded="false" aria-controls="doc-sidebar"><span data-icon="hamburger" data-icon-size="sm"></span>Sections</button>
+    <p class="doc-header__title">Internet Archive <span>elements</span></p>
+  </div>
+  <nav class="doc-tabs" aria-label="Design system">
+    <div class="ia-tabs">
+      <a class="ia-tab" href="principles.html" data-label="Principles">Principles</a>
+      <a class="ia-tab" href="foundations.html" data-label="Foundations">Foundations</a>
+      <a class="ia-tab" href="index.html" data-label="Components">Components</a>
+      <a class="ia-tab" href="specs.html" data-label="Specs" aria-current="page">Specs</a>
+      <a class="ia-tab" href="screens.html" data-label="Screens">Screens</a>
+      <a class="ia-tab" href="icons.html" data-label="Icons">Icons</a>
+      <a class="ia-tab" href="playground.html" data-label="Playground">Playground</a>
+    </div>
+  </nav>
+</header>
+<div class="doc-shell">
+<nav class="doc-sidebar" id="doc-sidebar" aria-label="On this page"></nav>
+<main class="doc-main" id="main">
+  <div class="doc-lede">
+    <h1 class="doc-h1">Specs</h1>
+    <p>
+      What each component in the design system should look like and do, drawn in plain
+      HTML and CSS. The look comes from <code>demo/docs/assets/ia.css</code>, which uses
+      nothing but the tokens; the behavior is a few lines of script. Each section is the
+      reference for its spec in
+      <a href="https://github.com/internetarchive/elements/tree/main/docs/components"><code>docs/components/</code></a>.
+    </p>
+    <p>
+      These are not elements, and <code>ia.css</code> does not ship in the package. The
+      <a href="index.html">Components</a> tab is the real elements. Where an element
+      already covers a spec, its section here says so and links to it; until the element
+      matches the spec, this page is what it is measured against.
+    </p>
+    <p>
+      <strong>This page shrinks as elements land.</strong> Once an element matches its
+      spec, its section and its <code>ia.css</code> rules are deleted, and the spec's
+      markdown points at the element instead. Anything still here is a component no
+      element covers yet.
+    </p>
+  </div>
+
+  <div class="doc-toolbar">
+    <div id="vp"></div>
+    <span style="flex:1"></span>
+    <label class="ia-choice">
+      <input class="ia-choice__control" type="checkbox" id="force-focus">
+      <span class="ia-choice__label">Show focus rings on everything</span>
+    </label>
+  </div>
+
+  <div class="doc-frame" id="stage">
+
+    <div class="doc-group" id="actions">
+    <h2 class="doc-group__title">Actions</h2>
+
+    <section class="doc-section" id="button">
+      <h3 class="doc-section__title">Button</h3>
+      <p>Three sizes, eight intents. Every size guarantees a 44&times;44 hit area on
+         coarse pointers even when its visual box is smaller.</p>
+
+      <h4>Intents</h4>
+      <div class="doc-panel doc-row">
+        <button class="ia-button ia-button--primary">Primary</button>
+        <button class="ia-button ia-button--secondary">Secondary</button>
+        <button class="ia-button ia-button--danger">Delete Collection</button>
+        <button class="ia-button ia-button--warning">Proceed Anyway</button>
+        <button class="ia-button ia-button--donate"><span data-icon="donate" data-icon-size="sm"></span>Donate</button>
+        <button class="ia-button ia-button--ghost ia-button--sm"><span data-icon="share" data-icon-size="sm"></span>Share</button>
+        <button class="ia-button ia-button--link">Display Reviews</button>
+        <button class="ia-button ia-button--primary" aria-disabled="true">Disabled</button>
+      </div>
+
+      <h4>Sizes</h4>
+      <div class="doc-panel doc-row">
+        <button class="ia-button ia-button--sm ia-button--primary">Small · 30px</button>
+        <button class="ia-button ia-button--primary">Medium · 36px</button>
+        <button class="ia-button ia-button--lg ia-button--primary">Large · 44px</button>
+      </div>
+
+      <h4>States</h4>
+      <div class="doc-panel doc-row">
+        <button class="ia-button ia-button--primary">Rest</button>
+        <button class="ia-button ia-button--primary" id="btn-focus">Focus (Tab Here)</button>
+        <button class="ia-button ia-button--primary" aria-busy="true">Saving</button>
+        <button class="ia-button ia-button--primary" disabled>Disabled</button>
+      </div>
+      <h4>Icon-only</h4>
+      <p>A square whose side is the size's control height, or a circle. Always carries an
+         <code>aria-label</code>. <code>--floating</code> adds the lift for a control that
+         sits over media.</p>
+      <div class="doc-panel doc-row">
+        <button class="ia-button ia-button--ghost ia-button--icon ia-button--sm" aria-label="Close" data-icon="close"></button>
+        <button class="ia-button ia-button--ghost ia-button--icon" aria-label="Close" data-icon="close"></button>
+        <button class="ia-button ia-button--ghost ia-button--icon ia-button--lg" aria-label="Close" data-icon="close"></button>
+        <button class="ia-button ia-button--ghost ia-button--icon ia-button--circle" aria-label="Favorite" data-icon="star"></button>
+        <button class="ia-button ia-button--ghost ia-button--icon" aria-label="More Actions" data-icon="ellipses"></button>
+      </div>
+      <h4>Press</h4>
+      <p>Press and hold. Each squeezes by the scale for its width, so the edge travels about
+         the same distance: icon buttons 0.92, text buttons 0.97, full-width buttons 0.985.</p>
+      <div class="doc-panel doc-row">
+        <button class="ia-button ia-button--ghost ia-button--icon" aria-label="Favorite" data-icon="star"></button>
+        <button class="ia-button ia-button--primary">Borrow</button>
+        <button class="ia-button ia-button--secondary ia-button--block" style="max-inline-size:46rem">Search This Collection</button>
+      </div>
+      <p class="doc-note">
+        Prefer <code>aria-disabled</code> over <code>disabled</code> on form submits — a
+        <code>disabled</code> button leaves the tab order, so a keyboard user reaches the
+        end of a form and finds nothing there. (<a href="https://github.com/internetarchive/elements/blob/main/docs/DECISIONS.md">D-32</a>)
+      </p>
+    </section>
+
+    <section class="doc-section" id="menu">
+      <h3 class="doc-section__title">Menu</h3>
+      <p>Commands, not a value. Arrows move focus only and nothing happens until Enter,
+         Space or a click, so a menu is safe to wire to navigation. Escape closes and returns
+         focus to the trigger. A menu that reflects a state names it in the trigger and
+         checks the current item.</p>
+      <div class="doc-panel doc-grid doc-grid--2" style="align-items:start">
+        <div style="min-block-size:22rem">
+          <span class="ia-menu-anchor">
+            <button class="ia-button ia-button--secondary" type="button" aria-haspopup="menu" aria-expanded="false"
+                    aria-controls="demo-menu">More<span data-icon="caret" data-icon-size="sm"></span></button>
+            <ul class="ia-menu ia-inverse" id="demo-menu" role="menu" aria-label="More" hidden>
+              <li role="none"><button class="ia-menu__item" role="menuitem" tabindex="-1">Edit Item</button></li>
+              <li role="none"><button class="ia-menu__item" role="menuitem" tabindex="-1">View History</button></li>
+              <li role="none"><button class="ia-menu__item" role="menuitem" tabindex="-1">Download Options</button></li>
+              <li role="separator" class="ia-menu__separator"></li>
+              <li role="none"><button class="ia-menu__item" role="menuitem" tabindex="-1">Report This Item</button></li>
+            </ul>
+          </span>
+        </div>
+        <div>
+          <span class="doc-compare__label">Open, with a current item</span><br>
+          <ul class="ia-menu ia-inverse" role="menu" aria-label="Uploads, Most Recent" style="margin-block-start:var(--ia-space-1)">
+            <li role="none"><button class="ia-menu__item" role="menuitemradio" aria-checked="true" tabindex="-1">Most Recent</button></li>
+            <li role="none"><button class="ia-menu__item" role="menuitemradio" aria-checked="false" tabindex="-1">Most Viewed</button></li>
+            <li role="none"><button class="ia-menu__item" role="menuitemradio" aria-checked="false" tabindex="-1">Title</button></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <div class="doc-group" id="inputs">
+    <h2 class="doc-group__title">Inputs</h2>
+
+    <section class="doc-section" id="input">
+      <h3 class="doc-section__title">Input</h3>
+      <p>The signup form's fields are native browser defaults today —
+         <code>border: 2px inset #767676</code>, no focus state, no error state.</p>
+      <div class="doc-panel doc-grid doc-grid--2">
+        <div class="ia-field">
+          <label class="ia-field__label" for="i1">Email Address</label>
+          <p class="ia-field__hint ia-type-meta" id="i1h">Up to 127 characters</p>
+          <input class="ia-input ia-input--lg" id="i1" type="email" aria-describedby="i1h"
+                 placeholder="you@example.org">
+        </div>
+        <div class="ia-field">
+          <label class="ia-field__label" for="i2">Screen Name</label>
+          <input class="ia-input ia-input--lg" id="i2" type="text"
+                 aria-invalid="true" aria-describedby="i2e" value="a">
+          <p class="ia-field__error" id="i2e">
+            <span aria-hidden="true">!</span> Use at least 3 characters
+          </p>
+        </div>
+        <div class="ia-field">
+          <label class="ia-field__label" for="i3">Disabled</label>
+          <input class="ia-input ia-input--lg" id="i3" value="Not editable" disabled>
+        </div>
+        <div class="ia-field">
+          <label class="ia-field__label" for="i4">Notes</label>
+          <textarea class="ia-textarea" id="i4" placeholder="Optional"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="search">
+      <h3 class="doc-section__title">Search bar</h3>
+      <p>Live's search bar, segment for segment: a search-type picker — All, Books/Documents,
+         Text Contents, TV, Radio and the rest — that sets what is searched before the
+         search runs, the query field with its clear button, and the search button. Two
+         sizes, as live: the default 30px bar in the topnav and on the search page, and the
+         50px bar on the homepage.</p>
+      <h4>Default — topnav, search page</h4>
+      <div class="doc-panel" id="search-md" style="max-inline-size:80rem"></div>
+      <h4>Large — homepage</h4>
+      <div class="doc-panel" id="search-lg" style="max-inline-size:52rem"></div>
+      <h4>With a query, and a different search type</h4>
+      <div class="doc-panel" id="search-value" style="max-inline-size:80rem"></div>
+    </section>
+
+    <section class="doc-section" id="dropdown">
+      <h3 class="doc-section__title">Dropdown</h3>
+      <p>Live's <code>ia-dropdown</code> — a bold label and a caret that open a dark panel —
+         built on a native <code>&lt;select&gt;</code>, so the keyboard, screen reader and
+         touch behavior are the platform's. Where the browser supports customizable
+         select the panel is styled to match; elsewhere its own picker opens. The
+         selected option carries a check as well as the fill.</p>
+      <div class="doc-panel doc-row" style="align-items:flex-start">
+        <div id="dropdown-demo"></div>
+        <div>
+          <span class="doc-compare__label">Open</span><br>
+          <ul class="ia-dropdown-preview" id="dropdown-preview" aria-hidden="true"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="segmented">
+      <h3 class="doc-section__title">Segmented control</h3>
+      <p>One choice from two to four options that fit on screen. A radio group: one tab
+         stop, arrows and Home/End move the choice. The chosen option takes the soft
+         selected look. The sort bar's view switch is one.</p>
+      <div class="doc-panel doc-stack">
+        <div class="ia-segmented" role="radiogroup" aria-label="Search In">
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="true">Metadata</button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1">Text Contents</button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1">TV Captions</button>
+        </div>
+        <div class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Result View">
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="true" aria-label="Grid View" data-icon="view-grid"></button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1" aria-label="List View" data-icon="view-detail"></button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1" aria-label="Compact List View" data-icon="view-list"></button>
+        </div>
+        <div class="ia-segmented ia-segmented--sm" role="radiogroup" aria-label="Date Range">
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="true">Any Time</button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1">This Year</button>
+          <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1" aria-disabled="true">Custom</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="choice">
+      <h3 class="doc-section__title">Checkbox and radio</h3>
+      <p>20px controls in 44px rows. Live renders these at 13&times;13 on mobile, inside a
+         list of about seventy.</p>
+      <div class="doc-panel doc-grid doc-grid--2">
+        <fieldset style="border:0;margin:0;padding:0">
+          <legend class="ia-type-subsection">Media Type</legend>
+          <label class="ia-choice"><input class="ia-choice__control" type="checkbox" checked>
+            <span class="ia-choice__label">Texts</span><span class="ia-choice__count">52,243,983</span></label>
+          <label class="ia-choice"><input class="ia-choice__control" type="checkbox">
+            <span class="ia-choice__label">Collection</span><span class="ia-choice__count">23,097</span></label>
+          <label class="ia-choice"><input class="ia-choice__control" type="checkbox" disabled>
+            <span class="ia-choice__label">Data</span><span class="ia-choice__count">112</span></label>
+          <button class="ia-button ia-button--link" aria-expanded="false">Show 42 More Media Types</button>
+        </fieldset>
+        <fieldset style="border:0;margin:0;padding:0">
+          <legend class="ia-type-subsection">Search In</legend>
+          <label class="ia-choice"><input class="ia-choice__control" type="radio" name="scope" checked>
+            <span class="ia-choice__label">Metadata</span></label>
+          <label class="ia-choice"><input class="ia-choice__control" type="radio" name="scope">
+            <span class="ia-choice__label">Text Contents</span></label>
+        </fieldset>
+      </div>
+    </section>
+
+    <section class="doc-section" id="switch">
+      <h3 class="doc-section__title">Switch</h3>
+      <p>A binary setting that takes effect the moment it changes. A form value that is
+         submitted later is a checkbox.</p>
+      <div class="doc-panel doc-stack">
+        <button class="ia-switch" type="button" role="switch" aria-checked="true">
+          <span class="ia-switch__track"></span>
+          <span>Email Me About New Uploads<span class="ia-switch__description">From collections you follow</span></span>
+        </button>
+        <button class="ia-switch" type="button" role="switch" aria-checked="false">
+          <span class="ia-switch__track"></span><span>Show Only Borrowable Items</span>
+        </button>
+        <button class="ia-switch" type="button" role="switch" aria-checked="false" aria-disabled="true">
+          <span class="ia-switch__track"></span><span>Public Favorites</span>
+        </button>
+      </div>
+    </section>
+    </div>
+
+    <div class="doc-group" id="navigation">
+    <h2 class="doc-group__title">Navigation</h2>
+
+    <section class="doc-section" id="tabs">
+      <h3 class="doc-section__title">Tabs</h3>
+      <p>Page tabs that swap a panel are a <code>tablist</code>. Tabs that change the URL
+         are links. The search page's search-type strip is presented as tabs too, over a
+         single results panel, with manual activation because choosing one re-runs the
+         search (<a href="https://github.com/internetarchive/elements/blob/main/docs/DECISIONS.md">D-28</a>).</p>
+      <h4>Page tabs</h4>
+      <div class="doc-panel">
+        <div class="ia-tabs" role="tablist" aria-label="Collection Sections">
+          <button class="ia-tab" role="tab" aria-selected="true" data-label="Collection">Collection</button>
+          <button class="ia-tab" role="tab" aria-selected="false" tabindex="-1" data-label="Forum">Forum</button>
+          <button class="ia-tab" role="tab" aria-selected="false" tabindex="-1" data-label="About">About</button>
+        </div>
+      </div>
+      <h4>Search-type tabs</h4>
+      <div class="doc-panel" id="search-type-tabs"></div>
+    </section>
+
+    <section class="doc-section" id="sort-bar">
+      <h3 class="doc-section__title">Sort bar</h3>
+      <p>Above every result grid: sort direction, sort field, and the result view. The
+         view switch is a radio group — exactly one view is always chosen. The direction
+         glyph's two arrows show the order: the current one in ink, the other faded.</p>
+      <div class="doc-panel doc-stack">
+        <div id="sort-bar-demo"></div>
+        <div id="sort-bar-demo-asc"></div>
+      </div>
+      <h4>Direction unavailable</h4>
+      <p>Relevance has no direction. The toggle stays in place, so the bar does not shift,
+         and says why it is unavailable.</p>
+      <div class="doc-panel" id="sort-bar-demo-relevance"></div>
+      <h4>Letter bar</h4>
+      <p>Sorting by Title or Creator adds a letter bar beneath. Each letter toggles a filter
+         to results starting with it; a letter with no results is disabled. Two rows of 13
+         below <code>md</code>.</p>
+      <div class="doc-panel" id="sort-bar-demo-title"></div>
+    </section>
+
+    <section class="doc-section" id="facets">
+      <h3 class="doc-section__title">Facet rail</h3>
+      <p>The filter rail on search, collection and profile pages: the Year Published
+         histogram, then Media Type, Year, Subject, Collection, Creator and Language, six
+         values each. Each group is a <code>fieldset</code>; each row is a checkbox, the eye
+         that hides the value, then the label and count. The eye rests at 30% and closes on
+         hover. Collection values link to their collection. "Clear All Filters" heads the
+         rail once anything is applied; there are no chips.</p>
+      <div class="doc-panel">
+        <div class="ia-facets" id="facets-wide"></div>
+      </div>
+      <h4>Narrow</h4>
+      <p>Narrower than <code>lg</code>, the rail is a <strong>Filters</strong> accordion above
+         the results, closed until opened, each group closed under its own caret.</p>
+      <div class="doc-panel">
+        <div style="max-inline-size:37.5rem"><div class="ia-facets" id="facets-narrow"></div></div>
+      </div>
+      <h4>Signed out</h4>
+      <p>Signed out, the rail stays behind the same <strong>Filters</strong> disclosure at
+         every width, and loads its values only when opened.</p>
+      <div class="doc-panel">
+        <div class="ia-facets ia-facets--opt-in" id="facets-opt-in"></div>
+      </div>
+      <h4>More</h4>
+      <p>"Show More" opens every value of one facet in a modal. Sort by count or name,
+         filter the list, and see what is chosen as removable chips. The values run in
+         columns of twelve that scroll sideways a page at a time. Nothing applies until
+         <strong>Apply Filters</strong>.</p>
+      <div class="doc-panel doc-row">
+        <button class="ia-button ia-button--secondary" id="open-more-facets" aria-haspopup="dialog">Show More Subjects</button>
+      </div>
+      <dialog class="ia-modal ia-modal--lg" id="demo-more-facets" aria-labelledby="dmf-title">
+        <header class="ia-modal__header">
+          <h2 class="ia-modal__title" id="dmf-title">Select Filters</h2>
+          <button class="ia-modal__close" type="button" aria-label="Close" data-icon="close" data-icon-size="sm"></button>
+        </header>
+        <div class="ia-modal__body">
+          <div class="ia-more-facets">
+            <h3 class="ia-more-facets__title"><span class="ia-visually-hidden">More Values for: </span>Subject</h3>
+            <div class="ia-more-facets__controls">
+              <span class="ia-more-facets__control"><span id="dmf-sort">Sort by:</span>
+                <span class="ia-segmented ia-segmented--sm" role="radiogroup" aria-labelledby="dmf-sort">
+                  <button class="ia-segmented__option" type="button" role="radio" aria-checked="true">Count</button>
+                  <button class="ia-segmented__option" type="button" role="radio" aria-checked="false" tabindex="-1">Subject</button>
+                </span></span>
+              <label class="ia-more-facets__control">Filter by:
+                <input class="ia-input ia-input--sm" type="search" placeholder="Search subjects…"></label>
+            </div>
+            <ul class="ia-more-facets__chosen" aria-label="Selected Subjects">
+              <li class="ia-more-facets__chip"><span data-icon="check" data-icon-size="sm"></span><span class="ia-visually-hidden">Selected: </span><span>Buster Keaton</span>
+                <button class="ia-button ia-button--ghost ia-button--icon ia-button--sm" type="button" aria-label="Deselect Buster Keaton" data-icon="close" data-icon-size="sm"></button></li>
+              <li class="ia-more-facets__chip"><span data-icon="eye-off" data-icon-size="sm"></span><span class="ia-visually-hidden">Hidden: </span><span>1920s</span>
+                <button class="ia-button ia-button--ghost ia-button--icon ia-button--sm" type="button" aria-label="Unhide 1920s" data-icon="close" data-icon-size="sm"></button></li>
+            </ul>
+            <div class="ia-more-facets__pages">
+              <button class="ia-button ia-button--ghost ia-button--icon ia-button--sm" type="button" data-pages="prev"
+                      aria-label="Show Previous Page of Values" data-icon="chevron-left" disabled></button>
+              <div class="ia-more-facets__columns" id="dmf-values" role="group" aria-label="Subject Values" tabindex="0"></div>
+              <button class="ia-button ia-button--ghost ia-button--icon ia-button--sm" type="button" data-pages="next"
+                      aria-label="Show Next Page of Values" data-icon="chevron-right"></button>
+            </div>
+            <div class="ia-modal__actions" style="justify-content:center">
+              <button class="ia-button ia-button--secondary" type="button" value="cancel">Cancel</button>
+              <button class="ia-button ia-button--primary" type="button" value="apply">Apply Filters</button>
+            </div>
+          </div>
+        </div>
+      </dialog>
+    </section>
+    </div>
+
+    <div class="doc-group" id="content">
+    <h2 class="doc-group__title">Content</h2>
+
+    <section class="doc-section" id="tiles">
+      <h3 class="doc-section__title">Tile</h3>
+      <p>The most-repeated component on the site — fifty per page of results. Four kinds,
+         chosen per result by content type — item, collection, account and saved search —
+         on one skeleton. Titles clamp at three lines (four for a search).</p>
+      <h4>Item</h4>
+      <div class="doc-panel">
+        <div class="ia-tile-grid" id="tile-grid"></div>
+      </div>
+      <h4>Collection</h4>
+      <div class="doc-panel">
+        <div class="ia-tile-grid" id="collection-tile-grid"></div>
+      </div>
+      <h4>Account and search</h4>
+      <p>An account: its avatar in a circle, the screen name, "Archivist since", and
+         uploads in place of views. A saved search: the search glyph on a light well in a
+         dark card, the query as its title, no footer.</p>
+      <div class="doc-panel">
+        <div class="ia-tile-grid" id="other-tile-grid"></div>
+      </div>
+      <h4>What a tile can carry</h4>
+      <p>Sorted by a date, that date replaces the byline ("published 1926"). Sorted by
+         weekly views, the views stat counts the week. A serial adds its volume and issue; a
+         full-text search adds the matching passages with the terms marked. A restricted
+         result blurs its thumbnail under a banner saying why.</p>
+      <div class="doc-panel">
+        <div class="ia-tile-grid" id="content-tile-grid"></div>
+      </div>
+      <h4>Parts</h4>
+      <p>The two parts the site builds as components of their own: the thumbnail well
+         (<code>image-block</code>) — a fixed 170px, image contained, square top corners
+         rounded to match the card — and the item stat row (<code>tile-stats</code>).</p>
+      <div class="doc-panel doc-row" style="align-items:flex-start">
+        <div class="ia-tile ia-tile--item" id="part-thumb" style="inline-size:19rem"></div>
+        <div class="ia-tile ia-tile--collection" id="part-thumb-collection" style="inline-size:19rem"></div>
+        <div class="ia-tile ia-tile--item" id="part-stats" style="inline-size:19rem"></div>
+      </div>
+      <h4>Hover pane</h4>
+      <p>With a pointer that can hover, resting on a grid or compact result for 300ms opens
+         its list-view row beside the pointer; keyboard focus opens it too, and Down Arrow
+         moves into it. Where a pointer cannot hover, the ⓘ button on the thumbnail opens it
+         instead — this page shows that button only on a touch screen.</p>
+      <div class="doc-panel">
+        <div class="ia-hover-pane" role="dialog" aria-label="The General (1926), Preview" id="hover-pane-demo"></div>
+      </div>
+      <h4>List view</h4>
+      <div class="doc-panel">
+        <div class="ia-results"><ul class="ia-tile-list" id="tile-list-demo" aria-label="Results"></ul></div>
+      </div>
+      <h4>Compact view</h4>
+      <div class="doc-panel">
+        <div class="ia-results"><div class="ia-tile-compact" id="tile-compact-demo" role="table" aria-label="Results"></div></div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="carousel">
+      <h3 class="doc-section__title">Carousel</h3>
+      <p>A native scroll container with scroll snapping. A fling moves one page, as the
+         arrows do, and each arrow drops out at its end. The viewport is clipped to its
+         container, so the document never scrolls sideways.</p>
+      <div class="doc-panel">
+        <section class="ia-carousel" aria-labelledby="carousel-title">
+          <div class="ia-carousel__header">
+            <h3 class="ia-type-section" id="carousel-title" style="margin:0">Similar Items</h3>
+            <div class="ia-carousel__controls">
+              <button class="ia-button ia-button--ghost ia-button--icon ia-button--sm" type="button" data-carousel="prev" aria-label="Previous Page" data-icon="chevron-left"></button>
+              <button class="ia-button ia-button--ghost ia-button--icon ia-button--sm" type="button" data-carousel="next" aria-label="Next Page" data-icon="chevron-right"></button>
+            </div>
+          </div>
+          <ul class="ia-carousel__viewport" id="carousel-items" tabindex="0" aria-label="Similar Items, scrollable"></ul>
+        </section>
+      </div>
+    </section>
+
+    <section class="doc-section" id="read-more">
+      <h3 class="doc-section__title">Read more</h3>
+      <p>Collapses long prose to six lines. The toggle appears only when at least four lines
+         are hidden — a short description shows whole, with no control.</p>
+      <div class="doc-panel doc-grid doc-grid--2">
+        <div class="ia-read-more ia-type-prose">
+          <div class="ia-read-more__body" id="rm-long">
+            <p style="margin-block-start:0">Buster Keaton's <i>College</i> (1927) follows Ronald, a bookish
+            valedictorian whose graduation speech denounces athletics. He loses his girlfriend to a star
+            athlete and enrolls at Clayton College determined to win her back by excelling at every sport
+            he once dismissed.</p>
+            <p>The film was produced by Joseph M. Schenck and released by United Artists. This copy was
+            digitized from a 16mm print held by a private collector and restored for the silent film
+            collection. Intertitles are in English. The musical score is a later addition and is not part
+            of the original release.</p>
+            <p style="margin-block-end:0">Running time is 66 minutes at 20 frames per second. The print
+            shows wear in the second reel, most visibly during the rowing sequence, and two short
+            passages are supplied from a second source.</p>
+          </div>
+          <button class="ia-button ia-button--link ia-read-more__toggle" type="button" aria-expanded="false"
+                  aria-controls="rm-long" data-more="Show More" data-less="Show Less">Show More</button>
+        </div>
+        <div class="ia-read-more ia-type-prose">
+          <div class="ia-read-more__body" id="rm-short">
+            <p style="margin:0">A 1927 silent comedy starring Buster Keaton.</p>
+          </div>
+          <button class="ia-button ia-button--link ia-read-more__toggle" type="button" aria-expanded="false"
+                  aria-controls="rm-short" data-more="Show More" data-less="Show Less">Show More</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="small">
+      <h3 class="doc-section__title">Chips, badges, avatars, pagination</h3>
+      <div class="doc-panel doc-row">
+        <button class="ia-chip" aria-pressed="true">Texts</button>
+        <button class="ia-chip" aria-pressed="false">1900–1950</button>
+        <button class="ia-chip" aria-pressed="false">English</button>
+        <span class="ia-badge">3</span>
+        <span class="ia-badge ia-badge--primary">New</span>
+        <span class="ia-badge ia-badge--new">New</span>
+        <span class="ia-badge ia-badge--danger">99+</span>
+        <span class="ia-avatar" aria-hidden="true">B</span>
+        <span class="ia-avatar ia-avatar--lg" aria-hidden="true">B</span>
+      </div>
+      <div class="doc-panel">
+        <nav aria-label="Search Results Pages">
+          <ul class="ia-pagination">
+            <li><a href="#small" aria-label="Previous Page" rel="prev" data-icon="chevron-left"></a></li>
+            <li class="ia-pagination__number"><a href="#small">1</a></li>
+            <li class="ia-pagination__number"><span aria-hidden="true">…</span></li>
+            <li class="ia-pagination__number"><a href="#small">4</a></li>
+            <li class="ia-pagination__number" data-current><a href="#small" aria-current="page">5</a></li>
+            <li class="ia-pagination__number"><a href="#small">6</a></li>
+            <li class="ia-pagination__number"><a href="#small">20</a></li>
+            <li class="ia-pagination__summary" aria-hidden="true">Page 5 of 20</li>
+            <li><a href="#small" aria-label="Next Page" rel="next" data-icon="chevron-right"></a></li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+
+    <section class="doc-section" id="item">
+      <h3 class="doc-section__title">Item page</h3>
+      <p>The parts of offshoot's details page that no other page uses. The whole page is
+         on the <a class="ia-link" href="screens.html#item">Screens</a> page.</p>
+      <h4>Actions</h4>
+      <p>The glyph over the label in a 2px ink frame. Add to List shows when signed in,
+         Borrow only on TV and radio items. Pressed, open, or holding a choice, an action
+         takes the soft selected tier. Below <code>lg</code> each shows its short label.</p>
+      <div class="doc-panel doc-row" id="item-actions"></div>
+      <h4>Lending bar</h4>
+      <p>Across the top of the theater over a lendable book: the loan's state, then its
+         actions — the first a split button whose caret lists the rest.</p>
+      <div class="doc-panel" style="padding:0">
+        <div class="ia-lending-bar ia-inverse">
+          <p class="ia-lending-bar__status">This book can be borrowed for 14 days.</p>
+          <div class="ia-lending-bar__actions">
+            <span class="ia-split-button">
+              <button class="ia-button ia-button--primary ia-button--sm" type="button">Borrow for 14 days</button>
+              <span class="ia-menu-anchor ia-menu-anchor--end">
+                <button class="ia-button ia-button--primary ia-button--sm ia-button--icon" type="button" aria-haspopup="menu"
+                        aria-expanded="false" aria-controls="lend-more" aria-label="More Ways to Borrow"><span data-icon="caret" data-icon-size="sm"></span></button>
+                <ul class="ia-menu ia-inverse" id="lend-more" role="menu" aria-label="More Ways to Borrow" hidden>
+                  <li role="none"><button class="ia-menu__item" role="menuitem" tabindex="-1">Borrow for 1 hour</button></li>
+                </ul>
+              </span>
+            </span>
+            <button class="ia-button ia-button--secondary ia-button--sm" type="button">Purchase at Better World Books</button>
+            <a class="ia-link" href="#item">Print Disability Access</a>
+          </div>
+        </div>
+      </div>
+      <h4>Sidebar states</h4>
+      <p>A stream-only item says so under its stats. An item that needs a login replaces
+         its downloads with the way in.</p>
+      <div class="doc-panel doc-grid doc-grid--2" style="align-items:start">
+        <div class="ia-record__box ia-record__box--condensed">
+          <ul class="ia-record__stats" aria-label="Item Stats"><li><b>9,804</b> Views</li><li><b>41</b> Favorites</li></ul>
+          <p class="ia-record__stream-only">Stream Only</p>
+        </div>
+        <a class="ia-button ia-button--primary ia-button--lg ia-button--block" href="#item">Log in to view this item</a>
+      </div>
+      <h4>Flag panel and list picker</h4>
+      <p>Flag opens a panel in the danger modal's dress; each flag is a checkbox item.
+         Add to List opens a menu of the patron's lists, each checked when the item is in it.</p>
+      <div class="doc-panel doc-row" style="align-items:flex-start">
+        <div class="ia-flag-panel" role="menu" aria-labelledby="fp-title">
+          <p class="ia-flag-panel__title" id="fp-title">Flag This Item For</p>
+          <button class="ia-menu__item" role="menuitemcheckbox" aria-checked="true" tabindex="-1">Graphic Violence</button>
+          <button class="ia-menu__item" role="menuitemcheckbox" aria-checked="false" tabindex="-1">Explicit Sexual Content</button>
+          <button class="ia-menu__item" role="menuitemcheckbox" aria-checked="false" tabindex="-1">Hate Speech</button>
+          <button class="ia-menu__item" role="menuitemcheckbox" aria-checked="false" tabindex="-1">Misinformation</button>
+        </div>
+        <ul class="ia-menu ia-inverse" role="menu" aria-label="Add to List">
+          <li role="none"><button class="ia-menu__item" role="menuitemcheckbox" aria-checked="true" tabindex="-1">Children's Books</button></li>
+          <li role="none"><button class="ia-menu__item" role="menuitemcheckbox" aria-checked="false" tabindex="-1">Read Later</button></li>
+          <li role="separator" class="ia-menu__separator"></li>
+          <li role="none"><button class="ia-menu__item" role="menuitem" tabindex="-1"><span data-icon="add" data-icon-size="sm"></span>Create New List</button></li>
+        </ul>
+      </div>
+      <h4>Not found</h4>
+      <div class="doc-panel">
+        <div class="ia-record-missing">
+          <p>The item you have requested had an error:</p>
+          <div class="ia-record-missing__error">Item cannot be found.</div>
+          <p>which prevents us from displaying this page.</p>
+          <p class="ia-record-missing__more">Items may be taken down for various reasons, including by decision of
+             the uploader or due to a violation of our <a class="ia-link" href="#item">Terms of Use</a>.</p>
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <div class="doc-group" id="feedback">
+    <h2 class="doc-group__title">Feedback</h2>
+
+    <section class="doc-section" id="messages">
+      <h3 class="doc-section__title">Messages</h3>
+      <p>Every intent carries an icon. Color alone fails WCAG 1.4.1 — and fails outright
+         for the success/danger distinction, which is exactly red vs green.</p>
+      <div class="doc-panel doc-grid">
+        <div class="ia-message"><span class="ia-message__icon" data-icon="info"></span>
+          <span>This collection is mirrored from a partner institution.</span></div>
+        <div class="ia-message ia-message--success"><span class="ia-message__icon" data-icon="check"></span>
+          <span>Your changes were saved.</span></div>
+        <div class="ia-message ia-message--warning"><span class="ia-message__icon" data-icon="alert"></span>
+          <span>Showing 200 of an estimated 1,200 results; the rest are still being counted.</span></div>
+        <div class="ia-message ia-message--danger" role="alert"><span class="ia-message__icon" data-icon="alert"></span>
+          <span>We couldn't load these results. Check your connection and try again.</span></div>
+      </div>
+      <h4>Banner</h4>
+      <p>The same message about the whole site, above the topnav and edge to edge like it:
+         the tint spans the window and the text lines up with the page. Up to three stack,
+         under the donation banner when a fundraiser is on. A dismissible banner fires an
+         event and leaves remembering the dismissal to the page.</p>
+      <div class="doc-panel" style="padding:0; overflow:hidden">
+        <div class="ia-message ia-message--banner" role="status">
+          <span class="ia-message__icon" data-icon="info"></span>
+          <span class="ia-message__body">The Wayback Machine is back to full speed after this week's outage.</span>
+          <button class="ia-message__dismiss" type="button" aria-label="Dismiss" data-icon="close" data-icon-size="sm"></button>
+        </div>
+        <div class="ia-message ia-message--warning ia-message--banner" role="status">
+          <span class="ia-message__icon" data-icon="alert"></span>
+          <span class="ia-message__body">Uploads pause Saturday from 02:00 to 04:00 UTC for maintenance.</span>
+          <button class="ia-message__dismiss" type="button" aria-label="Dismiss" data-icon="close" data-icon-size="sm"></button>
+        </div>
+        <header class="ia-topnav ia-inverse" id="topnav-demo-banner"></header>
+      </div>
+    </section>
+
+    <section class="doc-section" id="tooltip">
+      <h3 class="doc-section__title">Tooltip</h3>
+      <p>Names an icon-only control for pointer users, on hover and on focus. Escape hides it
+         without moving focus. Never essential information, never anything interactive —
+         the control's <code>aria-label</code> is still its name.</p>
+      <div class="doc-panel doc-row" style="padding-block-start:var(--ia-space-8)">
+        <span class="ia-tooltip-anchor">
+          <button class="ia-sort-bar__direction" type="button" aria-label="Change to Ascending Sort" data-icon="sort" data-icon-size="sm"></button>
+          <span class="ia-tooltip" aria-hidden="true">Change to Ascending Sort</span>
+        </span>
+        <span class="ia-tooltip-anchor">
+          <button class="ia-button ia-button--ghost ia-button--icon" type="button" aria-label="Favorite" data-icon="star"></button>
+          <span class="ia-tooltip" aria-hidden="true">Favorite</span>
+        </span>
+      </div>
+    </section>
+
+    <section class="doc-section" id="modal">
+      <h3 class="doc-section__title">Modal</h3>
+      <div class="doc-panel doc-row">
+        <button class="ia-button ia-button--secondary" id="open-modal-default">Open a Modal</button>
+        <button class="ia-button ia-button--secondary" id="open-modal">Open a Destructive Modal</button>
+      </div>
+      <dialog class="ia-modal" id="demo-modal-default" aria-labelledby="dmd-title">
+        <header class="ia-modal__header">
+          <h2 class="ia-modal__title" id="dmd-title">Create a New List</h2>
+          <button class="ia-modal__close" type="button" aria-label="Close" data-icon="close" data-icon-size="sm"></button>
+        </header>
+        <div class="ia-modal__body">
+          <div class="ia-field">
+            <label class="ia-type-body-strong" for="dmd-name">List Name (required)</label>
+            <input class="ia-input" id="dmd-name" type="text" autofocus>
+          </div>
+          <div class="ia-modal__actions">
+            <button class="ia-button ia-button--secondary" value="cancel">Cancel</button>
+            <button class="ia-button ia-button--primary" value="save">Create List</button>
+          </div>
+        </div>
+      </dialog>
+      <dialog class="ia-modal ia-modal--sm ia-modal--danger" id="demo-modal" aria-labelledby="dm-title">
+        <header class="ia-modal__header">
+          <h2 class="ia-modal__title" id="dm-title">Delete This Collection?</h2>
+          <button class="ia-modal__close" type="button" aria-label="Close" data-icon="close" data-icon-size="sm"></button>
+        </header>
+        <div class="ia-modal__body">
+          <p class="ia-type-body" style="margin-block-start:0">Every item in it will be moved out of
+             the collection. This cannot be undone.</p>
+          <div class="ia-modal__actions">
+            <button class="ia-button ia-button--secondary" value="cancel">Cancel</button>
+            <button class="ia-button ia-button--danger" value="confirm">Delete Collection</button>
+          </div>
+        </div>
+      </dialog>
+    </section>
+
+    <section class="doc-section" id="loading">
+      <h3 class="doc-section__title">Loading</h3>
+      <p>Skeletons match the shape of what is coming. A grid never gets a spinner.</p>
+      <div class="doc-panel">
+        <div class="ia-tile-grid" id="skeleton-grid"></div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="empty">
+      <h3 class="doc-section__title">Empty state</h3>
+      <p>No results, or a failed search, replaces the whole browser — rail and sort bar
+         included — with the message over a large illustration. A failure adds the search
+         engine's own message under "Error details:".</p>
+      <div class="doc-panel">
+        <div class="ia-results-placeholder" id="placeholder-empty"></div>
+      </div>
+      <div class="doc-panel">
+        <div class="ia-results-placeholder" id="placeholder-error"></div>
+      </div>
+    </section>
+    </div>
+
+    <div class="doc-group" id="chrome-group">
+    <h2 class="doc-group__title">Page chrome</h2>
+
+    <section class="doc-section" id="topnav">
+      <h3 class="doc-section__title">Topnav</h3>
+      <p>The dark bar across every page. Wide, it carries the brand, the media types,
+         search, account links and upload, with the subnav (About … Volunteer) in a row
+         beneath. Narrower than the <code>lg</code> breakpoint, the subnav goes, the media
+         types move into a drawer of full-width rows and search and account become
+         icons. It responds to its own width, so the preview switch above shows
+         the narrow form. The logo is the live mark and wordmark, lifted as a brand
+         asset.</p>
+      <div class="doc-panel" style="padding:0">
+        <header class="ia-topnav ia-inverse" id="topnav-demo"></header>
+      </div>
+      <h4>Signed in, Texts open</h4>
+      <p>The account area is the avatar and, from 990px, the screen name; it opens the
+         account menu, staff groups included. The open media type takes its color on
+         the <code>#333</code> fill. From 1200px each glyph carries its label.</p>
+      <div class="doc-panel" style="padding:0">
+        <header class="ia-topnav ia-inverse" id="topnav-demo-user"></header>
+      </div>
+      <h4>Environment badge</h4>
+      <p>On a development or staging host only, beside the logo, so a tab is never mistaken
+         for production.</p>
+      <div class="doc-panel doc-panel--inverse ia-inverse doc-row">
+        <span class="ia-env-badge" data-env="development">Development</span>
+        <span class="ia-env-badge" data-env="staging">Staging</span>
+      </div>
+      <h4>Narrow, menu open</h4>
+      <div class="doc-panel" style="padding:0; max-inline-size:375px">
+        <header class="ia-topnav ia-inverse" id="topnav-demo-open" data-open></header>
+      </div>
+      <h4>Loading</h4>
+      <p>While a page or its results load, a 3px bar sweeps under the header in the link
+         color, over the page's first 3px. Under reduced motion it holds still.</p>
+      <div class="doc-panel" style="padding:0">
+        <header class="ia-topnav ia-inverse" id="topnav-demo-loading"></header>
+        <div class="ia-activity-bar" role="progressbar" aria-label="Loading"></div>
+        <p class="ia-type-body" style="margin:0;padding:var(--ia-space-4)">The page.</p>
+      </div>
+      <h4>Footer</h4>
+      <p>One line on the chrome surface: fixed to the viewport's foot on the homepage, at
+         the end of the page on an item page, absent elsewhere.</p>
+      <div class="doc-panel" style="padding:0">
+        <footer class="ia-footer ia-inverse"><a href="#topnav">Terms of Service (last updated 12/31/2014)</a></footer>
+      </div>
+    </section>
+
+    <section class="doc-section" id="chrome">
+      <h3 class="doc-section__title">Dark chrome</h3>
+      <p>Everything inside <code>.ia-inverse</code> re-points its text, border and focus
+         tokens. The focus ring switches to <code>#9aa8ff</code> automatically.</p>
+      <div class="doc-panel doc-panel--inverse ia-inverse">
+        <div class="doc-row">
+          <p class="ia-type-body" style="margin:0"><a class="ia-link" href="#chrome"
+             style="color:var(--ia-color-text-link)">A link on chrome</a></p>
+          <button class="ia-button ia-button--ghost ia-button--sm"><span data-icon="share" data-icon-size="sm"></span>Share</button>
+          <span class="ia-type-body" style="color:var(--ia-color-text-secondary)">Secondary text</span>
+        </div>
+      </div>
+    </section>
+    </div>
+  </div>
+</main>
+</div>
+
+<script type="module">
+import { mountChrome, viewportSwitch, num, icon, tileThumb, hydrateIcons,
+         tileStats, tileMeta, topnavMarkup, facetRows, facetGroup, facetRailHeader, wireFacets, mediatypeIcon,
+         dropdownMarkup, sortBarMarkup, SORT_OPTIONS, searchBarMarkup, searchTypeTabs, wireTabs,
+         wireRadioGroups, wireSwitches, wireTooltips, wireMenus, wireCarousels, wireReadMore } from './demo/docs/assets/site.js';
+import nullResultSvg from './demo/docs/assets/illustrations/null-result.svg?raw';
+
+/* Specs that an element already covers, and that element. Remove a section, and
+   its ia.css rules, once its element matches the spec. */
+const ELEMENTS = {
+  button: ['ia-button'],
+  input: ['ia-clearable-text-input'],
+  search: ['ia-dropdown-search-bar', 'ia-expandable-search-bar'],
+  dropdown: ['ia-dropdown'],
+  modal: ['modal-manager'],
+  loading: ['ia-status-indicator'],
+  topnav: ['ia-topnav'],
+};
+/* Where an element matches part of its spec, what it covers and what is still CSS only. */
+const MATCHED = {
+  button: `It matches the intents, sizes and states here. The icon-only, circle, block,
+    floating and stacked shapes are still CSS only, and stay on this page until it has them.`,
+};
+for (const [id, tags] of Object.entries(ELEMENTS)) {
+  const note = document.createElement('p');
+  note.className = 'doc-note';
+  note.innerHTML = `Element: ${tags.map(t => `<a href="index.html#elem-${t}"><code>&lt;${t}&gt;</code></a>`).join(', ')}.
+    ${MATCHED[id] ?? 'Where the two differ, this section is the target.'}`;
+  document.querySelector(`#${id} > .doc-section__title`)?.after(note);
+}
+
+mountChrome('specs.html');
+
+const stage = document.getElementById('stage');
+document.getElementById('vp').append(viewportSwitch(stage));
+
+/* Force the focus ring on for inspection — uses the same declaration the
+   real rule uses, so what you see is what a keyboard user gets. */
+document.getElementById('force-focus').addEventListener('change', e => {
+  document.getElementById('force-focus-style')?.remove();
+  if (!e.target.checked) return;
+  const style = document.createElement('style');
+  style.id = 'force-focus-style';
+  style.textContent = `#stage :where(a,button,input,select,textarea,summary,[tabindex]) {
+    outline: var(--ia-size-focus-ring) solid var(--ia-color-border-focus);
+    outline-offset: var(--ia-size-focus-ring-offset);
+  }`;
+  document.head.append(style);
+});
+
+/* Tiles */
+
+
+const ITEMS = [
+  ['goody',        'The history of Little Goody Two-Shoes', 'Welsh, Charles', 4900, 35, 2, 'texts'],
+  ['prelinger',    'Prelinger Archives newsreel footage',   'Prelinger, Rick', 3700, 17, 0, 'movies'],
+  ['librivoxaudio','LibriVox recording of Pride and Prejudice', 'Austen, Jane', 2300, 13, 1, 'texts'],
+  ['gutenberg',    'Project Gutenberg collected editions',  'Project Gutenberg', 3000, 22, 3, 'texts'],
+  ['americana',    'American Libraries scanned volume',     'Internet Archive', 1200, 52, 6, 'texts'],
+  ['no-such-item', 'A title long enough that it has to wrap onto a second line and then clamp',
+                   'An unusually long creator name that clamps to one line', 810, 4, 0, 'movies']
+];
+document.getElementById('tile-grid').replaceChildren(...ITEMS.map(([id, title, by, v, f, r, kind]) => {
+  const tile = document.createElement('article');
+  tile.className = 'ia-tile ia-tile--item';
+  tile.innerHTML = `
+    <button class="ia-tile__info" aria-label="More info about ${title}" aria-expanded="false"
+            data-icon="info"></button>
+    <a class="ia-tile__link" href="#tiles">
+      <h3 class="ia-tile__title">${title}</h3>
+      <p class="ia-tile__creator">by ${by}</p>
+    </a>
+    ${tileStats(kind, num(v), f, r)}`;
+  tile.prepend(tileThumb(id, kind));
+  return tile;
+}));
+
+const COLLECTIONS = [
+  ['texts',    'Government Documents (Worldwide)', '17,871,144 items', '307.1 terabytes'],
+  ['americana','American Libraries',               '4,387,411 items',  '1.7 petabytes'],
+  ['audio',    'Books by Language',                '1,461,143 items',  '444.8 terabytes'],
+  ['movies',   'US Government Documents',          '9,407,881 items',  '191.7 terabytes'],
+  ['software', 'JaiGyan: Bharat Ek Khoj',          '1,027,029 items',  '314.3 terabytes'],
+  ['no-such-collection', 'A collection whose name is long enough to wrap onto a second line',
+                         '812 items', '4.1 terabytes']
+];
+document.getElementById('collection-tile-grid').replaceChildren(...COLLECTIONS.map(([id, title, items, size]) => {
+  const tile = document.createElement('article');
+  tile.className = 'ia-tile ia-tile--collection';
+  tile.innerHTML = `
+    <a class="ia-tile__link" href="#tiles">
+      <h3 class="ia-tile__title">${title}</h3>
+    </a>
+    ${tileMeta(items, size)}`;
+  tile.prepend(tileThumb(id, 'collection'));
+  return tile;
+}));
+
+/* Account and saved-search tiles */
+document.getElementById('other-tile-grid').innerHTML = `
+  <article class="ia-tile ia-tile--account">
+    <a class="ia-tile__link" href="#tiles"><h3 class="ia-tile__title">@brewster</h3></a>
+    <p class="ia-tile__detail">Archivist since 2001</p>
+    <ul class="ia-tile__stats" aria-label="Account Stats">
+      <li class="ia-tile__stat">${icon('user', { size: 'lg' })}<span class="ia-visually-hidden">Media Type: Account</span></li>
+      <li class="ia-tile__stat">${icon('upload', { size: 'sm' })}<span class="ia-visually-hidden">Uploads: </span>1.2K</li>
+      <li class="ia-tile__stat">${icon('star', { size: 'sm' })}<span class="ia-visually-hidden">Favorites: </span>310</li>
+      <li class="ia-tile__stat">${icon('comment', { size: 'sm' })}<span class="ia-visually-hidden">Reviews: </span>42</li>
+    </ul>
+  </article>
+  <article class="ia-tile ia-tile--search">
+    <span class="ia-tile__thumb"><span class="ia-tile__search-well">${icon('search', { size: '2xl' })}</span></span>
+    <a class="ia-tile__link" href="#tiles"><h3 class="ia-tile__title">buster keaton AND mediatype:movies</h3></a>
+  </article>`;
+document.querySelector('#other-tile-grid .ia-tile--account').prepend(tileThumb('@brewster', 'texts'));
+
+/* What a tile can carry: a date line, a weekly count, volume and issue, snippets, a restriction */
+{
+  const tile = (id, kind, title, lines, stats, { restricted } = {}) => {
+    const el = document.createElement('article');
+    el.className = 'ia-tile ia-tile--item';
+    el.innerHTML = `<a class="ia-tile__link" href="#tiles"><h3 class="ia-tile__title">${title}</h3></a>${lines}${stats}`;
+    const thumb = tileThumb(id, kind);
+    if (restricted) {
+      thumb.classList.add('ia-tile__thumb--restricted');
+      thumb.insertAdjacentHTML('beforeend', `<p class="ia-tile__overlay">${icon('alert', { size: 'xl' })}${restricted}</p>`);
+    }
+    el.prepend(thumb);
+    return el;
+  };
+  document.getElementById('content-tile-grid').replaceChildren(
+    tile('TheGeneral_201312', 'movies', '"The General" (1926) starring Buster Keaton',
+         '<p class="ia-tile__detail">published 1926</p>', tileStats('movies', '32K', 107, 3)),
+    tile('MyMovie_20190318', 'movies', '"Sherlock Jr." (1924) starring Buster Keaton',
+         '<p class="ia-tile__creator">by Buster Keaton</p>',
+         tileStats('movies', '1.1K', 123, 1).replace('All-Time Views: ', 'Weekly Views: ')),
+    tile('sim_photoplay_1925-04_27_5', 'texts', 'Photoplay',
+         '<p class="ia-tile__detail">Volume 27, Issue 5</p>', tileStats('texts', '2.4K', 9, 0)),
+    tile('busterkeaton00robi', 'texts', 'Buster Keaton', `<p class="ia-tile__creator">by Robinson, David</p>
+         <p class="ia-tile__snippet">… the great stone face of <mark>Buster</mark> <mark>Keaton</mark>, whose
+         films were made between 1920 and 1928 …</p>`, tileStats('texts', '456', 19, 0)),
+    tile('no-such-item-restricted', 'texts', 'A title only signed-in patrons can view',
+         '<p class="ia-tile__creator">by Anonymous</p>', tileStats('texts', '1.4K', 6, 0),
+         { restricted: 'Log in to view this item' })
+  );
+}
+
+/* Hover pane, list view, compact view — the same four results */
+const ROWS = [
+  ['TheGeneral_201312', '"The General" (1926) starring Buster Keaton', ['Buster Keaton', 'Clyde Bruckman'], '1926', 'movies', 31959, '4.5', 3,
+   ['Comedy', 'Silent films', 'Buster Keaton'], ['Silent Films', 'Feature Films'],
+   'Johnnie Gray, a Southern railroad engineer, sets out alone to recover his locomotive after Union spies steal it.'],
+  ['busterkeaton00robi', 'Buster Keaton', ['Robinson, David, 1930-'], '1969', 'texts', 456, '', 0,
+   ['Keaton, Buster, 1895-1966'], ['American Libraries'], 'A critical study of Keaton’s films.'],
+  ['OneWeek512kb', 'One Week', ['Buster Keaton', 'Edward F. Cline'], '1920', 'movies', 1759, '5.0', 1,
+   ['Comedy', 'Short films'], ['Silent Films'], 'Newlyweds assemble a build-it-yourself house from a kit, with a sabotaged numbering.'],
+  ['SteamboatBillJr_201411', '"Steamboat Bill, Jr." (1928) starring Buster Keaton', ['Charles Reisner'], '1928', 'movies', 8160, '', 1,
+   ['Comedy'], ['Feature Films'], 'A college student returns home to his father’s riverboat as a cyclone approaches.']
+];
+const link = t => `<a class="ia-link" href="#tiles">${t}</a>`;
+const listRow = ([id, title, creators, year, kind, views, rating, reviews, topics, collections, description], tag = 'li') => {
+  const row = document.createElement(tag);
+  row.className = 'ia-tile-list__row';
+  row.innerHTML = `
+    <a class="ia-tile-list__thumb" href="#tiles" tabindex="-1" aria-hidden="true"></a>
+    <div class="ia-tile-list__title-line">
+      <h3 class="ia-tile-list__title"><a href="#tiles">${title}</a></h3>
+      <a class="ia-tile-list__type" data-mediatype="${kind}" href="#tiles" title="See More: ${kind}">${icon(mediatypeIcon(kind), { size: 'md', label: kind })}</a>
+    </div>
+    <div class="ia-tile-list__details">
+      <p class="ia-tile-list__line ia-tile-list__clamp"><span class="ia-tile-list__label">By:</span> ${creators.map(link).join(', ')}</p>
+      <p class="ia-tile-list__line"><span><span class="ia-tile-list__label">Published:</span> ${year}</span></p>
+      <p class="ia-tile-list__line"><span><span class="ia-tile-list__label">Views:</span> ${num(views)}</span>
+        ${rating ? `<span><span class="ia-tile-list__label">Avg Rating:</span> ${rating}</span>` : ''}
+        ${reviews ? `<span><span class="ia-tile-list__label">Reviews:</span> ${reviews}</span>` : ''}</p>
+      <p class="ia-tile-list__line ia-tile-list__clamp"><span class="ia-tile-list__label">Topics:</span> ${topics.map(link).join(', ')}</p>
+      <p class="ia-tile-list__line ia-tile-list__clamp"><span class="ia-tile-list__label">Collections:</span> ${collections.map(link).join(', ')}</p>
+      <p class="ia-tile-list__clamp ia-tile-list__description">${description}</p>
+    </div>`;
+  row.querySelector('.ia-tile-list__thumb').append(...tileThumb(id, kind).childNodes);
+  return row;
+};
+document.getElementById('tile-list-demo').replaceChildren(...ROWS.map(r => listRow(r)));
+{
+  const pane = document.getElementById('hover-pane-demo');
+  pane.innerHTML = `<div class="ia-hover-pane__header"><a class="ia-link" href="#tiles">
+      <img src="https://archive.org/services/img/silent_films" alt="">Silent Films</a></div>
+    <div class="ia-hover-pane__body ia-results"></div>`;
+  pane.querySelector('.ia-hover-pane__body').append(listRow(ROWS[0], 'div'));
+}
+document.getElementById('tile-compact-demo').innerHTML = `
+  <div class="ia-tile-compact__row ia-tile-compact__row--header" role="row">
+    <span role="columnheader"><span class="ia-visually-hidden">Thumbnail</span></span><span role="columnheader">Title</span>
+    <span role="columnheader">Creator</span><span role="columnheader">Published</span><span role="columnheader">Type</span>
+    <span role="columnheader" class="ia-tile-compact__views">Weekly Views</span></div>
+  ${ROWS.map(([id, title, creators, year, kind, views]) => `<div class="ia-tile-compact__row" role="row">
+    <span role="cell"><span class="ia-tile-compact__thumb" data-thumb="${id}" data-kind="${kind}"></span></span>
+    <span role="cell" class="ia-tile-compact__title"><a href="#tiles">${title}</a></span>
+    <span role="cell">${creators[0]}</span><span role="cell">${year}</span>
+    <span role="cell" class="ia-tile-compact__type" data-mediatype="${kind}">${icon(mediatypeIcon(kind), { size: 'md', label: kind })}</span>
+    <span role="cell" class="ia-tile-compact__views">${num(Math.round(views / 40))}</span></div>`).join('')}`;
+for (const cell of document.querySelectorAll('#tile-compact-demo [data-thumb]'))
+  cell.append(...tileThumb(cell.dataset.thumb, cell.dataset.kind).childNodes);
+
+/* Search bar */
+document.getElementById('search-type-tabs').innerHTML = searchTypeTabs('stt', 'demo-results') +
+  `<div role="tabpanel" id="demo-results" aria-labelledby="stt-0" class="ia-type-meta"
+        style="padding-block-start:var(--ia-space-2)">1,228 Results</div>`;
+document.getElementById('search-md').innerHTML = searchBarMarkup('sb-md');
+document.getElementById('search-lg').innerHTML = searchBarMarkup('sb-lg', { size: 'lg' });
+document.getElementById('search-value').innerHTML = searchBarMarkup('sb-v', { value: 'buster keaton', type: 'Text Contents' });
+
+/* Dropdown and sort bar */
+document.getElementById('dropdown-demo').innerHTML =
+  dropdownMarkup('dd-demo', SORT_OPTIONS, 'Relevance', 'aria-label="Sort By"');
+document.getElementById('dropdown-preview').innerHTML = SORT_OPTIONS.slice(0, 7)
+  .map(o => `<li aria-selected="${o === 'Relevance'}">${o}</li>`).join('');
+document.getElementById('sort-bar-demo').innerHTML = sortBarMarkup('sb', 'Weekly Views');
+document.getElementById('sort-bar-demo-asc').innerHTML = sortBarMarkup('sb1', 'Date Published', 'grid', { direction: 'asc' });
+document.getElementById('sort-bar-demo-relevance').innerHTML = sortBarMarkup('sb2', 'Relevance');
+document.getElementById('sort-bar-demo-title').innerHTML = sortBarMarkup('sb3', 'Title', 'grid', { direction: 'asc', letter: 'K' });
+
+/* Tile parts, shown on their own */
+document.getElementById('part-thumb').append(tileThumb('librivoxaudio', 'texts'));
+document.getElementById('part-thumb-collection').append(tileThumb('americana', 'collection'));
+document.getElementById('part-stats').innerHTML = tileStats('movies', '4,900', 35, 2);
+
+/* Topnav — signed out; signed in with a media type open; narrow with its drawer open */
+for (const [id, open, options] of [['topnav-demo', false], ['topnav-demo-user', false, { user: 'brewster', openType: 'texts' }],
+                                   ['topnav-demo-open', true], ['topnav-demo-banner', false], ['topnav-demo-loading', false]]) {
+  const host = document.getElementById(id);
+  host.innerHTML = topnavMarkup(id, open, options);
+  host.querySelector('.ia-topnav__icon-button[aria-controls]').addEventListener('click', e => {
+    const opening = !host.hasAttribute('data-open');
+    host.toggleAttribute('data-open', opening);
+    e.currentTarget.setAttribute('aria-expanded', String(opening));
+  });
+}
+
+/* Facets — the rail in live's group order, six values each */
+const histogram = `<fieldset class="ia-facet-group">
+    <legend class="ia-facet-group__legend ia-type-subsection">Year Published</legend>
+    <div class="ia-facet-histogram" aria-hidden="true">${
+      // A representative distribution, not data: the bars are decorative.
+      [2, 3, 5, 9, 14, 22, 30, 26, 18, 12, 9, 7, 6, 8, 11, 16, 24, 35, 48, 60, 72, 64, 51, 40]
+        .map(h => `<span class="ia-facet-histogram__bar" style="block-size:${h / 72 * 100}%"></span>`).join('')}</div>
+    <div class="ia-facet-range">
+      <label class="ia-visually-hidden" for="FX-yr-from">From Year</label>
+      <input class="ia-input ia-input--sm" id="FX-yr-from" inputmode="numeric" value="1893">
+      <span aria-hidden="true">–</span>
+      <label class="ia-visually-hidden" for="FX-yr-to">To Year</label>
+      <input class="ia-input ia-input--sm" id="FX-yr-to" inputmode="numeric" value="2026">
+    </div>
+  </fieldset>`;
+const more = what => `<button class="ia-button ia-button--link ia-facet-more" type="button" aria-haspopup="dialog">Show More ${what}</button>`;
+const GROUPS = [
+  ['mediatype', 'Media Type', [['Movies', 912, 'in'], ['Texts', 158], ['Audio', 83], ['Image', 60], ['Software', 5, 'out'], ['Data', 2]], 'Media Types'],
+  ['year', 'Year', [['1926', 212], ['1925', 164], ['1924', 151], ['1928', 140], ['1927', 133], ['1923', 97]], 'Years'],
+  ['subject', 'Subject', [['Buster Keaton', 524], ['Charlie Chaplin', 200], ['Harold Lloyd', 185], ['Fatty Arbuckle', 166], ['1920s', 158], ['Comedy', 140]], 'Subjects'],
+  ['collection', 'Collection', [['Community Video', 455], ['Movies', 244], ['Feature Films', 222], ['Silent Films', 130], ['Comedy Films', 77], ['Short Films', 61]], 'Collections', true],
+  ['creator', 'Creator', [['Buster Keaton', 301], ['Roscoe Arbuckle', 88], ['Edward F. Cline', 54], ['Clyde Bruckman', 32], ['Joseph M. Schenck', 21], ['Charles Reisner', 12]], 'Creators'],
+  ['language', 'Language', [['English', 812, 'in'], ['French', 34], ['German', 21], ['Spanish', 12], ['Italian', 9], ['Japanese', 4]], 'Languages']
+];
+const rail = (prefix, { clear = false, open = true } = {}) => `
+  <div class="ia-facets__layout">
+    <aside class="ia-facet-rail" aria-label="Filters">
+      ${facetRailHeader(`${prefix}-body`, { clear })}
+      <div class="ia-facet-rail__body" id="${prefix}-body">
+        ${histogram.replaceAll('FX', prefix)}
+        ${GROUPS.map(([name, title, rows, plural, links]) =>
+          facetGroup(`${prefix}-${name}`, title, facetRows(`${prefix}-${name}`, rows, { links }) + more(plural), { open: open && name === 'mediatype' })).join('')}
+      </div>
+    </aside>
+    <div class="ia-facets__results">
+      <h2 class="ia-results-heading" aria-live="polite">812 Results</h2>
+      <p class="ia-type-body" style="margin:0;color:var(--ia-color-text-secondary)">The sort bar and results go here.</p>
+    </div>
+  </div>`;
+document.getElementById('facets-wide').innerHTML = rail('fw', { clear: true });
+document.getElementById('facets-narrow').innerHTML = rail('fn', { clear: true });
+document.getElementById('facets-opt-in').innerHTML = rail('fo');
+wireFacets(document.getElementById('facets'));
+{
+  const dialog = document.getElementById('demo-more-facets');
+  const SUBJECTS = ['Buster Keaton', 'Charlie Chaplin', 'Harold Lloyd', 'Fatty Arbuckle', '1920s', 'Comedy', 'Silent films',
+    'Short films', 'Feature films', 'Slapstick', 'Railroads', 'Cinema', 'Film history', 'Biography', 'Vaudeville', 'Stunts',
+    'Hollywood', 'Mabel Normand', 'Laurel and Hardy', 'Mack Sennett', 'Keystone', 'Public domain', 'Restoration', 'Newsreels',
+    'Westerns', 'Melodrama', 'Animation', 'Documentary', 'Romance', 'Adventure', 'Civil War', 'Boats', 'Sports', 'College',
+    'Music', 'Theater', 'Circus', 'Photography', 'Criticism', 'Interviews'];
+  document.getElementById('dmf-values').innerHTML = facetRows('dmf',
+    SUBJECTS.map((t, i) => [t, Math.round(524 / (1 + i * 0.4)), t === 'Buster Keaton' ? 'in' : t === '1920s' ? 'out' : undefined]));
+  const values = document.getElementById('dmf-values');
+  const page = () => values.clientWidth;
+  for (const b of dialog.querySelectorAll('[data-pages]'))
+    b.addEventListener('click', () => values.scrollBy({ left: (b.dataset.pages === 'next' ? 1 : -1) * page(), behavior: 'smooth' }));
+  values.addEventListener('scroll', () => {
+    dialog.querySelector('[data-pages=prev]').disabled = values.scrollLeft <= 0;
+    dialog.querySelector('[data-pages=next]').disabled = values.scrollLeft + values.clientWidth >= values.scrollWidth - 1;
+  }, { passive: true });
+  wireFacets(dialog);
+  document.getElementById('open-more-facets').addEventListener('click', () => dialog.showModal());
+  dialog.addEventListener('click', e => { if (e.target.closest('.ia-modal__close, [value]')) dialog.close(); });
+}
+
+document.getElementById('skeleton-grid').innerHTML = Array.from({ length: 6 }, () => `
+  <div class="ia-tile ia-tile--item" aria-hidden="true">
+    <div class="ia-skeleton" style="block-size:17rem"></div>
+    <div style="display:flex;flex-direction:column;gap:var(--ia-space-1);padding:var(--ia-space-1)">
+      <div class="ia-skeleton" style="block-size:1.8rem"></div>
+      <div class="ia-skeleton" style="block-size:1.8rem;inline-size:70%"></div>
+      <div class="ia-skeleton" style="block-size:1.4rem;inline-size:50%"></div>
+    </div>
+  </div>`).join('') +
+  '<span class="ia-visually-hidden" role="status">Loading search results…</span>';
+
+/* Item page actions */
+{
+  const action = (glyph, long, short = long, attrs = '') => `<button class="ia-button ia-button--stacked" type="button" ${attrs}>
+    ${icon(glyph)}<span class="ia-button__long">${long}</span><span class="ia-button__short" aria-hidden="true">${short}</span></button>`;
+  document.getElementById('item-actions').innerHTML = action('add', 'Add to List', 'List') + action('email', 'Borrow Program', 'Borrow') +
+    action('star', 'Favorite', 'Favorite', 'aria-pressed="true"') + action('share', 'Share') + action('flag', 'Flag', 'Flag', 'data-active');
+}
+
+/* Empty and error: the message over collection-browser's illustration */
+{
+  const svg = nullResultSvg;
+  const art = svg.replace(/^<!--.*?-->\s*/s, '').replace('<svg ', '<svg class="ia-results-placeholder__art" aria-hidden="true" ');
+  document.getElementById('placeholder-empty').innerHTML = `
+    <h2 class="ia-results-placeholder__title ia-type-section">Your search did not match any items in the Archive.
+      Try different keywords or a more general search.</h2>
+    <div class="ia-results-placeholder__actions">
+      <button class="ia-button ia-button--secondary" type="button">Clear Filters</button>
+      <button class="ia-button ia-button--primary" type="button">Search All Media Types</button>
+    </div>${art}`;
+  document.getElementById('placeholder-error').innerHTML = `
+    <h2 class="ia-results-placeholder__title ia-type-section">The search engine encountered an error, which might be
+      related to your search query. <a class="ia-link" href="#empty">Tips for constructing search queries.</a></h2>
+    <div class="ia-results-placeholder__actions">
+      <button class="ia-button ia-button--secondary" type="button">Retry</button>
+    </div>${art}
+    <p class="ia-results-placeholder__details">Error details: Query parse error near “AND OR” at position 14</p>`;
+}
+
+wireTabs(document.getElementById('search-type-tabs'));
+
+// Demo forms go nowhere; the search bar's clear button clears its field.
+for (const f of document.querySelectorAll('#stage form')) f.addEventListener('submit', e => e.preventDefault());
+for (const b of document.querySelectorAll('.ia-search-bar__clear')) b.addEventListener('click', () => {
+  const input = b.parentElement.querySelector('input');
+  input.value = '';
+  input.focus();
+});
+
+/* Carousel — the item tiles again, enough for several pages, as the item
+   page's Similar Items */
+document.getElementById('carousel-items').replaceChildren(...[...ITEMS, ...ITEMS].map(([id, title, by, v, f, r, kind]) => {
+  const li = document.createElement('li');
+  li.innerHTML = `<article class="ia-tile ia-tile--item">
+      <a class="ia-tile__link" href="#carousel"><h4 class="ia-tile__title">${title}</h4>
+        <p class="ia-tile__creator">by ${by}</p></a>
+      ${tileStats(kind, num(v), f, r)}</article>`;
+  li.firstElementChild.prepend(tileThumb(id, kind));
+  return li;
+}));
+
+// The tiles are built after mountChrome ran, so their placeholders need a
+// second pass.
+hydrateIcons();
+
+wireRadioGroups();
+wireSwitches();
+wireTooltips();
+wireMenus();
+wireCarousels();
+wireReadMore();
+
+/* Modal */
+for (const [trigger, id] of [['open-modal-default', 'demo-modal-default'], ['open-modal', 'demo-modal']]) {
+  const dialog = document.getElementById(id);
+  document.getElementById(trigger).addEventListener('click', () => dialog.showModal());
+  dialog.addEventListener('click', e => { if (e.target.closest('button')) dialog.close(); });
+}
+</script>
+</body>
+</html>
