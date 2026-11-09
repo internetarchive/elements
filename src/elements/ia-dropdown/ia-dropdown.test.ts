@@ -113,6 +113,33 @@ describe('IADropdown', () => {
     expect(style.boxShadow).to.equal('rgb(44, 44, 44) 0px 0px 0px 4px inset');
   });
 
+  test("follows a host's light panel on the selected row and its focus ring", async () => {
+    const options: OptionInterface[] = [
+      { id: 'a', label: 'Relevance' },
+      { id: 'b', label: 'Date added' },
+    ];
+    const el = await fixture<IADropdown>(
+      html`<ia-dropdown
+        .options=${options}
+        .selectedOption=${'b'}
+        .includeSelectedOption=${true}
+        open
+        style="--dropdownBgColor: white; --dropdownTextColor: rgb(44, 44, 44); --dropdownFocusRingColor: rgb(58, 79, 214); --dropdownFocusBand: none"
+      ></ia-dropdown>`,
+    );
+    const selected = el.shadowRoot!.querySelector<HTMLElement>(
+      '#dropdown-main li.selected > *',
+    )!;
+    await userEvent.keyboard('{Tab}');
+    selected.focus();
+    const style = getComputedStyle(selected);
+    // A white overlay on a white panel: the row stays the panel's color.
+    expect(style.backgroundColor).to.equal('rgba(255, 255, 255, 0.275)');
+    expect(style.color).to.equal('rgb(44, 44, 44)');
+    expect(style.outlineColor).to.equal('rgb(58, 79, 214)');
+    expect(style.boxShadow).to.equal('none');
+  });
+
   test('rings the trigger in the dark-surface focus color, with its band, by default', async () => {
     const el = await fixture<IADropdown>(html`<ia-dropdown></ia-dropdown>`);
     const trigger =
