@@ -12,13 +12,20 @@ export type TransUnit = {
   source: string;
   /** Inner XML of `<target>`, or undefined when the unit has no target. */
   target?: string;
+  /** The `state` attribute on `<target>`, when it has one. */
+  state?: string;
   /** The whole `<trans-unit>…</trans-unit>` block, verbatim. */
   block: string;
 };
 
-const UNIT_RE = /<trans-unit\b[^>]*\bid="([^"]+)"[^>]*>([\s\S]*?)<\/trans-unit>/g;
+const UNIT_RE =
+  /<trans-unit\b[^>]*\bid="([^"]+)"[^>]*>([\s\S]*?)<\/trans-unit>/g;
 const SOURCE_RE = /<source>([\s\S]*?)<\/source>/;
-const TARGET_RE = /<target>([\s\S]*?)<\/target>/;
+const TARGET_RE = /<target(?:\s([^>]*))?>([\s\S]*?)<\/target>/;
+const STATE_RE = /\bstate="([^"]*)"/;
+
+/** The state a drafted translation carries until a native speaker reviews it. */
+export const DRAFT_STATE = 'needs-review-translation';
 
 /** Every `<trans-unit>` in document order. */
 export function parseUnits(xml: string): TransUnit[] {
@@ -30,7 +37,8 @@ export function parseUnits(xml: string): TransUnit[] {
     units.push({
       id: m[1],
       source: source ? source[1] : '',
-      target: target ? target[1] : undefined,
+      target: target ? target[2] : undefined,
+      state: target ? STATE_RE.exec(target[1] ?? '')?.[1] : undefined,
       block: m[0],
     });
   }
@@ -40,6 +48,13 @@ export function parseUnits(xml: string): TransUnit[] {
 /** Units still needing a translation: no `<target>`, or an empty one. */
 export function untranslated(units: TransUnit[]): TransUnit[] {
   return units.filter((u) => (u.target ?? '').trim() === '');
+}
+
+/** Translated units still marked as drafts, waiting on a native reviewer. */
+export function needsReview(units: TransUnit[]): TransUnit[] {
+  return units.filter(
+    (u) => (u.target ?? '').trim() !== '' && u.state === DRAFT_STATE,
+  );
 }
 
 /** A placeholder lifted out of a source string. */
@@ -66,10 +81,7 @@ function unescapeXml(s: string): string {
 }
 
 function escapeXml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 /**
@@ -114,22 +126,29 @@ export function restore(
 /**
  * Returns `xml` with the given unit's target set, adding a `<target>` when the
  * unit has none. Other units are untouched, so already-translated strings and
- * the rest of the file survive byte for byte.
+ * the rest of the file survive byte for byte. A `state` is written as the
+ * target's `state` attribute.
  */
-export function setTarget(xml: string, id: string, target: string): string {
+export function setTarget(
+  xml: string,
+  id: string,
+  target: string,
+  state?: string,
+): string {
   const units = parseUnits(xml);
   const unit = units.find((u) => u.id === id);
   if (!unit) throw new Error(`no trans-unit with id ${id}`);
 
   // Replacer functions throughout, so a `$` in the translation is inserted
   // rather than read as a replacement pattern (`$1`, `$&`, `` $` ``, `$'`).
+  const open = state === undefined ? '<target>' : `<target state="${state}">`;
   const updated =
     unit.target === undefined
       ? unit.block.replace(
           /<source>[\s\S]*?<\/source>/,
-          (source) => `${source}\n<target>${target}</target>`,
+          (source) => `${source}\n${open}${target}</target>`,
         )
-      : unit.block.replace(TARGET_RE, () => `<target>${target}</target>`);
+      : unit.block.replace(TARGET_RE, () => `${open}${target}</target>`);
 
   return xml.replace(unit.block, () => updated);
 }

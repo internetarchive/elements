@@ -9,11 +9,13 @@ import {
 } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
-import { msg, str } from '@lit/localize';
+import { localized, msg, str } from '@lit/localize';
 import currency from 'currency.js';
+import { formatUsd } from '../localized-format';
 
 import themeStyles from '@src/themes/theme-styles';
 import { CurrencyValidator } from '../currency-validator';
+import { parseAmount } from '../parse-amount';
 import {
   DonationPaymentInfo,
   defaultDonationAmounts,
@@ -81,6 +83,7 @@ export type EditDonationAmountSelectionLayout =
  * form.
  */
 @customElement('ia-donation-edit-donation')
+@localized()
 export class IADonationEditDonation extends LitElement {
   @property({ type: Object })
   donationInfo: DonationPaymentInfo = defaultSelectedDonationInfo;
@@ -361,9 +364,7 @@ export class IADonationEditDonation extends LitElement {
   }
 
   private get coverFeesText(): string {
-    const feeAmountString = currency(this.donationInfo.fee, {
-      symbol: '$',
-    }).format();
+    const feeAmountString = formatUsd(this.donationInfo.fee);
 
     return msg(str`I'll generously add ${feeAmountString} to cover fees.`);
   }
@@ -374,7 +375,7 @@ export class IADonationEditDonation extends LitElement {
    */
   private formatShortenedAmount(dollars: number): string {
     const precision = dollars % 1 === 0 ? 0 : 2;
-    return currency(dollars, { symbol: '$', precision }).format();
+    return formatUsd(dollars, precision);
   }
 
   private get frequencyTemplate(): TemplateResult {
@@ -462,7 +463,10 @@ export class IADonationEditDonation extends LitElement {
 
   private get customAmountDisplayValue(): string {
     if (!this.isCustomAmount) return '';
-    return currency(this.donationInfo.amount, { symbol: '' }).format();
+    return currency(this.donationInfo.amount, {
+      symbol: '',
+      separator: '',
+    }).format();
   }
 
   private get customAmountTemplate(): TemplateResult {
@@ -527,7 +531,7 @@ export class IADonationEditDonation extends LitElement {
   }
 
   private handleCustomAmountInput(value: string): void {
-    const amount = parseFloat(value);
+    const amount = parseAmount(value);
     if (isNaN(amount)) {
       this.dispatchEditDonationError(
         EditDonationInfoStatus.InvalidDonationAmount,
