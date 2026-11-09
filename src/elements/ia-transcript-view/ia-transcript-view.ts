@@ -465,6 +465,10 @@ export class IATranscriptView extends LitElement {
             --ia-theme-transcript-search-result-active-border-color,
             var(--ia-color-text-inverse-link--)
           );
+          --transcript-search-result-active-fill--: var(
+            --ia-theme-transcript-search-result-active-fill,
+            var(--ia-color-hover-overlay-inverse--)
+          );
 
           --transcript-time-color--: var(
             --ia-theme-transcript-time-color,
@@ -626,8 +630,15 @@ export class IATranscriptView extends LitElement {
           border-radius: 5px;
         }
 
+        /* The current result differs from the others by more than its
+           color: a heavier outline and a fill behind its text. */
+        ia-transcript-entry[issearchresult][isselected] {
+          background-color: var(--transcript-search-result-active-fill--);
+          border-radius: 5px;
+        }
+
         ia-transcript-entry[issearchresult][isselected]:after {
-          border: 2px solid
+          border: 3px solid
             var(--transcript-search-result-active-border-color--);
         }
       `,
