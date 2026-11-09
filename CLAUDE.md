@@ -17,7 +17,7 @@ pnpm run typecheck  # tsc --noEmit
 Design-token lengths don't depend on the page's root font size: they're px at
 the browser's default 16px, and the ones marked `scale` grow with the user's
 font-size setting through `--ia-unit` (`src/themes/unit.ts`). A `rem` literal
-still in a component assumes archive.org's 10px root (`html { font-size: 62.5% }`);
+still in a component assumes archive.org's 10px root (offshoot's `html { font-size: 10px }`);
 the demo and the browser tests set that root too.
 
 Design tokens live in `tokens/tokens.json`, the source of truth for colors, type,

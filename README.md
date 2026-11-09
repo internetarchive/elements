@@ -28,7 +28,7 @@ import { FoobarService } from "@internetarchive/elements/services/foobar-service
 
 Sizes from the design tokens don't depend on the page's root font size, so a component looks the same on archive.org's 10px root and on a page with the browser's default 16px. Text, spacing, control heights, icons and containers grow with the user's browser font-size setting; borders, focus rings, corners, the 44px touch minimum, shadows and breakpoints stay fixed. elements does this by setting `--ia-unit` on `<html>` when it loads: `1px` at the browser's default 16px, `1.25px` at 20px. A page can set `--ia-unit` itself, on `:root` or on one element, to scale components on its own.
 
-A few components still have `rem` values of their own that aren't on tokens yet. Those assume archive.org's root, `html { font-size: 62.5% }`, and render 1.6 times larger on a 16px root.
+A few components still have `rem` values of their own that aren't on tokens yet. Those assume archive.org's 10px root font size and render 1.6 times larger on a 16px root.
 
 ## Build Dependencies
 
@@ -263,7 +263,7 @@ A page overrides a token by setting its public name, e.g. `--ia-color-text-link`
 
 For a dark surface, add the `ia-inverse` class, either inside the shadow root or on the element itself. It re-points the text, border, focus, surface, hover and selected aliases to values that clear contrast on dark backgrounds.
 
-Length tokens are px at the browser's default font size. Each group in `tokens/tokens.json` sets `$extensions.ia.scale`: `true` builds as `calc(N * var(--ia-unit, 1px))`, `false` as plain px, and a length outside either fails the build. `src/themes/tokens.node.test.ts` checks every color pairing the system recommends against its WCAG contrast minimum, so a token change that breaks one fails the tests.
+Length tokens are px at the browser's default font size. Each group of lengths in `tokens/tokens.json` sets `$extensions.ia.scale`: `true` builds as `calc(N * var(--ia-unit, 1px))`, `false` as plain px, and a length outside either fails the build. `src/themes/tokens.node.test.ts` checks every color pairing the system recommends against its WCAG contrast minimum, so a token change that breaks one fails the tests.
 
 #### Setting up styles
 
