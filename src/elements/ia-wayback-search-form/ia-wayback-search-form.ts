@@ -103,9 +103,11 @@ export class IAWaybackSearchForm extends LitElement {
       themeStyles,
       css`
         :host {
+          /* The secondary text hook stays first so a host that set it keeps
+             its field color; without it, the field takes primary text. */
           --wayback-search-input-text-color--: var(
-            --ia-theme-primary-text-color,
-            var(--ia-color-text-primary--)
+            --ia-theme-secondary-text-color,
+            var(--ia-theme-primary-text-color, var(--ia-color-text-primary--))
           );
           --wayback-search-input-bg--: var(
             --ia-theme-secondary-background-color,
