@@ -72,6 +72,16 @@ describe('<ia-topnav> font-size scale unit', () => {
     expect(labelFontSize).to.equal('32px');
   });
 
+  test('still scales with the deprecated --topnavFontSize', async () => {
+    const el = await fixture<IATopNav>(
+      html`<ia-topnav style="--topnavFontSize: 32px"></ia-topnav>`,
+    );
+    const { barHeight, labelFontSize } = measurements(el);
+
+    expect(barHeight).to.equal('80px');
+    expect(labelFontSize).to.equal('32px');
+  });
+
   test('stays fixed through a nested component that sets its own font-size', async () => {
     // ia-topnav-wayback-search's own :host sets font-size to
     // calc(12 * var(--topnavUnit--)), a container with a font-size
@@ -92,9 +102,11 @@ describe('<ia-topnav> font-size scale unit', () => {
       throw new Error('expected wayback search and its input to be present');
     }
 
-    expect(
-      getComputedStyle(waybackSearch).getPropertyValue('--topnavUnit--'),
-    ).to.equal('2px');
+    const probe = document.createElement('div');
+    probe.style.width = 'var(--topnavUnit--)';
+    waybackSearch.shadowRoot!.append(probe);
+    expect(getComputedStyle(probe).width).to.equal('2px');
+    probe.remove();
 
     const inputStyle = getComputedStyle(input);
     expect(inputStyle.height).to.equal('60px');
