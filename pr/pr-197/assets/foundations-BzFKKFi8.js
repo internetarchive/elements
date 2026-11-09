@@ -1,27 +1,27 @@
-import{r as y,u as t,x as o,y as p,z as d,A as l,C as $,D as f,E as h}from"./site-BRoG7j6e.js";/* empty css           *//* empty css             */y("foundations.html");const n=e=>e.replace("--ia-",""),r=e=>document.getElementById(e),u=e=>{const a=/^var\((--ia-[\w-]+)\)$/.exec(e.declared);return a?`<span class="doc-swatch__value">via ${n(a[1])}</span>`:""},m=(e,a)=>{const s=e.resolved;return`<div class="doc-swatch">
+import{r as $,u as t,x as o,y as p,z as d,A as l,C as f,D as w,E as g}from"./site-BRoG7j6e.js";/* empty css           *//* empty css             */$("foundations.html");const n=e=>e.replace("--ia-",""),r=e=>document.getElementById(e),v=e=>{if(!/\d(px|rem)|calc\(/.test(e))return e;const a=document.createElement("div");a.style.cssText=`position:absolute;visibility:hidden;inline-size:${e}`,document.body.append(a);const s=a.getBoundingClientRect().width;return a.remove(),`${+s.toFixed(2)}px`},h=e=>{const a=/^var\((--ia-[\w-]+)\)$/.exec(e.declared);return a?`<span class="doc-swatch__value">via ${n(a[1])}</span>`:""},u=(e,a)=>{const s=e.resolved;return`<div class="doc-swatch">
     <div class="doc-swatch__chip" style="background:${s};color:${a??"var(--ia-color-text-primary)"}">
       ${a?"Aa":""}
     </div>
     <div class="doc-swatch__meta">
       <span class="doc-swatch__name">${n(e.name)}</span>
       <span class="doc-swatch__value">${d(s)}</span>
-      ${u(e)}
+      ${h(e)}
     </div>
-  </div>`};r("surfaces").innerHTML=t("color-surface-").map(e=>/scrim/.test(e.name)?m(e):m(e,/chrome|inverse|collection|theater/.test(e.name)?o("color-text-inverse"):o("color-text-primary"))).join("");r("palette").innerHTML=t("color-palette-").map(e=>m(e)).join("");r("legacy").innerHTML=t("color-legacy-").map(e=>m(e)).join("");{const e=["color-surface-page","color-surface-raised","color-surface-sunken"],a=["color-text-primary","color-text-secondary","color-text-link","color-text-link-hover","color-text-danger"];r("text-matrix").innerHTML=p(["Token","Value",...e.map(s=>({label:n(s).replace("color-surface-",""),num:!0}))],a.map(s=>{const c=o(s);return[`<code>${n("--ia-"+s)}</code>`,`<code>${d(c)}</code>`,...e.map(i=>`<span style="background:${o(i)};padding:0.3rem 0.6rem;border-radius:var(--ia-radius-sm);color:${c}">Aa</span> ${l(c,o(i))}`)]}))}{const e=["primary","secondary","danger","warning","donate","disabled"];r("actions").innerHTML=e.map(a=>{const s=o(`color-action-${a}-fill`),c=o(`color-action-${a}-text`),i=o(`color-action-${a}-border`),v=a==="warning"||a==="secondary",g=v?i:s,b=v?"border vs page":"fill vs page";return`<div class="doc-swatch">
+  </div>`};r("surfaces").innerHTML=t("color-surface-").map(e=>/scrim/.test(e.name)?u(e):u(e,/chrome|inverse|collection|theater/.test(e.name)?o("color-text-inverse"):o("color-text-primary"))).join("");r("palette").innerHTML=t("color-palette-").map(e=>u(e)).join("");r("legacy").innerHTML=t("color-legacy-").map(e=>u(e)).join("");{const e=["color-surface-page","color-surface-raised","color-surface-sunken"],a=["color-text-primary","color-text-secondary","color-text-link","color-text-link-hover","color-text-danger"];r("text-matrix").innerHTML=p(["Token","Value",...e.map(s=>({label:n(s).replace("color-surface-",""),num:!0}))],a.map(s=>{const c=o(s);return[`<code>${n("--ia-"+s)}</code>`,`<code>${d(c)}</code>`,...e.map(i=>`<span style="background:${o(i)};padding:0.3rem 0.6rem;border-radius:var(--ia-radius-sm);color:${c}">Aa</span> ${l(c,o(i))}`)]}))}{const e=["primary","secondary","danger","warning","donate","disabled"];r("actions").innerHTML=e.map(a=>{const s=o(`color-action-${a}-fill`),c=o(`color-action-${a}-text`),i=o(`color-action-${a}-border`),m=a==="warning"||a==="secondary",b=m?i:s,y=m?"border vs page":"fill vs page";return`<div class="doc-swatch">
       <div class="doc-swatch__chip" style="background:${s};border:2px solid ${i}">
         <span style="color:${c};font-weight:var(--ia-font-weight-bold)">${a}</span>
       </div>
       <div class="doc-swatch__meta">
         <span class="doc-swatch__value">fill ${d(s)} · border ${d(i)}</span>
         <span>label ${l(c,s)}</span>
-        <span>${b} ${a==="disabled"?'<span class="doc-ratio">exempt</span>':l(g,o("color-surface-page"),3)}</span>
+        <span>${y} ${a==="disabled"?'<span class="doc-ratio">exempt</span>':l(b,o("color-surface-page"),3)}</span>
       </div>
     </div>`}).join("")}r("status").innerHTML=t("color-status-").filter(e=>!/-(subtle|border)$/.test(e.name)).map(e=>{const a=e.resolved;return`<div class="doc-swatch">
     <div class="doc-swatch__chip" style="background:${o("color-surface-raised")};color:${a};font-weight:var(--ia-font-weight-bold)">Aa</div>
     <div class="doc-swatch__meta">
       <span class="doc-swatch__name">${n(e.name)}</span>
       <span class="doc-swatch__value">${d(a)}</span>
-      ${u(e)}
+      ${h(e)}
       <span>as text on white ${l(a,o("color-surface-raised"))}</span>
       <span>on sunken ${l(a,o("color-surface-sunken"))}</span>
     </div></div>`}).join("");r("status-tints").innerHTML=["info","success","warning","danger"].map(e=>{const a=o(`color-status-${e}-subtle`),s=o(`color-status-${e}-border`),c=o(`color-status-${e}`);return`<div class="doc-swatch">
@@ -62,14 +62,14 @@ import{r as y,u as t,x as o,y as p,z as d,A as l,C as $,D as f,E as h}from"./sit
     <div class="doc-swatch__meta"><span class="doc-swatch__name">hover-overlay</span>
       <span class="doc-swatch__value">${o("color-hover-overlay")}</span>
       <span>on the sunken surface — a sunken fill would not show</span></div>
-  </div>`;{const e=/-(strong|focus|focus-inverse)$/;r("borders").innerHTML=t("color-border-").map(a=>{const s=a.resolved,c=/inverse/.test(a.name),i=c?o("color-surface-chrome"):o("color-surface-raised"),v=e.test(a.name);return`<div class="doc-swatch">
+  </div>`;{const e=/-(strong|focus|focus-inverse)$/;r("borders").innerHTML=t("color-border-").map(a=>{const s=a.resolved,c=/inverse/.test(a.name),i=c?o("color-surface-chrome"):o("color-surface-raised"),m=e.test(a.name);return`<div class="doc-swatch">
       <div class="doc-swatch__chip" style="background:${i}">
         <span style="display:block;inline-size:8rem;block-size:3rem;border:2px solid ${s};border-radius:var(--ia-radius-default)"></span>
       </div>
       <div class="doc-swatch__meta">
         <span class="doc-swatch__name">${n(a.name)}</span>
         <span class="doc-swatch__value">${d(s)}</span>
-        <span>vs ${c?"chrome":"raised"} ${v?l(s,i,3):`<span class="doc-ratio">${$(s,i).toFixed(2)}:1 · decorative, exempt</span>`}</span>
+        <span>vs ${c?"chrome":"raised"} ${m?l(s,i,3):`<span class="doc-ratio">${f(s,i).toFixed(2)}:1 · decorative, exempt</span>`}</span>
       </div></div>`}).join("")}r("inverse").innerHTML=`<div class="doc-panel doc-panel--inverse ia-inverse">
   <p class="ia-type-body" style="color:var(--ia-color-text-primary);margin-block-start:0">
     Primary text on chrome ${l(o("color-text-inverse"),o("color-surface-chrome"))}</p>
@@ -82,7 +82,7 @@ import{r as y,u as t,x as o,y as p,z as d,A as l,C as $,D as f,E as h}from"./sit
     <div style="padding-block:var(--ia-space-2);border-block-end:1px solid var(--ia-color-border-subtle)">
       <div class="ia-type-${a}">The Internet Archive is a non-profit library</div>
       <div class="doc-swatch__value">.ia-type-${a}</div>
-    </div>`).join("");for(const a of r("roles").querySelectorAll('[class^="ia-type-"]')){const s=getComputedStyle(a),c=parseFloat(s.fontSize);a.nextElementSibling.textContent+=` — ${c/10}rem / ${s.fontWeight} / ${+(parseFloat(s.lineHeight)/c).toFixed(2)}`}r("type-scale").innerHTML=p(["Token","rem","px","Sample"],t("font-size-").map(a=>[`<code>${n(a.name)}</code>`,`<code>${a.resolved}</code>`,`<span class="num">${parseFloat(a.resolved)*10}</span>`,`<span style="font-size:${a.resolved}">Buster Keaton</span>`])),r("weights").innerHTML=t("font-weight-").map(a=>`<div style="font-weight:${a.resolved};font-size:var(--ia-font-size-xl);padding-block:var(--ia-space-1)">
+    </div>`).join("");for(const a of r("roles").querySelectorAll('[class^="ia-type-"]')){const s=getComputedStyle(a),c=parseFloat(s.fontSize);a.nextElementSibling.textContent+=` — ${c}px / ${s.fontWeight} / ${+(parseFloat(s.lineHeight)/c).toFixed(2)}`}r("type-scale").innerHTML=p(["Token","px","Sample"],t("font-size-").map(a=>[`<code>${n(a.name)}</code>`,`<span class="num">${parseFloat(v(a.resolved))}</span>`,`<span style="font-size:${a.resolved}">Buster Keaton</span>`])),r("weights").innerHTML=t("font-weight-").map(a=>`<div style="font-weight:${a.resolved};font-size:var(--ia-font-size-xl);padding-block:var(--ia-space-1)">
        ${a.resolved} — ${n(a.name).replace("font-weight-","")} — The Internet Archive
      </div>`).join(""),r("line-heights").innerHTML=t("font-line-height-").map(a=>`<div style="margin-block-end:var(--ia-space-3)">
        <div class="doc-swatch__value">${n(a.name)} — ${a.resolved}</div>
@@ -91,20 +91,20 @@ import{r as y,u as t,x as o,y as p,z as d,A as l,C as $,D as f,E as h}from"./sit
          software, music, websites, and more.</p>
      </div>`).join("")}r("space-scale").innerHTML=t("space-").filter(e=>/^--ia-space-\d+$/.test(e.name)).map(e=>`<div style="display:flex;align-items:center;gap:var(--ia-space-3);padding-block:0.4rem">
      <code style="min-inline-size:12rem">${n(e.name)}</code>
-     <code style="min-inline-size:6rem">${e.resolved}</code>
+     <code style="min-inline-size:6rem">${v(e.resolved)}</code>
      <span style="display:block;block-size:1.6rem;inline-size:${e.resolved};background:var(--ia-color-action-primary-fill);border-radius:var(--ia-radius-sm)"></span>
    </div>`).join("");r("radii").innerHTML=t("radius-").map(e=>`<div class="doc-swatch">
      <div class="doc-swatch__chip">
        <span style="display:block;inline-size:8rem;block-size:5rem;background:var(--ia-color-action-primary-fill);border-radius:${e.resolved}"></span>
      </div>
      <div class="doc-swatch__meta"><span class="doc-swatch__name">${n(e.name)}</span>
-       <span class="doc-swatch__value">${e.resolved}</span>${u(e)}</div>
+       <span class="doc-swatch__value">${v(e.resolved)}</span>${h(e)}</div>
    </div>`).join("");r("shadows").innerHTML=t("shadow-").map(e=>`<div class="doc-swatch">
      <div class="doc-swatch__chip" style="background:var(--ia-color-surface-page)">
        <span style="display:block;inline-size:9rem;block-size:4rem;background:var(--ia-color-surface-raised);border-radius:var(--ia-radius-default);box-shadow:${e.resolved}"></span>
      </div>
      <div class="doc-swatch__meta"><span class="doc-swatch__name">${n(e.name)}</span>
-       <span class="doc-swatch__value">${e.resolved}</span>${u(e)}</div>
+       <span class="doc-swatch__value">${e.resolved}</span>${h(e)}</div>
    </div>`).join("");r("motion-demo").innerHTML=t("motion-duration-").map(e=>`<div class="doc-swatch">
      <div class="doc-swatch__chip" style="background:var(--ia-color-surface-page)">
        <span tabindex="0" style="display:block;inline-size:6rem;block-size:4.4rem;background:var(--ia-color-action-primary-fill);border-radius:var(--ia-radius-default);transition:translate ${e.resolved} var(--ia-motion-easing-standard)"
@@ -113,4 +113,4 @@ import{r as y,u as t,x as o,y as p,z as d,A as l,C as $,D as f,E as h}from"./sit
      </div>
      <div class="doc-swatch__meta"><span class="doc-swatch__name">${n(e.name)}</span>
        <span class="doc-swatch__value">${e.resolved}</span></div>
-   </div>`).join("");r("easings").innerHTML=p(["Token","Value","Use"],t("motion-easing-").map(e=>[`<code>${n(e.name)}</code>`,`<code>${e.resolved}</code>`,{standard:"anything that moves and stays",enter:"appearing — decelerate in",exit:"leaving — accelerate out",linear:"progress, spinners",state:"checked, selected, expanded, disabled"}[n(e.name).replace("motion-easing-","")]??""]));r("breakpoints").innerHTML=p(["Token","Value","What changes"],t("breakpoint-").map(e=>[`<code>${n(e.name)}</code>`,`<code>${e.resolved}</code>`,{sm:"result grids gain a second column",md:"wider gutters; inputs return to 1.4rem",lg:"topnav goes desktop; facet rail appears; display and page-title step up",xl:"widest grid tier; the container stops growing"}[n(e.name).replace("breakpoint-","")]??""]));r("containers").innerHTML=p(["Token","Value","Use"],t("container-").map(e=>[`<code>${n(e.name)}</code>`,`<code>${e.resolved}</code>`,{"container-page":"the default page container","container-prose":"continuous text","container-form":"forms","container-gutter":"page gutter above md","container-gutter-narrow":"page gutter at and below md"}[n(e.name)]??""]));r("zindex").innerHTML=p([{label:"Token"},{label:"Value",num:!0}],t("z-index-").map(e=>[`<code>${n(e.name)}</code>`,e.resolved]));r("sizes").innerHTML=p(["Token","Value","px"],t("size-").map(e=>[`<code>${n(e.name)}</code>`,`<code>${e.resolved}</code>`,e.resolved.endsWith("rem")?String(parseFloat(e.resolved)*10):e.resolved]));{const e=f();r("token-count").textContent=e.length;const a=s=>{const c=e.filter(i=>!s||i.name.includes(s)||i.resolved.includes(s)).map(i=>[`<code>${n(i.name)}</code>`,`<code>${h(i.declared)}</code>`,`<code>${h(i.resolved)}</code>`,i.name.startsWith("--ia-theme-")?"compatibility alias":i.name.startsWith("--ia-color-legacy-")?"legacy — not for new code":""]);r("all-tokens").innerHTML=c.length?p(["Token","Declared","Resolved",""],c):'<p class="doc-empty">No tokens match that filter.</p>'};a(""),r("tok-filter").addEventListener("input",s=>a(s.target.value.trim().toLowerCase()))}
+   </div>`).join("");r("easings").innerHTML=p(["Token","Value","Use"],t("motion-easing-").map(e=>[`<code>${n(e.name)}</code>`,`<code>${e.resolved}</code>`,{standard:"anything that moves and stays",enter:"appearing — decelerate in",exit:"leaving — accelerate out",linear:"progress, spinners",state:"checked, selected, expanded, disabled"}[n(e.name).replace("motion-easing-","")]??""]));r("breakpoints").innerHTML=p(["Token","Value","What changes"],t("breakpoint-").map(e=>[`<code>${n(e.name)}</code>`,`<code>${e.resolved}</code>`,{sm:"result grids gain a second column",md:"wider gutters; inputs return to 14px",lg:"topnav goes desktop; facet rail appears; display and page-title step up",xl:"widest grid tier; the container stops growing"}[n(e.name).replace("breakpoint-","")]??""]));r("containers").innerHTML=p(["Token","Value","Use"],t("container-").map(e=>[`<code>${n(e.name)}</code>`,`<code>${v(e.resolved)}</code>`,{"container-page":"the default page container","container-prose":"continuous text","container-form":"forms","container-gutter":"page gutter above md","container-gutter-narrow":"page gutter at and below md"}[n(e.name)]??""]));r("zindex").innerHTML=p([{label:"Token"},{label:"Value",num:!0}],t("z-index-").map(e=>[`<code>${n(e.name)}</code>`,e.resolved]));r("sizes").innerHTML=p(["Token","Value"],t("size-").map(e=>[`<code>${n(e.name)}</code>`,`<code>${v(e.resolved)}</code>`]));{const e=w();r("token-count").textContent=e.length;const a=s=>{const c=e.filter(i=>!s||i.name.includes(s)||i.resolved.includes(s)).map(i=>[`<code>${n(i.name)}</code>`,`<code>${g(i.declared)}</code>`,`<code>${g(i.resolved)}</code>`,i.name.startsWith("--ia-theme-")?"compatibility alias":i.name.startsWith("--ia-color-legacy-")?"legacy — not for new code":""]);r("all-tokens").innerHTML=c.length?p(["Token","Declared","Resolved",""],c):'<p class="doc-empty">No tokens match that filter.</p>'};a(""),r("tok-filter").addEventListener("input",s=>a(s.target.value.trim().toLowerCase()))}
