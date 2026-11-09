@@ -8,7 +8,7 @@ import {
 } from 'lit';
 import { property, query, state } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
-import { msg, str } from '@lit/localize';
+import { localized, msg, str } from '@lit/localize';
 
 import themeStyles from '@src/themes/theme-styles';
 
@@ -25,19 +25,27 @@ export type CurrentAmountMode = 'on' | 'off';
  * and the goal (or a goal message) sits to the right of the bar.
  */
 @customElement('ia-donation-thermometer')
+@localized()
 export class IADonationThermometer extends LitElement {
   @property({ type: String }) goalMessageMode: GoalMessageMode = 'amount';
 
-  @property({ type: String }) goalNearMessage = msg(
-    'We’ve almost reached our goal!',
-  );
+  /**
+   * The message shown when the goal is near. Empty shows the built-in message
+   * in the current language.
+   */
+  @property({ type: String }) goalNearMessage = '';
 
-  @property({ type: String }) goalReachedMessage = msg(
-    'We’ve reached our goal!',
-  );
+  /**
+   * The message shown when the goal is reached. Empty shows the built-in
+   * message in the current language.
+   */
+  @property({ type: String }) goalReachedMessage = '';
 
-  /** The accessible name of the progress bar, for screen readers. */
-  @property({ type: String }) label = msg('Donation progress');
+  /**
+   * The accessible name of the progress bar, for screen readers. Empty uses
+   * the built-in name in the current language.
+   */
+  @property({ type: String }) label = '';
 
   @property({ type: Number }) goalAmount = 7_500_000;
 
@@ -77,7 +85,7 @@ export class IADonationThermometer extends LitElement {
             class="thermometer-background ${this.thermometerValuePosition}"
             style="--fill-end--: ${this.percentComplete}%"
             role="progressbar"
-            aria-label="${this.label}"
+            aria-label="${this.label || msg('Donation progress')}"
             aria-valuemin="0"
             aria-valuemax="${this.progressMax}"
             aria-valuenow="${this.progressValue}"
@@ -185,8 +193,8 @@ export class IADonationThermometer extends LitElement {
 
   private get goalMessage(): string {
     return this.currentAmount >= this.goalAmount
-      ? this.goalReachedMessage
-      : this.goalNearMessage;
+      ? this.goalReachedMessage || msg('We’ve reached our goal!')
+      : this.goalNearMessage || msg('We’ve almost reached our goal!');
   }
 
   private get currentAmountDisplayValue(): string {

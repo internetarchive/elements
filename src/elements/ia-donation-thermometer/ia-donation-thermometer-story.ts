@@ -109,19 +109,19 @@ const propInputSettings: PropInputSettings<IADonationThermometer>[] = [
   {
     label: 'Accessible label',
     propertyName: 'label',
-    defaultValue: 'Donation progress',
+    defaultValue: '',
   },
   {
     section: 'Goal messages',
     label: 'Near goal',
     propertyName: 'goalNearMessage',
-    defaultValue: 'We’ve almost reached our goal!',
+    defaultValue: '',
   },
   {
     section: 'Goal messages',
     label: 'Goal reached',
     propertyName: 'goalReachedMessage',
-    defaultValue: 'We’ve reached our goal!',
+    defaultValue: '',
   },
 ];
 
