@@ -273,29 +273,30 @@ export class MediaButton extends TrackedElement {
             background: transparent;
           }
 
-          /* An open media type's glyph takes its media type's color (D-43). */
+          /* An open media type's glyph takes its media type's color, in the
+             values that read on the dark tab (D-43). */
           .web.selected svg {
-            color: var(--ia-color-mediatype-web--);
+            color: var(--ia-color-mediatype-inverse-web--);
           }
 
           .texts.selected svg {
-            color: var(--ia-color-mediatype-texts--);
+            color: var(--ia-color-mediatype-inverse-texts--);
           }
 
           .video.selected svg {
-            color: var(--ia-color-mediatype-movies--);
+            color: var(--ia-color-mediatype-inverse-movies--);
           }
 
           .audio.selected svg {
-            color: var(--ia-color-mediatype-audio--);
+            color: var(--ia-color-mediatype-inverse-audio--);
           }
 
           .software.selected svg {
-            color: var(--ia-color-mediatype-software--);
+            color: var(--ia-color-mediatype-inverse-software--);
           }
 
           .images.selected svg {
-            color: var(--ia-color-mediatype-image--);
+            color: var(--ia-color-mediatype-inverse-image--);
           }
         }
 

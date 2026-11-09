@@ -112,8 +112,8 @@ describe('ia-topnav icons', () => {
 
         expect(colorOf('video')).to.equal('rgb(204, 204, 204)');
         expect(colorOf('donate')).to.equal('rgb(255, 0, 0)');
-        // --ia-color-mediatype-texts, #c5872f
-        expect(colorOf('texts')).to.equal('rgb(197, 135, 47)');
+        // --ia-color-mediatype-inverse-texts, #faab3c
+        expect(colorOf('texts')).to.equal('rgb(250, 171, 60)');
       } finally {
         await page.viewport(414, 896);
       }
