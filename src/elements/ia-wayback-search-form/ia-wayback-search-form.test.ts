@@ -78,15 +78,19 @@ describe('IAWaybackSearchForm', () => {
     );
   });
 
-  test('colors the field text from the primary text hook', async () => {
-    const el = await fixture<IAWaybackSearchForm>(
+  test('colors the field text from the secondary text hook, then the primary', async () => {
+    const both = await fixture<IAWaybackSearchForm>(
       html`<ia-wayback-search-form
         style="--ia-theme-secondary-text-color: rgb(1, 2, 3); --ia-theme-primary-text-color: rgb(4, 5, 6)"
       ></ia-wayback-search-form>`,
     );
-    const input = inputOf(el);
-    if (!input) throw new Error('no input');
-    expect(getComputedStyle(input).color).to.equal('rgb(4, 5, 6)');
+    expect(getComputedStyle(inputOf(both)!).color).to.equal('rgb(1, 2, 3)');
+    const primary = await fixture<IAWaybackSearchForm>(
+      html`<ia-wayback-search-form
+        style="--ia-theme-primary-text-color: rgb(4, 5, 6)"
+      ></ia-wayback-search-form>`,
+    );
+    expect(getComputedStyle(inputOf(primary)!).color).to.equal('rgb(4, 5, 6)');
   });
 
   test('shows the page count the host passes', async () => {

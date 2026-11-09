@@ -501,7 +501,9 @@ export class IADropdown extends LitElement {
     const dropdownBgColor = css`var(--dropdownBgColor, var(--ia-color-surface-inverse--))`;
     const dropdownTextColor = css`var(--dropdownTextColor, var(--ia-color-text-inverse--))`;
     const dropdownHoverBgColor = css`var(--dropdownHoverBgColor, var(--ia-color-hover-overlay-inverse--))`;
-    const dropdownSelectedBgColor = css`var(--dropdownSelectedBgColor, var(--ia-color-selected-soft-fill-inverse--))`;
+    // An overlay on the panel: #666 on the default one, and on a panel a host
+    // recolors, a lighter shade of it rather than a dark bar.
+    const dropdownSelectedBgColor = css`var(--dropdownSelectedBgColor, var(--ia-color-selected-soft-overlay-inverse--))`;
     const dropdownMainButtonBgColor = css`var(--dropdownMainButtonBgColor, transparent)`;
     const dropdownTextAlign = css`var(--dropdownTextAlign, inherit)`;
     const dropdownBackdropZIndex = css`var(--dropdownBackdropZIndex, 1)`;
@@ -753,10 +755,7 @@ export class IADropdown extends LitElement {
 
         #dropdown-main li.selected > * {
           background-color: ${dropdownSelectedBgColor};
-          color: var(
-            --dropdownSelectedTextColor,
-            var(--ia-color-text-inverse--)
-          );
+          color: var(--dropdownSelectedTextColor, ${dropdownTextColor});
         }
 
         #dropdown-main li {
@@ -777,14 +776,21 @@ export class IADropdown extends LitElement {
           outline: inherit;
         }
 
-        /* An option's focus: the dark-surface ring, inside the row, with its
+        /* An option's focus: the trigger's ring, inside the row, with its
            band, so it shows on any row fill. On the selected #666 row the
-           ring alone is 2.58:1. */
+           ring alone is 2.58:1. A host on a light panel sets the same two
+           hooks as for the trigger. */
         #dropdown-main li > *:focus-visible {
           outline: var(--ia-size-focus-ring--) solid
-            var(--ia-color-border-focus-inverse--);
+            var(
+              --dropdownFocusRingColor,
+              var(--ia-color-border-focus-inverse--)
+            );
           outline-offset: calc(-1 * var(--ia-size-focus-ring--));
-          box-shadow: var(--ia-shadow-focus-band-inverse--);
+          box-shadow: var(
+            --dropdownFocusBand,
+            var(--ia-shadow-focus-band-inverse--)
+          );
         }
 
         #dropdown-main li a {
