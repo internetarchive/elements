@@ -102,7 +102,7 @@ JSON to hand back.
 
 **Blast radius.** None on day one — the compatibility block is additive. Color values change (see D-07 to D-11), so components reading --ia-theme-link-color will visibly change.
 
-*See:* `tokens/tokens.css`
+*See:* `tokens/tokens.json`
 
 ---
 
@@ -1210,7 +1210,7 @@ JSON to hand back.
 
 **The conflict.** The spec put one banner under the topnav and said not to stack three, pointed the skip link at #main from inside the header, and had no footer or loading bar.
 
-**The decision.** Banners go above the topnav, up to three stacked under the donation banner, keeping the system's tints, icons, 31px height, accessible dismiss and four intents. The skip link is the page's first element and targets #maincontent. Spec offshoot's footer (on the chrome surface, regular weight, in its three modes) and its 3px activity bar (link color, a 1.4s sweep from the motion tokens, still under reduced motion). The root font size stays 62.5%.
+**The decision.** Banners go above the topnav, up to three stacked under the donation banner, keeping the system's tints, icons, 31px height, accessible dismiss and four intents. The skip link is the page's first element and targets #maincontent. Spec offshoot's footer (on the chrome surface, regular weight, in its three modes) and its 3px activity bar (link color, a 1.4s sweep from the motion tokens, still under reduced motion). The root font size follows [D-37](#d-37).
 
 **Why.** A notice about the whole site reads before the site's own navigation, as offshoot already orders it. The footer and the loading bar exist on every offshoot page that needs them; specifying them on tokens keeps them from being the two parts of the chrome nobody designed.
 

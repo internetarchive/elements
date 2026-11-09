@@ -43,7 +43,7 @@ Live uses max-widths of 1350, 1170, 1000, 600, 570, 440, 430 and 300. Three rema
 | `--ia-container-prose` | 1000px | anything read as continuous text: item descriptions, help, policy pages |
 | `--ia-container-form` | 600px | forms — signup, login, upload metadata |
 
-Account settings is the one page-specific width: 70rem (700px), as offshoot sets it, since
+Account settings is the one page-specific width: 700px, as offshoot sets it, since
 its preference rows need three columns ([account-settings.md](../patterns/account-settings.md#width)).
 
 `1170px` is Bootstrap 3's `.container` on petabox's legacy item page, and offshoot's details
