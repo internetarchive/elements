@@ -265,7 +265,7 @@ padding: var(--ia-space-2--);
 ```
 A page overrides a token by setting its public name, e.g. `--ia-color-text-link`, on `:root` or any ancestor. Setting a palette value such as `--ia-color-palette-navy-700` changes every role that points at it. Use the semantic roles (`text`, `surface`, `border`, `action`, `status`, ...) in components, not the palette.
 
-For a dark surface, add the `ia-inverse` class, either inside the shadow root or on the element itself. It re-points the text, border, focus, surface, hover and selected aliases to values that clear contrast on dark backgrounds.
+For a dark surface, add the `ia-inverse` class, either inside the shadow root or on the element itself. It re-points the text, border, focus, surface, hover and selected aliases to values that clear contrast on dark backgrounds. It reaches only that element's own shadow root: a nested elements component sets its aliases afresh, so it needs the class too. Inside a shadow root it flips only what reads the `--ia-*--` aliases directly; on the element itself (`:host(.ia-inverse)`), the `--ia-theme-*` defaults built on them flip as well.
 
 Length tokens are px at the browser's default font size. Each group of lengths in `tokens/tokens.json` sets `$extensions.ia.scale`: `true` builds as `calc(N * var(--ia-unit, 1px))`, `false` as plain px, and a length outside either fails the build. `src/themes/tokens.node.test.ts` checks every color pairing the system recommends against its WCAG contrast minimum, so a token change that breaks one fails the tests.
 

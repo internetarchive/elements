@@ -6,9 +6,9 @@ import path from 'path';
 // it, and the screens they frame.
 const pages = [
   ...readdirSync(__dirname).filter((f) => f.endsWith('.html')),
-  ...readdirSync(path.resolve(__dirname, 'demo/docs/screens')).map(
-    (f) => `demo/docs/screens/${f}`,
-  ),
+  ...readdirSync(path.resolve(__dirname, 'demo/docs/screens'))
+    .filter((f) => f.endsWith('.html'))
+    .map((f) => `demo/docs/screens/${f}`),
 ];
 
 // https://vitejs.dev/config/
