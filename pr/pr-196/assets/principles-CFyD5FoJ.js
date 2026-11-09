@@ -123,4 +123,4 @@ The conflicts that keep coming up, and how they are resolved so far.
       <h3 class="ia-type-section">${c(t.title)}</h3>
       ${a}
     </article>`}).join(""),document.getElementById("tension-body").innerHTML=d(l).map(t=>{if(!t.startsWith("|"))return p(t);const[a,,...r]=t.split(`
-`);return y(m(a),r.map(m))}).join("")}location.hash&&document.querySelector(location.hash)?.scrollIntoView();
+`);return y(m(a),r.map(m))}).join("")}location.hash&&document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
