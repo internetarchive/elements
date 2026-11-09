@@ -4,7 +4,7 @@ Three icon systems ship on archive.org simultaneously:
 
 | System | How | Live |
 | --- | --- | --- |
-| **Inline SVG** | drawn into the component, some via `<ia-icon-*>` Lit wrappers | offshoot, collection-browser and ia-topnav; the glyphs lifted into `tools/live-icons.json` |
+| **Inline SVG** | drawn into the component, some via `<ia-icon-*>` Lit wrappers | offshoot, collection-browser and ia-topnav; the glyphs lifted into `demo/docs/assets/icons.js` |
 | **Iconochive** | `@font-face` icon font, `<span class="iconochive-download">` | petabox (legacy) pages; in offshoot, only the forum widget's `email` and `rss` |
 | **Glyphicons Halflings** | Bootstrap 3's icon font | loaded with Bootstrap on petabox's legacy item page |
 
@@ -16,9 +16,8 @@ if the markup is careless, and they block on a font download.
 ## The set
 
 The SVG icons are the system's, and they are taken from the site rather than redrawn:
-`tools/live-icons.json` holds the shape elements and geometry attributes lifted from the
-site's `<svg>`s, `tools/make-icons.mjs` turns that into `demo/docs/assets/icons.js`, and the
-spec site renders from it. No markup, script, style or external reference from
+`demo/docs/assets/icons.js` holds the shape elements and geometry attributes lifted from the
+site's `<svg>`s, and the spec site renders from it. No markup, script, style or external reference from
 the page is carried over, and fill and stroke colors are dropped so every glyph inherits
 `currentColor`.
 
@@ -104,11 +103,10 @@ One element that takes a `name` is worth weighing against today's one package pe
 2. **Name it** in kebab-case for what it shows, not what it does on one page: `flag`, not
    `report-item`. The name is how it is referenced everywhere.
 3. **Record where it came from.** A glyph lifted from the live site goes in
-   `tools/live-icons.json`. A new drawing is `proposed` until it ships, and the icons page marks it so. A glyph
+   `demo/docs/assets/icons.js`. A new drawing is `proposed` until it ships, and the icons page marks it so. A glyph
    adapted from an outside library carries that library's license, and is redrawn to the
    canonical form first so the set still reads as one family.
-4. **Rebuild** with `node tools/make-icons.mjs`, then check it on the icons page at every
-   size and inside `.ia-inverse`.
+4. **Check** it on the icons page at every size and inside `.ia-inverse`.
 
 Don't import a stroke-based library — Lucide, Feather, Heroicons' outline set — wholesale
 to fill gaps. The lifted set is filled; a second style beside it is the "three icon

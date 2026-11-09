@@ -118,9 +118,9 @@ collection-browser and ia-topnav alone, and one third-party widget at
 | `--ia-z-index-toast` | 600 | transient notifications |
 | `--ia-z-index-tooltip` | 700 | tooltips, over everything |
 
-Gaps of 100 leave room to slot something in without renumbering. Nothing in product
-code sets a raw `z-index` [D-16](../DECISIONS.md#d-16), and `tools/verify.mjs` fails a
-stylesheet that does. Within a band, ties resolve by document order; a component that must
+Gaps of 100 leave room to slot something in without renumbering. Product code sets no
+raw `z-index` [D-16](../DECISIONS.md#d-16); a few donation-form rules still do, until
+they move onto these tokens. Within a band, ties resolve by document order; a component that must
 beat its peers needs its own band, not a bigger number.
 
 There is no zero layer. `z-index: 0` orders nothing — it paints the same as `auto` — and
