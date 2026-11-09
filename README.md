@@ -26,6 +26,8 @@ Services (code with no UI, like a metadata fetcher or a parser) import the same 
 import { FoobarService } from "@internetarchive/elements/services/foobar-service/foobar-service";
 ```
 
+The components assume archive.org's root font size, `html { font-size: 62.5% }`, where `1rem` is `10px`. On a page with the browser's default 16px root, anything sized in `rem` renders 1.6 times larger.
+
 ## Build Dependencies
 
 We use SVGs in this repo, which not all build systems support out of the box. Here's how to support SVGs:

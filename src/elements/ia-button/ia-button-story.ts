@@ -72,7 +72,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Button padding',
     cssVariable: '--ia-theme-button-padding',
-    defaultValue: '0 1.875rem',
+    defaultValue: '0 3rem',
     inputType: 'text',
   },
   {
@@ -84,7 +84,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Button height',
     cssVariable: '--ia-theme-button-height',
-    defaultValue: '2.25rem',
+    defaultValue: '3.6rem',
     inputType: 'text',
   },
   {

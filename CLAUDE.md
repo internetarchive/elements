@@ -14,6 +14,9 @@ pnpm run lint       # eslint + prettier --check
 pnpm run typecheck  # tsc --noEmit
 ```
 
+Components assume a 10px root font size (`html { font-size: 62.5% }`), as on
+archive.org, so `1rem` is `10px`. The demo and the browser tests set it too.
+
 CI runs `lint`, `typecheck` and `test` as separate jobs. Nothing but `typecheck`
 checks types: vitest transpiles without checking and eslint isn't type-aware
 here, so run it before pushing rather than finding out from the PR.
