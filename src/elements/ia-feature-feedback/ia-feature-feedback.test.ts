@@ -171,6 +171,35 @@ describe('IAFeatureFeedback', () => {
     expect(commentButton).to.exist;
   });
 
+  test('sizes the comment button from --featureFeedbackCommentButtonFontSize alone', async () => {
+    const commentButtonStyle = async (style: string) => {
+      const el = (await fixture(html`
+        <ia-feature-feedback
+          displayMode="vote-prompt"
+          style=${style}
+        ></ia-feature-feedback>
+      `)) as IAFeatureFeedback;
+      const button = el.shadowRoot!.querySelector(
+        '#comment-button',
+      ) as HTMLButtonElement;
+      return getComputedStyle(button);
+    };
+
+    const defaults = await commentButtonStyle('');
+    expect(defaults.fontSize).to.equal('22.4px');
+
+    const sized = await commentButtonStyle(
+      '--featureFeedbackCommentButtonFontSize: 20px',
+    );
+    expect(sized.fontSize).to.equal('20px');
+
+    const weighted = await commentButtonStyle(
+      '--featureFeedbackCommentButtonFontWeight: bold',
+    );
+    expect(weighted.fontWeight).to.equal('700');
+    expect(weighted.fontSize).to.equal(defaults.fontSize);
+  });
+
   test('in vote-prompt mode, submits feedback when clicking a vote button outside the popup', async () => {
     const service = new MockFeatureFeedbackService();
     const recaptchaManager = new MockRecaptchaManager();

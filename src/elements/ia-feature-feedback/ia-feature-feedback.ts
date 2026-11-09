@@ -585,7 +585,7 @@ export class IAFeatureFeedback
     const promptFontSize = css`var(--featureFeedbackPromptFontSize, 1.4rem)`;
 
     const commentButtonFontWeight = css`var(--featureFeedbackCommentButtonFontWeight, normal)`;
-    const commentButtonFontSize = css`var(--featureFeedbackCommentButtonFontWeight, 1.4rem)`;
+    const commentButtonFontSize = css`var(--featureFeedbackCommentButtonFontSize, 1.4rem)`;
 
     const defaultColor = css`var(--defaultColor, ${darkGrayColor});`;
     const defaultColorSvgFilter = css`var(--defaultColorSvgFilter, ${darkGrayColorSvgFilter});`;
