@@ -101,7 +101,7 @@ JSON to hand back.
 
 **Blast radius.** None on day one — the compatibility block is additive. Color values change (see D-07 to D-11), so components reading --ia-theme-link-color will visibly change.
 
-*See:* `tokens/tokens.css`
+*See:* `tokens/tokens.json`
 
 ---
 
