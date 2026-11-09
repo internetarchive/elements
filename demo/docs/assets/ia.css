@@ -12,7 +12,7 @@
 /* ---------------------------------------------------------------- reset --- */
 
 /*
- * Every rem in the tokens assumes 1rem = 10px (D-37). archive.org declares this
+ * Every rem in this stylesheet assumes 1rem = 10px. archive.org declares this
  * on its own pages; declaring it here too means the stylesheet renders at the
  * right size anywhere else — a preview, a prototype, a design tool.
  */
