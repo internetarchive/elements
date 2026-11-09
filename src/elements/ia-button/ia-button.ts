@@ -326,6 +326,12 @@ export class IAButton extends LitElement {
 
         .button {
           --_height: var(--button-height--);
+          /* A host's own height fits a layout it controls, so it stands on a
+             touch screen too; the token heights get the 44px floor. */
+          --_touch-min: var(
+            --ia-theme-button-height,
+            var(--ia-size-target-min--)
+          );
           --_padding: var(--button-padding--);
           --_font-size: var(--font-size-standard--);
           --_press: var(--ia-motion-press-scale-default--);
@@ -368,19 +374,21 @@ export class IAButton extends LitElement {
 
         .size-sm {
           --_height: var(--ia-size-control-sm--);
+          --_touch-min: var(--ia-size-target-min--);
           --_padding: 0 var(--ia-space-4--);
         }
 
         .size-lg {
           --_height: var(--ia-size-control-lg--);
+          --_touch-min: var(--ia-size-target-min--);
           --_padding: 0 var(--ia-space-6--);
           --_font-size: var(--ia-font-size-lg--);
         }
 
-        /* Every size is at least 44px tall to a finger. */
+        /* Every token size is at least 44px tall to a finger. */
         @media (pointer: coarse) {
           .button {
-            min-height: max(var(--_height), var(--ia-size-target-min--));
+            min-height: max(var(--_height), var(--_touch-min));
           }
         }
 

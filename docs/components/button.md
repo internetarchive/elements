@@ -231,6 +231,11 @@ Where it still differs:
   transparent with `--ia-color-text-disabled` (`#666`) text, where the spec gives every
   disabled button the `#666` disabled fill. `mode="disabled"` still takes the fill.
 - The `--ia-theme-button-*` hooks set the `md` size. `sm` and `lg` use their tokens.
+- An `md` button whose host sets `--ia-theme-button-height` keeps that height on a coarse
+  pointer, since the host is fitting it to a layout of its own; the 44px floor applies to
+  the token heights.
+- A disabled `custom` button keeps the host's `--ia-button-custom-*` colors at half
+  opacity rather than taking the disabled fill.
 
 Its size comes from `--ia-theme-button-width` (default `fit-content`) and
 `--ia-theme-button-height`. Setting `width` on the element does nothing to the button
