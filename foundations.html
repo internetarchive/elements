@@ -94,8 +94,9 @@
 
   <section class="doc-section" id="typography">
     <h2>Typography</h2>
-    <p><code>html { font-size: 62.5% }</code>, so <strong>1rem = 10px</strong>.
-       Every value below assumes that.</p>
+    <p>Sizes are px at the browser's default font size. Type, spacing, controls and icons
+       grow with the reader's font setting
+       (<a href="https://github.com/internetarchive/elements/blob/main/docs/DECISIONS.md#d-37">D-37</a>).</p>
 
     <h3>Type roles</h3>
     <p>Heading <em>level</em> is document structure. Heading <em>appearance</em> is a role
@@ -193,6 +194,17 @@ mountChrome('foundations.html');
 
 const short = n => n.replace('--ia-', '');
 const el = id => document.getElementById(id);
+
+/** A length's rendered size in px, whatever unit the token is written in. */
+const px = v => {
+  if (!/\d(px|rem)|calc\(/.test(v)) return v;
+  const probe = document.createElement('div');
+  probe.style.cssText = `position:absolute;visibility:hidden;inline-size:${v}`;
+  document.body.append(probe);
+  const width = probe.getBoundingClientRect().width;
+  probe.remove();
+  return `${+width.toFixed(2)}px`;
+};
 
 /* ---- color swatches ------------------------------------------------- */
 /** "via palette-gray-600" for a role that points at another token; nothing for a raw value. */
@@ -368,14 +380,14 @@ el('inverse').innerHTML = `<div class="doc-panel doc-panel--inverse ia-inverse">
   for (const sample of el('roles').querySelectorAll('[class^="ia-type-"]')) {
     const cs = getComputedStyle(sample), size = parseFloat(cs.fontSize);
     sample.nextElementSibling.textContent +=
-      ` — ${size / 10}rem / ${cs.fontWeight} / ${+(parseFloat(cs.lineHeight) / size).toFixed(2)}`;
+      ` — ${size}px / ${cs.fontWeight} / ${+(parseFloat(cs.lineHeight) / size).toFixed(2)}`;
   }
 
   el('type-scale').innerHTML = table(
-    ['Token', 'rem', 'px', 'Sample'],
+    ['Token', 'px', 'Sample'],
     tokensMatching('font-size-').map(t => [
-      `<code>${short(t.name)}</code>`, `<code>${t.resolved}</code>`,
-      `<span class="num">${parseFloat(t.resolved) * 10}</span>`,
+      `<code>${short(t.name)}</code>`,
+      `<span class="num">${parseFloat(px(t.resolved))}</span>`,
       `<span style="font-size:${t.resolved}">Buster Keaton</span>`]));
 
   el('weights').innerHTML = tokensMatching('font-weight-').map(t =>
@@ -396,7 +408,7 @@ el('inverse').innerHTML = `<div class="doc-panel doc-panel--inverse ia-inverse">
 el('space-scale').innerHTML = tokensMatching('space-').filter(t => /^--ia-space-\d+$/.test(t.name)).map(t =>
   `<div style="display:flex;align-items:center;gap:var(--ia-space-3);padding-block:0.4rem">
      <code style="min-inline-size:12rem">${short(t.name)}</code>
-     <code style="min-inline-size:6rem">${t.resolved}</code>
+     <code style="min-inline-size:6rem">${px(t.resolved)}</code>
      <span style="display:block;block-size:1.6rem;inline-size:${t.resolved};background:var(--ia-color-action-primary-fill);border-radius:var(--ia-radius-sm)"></span>
    </div>`).join('');
 
@@ -407,7 +419,7 @@ el('radii').innerHTML = tokensMatching('radius-').map(t =>
        <span style="display:block;inline-size:8rem;block-size:5rem;background:var(--ia-color-action-primary-fill);border-radius:${t.resolved}"></span>
      </div>
      <div class="doc-swatch__meta"><span class="doc-swatch__name">${short(t.name)}</span>
-       <span class="doc-swatch__value">${t.resolved}</span>${via(t)}</div>
+       <span class="doc-swatch__value">${px(t.resolved)}</span>${via(t)}</div>
    </div>`).join('');
 
 el('shadows').innerHTML = tokensMatching('shadow-').map(t =>
@@ -441,13 +453,13 @@ el('easings').innerHTML = table(['Token', 'Value', 'Use'],
 /* ---- layout ---------------------------------------------------------- */
 el('breakpoints').innerHTML = table(['Token', 'Value', 'What changes'],
   tokensMatching('breakpoint-').map(t => [`<code>${short(t.name)}</code>`, `<code>${t.resolved}</code>`,
-    { sm: 'result grids gain a second column', md: 'wider gutters; inputs return to 1.4rem',
+    { sm: 'result grids gain a second column', md: 'wider gutters; inputs return to 14px',
       lg: 'topnav goes desktop; facet rail appears; display and page-title step up',
       xl: 'widest grid tier; the container stops growing'
     }[short(t.name).replace('breakpoint-', '')] ?? '']));
 
 el('containers').innerHTML = table(['Token', 'Value', 'Use'],
-  tokensMatching('container-').map(t => [`<code>${short(t.name)}</code>`, `<code>${t.resolved}</code>`,
+  tokensMatching('container-').map(t => [`<code>${short(t.name)}</code>`, `<code>${px(t.resolved)}</code>`,
     { 'container-page': 'the default page container', 'container-prose': 'continuous text',
       'container-form': 'forms', 'container-gutter': 'page gutter above md',
       'container-gutter-narrow': 'page gutter at and below md'
@@ -456,9 +468,8 @@ el('containers').innerHTML = table(['Token', 'Value', 'Use'],
 el('zindex').innerHTML = table([{ label: 'Token' }, { label: 'Value', num: true }],
   tokensMatching('z-index-').map(t => [`<code>${short(t.name)}</code>`, t.resolved]));
 
-el('sizes').innerHTML = table(['Token', 'Value', 'px'],
-  tokensMatching('size-').map(t => [`<code>${short(t.name)}</code>`, `<code>${t.resolved}</code>`,
-    t.resolved.endsWith('rem') ? String(parseFloat(t.resolved) * 10) : t.resolved]));
+el('sizes').innerHTML = table(['Token', 'Value'],
+  tokensMatching('size-').map(t => [`<code>${short(t.name)}</code>`, `<code>${px(t.resolved)}</code>`]));
 
 /* ---- every token ----------------------------------------------------- */
 {
