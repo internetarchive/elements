@@ -7,8 +7,8 @@ import {
 } from 'lit';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
-import { msg, str } from '@lit/localize';
-import currency from 'currency.js';
+import { localized, msg, str } from '@lit/localize';
+import { formatUsd } from '../localized-format';
 
 import themeStyles from '@src/themes/theme-styles';
 import type { DonationPaymentInfo } from '../models/donation-payment-info';
@@ -16,6 +16,7 @@ import { DonationType } from '../models/donation-type';
 
 /** The "Total: $X" line under the amount picker, with "/month" for monthly gifts. */
 @customElement('ia-donation-total-amount')
+@localized()
 export class IADonationTotalAmount extends LitElement {
   @property({ type: Object }) donationInfo?: DonationPaymentInfo;
 
@@ -28,7 +29,7 @@ export class IADonationTotalAmount extends LitElement {
 
   private get totalLine(): string {
     if (!this.donationInfo) return '';
-    const amount = currency(this.donationInfo.total, { symbol: '$' }).format();
+    const amount = formatUsd(this.donationInfo.total);
     return this.donationInfo.donationType === DonationType.Monthly
       ? msg(str`Total: ${amount}/month`)
       : msg(str`Total: ${amount}`);

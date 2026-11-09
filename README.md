@@ -361,6 +361,23 @@ export const templates = { ...elements, ...app };
 
 The XLIFF in `xliff/` is where translations are edited. It isn't published.
 
+#### Drafting and reviewing translations
+
+`pnpm run i18n:status` lists each locale's missing translations and the drafts still waiting on a native speaker. CI runs it on every PR and only warns.
+
+To fill the gaps:
+
+```zsh
+pnpm run i18n:draft --locale es --export pending.es.json   # extract, then write {id: text} for the missing strings
+pnpm run i18n:draft --locale es --from translations.es.json # write translations of the same shape
+```
+
+`{0}` tokens are placeholders and have to stay in the translation. A unit that loses one is skipped and reported. Written translations are drafts, saved as `<target state="needs-review-translation">`.
+
+A native speaker reviews each draft, fixes the `<target>` if needed, and sets `state="final"` (or deletes the attribute). Don't ship a language to everyone before its drafts have been reviewed.
+
+To add a language, add its code to `targetLocales` in `lit-localize.json`, run `pnpm run strings:extract` to create `xliff/<locale>.xlf`, draft it as above, then run `pnpm run strings:build`.
+
 ## Icons
 
 SVG sources live in `icons/<kebab-name>.svg`. To add one, drop the file in that folder and run `pnpm run icons` (`build`, `dev`, `typecheck` and `test` run it for you). The root `<svg>` needs a `viewBox`. The build fails on a name that isn't kebab-case, a duplicate, or a missing `viewBox`. It writes `src/icons/` (gitignored), one `.ts` and one `.svg` per icon.
