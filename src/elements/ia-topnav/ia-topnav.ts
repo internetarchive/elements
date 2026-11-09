@@ -442,7 +442,7 @@ export class IATopNav extends LitElement {
           --grey80: var(--ia-color-text-inverse-secondary--);
           --greya0: var(--ia-color-text-inverse-secondary--);
           --grey6f: var(--ia-color-legacy-gray-550--);
-          --errorYellow: var(--ia-color-action-warning-fill--);
+          --errorYellow: var(--ia-color-text-inverse-warning--);
 
           --linkHoverColor: var(--white);
           --subnavLinkColor: var(--grey66);
