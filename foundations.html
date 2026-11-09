@@ -197,7 +197,7 @@ const el = id => document.getElementById(id);
 
 /** A length's rendered size in px, whatever unit the token is written in. */
 const px = v => {
-  if (!/\d(px|rem)|calc\(/.test(v)) return v;
+  if (!/^(-?[\d.]+(px|rem)|calc\(.*\))$/.test(v)) return v;
   const probe = document.createElement('div');
   probe.style.cssText = `position:absolute;visibility:hidden;inline-size:${v}`;
   document.body.append(probe);
@@ -479,7 +479,7 @@ el('sizes').innerHTML = table(['Token', 'Value'],
     const rows = all.filter(t => !q || t.name.includes(q) || t.resolved.includes(q))
       .map(t => [`<code>${short(t.name)}</code>`,
                  `<code>${escapeHtml(t.declared)}</code>`,
-                 `<code>${escapeHtml(t.resolved)}</code>`,
+                 `<code>${escapeHtml(px(t.resolved))}</code>`,
                  t.name.startsWith('--ia-theme-') ? 'compatibility alias'
                    : t.name.startsWith('--ia-color-legacy-') ? 'legacy — not for new code' : '']);
     el('all-tokens').innerHTML = rows.length

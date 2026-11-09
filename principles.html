@@ -72,8 +72,10 @@
     background-color: var(--ia-color-surface-raised); font: var(--ia-font-weight-bold) var(--ia-font-size-sm)/1 var(--ia-font-family-base);
   }
   .pf-skeleton { display: flex; flex-direction: column; gap: var(--ia-space-1); inline-size: 12rem; padding: var(--ia-space-2); border: var(--ia-border-card); border-radius: var(--ia-radius-default); background-color: var(--ia-color-surface-raised); }
-  .pf-field { inline-size: 13rem; }
-  .pf-field--hairline { border-color: var(--ia-color-palette-gray-300); }
+  /* These override ia.css's .ia-input, so they carry its class: the built
+     site loads this block before ia.css, where equal specificity would lose. */
+  .ia-input.pf-field { inline-size: 13rem; }
+  .ia-input.pf-field--hairline { border-color: var(--ia-color-palette-gray-300); }
   .pf-ratio { font: var(--ia-font-weight-bold) var(--ia-font-size-sm)/var(--ia-font-line-height-tight) var(--ia-font-family-base); font-variant-numeric: tabular-nums; }
   .pf-ratio--fail { color: var(--ia-color-text-danger); }
   .pf-titles { display: flex; flex-direction: column; gap: var(--ia-space-1); inline-size: 24rem; }
