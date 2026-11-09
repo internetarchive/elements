@@ -87,11 +87,7 @@ function* walk(
         scale,
       };
     } else {
-      yield* walk(
-        token,
-        [...path, key],
-        token.$extensions?.ia?.scale ?? scale,
-      );
+      yield* walk(token, [...path, key], token.$extensions?.ia?.scale ?? scale);
     }
   }
 }
