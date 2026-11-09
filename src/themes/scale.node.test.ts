@@ -79,3 +79,15 @@ describe('length tokens', () => {
     }
   });
 });
+
+describe('the module that sets --ia-unit', () => {
+  it("is a side effect, so a consumer's bundler keeps its import", () => {
+    const { sideEffects } = JSON.parse(
+      readFileSync(join(repoRoot, 'package.json'), 'utf8'),
+    );
+    expect(sideEffects).to.include.members([
+      './src/themes/unit.ts',
+      './dist/src/themes/unit.js',
+    ]);
+  });
+});

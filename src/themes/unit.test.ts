@@ -1,6 +1,6 @@
 import { fixture, fixtureCleanup } from '@open-wc/testing-helpers';
 import { html } from 'lit';
-import { afterEach, describe, expect, test } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import '@src/elements/ia-button/ia-button';
 import type { IAButton } from '@src/elements/ia-button/ia-button';
@@ -31,8 +31,29 @@ describe('--ia-unit', () => {
     root.style.fontSize = fontSizeBefore;
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+    applyIaUnit();
+  });
+
   test('is set on <html> from the default font size when the module loads', () => {
-    expect(unitBefore).to.equal('1px');
+    expect(getComputedStyle(root).getPropertyValue('--ia-unit')).to.equal(
+      '1px',
+    );
+  });
+
+  test("follows the probe's default font size", () => {
+    const real = window.getComputedStyle.bind(window);
+    vi.spyOn(window, 'getComputedStyle').mockImplementation((el, pseudo) =>
+      (el as HTMLElement).style.fontSize === 'medium'
+        ? ({ fontSize: '20px' } as CSSStyleDeclaration)
+        : real(el, pseudo),
+    );
+    applyIaUnit();
+    vi.restoreAllMocks();
+    expect(getComputedStyle(root).getPropertyValue('--ia-unit')).to.equal(
+      '1.25px',
+    );
   });
 
   test('is the default font size over 16', () => {
@@ -40,10 +61,18 @@ describe('--ia-unit', () => {
     expect(iaUnitFromDefaultFontSize(20)).to.equal('1.25px');
   });
 
-  test("keeps a page's own --ia-unit", () => {
-    root.style.setProperty('--ia-unit', '3px');
-    applyIaUnit();
-    expect(root.style.getPropertyValue('--ia-unit')).to.equal('3px');
+  test("yields to a page's own --ia-unit, even from a stylesheet that loads later", () => {
+    const style = document.createElement('style');
+    style.textContent = ':root { --ia-unit: 3px; }';
+    document.head.append(style);
+    try {
+      applyIaUnit();
+      expect(getComputedStyle(root).getPropertyValue('--ia-unit')).to.equal(
+        '3px',
+      );
+    } finally {
+      style.remove();
+    }
   });
 
   test("sizes the same at a 10px root, a 16px root and the browser's default", async () => {
