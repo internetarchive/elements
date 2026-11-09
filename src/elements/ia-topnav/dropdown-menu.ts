@@ -298,7 +298,7 @@ export default class DropdownMenu extends TrackedElement {
             min-height: calc(30 * var(--topnavUnit--));
             padding: calc(5 * var(--topnavUnit--))
               calc(20 * var(--topnavUnit--));
-            color: var(--ia-color-text-inverse--);
+            color: var(--inverseTextColor);
           }
 
           /* In flow beside the label: absolute in a flex row lands it over
@@ -311,7 +311,7 @@ export default class DropdownMenu extends TrackedElement {
             padding: calc(5 * var(--topnavUnit--))
               calc(20 * var(--topnavUnit--));
             font-size: 0.8em;
-            color: var(--dropdownMenuInfoItem);
+            color: var(--inverseDropdownMenuInfoItem);
           }
 
           /* Hover lays the overlay on the row, instantly (D-54). */
@@ -319,6 +319,7 @@ export default class DropdownMenu extends TrackedElement {
           a:active,
           a:focus-visible {
             color: var(--linkHoverColor);
+            background-color: var(--linkColor);
             background-image: linear-gradient(
               var(--ia-color-hover-overlay-inverse--),
               var(--ia-color-hover-overlay-inverse--)

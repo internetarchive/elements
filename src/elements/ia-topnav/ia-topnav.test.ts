@@ -29,6 +29,27 @@ afterEach(() => {
 });
 
 describe('<ia-topnav>', () => {
+  test('restyles the parts each palette name always set', async () => {
+    const el = await fixture<IATopNav>(
+      html`<ia-topnav
+        style="--grey60: rgb(1, 2, 3); --grey66: rgb(4, 5, 6); --grey28: rgb(7, 8, 9)"
+      ></ia-topnav>`,
+    );
+    const style = getComputedStyle(el);
+    const value = (name: string) => style.getPropertyValue(name).trim();
+    for (const role of [
+      '--iconFill',
+      '--lightTextColor',
+      '--loginTextColor',
+      '--mediaLabelDesktopColor',
+    ]) {
+      expect(value(role), role).to.equal('rgb(1, 2, 3)');
+    }
+    expect(value('--subnavLinkColor')).to.equal('rgb(4, 5, 6)');
+    expect(value('--activeDesktopMenuIcon')).to.equal('rgb(7, 8, 9)');
+    expect(value('--mediaSliderDesktopBg')).to.equal('rgb(7, 8, 9)');
+  });
+
   test('draws the menu divider in #666 and the open media tab in its panel color', async () => {
     const el = await fixture<IATopNav>(html`<ia-topnav></ia-topnav>`);
     const style = getComputedStyle(el);

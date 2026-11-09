@@ -564,7 +564,7 @@ export class PrimaryNav extends TrackedElement {
           display: inline-flex;
         }
         a.link-home {
-          color: var(--ia-color-text-inverse--);
+          color: var(--primaryTextColor);
         }
 
         @media only screen and (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) and (max-device-width: 905px) {
