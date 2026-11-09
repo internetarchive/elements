@@ -258,6 +258,33 @@ describe('IA button', () => {
     expect(style.opacity).to.equal('1');
   });
 
+  test("keeps a custom button's own colors when disabled, dimmed", async () => {
+    const el = await fixture<IAButton>(
+      html`<ia-button
+        mode="custom"
+        ?disabled=${true}
+        style="--ia-button-custom-fill: rgb(1, 2, 3); --ia-button-custom-text-color: rgb(4, 5, 6)"
+        >Save</ia-button
+      >`,
+    );
+    const style = getComputedStyle(
+      el.shadowRoot?.querySelector('button') as HTMLElement,
+    );
+    expect(style.backgroundColor).to.equal('rgb(1, 2, 3)');
+    expect(style.color).to.equal('rgb(4, 5, 6)');
+    expect(style.opacity).to.equal('0.5');
+  });
+
+  test('shows the progress cursor while loading', async () => {
+    const el = await fixture<IAButton>(
+      html`<ia-button ?loading=${true}>Submit</ia-button>`,
+    );
+    const style = getComputedStyle(
+      el.shadowRoot?.querySelector('button') as HTMLElement,
+    );
+    expect(style.cursor).to.equal('progress');
+  });
+
   test.each([
     ['sm', 30],
     ['md', 36],

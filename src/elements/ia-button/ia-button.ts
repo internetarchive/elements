@@ -545,6 +545,14 @@ export class IAButton extends LitElement {
           background: none;
         }
 
+        /* Custom mode keeps the host's own colors when disabled, dimmed. */
+        .is-disabled.custom {
+          color: var(--ia-button-custom-text-color--);
+          background-color: var(--ia-button-custom-fill--);
+          border-color: var(--ia-button-custom-border--);
+          opacity: 0.5;
+        }
+
         /* Last, so no hover or press shows on a button that won't act. */
         .button[aria-disabled='true'] {
           cursor: not-allowed;
@@ -554,7 +562,7 @@ export class IAButton extends LitElement {
           text-decoration: none;
         }
 
-        .is-loading {
+        .button.is-loading {
           cursor: progress;
         }
 
