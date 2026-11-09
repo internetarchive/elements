@@ -86,6 +86,34 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
 
+  # Lists each locale's missing and unreviewed translations. Warns only, since
+  # lit-localize falls back to English. It extracts first so a new msg() with no
+  # catalog entry shows up as missing. The checkout is thrown away, so the
+  # extract's catalog rewrite goes nowhere.
+  i18n-status:
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v6
+    - uses: pnpm/action-setup@v4
+    - uses: actions/setup-node@v6
+      with:
+        node-version: 24
+        cache: pnpm
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Extract strings
+      run: pnpm run strings:extract
+
+    # continue-on-error keeps a missing translation from blocking the merge.
+    # The step still shows as failed on a real error, and the report is in the log.
+    - name: List missing and unreviewed translations
+      continue-on-error: true
+      run: pnpm run i18n:status | tee "$GITHUB_STEP_SUMMARY"
+
   # Warns (never blocks) when a test file lands slow or the run gets slower
   # than main. The report from main's latest successful run is the baseline.
   slow-tests:

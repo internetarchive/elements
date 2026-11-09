@@ -7,7 +7,8 @@ import {
 } from 'lit';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
+import { formatUsd } from '../localized-format';
 import currency from 'currency.js';
 
 import themeStyles from '@src/themes/theme-styles';
@@ -18,6 +19,7 @@ import { DonationType } from '../models/donation-type';
  * donor is about to give, with Complete and Cancel buttons.
  */
 @customElement('ia-donation-confirm-modal')
+@localized()
 export class IADonationConfirmModal extends LitElement {
   @property({ type: Number }) amount = 5;
 
@@ -31,6 +33,7 @@ export class IADonationConfirmModal extends LitElement {
   @property({ attribute: false }) cancelDonation: () => void = () => {};
 
   private get formattedAmount(): string {
+    if (this.currencyType === 'USD') return formatUsd(this.amount);
     return currency(this.amount, { symbol: this.currencySymbol }).format();
   }
 

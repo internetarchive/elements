@@ -4,15 +4,27 @@
  * Translations come from a JSON file (`--from`), a map of trans-unit id to the
  * translated string with `{0}`-style tokens where the source has placeholders.
  * Already-translated units are left alone, so a re-run with nothing new writes
- * nothing.
+ * nothing. Every target it writes is a draft, marked
+ * `state="needs-review-translation"` until a native speaker reviews it.
  *
- *   pnpm strings:translate --from translations.es.json
- *   pnpm strings:translate --from translations.es.json --locale es --dry-run
+ * `--export <file>` writes the pending units instead (id to source text, with
+ * `{0}` tokens), which is what gets handed to a translator.
+ *
+ *   pnpm i18n:draft --locale es --export pending.es.json
+ *   pnpm i18n:draft --locale es --from translations.es.json
+ *   pnpm i18n:draft --locale es --from translations.es.json --dry-run
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { parseArgs } from 'node:util';
 
-import { parseUnits, restore, sentinelize, setTarget, untranslated } from './xliff.mts';
+import {
+  DRAFT_STATE,
+  parseUnits,
+  restore,
+  sentinelize,
+  setTarget,
+  untranslated,
+} from './xliff.mts';
 
 type Config = {
   targetLocales: string[];
@@ -47,21 +59,36 @@ function checkLocale(requested: string): string {
 const { values } = parseArgs({
   options: {
     from: { type: 'string' },
+    export: { type: 'string' },
     locale: { type: 'string' },
     'dry-run': { type: 'boolean', default: false },
   },
 });
 
-if (!values.from) {
-  throw new Error('--from <file.json> is required');
-}
 if (!values.locale) {
   throw new Error('--locale <locale> is required');
 }
-const translations = JSON.parse(readFileSync(values.from, 'utf8')) as Record<
-  string,
-  string
->;
+if (!values.from && !values.export) {
+  throw new Error('--from <file.json> or --export <file.json> is required');
+}
+
+if (values.export) {
+  const locale = checkLocale(values.locale);
+  const pending = untranslated(
+    parseUnits(readFileSync(xliffPath(locale), 'utf8')),
+  );
+  const out: Record<string, string> = {};
+  for (const unit of pending) out[unit.id] = sentinelize(unit.source).text;
+  writeFileSync(values.export, `${JSON.stringify(out, null, 2)}\n`);
+  console.log(
+    `${locale}: ${pending.length} pending units written to ${values.export}`,
+  );
+  process.exit(0);
+}
+
+const translations = JSON.parse(
+  readFileSync(values.from as string, 'utf8'),
+) as Record<string, string>;
 
 for (const locale of [checkLocale(values.locale)]) {
   const path = xliffPath(locale);
@@ -82,7 +109,12 @@ for (const locale of [checkLocale(values.locale)]) {
     }
     const { placeholders } = sentinelize(unit.source);
     try {
-      xml = setTarget(xml, unit.id, restore(translated, placeholders));
+      xml = setTarget(
+        xml,
+        unit.id,
+        restore(translated, placeholders),
+        DRAFT_STATE,
+      );
       written += 1;
     } catch (err) {
       // A lost or duplicated placeholder would corrupt the target, so the unit
