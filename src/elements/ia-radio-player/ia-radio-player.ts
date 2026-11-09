@@ -719,7 +719,7 @@ export class IARadioPlayer extends LitElement {
         ia-status-indicator {
           --ia-theme-icon-width: 1.5em;
           --ia-theme-primary-text-color: var(
-            --ia-color-text-inverse-secondary--
+            --ia-color-text-inverse-tertiary--
           );
 
           display: block;

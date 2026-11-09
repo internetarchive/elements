@@ -344,6 +344,9 @@ export default class DropdownMenu extends TrackedElement {
         /* Every row is at least 44px tall to a finger. */
         @media (pointer: coarse) {
           a {
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
             min-height: calc(44 * var(--topnavUnit--));
           }
         }
