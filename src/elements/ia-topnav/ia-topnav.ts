@@ -413,35 +413,37 @@ export class IATopNav extends LitElement {
           font-size: calc(16 * var(--topnavUnit--));
 
           /* The topnav's palette, on the design tokens. The roles below read
-             it; set any of them on <ia-topnav> to restyle a part. */
+             it; set any of them on <ia-topnav> to restyle a part. Each name
+             still sets the parts it always has, so its value is the spec's
+             color for those parts rather than the gray in its name. */
           --white: var(--ia-color-text-inverse--);
           --grey13: var(--ia-color-surface-chrome--);
           --grey20: var(--ia-color-surface-chrome-secondary--);
           --grey40: var(--ia-color-palette-gray-600--);
-          --grey28: var(--ia-color-border-inverse--);
-          --grey60: var(--ia-color-text-inverse-tertiary--);
-          --grey66: var(--ia-color-palette-gray-400--);
+          --grey28: var(--ia-color-surface-chrome-tertiary--);
+          --grey60: var(--ia-color-text-inverse-secondary--);
+          --grey66: var(--ia-color-text-inverse-secondary--);
           --grey80: var(--ia-color-text-inverse-secondary--);
           --greya0: var(--ia-color-text-inverse-secondary--);
           --grey6f: var(--ia-color-legacy-gray-550--);
           --errorYellow: var(--ia-color-action-warning-fill--);
 
           --linkHoverColor: var(--white);
-          --subnavLinkColor: var(--grey80);
+          --subnavLinkColor: var(--grey66);
           --primaryTextColor: var(--white);
-          --lightTextColor: var(--grey80);
+          --lightTextColor: var(--grey60);
           --activeColor: var(--white);
           --activeButtonBg: var(--grey20);
-          --iconFill: var(--grey80);
+          --iconFill: var(--grey60);
           --desktopSearchIconFill: var(--grey20);
 
           --mediaMenuBg: var(--grey13);
-          --mediaLabelDesktopColor: var(--grey80);
+          --mediaLabelDesktopColor: var(--grey60);
           /* The open media tab matches the panel it opens. */
-          --activeDesktopMenuIcon: var(--ia-color-surface-chrome-tertiary--);
+          --activeDesktopMenuIcon: var(--grey28);
 
           --mediaSliderBg: var(--grey20);
-          --mediaSliderDesktopBg: var(--ia-color-surface-chrome-tertiary--);
+          --mediaSliderDesktopBg: var(--grey28);
 
           --primaryNavBg: var(--grey13);
           --primaryNavBottomBorder: var(--grey20);
@@ -452,22 +454,21 @@ export class IATopNav extends LitElement {
           --dropdownMenuInfoItem: var(--greya0);
           --dropdownMenuDivider: var(--grey40);
 
-          /* Deprecated: the wide dropdown's light panel read these, and its
-             dark panel (D-41) doesn't. Still declared, at their old values,
-             for anything else that reads them; setting them restyles nothing
-             in the topnav. */
-          --linkColor: var(--ia-color-legacy-blue-500--);
-          --inverseTextColor: var(--grey20);
-          --inverseDropdownMenuInfoItem: var(--grey6f);
+          /* The wide dropdown's roles. Its panel is dark now (D-41), so they
+             hold dark-panel values; --linkColor is a fill under the hover
+             overlay, none by default. */
+          --linkColor: transparent;
+          --inverseTextColor: var(--ia-color-text-inverse--);
+          --inverseDropdownMenuInfoItem: var(--dropdownMenuInfoItem);
 
-          --loginTextColor: var(--grey80);
+          --loginTextColor: var(--grey60);
 
           --themeFontFamily: var(--ia-font-family-base--);
           --logoWidthTablet: 263px;
 
           --savePageSubmitBg: var(--grey13);
           --savePageSubmitText: var(--white);
-          --savePageInputBorder: var(--grey60);
+          --savePageInputBorder: var(--ia-color-text-inverse-tertiary--);
           --savePageErrorText: var(--errorYellow);
 
           color: var(--primaryTextColor);
