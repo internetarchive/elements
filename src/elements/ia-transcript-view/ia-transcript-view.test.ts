@@ -377,6 +377,33 @@ describe('IA Transcript View', () => {
     expect(el.autoScroll).to.be.false;
   });
 
+  test('marks the current search result by more than its color', async () => {
+    const config = new TranscriptConfig([
+      new TranscriptEntryConfig(1, 64, 67, 'foo', false, 0),
+      new TranscriptEntryConfig(2, 68, 73, 'bar', false, 1),
+    ]);
+    const el = await fixture<IATranscriptView>(
+      html`<ia-transcript-view .config=${config}></ia-transcript-view>`,
+    );
+    await elementUpdated(el);
+    const results = Array.from(
+      el.shadowRoot!.querySelectorAll<HTMLElement>(
+        'ia-transcript-entry[issearchresult]',
+      ),
+    );
+    const current = results.find((r) => r.hasAttribute('isselected'))!;
+    const other = results.find((r) => !r.hasAttribute('isselected'))!;
+
+    expect(getComputedStyle(current, '::after').borderTopWidth).to.equal('3px');
+    expect(getComputedStyle(other, '::after').borderTopWidth).to.equal('2px');
+    expect(getComputedStyle(current).backgroundColor).to.equal(
+      'rgba(255, 255, 255, 0.12)',
+    );
+    expect(getComputedStyle(other).backgroundColor).to.equal(
+      'rgba(0, 0, 0, 0)',
+    );
+  });
+
   test('resets on any new config, even an equivalent one', async () => {
     const el = await fixture<IATranscriptView>(
       html`<ia-transcript-view .config=${sampleConfig()}></ia-transcript-view>`,
