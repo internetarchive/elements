@@ -69,6 +69,27 @@ describe('IADropdown', () => {
     ).to.equal(4);
   });
 
+  test("insets a plain-text option by a host's --dropdownItemButtonPadding alone", async () => {
+    const options: OptionInterface[] = [{ id: 'text', label: 'Texts' }];
+    const el = await fixture<IADropdown>(
+      html`<ia-dropdown
+        .options=${options}
+        open
+        style="--dropdownItemButtonPadding: 0 10px"
+      ></ia-dropdown>`,
+    );
+    const label = el.shadowRoot!.querySelector<HTMLElement>(
+      '#dropdown-main li > * > :first-child',
+    )!;
+    const option = label.parentElement!;
+    expect(
+      label.getBoundingClientRect().left +
+        parseFloat(getComputedStyle(label).paddingLeft) -
+        option.getBoundingClientRect().left,
+    ).to.equal(10);
+    expect(getComputedStyle(label).paddingTop).to.equal('0px');
+  });
+
   test('keeps the blue ring on the selected row, with its dark band', async () => {
     const options: OptionInterface[] = [
       { id: 'a', label: 'Relevance' },

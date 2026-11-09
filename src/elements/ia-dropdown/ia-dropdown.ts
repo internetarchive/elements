@@ -2,6 +2,7 @@ import {
   html,
   css,
   LitElement,
+  nothing,
   TemplateResult,
   PropertyValues,
   CSSResultGroup,
@@ -267,19 +268,22 @@ export class IADropdown extends LitElement {
     const selected = this.selectedOption === id ? 'selected' : '';
     // The option's padding sits on its first element, so a plain-text label
     // gets an element of its own; otherwise it would run flush to the edge.
-    const label =
-      typeof availableOption.label === 'string'
-        ? html`<span>${availableOption.label}</span>`
-        : availableOption.label;
+    const isText = typeof availableOption.label === 'string';
+    const label = isText
+      ? html`<span class="option-text">${availableOption.label}</span>`
+      : availableOption.label;
+    const optionClass = isText ? 'text-option' : nothing;
 
     if (url) {
       component = html`<a
         href=${url}
+        class=${optionClass}
         @click=${(e: Event) => this.optionClicked(e, availableOption)}
         >${label}</a
       >`;
     } else {
       component = html`<button
+        class=${optionClass}
         @click=${(e: Event) => this.optionClicked(e, availableOption)}
       >
         ${label}
@@ -836,6 +840,23 @@ export class IADropdown extends LitElement {
           background: var(--dropdownItemButtonBgColor, transparent);
           padding: var(--dropdownItemButtonPadding, 0);
           text-align: ${dropdownTextAlign};
+        }
+
+        /* A plain-text option's inset is its text's alone. A host's
+           --dropdownItemButtonPadding sets it, as it did when the text had
+           no element of its own; otherwise the option padding applies. */
+        #dropdown-main li > .text-option {
+          padding: 0;
+        }
+
+        #dropdown-main li > * > .option-text {
+          padding: var(
+            --dropdownItemButtonPadding,
+            var(--dropdownItemPaddingTop, 5px)
+              var(--dropdownItemPaddingRight, var(--ia-space-4--))
+              var(--dropdownItemPaddingBottom, 5px)
+              var(--dropdownItemPaddingLeft, var(--ia-space-4--))
+          );
         }
       `,
     ];
