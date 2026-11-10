@@ -40,7 +40,6 @@ interface TokenNode {
 }
 
 interface TokenExtension {
-  decision?: string;
   scale?: boolean;
   responsive?: { below: string; value: string };
 }
