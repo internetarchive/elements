@@ -347,21 +347,21 @@ export class IAFeatureFeedbackSurveyVote
   }
 
   static get styles(): CSSResultGroup {
-    const questionMargin = css`var(--surveyQuestionMargin, 0 0 15px 0)`;
+    const questionMargin = css`var(--surveyQuestionMargin, 0 0 var(--ia-space-3--) 0)`;
 
-    const darkGrayColor = css`var(--featureFeedbackDarkGrayColor, #767676)`;
+    const darkGrayColor = css`var(--featureFeedbackDarkGrayColor, var(--ia-color-border-strong--))`;
     const darkGrayColorSvgFilter = css`var(--defaultColorSvgFilter, invert(52%) sepia(0%) saturate(1%) hue-rotate(331deg) brightness(87%) contrast(89%))`;
 
     const defaultColor = css`var(--defaultColor, ${darkGrayColor})`;
     const defaultColorSvgFilter = css`var(--defaultColorSvgFilter, ${darkGrayColorSvgFilter})`;
 
-    const upvoteColor = css`var(--upvoteColor, #23765D)`;
+    const upvoteColor = css`var(--upvoteColor, var(--ia-color-status-success--))`;
     const upvoteColorSvgFilter = css`var(--upvoteColorSvgFilter, invert(34%) sepia(72%) saturate(357%) hue-rotate(111deg) brightness(97%) contrast(95%))`;
 
-    const downvoteColor = css`var(--downvoteColor, #720D11)`;
+    const downvoteColor = css`var(--downvoteColor, var(--ia-color-status-danger--))`;
     const downvoteColorSvgFilter = css`var(--downvoteColorSvgFilter, invert(5%) sepia(81%) saturate(5874%) hue-rotate(352deg) brightness(105%) contrast(95%))`;
 
-    const unselectedColor = css`var(--unselectedColor, #CCCCCC)`;
+    const unselectedColor = css`var(--unselectedColor, var(--ia-color-border-default--))`;
     const unselectedColorSvgFilter = css`var(--unselectedColorSvgFilter, invert(100%) sepia(0%) saturate(107%) hue-rotate(138deg) brightness(89%) contrast(77%))`;
 
     const promptFontWeight = css`var(--featureFeedbackPromptFontWeight, bold)`;
@@ -377,7 +377,7 @@ export class IAFeatureFeedbackSurveyVote
       #prompt-row {
         display: flex;
         align-items: center;
-        margin-bottom: 5px;
+        margin-bottom: var(--ia-space-1--);
       }
 
       #prompt-text {
@@ -388,13 +388,14 @@ export class IAFeatureFeedbackSurveyVote
       }
 
       .vote-button {
-        background-color: #ffffff;
-        border: 1px solid #767676;
-        border-radius: 2px;
-        margin-left: 10px;
+        background-color: var(--ia-color-action-secondary-fill--);
+        border: var(--ia-size-border-width--) solid
+          var(--ia-color-action-secondary-border--);
+        border-radius: var(--ia-radius-sm--);
+        margin-left: var(--ia-space-2--);
         padding: 0;
-        width: 25px;
-        height: 25px;
+        width: var(--ia-size-control-sm--);
+        height: var(--ia-size-control-sm--);
         box-sizing: border-box;
         display: flex;
         justify-content: center;
@@ -404,13 +405,14 @@ export class IAFeatureFeedbackSurveyVote
       }
 
       .vote-button:focus-within {
-        outline: 2px solid black;
-        outline-offset: 1px;
+        outline: var(--ia-size-focus-ring--) solid
+          var(--ia-color-border-focus--);
+        outline-offset: var(--ia-size-focus-ring-offset--);
       }
 
       .vote-button svg {
-        width: 15px;
-        height: 15px;
+        width: var(--ia-size-icon-sm--);
+        height: var(--ia-size-icon-sm--);
       }
 
       .vote-button input {
@@ -454,7 +456,7 @@ export class IAFeatureFeedbackSurveyVote
       }
 
       .vote-button.error {
-        box-shadow: 0 0 4px red;
+        box-shadow: 0 0 4px var(--ia-color-status-danger--);
       }
 
       .vote-button.noselection[disabled],
@@ -470,7 +472,7 @@ export class IAFeatureFeedbackSurveyVote
 
       :host(:invalid) #upvote,
       :host(:invalid) #downvote {
-        box-shadow: 0 0 4px red;
+        box-shadow: 0 0 4px var(--ia-color-status-danger--);
       }
 
       #comments {
