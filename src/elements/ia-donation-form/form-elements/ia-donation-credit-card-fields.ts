@@ -130,7 +130,7 @@ export class IADonationCreditCardFields extends LitElement {
           );
           --donation-card-label-color--: var(
             --ia-donation-field-label-color,
-            #2c2c2c
+            var(--ia-color-text-primary, #2c2c2c)
           );
           --donation-card-label-margin-bottom--: var(
             --ia-donation-field-label-margin-bottom,
@@ -142,9 +142,12 @@ export class IADonationCreditCardFields extends LitElement {
           );
           --donation-card-required-color--: var(
             --ia-donation-badged-input-required-color,
-            var(--ia-theme-color-danger, #e51c23)
+            var(--ia-theme-color-danger, var(--ia-color-text-danger, #b8161c))
           );
-          --donation-card-error-color--: var(--ia-theme-color-danger, #e51c23);
+          --donation-card-error-color--: var(
+            --ia-theme-color-danger,
+            var(--ia-color-text-danger, #b8161c)
+          );
         }
 
         ia-donation-credit-card-fields .field-label {
