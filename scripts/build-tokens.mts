@@ -33,7 +33,6 @@ interface TokenNode {
 
 interface TokenExtension {
   px?: number;
-  decision?: string;
   responsive?: { below: string; value: string };
 }
 
