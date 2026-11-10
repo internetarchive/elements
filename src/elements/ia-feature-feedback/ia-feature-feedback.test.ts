@@ -186,7 +186,13 @@ describe('IAFeatureFeedback', () => {
     };
 
     const defaults = await commentButtonStyle('');
-    expect(defaults.fontSize).to.equal('22.4px');
+    const rootFontSize = parseFloat(
+      getComputedStyle(document.documentElement).fontSize,
+    );
+    expect(parseFloat(defaults.fontSize)).to.be.closeTo(
+      rootFontSize * 1.4,
+      0.01,
+    );
 
     const sized = await commentButtonStyle(
       '--featureFeedbackCommentButtonFontSize: 20px',
