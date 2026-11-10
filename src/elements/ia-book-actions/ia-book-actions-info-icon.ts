@@ -2,6 +2,7 @@ import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { property } from 'lit/decorators.js';
 import { localized, msg } from '@lit/localize';
 import { customElement } from '@src/utils/custom-element';
+import { tokenStyles } from '@src/themes/tokens';
 import '@internetarchive/icon-info/icon-info.js';
 
 @customElement('ia-book-actions-info-icon')
@@ -27,18 +28,20 @@ export class IABookActionsInfoIcon extends LitElement {
 
   static get styles(): CSSResultGroup {
     return css`
+      ${tokenStyles}
+
       ia-icon-info {
         display: inline-block;
-        width: 18px;
-        height: 20px;
+        width: var(--ia-size-icon-sm--);
+        height: var(--ia-size-icon-md--);
         vertical-align: middle;
-        --iconFillColor: white;
+        --iconFillColor: var(--ia-color-text-inverse--);
       }
       .more-info-icon img {
-        width: 24px;
-        height: 24px;
+        width: var(--ia-size-icon-lg--);
+        height: var(--ia-size-icon-lg--);
         vertical-align: middle;
-        background: white;
+        background: var(--ia-color-surface-raised--);
       }
       .hidden {
         display: none;

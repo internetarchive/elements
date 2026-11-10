@@ -1,20 +1,21 @@
 import { css } from 'lit';
 
-const whiteColor = css`var(--white, #fff)`;
-const disabledButtonFillColor = css`var(--primaryDisableCTAFill, #767676)`;
-const disabledButtonBorderColor = css`var(--secondaryCTABorder, #999)`;
+const whiteText = css`var(--white, var(--ia-color-action-primary-text--))`;
+const whiteFocusRing = css`var(--white, var(--ia-color-border-focus-band--))`;
+const disabledButtonFillColor = css`var(--primaryDisableCTAFill, var(--ia-color-action-disabled-fill--))`;
+const disabledButtonBorderColor = css`var(--secondaryCTABorder, var(--ia-color-action-disabled-border--))`;
 
-const primaryButtonFillColor = css`var(--primaryCTAFill, #194880)`;
+const primaryButtonFillColor = css`var(--primaryCTAFill, var(--ia-color-action-primary-fill--))`;
 const primaryButtonFillColorRGB = css`var(--primaryCTAFillRGB, 25, 72, 128)`; // RBG format of --primaryCTAFill
-const primaryButtonBorderColor = css`var(--primaryCTABorder, #c5d1df)`;
+const primaryButtonBorderColor = css`var(--primaryCTABorder, var(--ia-color-action-primary-border--))`;
 
-const dangerButtonFillColor = css`var(--primaryErrorCTAFill, #d9534f)`;
+const dangerButtonFillColor = css`var(--primaryErrorCTAFill, var(--ia-color-action-danger-fill--))`;
 const dangerButtonFillColorRGB = css`var(--primaryErrorCTAFillRGB, 229, 28, 38)`; // RBG format of --primaryErrorCTAFill
-const dangerButtonBorderColor = css`var(--primaryErrorCTABorder, #d43f3a)`;
+const dangerButtonBorderColor = css`var(--primaryErrorCTABorder, var(--ia-color-action-danger-border--))`;
 
-const darkButtonFillColor = css`var(--secondaryCTAFill, #333)`;
+const darkButtonFillColor = css`var(--secondaryCTAFill, var(--ia-color-surface-chrome-secondary--))`;
 const darkButtonFillColorRGB = css`var(--secondaryCTAFillRGB, 51, 51, 51)`; // RBG format of --secondaryCTAFill
-const darkButtonBorderColor = css`var(--primaryCTABorder, #979797)`;
+const darkButtonBorderColor = css`var(--primaryCTABorder, var(--ia-color-border-strong--))`;
 
 const warningButtonBGColor = css`#ee8950`;
 const warningButtonBorderColor = css`#ec7939`;
@@ -23,12 +24,12 @@ export default css`
   .ia-button {
     min-height: var(--ia-size-control-sm--);
     cursor: pointer;
-    color: ${whiteColor};
+    color: ${whiteText};
     line-height: normal;
     border-radius: var(--ia-radius-default--);
     font-size: var(--ia-font-size-md--);
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    border: 1px solid transparent;
+    border: var(--ia-size-border-width--) solid transparent;
     white-space: nowrap;
     appearance: auto;
     box-sizing: border-box;
@@ -37,8 +38,8 @@ export default css`
     transition: all 0.1s ease 0s;
     vertical-align: middle;
     padding: 0 var(--ia-space-2--);
-    outline-color: ${whiteColor};
-    outline-offset: -4px;
+    outline-color: ${whiteFocusRing};
+    outline-offset: calc(-1 * var(--ia-size-focus-ring-offset--));
     user-select: none;
     text-decoration: none;
     width: fit-content;
@@ -53,7 +54,7 @@ export default css`
   .ia-button:disabled {
     cursor: not-allowed;
     background-color: ${disabledButtonFillColor};
-    border: 1px solid ${disabledButtonBorderColor};
+    border: var(--ia-size-border-width--) solid ${disabledButtonBorderColor};
   }
   .ia-button.transparent {
     background-color: transparent;

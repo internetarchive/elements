@@ -1,18 +1,21 @@
 import { css } from 'lit';
 
-const whiteColor = css`var(--white, #fff)`;
-const blackColor = css`var(--primaryBGColor, #000)`;
-const dropdownBGColor = css`var(--iaBookActionsDropdownBGColor, #2d2d2d)`;
+const whiteFill = css`var(--white, var(--ia-color-surface-raised--))`;
+const whiteText = css`var(--white, var(--ia-color-text-inverse--))`;
+const whiteBorder = css`var(--white, var(--ia-color-border-strong--))`;
+const blackFill = css`var(--primaryBGColor, var(--ia-color-surface-theater--))`;
+const blackText = css`var(--primaryBGColor, var(--ia-color-text-primary--))`;
+const dropdownBGColor = css`var(--iaBookActionsDropdownBGColor, var(--ia-color-surface-inverse--))`;
 
 export default css`
   :host {
     display: inline-flex;
-    height: 3.5rem; /* 35px at a 10px root */
+    height: var(--ia-size-control-md--);
     padding: var(--ia-space-2--) 0;
   }
   .actiongroup {
     display: flex;
-    margin-right: 10px;
+    margin-right: var(--ia-space-2--);
   }
   .action-buttons {
     display: inline-flex;
@@ -20,30 +23,30 @@ export default css`
   }
   .action-buttons .ia-button {
     margin: 0;
-    height: 3.5rem; /* 35px at a 10px root */
+    height: var(--ia-size-control-md--);
     padding: 0 var(--ia-space-4--);
   }
   .action-buttons .desktop {
-    background-color: ${whiteColor};
-    border-radius: 10px;
+    background-color: ${whiteFill};
+    border-radius: var(--ia-radius-lg--);
   }
   .action-buttons .desktop.purchase {
-    margin-left: 5px;
+    margin-left: var(--ia-space-1--);
   }
   .action-buttons .mobile.purchase.dark {
     padding-left: 0;
   }
   .primary {
-    background-color: ${whiteColor};
+    background-color: ${whiteFill};
     margin-right: 4px;
   }
   .primary,
   .secondary {
     position: relative;
-    border-radius: 5px;
+    border-radius: var(--ia-radius-default--);
   }
   .primary .initial {
-    border-radius: 4px 0 0 4px;
+    border-radius: var(--ia-radius-default--) 0 0 var(--ia-radius-default--);
     margin-right: 0;
   }
   .primary svg {
@@ -51,44 +54,44 @@ export default css`
   }
 
   .secondary .ia-button.purchase {
-    padding: 2px 10px 2px 35px;
+    padding: 2px var(--ia-space-2--) 2px var(--ia-space-6--);
     position: relative;
     display: inline-block;
     vertical-align: middle;
   }
   .secondary .ia-button.exit-admin {
-    background-color: ${blackColor};
-    border: 1px solid ${whiteColor};
+    background-color: ${blackFill};
+    border: var(--ia-size-border-width--) solid ${whiteBorder};
   }
 
   .dropdown-content {
     position: absolute;
-    min-width: 14rem; /* 140px at a 10px root */
+    min-width: calc(140 * var(--ia-unit, 1px));
     margin: 0;
     padding: 0;
     background: ${dropdownBGColor};
-    border-radius: 4px;
-    border: 1px solid var(--primaryCTABorder);
-    top: 3.4rem; /* 34px at a 10px root */
+    border-radius: var(--ia-radius-default--);
+    border: var(--ia-size-border-width--) solid var(--primaryCTABorder);
+    top: calc(34 * var(--ia-unit, 1px));
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
   }
   .dropdown-content li {
-    color: ${blackColor};
+    color: ${blackText};
     list-style: none;
     height: var(--ia-size-control-sm--);
   }
   .dropdown-content .ia-button {
     background: none;
-    color: ${whiteColor};
+    color: ${whiteText};
     border: none;
     box-sizing: border-box;
     width: 100%;
     text-align: left;
     height: var(--ia-size-control-sm--);
     position: relative;
-    padding: 0.6rem 1.2rem; /* 6px 12px at a 10px root */
+    padding: var(--ia-space-1--) var(--ia-space-2--);
     margin: 0;
   }
   .dropdown-content .ia-button:is(:focus-visible, :hover) {
@@ -98,21 +101,21 @@ export default css`
     border-radius: 0;
   }
   .dropdown-content li .ia-button:hover {
-    background: ${whiteColor};
-    color: rgb(45, 45, 45);
+    background: ${whiteFill};
+    color: var(--ia-color-text-primary--);
   }
   .dropdown-content li:first-child .ia-button {
-    border-radius: 0.3rem 0.3rem 0 0; /* 3px at a 10px root */
+    border-radius: var(--ia-radius-sm--) var(--ia-radius-sm--) 0 0;
   }
   .dropdown-content li:last-child .ia-button {
     border-radius: 0;
-    border-radius: 0 0 0.3rem 0.3rem; /* 3px at a 10px root */
+    border-radius: 0 0 var(--ia-radius-sm--) var(--ia-radius-sm--);
   }
   .dropdown-content .purchase:hover svg g {
-    fill: black;
+    fill: var(--ia-color-text-primary--);
   }
   .dropdown-content .purchase {
-    padding-left: 35px;
+    padding-left: var(--ia-space-6--);
     margin: 0;
   }
   .dropdown-content .purchase small {
@@ -122,13 +125,13 @@ export default css`
 
   .ia-button.down-arrow {
     border-radius: 0 var(--ia-radius-default--) var(--ia-radius-default--) 0;
-    padding: 0 0.6rem; /* 6px at a 10px root */
+    padding: 0 var(--ia-space-1--);
     margin-left: 0;
   }
   .actionloader {
     vertical-align: middle;
     visibility: hidden;
-    padding: 0.9rem 0.2rem; /* 9px 2px at a 10px root */
+    padding: var(--ia-space-2--) 2px;
   }
   .close {
     display: none;
@@ -142,18 +145,18 @@ export default css`
   }
   .btn:hover,
   .dropdown:hover .btn {
-    background-color: ${whiteColor};
+    background-color: ${whiteFill};
   }
   a {
     text-decoration: none;
   }
   .purchase small {
     display: block;
-    font-size: 1rem; /* 10px at a 10px root */
+    font-size: var(--ia-font-size-xs--);
   }
   .purchase svg {
     position: absolute;
-    left: 10px;
+    left: var(--ia-space-2--);
     top: 20%;
   }
   .unavailable {

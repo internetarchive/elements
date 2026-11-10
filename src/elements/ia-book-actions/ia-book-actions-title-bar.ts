@@ -59,15 +59,15 @@ export class IABookActionsTitleBar extends ActionsHandler {
       ${tokenStyles}
 
       :host {
-        padding: 0 10px;
-        height: 3.4rem; /* 34px at a 10px root */
+        padding: 0 var(--ia-space-2--);
+        height: calc(34 * var(--ia-unit, 1px));
         display: flex;
       }
       .embed-link {
         display: inline-flex;
         align-items: center;
         text-decoration: none;
-        color: var(--primaryTextColor, #fff);
+        color: var(--primaryTextColor, var(--ia-color-text-inverse--));
         font-size: var(--ia-font-size-md--);
       }
       .embed-link .title {
