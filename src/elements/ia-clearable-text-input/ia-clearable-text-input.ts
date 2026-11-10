@@ -168,7 +168,7 @@ export class IaClearableTextInput extends LitElement {
         background-image: var(--input-background-image, none);
         background-color: var(--input-background-color, transparent);
         color: var(--input-color, var(--ia-color-text-primary--));
-        font-size: var(--input-font-size, 1.7rem); /* 17px at a 10px root */
+        font-size: var(--input-font-size, var(--ia-font-size-lg--));
         line-height: var(--input-line-height, 1.5);
         box-shadow: var(--input-box-shadow, none);
       }

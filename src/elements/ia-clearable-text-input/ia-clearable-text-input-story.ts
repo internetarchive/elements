@@ -34,7 +34,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Font size',
     cssVariable: '--input-font-size',
-    defaultValue: '1.7rem',
+    defaultValue: '16px',
   },
   {
     label: 'Clear icon background',
