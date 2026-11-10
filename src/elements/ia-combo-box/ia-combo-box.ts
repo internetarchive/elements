@@ -1284,7 +1284,7 @@ export class IAComboBox extends LitElement {
         appearance: none;
         background: transparent;
         border: none;
-        padding: var(--combo-box-padding--) 5px;
+        padding: var(--combo-box-padding--) var(--ia-space-1--);
         font-size: inherit;
         font-family: inherit;
         font-weight: inherit;
@@ -1332,7 +1332,7 @@ export class IAComboBox extends LitElement {
       }
 
       #empty-options {
-        padding: 5px;
+        padding: var(--ia-space-1--);
         color: var(--ia-color-text-secondary--);
         font-style: italic;
         text-align: center;
@@ -1361,7 +1361,7 @@ export class IAComboBox extends LitElement {
       }
 
       .option {
-        padding: 7px 5px;
+        padding: var(--ia-space-1--);
         width: 100%;
         box-sizing: border-box;
         line-height: 1.1;
