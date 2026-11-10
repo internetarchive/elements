@@ -349,17 +349,17 @@ export class IAReview extends LitElement {
         );
 
         font-size: inherit;
-        --container-bg-color: #fbfbfd;
-        --container-border-color: #999999;
+        --container-bg-color: var(--ia-color-surface-page--);
+        --container-border-color: var(--ia-color-border-strong--);
       }
 
       .review {
         position: relative;
-        padding-right: 30px;
+        padding-right: var(--ia-space-6--);
       }
 
       .error {
-        color: var(--error-color, #cc0000);
+        color: var(--error-color, var(--ia-color-text-danger--));
       }
 
       .top-line {
@@ -371,7 +371,7 @@ export class IAReview extends LitElement {
       }
 
       .review-star {
-        width: 1rem; /* 10px at a 10px root */
+        width: var(--ia-size-icon-xs--);
         display: inline-block;
       }
 
@@ -382,7 +382,7 @@ export class IAReview extends LitElement {
 
       .simple-link,
       .body a {
-        color: var(--link-color, #4b64ff);
+        color: var(--link-color, var(--ia-color-text-link--));
         text-decoration: none;
         background: transparent;
         border: none;
@@ -413,7 +413,7 @@ export class IAReview extends LitElement {
       }
 
       .delete-icon {
-        width: 20px;
+        width: var(--ia-size-icon-md--);
         mix-blend-mode: multiply;
       }
     `;

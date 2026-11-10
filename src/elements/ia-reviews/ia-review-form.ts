@@ -689,7 +689,7 @@ export class IAReviewForm extends LitElement {
           display: flex;
           flex-direction: row;
           justify-content: space-between;
-          padding-top: 15px;
+          padding-top: var(--ia-space-3--);
         }
 
         .form-heading.rating {
@@ -703,29 +703,31 @@ export class IAReviewForm extends LitElement {
 
         label {
           display: inline-block;
-          margin-bottom: 5px;
+          margin-bottom: var(--ia-space-1--);
         }
 
         textarea,
         input[type='text'],
         .unrecoverable-error {
-          padding: 5px;
-          width: calc(100% - 10px);
+          padding: var(--ia-space-1--);
+          width: calc(100% - 2 * var(--ia-space-1--));
           font-family: inherit;
-          border-radius: 5px;
-          border: 1px solid var(--container-border-color, #999999);
+          border-radius: var(--ia-radius-default--);
+          border: var(--ia-size-border-width--) solid
+            var(--container-border-color, var(--ia-color-border-strong--));
         }
 
         .input-box.error input,
         .input-box.error textarea {
-          border: 2px solid var(--container-error-color, #ea0202);
+          border: 2px solid
+            var(--container-error-color, var(--ia-color-status-danger--));
         }
 
         .input-box.error .char-count,
         .input-error,
         .unrecoverable-error,
         .recoverable-error {
-          color: var(--container-error-color, #ea0202);
+          color: var(--container-error-color, var(--ia-color-text-danger--));
         }
 
         .input-error {
@@ -735,11 +737,11 @@ export class IAReviewForm extends LitElement {
         .input-box.error .input-error {
           display: block;
           text-align: right;
-          padding-top: 5px;
+          padding-top: var(--ia-space-1--);
         }
 
         .inline-link {
-          color: var(--container-link-color, #4f65f5);
+          color: var(--container-link-color, var(--ia-color-text-link--));
           text-decoration: none;
         }
 
@@ -756,8 +758,8 @@ export class IAReviewForm extends LitElement {
 
         .star {
           all: unset;
-          height: 30px;
-          width: 30px;
+          height: var(--ia-size-control-sm--);
+          width: var(--ia-size-control-sm--);
         }
 
         .star-selected,
@@ -773,13 +775,13 @@ export class IAReviewForm extends LitElement {
 
         .clear-stars-btn,
         .recoverable-error a {
-          padding: 0 5px;
-          color: var(--container-link-color, #4f65f5);
+          padding: 0 var(--ia-space-1--);
+          color: var(--container-link-color, var(--ia-color-text-link--));
           font-family: inherit;
           border: none;
           background: transparent;
           display: inline-block;
-          padding-top: 5px;
+          padding-top: var(--ia-space-1--);
         }
 
         .clear-stars-btn:hover,
@@ -792,8 +794,8 @@ export class IAReviewForm extends LitElement {
           width: 100%;
           display: flex;
           justify-content: flex-end;
-          gap: 10px;
-          padding-top: 15px;
+          gap: var(--ia-space-2--);
+          padding-top: var(--ia-space-3--);
         }
 
         .ia-button:disabled {
@@ -806,12 +808,15 @@ export class IAReviewForm extends LitElement {
 
         .unrecoverable-error {
           min-height: 50px;
-          padding: 5px;
+          padding: var(--ia-space-1--);
           text-align: center;
           display: flex;
           flex-direction: column;
           justify-content: center;
-          background-color: var(--container-bg-color, #fbfbfd);
+          background-color: var(
+            --container-bg-color,
+            var(--ia-color-surface-page--)
+          );
         }
 
         .recaptcha-disclaimer {
