@@ -360,7 +360,7 @@ export class IAScrubberBar extends LitElement {
 
         ia-section-marker {
           position: absolute;
-          width: 2rem; /* 20px at a 10px root */
+          width: calc(20 * var(--ia-unit, 1px));
           height: var(--scrubber-track-height--);
           bottom: var(--scrubber-track-offset--);
           /*

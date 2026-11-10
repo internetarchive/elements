@@ -9,6 +9,7 @@ import {
 } from 'lit';
 import { property, query, queryAll, state } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
+import themeStyles from '@src/themes/theme-styles';
 import { keyed } from 'lit/directives/keyed.js';
 import { map } from 'lit/directives/map.js';
 import {
@@ -961,8 +962,9 @@ export class IAInfiniteScroller
     if (this.estimatedCellHeight != null) return this.estimatedCellHeight;
     if (!this.container) return INITIAL_ROW_HEIGHT;
     const temp = document.createElement('div');
-    // 225px at a 10px root
-    temp.style.height = 'var(--infiniteScrollerCellMinHeight, 22.5rem)';
+    // Mirrors the .cell-container min-height default in styles
+    temp.style.height =
+      'var(--infiniteScrollerCellMinHeight, calc(225 * var(--ia-unit, 1px)))';
     this.container.appendChild(temp);
     const height = temp.offsetHeight;
     temp.remove();
@@ -1445,14 +1447,14 @@ export class IAInfiniteScroller
             // incorrect position with the collapsed cells.
             const row = Math.floor(index / this.cachedColumnsPerRow);
             const rowHeight = this.rowHeightCache.rowHeightFor(row);
-            // The 22.5rem fallback is 225px at a 10px root.
+            // The fallback mirrors the .cell-container min-height default.
             return html`<article
               class="cell-container"
               aria-posinset=${index + 1}
               aria-setsize=${itemCount}
               data-cell-index=${index}
               ?data-rendered=${cellTemplate != null}
-              style="min-height: max(${rowHeight}px, var(--infiniteScrollerCellMinHeight, 22.5rem))"
+              style="min-height: max(${rowHeight}px, var(--infiniteScrollerCellMinHeight, calc(225 * var(--ia-unit, 1px))))"
               @click=${this.handleCellClick}
               @keyup=${this.handleCellKeyup}
             >
@@ -1557,16 +1559,18 @@ export class IAInfiniteScroller
   //
 
   static get styles(): CSSResultGroup {
-    const sentinelHeightCss = css`var(--infiniteScrollerSentinelDistanceFromEnd, 200rem)`; // 2000px at a 10px root
-    const rowGapSizeCss = css`var(--infiniteScrollerRowGap, 1.7rem)`; // 17px at a 10px root
-    const colGapSizeCss = css`var(--infiniteScrollerColGap, 1.7rem)`; // 17px at a 10px root
-    const cellMinWidth = css`var(--infiniteScrollerCellMinWidth, 16rem)`; // 160px at a 10px root
+    const sentinelHeightCss = css`var(--infiniteScrollerSentinelDistanceFromEnd, calc(2000 * var(--ia-unit, 1px)))`;
+    const rowGapSizeCss = css`var(--infiniteScrollerRowGap, var(--ia-space-3--))`;
+    const colGapSizeCss = css`var(--infiniteScrollerColGap, var(--ia-space-3--))`;
+    const cellMinWidth = css`var(--infiniteScrollerCellMinWidth, calc(160 * var(--ia-unit, 1px)))`;
     const cellMaxWidth = css`var(--infiniteScrollerCellMaxWidth, 1fr)`;
-    const cellMinHeight = css`var(--infiniteScrollerCellMinHeight, 22.5rem)`; // 225px at a 10px root
+    const cellMinHeight = css`var(--infiniteScrollerCellMinHeight, calc(225 * var(--ia-unit, 1px)))`;
     const cellMaxHeight = css`var(--infiniteScrollerCellMaxHeight, none)`;
     const cellOutline = css`var(--infiniteScrollerCellOutline, 0)`;
 
     return css`
+      ${themeStyles}
+
       :host {
         /**
          * We handle scroll anchoring ourselves for fine-tuning, so opt out

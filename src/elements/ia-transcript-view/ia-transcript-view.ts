@@ -476,7 +476,7 @@ export class IATranscriptView extends LitElement {
           );
           --transcript-time-column-width--: var(
             --ia-theme-transcript-time-column-width,
-            3rem /* 30px at a 10px root */
+            calc(30 * var(--ia-unit, 1px))
           );
           --transcript-time-font-size--: var(
             --ia-theme-transcript-time-font-size,
@@ -501,7 +501,7 @@ export class IATranscriptView extends LitElement {
           );
           --transcript-auto-scroll-button-width--: var(
             --ia-theme-transcript-auto-scroll-button-width,
-            12rem /* 120px at a 10px root */
+            calc(120 * var(--ia-unit, 1px))
           );
           --transcript-auto-scroll-button-font-size--: var(
             --ia-theme-transcript-auto-scroll-button-font-size,
@@ -613,7 +613,7 @@ export class IATranscriptView extends LitElement {
         ia-transcript-entry[issearchresult] {
           /* Inline-block, or the outline adds a space to the right of the text */
           display: inline-block;
-          padding: 0 5px;
+          padding: 0 var(--ia-space-1--);
           position: relative;
         }
 
@@ -627,14 +627,14 @@ export class IATranscriptView extends LitElement {
           right: 0;
           border: 2px solid
             var(--transcript-search-result-inactive-border-color--);
-          border-radius: 5px;
+          border-radius: var(--ia-radius-default--);
         }
 
         /* The current result differs from the others by more than its
            color: a heavier outline and a fill behind its text. */
         ia-transcript-entry[issearchresult][isselected] {
           background-color: var(--transcript-search-result-active-fill--);
-          border-radius: 5px;
+          border-radius: var(--ia-radius-default--);
         }
 
         ia-transcript-entry[issearchresult][isselected]:after {

@@ -77,7 +77,7 @@ export class IASectionMarker extends LitElement {
         }
 
         .arrow {
-          padding-top: 10px;
+          padding-top: var(--ia-space-2--);
           opacity: 1;
           /*
           The arrows are hidden in every mode. The mode rules below vary only
@@ -110,7 +110,7 @@ export class IASectionMarker extends LitElement {
         }
 
         .center-divider {
-          border-left: 1px solid currentColor;
+          border-left: var(--ia-size-border-width--) solid currentColor;
           width: 1px;
           left: 50%;
           height: var(--section-marker-height-expanded--);
