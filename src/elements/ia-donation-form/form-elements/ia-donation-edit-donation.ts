@@ -742,11 +742,11 @@ export class IADonationEditDonation extends LitElement {
           );
           --ia-donation-section-badge-background-color: var(
             --ia-donation-edit-badge-background-color,
-            var(--mid-gray)
+            var(--ia-color-surface-chrome-secondary--)
           );
           --ia-donation-section-badge-font-color: var(
             --ia-donation-edit-badge-font-color,
-            var(--true-white)
+            var(--ia-color-text-inverse--)
           );
         }
 

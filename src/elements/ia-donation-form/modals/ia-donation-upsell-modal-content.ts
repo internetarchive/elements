@@ -171,11 +171,11 @@ export class IADonationUpsellModalContent extends LitElement {
           );
           --donation-upsell-cta-color--: var(
             --ia-donation-upsell-cta-button-color,
-            var(--navy-blue)
+            var(--ia-color-action-primary-fill--)
           );
           --donation-upsell-cta-disabled-color--: var(
             --ia-donation-upsell-cta-button-disabled-color,
-            rgba(109, 148, 201, 0.5)
+            var(--ia-color-action-disabled-fill--)
           );
           /* Shifts the amount field left a little so the dollar sign and field read as centred */
           --donation-upsell-amount-input-offset--: var(
@@ -186,9 +186,9 @@ export class IADonationUpsellModalContent extends LitElement {
         }
 
         .monthly-amount {
-          background-color: var(--true-white);
-          padding: var(--padding-sm) 0.625rem; /* 6.25px at a 10px root */
-          border-radius: 5px;
+          background-color: var(--ia-color-surface-raised--);
+          padding: var(--padding-sm) var(--ia-space-1--);
+          border-radius: var(--ia-radius-default--);
           text-align: center;
           margin-bottom: var(--padding-sm);
           margin-top: 0;
@@ -198,7 +198,7 @@ export class IADonationUpsellModalContent extends LitElement {
           font-size: calc(var(--donation-upsell-base-font-size--) * 1.8);
           font-weight: bold;
           text-align: center;
-          line-height: 1.2;
+          line-height: var(--ia-font-line-height-tight--);
           margin: 0;
           padding: var(--padding-sm) 0 0 0;
         }
@@ -233,7 +233,7 @@ export class IADonationUpsellModalContent extends LitElement {
           width: 100px;
           text-align: center;
           border: none;
-          border-bottom: 1px solid gray;
+          border-bottom: var(--ia-border-control--);
           font-weight: bold;
           font-size: calc(var(--donation-upsell-base-font-size--) * 3.4);
         }
@@ -246,8 +246,8 @@ export class IADonationUpsellModalContent extends LitElement {
           padding: var(--donation-upsell-base-font-size--)
             calc(var(--donation-upsell-base-font-size--) * 2);
           background-color: var(--donation-upsell-cta-color--);
-          color: var(--true-white);
-          border-radius: 5px;
+          color: var(--ia-color-action-primary-text--);
+          border-radius: var(--ia-radius-default--);
           border: 0;
           font-weight: bold;
           line-height: normal;
@@ -317,7 +317,7 @@ export class IADonationUpsellModalContent extends LitElement {
           display: inline-block;
           position: relative;
           padding: 0 var(--donation-upsell-base-font-size--);
-          background: #f5f5f7;
+          background: var(--ia-color-surface-page--);
         }
       `,
     ];

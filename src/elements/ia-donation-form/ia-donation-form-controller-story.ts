@@ -110,7 +110,7 @@ const styleInputSettings: StyleInputSettings[] = [
     section: 'Color',
     label: 'Text',
     cssVariable: '--ia-donation-form-text-color',
-    defaultValue: '#333333',
+    defaultValue: '#2c2c2c',
     inputType: 'color',
   },
   {

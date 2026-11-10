@@ -400,7 +400,7 @@ export class IADonationContactForm extends LitElement {
           );
           --donation-contact-field-font-color--: var(
             --ia-donation-form-input-font-color,
-            #2c2c2c
+            var(--ia-color-text-primary, #2c2c2c)
           );
           --donation-contact-label-font-family--: var(
             --ia-donation-field-label-font-family,
@@ -412,7 +412,7 @@ export class IADonationContactForm extends LitElement {
           );
           --donation-contact-label-color--: var(
             --ia-donation-field-label-color,
-            #2c2c2c
+            var(--ia-color-text-primary, #2c2c2c)
           );
           --donation-contact-label-margin-bottom--: var(
             --ia-donation-field-label-margin-bottom,
@@ -420,11 +420,11 @@ export class IADonationContactForm extends LitElement {
           );
           --donation-contact-required-color--: var(
             --ia-donation-badged-input-required-color,
-            var(--ia-theme-color-danger, #e51c23)
+            var(--ia-theme-color-danger, var(--ia-color-text-danger, #b8161c))
           );
           --donation-contact-error-color--: var(
             --ia-theme-color-danger,
-            #e51c23
+            var(--ia-color-text-danger, #b8161c)
           );
           --donation-contact-no-icon-field-width--: calc(
             100% - ${noIconSpacerWidth}
@@ -510,7 +510,7 @@ export class IADonationContactForm extends LitElement {
           color: var(--donation-contact-field-font-color--);
           font-family: var(--donation-contact-field-font-family--);
           border: 0;
-          background: #fff;
+          background: var(--ia-color-surface-raised, #ffffff);
         }
       </style>
     `;
