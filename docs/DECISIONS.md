@@ -6,13 +6,12 @@ Every judgment call made while deriving this style guide from the live site.
 61 in total.
 
 Each entry records what is live, what the conflict is, what
-was decided, why, and what it costs to implement. Nothing here has been applied to
-archive.org — these are proposals with a default already chosen, so that the review is
-"do we disagree with this?" rather than "what should we do?".
+was decided, why, and what it costs to implement. elements applies them as its
+components move onto the tokens ([which components follow it](README.md#which-components-follow-it));
+archive.org's pages follow as they adopt those components.
 
-**To review interactively**, open `site/decisions.html` in the style guide repo: you can
-set each decision to accepted / amended / rejected, add notes, and export the result as
-JSON to hand back.
+This file is edited by hand. [README.md](README.md#changing-the-system) says how to
+add or change a decision.
 
 ---
 
@@ -245,7 +244,7 @@ JSON to hand back.
 
 **Blast radius.** Result grids get slightly taller. Very visible in aggregate, trivial per tile.
 
-*See:* [`components/item-tile.md#grid-tile`](components/item-tile.md#grid-tile)
+*See:* [`components/item-tile.md#spec`](components/item-tile.md#spec)
 
 ---
 
@@ -737,7 +736,7 @@ JSON to hand back.
 
 **Blast radius.** Facet rows go from roughly 24px to 44px on touch, which makes a seventy-item facet list much taller on a phone. That is what the 'Show N more' truncation and the independently scrolling rail are for. On desktop the rows can stay compact.
 
-*See:* [`foundations/accessibility.md#touch-targets`](foundations/accessibility.md#touch-targets)
+*See:* [`foundations/accessibility.md#pointer-targets`](foundations/accessibility.md#pointer-targets)
 
 ---
 

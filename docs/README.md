@@ -31,6 +31,29 @@ The demo renders the system next to the elements, as tabs:
 `ia.css` and the pages under `demo/docs/` are demo-only and do not ship in the
 package.
 
+## Which components follow it
+
+Where each element stands once the WEBDEV-9043 PRs have landed. "On tokens" means its colors and sizes come from the tokens; a few px values (hairlines, offsets) stay literal on purpose.
+
+| | Elements |
+| --- | --- |
+| On tokens | `ia-button`, `ia-otp-form`, `ia-otp-input`, `ia-donation-thermometer` · `ia-radio-player`, `ia-waveform-progress`, `ia-scrubber-bar`, `ia-transcript-view`, `ia-playback-controls`, `ia-expandable-search-bar` · `ia-topnav` · `ia-dropdown`, `ia-dropdown-search-bar`, `ia-combo-box`, `ia-clearable-text-input`, `ia-wayback-search-form` |
+| Partly | `ia-book-actions`, `ia-feature-feedback`, `ia-donation-form`, `ia-reviews`, `modal-manager`, `ia-histogram-date-range`, `ia-image-viewer`: rem values that match a token read it, but most colors and the other sizes are still literal |
+| Not yet | `ia-item-navigator`, `ia-infinite-scroller` |
+| Nothing to convert | `ia-icon`, `ia-status-indicator`, `ia-sr-only-text`, `ia-audio-element`: they inherit their colors or have no styles of their own |
+
+Moving the partial and unconverted ones onto tokens is the literal-to-token follow-up. The donation form's hosted payment fields keep literal colors: the payment provider styles them inside an iframe, which CSS custom properties can't reach.
+
+## Changing the system
+
+A new value or rule, or a change to one, is a decision in [DECISIONS.md](DECISIONS.md), written in the same PR as the change.
+
+- Give it the next free number after the highest `D-` heading, and a row in the "All decisions" table.
+- Start it with `**Status:**` (`accepted`, or `rejected` with the reason kept) and `**Area:**`, then the five parts every entry has: **What's live** (what archive.org does today, with values), **The conflict**, **The decision**, **Why**, and **Blast radius** (what changes, for whom).
+- If it changes a token, change `tokens/tokens.json` in the same PR. A new color pairing goes in `src/themes/tokens.node.test.ts`, so its contrast is checked; a new length goes in a group with a scale flag, or `pnpm run tokens` fails.
+- Update the foundation or component spec it touches, and link it from the entry's `*See:*` line.
+- A decision that supersedes part of another says so in a `> **Supersedes part of** [D-NN](#d-nn)` line under its status.
+
 ## Left in the style guide repo
 
 The style guide repo also had tooling these docs mention in places: the decisions
