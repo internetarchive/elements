@@ -104,10 +104,6 @@ function scaled({ path, value, scale }: Token): string {
   return scale && px ? `calc(${px[1]} * var(--ia-unit, 1px))` : value;
 }
 
-function note(ext: TokenExtension): string {
-  return ext.decision ? ` /* ${ext.decision} */` : '';
-}
-
 const alias = (name: string, fallback: string) =>
   `${name}--: var(${name}, ${fallback});`;
 
@@ -123,7 +119,7 @@ for (const { path, value } of tokens) {
 
 const declarations = tokens.map(
   (token) =>
-    `    ${alias(cssName(token.path), resolveRefs(scaled(token), known))}${note(token.ext)}`,
+    `    ${alias(cssName(token.path), resolveRefs(scaled(token), known))}`,
 );
 
 /* Tokens that re-point below a breakpoint, grouped by breakpoint. */
