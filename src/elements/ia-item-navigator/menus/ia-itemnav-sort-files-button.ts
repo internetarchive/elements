@@ -108,7 +108,7 @@ export class IAItemNavSortFilesButton extends LitElement {
           );
           --item-navigator-icon-color--: var(
             --item-navigator-icon-color,
-            var(--item-navigator-text-color, var(--true-white))
+            var(--item-navigator-text-color, var(--ia-color-text-inverse--))
           );
 
           /* 10px base (petabox scale); internal sizing is em against it. */

@@ -404,7 +404,7 @@ export class IAItemNavigator extends LitElement {
           );
           --item-navigator-theater-bg-color--: var(
             --item-navigator-theater-bg-color,
-            #000
+            var(--ia-color-surface-theater--)
           );
           /* Every glyph is square, so one knob sizes both axes. */
           --item-navigator-icon-size--: var(--item-navigator-icon-size, 2.4em);
@@ -415,7 +415,7 @@ export class IAItemNavigator extends LitElement {
           /* Icons follow the adjustable text color by default. */
           --item-navigator-icon-color--: var(
             --item-navigator-icon-color,
-            var(--item-navigator-text-color, var(--true-white))
+            var(--item-navigator-text-color, var(--ia-color-text-inverse--))
           );
 
           /*
@@ -515,8 +515,8 @@ export class IAItemNavigator extends LitElement {
         }
 
         nav .minimized {
-          background: rgba(0, 0, 0, 0.7);
-          padding-top: 6px;
+          background: var(--ia-color-surface-scrim--);
+          padding-top: var(--ia-space-1--);
           position: absolute;
           width: ${menuMargin};
           z-index: 2;
@@ -630,7 +630,10 @@ export class IAItemNavigator extends LitElement {
         .loading-caption {
           margin: 0;
           font-size: 1.6em;
-          color: var(--item-navigator-text-color, var(--true-white));
+          color: var(
+            --item-navigator-text-color,
+            var(--ia-color-text-inverse--)
+          );
         }
 
         #menu {

@@ -141,7 +141,7 @@ export class IAImageViewerSlide extends LitElement {
         :host {
           --imgview-slide-text-color--: var(
             --image-viewer-text-color,
-            var(--true-white)
+            var(--ia-color-text-inverse--)
           );
 
           flex: 0 0 100%;
@@ -181,10 +181,10 @@ export class IAImageViewerSlide extends LitElement {
 
         .loading-spinner {
           position: absolute;
-          width: 24px;
-          height: 24px;
-          border: 2px solid rgba(255, 255, 255, 0.15);
-          border-top-color: rgba(255, 255, 255, 0.5);
+          width: var(--ia-size-icon-lg--);
+          height: var(--ia-size-icon-lg--);
+          border: 2px solid var(--ia-color-border-inverse--);
+          border-top-color: var(--ia-color-text-inverse-tertiary--);
           border-radius: 50%;
           animation: spin 0.8s linear infinite;
         }
@@ -198,7 +198,7 @@ export class IAImageViewerSlide extends LitElement {
         .image-failed {
           position: absolute;
           margin: 0;
-          padding: 0 1.6rem; /* 16px at a 10px root */
+          padding: 0 var(--ia-space-3--);
           color: var(--imgview-slide-text-color--);
           font-size: var(--ia-font-size-md--);
           text-align: center;

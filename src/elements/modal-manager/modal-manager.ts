@@ -8,6 +8,7 @@ import {
 } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
+import { tokenStyles } from '@src/themes/tokens';
 
 import Modal from './shoelace/modal';
 import { getDeepestActiveElement } from './shoelace/active-elements';
@@ -279,14 +280,16 @@ export class IAModalManager
 
   /** @inheritdoc */
   static get styles(): CSSResult {
-    const modalBackdropColor = css`var(--modalBackdropColor, rgba(10, 10, 10, 0.9))`;
+    const modalBackdropColor = css`var(--modalBackdropColor, var(--ia-color-surface-scrim--))`;
     const modalBackdropZindex = css`var(--modalBackdropZindex, 1000)`;
 
-    const modalWidth = css`var(--modalWidth, 32rem)`; // 320px at a 10px root
+    const modalWidth = css`var(--modalWidth, calc(320 * var(--ia-unit, 1px)))`;
     const modalMaxWidth = css`var(--modalMaxWidth, 95%)`;
     const modalZindex = css`var(--modalZindex, 2000)`;
 
     return css`
+      ${tokenStyles}
+
       .container {
         width: 100%;
         height: 100%;
