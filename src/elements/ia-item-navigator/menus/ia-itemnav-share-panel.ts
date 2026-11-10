@@ -225,11 +225,11 @@ export class IAItemNavSharePanel extends LitElement {
         :host {
           --item-navigator-text-color--: var(
             --item-navigator-text-color,
-            var(--true-white)
+            var(--ia-color-text-inverse--)
           );
           --item-navigator-border-color--: var(
             --item-navigator-border-color,
-            #4b4b4b
+            var(--ia-color-border-inverse--)
           );
           /* Icons follow the adjustable text color by default. */
           --item-navigator-icon-color--: var(
@@ -238,7 +238,7 @@ export class IAItemNavSharePanel extends LitElement {
           );
           --item-navigator-share-embed-bg--: var(
             --item-navigator-share-embed-bg,
-            #151515
+            var(--ia-color-surface-chrome--)
           );
 
           display: block;
@@ -281,11 +281,11 @@ export class IAItemNavSharePanel extends LitElement {
           color: var(--item-navigator-text-color--);
           cursor: pointer;
           transition: background-color 0.2s;
-          border-radius: 6px;
+          border-radius: var(--ia-radius-default--);
         }
 
         .share-option:hover {
-          background-color: rgba(255, 255, 255, 0.05);
+          background-color: var(--ia-color-hover-overlay-inverse--);
         }
 
         .share-option > * {
@@ -294,8 +294,8 @@ export class IAItemNavSharePanel extends LitElement {
           margin-right: 1em;
           vertical-align: middle;
           /* The border only reserves geometry. It isn't drawn. */
-          border: 1px solid transparent;
-          border-radius: 7px;
+          border: var(--ia-size-border-width--) solid transparent;
+          border-radius: var(--ia-radius-lg--);
         }
 
         .share-option .ia-icon {
@@ -307,14 +307,14 @@ export class IAItemNavSharePanel extends LitElement {
           position: relative;
           /* The glyph fills the border box (the padding box plus the 1px
              border) and is clipped to its rounded corners. */
-          clip-path: inset(0 round 7px);
+          clip-path: inset(0 round var(--ia-radius-lg--));
         }
 
         .share-option .ia-icon > svg {
           position: absolute;
-          inset: -1px;
-          width: calc(100% + 2px);
-          height: calc(100% + 2px);
+          inset: calc(-1 * var(--ia-size-border-width--));
+          width: calc(100% + 2 * var(--ia-size-border-width--));
+          height: calc(100% + 2 * var(--ia-size-border-width--));
         }
 
         /* Our glyphs paint with currentColor, so this supplies the paint. */
@@ -338,7 +338,7 @@ export class IAItemNavSharePanel extends LitElement {
         }
 
         .embed {
-          padding-right: 5px;
+          padding-right: var(--ia-space-1--);
         }
 
         .embed a {

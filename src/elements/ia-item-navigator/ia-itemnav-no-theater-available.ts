@@ -60,7 +60,7 @@ export class IAItemNavNoTheaterAvailable extends LitElement {
         :host {
           --item-navigator-text-color--: var(
             --item-navigator-text-color,
-            var(--true-white)
+            var(--ia-color-text-inverse--)
           );
           color: var(--item-navigator-text-color--);
           text-align: center;
@@ -84,8 +84,8 @@ export class IAItemNavNoTheaterAvailable extends LitElement {
 
         a {
           color: var(--item-navigator-text-color--);
-          background-color: var(--navy-blue);
-          min-height: 35px;
+          background-color: var(--ia-color-action-primary-fill--);
+          min-height: var(--ia-size-control-md--);
           cursor: pointer;
           line-height: normal;
           border-radius: 0.4em;
@@ -95,7 +95,8 @@ export class IAItemNavNoTheaterAvailable extends LitElement {
           font-family: var(--base-font-family);
           display: inline-block;
           padding: 0.85em 1.2em;
-          border: 1px solid var(--lightest-gray);
+          border: var(--ia-size-border-width--) solid
+            var(--ia-color-action-primary-border--);
           white-space: nowrap;
           appearance: auto;
           box-sizing: border-box;
