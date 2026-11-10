@@ -563,8 +563,8 @@ export class IAFeatureFeedback
   }
 
   static get styles(): CSSResultGroup {
-    const blueColor = css`var(--featureFeedbackBlueColor, #194880)`;
-    const darkGrayColor = css`var(--featureFeedbackDarkGrayColor, #767676)`;
+    const blueColor = css`var(--featureFeedbackBlueColor, var(--ia-color-action-primary-fill--))`;
+    const darkGrayColor = css`var(--featureFeedbackDarkGrayColor, var(--ia-color-border-strong--))`;
     const darkGrayColorSvgFilter = css`var(--defaultColorSvgFilter, invert(52%) sepia(0%) saturate(1%) hue-rotate(331deg) brightness(87%) contrast(89%))`;
 
     const backdropZindex = css`var(--featureFeedbackBackdropZindex, 5)`;
@@ -577,10 +577,10 @@ export class IAFeatureFeedback
     const betaButtonBackground = css`var(--featureFeedbackBetaButtonBackground, none)`;
     const betaButtonSvgFilter = css`var(--featureFeedbackBetaButtonSvgFilter, ${darkGrayColorSvgFilter})`;
 
-    const cancelButtonColor = css`var(--featureFeedbackCancelButtonColor, #515151)`;
+    const cancelButtonColor = css`var(--featureFeedbackCancelButtonColor, var(--ia-color-palette-gray-700--))`;
     const popupBlockerColor = css`var(--featureFeedbackPopupBlockerColor, rgba(255, 255, 255, 0.3))`;
 
-    const popupBackgroundColor = css`var(--featureFeedbackPopupBackgroundColor, #F5F5F7)`;
+    const popupBackgroundColor = css`var(--featureFeedbackPopupBackgroundColor, var(--ia-color-surface-sunken--))`;
 
     const promptFontWeight = css`var(--featureFeedbackPromptFontWeight, bold)`;
     const promptFontSize = css`var(--featureFeedbackPromptFontSize, var(--ia-font-size-md--))`;
@@ -591,13 +591,13 @@ export class IAFeatureFeedback
     const defaultColor = css`var(--defaultColor, ${darkGrayColor});`;
     const defaultColorSvgFilter = css`var(--defaultColorSvgFilter, ${darkGrayColorSvgFilter});`;
 
-    const upvoteColor = css`var(--upvoteColor, #23765D);`;
+    const upvoteColor = css`var(--upvoteColor, var(--ia-color-status-success--));`;
     const upvoteColorSvgFilter = css`var(--upvoteColorSvgFilter, invert(34%) sepia(72%) saturate(357%) hue-rotate(111deg) brightness(97%) contrast(95%));`;
 
-    const downvoteColor = css`var(--downvoteColor, #720D11);`;
+    const downvoteColor = css`var(--downvoteColor, var(--ia-color-status-danger--));`;
     const downvoteColorSvgFilter = css`var(--downvoteColorSvgFilter, invert(5%) sepia(81%) saturate(5874%) hue-rotate(352deg) brightness(105%) contrast(95%));`;
 
-    const unselectedColor = css`var(--unselectedColor, #CCCCCC);`;
+    const unselectedColor = css`var(--unselectedColor, var(--ia-color-border-default--));`;
     const unselectedColorSvgFilter = css`var(--unselectedColorSvgFilter, invert(100%) sepia(0%) saturate(107%) hue-rotate(138deg) brightness(89%) contrast(77%));`;
 
     return css`
@@ -608,19 +608,19 @@ export class IAFeatureFeedback
       }
 
       #beta-button {
-        font-size: 12px;
+        font-size: var(--ia-font-size-sm--);
         font-weight: bold;
         font-style: italic;
         color: ${betaButtonTextColor};
         background: ${betaButtonBackground};
-        border: 1px solid ${betaButtonBorderColor};
-        border-radius: 4px;
-        padding: 1px 5px;
+        border: var(--ia-size-border-width--) solid ${betaButtonBorderColor};
+        border-radius: var(--ia-radius-default--);
+        padding: 1px var(--ia-space-1--);
       }
 
       .beta-button-thumb svg {
-        height: 10px;
-        width: 10px;
+        height: var(--ia-size-icon-xs--);
+        width: var(--ia-size-icon-xs--);
         filter: ${betaButtonSvgFilter};
       }
 
@@ -629,8 +629,8 @@ export class IAFeatureFeedback
       }
 
       #error {
-        color: red;
-        font-size: 14px;
+        color: var(--ia-color-text-danger--);
+        font-size: var(--ia-font-size-md--);
         text-align: center;
         font-weight: bold;
       }
@@ -654,15 +654,15 @@ export class IAFeatureFeedback
 
       #popup {
         position: absolute;
-        padding: 10px;
+        padding: var(--ia-space-2--);
         background-color: ${popupBackgroundColor};
-        border: 1px ${popupBorderColor} solid;
-        border-radius: 5px;
-        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        border: var(--ia-size-border-width--) ${popupBorderColor} solid;
+        border-radius: var(--ia-radius-default--);
+        box-shadow: var(--ia-shadow-overlay--);
         z-index: ${modalZindex};
         max-width: 300px;
-        margin-left: 10px;
-        margin-right: 10px;
+        margin-left: var(--ia-space-2--);
+        margin-right: var(--ia-space-2--);
       }
 
       button,
@@ -689,7 +689,7 @@ export class IAFeatureFeedback
       }
 
       #form > div {
-        margin-bottom: 10px;
+        margin-bottom: var(--ia-space-2--);
       }
 
       #form > div:last-child {
@@ -714,11 +714,12 @@ export class IAFeatureFeedback
 
       #comments {
         width: 100%;
-        height: 50px;
-        background-color: #ffffff;
-        border: 1px #2c2c2c solid;
-        border-radius: 4px;
-        padding: 7px;
+        height: var(--ia-size-control-xl--);
+        background-color: var(--ia-color-surface-raised--);
+        border: var(--ia-size-border-width--) var(--ia-color-border-strong--)
+          solid;
+        border-radius: var(--ia-radius-default--);
+        padding: var(--ia-space-1--);
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
@@ -726,7 +727,7 @@ export class IAFeatureFeedback
       }
 
       #comments::placeholder {
-        color: #767676;
+        color: var(--ia-color-text-secondary--);
       }
 
       #actions {
@@ -735,10 +736,10 @@ export class IAFeatureFeedback
       }
 
       .cta-button {
-        color: white;
-        font-size: 14px;
-        border-radius: 4px;
-        height: 30px;
+        color: var(--ia-color-action-primary-text--);
+        font-size: var(--ia-font-size-md--);
+        border-radius: var(--ia-radius-default--);
+        height: var(--ia-size-control-sm--);
         margin: 0;
       }
 
@@ -748,26 +749,27 @@ export class IAFeatureFeedback
 
       #submit-button {
         background-color: ${submitButtonColor};
-        margin-left: 10px;
+        margin-left: var(--ia-space-2--);
       }
 
       .vote-button {
-        background-color: #ffffff;
-        border: 1px solid #767676;
-        border-radius: 2px;
+        background-color: var(--ia-color-action-secondary-fill--);
+        border: var(--ia-size-border-width--) solid
+          var(--ia-color-action-secondary-border--);
+        border-radius: var(--ia-radius-sm--);
         padding: 0;
-        width: 25px;
-        height: 25px;
+        width: var(--ia-size-control-sm--);
+        height: var(--ia-size-control-sm--);
         box-sizing: border-box;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-left: 10px;
+        margin-left: var(--ia-space-2--);
       }
 
       .vote-button svg {
-        width: 15px;
-        height: 15px;
+        width: var(--ia-size-icon-sm--);
+        height: var(--ia-size-icon-sm--);
       }
 
       .vote-button input {
@@ -811,7 +813,7 @@ export class IAFeatureFeedback
       }
 
       .vote-button.error {
-        box-shadow: 0 0 4px red;
+        box-shadow: 0 0 4px var(--ia-color-status-danger--);
       }
 
       form[disabled] .vote-button.unselected {
@@ -819,7 +821,7 @@ export class IAFeatureFeedback
       }
 
       #comment-button {
-        color: var(--ia-theme-link-color, #4b64ff);
+        color: var(--ia-theme-link-color, var(--ia-color-text-link--));
         font-weight: ${commentButtonFontWeight};
         font-size: ${commentButtonFontSize};
       }
