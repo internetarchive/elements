@@ -5,13 +5,10 @@
 Every judgment call made while deriving this style guide from the live site.
 61 in total.
 
-Each entry records what is live, what the conflict is, what
-was decided, why, and what it costs to implement. elements applies them as its
-components move onto the tokens ([which components follow it](README.md#which-components-follow-it));
-archive.org's pages follow as they adopt those components.
-
-This file is edited by hand. [README.md](README.md#changing-the-system) says how to
-add or change a decision.
+Each entry records what was live on archive.org, the conflict, what was decided, why,
+and what it changes. This is the record of how the system was derived, kept for the
+release that applies it and for anyone asking why a value changed. It's closed:
+changes after it are explained in their own PRs.
 
 ---
 
