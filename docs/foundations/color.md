@@ -35,7 +35,7 @@ Most role names say what they are for. The ones that don't:
 
 ## Surfaces
 
-Twelve surfaces.
+Eleven surfaces. The Wayback Machine cream is a brand color, `--ia-color-brand-wayback`, below.
 
 | Token | Value | Where it is live today |
 | --- | --- | --- |
@@ -48,7 +48,6 @@ Twelve surfaces.
 | `--ia-color-surface-chrome-tertiary` | `#474747` | the wide topnav's open media panel, and the tab that opens it — 9.29:1 with white text, 5.79:1 with `#ccc` |
 | `--ia-color-surface-collection` | `#666666` | the collection tile's card and thumbnail well — 5.74:1 with white text |
 | `--ia-color-surface-theater` | `#000000` | the item page's theater, behind the player and BookReader — with `.ia-inverse .ia-inverse--theater` |
-| `--ia-color-surface-brand-wayback` | `#fcf5e6` | the Wayback Machine hero panel, as a surface (`--ia-color-brand-wayback` is the same cream) |
 | `--ia-color-surface-highlight` | `#c5d1df` | a search term marked in a result's text snippet (live: `<mark>`, `#0000ff33`) — 9.02:1 with primary text |
 | `--ia-color-surface-scrim` | `rgb(0 0 0 / 0.5)` | behind modals and drawers |
 
