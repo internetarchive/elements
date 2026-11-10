@@ -88,11 +88,9 @@ function* walk(node: TokenNode, path: string[] = []): Generator<Token> {
   }
 }
 
+/** A rem token's px value at the 10px root, as a comment beside it. */
 function note(ext: TokenExtension): string {
-  const bits = [];
-  if (ext.px !== undefined) bits.push(`${ext.px}px`);
-  if (ext.decision) bits.push(ext.decision);
-  return bits.length ? ` /* ${bits.join(', ')} */` : '';
+  return ext.px !== undefined ? ` /* ${ext.px}px */` : '';
 }
 
 const alias = (name: string, fallback: string) =>
