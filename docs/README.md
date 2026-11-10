@@ -8,7 +8,7 @@ components and the system they implement live together.
 | [foundations/](foundations/) | Principles, color, type, spacing, radius, elevation, motion, layout, iconography, accessibility, content voice |
 | [components/](components/) | One spec per component: anatomy, sizes, states, behavior, and how the element (where there is one) differs |
 | [patterns/](patterns/) | Page-level patterns: page shells, forms, the item and profile pages, empty and loading states |
-| [DECISIONS.md](DECISIONS.md) | Every decision the system makes, numbered `D-01` onward, each with the live value it replaces |
+| [DECISIONS.md](DECISIONS.md) | Background: how the system was derived from the live site, each value it changed and why. A closed record |
 
 The tokens themselves are in [tokens/tokens.json](../tokens/tokens.json); see the
 README's [Design tokens](../README.md#design-tokens) section.
@@ -46,13 +46,7 @@ Moving the partial and unconverted ones onto tokens is the literal-to-token foll
 
 ## Changing the system
 
-A new value or rule, or a change to one, is a decision in [DECISIONS.md](DECISIONS.md), written in the same PR as the change.
-
-- Give it the next free number after the highest `D-` heading, and a row in the "All decisions" table.
-- Start it with `**Status:**` (`accepted`, or `rejected` with the reason kept) and `**Area:**`, then the five parts every entry has: **What's live** (what archive.org does today, with values), **The conflict**, **The decision**, **Why**, and **Blast radius** (what changes, for whom).
-- If it changes a token, change `tokens/tokens.json` in the same PR. A new color pairing goes in `src/themes/tokens.node.test.ts`, so its contrast is checked; a new length goes in a group with a scale flag, or `pnpm run tokens` fails.
-- Update the foundation or component spec it touches, and link it from the entry's `*See:*` line.
-- A decision that supersedes part of another says so in a `> **Supersedes part of** [D-NN](#d-nn)` line under its status.
+Change `tokens/tokens.json` and the spec it touches in one PR, and say why in the PR. A new color pairing goes in `src/themes/tokens.node.test.ts` so its contrast is checked, and a new length goes in a group with a scale flag or `pnpm run tokens` fails.
 
 ## Left in the style guide repo
 
@@ -60,5 +54,5 @@ The style guide repo also had tooling these docs mention in places: the decision
 review page and `make-decisions.mjs` that generated `DECISIONS.md`, the icon and
 brand lifting scripts (`make-icons.mjs`, `make-brand.mjs`, `live-icons.json`), the
 Claude Design sync and its React wrappers, and the static `design-system/` export.
-None of it moved. `DECISIONS.md` and `demo/docs/assets/icons.js` are now edited by
-hand, and the contrast check is `src/themes/tokens.node.test.ts`.
+None of it moved. `DECISIONS.md` is a closed record, `demo/docs/assets/icons.js` is
+edited by hand, and the contrast check is `src/themes/tokens.node.test.ts`.
