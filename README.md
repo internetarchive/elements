@@ -10,20 +10,19 @@ screens, icons and stress tests. The docs behind it are in [docs/](docs/README.m
 
 ## Design system
 
-elements implements archive.org's design system: the tokens (colors, type, spacing, sizes, motion), the foundations they come from, a spec for each component, page-level patterns, and the decisions behind every value.
+elements implements archive.org's design system: the tokens (colors, type, spacing, sizes, motion), the foundations they come from, a spec for each component, and page-level patterns.
 
 | Part | Where |
 | --- | --- |
 | See it rendered | The [demo](https://internetarchive.github.io/elements)'s Principles, Foundations, Specs, Screens, Icons and Playground tabs |
 | Foundations, component specs, patterns | [docs/](docs/README.md), which also lists which components follow the system so far |
 | Token values | [tokens/tokens.json](tokens/tokens.json) |
-| Why each value is what it is | [docs/DECISIONS.md](docs/DECISIONS.md), numbered `D-01` onward |
 
 **Using components on a page.** They follow the tokens with no setup. To change one, set its public name, such as `--ia-color-text-link`, on `:root` or any ancestor; a component's own `--ia-theme-*` hooks still win over the tokens. Add the `ia-inverse` class for a dark surface, and set `--ia-unit` to scale sizes. [Design tokens](#design-tokens) has the details. A page can't yet read the tokens in its own CSS: they're private to each component.
 
 **Building a component.** Read the tokens as [Design tokens](#design-tokens) describes, preferring the semantic roles (`text`, `surface`, `border`, `action`, `status`) over the palette. A value the tokens don't have becomes a new token in `tokens/tokens.json`: a length goes in a group with a scale flag, and a color the component pairs with another gets that pairing in `src/themes/tokens.node.test.ts`. Write or update the component's spec in [docs/components/](docs/components/).
 
-**Changing the system.** A new value or rule is a decision in [docs/DECISIONS.md](docs/DECISIONS.md). [docs/README.md](docs/README.md#changing-the-system) says how to add one.
+**Changing the system.** Change `tokens/tokens.json` and the spec in one PR, and say why in the PR; [docs/README.md](docs/README.md#changing-the-system) has the two checks it needs.
 
 ## Installation
 
