@@ -59,8 +59,8 @@ export class IAIconLabel extends LitElement {
       }
 
       slot[name='icon'] {
-        width: var(--iconWidth, 20px);
-        margin-right: var(--iconLabelGutterWidth, 10px);
+        width: var(--iconWidth, var(--ia-size-icon-md--));
+        margin-right: var(--iconLabelGutterWidth, var(--ia-space-2--));
         display: flex;
         align-items: center;
         justify-content: flex-start;
