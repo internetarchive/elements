@@ -607,8 +607,10 @@ export class IADonationForm extends LitElement {
           height: var(--donation-form-donate-button-height--);
         }
 
+        /* Hover darkens the fill a step, as ia-button's donate mode does. */
         #donate-button:hover {
           background-color: var(--donation-form-donate-button-hover-color--);
+          filter: brightness(0.88);
         }
 
         #total-amount-section {
