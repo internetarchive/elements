@@ -1,4 +1,4 @@
-<!-- Generated in the style guide repo by tools/make-decisions.mjs. Copied into elements, where it is edited by hand. -->
+<!-- Generated in the style guide repo by tools/make-decisions.mjs. Copied into elements as a closed record. -->
 
 # Decisions
 

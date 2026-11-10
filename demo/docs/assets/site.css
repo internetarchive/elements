@@ -321,32 +321,6 @@ code, .doc-mono {
   color: var(--ia-color-text-secondary);
 }
 
-/* ------------------------------------------------------------ decisions --- */
-
-.doc-decision {
-  border: var(--ia-size-border-width) solid var(--ia-color-border-subtle);
-  border-inline-start: 4px solid var(--ia-color-border-default);
-  border-radius: var(--ia-radius-default);
-  background-color: var(--ia-color-surface-raised);
-  padding: var(--ia-space-4);
-  margin-block-start: var(--ia-space-3);
-  scroll-margin-block-start: calc(var(--doc-header-h, 8rem) + var(--doc-toolbar-h, 0px) + var(--ia-space-4));
-}
-.doc-decision[data-status='accepted'] { border-inline-start-color: var(--ia-color-status-success); }
-.doc-decision[data-status='amended']  { border-inline-start-color: var(--ia-color-status-warning); }
-.doc-decision[data-status='rejected'] { border-inline-start-color: var(--ia-color-status-danger); }
-.doc-decision__head { display: flex; flex-wrap: wrap; gap: var(--ia-space-2); align-items: baseline; }
-.doc-decision__id { font-family: var(--ia-font-family-mono); font-weight: var(--ia-font-weight-bold); color: var(--ia-color-text-secondary); }
-.doc-decision__title { font-size: var(--ia-font-size-xl); font-weight: var(--ia-font-weight-bold); flex: 1; min-inline-size: 20rem; }
-.doc-decision dl { margin: var(--ia-space-3) 0 0; display: grid; gap: var(--ia-space-2); }
-.doc-decision dt {
-  font-size: var(--ia-font-size-sm); font-weight: var(--ia-font-weight-bold);
-  text-transform: uppercase; letter-spacing: 0.05em; color: var(--ia-color-text-secondary);
-}
-.doc-decision dd { margin: 0; max-inline-size: 90ch; }
-.doc-decision__controls { display: flex; flex-wrap: wrap; gap: var(--ia-space-2); align-items: center; margin-block-start: var(--ia-space-3); padding-block-start: var(--ia-space-3); border-block-start: var(--ia-size-border-width) solid var(--ia-color-border-subtle); }
-.doc-decision__notes { inline-size: 100%; }
-
 .doc-flag {
   display: inline-flex; align-items: center; gap: 0.4rem;
   padding: 0.2rem var(--ia-space-1);

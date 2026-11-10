@@ -6,8 +6,8 @@ What is missing is a rule for which name to reach for, and a handful of the valu
 contrast against the surfaces they are actually drawn on.
 
 This page keeps the live palette, gives every color a job, and changes the six values
-that fail contrast where they are drawn. Every change is flagged and
-carries a decision number.
+that fail contrast where they are drawn. Every change made in deriving it is flagged
+with its decision number.
 
 ## The rule
 
