@@ -29,7 +29,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Border radius',
     cssVariable: '--ia-donation-thermometer-border-radius',
-    defaultValue: '999rem',
+    defaultValue: '999px',
     inputType: 'text',
     presets: [{ label: 'Square', value: '0' }],
     presetsInline: true,

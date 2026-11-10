@@ -273,7 +273,7 @@ export class IADonationThermometer extends LitElement {
         :host {
           --donation-thermometer-height--: var(
             --ia-donation-thermometer-height,
-            2rem /* 20px at a 10px root */
+            calc(20 * var(--ia-unit, 1px))
           );
           --donation-thermometer-fill-color--: var(
             --ia-donation-thermometer-fill-color,
@@ -374,7 +374,7 @@ export class IADonationThermometer extends LitElement {
         }
 
         /*
-         * Both paddings total 1.5rem, so changing sides leaves the label the
+         * Both paddings total 15px, so changing sides leaves the label the
          * same width and cannot feed back into the side it is placed on.
          */
         .value-left .thermometer-value {
