@@ -8,7 +8,9 @@ import errorSource from './user-lists-error.ts?raw';
 import '@demo/service-template';
 import { UserListsService } from './user-lists-service';
 import type { UserList, UserListMember } from './models';
+import { FetchHandler } from '../fetch-handler/fetch-handler';
 import type { ApiFetchOptions } from '../fetch-handler/fetch-options';
+import { SearchService } from '../search-service/search-service';
 import type { SearchServiceInterface } from '../search-service/search-service-interface';
 import type { UserServiceInterface } from '../user-service/user-service';
 
@@ -247,8 +249,48 @@ const sampleUserService = {
   },
 } as unknown as UserServiceInterface;
 
+type Source = 'sample' | 'live';
+
+/**
+ * Real data comes through the `/__archive__` proxy in `vite.config.ts`, which
+ * only the dev server has. The GitHub Pages build is static, so it only offers
+ * the sample data.
+ */
+const LIVE_AVAILABLE = import.meta.env.DEV;
+
+/**
+ * The proxy sends no cookies, so the live source is signed out: it offers the
+ * reads that work on public lists, and nothing that needs `me` or writes.
+ */
+const LIVE_METHODS: readonly Method[] = [
+  'fetchListsForUser',
+  'fetchList',
+  'fetchListMembers',
+  'fetchListMemberSearchResults',
+];
+
+/** Notes the request the service makes, then sends it through the proxy. */
+class LiveFetchHandler {
+  last?: string;
+
+  private readonly fetchHandler = new FetchHandler();
+
+  async fetchApiResponse<T>(url: string, options?: ApiFetchOptions) {
+    this.last = `${options?.method ?? 'GET'} ${url}`;
+    return this.fetchHandler.fetchApiResponse<T>(url, options);
+  }
+}
+
+const signedOutUserService = {
+  async getLoggedInUser() {
+    return { error: new Error('Not signed in through the dev proxy') };
+  },
+} as unknown as UserServiceInterface;
+
 @customElement('user-lists-service-story')
 export class UserListsServiceStory extends LitElement {
+  @state() private source: Source = 'sample';
+
   @state() private method: Method = 'fetchListsForUser';
 
   @state() private values: Record<Exclude<Field, 'isPrivate'>, string> = {
@@ -275,8 +317,19 @@ export class UserListsServiceStory extends LitElement {
     userService: sampleUserService,
   });
 
+  private liveFetchHandler = new LiveFetchHandler();
+
+  private liveService = new UserListsService({
+    fetchHandler: this.liveFetchHandler,
+    searchService: SearchService.default,
+    userService: signedOutUserService,
+    baseUrl: `${window.location.origin}/__archive__`,
+  });
+
   render() {
     const fields: readonly Field[] = METHODS[this.method];
+    const methods =
+      this.source === 'live' ? LIVE_METHODS : Object.keys(METHODS);
     return html`
       <service-template
         serviceName="user-lists-service"
@@ -284,10 +337,23 @@ export class UserListsServiceStory extends LitElement {
         .apiSource=${API_SOURCE}
       >
         <form slot="console" @submit=${this.run}>
+          ${LIVE_AVAILABLE
+            ? html`<label>
+                Answer from
+                <select name="source" @change=${this.pickSource}>
+                  <option value="sample" ?selected=${this.source === 'sample'}>
+                    Sample data
+                  </option>
+                  <option value="live" ?selected=${this.source === 'live'}>
+                    archive.org via dev proxy (public, read only)
+                  </option>
+                </select>
+              </label>`
+            : nothing}
           <label>
             Method
-            <select @change=${this.pickMethod}>
-              ${Object.keys(METHODS).map(
+            <select name="method" @change=${this.pickMethod}>
+              ${methods.map(
                 (method) =>
                   html`<option
                     value=${method}
@@ -313,7 +379,11 @@ export class UserListsServiceStory extends LitElement {
               : this.textField(field),
           )}
           <button type="submit" ?disabled=${this.running}>Run</button>
-          <button type="button" @click=${this.reset}>Reset sample data</button>
+          ${this.source === 'sample'
+            ? html`<button type="button" @click=${this.reset}>
+                Reset sample data
+              </button>`
+            : nothing}
           <div class="result" aria-live="polite" ?hidden=${!this.result}>
             ${this.result
               ? html`<code class="call">${this.result.call}</code>
@@ -327,12 +397,17 @@ export class UserListsServiceStory extends LitElement {
         <div slot="usage-notes">
           <p>
             Reads and edits a user's lists through
-            <code>/services/users/…/lists</code>. This console answers from
-            sample data held in the page, signed in as
-            <code>${SIGNED_IN_USER}</code>, so changes show up in later reads
-            and nothing is sent anywhere. archive.org only accepts these
-            credentialed requests from archive.org itself, so a live call from
-            this page would fail anyway.
+            <code>/services/users/…/lists</code>. The sample data is held in the
+            page, signed in as <code>${SIGNED_IN_USER}</code>, so changes show
+            up in later reads and nothing is sent anywhere.
+          </p>
+          <p>
+            archive.org only answers these endpoints for pages on archive.org,
+            so the browser blocks a direct call from here (CORS). Run
+            <code>pnpm run dev</code> to get real data: the dev server fetches
+            <code>/__archive__/…</code> from archive.org on the page's behalf.
+            It sends no cookies, so it's signed out and offers only the reads of
+            public lists.
           </p>
         </div>
       </service-template>
@@ -357,6 +432,14 @@ export class UserListsServiceStory extends LitElement {
           })}
       />
     </label>`;
+  }
+
+  private pickSource(e: Event) {
+    this.source = (e.target as HTMLSelectElement).value as Source;
+    if (this.source === 'live' && !LIVE_METHODS.includes(this.method)) {
+      this.method = 'fetchListsForUser';
+    }
+    this.result = undefined;
   }
 
   private pickMethod(e: Event) {
@@ -393,7 +476,9 @@ export class UserListsServiceStory extends LitElement {
       .map((id) => id.trim())
       .filter(Boolean);
 
-    const s = this.service;
+    const live = this.source === 'live';
+    const s = live ? this.liveService : this.service;
+    const recorder = live ? this.liveFetchHandler : this.backend;
     const calls: Record<
       Method,
       [
@@ -437,7 +522,7 @@ export class UserListsServiceStory extends LitElement {
     const [args, invoke] = calls[this.method];
     const call = `${this.method}(${args.map((a) => JSON.stringify(a)).join(', ')})`;
 
-    this.backend.last = undefined;
+    recorder.last = undefined;
     this.running = true;
     let output: string;
     try {
@@ -450,7 +535,7 @@ export class UserListsServiceStory extends LitElement {
     } finally {
       this.running = false;
     }
-    this.result = { call, request: this.backend.last, output };
+    this.result = { call, request: recorder.last, output };
   }
 
   static get styles(): CSSResultGroup {
