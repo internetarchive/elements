@@ -13,7 +13,9 @@ async function run(
   fields: Record<string, string | boolean> = {},
 ) {
   const root = story.shadowRoot!;
-  const select = root.querySelector('select') as HTMLSelectElement;
+  const select = root.querySelector(
+    'select[name="method"]',
+  ) as HTMLSelectElement;
   if (select.value !== method) {
     select.value = method;
     select.dispatchEvent(new Event('change'));
@@ -49,6 +51,9 @@ async function run(
 describe('user-lists-service story', () => {
   let fetchSpy: ReturnType<typeof vi.spyOn>;
 
+  /** Set by the live tests, which answer fetch themselves. */
+  let usesNetwork = false;
+
   beforeEach(async () => {
     fetchSpy = vi.spyOn(window, 'fetch');
     story = await fixture<UserListsServiceStory>(
@@ -57,7 +62,8 @@ describe('user-lists-service story', () => {
   });
 
   afterEach(() => {
-    expect(fetchSpy).not.toHaveBeenCalled();
+    if (!usesNetwork) expect(fetchSpy).not.toHaveBeenCalled();
+    usesNetwork = false;
     vi.restoreAllMocks();
   });
 
@@ -79,9 +85,11 @@ describe('user-lists-service story', () => {
   });
 
   test('offers every method of the service', () => {
-    const options = [...story.shadowRoot!.querySelectorAll('option')].map(
-      (o) => o.value,
-    );
+    const options = [
+      ...story.shadowRoot!.querySelectorAll<HTMLOptionElement>(
+        'select[name="method"] option',
+      ),
+    ].map((o) => o.value);
 
     expect(options).to.deep.equal([
       'fetchListsForUser',
@@ -237,5 +245,66 @@ describe('user-lists-service story', () => {
     expect(story.shadowRoot!.querySelector('.output')).to.be.null;
     const lists = await run('fetchListsForUser');
     expect(lists.json()).to.have.length(2);
+  });
+
+  describe('real data through the dev proxy', () => {
+    async function useLive(answer: unknown) {
+      usesNetwork = true;
+      fetchSpy.mockImplementation(
+        async () =>
+          new Response(JSON.stringify(answer), {
+            headers: { 'Content-Type': 'application/json' },
+          }),
+      );
+      const source = story.shadowRoot!.querySelector(
+        'select[name="source"]',
+      ) as HTMLSelectElement;
+      source.value = 'live';
+      source.dispatchEvent(new Event('change'));
+      await story.updateComplete;
+    }
+
+    test('offers only the signed-out reads, and no reset', async () => {
+      await useLive({ success: true, value: [] });
+
+      const options = [
+        ...story.shadowRoot!.querySelectorAll('select[name="method"] option'),
+      ].map((o) => (o as HTMLOptionElement).value);
+      expect(options).to.deep.equal([
+        'fetchListsForUser',
+        'fetchList',
+        'fetchListMembers',
+        'fetchListMemberSearchResults',
+      ]);
+      expect(story.shadowRoot!.querySelector('button[type="button"]')).to.be
+        .null;
+    });
+
+    test('falls back to fetchListsForUser when the picked method is not offered', async () => {
+      await run('createList');
+      await useLive({ success: true, value: [] });
+
+      const method = story.shadowRoot!.querySelector(
+        'select[name="method"]',
+      ) as HTMLSelectElement;
+      expect(method.value).to.equal('fetchListsForUser');
+    });
+
+    test('sends the request through /__archive__ and shows the real answer', async () => {
+      await useLive({
+        success: true,
+        value: [{ id: 1, list_name: 'test list' }],
+      });
+
+      const shown = await run('fetchListsForUser');
+
+      expect(shown.request).to.equal(
+        `GET ${window.location.origin}/__archive__/services/users/@brewster/lists`,
+      );
+      expect(String(fetchSpy.mock.calls[0][0])).to.contain(
+        '/__archive__/services/users/@brewster/lists',
+      );
+      expect(shown.json()).to.deep.equal([{ id: 1, list_name: 'test list' }]);
+    });
   });
 });
