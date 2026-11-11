@@ -7,28 +7,53 @@ import errorSource from './user-lists-error.ts?raw';
 
 import '@demo/service-template';
 import { UserListsService } from './user-lists-service';
-import type { UserList } from './models';
-import { FetchHandler } from '../fetch-handler/fetch-handler';
+import type { UserList, UserListMember } from './models';
 import type { ApiFetchOptions } from '../fetch-handler/fetch-options';
-import { SearchService } from '../search-service/search-service';
-import { UserService } from '../user-service/user-service';
+import type { SearchServiceInterface } from '../search-service/search-service-interface';
+import type { UserServiceInterface } from '../user-service/user-service';
 
-type Call =
-  | 'fetchListsForUser'
-  | 'fetchList'
-  | 'fetchOwnListsContainingItem'
-  | 'fetchListMembers';
+type Field =
+  | 'userId'
+  | 'listId'
+  | 'itemId'
+  | 'memberId'
+  | 'memberIds'
+  | 'listName'
+  | 'description'
+  | 'isPrivate';
 
-const CALLS: Call[] = [
-  'fetchListsForUser',
-  'fetchList',
-  'fetchOwnListsContainingItem',
-  'fetchListMembers',
-];
+/** Each method the console can run, and the inputs it takes. */
+const METHODS = {
+  fetchListsForUser: ['userId'],
+  fetchList: ['userId', 'listId'],
+  fetchOwnListsContainingItem: ['itemId'],
+  fetchListMembers: ['userId', 'listId'],
+  fetchListMemberSearchResults: ['userId', 'listId'],
+  createList: ['listName', 'description', 'isPrivate'],
+  updateList: ['listId', 'listName', 'description', 'isPrivate'],
+  deleteList: ['listId'],
+  addMemberToList: ['listId', 'itemId'],
+  removeMemberFromList: ['listId', 'memberId'],
+  removeBulkMembersFromList: ['listId', 'memberIds'],
+} as const satisfies Record<string, readonly Field[]>;
 
-const DEFAULT_USER_ID = '@brewster';
-const DEFAULT_LIST_ID = '1';
-const DEFAULT_ITEM_ID = 'goody';
+type Method = keyof typeof METHODS;
+
+const TEXT_FIELDS: Record<
+  Exclude<Field, 'isPrivate'>,
+  { label: string; placeholder: string }
+> = {
+  userId: { label: 'User id', placeholder: '@brewster' },
+  listId: { label: 'List id', placeholder: '1' },
+  itemId: { label: 'Item identifier', placeholder: 'goody' },
+  memberId: { label: 'Member id', placeholder: '1' },
+  memberIds: { label: 'Member ids (comma separated)', placeholder: '1, 2' },
+  listName: { label: 'List name', placeholder: 'My new list' },
+  description: { label: 'Description', placeholder: 'Things I like' },
+};
+
+/** The user the sample data treats as signed in. */
+const SIGNED_IN_USER = '@brewster';
 
 const USAGE = `import { UserListsService } from '@internetarchive/elements/services/user-lists-service/user-lists-service';
 import { FetchHandler } from '@internetarchive/elements/services/fetch-handler/fetch-handler';
@@ -41,9 +66,13 @@ const service = new UserListsService({
   userService: new UserService(),
 });
 
-const { success: lists, error } = await service.fetchListsForUser('@brewster');
+const { success: list, error } = await service.createList({
+  list_name: 'My list',
+  description: 'Things I like',
+  is_private: false,
+});
 if (error) console.log(error.reason); // e.g. UserListsErrorReason.NETWORK
-else console.log(lists.map(list => list.list_name));`;
+else console.log(list.id);`;
 
 /** Strips the import statements, which are noise in the API listing. */
 const withoutImports = (source: string) =>
@@ -63,84 +92,191 @@ const API_SOURCE = [interfaceSource, SERVICE_CLASS, modelsSource, errorSource]
   .map(withoutImports)
   .join('\n\n');
 
-const sampleList = (id: string): UserList => ({
-  id,
-  list_name: 'Sample list',
-  description: 'A list answered from sample data',
-  is_private: false,
-  date_created: new Date('2025-01-01T00:00:00Z'),
-  date_updated: new Date('2025-01-02T00:00:00Z'),
-  count: 1,
-  members: [
-    {
-      member_id: '1',
-      identifier: DEFAULT_ITEM_ID,
-      date_added: new Date('2025-01-02T00:00:00Z'),
-    },
-  ],
-});
+const NOW = '2025-01-02T00:00:00.000Z';
+
+/** A member as the backend sends it, dates as strings. */
+const sampleMember = (member_id: string, identifier: string) =>
+  ({ member_id, identifier, date_added: NOW }) as unknown as UserListMember;
 
 /**
- * Notes the request the service makes. With `sample` set it answers from
- * canned lists and never touches the network.
+ * Stands in for the archive.org lists endpoints, holding the signed-in user's
+ * lists in memory so writes show up in later reads. Notes each request it
+ * gets. It never touches the network.
  */
-class RecordingFetchHandler {
+class SampleListsBackend {
   last?: string;
 
-  private readonly sample: boolean;
+  private nextListId = 3;
 
-  private readonly live = new FetchHandler();
+  private nextMemberId = 3;
 
-  constructor(sample: boolean) {
-    this.sample = sample;
-  }
+  private lists: UserList[] = [
+    {
+      id: '1',
+      list_name: 'Favorite books',
+      description: 'Books worth reading twice',
+      is_private: false,
+      date_created: NOW,
+      date_updated: NOW,
+      count: 2,
+      members: [sampleMember('1', 'goody'), sampleMember('2', 'alice')],
+    },
+    {
+      id: '2',
+      list_name: 'To watch',
+      description: '',
+      is_private: true,
+      date_created: NOW,
+      date_updated: NOW,
+      count: 0,
+      members: [],
+    },
+  ] as unknown as UserList[];
 
   async fetchApiResponse<T>(url: string, options?: ApiFetchOptions) {
-    this.last = `${options?.method ?? 'GET'} ${url}`;
-    if (!this.sample) return this.live.fetchApiResponse<T>(url, options);
+    const method = options?.method ?? 'GET';
+    const body =
+      typeof options?.body === 'string' ? JSON.parse(options.body) : undefined;
+    this.last = `${method} ${url}${body ? `\n${JSON.stringify(body)}` : ''}`;
+    return this.answer(method, new URL(url), body) as T;
+  }
 
-    const { pathname, searchParams } = new URL(url);
-    const listId = pathname.match(/\/lists\/([^/]+)$/)?.[1];
-    if (listId) return { success: true, value: sampleList(listId) } as T;
-    const lists = [{ ...sampleList(DEFAULT_LIST_ID), members: undefined }];
-    return {
-      success: true,
-      value: searchParams.has('item')
-        ? lists.map((list) => ({ ...list, item_is_member: true }))
-        : lists,
-    } as T;
+  private answer(method: string, url: URL, body: Record<string, unknown>) {
+    const [, user, listId, onMembers, memberId] =
+      url.pathname.match(
+        /^\/services\/users\/([^/]+)\/lists(?:\/([^/]+))?(\/members)?(?:\/([^/]+))?$/,
+      ) ?? [];
+    if (user !== 'me' && user !== SIGNED_IN_USER) {
+      return { success: false, error: `User ${user} not found` };
+    }
+
+    if (!listId) {
+      if (method === 'POST') return this.ok(this.create(body));
+      const item = url.searchParams.get('item');
+      return this.ok(
+        this.lists.map(({ members, ...list }) =>
+          item
+            ? {
+                ...list,
+                item_is_member: !!members?.some((m) => m.identifier === item),
+              }
+            : list,
+        ),
+      );
+    }
+
+    const list = this.lists.find((l) => l.id === listId);
+    if (!list) return { success: false, error: `List ${listId} not found` };
+
+    if (onMembers) {
+      if (method === 'POST') {
+        return this.ok(this.addMember(list, body as { identifier: string }));
+      }
+      const remove =
+        method === 'DELETE' ? [memberId] : (body.remove as string[]);
+      list.members = list.members?.filter((m) => !remove.includes(m.member_id));
+      return this.ok(this.touch(list));
+    }
+    if (method === 'PATCH')
+      return this.ok(this.touch(Object.assign(list, body)));
+    if (method === 'DELETE') {
+      this.lists = this.lists.filter((l) => l !== list);
+      return this.ok(true);
+    }
+    return this.ok(list);
+  }
+
+  private create(options: Partial<UserList>) {
+    const list = {
+      id: String(this.nextListId++),
+      list_name: '',
+      description: '',
+      is_private: false,
+      ...options,
+      date_created: NOW,
+      date_updated: NOW,
+      count: 0,
+      members: [],
+    } as unknown as UserList;
+    this.lists.push(list);
+    return list;
+  }
+
+  private addMember(list: UserList, options: { identifier: string }) {
+    const member = sampleMember(
+      String(this.nextMemberId++),
+      options.identifier,
+    );
+    list.members = [...(list.members ?? []), member];
+    this.touch(list);
+    return member;
+  }
+
+  private touch(list: UserList) {
+    list.count = list.members?.length ?? 0;
+    return list;
+  }
+
+  private ok(value: unknown) {
+    return { success: true, value };
   }
 }
 
+/** Answers the member search with a title per identifier. */
+const sampleSearchService = {
+  async search(params: { query: string }) {
+    const identifiers = params.query
+      .replace(/^identifier:\(|\)$/g, '')
+      .split(' OR ');
+    return {
+      success: {
+        response: {
+          results: identifiers.map((identifier) => ({
+            identifier,
+            title: `Sample title for ${identifier}`,
+          })),
+        },
+      },
+    };
+  },
+} as unknown as SearchServiceInterface;
+
+const sampleUserService = {
+  async getLoggedInUser() {
+    return { success: { itemname: SIGNED_IN_USER } };
+  },
+} as unknown as UserServiceInterface;
+
 @customElement('user-lists-service-story')
 export class UserListsServiceStory extends LitElement {
-  @state() private call: Call = 'fetchListsForUser';
+  @state() private method: Method = 'fetchListsForUser';
 
-  @state() private userId = '';
+  @state() private values: Record<Exclude<Field, 'isPrivate'>, string> = {
+    userId: '',
+    listId: '',
+    itemId: '',
+    memberId: '',
+    memberIds: '',
+    listName: '',
+    description: '',
+  };
 
-  @state() private listId = '';
-
-  @state() private itemId = '';
-
-  @state() private sample = true;
+  @state() private isPrivate = false;
 
   @state() private running = false;
 
-  @state() private result?: {
-    call: string;
-    request?: string;
-    output: string;
-  };
+  @state() private result?: { call: string; request?: string; output: string };
+
+  private backend = new SampleListsBackend();
+
+  private service = new UserListsService({
+    fetchHandler: this.backend,
+    searchService: sampleSearchService,
+    userService: sampleUserService,
+  });
 
   render() {
-    const needsUser =
-      this.call === 'fetchListsForUser' ||
-      this.call === 'fetchList' ||
-      this.call === 'fetchListMembers';
-    const needsList =
-      this.call === 'fetchList' || this.call === 'fetchListMembers';
-    const needsItem = this.call === 'fetchOwnListsContainingItem';
-
+    const fields: readonly Field[] = METHODS[this.method];
     return html`
       <service-template
         serviceName="user-lists-service"
@@ -150,39 +286,39 @@ export class UserListsServiceStory extends LitElement {
         <form slot="console" @submit=${this.run}>
           <label>
             Method
-            <select @change=${this.pickCall}>
-              ${CALLS.map(
-                (call) =>
-                  html`<option value=${call} ?selected=${this.call === call}>
-                    ${call}
+            <select @change=${this.pickMethod}>
+              ${Object.keys(METHODS).map(
+                (method) =>
+                  html`<option
+                    value=${method}
+                    ?selected=${this.method === method}
+                  >
+                    ${method}
                   </option>`,
               )}
             </select>
           </label>
-          ${needsUser
-            ? this.textField('User id', 'userId', DEFAULT_USER_ID)
-            : nothing}
-          ${needsList
-            ? this.textField('List id', 'listId', DEFAULT_LIST_ID)
-            : nothing}
-          ${needsItem
-            ? this.textField('Item identifier', 'itemId', DEFAULT_ITEM_ID)
-            : nothing}
-          <label class="check">
-            <input
-              type="checkbox"
-              .checked=${this.sample}
-              @change=${(e: Event) =>
-                (this.sample = (e.target as HTMLInputElement).checked)}
-            />
-            Sample data (works offline)
-          </label>
+          ${fields.map((field) =>
+            field === 'isPrivate'
+              ? html`<label class="check">
+                  <input
+                    type="checkbox"
+                    name="isPrivate"
+                    .checked=${this.isPrivate}
+                    @change=${(e: Event) =>
+                      (this.isPrivate = (e.target as HTMLInputElement).checked)}
+                  />
+                  Private
+                </label>`
+              : this.textField(field),
+          )}
           <button type="submit" ?disabled=${this.running}>Run</button>
+          <button type="button" @click=${this.reset}>Reset sample data</button>
           <div class="result" aria-live="polite" ?hidden=${!this.result}>
             ${this.result
               ? html`<code class="call">${this.result.call}</code>
                   ${this.result.request
-                    ? html`<code class="request">${this.result.request}</code>`
+                    ? html`<pre class="request">${this.result.request}</pre>`
                     : nothing}
                   <pre class="output">${this.result.output}</pre>`
               : nothing}
@@ -191,22 +327,20 @@ export class UserListsServiceStory extends LitElement {
         <div slot="usage-notes">
           <p>
             Reads and edits a user's lists through
-            <code>/services/users/…/lists</code>. Only the reads run here, so a
-            live call can't change anyone's lists. The sample data answers from
-            canned lists and sends nothing. A live call goes to archive.org with
-            your credentials, which the browser only allows from archive.org
-            itself, so from here it fails with a network error.
+            <code>/services/users/…/lists</code>. This console answers from
+            sample data held in the page, signed in as
+            <code>${SIGNED_IN_USER}</code>, so changes show up in later reads
+            and nothing is sent anywhere. archive.org only accepts these
+            credentialed requests from archive.org itself, so a live call from
+            this page would fail anyway.
           </p>
         </div>
       </service-template>
     `;
   }
 
-  private textField(
-    label: string,
-    field: 'userId' | 'listId' | 'itemId',
-    placeholder: string,
-  ) {
+  private textField(field: Exclude<Field, 'isPrivate'>) {
+    const { label, placeholder } = TEXT_FIELDS[field];
     return html`<label>
       ${label}
       <input
@@ -215,56 +349,108 @@ export class UserListsServiceStory extends LitElement {
         placeholder=${placeholder}
         autocomplete="off"
         spellcheck="false"
-        .value=${this[field]}
+        .value=${this.values[field]}
         @input=${(e: Event) =>
-          (this[field] = (e.target as HTMLInputElement).value)}
+          (this.values = {
+            ...this.values,
+            [field]: (e.target as HTMLInputElement).value,
+          })}
       />
     </label>`;
   }
 
-  private pickCall(e: Event) {
-    this.call = (e.target as HTMLSelectElement).value as Call;
+  private pickMethod(e: Event) {
+    this.method = (e.target as HTMLSelectElement).value as Method;
     this.result = undefined;
+  }
+
+  private reset() {
+    this.backend = new SampleListsBackend();
+    this.service = new UserListsService({
+      fetchHandler: this.backend,
+      searchService: sampleSearchService,
+      userService: sampleUserService,
+    });
+    this.result = undefined;
+  }
+
+  /** The typed value of a field, or its placeholder when left empty. */
+  private value(field: Exclude<Field, 'isPrivate'>) {
+    return this.values[field].trim() || TEXT_FIELDS[field].placeholder;
   }
 
   private async run(e: Event) {
     e.preventDefault();
-    const userId = this.userId.trim() || DEFAULT_USER_ID;
-    const listId = this.listId.trim() || DEFAULT_LIST_ID;
-    const itemId = this.itemId.trim() || DEFAULT_ITEM_ID;
-    const fetchHandler = new RecordingFetchHandler(this.sample);
-    const service = new UserListsService({
-      fetchHandler,
-      searchService: SearchService.default,
-      userService: new UserService(),
-    });
+    const userId = this.value('userId');
+    const listId = this.value('listId');
+    const options = {
+      list_name: this.value('listName'),
+      description: this.values.description.trim(),
+      is_private: this.isPrivate,
+    };
+    const memberIds = this.value('memberIds')
+      .split(',')
+      .map((id) => id.trim())
+      .filter(Boolean);
 
-    const args = {
-      fetchListsForUser: [userId],
-      fetchList: [userId, listId],
-      fetchOwnListsContainingItem: [itemId],
-      fetchListMembers: [userId, listId],
-    }[this.call];
-    const call = `${this.call}(${args.map((a) => JSON.stringify(a)).join(', ')})`;
+    const s = this.service;
+    const calls: Record<
+      Method,
+      [
+        unknown[],
+        () => Promise<{
+          success?: unknown;
+          error?: Error & { reason?: string };
+        }>,
+      ]
+    > = {
+      fetchListsForUser: [[userId], () => s.fetchListsForUser(userId)],
+      fetchList: [[userId, listId], () => s.fetchList(userId, listId)],
+      fetchOwnListsContainingItem: [
+        [this.value('itemId')],
+        () => s.fetchOwnListsContainingItem(this.value('itemId')),
+      ],
+      fetchListMembers: [
+        [userId, listId],
+        () => s.fetchListMembers(userId, listId),
+      ],
+      fetchListMemberSearchResults: [
+        [userId, listId],
+        () => s.fetchListMemberSearchResults(userId, listId),
+      ],
+      createList: [[options], () => s.createList(options)],
+      updateList: [[listId, options], () => s.updateList(listId, options)],
+      deleteList: [[listId], () => s.deleteList(listId)],
+      addMemberToList: [
+        [listId, { identifier: this.value('itemId') }],
+        () => s.addMemberToList(listId, { identifier: this.value('itemId') }),
+      ],
+      removeMemberFromList: [
+        [listId, this.value('memberId')],
+        () => s.removeMemberFromList(listId, this.value('memberId')),
+      ],
+      removeBulkMembersFromList: [
+        [listId, memberIds],
+        () => s.removeBulkMembersFromList(listId, memberIds),
+      ],
+    };
+    const [args, invoke] = calls[this.method];
+    const call = `${this.method}(${args.map((a) => JSON.stringify(a)).join(', ')})`;
 
+    this.backend.last = undefined;
     this.running = true;
     let output: string;
     try {
-      const { success, error } =
-        this.call === 'fetchListsForUser'
-          ? await service.fetchListsForUser(userId)
-          : this.call === 'fetchList'
-            ? await service.fetchList(userId, listId)
-            : this.call === 'fetchOwnListsContainingItem'
-              ? await service.fetchOwnListsContainingItem(itemId)
-              : await service.fetchListMembers(userId, listId);
+      const { success, error } = await invoke();
       output = error
-        ? `error: ${error.reason}${error.message ? ` (${error.message})` : ''}`
+        ? `error: ${error.reason ?? error.name}${error.message ? ` (${error.message})` : ''}`
         : JSON.stringify(success, null, 2);
+    } catch (err) {
+      output = `threw: ${(err as Error).message || (err as Error).name}`;
     } finally {
       this.running = false;
     }
-    this.result = { call, request: fetchHandler.last, output };
+    this.result = { call, request: this.backend.last, output };
   }
 
   static get styles(): CSSResultGroup {
@@ -311,6 +497,12 @@ export class UserListsServiceStory extends LitElement {
         background: #fff;
         border: 1px solid #ccc;
         font-size: 0.85rem;
+      }
+
+      .request {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-all;
       }
 
       .output {
