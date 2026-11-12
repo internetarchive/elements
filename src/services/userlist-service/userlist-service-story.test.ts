@@ -2,8 +2,8 @@ import { fixture } from '@open-wc/testing-helpers';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { html } from 'lit';
 
-import type { UserListsServiceStory } from './user-lists-service-story';
-import './user-lists-service-story';
+import type { UserListsServiceStory } from './userlist-service-story';
+import './userlist-service-story';
 
 let story: UserListsServiceStory;
 
@@ -48,7 +48,7 @@ async function run(
   };
 }
 
-describe('user-lists-service story', () => {
+describe('userlist-service story', () => {
   let fetchSpy: ReturnType<typeof vi.spyOn>;
 
   /** Set by the live tests, which answer fetch themselves. */
@@ -57,7 +57,7 @@ describe('user-lists-service story', () => {
   beforeEach(async () => {
     fetchSpy = vi.spyOn(window, 'fetch');
     story = await fixture<UserListsServiceStory>(
-      html`<user-lists-service-story></user-lists-service-story>`,
+      html`<userlist-service-story></userlist-service-story>`,
     );
   });
 

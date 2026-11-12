@@ -3,14 +3,14 @@ import { SearchType } from '../search-service/search-type';
 import type { SearchResult } from '../search-service/models/hit-types/hit';
 import type { SearchServiceInterface } from '../search-service/search-service-interface';
 import type { UserServiceInterface } from '../user-service/user-service';
-import type { UserListsServiceInterface } from './user-lists-service-interface';
+import type { UserListsServiceInterface } from './userlist-service-interface';
 import type {
   UserList,
   UserListMember,
   UserListMemberOptions,
   UserListOptions,
 } from './models';
-import { UserListsErrorReason, UserListsError } from './user-lists-error';
+import { UserListsErrorReason, UserListsError } from './userlist-error';
 
 /** Required shape of the fetch handler provided to the service */
 interface FetchHandlerInterface {
