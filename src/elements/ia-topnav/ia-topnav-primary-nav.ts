@@ -329,7 +329,10 @@ export class PrimaryNav extends TrackedElement {
 
   get uploadButtonTemplate() {
     return html` <a
-      .href="${formatUrl(this.uploadUrl as string & Location, this.baseHost)}"
+      .href="${formatUrl(
+        (this.uploadUrl || '/upload') as string & Location,
+        this.baseHost,
+      )}"
       class="upload"
       aria-label=${msg('Upload')}
       @focus=${this.toggleMediaMenu}

@@ -592,7 +592,7 @@ export function buildTopNavMenus(
     },
     user: [
       {
-        url: formatUrl(uploadUrl, baseHost),
+        url: formatUrl(uploadUrl || '/upload', baseHost),
         title: msg('Upload files'),
         key: 'Upload files',
         analyticsEvent: 'UserUpload',

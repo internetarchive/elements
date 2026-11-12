@@ -377,6 +377,24 @@ describe('<ia-topnav>', () => {
       });
     });
 
+    test('falls back to /upload when the attribute is removed', async () => {
+      const el = await fixture<IATopNav>(
+        html`<ia-topnav
+          username="foopey"
+          uploadurl="/upload?collection=foo"
+        ></ia-topnav>`,
+      );
+      el.removeAttribute('uploadurl');
+      await elementUpdated(el);
+      await elementUpdated(
+        el.shadowRoot!.querySelector('ia-topnav-user-menu')!,
+      );
+      expect(uploadLinks(el)).to.deep.equal({
+        desktop: 'https://archive.org/upload',
+        mobile: 'https://archive.org/upload',
+      });
+    });
+
     test('updates both links when uploadUrl changes', async () => {
       const el = await fixture<IATopNav>(
         html`<ia-topnav username="foopey"></ia-topnav>`,
