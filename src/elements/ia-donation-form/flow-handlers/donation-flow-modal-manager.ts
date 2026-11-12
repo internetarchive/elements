@@ -19,10 +19,15 @@ import '../modals/ia-donation-confirm-modal';
 import '../modals/ia-donation-error-modal-content';
 import '../modals/ia-donation-upsell-modal-content';
 
+/*
+ * The status tokens, by their public names with each token's value as the
+ * fallback: the header renders in whatever modal manager the page supplies,
+ * which may not carry the tokens.
+ */
 const ModalHeaderColor = {
-  Blue: '#497fbf',
-  Green: '#55A183',
-  Red: '#691916',
+  Blue: 'var(--ia-color-status-info, #194880)',
+  Green: 'var(--ia-color-status-success, #20705a)',
+  Red: 'var(--ia-color-status-danger, #b8161c)',
 } as const;
 
 /**
