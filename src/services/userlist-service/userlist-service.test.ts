@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { UserListsService } from './user-lists-service';
-import { UserListsError, UserListsErrorReason } from './user-lists-error';
+import { UserListsService } from './userlist-service';
+import { UserListsError, UserListsErrorReason } from './userlist-error';
 import type { UserList, UserListMember } from './models';
 import { SearchType } from '../search-service/search-type';
 import type { SearchServiceInterface } from '../search-service/search-service-interface';
