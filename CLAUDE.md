@@ -25,6 +25,12 @@ spacing and the rest. `src/themes/tokens.ts` is generated from it and gitignored
 components read tokens as private aliases (`var(--ia-color-text-primary--)`) via
 `themeStyles`. See README "Design tokens".
 
+Every component, new or ported, takes its colors and sizes from the tokens: snap
+a value to the nearest token in the role that fits, and keep the component's own
+custom properties as hooks in front of the token. A literal that stays needs a
+comment saying why (SVG artwork, a third-party iframe, a layout width no scale
+covers).
+
 The design system's docs are in `docs/`, and the demo's pages for them (every
 `*.html` at the root besides `index.html`, plus `demo/docs/`) are demo-only. See
 [docs/README.md](docs/README.md).
@@ -180,7 +186,7 @@ which needs no clone at all.
 Re-derive the element from the upstream source and re-apply the elements-specific
 changes on top (tag and class rename, `customElement` from `@src/utils/custom-element`,
 shared types into `models.ts`, elements' own `ia-status-indicator` in place of a
-standalone one). Hand-patching an older copy forward loses things quietly. Where
+standalone one, and its styles on the design tokens). Hand-patching an older copy forward loses things quietly. Where
 upstream has already fixed a bug you also hit, take upstream's fix: that's what the
 consumers are tested against.
 
