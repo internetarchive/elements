@@ -132,11 +132,42 @@ describe('user-lists-service story', () => {
     ).to.deep.equal(['Favorite books', 'To watch']);
   });
 
-  test('reports an error for a user with no sample lists', async () => {
+  test('answers in the shape archive.org sends', async () => {
+    const shown = await run('fetchList');
+
+    const list = shown.json();
+    expect(Object.keys(list)).to.deep.equal([
+      'list_name',
+      'description',
+      'is_private',
+      'id',
+      'date_created',
+      'date_updated',
+      'members',
+    ]);
+    expect(list.id).to.equal(1);
+    expect(list.date_created).to.match(/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$/);
+    expect(Object.keys(list.members[0])).to.deep.equal([
+      'identifier',
+      'member_id',
+      'date_added',
+    ]);
+    expect(list.members[0].member_id).to.equal(1);
+  });
+
+  test("includes each list's members in the lists, as the backend does", async () => {
+    const shown = await run('fetchListsForUser');
+
+    expect(shown.json()[0].members).to.have.length(2);
+  });
+
+  test("reports the backend's error for a user it doesn't know", async () => {
     const shown = await run('fetchListsForUser', { userId: '@someone' });
 
+    // The service passes on the response's `error`, the HTTP status text. The
+    // backend's own message, in `value`, isn't part of the result.
     expect(shown.output).to.equal(
-      'error: user list with the given id was not found (User @someone not found)',
+      'error: user list with the given id was not found (Not Found)',
     );
   });
 
@@ -149,24 +180,29 @@ describe('user-lists-service story', () => {
     expect(shown.json().members).to.have.length(2);
   });
 
-  test('flags the lists containing an item', async () => {
-    const shown = await run('fetchOwnListsContainingItem', { itemId: 'goody' });
+  test('flags the lists containing an item, with its member id', async () => {
+    const shown = await run('fetchOwnListsContainingItem', { itemId: 'alice' });
 
     expect(shown.request).to.equal(
-      'GET https://archive.org/services/users/me/lists?item=goody',
+      'GET https://archive.org/services/users/me/lists?item=alice',
     );
-    expect(
-      shown.json().map((l: { item_is_member: boolean }) => l.item_is_member),
-    ).to.deep.equal([true, false]);
+    const [inList, notInList] = shown.json();
+    expect(inList).to.include({ item_is_member: true, member_id: 2 });
+    expect(notInList.item_is_member).to.equal(false);
+    expect(notInList).not.to.have.property('member_id');
   });
 
-  test("searches the list's members for their titles", async () => {
+  test("searches the list's members, answering with item hits", async () => {
     const shown = await run('fetchListMemberSearchResults');
 
-    expect(shown.json()).to.deep.equal([
-      { identifier: 'goody', title: 'Sample title for goody' },
-      { identifier: 'alice', title: 'Sample title for alice' },
-    ]);
+    expect(
+      shown
+        .json()
+        .map(
+          (hit: { rawMetadata: { fields: { title: string } } }) =>
+            hit.rawMetadata.fields.title,
+        ),
+    ).to.deep.equal(['Sample title for goody', 'Sample title for alice']);
   });
 
   test('creates a list that later reads include', async () => {
@@ -180,13 +216,19 @@ describe('user-lists-service story', () => {
       'POST https://archive.org/services/users/me/lists\n' +
         '{"list_name":"Road trip","description":"Audiobooks","is_private":true}',
     );
-    expect(created.json().id).to.equal('3');
+    expect(created.json()).to.include({
+      list_name: 'Road trip',
+      description: 'Audiobooks',
+      is_private: true,
+      id: 3,
+    });
+    expect(created.json().members).to.deep.equal([]);
 
     const lists = await run('fetchListsForUser');
     expect(lists.json()).to.have.length(3);
   });
 
-  test('updates a list', async () => {
+  test('updates a list, answering with the old date_updated as the backend does', async () => {
     const shown = await run('updateList', {
       listId: '2',
       listName: 'Watched',
@@ -196,22 +238,34 @@ describe('user-lists-service story', () => {
       /^PATCH https:\/\/archive.org\/services\/users\/me\/lists\/2\n/,
     );
     expect(shown.json().list_name).to.equal('Watched');
+    expect(shown.json().date_updated).to.equal('2025-01-02T00:00:00Z');
+
+    const fetched = await run('fetchList', { listId: '2' });
+    expect(fetched.json().list_name).to.equal('Watched');
+    expect(fetched.json().date_updated).not.to.equal('2025-01-02T00:00:00Z');
   });
 
-  test('deletes a list, after which it is not found', async () => {
+  test('deletes a list, answering with the lists that are left', async () => {
     const deleted = await run('deleteList', { listId: '2' });
     expect(deleted.request).to.equal(
       'DELETE https://archive.org/services/users/me/lists/2',
     );
-    expect(deleted.output).to.equal('true');
+    expect(deleted.json().map((l: { id: number }) => l.id)).to.deep.equal([1]);
 
     const fetched = await run('fetchList', { listId: '2' });
-    expect(fetched.output).to.match(/^error: .*\(List 2 not found\)$/);
+    expect(fetched.output).to.equal(
+      'error: user list with the given id was not found (Not Found)',
+    );
   });
 
   test('adds and removes members', async () => {
     const added = await run('addMemberToList', { listId: '2', itemId: 'nasa' });
-    expect(added.json()).to.include({ member_id: '3', identifier: 'nasa' });
+    expect(Object.keys(added.json())).to.deep.equal([
+      'identifier',
+      'member_id',
+      'date_added',
+    ]);
+    expect(added.json()).to.include({ member_id: 1, identifier: 'nasa' });
 
     const removed = await run('removeMemberFromList', {
       listId: '1',
@@ -220,7 +274,7 @@ describe('user-lists-service story', () => {
     expect(removed.request).to.equal(
       'DELETE https://archive.org/services/users/me/lists/1/members/1',
     );
-    expect(removed.json().count).to.equal(1);
+    expect(removed.json().members).to.have.length(1);
 
     const bulk = await run('removeBulkMembersFromList', {
       listId: '1',
@@ -231,6 +285,19 @@ describe('user-lists-service story', () => {
         '{"remove":["2"]}',
     );
     expect(bulk.json().members).to.deep.equal([]);
+  });
+
+  test('removes no members when any of them is missing', async () => {
+    const shown = await run('removeBulkMembersFromList', {
+      listId: '1',
+      memberIds: '1, 99',
+    });
+    expect(shown.output).to.equal(
+      'error: user list with the given id was not found (Not Found)',
+    );
+
+    const fetched = await run('fetchList');
+    expect(fetched.json().members).to.have.length(2);
   });
 
   test('puts the sample data back on reset', async () => {
