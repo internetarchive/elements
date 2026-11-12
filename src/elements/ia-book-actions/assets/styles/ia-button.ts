@@ -17,8 +17,9 @@ const darkButtonFillColor = css`var(--secondaryCTAFill, var(--ia-color-surface-c
 const darkButtonFillColorRGB = css`var(--secondaryCTAFillRGB, 51, 51, 51)`; // RBG format of --secondaryCTAFill
 const darkButtonBorderColor = css`var(--primaryCTABorder, var(--ia-color-border-strong--))`;
 
-const warningButtonBGColor = css`#ee8950`;
-const warningButtonBorderColor = css`#ec7939`;
+const warningButtonBGColor = css`var(--ia-color-action-warning-fill--)`;
+const warningButtonBorderColor = css`var(--ia-color-action-warning-border--)`;
+const warningButtonTextColor = css`var(--ia-color-action-warning-text--)`;
 
 export default css`
   .ia-button {
@@ -59,9 +60,13 @@ export default css`
   .ia-button.transparent {
     background-color: transparent;
   }
+  /* Dark text: white on the amber fill is about 1.9:1. The white focus ring
+     would vanish against it too, so it takes the light-surface ring. */
   .ia-button.warning {
-    background-color: ${warningButtonBGColor}
+    background-color: ${warningButtonBGColor};
     border-color: ${warningButtonBorderColor};
+    color: ${warningButtonTextColor};
+    outline-color: var(--ia-color-border-focus--);
   }
 
   .ia-button.primary {
