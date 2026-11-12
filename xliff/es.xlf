@@ -1319,6 +1319,18 @@
   <source>Toggle <x id="0" equiv-text="${this.optionGroup}"/></source>
 <target>Mostrar u ocultar <x id="0" equiv-text="${this.optionGroup}"/></target>
 </trans-unit>
+<trans-unit id="sd8729bf51bf12596">
+  <source>List name*</source>
+</trans-unit>
+<trans-unit id="s63d894b1ddb06289">
+  <source>Description</source>
+</trans-unit>
+<trans-unit id="sfc87d0924756aacc">
+  <source>Private list</source>
+</trans-unit>
+<trans-unit id="sbe10d8b092b75273">
+  <source>The list could not be saved. Please try again.</source>
+</trans-unit>
 </body>
 </file>
 </xliff>

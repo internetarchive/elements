@@ -176,6 +176,9 @@ export class IAModalManagerTemplate extends LitElement {
     const headlineLineHeight = css`var(--modalHeadlineLineHeight, normal)`;
     const messageLineHeight = css`var(--modalMessageLineHeight, normal)`;
 
+    const closeButtonSize = css`var(--modalCloseButtonSize, 2rem)`;
+    const closeButtonOffset = css`var(--modalCloseButtonOffset, 1.2rem)`;
+
     return css`
       .processing-logo {
         margin: auto;
@@ -300,10 +303,10 @@ export class IAModalManagerTemplate extends LitElement {
 
       .close-button {
         position: absolute;
-        right: 1.2rem;
-        top: 1.2rem;
-        width: 2rem;
-        height: 2rem;
+        right: ${closeButtonOffset};
+        top: ${closeButtonOffset};
+        width: ${closeButtonSize};
+        height: ${closeButtonSize};
         border-radius: 100%;
         border: 0;
         padding: 0;
