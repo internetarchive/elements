@@ -10,7 +10,7 @@ screens, icons and stress tests. The docs behind it are in [docs/](docs/README.m
 
 ## Design system
 
-elements implements archive.org's design system: the tokens (colors, type, spacing, sizes, motion), the foundations they come from, a spec for each component, and page-level patterns.
+elements implements archive.org's design system: the tokens (colors, type, spacing, sizes, motion), the foundations they come from, a spec for each component, and page-level patterns. Components target **WCAG 2.2 level AA**; [accessibility.md](docs/foundations/accessibility.md) has the rules.
 
 | Part | Where |
 | --- | --- |
