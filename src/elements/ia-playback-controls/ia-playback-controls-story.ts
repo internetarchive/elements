@@ -31,7 +31,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Play button size',
     cssVariable: '--ia-theme-playback-controls-play-button-diameter',
-    defaultValue: 36,
+    defaultValue: 44,
     inputType: 'range',
     min: 20,
     max: 80,

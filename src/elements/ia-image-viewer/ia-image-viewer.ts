@@ -466,7 +466,7 @@ export class IAImageViewer extends LitElement {
           );
           --image-viewer-glow-color--: var(
             --image-viewer-glow-color,
-            rgba(255, 255, 255, 0.25)
+            var(--ia-color-hover-overlay-inverse--)
           );
           /*
            * Size and placement are the host's business, set with ordinary CSS
