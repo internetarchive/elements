@@ -60,7 +60,7 @@ failure doesn't hide the others. All four are wireit scripts, so a step whose
 inputs haven't changed can report as skipped from cache. That's a pass.
 
 ```bash
-corepack pnpm run format      # eslint --fix + prettier --write over **/*.ts
+corepack pnpm run format      # eslint --fix + prettier --write over **/*.{ts,mts}
 corepack pnpm run typecheck   # tsc --noEmit; nothing else checks types
 corepack pnpm run lint        # eslint + prettier --check, what CI runs
 corepack pnpm run test        # madge --circular, then vitest in headless Chromium
