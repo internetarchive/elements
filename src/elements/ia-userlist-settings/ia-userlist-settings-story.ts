@@ -8,9 +8,9 @@ import { ModalConfig } from '@src/elements/modal-manager/modal-config';
 import type { ApiFetchOptions } from '@src/services/fetch-handler/fetch-options';
 import type { SearchServiceInterface } from '@src/services/search-service/search-service-interface';
 import type { UserServiceInterface } from '@src/services/user-service/user-service';
-import type { UserList } from '@src/services/user-lists-service/models';
-import { UserListsService } from '@src/services/user-lists-service/user-lists-service';
-import { SampleListsBackend } from '@src/services/user-lists-service/mocks/sample-lists-backend';
+import type { UserList } from '@src/services/userlist-service/models';
+import { UserListsService } from '@src/services/userlist-service/userlist-service';
+import { SampleListsBackend } from '@src/services/userlist-service/mocks/sample-lists-backend';
 import type { UserListModel } from './models';
 
 import './ia-userlist-settings';
@@ -213,13 +213,13 @@ export class IAUserListSettingsStory extends LitElement {
             <code>createList</code> otherwise, on the
             <code>userListsService</code> it's handed: a
             <code>UserListsService</code> from
-            <code>@internetarchive/elements/services/user-lists-service</code>,
-            or anything implementing <code>UserListsServiceInterface</code>.
-            This demo hands it a real <code>UserListsService</code> on the
-            service's sample backend, which answers in archive.org's shape and
-            keeps lists in memory, so nothing is saved to archive.org. "Make
-            saves fail" makes the backend refuse saves the way it refuses one
-            over the list limit.
+            <code>@internetarchive/elements/services/userlist-service</code>, or
+            anything implementing <code>UserListsServiceInterface</code>. This
+            demo hands it a real <code>UserListsService</code> on the service's
+            sample backend, which answers in archive.org's shape and keeps lists
+            in memory, so nothing is saved to archive.org. "Make saves fail"
+            makes the backend refuse saves the way it refuses one over the list
+            limit.
           </p>
           <p>
             Events: <code>userListSaving</code> when a save starts,

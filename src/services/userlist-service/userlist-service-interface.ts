@@ -1,6 +1,6 @@
 import type { Result } from '../result-type/result-type';
 import type { SearchResult } from '../search-service/models/hit-types/hit';
-import type { UserListsError } from './user-lists-error';
+import type { UserListsError } from './userlist-error';
 import type {
   UserList,
   UserListMember,

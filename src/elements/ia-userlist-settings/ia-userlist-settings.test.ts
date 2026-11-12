@@ -7,12 +7,12 @@ import type { IAModalManager } from '@src/elements/modal-manager/modal-manager';
 import { ModalConfig } from '@src/elements/modal-manager/modal-config';
 import type { SearchServiceInterface } from '@src/services/search-service/search-service-interface';
 import type { UserServiceInterface } from '@src/services/user-service/user-service';
-import type { UserList } from '@src/services/user-lists-service/models';
-import { UserListsService } from '@src/services/user-lists-service/user-lists-service';
+import type { UserList } from '@src/services/userlist-service/models';
+import { UserListsService } from '@src/services/userlist-service/userlist-service';
 import {
   UserListsError,
   UserListsErrorReason,
-} from '@src/services/user-lists-service/user-lists-error';
+} from '@src/services/userlist-service/userlist-error';
 import type { IAUserListSettings, UserListModel } from './ia-userlist-settings';
 import { MockUserListsService } from './mocks/mock-user-lists-service';
 

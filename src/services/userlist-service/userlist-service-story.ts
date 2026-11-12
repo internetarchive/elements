@@ -1,12 +1,12 @@
 import { css, html, LitElement, nothing, type CSSResultGroup } from 'lit';
 import { state } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
-import interfaceSource from './user-lists-service-interface.ts?raw';
+import interfaceSource from './userlist-service-interface.ts?raw';
 import modelsSource from './models.ts?raw';
-import errorSource from './user-lists-error.ts?raw';
+import errorSource from './userlist-error.ts?raw';
 
 import '@demo/service-template';
-import { UserListsService } from './user-lists-service';
+import { UserListsService } from './userlist-service';
 import { FetchHandler } from '../fetch-handler/fetch-handler';
 import type { ApiFetchOptions } from '../fetch-handler/fetch-options';
 import { SearchService } from '../search-service/search-service';
@@ -58,7 +58,7 @@ const TEXT_FIELDS: Record<
   description: { label: 'Description', placeholder: 'Things I like' },
 };
 
-const USAGE = `import { UserListsService } from '@internetarchive/elements/services/user-lists-service/user-lists-service';
+const USAGE = `import { UserListsService } from '@internetarchive/elements/services/userlist-service/userlist-service';
 import { FetchHandler } from '@internetarchive/elements/services/fetch-handler/fetch-handler';
 import { SearchService } from '@internetarchive/elements/services/search-service/search-service';
 import { UserService } from '@internetarchive/elements/services/user-service/user-service';
@@ -168,7 +168,7 @@ const signedOutUserService = {
   },
 } as unknown as UserServiceInterface;
 
-@customElement('user-lists-service-story')
+@customElement('userlist-service-story')
 export class UserListsServiceStory extends LitElement {
   @state() private source: Source = 'sample';
 
@@ -213,7 +213,7 @@ export class UserListsServiceStory extends LitElement {
       this.source === 'live' ? LIVE_METHODS : Object.keys(METHODS);
     return html`
       <service-template
-        serviceName="user-lists-service"
+        serviceName="userlist-service"
         .usage=${USAGE}
         .apiSource=${API_SOURCE}
       >

@@ -1,15 +1,15 @@
 import type { Result } from '@src/services/result-type/result-type';
 import type { SearchResult } from '@src/services/search-service/models/hit-types/hit';
-import type { UserListsServiceInterface } from '@src/services/user-lists-service/user-lists-service-interface';
+import type { UserListsServiceInterface } from '@src/services/userlist-service/userlist-service-interface';
 import {
   UserListsError,
   UserListsErrorReason,
-} from '@src/services/user-lists-service/user-lists-error';
+} from '@src/services/userlist-service/userlist-error';
 import type {
   UserList,
   UserListMember,
   UserListOptions,
-} from '@src/services/user-lists-service/models';
+} from '@src/services/userlist-service/models';
 
 /**
  * A user lists service that saves lists in memory. Only `createList` and

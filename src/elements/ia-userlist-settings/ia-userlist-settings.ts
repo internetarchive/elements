@@ -13,12 +13,12 @@ import { customElement } from '@src/utils/custom-element';
 import themeStyles from '@src/themes/theme-styles';
 
 import type { Result } from '@src/services/result-type/result-type';
-import type { UserListsServiceInterface } from '@src/services/user-lists-service/user-lists-service-interface';
-import { UserListsError } from '@src/services/user-lists-service/user-lists-error';
+import type { UserListsServiceInterface } from '@src/services/userlist-service/userlist-service-interface';
+import { UserListsError } from '@src/services/userlist-service/userlist-error';
 import type {
   UserList,
   UserListOptions,
-} from '@src/services/user-lists-service/models';
+} from '@src/services/userlist-service/models';
 import type { UserListModel } from './models';
 
 import '@src/elements/ia-button/ia-button';
