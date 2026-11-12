@@ -320,7 +320,7 @@ const styleInputSettings: StyleInputSettings[] = [
 
 #### Creating a new theme style
 While working on a component, you may realize that a customizable style you need doesn't already have an associated variable in `theme-styles.ts`. If this happens, you can follow the following steps to add one:
-1. Select a rational default value for the style, preferably a design token, and add it to the defaults section at the top of the file:
+1. Select a rational default value for the style from the [design tokens](#design-tokens), snapped to the nearest token in the role that fits (a literal that stays needs a comment saying why), and add it to the defaults section at the top of the file:
 ```
 --default-font-size-xs: var(--ia-font-size-xs--); /* 11px */
 ```
