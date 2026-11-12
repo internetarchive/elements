@@ -1361,10 +1361,10 @@ export class IAComboBox extends LitElement {
       }
 
       .option {
-        padding: var(--ia-space-1--);
+        padding: var(--ia-space-1--) var(--ia-space-2--);
         width: 100%;
         box-sizing: border-box;
-        line-height: 1.1;
+        line-height: var(--ia-font-line-height-tight--);
         text-overflow: ellipsis;
         overflow: hidden;
         cursor: pointer;
