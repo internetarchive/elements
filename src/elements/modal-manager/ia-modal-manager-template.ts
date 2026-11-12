@@ -343,6 +343,13 @@ export class IAModalManagerTemplate extends LitElement {
         gap: var(--ia-space-1--);
       }
 
+      /* The header is dark, so the ring takes its inverse color. */
+      .back-button:focus-visible {
+        outline: var(--ia-size-focus-ring--) solid
+          var(--ia-color-border-focus-inverse--);
+        outline-offset: var(--ia-size-focus-ring-offset--);
+      }
+
       .back-button svg {
         height: var(--ia-size-icon-sm--);
       }
