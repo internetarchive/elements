@@ -1,3 +1,7 @@
+import '@src/utils/sentry-global';
+
+export type { SentryContext, SentryGlobal } from '@src/utils/sentry-global';
+
 /**
  * Window properties that archive.org's page scripts (Sentry, analytics) and
  * this element's own `ia-lending-intervals` module put on `window`.
@@ -16,18 +20,6 @@ export interface IALendingIntervalsInterface {
   clearAll: () => void;
 }
 
-/** The capture context this element hands to Sentry. */
-export interface SentryContext {
-  tags: Record<string, string>;
-  extra: Record<string, unknown>;
-}
-
-/** The part of the Sentry browser SDK global that is used here. */
-export interface SentryGlobal {
-  captureMessage: (message: string, context?: SentryContext) => unknown;
-  captureException: (exception: unknown, context?: SentryContext) => unknown;
-}
-
 /** The part of archive.org's analytics global that is used here. */
 export interface ArchiveAnalyticsGlobal {
   send_event_no_sampling: (
@@ -41,7 +33,6 @@ export interface ArchiveAnalyticsGlobal {
 declare global {
   interface Window {
     IALendingIntervals: IALendingIntervalsInterface;
-    Sentry?: SentryGlobal;
     archive_analytics?: ArchiveAnalyticsGlobal;
   }
 }
