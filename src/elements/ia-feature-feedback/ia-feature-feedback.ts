@@ -565,7 +565,7 @@ export class IAFeatureFeedback
   static get styles(): CSSResultGroup {
     const blueColor = css`var(--featureFeedbackBlueColor, var(--ia-color-action-primary-fill--))`;
     const darkGrayColor = css`var(--featureFeedbackDarkGrayColor, var(--ia-color-border-strong--))`;
-    const darkGrayColorSvgFilter = css`var(--defaultColorSvgFilter, invert(52%) sepia(0%) saturate(1%) hue-rotate(331deg) brightness(87%) contrast(89%))`;
+    const darkGrayColorSvgFilter = css`var(--defaultColorSvgFilter, invert(43%) sepia(5%) saturate(0%) hue-rotate(352deg) brightness(89%) contrast(88%))`;
 
     const backdropZindex = css`var(--featureFeedbackBackdropZindex, 5)`;
     const modalZindex = css`var(--featureFeedbackModalZindex, 6)`;
@@ -578,7 +578,7 @@ export class IAFeatureFeedback
     const betaButtonSvgFilter = css`var(--featureFeedbackBetaButtonSvgFilter, ${darkGrayColorSvgFilter})`;
 
     const cancelButtonColor = css`var(--featureFeedbackCancelButtonColor, var(--ia-color-palette-gray-700--))`;
-    const popupBlockerColor = css`var(--featureFeedbackPopupBlockerColor, rgba(255, 255, 255, 0.3))`;
+    const popupBlockerColor = css`var(--featureFeedbackPopupBlockerColor, var(--ia-color-surface-scrim--))`;
 
     const popupBackgroundColor = css`var(--featureFeedbackPopupBackgroundColor, var(--ia-color-surface-sunken--))`;
 
@@ -592,12 +592,12 @@ export class IAFeatureFeedback
     const defaultColorSvgFilter = css`var(--defaultColorSvgFilter, ${darkGrayColorSvgFilter});`;
 
     const upvoteColor = css`var(--upvoteColor, var(--ia-color-status-success--));`;
-    const upvoteColorSvgFilter = css`var(--upvoteColorSvgFilter, invert(34%) sepia(72%) saturate(357%) hue-rotate(111deg) brightness(97%) contrast(95%));`;
+    const upvoteColorSvgFilter = css`var(--upvoteColorSvgFilter, invert(32%) sepia(61%) saturate(448%) hue-rotate(113deg) brightness(99%) contrast(91%));`;
 
     const downvoteColor = css`var(--downvoteColor, var(--ia-color-status-danger--));`;
-    const downvoteColorSvgFilter = css`var(--downvoteColorSvgFilter, invert(5%) sepia(81%) saturate(5874%) hue-rotate(352deg) brightness(105%) contrast(95%));`;
+    const downvoteColorSvgFilter = css`var(--downvoteColorSvgFilter, invert(10%) sepia(66%) saturate(7048%) hue-rotate(353deg) brightness(95%) contrast(90%));`;
 
-    const unselectedColor = css`var(--unselectedColor, var(--ia-color-border-default--));`;
+    const unselectedColor = css`var(--unselectedColor, var(--ia-color-border-strong--));`;
     const unselectedColorSvgFilter = css`var(--unselectedColorSvgFilter, invert(100%) sepia(0%) saturate(107%) hue-rotate(138deg) brightness(89%) contrast(77%));`;
 
     return css`
