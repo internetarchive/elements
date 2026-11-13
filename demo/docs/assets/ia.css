@@ -342,6 +342,10 @@ ia-button { inline-size: var(--ia-theme-button-width); }
 }
 .ia-input[readonly] { border-color: transparent; background-color: var(--ia-color-surface-sunken); }
 
+/* A text field's ring is drawn over its border, inside the edge. */
+.ia-input:focus-visible,
+.ia-textarea:focus-visible { outline-offset: calc(var(--ia-size-focus-ring) * -1); }
+
 /* iOS zooms the viewport when a focused input's text is under 16px. */
 @media (max-width: 767px) {
   .ia-input, .ia-textarea, .ia-select, .ia-search-bar__input { font-size: 16px; }
@@ -474,7 +478,6 @@ ia-button { inline-size: var(--ia-theme-button-width); }
 .ia-search-bar__field:has(.ia-search-bar__input:focus-visible) {
   outline: var(--ia-size-focus-ring) solid var(--ia-color-border-focus);
   outline-offset: calc(var(--ia-size-focus-ring) * -1);
-  box-shadow: var(--ia-shadow-focus-band);
 }
 /* Without a picker (a collection's own search), the field takes the start cap. */
 .ia-search-bar__field:first-child {
