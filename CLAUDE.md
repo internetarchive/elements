@@ -29,6 +29,10 @@ custom properties as hooks in front of the token. A literal that stays needs a
 comment saying why (SVG artwork, a third-party iframe, a layout width no scale
 covers).
 
+The design system's docs are in `docs/`, and the demo's pages for them (every
+`*.html` at the root besides `index.html`, plus `demo/docs/`) are demo-only. See
+[docs/README.md](docs/README.md).
+
 CI runs `lint`, `typecheck` and `test` as separate jobs. Nothing but `typecheck`
 checks types: vitest transpiles without checking and eslint isn't type-aware
 here, so run it before pushing rather than finding out from the PR.
