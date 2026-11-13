@@ -48,6 +48,30 @@ describe('Menu data', () => {
     expect(menus.userAdminBiblio).to.be.an('array').that.is.empty;
   });
 
+  test('points the mobile upload item at uploadUrl', () => {
+    const uploadItem = (...args: Parameters<typeof buildTopNavMenus>) =>
+      buildTopNavMenus(...args).user.find(
+        (link) => link.class === 'mobile-upload',
+      )?.url;
+
+    expect(uploadItem('brewster', 'https://archive.org')).to.equal(
+      'https://archive.org/upload',
+    );
+    expect(
+      uploadItem(
+        'brewster',
+        'https://archive.org',
+        '',
+        '',
+        '',
+        '/upload?collection=foo',
+      ),
+    ).to.equal('https://archive.org/upload?collection=foo');
+    expect(
+      uploadItem('brewster', '', '', '', '', 'https://example.org/up'),
+    ).to.equal('https://example.org/up');
+  });
+
   test('builds the uploader and biblio sections when given both', () => {
     const menus = buildTopNavMenus(
       'brewster',
