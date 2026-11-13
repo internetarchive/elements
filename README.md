@@ -252,7 +252,7 @@ For styling, our components use a series of rational CSS variable fallbacks to e
 
 The design system's values (colors, type, spacing, radius, sizing, motion and more) are design tokens, defined in [tokens/tokens.json](tokens/tokens.json). `pnpm run tokens` generates `src/themes/tokens.ts` from it; `dev`, `build`, `test` and `typecheck` run it first. Never edit the generated file.
 
-`themeStyles` includes every token as a private alias on `:host`, named after the token with a trailing `--`. Read the alias, never the token itself:
+`tokenStyles` (`@src/themes/tokens`) declares every token as a private alias on `:host`, named after the token with a trailing `--`. `themeStyles` includes `tokenStyles` and adds the older `--ia-theme-*` defaults, so a component that reads only tokens takes `tokenStyles`, and one that also reads a `--ia-theme-*` default takes `themeStyles`. Put either one in the component's `styles` array; pasting it into a `css` template with `${}` copies the whole token sheet into that component's stylesheet. Read the alias, never the token itself:
 ```
 color: var(--ia-color-text-primary--);
 padding: var(--ia-space-2--);
