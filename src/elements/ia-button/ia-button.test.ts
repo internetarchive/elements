@@ -308,12 +308,17 @@ describe('IA button', () => {
     expect(style.color).to.equal('rgb(255, 255, 255)');
   });
 
-  test('treats transparent as the old name for ghost', async () => {
+  test('treats transparent as the old name for ghost, with one warning', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const el = await fixture<IAButton>(
-      html`<ia-button mode="transparent">Share</ia-button>`,
+      html`<ia-button mode="transparent">Share</ia-button>
+        <ia-button mode="transparent">Copy</ia-button>`,
     );
     const button = el.shadowRoot?.querySelector('button');
     expect(button?.classList.contains('ghost')).to.be.true;
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0][0]).to.contain('mode="ghost"');
+    warn.mockRestore();
   });
 
   test('keeps its label whole in a flex row too narrow for it', async () => {
