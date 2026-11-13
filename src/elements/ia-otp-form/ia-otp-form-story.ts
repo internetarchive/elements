@@ -30,19 +30,19 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Link font color',
     cssVariable: '--ia-theme-link-color',
-    defaultValue: '#4b64ff',
+    defaultValue: '#3a4fd6',
     inputType: 'color',
   },
   {
     label: 'Error message/indicator color',
     cssVariable: '--ia-theme-color-danger',
-    defaultValue: '#e51c23',
+    defaultValue: '#b8161c',
     inputType: 'color',
   },
   {
     label: 'Success indicator color',
     cssVariable: '--ia-theme-color-success',
-    defaultValue: '#31a481',
+    defaultValue: '#20705a',
     inputType: 'color',
   },
 ];
