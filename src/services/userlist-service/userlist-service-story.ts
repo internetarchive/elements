@@ -7,6 +7,7 @@ import errorSource from './userlist-error.ts?raw';
 
 import '@demo/service-template';
 import { UserListService } from './userlist-service';
+import type { UserListOptions } from './models';
 import { FetchHandler } from '../fetch-handler/fetch-handler';
 import type { ApiFetchOptions } from '../fetch-handler/fetch-options';
 import { SearchService } from '../search-service/search-service';
@@ -22,7 +23,8 @@ type Field =
   | 'memberIds'
   | 'listName'
   | 'description'
-  | 'isPrivate';
+  | 'isPrivate'
+  | 'privacy';
 
 /** Each method the console can run, and the inputs it takes. */
 const METHODS = {
@@ -32,7 +34,7 @@ const METHODS = {
   fetchListMembers: ['userId', 'listId'],
   fetchListMemberSearchResults: ['userId', 'listId'],
   createList: ['listName', 'description', 'isPrivate'],
-  updateList: ['listId', 'listName', 'description', 'isPrivate'],
+  updateList: ['listId', 'listName', 'description', 'privacy'],
   deleteList: ['listId'],
   addMemberToList: ['listId', 'itemId'],
   removeMemberFromList: ['listId', 'memberId'],
@@ -41,10 +43,12 @@ const METHODS = {
 
 type Method = keyof typeof METHODS;
 
-const TEXT_FIELDS: Record<
-  Exclude<Field, 'isPrivate'>,
-  { label: string; placeholder: string }
-> = {
+type TextField = Exclude<Field, 'isPrivate' | 'privacy'>;
+
+/** An update's privacy choice, where '' leaves the list's privacy as it is. */
+type Privacy = '' | 'private' | 'public';
+
+const TEXT_FIELDS: Record<TextField, { label: string; placeholder: string }> = {
   userId: { label: 'User id', placeholder: '@brewster' },
   listId: { label: 'List id', placeholder: '1' },
   itemId: { label: 'Item identifier', placeholder: 'goody' },
@@ -381,7 +385,7 @@ export class UserListServiceStory extends LitElement {
 
   @state() private method: Method = 'fetchListsForUser';
 
-  @state() private values: Record<Exclude<Field, 'isPrivate'>, string> = {
+  @state() private values: Record<TextField, string> = {
     userId: '',
     listId: '',
     itemId: '',
@@ -392,6 +396,8 @@ export class UserListServiceStory extends LitElement {
   };
 
   @state() private isPrivate = false;
+
+  @state() private privacy: Privacy = '';
 
   @state() private running = false;
 
@@ -452,20 +458,45 @@ export class UserListServiceStory extends LitElement {
               )}
             </select>
           </label>
-          ${fields.map((field) =>
-            field === 'isPrivate'
-              ? html`<label class="check">
-                  <input
-                    type="checkbox"
-                    name="isPrivate"
-                    .checked=${this.isPrivate}
-                    @change=${(e: Event) =>
-                      (this.isPrivate = (e.target as HTMLInputElement).checked)}
-                  />
-                  Private
-                </label>`
-              : this.textField(field),
-          )}
+          ${fields.map((field) => {
+            if (field === 'isPrivate') {
+              return html`<label class="check">
+                <input
+                  type="checkbox"
+                  name="isPrivate"
+                  .checked=${this.isPrivate}
+                  @change=${(e: Event) =>
+                    (this.isPrivate = (e.target as HTMLInputElement).checked)}
+                />
+                Private
+              </label>`;
+            }
+            if (field === 'privacy') {
+              return html`<label>
+                Privacy
+                <select
+                  name="privacy"
+                  @change=${(e: Event) =>
+                    (this.privacy = (e.target as HTMLSelectElement)
+                      .value as Privacy)}
+                >
+                  <option value="" ?selected=${this.privacy === ''}>
+                    Leave as it is
+                  </option>
+                  <option
+                    value="private"
+                    ?selected=${this.privacy === 'private'}
+                  >
+                    Private
+                  </option>
+                  <option value="public" ?selected=${this.privacy === 'public'}>
+                    Public
+                  </option>
+                </select>
+              </label>`;
+            }
+            return this.textField(field);
+          })}
           <button type="submit" ?disabled=${this.running}>Run</button>
           ${this.source === 'sample'
             ? html`<button type="button" @click=${this.reset}>
@@ -502,8 +533,14 @@ export class UserListServiceStory extends LitElement {
     `;
   }
 
-  private textField(field: Exclude<Field, 'isPrivate'>) {
-    const { label, placeholder } = TEXT_FIELDS[field];
+  private textField(field: TextField) {
+    const { label } = TEXT_FIELDS[field];
+    // An update leaves out what's left empty, so a sample value would mislead.
+    const placeholder =
+      this.method === 'updateList' &&
+      (field === 'listName' || field === 'description')
+        ? 'Leave empty to keep'
+        : TEXT_FIELDS[field].placeholder;
     return html`<label>
       ${label}
       <input
@@ -546,7 +583,7 @@ export class UserListServiceStory extends LitElement {
   }
 
   /** The typed value of a field, or its placeholder when left empty. */
-  private value(field: Exclude<Field, 'isPrivate'>) {
+  private value(field: TextField) {
     return this.values[field].trim() || TEXT_FIELDS[field].placeholder;
   }
 
@@ -558,6 +595,14 @@ export class UserListServiceStory extends LitElement {
       list_name: this.value('listName'),
       description: this.values.description.trim(),
       is_private: this.isPrivate,
+    };
+    // An update sends only what was filled in, so the rest of the list stays.
+    const listName = this.values.listName.trim();
+    const description = this.values.description.trim();
+    const updates: Partial<UserListOptions> = {
+      ...(listName && { list_name: listName }),
+      ...(description && { description }),
+      ...(this.privacy && { is_private: this.privacy === 'private' }),
     };
     const memberIds = this.value('memberIds')
       .split(',')
@@ -592,7 +637,7 @@ export class UserListServiceStory extends LitElement {
         () => s.fetchListMemberSearchResults(userId, listId),
       ],
       createList: [[options], () => s.createList(options)],
-      updateList: [[listId, options], () => s.updateList(listId, options)],
+      updateList: [[listId, updates], () => s.updateList(listId, updates)],
       deleteList: [[listId], () => s.deleteList(listId)],
       addMemberToList: [
         [listId, { identifier: this.value('itemId') }],
