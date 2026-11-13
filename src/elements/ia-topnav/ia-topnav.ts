@@ -43,6 +43,12 @@ export class IATopNav extends LitElement {
 
   @property({ type: String }) mediaBaseHost = 'https://archive.org';
 
+  /**
+   * Where the Upload button and the mobile "Upload files" menu item go. A
+   * path is joined to `baseHost`, an absolute URL is used as given.
+   */
+  @property({ type: String }) uploadUrl = '/upload';
+
   @property({ type: Boolean }) admin = false;
 
   @property({ type: Boolean }) canManageFlags = false;
@@ -143,6 +149,7 @@ export class IATopNav extends LitElement {
       props.has('itemIdentifier') ||
       props.has('uploader') ||
       props.has('biblio') ||
+      props.has('uploadUrl') ||
       props.has('localLinks') ||
       props.has('baseHost')
     ) {
@@ -156,6 +163,7 @@ export class IATopNav extends LitElement {
         <ia-topnav-primary-nav
           .baseHost=${this.normalizedBaseHost}
           .mediaBaseHost=${this.mediaBaseHost}
+          .uploadUrl=${this.uploadUrl}
           .config=${this.config}
           .openMenu=${this.openMenu}
           .screenName=${this.screenName}
@@ -230,6 +238,7 @@ export class IATopNav extends LitElement {
       this.itemIdentifier,
       this.uploader,
       this.biblio,
+      this.uploadUrl,
     );
   }
 
