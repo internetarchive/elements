@@ -484,7 +484,7 @@ export class IATranscriptView extends LitElement {
           );
           --transcript-time-line-height--: var(
             --ia-theme-transcript-time-line-height,
-            1em
+            1
           );
           --transcript-time-display--: var(
             --ia-theme-transcript-time-display,
