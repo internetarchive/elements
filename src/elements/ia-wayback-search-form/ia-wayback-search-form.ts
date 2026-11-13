@@ -149,7 +149,7 @@ export class IAWaybackSearchForm extends LitElement {
         }
 
         fieldset {
-          padding: 0.7rem var(--ia-space-4--); /* 7px at a 10px root */
+          padding: var(--ia-space-1--) var(--ia-space-4--);
           margin: var(--ia-space-3--) 0;
           box-sizing: border-box;
           text-align: center;
@@ -172,7 +172,7 @@ export class IAWaybackSearchForm extends LitElement {
           width: 100%;
           max-width: 215px;
           max-height: 60px;
-          margin-bottom: 1.3rem; /* 13px at a 10px root */
+          margin-bottom: var(--ia-space-3--);
           vertical-align: middle;
         }
 

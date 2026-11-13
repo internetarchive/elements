@@ -207,51 +207,53 @@ export class IAFeatureFeedbackSurveyComment
   }
 
   static get styles(): CSSResultGroup {
-    const height = css`var(--commentHeight, 50px)`;
+    const height = css`var(--commentHeight, var(--ia-size-control-xl--))`;
     const resize = css`var(--commentResize, none)`;
 
-    const questionMargin = css`var(--surveyQuestionMargin, 0 0 15px 0)`;
+    const questionMargin = css`var(--surveyQuestionMargin, 0 0 var(--ia-space-3--) 0)`;
 
     const promptFontWeight = css`var(--featureFeedbackPromptFontWeight, bold)`;
     const promptFontSize = css`var(--featureFeedbackPromptFontSize, var(--ia-font-size-md--))`;
 
-    return css`
-      ${tokenStyles}
+    return [
+      tokenStyles,
+      css`
+        #container {
+          margin: ${questionMargin};
+        }
 
-      #container {
-        margin: ${questionMargin};
-      }
+        #prompt-text {
+          text-align: left;
+          margin-bottom: var(--ia-space-1--);
+          flex-grow: 1;
+          font-size: ${promptFontSize};
+          font-weight: ${promptFontWeight};
+        }
 
-      #prompt-text {
-        text-align: left;
-        margin-bottom: 5px;
-        flex-grow: 1;
-        font-size: ${promptFontSize};
-        font-weight: ${promptFontWeight};
-      }
+        #comments {
+          width: 100%;
+          height: ${height};
+          background-color: var(--ia-color-surface-raised--);
+          border: var(--ia-size-border-width--) var(--ia-color-border-strong--)
+            solid;
+          border-radius: var(--ia-radius-default--);
+          padding: var(--ia-space-1--);
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+          font-family: inherit;
+          resize: ${resize};
+        }
 
-      #comments {
-        width: 100%;
-        height: ${height};
-        background-color: #ffffff;
-        border: 1px #2c2c2c solid;
-        border-radius: 4px;
-        padding: 7px;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        font-family: inherit;
-        resize: ${resize};
-      }
+        #comments::placeholder {
+          color: var(--ia-color-text-secondary--);
+        }
 
-      #comments::placeholder {
-        color: #767676;
-      }
-
-      :host(:invalid) #comments {
-        box-shadow: 0 0 4px red;
-      }
-    `;
+        :host(:invalid) #comments {
+          box-shadow: 0 0 4px var(--ia-color-status-danger--);
+        }
+      `,
+    ];
   }
 }
 

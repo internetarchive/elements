@@ -91,11 +91,11 @@ export class IADonationConfirmModal extends LitElement {
           );
           --donation-confirm-cta-color--: var(
             --ia-donation-upsell-cta-button-color,
-            var(--navy-blue)
+            var(--ia-color-action-primary-fill--)
           );
           --donation-confirm-cta-disabled-color--: var(
             --ia-donation-upsell-cta-button-disabled-color,
-            rgba(109, 148, 201, 0.5)
+            var(--ia-color-action-disabled-fill--)
           );
 
           display: block;
@@ -114,8 +114,8 @@ export class IADonationConfirmModal extends LitElement {
           padding: var(--donation-confirm-base-font-size--)
             calc(var(--donation-confirm-base-font-size--) * 2);
           background-color: var(--donation-confirm-cta-color--);
-          color: var(--true-white);
-          border-radius: 5px;
+          color: var(--ia-color-action-primary-text--);
+          border-radius: var(--ia-radius-default--);
           border: 0;
           font-weight: bold;
           line-height: normal;

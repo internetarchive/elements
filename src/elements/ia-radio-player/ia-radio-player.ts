@@ -703,11 +703,11 @@ export class IARadioPlayer extends LitElement {
           );
           --radio-player-logo-max-height--: var(
             --ia-theme-radio-player-logo-max-height,
-            8rem /* 80px at a 10px root */
+            calc(80 * var(--ia-unit, 1px))
           );
           --radio-player-waveform-height--: var(
             --ia-theme-radio-player-waveform-height,
-            5rem /* 50px at a 10px root */
+            calc(50 * var(--ia-unit, 1px))
           );
         }
 

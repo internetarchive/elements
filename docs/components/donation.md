@@ -17,7 +17,7 @@ beside the fill, the goal after it.
 | --- | --- |
 | Fill | `--ia-color-action-donate-fill` (`#20705a`) |
 | Track | `--ia-color-action-donate-subtle` (`#b8f5e2`, pale mint), a 1px `--ia-color-action-donate-border` edge |
-| Shape | 2rem (20px) tall, `--ia-radius-pill` |
+| Shape | 20px tall, `--ia-radius-pill` |
 | Amount | `--ia-font-size-md` / bold: `--ia-color-action-donate-text` on the fill (5.95:1), `--ia-color-action-donate-fill` on the track (4.88:1) |
 | Goal | `--ia-font-size-md` / bold, `--ia-color-text-primary`, `--ia-space-2` either side |
 
@@ -36,14 +36,14 @@ beside the fill, the goal after it.
 
 `ia-donation-thermometer` takes its defaults from the tokens: the fill is
 `--ia-color-action-donate-fill`, the track `--ia-color-action-donate-subtle`, the radius
-`--ia-radius-pill`, the goal padding `0 var(--ia-space-2)`, and 2rem tall. Its own
+`--ia-radius-pill`, the goal padding `0 var(--ia-space-2)`, and 20px tall. Its own
 variables override each:
 
 | Variable | Default |
 | --- | --- |
 | `--ia-donation-thermometer-fill-color` | `--ia-color-action-donate-fill` (`#20705a`) |
 | `--ia-donation-thermometer-track-color` | `--ia-color-action-donate-subtle` (`#b8f5e2`) |
-| `--ia-donation-thermometer-height` | 2rem |
+| `--ia-donation-thermometer-height` | 20px, scaled by `--ia-unit` |
 | `--ia-donation-thermometer-border-radius` | `--ia-radius-pill` |
 | `--ia-donation-thermometer-goal-padding` | `0 var(--ia-space-2)` |
 

@@ -73,7 +73,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Danger button fill',
     cssVariable: '--primaryErrorCTAFill',
-    defaultValue: '#d9534f',
+    defaultValue: '#e51c23',
     inputType: 'color',
   },
   {
@@ -85,19 +85,19 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Danger button border',
     cssVariable: '--primaryErrorCTABorder',
-    defaultValue: '#d43f3a',
+    defaultValue: '#b8161c',
     inputType: 'color',
   },
   {
     label: 'Disabled button fill',
     cssVariable: '--primaryDisableCTAFill',
-    defaultValue: '#767676',
+    defaultValue: '#666666',
     inputType: 'color',
   },
   {
     label: 'Dropdown background',
     cssVariable: '--iaBookActionsDropdownBGColor',
-    defaultValue: '#2d2d2d',
+    defaultValue: '#2c2c2c',
     inputType: 'color',
   },
 ];
@@ -713,10 +713,7 @@ export class IABookActionsStory extends LitElement {
             the automatic renewal and the auto-return in under two minutes. Fail
             lending requests makes borrow, return, renew and waitlist calls
             fail. create_token still succeeds, since it repeats for as long as a
-            loan is active. archive.org font size, under the settings, sets the
-            page's root font size to 10px, which the bar is built for. It
-            applies to the whole demo page, so it's on by default only when this
-            element is the one being viewed.
+            loan is active.
           </p>
           <p>
             Pass a <code>fetchHandler</code> to the bar to control how it
@@ -734,8 +731,8 @@ export class IABookActionsStory extends LitElement {
             <code>lendingBarPostInit</code> is called once access to the book is
             confirmed, and is where the host starts BookReader. The
             <code>IABookReader:BrowsingHasExpired</code> event bubbles when a 1
-            hour loan runs out. Sizes are in rem and assume the host page sets
-            <code>html { font-size: 10px }</code>.
+            hour loan runs out. Its sizes come from the design tokens, so they
+            don't depend on the host page's root font size.
           </p>
         </div>
       </story-template>

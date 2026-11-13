@@ -470,8 +470,8 @@ export class IATopNav extends LitElement {
           --dropdownMenuInfoItem: var(--greya0);
           --dropdownMenuDivider: var(--grey40);
 
-          /* The wide dropdown's roles. Its panel is dark now (D-41), so they
-             hold dark-panel values; --linkColor is a fill under the hover
+          /* The wide dropdown's roles. Its panel is dark, so they hold
+             dark-panel values; --linkColor is a fill under the hover
              overlay, none by default. */
           --linkColor: transparent;
           --inverseTextColor: var(--ia-color-text-inverse--);

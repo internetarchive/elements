@@ -2,7 +2,7 @@
    base from demo/docs/assets/site.css. Colors, type and spacing come from the
    design tokens in demo/docs/assets/tokens.css, as on the other pages. */
 
-/* archive.org's root font size, which components' own rem values assume: 1rem = 10px. */
+/* archive.org's root font size, which the demo's and the stories' rem values assume: 1rem = 10px. */
 html {
   font-size: 62.5%;
 }

@@ -606,7 +606,7 @@ export class IADropdown extends LitElement {
 
         button slot[name='dropdown-label'] {
           /* Set var to 0px for column layout */
-          padding-right: var(--buttonSlotPaddingRight, 5px);
+          padding-right: var(--buttonSlotPaddingRight, var(--ia-space-1--));
           display: inline-block;
         }
 
@@ -648,8 +648,8 @@ export class IADropdown extends LitElement {
         }
 
         .caret svg {
-          height: var(--caretHeight, 10px);
-          width: var(--caretWidth, 20px);
+          height: var(--caretHeight, var(--ia-size-icon-xs--));
+          width: var(--caretWidth, var(--ia-size-icon-md--));
         }
 
         #dropdown-backdrop {
@@ -675,7 +675,7 @@ export class IADropdown extends LitElement {
         #dropdown-main {
           position: var(--dropdownListPosition, absolute);
           list-style: none;
-          margin: var(--dropdownOffsetTop, 5px) 0 0 0;
+          margin: var(--dropdownOffsetTop, var(--ia-space-1--)) 0 0 0;
           padding: var(--dropdownPadding, 0);
           color: ${dropdownTextColor};
           background: ${dropdownBgColor};
@@ -761,7 +761,7 @@ export class IADropdown extends LitElement {
         #dropdown-main li {
           background: ${dropdownBgColor};
           list-style: none;
-          height: 30px;
+          height: var(--ia-size-control-sm--);
           cursor: pointer;
           border-bottom: 0.5px solid ${dropdownBgColor};
           border-top: 0.5px solid ${dropdownBgColor};

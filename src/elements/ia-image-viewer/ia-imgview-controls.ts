@@ -76,7 +76,7 @@ export class IAImageViewerControls extends LitElement {
         :host {
           --imgview-controls-text-color--: var(
             --image-viewer-text-color,
-            var(--true-white)
+            var(--ia-color-text-inverse--)
           );
 
           display: block;
@@ -89,7 +89,7 @@ export class IAImageViewerControls extends LitElement {
           align-items: center;
           justify-content: space-between;
           width: 100%;
-          margin-top: 0.8rem; /* 8px at a 10px root */
+          margin-top: var(--ia-space-2--);
         }
 
         .nav-btn {
@@ -98,7 +98,7 @@ export class IAImageViewerControls extends LitElement {
           color: var(--imgview-controls-text-color--);
           border: none;
           cursor: pointer;
-          font-size: 30px;
+          font-size: var(--ia-font-size-3xl--);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -112,13 +112,14 @@ export class IAImageViewerControls extends LitElement {
         }
 
         .nav-btn:focus-visible {
-          outline: 2px solid rgba(255, 255, 255, 0.8);
-          outline-offset: -2px;
+          outline: var(--ia-size-focus-ring--) solid
+            var(--ia-color-border-focus-inverse--);
+          outline-offset: calc(-1 * var(--ia-size-focus-ring-offset--));
         }
 
         .counter {
           color: var(--imgview-controls-text-color--);
-          font-size: 14px;
+          font-size: var(--ia-font-size-md--);
           font-weight: 200;
           letter-spacing: 0.05em;
         }
@@ -153,7 +154,7 @@ export class IAImageViewerControls extends LitElement {
           }
 
           .counter {
-            margin-top: 0.8rem; /* 8px at a 10px root */
+            margin-top: var(--ia-space-2--);
           }
         }
       `,

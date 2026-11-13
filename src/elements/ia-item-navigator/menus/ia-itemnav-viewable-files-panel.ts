@@ -124,22 +124,22 @@ export class IAItemNavViewableFilesPanel extends LitElement {
         :host {
           --item-navigator-text-color--: var(
             --item-navigator-text-color,
-            var(--true-white)
+            var(--ia-color-text-inverse--)
           );
           --item-navigator-border-color--: var(
             --item-navigator-border-color,
-            #4b4b4b
+            var(--ia-color-border-inverse--)
           );
           --item-navigator-active-file-border-color--: var(
             --item-navigator-active-file-border-color,
-            #538bc5
+            var(--ia-color-selected-soft-border--)
           );
 
           display: block;
           overflow-y: auto;
           box-sizing: border-box;
           color: var(--item-navigator-text-color--);
-          margin-top: 14px;
+          margin-top: var(--ia-space-3--);
           margin-bottom: 2em;
           --active-border-width--: 2px;
           /* 10px base (petabox scale); internal sizing is em against it. */
@@ -187,25 +187,25 @@ export class IAItemNavViewableFilesPanel extends LitElement {
         .item-title {
           margin-block-start: 0em;
           margin-block-end: 0em;
-          font-size: 14px;
+          font-size: var(--ia-font-size-md--);
           font-weight: bold;
           word-wrap: break-word;
-          padding-left: 5px;
+          padding-left: var(--ia-space-1--);
         }
 
         .separator {
           background-color: var(--item-navigator-border-color--);
           width: 98%;
           margin: 1px auto;
-          height: 1px;
+          height: var(--ia-size-border-width--);
         }
 
         .pdf-label {
-          border: 1px solid;
-          padding: 2px 5px;
-          border-radius: 20px;
+          border: var(--ia-size-border-width--) solid;
+          padding: 2px var(--ia-space-1--);
+          border-radius: var(--ia-radius-lg--);
           display: inline-block;
-          margin-left: 5px;
+          margin-left: var(--ia-space-1--);
           font-size: 0.9em;
         }
 

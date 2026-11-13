@@ -67,18 +67,18 @@ const BAR_SCALING_PRESET_FNS: Record<BarScalingPreset, BarScalingFunction> = {
 };
 
 // these CSS custom props can be overridden from the HTML that is invoking this component
-const sliderColor = css`var(--histogramDateRangeSliderColor, #4B65FE)`;
-const selectedRangeColor = css`var(--histogramDateRangeSelectedRangeColor, #DBE0FF)`;
-const barIncludedFill = css`var(--histogramDateRangeBarIncludedFill, #2C2C2C)`;
-const activityIndicatorColor = css`var(--histogramDateRangeActivityIndicator, #2C2C2C)`;
-const barExcludedFill = css`var(--histogramDateRangeBarExcludedFill, #CCCCCC)`;
+const sliderColor = css`var(--histogramDateRangeSliderColor, var(--ia-color-selected-strong-fill--))`;
+const selectedRangeColor = css`var(--histogramDateRangeSelectedRangeColor, var(--ia-color-selected-soft-fill--))`;
+const barIncludedFill = css`var(--histogramDateRangeBarIncludedFill, var(--ia-color-text-primary--))`;
+const activityIndicatorColor = css`var(--histogramDateRangeActivityIndicator, var(--ia-color-text-primary--))`;
+const barExcludedFill = css`var(--histogramDateRangeBarExcludedFill, var(--ia-color-border-default--))`;
 const inputRowMargin = css`var(--histogramDateRangeInputRowMargin, 0)`;
-const inputBorder = css`var(--histogramDateRangeInputBorder, 0.5px solid #2C2C2C)`;
+const inputBorder = css`var(--histogramDateRangeInputBorder, var(--ia-border-control--))`;
 const inputWidth = css`var(--histogramDateRangeInputWidth, 35px)`;
 const inputFontSize = css`var(--histogramDateRangeInputFontSize, var(--ia-font-size-sm--))`;
 const inputFontFamily = css`var(--histogramDateRangeInputFontFamily, sans-serif)`;
-const tooltipBackgroundColor = css`var(--histogramDateRangeTooltipBackgroundColor, #2C2C2C)`;
-const tooltipTextColor = css`var(--histogramDateRangeTooltipTextColor, #FFFFFF)`;
+const tooltipBackgroundColor = css`var(--histogramDateRangeTooltipBackgroundColor, var(--ia-color-surface-inverse--))`;
+const tooltipTextColor = css`var(--histogramDateRangeTooltipTextColor, var(--ia-color-text-inverse--))`;
 const tooltipFontSize = css`var(--histogramDateRangeTooltipFontSize, var(--ia-font-size-xs--))`;
 const tooltipFontFamily = css`var(--histogramDateRangeTooltipFontFamily, sans-serif)`;
 
@@ -846,7 +846,7 @@ export class IAHistogramDateRange extends LitElement {
         y="${this.height / 3}"
         width="1"
         height="${this.height / 3}"
-        fill="white"
+        fill="var(--ia-color-selected-strong-text--)"
       />
       <rect
         x="${
@@ -855,7 +855,7 @@ export class IAHistogramDateRange extends LitElement {
         y="${this.height / 3}"
         width="1"
         height="${this.height / 3}"
-        fill="white"
+        fill="var(--ia-color-selected-strong-text--)"
       />
     </svg>
     `;
@@ -1044,7 +1044,7 @@ export class IAHistogramDateRange extends LitElement {
 
   /*
    * tokenStyles is pasted in rather than listed beside this css because the
-   * class's public \`styles\` type is a single CSSResult.
+   * class's public `styles` type is a single CSSResult.
    */
   static styles = css`
     ${tokenStyles}
@@ -1062,9 +1062,9 @@ export class IAHistogramDateRange extends LitElement {
     }
     ia-status-indicator {
       position: absolute;
-      left: calc(50% - 10px);
-      top: 10px;
-      --icon-width: 20px;
+      left: calc(50% - var(--ia-size-icon-md--) / 2);
+      top: var(--ia-space-2--);
+      --icon-width: var(--ia-size-icon-md--);
       --loading-ring-color--: ${activityIndicatorColor};
     }
 
@@ -1107,7 +1107,7 @@ export class IAHistogramDateRange extends LitElement {
       border: 0;
       color: ${tooltipTextColor};
       text-align: center;
-      border-radius: 3px;
+      border-radius: var(--ia-radius-sm--);
       padding: 2px;
       font-size: ${tooltipFontSize};
       font-family: ${tooltipFontFamily};
@@ -1151,7 +1151,7 @@ export class IAHistogramDateRange extends LitElement {
       width: ${inputWidth};
       margin: 0 3px;
       border: ${inputBorder};
-      border-radius: 2px !important;
+      border-radius: var(--ia-radius-sm--) !important;
       text-align: center;
       font-size: ${inputFontSize};
       font-family: ${inputFontFamily};

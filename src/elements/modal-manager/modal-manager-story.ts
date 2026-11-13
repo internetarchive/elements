@@ -13,7 +13,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Backdrop color',
     cssVariable: '--modalBackdropColor',
-    defaultValue: 'rgba(10, 10, 10, 0.9)',
+    defaultValue: 'rgb(0 0 0 / 0.5)',
     inputType: 'text',
   },
   {
@@ -35,7 +35,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Modal width',
     cssVariable: '--modalWidth',
-    defaultValue: '32rem',
+    defaultValue: '320px',
     inputType: 'text',
   },
   {
@@ -47,55 +47,55 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Corner radius',
     cssVariable: '--modalCornerRadius',
-    defaultValue: '1rem',
+    defaultValue: '8px',
     inputType: 'text',
   },
   {
     label: 'Border',
     cssVariable: '--modalBorder',
-    defaultValue: '2px solid black',
+    defaultValue: '2px solid #474747',
     inputType: 'text',
   },
   {
     label: 'Top margin',
     cssVariable: '--modalTopMargin',
-    defaultValue: '5rem',
+    defaultValue: '40px',
     inputType: 'text',
   },
   {
     label: 'Header logo size',
     cssVariable: '--modalLogoSize',
-    defaultValue: '6.5rem',
+    defaultValue: '65px',
     inputType: 'text',
   },
   {
     label: 'Processing indicator size',
     cssVariable: '--processingImageSize',
-    defaultValue: '7.5rem',
+    defaultValue: '75px',
     inputType: 'text',
   },
   {
     label: 'Title font size',
     cssVariable: '--modalTitleFontSize',
-    defaultValue: '1.8rem',
+    defaultValue: '16px',
     inputType: 'text',
   },
   {
     label: 'Subtitle font size',
     cssVariable: '--modalSubtitleFontSize',
-    defaultValue: '1.4rem',
+    defaultValue: '14px',
     inputType: 'text',
   },
   {
     label: 'Headline font size',
     cssVariable: '--modalHeadlineFontSize',
-    defaultValue: '1.6rem',
+    defaultValue: '16px',
     inputType: 'text',
   },
   {
     label: 'Message font size',
     cssVariable: '--modalMessageFontSize',
-    defaultValue: '1.4rem',
+    defaultValue: '14px',
     inputType: 'text',
   },
 ];
