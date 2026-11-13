@@ -3,14 +3,14 @@ import { SearchType } from '../search-service/search-type';
 import type { SearchResult } from '../search-service/models/hit-types/hit';
 import type { SearchServiceInterface } from '../search-service/search-service-interface';
 import type { UserServiceInterface } from '../user-service/user-service';
-import type { UserListsServiceInterface } from './userlist-service-interface';
+import type { UserListServiceInterface } from './userlist-service-interface';
 import type {
   UserList,
   UserListMember,
   UserListMemberOptions,
   UserListOptions,
 } from './models';
-import { UserListsErrorReason, UserListsError } from './userlist-error';
+import { UserListErrorReason, UserListError } from './userlist-error';
 
 /** Required shape of the fetch handler provided to the service */
 interface FetchHandlerInterface {
@@ -30,8 +30,8 @@ type BackendServiceResponse<T> =
   | { success: true; value: T }
   | { success: false; error: string };
 
-/** Options accepted by the user lists service constructor */
-type UserListsServiceConstructorOptions = {
+/** Options accepted by the userlist service constructor */
+type UserListServiceConstructorOptions = {
   fetchHandler: FetchHandlerInterface;
   searchService: SearchServiceInterface;
   userService: UserServiceInterface;
@@ -41,7 +41,7 @@ type UserListsServiceConstructorOptions = {
 const JSON_CONTENT_TYPE = 'application/json; charset=utf-8';
 
 /** Service for reading and editing users' lists */
-export class UserListsService implements UserListsServiceInterface {
+export class UserListService implements UserListServiceInterface {
   private static readonly DEFAULT_BASE_URL = 'https://archive.org';
 
   private fetchHandler: FetchHandlerInterface;
@@ -56,8 +56,8 @@ export class UserListsService implements UserListsServiceInterface {
     fetchHandler,
     searchService,
     userService,
-    baseUrl = UserListsService.DEFAULT_BASE_URL,
-  }: UserListsServiceConstructorOptions) {
+    baseUrl = UserListService.DEFAULT_BASE_URL,
+  }: UserListServiceConstructorOptions) {
     this.fetchHandler = fetchHandler;
     this.searchService = searchService;
     this.userService = userService;
@@ -69,7 +69,7 @@ export class UserListsService implements UserListsServiceInterface {
     method?: string,
     body?: BodyInit,
     headers?: HeadersInit,
-  ): Promise<Result<T, UserListsError>> {
+  ): Promise<Result<T, UserListError>> {
     try {
       const fetchResult: BackendServiceResponse<T> =
         await this.fetchHandler.fetchApiResponse(url, {
@@ -83,17 +83,14 @@ export class UserListsService implements UserListsServiceInterface {
         return { success: fetchResult.value };
       }
       return {
-        error: UserListsService.getErrorResult(
-          UserListsErrorReason.LIST_NOT_FOUND, // TODO determine the real reason
+        error: UserListService.getErrorResult(
+          UserListErrorReason.LIST_NOT_FOUND, // TODO determine the real reason
           fetchResult.error,
         ),
       };
     } catch (err) {
       return {
-        error: UserListsService.getErrorResult(
-          UserListsErrorReason.NETWORK,
-          err,
-        ),
+        error: UserListService.getErrorResult(UserListErrorReason.NETWORK, err),
       };
     }
   }
@@ -101,7 +98,7 @@ export class UserListsService implements UserListsServiceInterface {
   /** @inheritdoc */
   async fetchListsForUser(
     userId: string,
-  ): Promise<Result<UserList[], UserListsError>> {
+  ): Promise<Result<UserList[], UserListError>> {
     // If we are fetching lists for the currently logged-in user, we use 'me' in place of
     // their userid, to better preserve privacy.
     const loggedInUser = (await this.userService.getLoggedInUser())?.success;
@@ -117,7 +114,7 @@ export class UserListsService implements UserListsServiceInterface {
   async fetchList(
     userId: string,
     listId: string,
-  ): Promise<Result<UserList, UserListsError>> {
+  ): Promise<Result<UserList, UserListError>> {
     return this.fetchEndpoint<UserList>(
       `${this.baseUrl}/services/users/${userId}/lists/${listId}`,
     );
@@ -126,7 +123,7 @@ export class UserListsService implements UserListsServiceInterface {
   /** @inheritdoc */
   async fetchOwnListsContainingItem(
     itemId: string,
-  ): Promise<Result<UserList[], UserListsError>> {
+  ): Promise<Result<UserList[], UserListError>> {
     return this.fetchEndpoint<UserList[]>(
       `${this.baseUrl}/services/users/me/lists?item=${itemId}`,
     );
@@ -135,14 +132,14 @@ export class UserListsService implements UserListsServiceInterface {
   async fetchListMembers(
     userId: string,
     listId: string,
-  ): Promise<Result<UserListMember[], UserListsError>> {
+  ): Promise<Result<UserListMember[], UserListError>> {
     const listResult = await this.fetchList(userId, listId);
-    if (!listResult.success) return listResult as Result<never, UserListsError>;
+    if (!listResult.success) return listResult as Result<never, UserListError>;
 
     const { members } = listResult.success;
     if (!members) {
       // The response must contain a members array -- otherwise the response is malformed.
-      throw UserListsService.getErrorResult(UserListsErrorReason.BAD_RESPONSE);
+      throw UserListService.getErrorResult(UserListErrorReason.BAD_RESPONSE);
     }
 
     return { success: members };
@@ -155,7 +152,7 @@ export class UserListsService implements UserListsServiceInterface {
   ): Promise<Result<SearchResult[], Error>> {
     const membersResult = await this.fetchListMembers(userId, listId);
     if (!membersResult.success)
-      return membersResult as Result<never, UserListsError>;
+      return membersResult as Result<never, UserListError>;
 
     const members = membersResult.success;
     if (members.length === 0) return { success: [] };
@@ -182,7 +179,7 @@ export class UserListsService implements UserListsServiceInterface {
   /** @inheritdoc */
   async createList(
     options: UserListOptions,
-  ): Promise<Result<UserList, UserListsError>> {
+  ): Promise<Result<UserList, UserListError>> {
     return this.fetchEndpoint<UserList>(
       `${this.baseUrl}/services/users/me/lists`,
       'POST',
@@ -195,7 +192,7 @@ export class UserListsService implements UserListsServiceInterface {
   async updateList(
     listId: string,
     options: Partial<UserListOptions>,
-  ): Promise<Result<UserList, UserListsError>> {
+  ): Promise<Result<UserList, UserListError>> {
     return this.fetchEndpoint<UserList>(
       `${this.baseUrl}/services/users/me/lists/${listId}`,
       'PATCH',
@@ -205,7 +202,7 @@ export class UserListsService implements UserListsServiceInterface {
   }
 
   /** @inheritdoc */
-  async deleteList(listId: string): Promise<Result<boolean, UserListsError>> {
+  async deleteList(listId: string): Promise<Result<boolean, UserListError>> {
     return this.fetchEndpoint<boolean>(
       `${this.baseUrl}/services/users/me/lists/${listId}`,
       'DELETE',
@@ -216,7 +213,7 @@ export class UserListsService implements UserListsServiceInterface {
   async addMemberToList(
     listId: string,
     options: UserListMemberOptions,
-  ): Promise<Result<UserListMember, UserListsError>> {
+  ): Promise<Result<UserListMember, UserListError>> {
     return this.fetchEndpoint<UserListMember>(
       `${this.baseUrl}/services/users/me/lists/${listId}/members`,
       'POST',
@@ -229,7 +226,7 @@ export class UserListsService implements UserListsServiceInterface {
   async removeMemberFromList(
     listId: string,
     memberId: string,
-  ): Promise<Result<UserList, UserListsError>> {
+  ): Promise<Result<UserList, UserListError>> {
     return this.fetchEndpoint<UserList>(
       `${this.baseUrl}/services/users/me/lists/${listId}/members/${memberId}`,
       'DELETE',
@@ -240,7 +237,7 @@ export class UserListsService implements UserListsServiceInterface {
   async removeBulkMembersFromList(
     listId: string,
     memberIds: string[],
-  ): Promise<Result<UserList, UserListsError>> {
+  ): Promise<Result<UserList, UserListError>> {
     return this.fetchEndpoint<UserList>(
       `${this.baseUrl}/services/users/me/lists/${listId}/members`,
       'PATCH',
@@ -249,9 +246,9 @@ export class UserListsService implements UserListsServiceInterface {
     );
   }
 
-  /** Construct a UserListsError with the given reason and underlying error cause */
-  private static getErrorResult(reason: UserListsErrorReason, err?: unknown) {
-    return new UserListsError(reason, UserListsService.getErrorMessage(err), {
+  /** Construct a UserListError with the given reason and underlying error cause */
+  private static getErrorResult(reason: UserListErrorReason, err?: unknown) {
+    return new UserListError(reason, UserListService.getErrorMessage(err), {
       cause: err,
     });
   }

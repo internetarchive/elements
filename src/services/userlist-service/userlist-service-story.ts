@@ -6,7 +6,7 @@ import modelsSource from './models.ts?raw';
 import errorSource from './userlist-error.ts?raw';
 
 import '@demo/service-template';
-import { UserListsService } from './userlist-service';
+import { UserListService } from './userlist-service';
 import { FetchHandler } from '../fetch-handler/fetch-handler';
 import type { ApiFetchOptions } from '../fetch-handler/fetch-options';
 import { SearchService } from '../search-service/search-service';
@@ -57,12 +57,12 @@ const TEXT_FIELDS: Record<
 /** The user the sample data treats as signed in. */
 const SIGNED_IN_USER = '@brewster';
 
-const USAGE = `import { UserListsService } from '@internetarchive/elements/services/userlist-service/userlist-service';
+const USAGE = `import { UserListService } from '@internetarchive/elements/services/userlist-service/userlist-service';
 import { FetchHandler } from '@internetarchive/elements/services/fetch-handler/fetch-handler';
 import { SearchService } from '@internetarchive/elements/services/search-service/search-service';
 import { UserService } from '@internetarchive/elements/services/user-service/user-service';
 
-const service = new UserListsService({
+const service = new UserListService({
   fetchHandler: new FetchHandler(),
   searchService: SearchService.default,
   userService: new UserService(),
@@ -73,7 +73,7 @@ const { success: list, error } = await service.createList({
   description: 'Things I like',
   is_private: false,
 });
-if (error) console.log(error.reason); // e.g. UserListsErrorReason.NETWORK
+if (error) console.log(error.reason); // e.g. UserListErrorReason.NETWORK
 else console.log(list.id);`;
 
 /** Strips the import statements, which are noise in the API listing. */
@@ -81,7 +81,7 @@ const withoutImports = (source: string) =>
   source.replace(/^import[\s\S]*?from '[^']+';\n/gm, '').trim();
 
 /** What a consumer calls, without the implementation behind it. */
-const SERVICE_CLASS = `export declare class UserListsService implements UserListsServiceInterface {
+const SERVICE_CLASS = `export declare class UserListService implements UserListServiceInterface {
   constructor(options: {
     fetchHandler: { fetchApiResponse<T>(url: string, options?: ApiFetchOptions): Promise<T> };
     searchService: SearchServiceInterface;
@@ -376,7 +376,7 @@ const signedOutUserService = {
 } as unknown as UserServiceInterface;
 
 @customElement('userlist-service-story')
-export class UserListsServiceStory extends LitElement {
+export class UserListServiceStory extends LitElement {
   @state() private source: Source = 'sample';
 
   @state() private method: Method = 'fetchListsForUser';
@@ -399,7 +399,7 @@ export class UserListsServiceStory extends LitElement {
 
   private backend = new SampleListsBackend();
 
-  private service = new UserListsService({
+  private service = new UserListService({
     fetchHandler: this.backend,
     searchService: sampleSearchService,
     userService: sampleUserService,
@@ -407,7 +407,7 @@ export class UserListsServiceStory extends LitElement {
 
   private liveFetchHandler = new LiveFetchHandler();
 
-  private liveService = new UserListsService({
+  private liveService = new UserListService({
     fetchHandler: this.liveFetchHandler,
     searchService: SearchService.default,
     userService: signedOutUserService,
@@ -537,7 +537,7 @@ export class UserListsServiceStory extends LitElement {
 
   private reset() {
     this.backend = new SampleListsBackend();
-    this.service = new UserListsService({
+    this.service = new UserListService({
       fetchHandler: this.backend,
       searchService: sampleSearchService,
       userService: sampleUserService,

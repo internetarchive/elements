@@ -1,6 +1,6 @@
 import type { Result } from '../result-type/result-type';
 import type { SearchResult } from '../search-service/models/hit-types/hit';
-import type { UserListsError } from './userlist-error';
+import type { UserListError } from './userlist-error';
 import type {
   UserList,
   UserListMember,
@@ -8,7 +8,7 @@ import type {
   UserListOptions,
 } from './models';
 
-export interface UserListsServiceInterface {
+export interface UserListServiceInterface {
   /**
    * Fetches the full set of the given user's lists from the backend service.
    * The result does not include the members array for each list; only the list metadata.
@@ -18,14 +18,12 @@ export interface UserListsServiceInterface {
    *
    * @param userId The ID of the user to fetch lists for (e.g., `@brewster`)
    */
-  fetchListsForUser(
-    userId: string,
-  ): Promise<Result<UserList[], UserListsError>>;
+  fetchListsForUser(userId: string): Promise<Result<UserList[], UserListError>>;
 
   /**
    * Fetches a specific user list, including the list metadata and the array of list
    * members. Note that the list members returned include only the basic information
-   * kept in the user lists store, not the full item metadata.
+   * kept in the userlist store, not the full item metadata.
    * For that, use `fetchListMemberSearchResults`.
    *
    * @param userId The ID of the user whose list should be fetched
@@ -34,7 +32,7 @@ export interface UserListsServiceInterface {
   fetchList(
     userId: string,
     listId: string,
-  ): Promise<Result<UserList, UserListsError>>;
+  ): Promise<Result<UserList, UserListError>>;
 
   /**
    * Fetches the full set of the current user's lists from the backend service,
@@ -45,7 +43,7 @@ export interface UserListsServiceInterface {
    */
   fetchOwnListsContainingItem(
     itemId: string,
-  ): Promise<Result<UserList[], UserListsError>>;
+  ): Promise<Result<UserList[], UserListError>>;
 
   /**
    * Fetches an array of UserListMembers representing all of the members of the
@@ -57,7 +55,7 @@ export interface UserListsServiceInterface {
   fetchListMembers(
     userId: string,
     listId: string,
-  ): Promise<Result<UserListMember[], UserListsError>>;
+  ): Promise<Result<UserListMember[], UserListError>>;
 
   /**
    * Fetches an array of SearchResults representing all of the members of the
@@ -79,7 +77,7 @@ export interface UserListsServiceInterface {
    */
   createList(
     options: UserListOptions,
-  ): Promise<Result<UserList, UserListsError>>;
+  ): Promise<Result<UserList, UserListError>>;
 
   /**
    * Updates the given properties of an existing User List.
@@ -91,14 +89,14 @@ export interface UserListsServiceInterface {
   updateList(
     listId: string,
     options: Partial<UserListOptions>,
-  ): Promise<Result<UserList, UserListsError>>;
+  ): Promise<Result<UserList, UserListError>>;
 
   /**
    * Deletes the given User List entirely.
    * @param listId The id of the list to delete.
    * @returns A boolean indicator of success; if true, the list was removed successfully.
    */
-  deleteList(listId: string): Promise<Result<boolean, UserListsError>>;
+  deleteList(listId: string): Promise<Result<boolean, UserListError>>;
 
   /**
    * Adds a new member to an existing User List.
@@ -110,7 +108,7 @@ export interface UserListsServiceInterface {
   addMemberToList(
     listId: string,
     options: UserListMemberOptions,
-  ): Promise<Result<UserListMember, UserListsError>>;
+  ): Promise<Result<UserListMember, UserListError>>;
 
   /**
    * Removes the given member from the given User List.
@@ -121,7 +119,7 @@ export interface UserListsServiceInterface {
   removeMemberFromList(
     listId: string,
     memberId: string,
-  ): Promise<Result<UserList, UserListsError>>;
+  ): Promise<Result<UserList, UserListError>>;
 
   /**
    * Removes all of the given members from the given User List.
@@ -132,5 +130,5 @@ export interface UserListsServiceInterface {
   removeBulkMembersFromList(
     listId: string,
     memberIds: string[],
-  ): Promise<Result<UserList, UserListsError>>;
+  ): Promise<Result<UserList, UserListError>>;
 }

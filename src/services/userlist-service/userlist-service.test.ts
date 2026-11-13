@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { UserListsService } from './userlist-service';
-import { UserListsError, UserListsErrorReason } from './userlist-error';
+import { UserListService } from './userlist-service';
+import { UserListError, UserListErrorReason } from './userlist-error';
 import type { UserList, UserListMember } from './models';
 import { SearchType } from '../search-service/search-type';
 import type { SearchServiceInterface } from '../search-service/search-service-interface';
@@ -51,9 +51,9 @@ function setup(
         success: { response: { results: [{ identifier: 'goody' }] } },
       },
   );
-  const service = new UserListsService({
+  const service = new UserListService({
     fetchHandler: { fetchApiResponse } as unknown as ConstructorParameters<
-      typeof UserListsService
+      typeof UserListService
     >[0]['fetchHandler'],
     userService: { getLoggedInUser } as unknown as UserServiceInterface,
     searchService: { search } as unknown as SearchServiceInterface,
@@ -82,7 +82,7 @@ const JSON_HEADERS = { 'Content-Type': 'application/json; charset=utf-8' };
 const causeOf = (error?: Error) =>
   (error as { cause?: unknown } | undefined)?.cause;
 
-describe('UserListsService', () => {
+describe('UserListService', () => {
   describe('reading lists', () => {
     it('fetches the lists of another user by their id', async () => {
       const { service, request } = setup({
@@ -182,9 +182,7 @@ describe('UserListsService', () => {
 
       const result = await service.fetchListMembers('@brewster', 'abc');
 
-      expect(result.error?.reason).to.equal(
-        UserListsErrorReason.LIST_NOT_FOUND,
-      );
+      expect(result.error?.reason).to.equal(UserListErrorReason.LIST_NOT_FOUND);
     });
 
     it('throws a bad response error when the list has no members array', async () => {
@@ -196,9 +194,9 @@ describe('UserListsService', () => {
         .fetchListMembers('@brewster', 'abc')
         .catch((err: unknown) => err);
 
-      expect(thrown).to.be.instanceOf(UserListsError);
-      expect((thrown as UserListsError).reason).to.equal(
-        UserListsErrorReason.BAD_RESPONSE,
+      expect(thrown).to.be.instanceOf(UserListError);
+      expect((thrown as UserListError).reason).to.equal(
+        UserListErrorReason.BAD_RESPONSE,
       );
     });
   });
@@ -272,7 +270,7 @@ describe('UserListsService', () => {
         'abc',
       );
 
-      expect(result.error).to.be.instanceOf(UserListsError);
+      expect(result.error).to.be.instanceOf(UserListError);
       expect(search).not.toHaveBeenCalled();
     });
   });
@@ -389,10 +387,8 @@ describe('UserListsService', () => {
       });
 
       expect(result.success).to.equal(undefined);
-      expect(result.error).to.be.instanceOf(UserListsError);
-      expect(result.error?.reason).to.equal(
-        UserListsErrorReason.LIST_NOT_FOUND,
-      );
+      expect(result.error).to.be.instanceOf(UserListError);
+      expect(result.error?.reason).to.equal(UserListErrorReason.LIST_NOT_FOUND);
       expect(result.error?.message).to.equal('List limit reached');
       expect(causeOf(result.error)).to.equal('List limit reached');
     });
@@ -403,7 +399,7 @@ describe('UserListsService', () => {
 
       const result = await service.fetchList('@brewster', 'abc');
 
-      expect(result.error?.reason).to.equal(UserListsErrorReason.NETWORK);
+      expect(result.error?.reason).to.equal(UserListErrorReason.NETWORK);
       expect(result.error?.message).to.equal('Failed to fetch');
       expect(causeOf(result.error)).to.equal(failure);
     });
@@ -418,11 +414,11 @@ describe('UserListsService', () => {
   });
 });
 
-describe('UserListsError', () => {
+describe('UserListError', () => {
   it('is an Error carrying its reason, message and cause', () => {
     const cause = new Error('underlying');
-    const error = new UserListsError(
-      UserListsErrorReason.USER_NOT_FOUND,
+    const error = new UserListError(
+      UserListErrorReason.USER_NOT_FOUND,
       'no such user',
       { cause },
     );
@@ -434,8 +430,8 @@ describe('UserListsError', () => {
   });
 
   it('keeps the reason values consumers compare against', () => {
-    expect(UserListsErrorReason).to.deep.equal({
-      NETWORK: 'failed to connect to user lists backend service',
+    expect(UserListErrorReason).to.deep.equal({
+      NETWORK: 'failed to connect to userlist backend service',
       BAD_RESPONSE: 'malformed response from backend',
       USER_NOT_FOUND: 'user with the given id was not found',
       LIST_NOT_FOUND: 'user list with the given id was not found',
