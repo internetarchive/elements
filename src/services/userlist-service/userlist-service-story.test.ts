@@ -22,10 +22,13 @@ async function run(
     await story.updateComplete;
   }
   for (const [name, value] of Object.entries(fields)) {
-    const input = root.querySelector(
-      `input[name="${name}"]`,
-    ) as HTMLInputElement;
-    if (typeof value === 'boolean') {
+    const input = root.querySelector(`[name="${name}"]`) as
+      | HTMLInputElement
+      | HTMLSelectElement;
+    if (input instanceof HTMLSelectElement) {
+      input.value = value as string;
+      input.dispatchEvent(new Event('change'));
+    } else if (typeof value === 'boolean') {
       input.checked = value;
       input.dispatchEvent(new Event('change'));
     } else {
@@ -108,15 +111,21 @@ describe('userlist-service story', () => {
 
   test('shows only the inputs the picked method takes', async () => {
     const names = () =>
-      [...story.shadowRoot!.querySelectorAll('input')].map((i) => i.name);
+      [
+        ...story.shadowRoot!.querySelectorAll<
+          HTMLInputElement | HTMLSelectElement
+        >('input, select:not([name="method"], [name="source"])'),
+      ].map((i) => i.name);
 
     expect(names()).to.deep.equal(['userId']);
+    await run('createList');
+    expect(names()).to.deep.equal(['listName', 'description', 'isPrivate']);
     await run('updateList');
     expect(names()).to.deep.equal([
       'listId',
       'listName',
       'description',
-      'isPrivate',
+      'privacy',
     ]);
   });
 
@@ -234,8 +243,9 @@ describe('userlist-service story', () => {
       listName: 'Watched',
     });
 
-    expect(shown.request).to.match(
-      /^PATCH https:\/\/archive.org\/services\/users\/me\/lists\/2\n/,
+    expect(shown.request).to.equal(
+      'PATCH https://archive.org/services/users/me/lists/2\n' +
+        '{"list_name":"Watched"}',
     );
     expect(shown.json().list_name).to.equal('Watched');
     expect(shown.json().date_updated).to.equal('2025-01-02T00:00:00Z');
@@ -243,6 +253,35 @@ describe('userlist-service story', () => {
     const fetched = await run('fetchList', { listId: '2' });
     expect(fetched.json().list_name).to.equal('Watched');
     expect(fetched.json().date_updated).not.to.equal('2025-01-02T00:00:00Z');
+  });
+
+  test('updates only the fields that are filled in', async () => {
+    const shown = await run('updateList', {
+      listId: '2',
+      description: 'Weekend films',
+    });
+
+    expect(shown.call).to.equal(
+      'updateList("2", {"description":"Weekend films"})',
+    );
+    expect(shown.json()).to.include({
+      list_name: 'To watch',
+      description: 'Weekend films',
+      is_private: true,
+    });
+  });
+
+  test('changes privacy only when one is picked', async () => {
+    const shown = await run('updateList', { listId: '2', privacy: 'public' });
+
+    expect(shown.request).to.equal(
+      'PATCH https://archive.org/services/users/me/lists/2\n' +
+        '{"is_private":false}',
+    );
+    expect(shown.json()).to.include({
+      list_name: 'To watch',
+      is_private: false,
+    });
   });
 
   test('deletes a list, answering with the lists that are left', async () => {
