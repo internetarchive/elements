@@ -40,9 +40,9 @@ export class IAIconLabel extends LitElement {
         color: var(--selectedTextColor, var(--ia-color-text-inverse--));
       }
 
-      /* The selected row is dark now, so a light icon stays as it is. A page
-         that brings back a light selected row can set --selectedIconFilter
-         to invert(1) for the old behavior. */
+      /* The selected row is dark, so a light icon stays as it is. A page
+         that sets a light selected row can set --selectedIconFilter to
+         invert(1) to darken the icon. */
       :host(.invert-icon-at-selected.selected) slot[name='icon'] {
         filter: var(--selectedIconFilter, none);
       }

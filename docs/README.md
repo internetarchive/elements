@@ -37,12 +37,11 @@ Where each element stands once the WEBDEV-9043 PRs have landed. "On tokens" mean
 
 | | Elements |
 | --- | --- |
-| On tokens | `ia-button`, `ia-otp-form`, `ia-otp-input`, `ia-donation-thermometer` · `ia-radio-player`, `ia-waveform-progress`, `ia-scrubber-bar`, `ia-transcript-view`, `ia-playback-controls`, `ia-expandable-search-bar` · `ia-topnav` · `ia-dropdown`, `ia-dropdown-search-bar`, `ia-combo-box`, `ia-clearable-text-input`, `ia-wayback-search-form` |
-| Partly | `ia-book-actions`, `ia-feature-feedback`, `ia-donation-form`, `ia-reviews`, `modal-manager`, `ia-histogram-date-range`, `ia-image-viewer`: rem values that match a token read it, but most colors and the other sizes are still literal |
-| Not yet | `ia-item-navigator`, `ia-infinite-scroller` |
+| On tokens | `ia-button`, `ia-otp-form`, `ia-otp-input`, `ia-donation-thermometer` · `ia-radio-player`, `ia-waveform-progress`, `ia-scrubber-bar`, `ia-transcript-view`, `ia-playback-controls`, `ia-expandable-search-bar` · `ia-topnav` · `ia-dropdown`, `ia-dropdown-search-bar`, `ia-combo-box`, `ia-clearable-text-input`, `ia-wayback-search-form` · `ia-donation-form`, `ia-feature-feedback`, `ia-reviews`, `ia-histogram-date-range`, `ia-image-viewer`, `ia-item-navigator`, `ia-infinite-scroller` |
+| Partly | `ia-book-actions`, `modal-manager`: their own styles are on tokens, but the modal header colors they pass to `modal-manager`, `ModalConfig`'s default header and body colors, and the inline styles on book-actions' light-DOM modal buttons are still literal |
 | Nothing to convert | `ia-icon`, `ia-status-indicator`, `ia-sr-only-text`, `ia-audio-element`: they inherit their colors or have no styles of their own |
 
-Moving the partial and unconverted ones onto tokens is the literal-to-token follow-up. The donation form's hosted payment fields keep literal colors: the payment provider styles them inside an iframe, which CSS custom properties can't reach.
+The donation form's light-DOM styles read the tokens by their public names, with the token's value as the fallback, since the private aliases exist only inside a shadow root. Its hosted payment fields keep literal colors: the payment provider styles them inside an iframe, which CSS custom properties can't reach.
 
 ## Changing the system
 

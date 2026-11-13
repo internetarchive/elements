@@ -363,7 +363,7 @@ export class IADropdownSearchBar extends LitElement {
         border-left: 0;
         padding: 0 var(--search-bar-internal-padding--, var(--ia-space-1--)) 0
           var(--ia-space-1--);
-        min-width: 30px;
+        min-width: var(--ia-size-control-sm--);
         height: 100%;
         cursor: pointer;
         display: flex;
@@ -383,6 +383,8 @@ export class IADropdownSearchBar extends LitElement {
       }
 
       #search-button svg {
+        /* The live search icon's size, halfway between the 16px and 20px
+           icon tokens, so neither one matches it. */
         width: 18px;
         height: 18px;
         color: var(--ia-color-text-primary--);

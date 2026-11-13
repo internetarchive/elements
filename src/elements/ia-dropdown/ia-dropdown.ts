@@ -761,7 +761,7 @@ export class IADropdown extends LitElement {
         #dropdown-main li {
           background: ${dropdownBgColor};
           list-style: none;
-          height: 30px;
+          height: var(--ia-size-control-sm--);
           cursor: pointer;
           border-bottom: 0.5px solid ${dropdownBgColor};
           border-top: 0.5px solid ${dropdownBgColor};

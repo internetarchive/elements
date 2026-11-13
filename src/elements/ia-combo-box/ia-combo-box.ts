@@ -1271,7 +1271,7 @@ export class IAComboBox extends LitElement {
       }
 
       #text-input.clear-padding {
-        padding-right: 30px;
+        padding-right: var(--ia-size-control-sm--);
       }
 
       #text-input:read-only {
@@ -1302,7 +1302,7 @@ export class IAComboBox extends LitElement {
       }
 
       #clear-button {
-        flex: 0 0 30px;
+        flex: 0 0 var(--ia-size-control-sm--);
       }
 
       #clear-button[hidden] {
@@ -1322,6 +1322,8 @@ export class IAComboBox extends LitElement {
         background: var(--ia-color-surface-raised--);
         border-radius: var(--ia-radius-default--);
         width: var(--combo-box-list-width--);
+        /* Fixed: a cap on how long the open list grows, which no token
+           covers. */
         max-height: 400px;
         box-shadow: var(--ia-shadow-overlay--);
         opacity: 0;
