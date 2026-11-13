@@ -25,10 +25,6 @@
     "file": "assets/fetch-handler-CW24_TiN.js",
     "name": "fetch-handler"
   },
-  "_ia-CUUsvWlj.css": {
-    "file": "assets/ia-CUUsvWlj.css",
-    "src": "_ia-CUUsvWlj.css"
-  },
   "_ia-audio-element-BiYQH-26.js": {
     "file": "assets/ia-audio-element-BiYQH-26.js",
     "name": "ia-audio-element",
@@ -123,6 +119,10 @@
       "_theme-styles-DzrYL1XH.js",
       "_mediatype-web-DdyRJdJ-.js"
     ]
+  },
+  "_ia-tHSapo1D.css": {
+    "file": "assets/ia-tHSapo1D.css",
+    "src": "_ia-tHSapo1D.css"
   },
   "_ia-transcript-view-jKV6dqjX.js": {
     "file": "assets/ia-transcript-view-jKV6dqjX.js",
@@ -349,7 +349,7 @@
     "src": "demo/docs/assets/brand/ia-logo-white.svg"
   },
   "demo/docs/screens/collection.html": {
-    "file": "assets/demo/docs/screens/collection-J7swHPYv.js",
+    "file": "assets/demo/docs/screens/collection-Dw0aACoI.js",
     "name": "demo/docs/screens/collection",
     "src": "demo/docs/screens/collection.html",
     "isEntry": true,
@@ -357,11 +357,11 @@
       "_site-Czi30d3y.js"
     ],
     "css": [
-      "assets/ia-CUUsvWlj.css"
+      "assets/ia-tHSapo1D.css"
     ]
   },
   "demo/docs/screens/item.html": {
-    "file": "assets/demo/docs/screens/item-C8NPYP0z.js",
+    "file": "assets/demo/docs/screens/item-CSO9YiBt.js",
     "name": "demo/docs/screens/item",
     "src": "demo/docs/screens/item.html",
     "isEntry": true,
@@ -369,11 +369,11 @@
       "_site-Czi30d3y.js"
     ],
     "css": [
-      "assets/ia-CUUsvWlj.css"
+      "assets/ia-tHSapo1D.css"
     ]
   },
   "demo/docs/screens/login.html": {
-    "file": "assets/demo/docs/screens/login-7NC3pfAW.js",
+    "file": "assets/demo/docs/screens/login-h4AYzOgm.js",
     "name": "demo/docs/screens/login",
     "src": "demo/docs/screens/login.html",
     "isEntry": true,
@@ -381,11 +381,11 @@
       "_site-Czi30d3y.js"
     ],
     "css": [
-      "assets/ia-CUUsvWlj.css"
+      "assets/ia-tHSapo1D.css"
     ]
   },
   "demo/docs/screens/profile.html": {
-    "file": "assets/demo/docs/screens/profile-YNdnztGX.js",
+    "file": "assets/demo/docs/screens/profile-BPVu6ceS.js",
     "name": "demo/docs/screens/profile",
     "src": "demo/docs/screens/profile.html",
     "isEntry": true,
@@ -393,11 +393,11 @@
       "_site-Czi30d3y.js"
     ],
     "css": [
-      "assets/ia-CUUsvWlj.css"
+      "assets/ia-tHSapo1D.css"
     ]
   },
   "demo/docs/screens/search.html": {
-    "file": "assets/demo/docs/screens/search-DBOWJ97W.js",
+    "file": "assets/demo/docs/screens/search-Bbn8GCVY.js",
     "name": "demo/docs/screens/search",
     "src": "demo/docs/screens/search.html",
     "isEntry": true,
@@ -405,11 +405,11 @@
       "_site-Czi30d3y.js"
     ],
     "css": [
-      "assets/ia-CUUsvWlj.css"
+      "assets/ia-tHSapo1D.css"
     ]
   },
   "demo/docs/screens/settings.html": {
-    "file": "assets/demo/docs/screens/settings-DyOy9-MB.js",
+    "file": "assets/demo/docs/screens/settings-DGMXXY6B.js",
     "name": "demo/docs/screens/settings",
     "src": "demo/docs/screens/settings.html",
     "isEntry": true,
@@ -417,11 +417,11 @@
       "_site-Czi30d3y.js"
     ],
     "css": [
-      "assets/ia-CUUsvWlj.css"
+      "assets/ia-tHSapo1D.css"
     ]
   },
   "demo/docs/screens/signup.html": {
-    "file": "assets/demo/docs/screens/signup-DFEKcmVn.js",
+    "file": "assets/demo/docs/screens/signup-Bs9tftuL.js",
     "name": "demo/docs/screens/signup",
     "src": "demo/docs/screens/signup.html",
     "isEntry": true,
@@ -429,11 +429,11 @@
       "_site-Czi30d3y.js"
     ],
     "css": [
-      "assets/ia-CUUsvWlj.css"
+      "assets/ia-tHSapo1D.css"
     ]
   },
   "foundations.html": {
-    "file": "assets/foundations-CGQ0GQhp.js",
+    "file": "assets/foundations-CVHPhHw-.js",
     "name": "foundations",
     "src": "foundations.html",
     "isEntry": true,
@@ -441,12 +441,12 @@
       "_site-Czi30d3y.js"
     ],
     "css": [
-      "assets/ia-CUUsvWlj.css",
+      "assets/ia-tHSapo1D.css",
       "assets/site-DOgzNwBQ.css"
     ]
   },
   "icons.html": {
-    "file": "assets/icons-BfvqsakJ.js",
+    "file": "assets/icons-BAA4djSs.js",
     "name": "icons",
     "src": "icons.html",
     "isEntry": true,
@@ -454,7 +454,7 @@
       "_site-Czi30d3y.js"
     ],
     "css": [
-      "assets/ia-CUUsvWlj.css",
+      "assets/ia-tHSapo1D.css",
       "assets/site-DOgzNwBQ.css"
     ]
   },
@@ -531,7 +531,7 @@
     "isDynamicEntry": true
   },
   "playground.html": {
-    "file": "assets/playground-kAovtqS4.js",
+    "file": "assets/playground-DJohow39.js",
     "name": "playground",
     "src": "playground.html",
     "isEntry": true,
@@ -539,12 +539,12 @@
       "_site-Czi30d3y.js"
     ],
     "css": [
-      "assets/ia-CUUsvWlj.css",
+      "assets/ia-tHSapo1D.css",
       "assets/site-DOgzNwBQ.css"
     ]
   },
   "principles.html": {
-    "file": "assets/principles-FGYmduUe.js",
+    "file": "assets/principles-Bfwp1xSu.js",
     "name": "principles",
     "src": "principles.html",
     "isEntry": true,
@@ -552,12 +552,12 @@
       "_site-Czi30d3y.js"
     ],
     "css": [
-      "assets/ia-CUUsvWlj.css",
+      "assets/ia-tHSapo1D.css",
       "assets/site-DOgzNwBQ.css"
     ]
   },
   "screens.html": {
-    "file": "assets/screens-BpI7qHNC.js",
+    "file": "assets/screens-CdABlB1F.js",
     "name": "screens",
     "src": "screens.html",
     "isEntry": true,
@@ -565,12 +565,12 @@
       "_site-Czi30d3y.js"
     ],
     "css": [
-      "assets/ia-CUUsvWlj.css",
+      "assets/ia-tHSapo1D.css",
       "assets/site-DOgzNwBQ.css"
     ]
   },
   "specs.html": {
-    "file": "assets/specs-CfFI20YV.js",
+    "file": "assets/specs-CSpqqeDj.js",
     "name": "specs",
     "src": "specs.html",
     "isEntry": true,
@@ -578,7 +578,7 @@
       "_site-Czi30d3y.js"
     ],
     "css": [
-      "assets/ia-CUUsvWlj.css",
+      "assets/ia-tHSapo1D.css",
       "assets/site-DOgzNwBQ.css"
     ]
   },
