@@ -62,9 +62,9 @@ describe('length tokens', () => {
 
   it('keep hairlines, focus rings, corners, the touch minimum, shadows and breakpoints fixed', () => {
     for (const path of [
-      'size.borderWidth',
-      'size.focusRing',
-      'size.focusRingOffset',
+      'size.border-width',
+      'size.focus-ring',
+      'size.focus-ring-offset',
       'size.target.min',
       'radius.default',
       'shadow.overlay',

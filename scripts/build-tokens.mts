@@ -37,7 +37,6 @@ interface TokenNode {
 
 interface TokenExtension {
   scale?: boolean;
-  responsive?: { below: string; value: string };
 }
 
 interface Token {
@@ -52,10 +51,8 @@ function fail(message: string): never {
   throw new Error(`build-tokens: ${message}`);
 }
 
-/** `['font', 'lineHeight', 'tight']` -> `--ia-font-line-height-tight` */
-const kebab = (s: string) =>
-  s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
-const cssName = (path: string[]) => '--ia-' + path.map(kebab).join('-');
+/** `['font', 'line-height', 'tight']` -> `--ia-font-line-height-tight` */
+const cssName = (path: string[]) => '--ia-' + path.join('-');
 
 /** Rewrites each `{a.b.c}` reference to the referenced token's alias. */
 function resolveRefs(value: string, known: Set<string>): string {
@@ -110,7 +107,16 @@ const source = JSON.parse(readFileSync(sourcePath, 'utf8'));
 const tokens = [...walk(source)];
 const known = new Set(tokens.map((t) => cssName(t.path)));
 
+/*
+ * Keys and values are written into the generated module's css`` template, so
+ * neither may close it or interpolate into it. Keys are kebab-case, so a key
+ * reads the same as the CSS name it becomes.
+ */
 for (const { path, value } of tokens) {
+  const key = path.find((k) => !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(k));
+  if (key !== undefined) {
+    fail(`${path.join('.')}: "${key}" is not a kebab-case key`);
+  }
   if (value.includes('`') || value.includes('${') || value.includes('\\')) {
     fail(`${path.join('.')} contains a backtick, "\${" or backslash`);
   }
@@ -120,31 +126,6 @@ const declarations = tokens.map(
   (token) =>
     `    ${alias(cssName(token.path), resolveRefs(scaled(token), known))}`,
 );
-
-/* Tokens that re-point below a breakpoint, grouped by breakpoint. */
-const breakpoints = source.breakpoint as Record<string, { $value: string }>;
-const responsive = new Map<string, string[]>();
-for (const { path, ext, scale } of tokens) {
-  if (!ext.responsive) continue;
-  const { below } = ext.responsive;
-  const value = scaled({ path, value: ext.responsive.value, ext, scale });
-  if (!breakpoints[below]) {
-    fail(`${path.join('.')} is responsive below unknown breakpoint "${below}"`);
-  }
-  const lines = responsive.get(below) ?? [];
-  lines.push(`      ${alias(cssName(path), resolveRefs(value, known))}`);
-  responsive.set(below, lines);
-}
-const mediaBlocks = [...responsive]
-  .map(
-    ([below, lines]) => `
-  @media (max-width: ${parseInt(breakpoints[below].$value, 10) - 1}px) {
-    :host {
-${lines.join('\n')}
-    }
-  }`,
-  )
-  .join('\n');
 
 /*
  * The inverse context, for anything drawn on a dark surface. The aliases are
@@ -206,7 +187,6 @@ export const tokenStyles = css\`
   :host {
 ${declarations.join('\n')}
   }
-${mediaBlocks}
 
   :host(.ia-inverse),
   :host([data-ia-surface='inverse']),
