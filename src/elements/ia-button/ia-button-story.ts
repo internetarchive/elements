@@ -19,12 +19,20 @@ const propInputSettings: PropInputSettings<IAButton>[] = [
       'secondary',
       'danger',
       'warning',
+      'donate',
       'disabled',
-      'transparent',
+      'ghost',
       'custom',
       'link',
       'danger-link',
     ],
+  },
+  {
+    label: 'Size',
+    propertyName: 'size',
+    defaultValue: 'md',
+    inputType: 'radio',
+    radioOptions: ['sm', 'md', 'lg'],
   },
   {
     label: 'Disabled',
@@ -96,13 +104,13 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Font',
     cssVariable: '--ia-theme-base-font-family',
-    defaultValue: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+    defaultValue: "'Helvetica Neue', Helvetica, Arial, 'Noto Sans', sans-serif",
     inputType: 'text',
   },
   {
     label: 'Transition',
     cssVariable: '--ia-button-transition',
-    defaultValue: 'all 0.1s ease 0s',
+    defaultValue: 'transform 50ms cubic-bezier(0.4, 0, 0.2, 1)',
     inputType: 'text',
   },
   {
@@ -175,6 +183,24 @@ const styleInputSettings: StyleInputSettings[] = [
     label: 'Border color (warning)',
     cssVariable: '--ia-theme-warning-cta-border',
     defaultValue: '#cc7a00',
+    inputType: 'color',
+  },
+  {
+    label: 'Text color (donate)',
+    cssVariable: '--ia-theme-donate-cta-text-color',
+    defaultValue: '#ffffff',
+    inputType: 'color',
+  },
+  {
+    label: 'Background color (donate)',
+    cssVariable: '--ia-theme-donate-cta-fill',
+    defaultValue: '#20705a',
+    inputType: 'color',
+  },
+  {
+    label: 'Border color (donate)',
+    cssVariable: '--ia-theme-donate-cta-border',
+    defaultValue: '#20705a',
     inputType: 'color',
   },
   {
