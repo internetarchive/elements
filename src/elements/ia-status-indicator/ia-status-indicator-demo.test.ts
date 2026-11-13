@@ -85,9 +85,7 @@ describe('ia-status-indicator demo', () => {
 
     const after = indicator.getBoundingClientRect().width;
     expect(after, `width did not change from ${before}px`).to.not.equal(before);
-    expect(after, 'Theater is 5rem, so 80px at the default root size').to.equal(
-      80,
-    );
+    expect(after, 'Theater is 5rem, so 50px at a 10px root').to.equal(50);
   });
 
   test('choosing a mediatype swaps the glyph and the usage example', async () => {

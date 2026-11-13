@@ -4,7 +4,8 @@ const themeStyles = css`
   :host {
     /*
     BASE STYLES
-    Default fallback values for theme styles. Assumes 16px root font size.
+    Default fallback values for theme styles. Assumes a 10px root font size
+    (html { font-size: 62.5% }), as on archive.org.
     To adjust values, use theme styles below.
     */
 
@@ -12,18 +13,18 @@ const themeStyles = css`
     --default-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
     /* Sizing */
-    --default-icon-width: 1.25rem;
+    --default-icon-width: 2rem; /* 20px */
     --default-padding-sm: 5px;
     --default-combo-box-width: auto;
     --default-search-bar-width: auto;
     --default-search-bar-height: 30px;
-    --default-button-padding: 0 1.875rem; /* 0 30px with 16px root font size */
-    --default-button-height: 2.25rem; /* 36px with 16px root font size */
+    --default-button-padding: 0 3rem; /* 0 30px */
+    --default-button-height: 3.6rem; /* 36px */
     --default-button-width: fit-content;
     --default-button-border-width: 1px;
-    --default-button-border-radius: 0.25rem; /* 4px with 16px root font size */
-    --default-font-size-standard: 0.875rem; /* 14px with 16px root font size */
-    --default-font-size-lg: 2.25rem; /* 36px with 16px root font size */
+    --default-button-border-radius: 0.4rem; /* 4px */
+    --default-font-size-standard: 1.4rem; /* 14px */
+    --default-font-size-lg: 3.6rem; /* 36px */
 
     /* Colors */
     --true-white: #fff;
