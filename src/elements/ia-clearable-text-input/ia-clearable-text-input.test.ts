@@ -101,6 +101,20 @@ describe('IaClearableTextInput', () => {
     );
   });
 
+  test('draws the text field focus ring over its border, with no band', async () => {
+    const el = await fixture<IaClearableTextInput>(
+      html`<ia-clearable-text-input></ia-clearable-text-input>`,
+    );
+    const input =
+      el.shadowRoot!.querySelector<HTMLInputElement>('#text-input')!;
+    await userEvent.keyboard('{Tab}');
+    input.focus();
+    const style = getComputedStyle(input);
+    expect(style.outlineWidth).to.equal('2px');
+    expect(style.outlineOffset).to.equal('-2px');
+    expect(style.boxShadow).to.equal('none');
+  });
+
   test('shows the clear button when the input field has initial text', async () => {
     const el = await fixture<IaClearableTextInput>(
       html`<ia-clearable-text-input .value=${'a'}></ia-clearable-text-input>`,

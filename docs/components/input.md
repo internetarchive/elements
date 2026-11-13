@@ -26,7 +26,7 @@ defaults declare `--input-border-width: 0` and `--input-border-radius: 0`, which
 | Text | `--ia-font-size-md`, `--ia-color-text-primary` |
 | Placeholder | `--ia-color-text-secondary` — `#666`, still readable |
 | Padding | `--ia-space-2` inline (10px) |
-| Focus | `2px solid var(--ia-color-border-focus)`, offset 2px |
+| Focus | `2px solid var(--ia-color-border-focus)`, inset 2px, over the border |
 
 **Below the `md` breakpoint the font size is 16px, not 1.4rem.** iOS Safari
 zooms the viewport whenever a focused input's text is under 16px, and the user has to
@@ -49,7 +49,7 @@ that defines where a control begins has to clear 3:1 (WCAG 1.4.11); `#ddd` is 1.
 | --- | --- |
 | rest | as above |
 | hover | border → `--ia-color-text-primary` |
-| focus-visible | 2px focus ring, offset 2px; border unchanged |
+| focus-visible | 2px focus ring drawn over the border, inside the edge (offset −2px); no band. Shows on click too, as browsers do for text fields |
 | filled | identical to rest — a filled field is not a state |
 | error | border `--ia-color-status-danger`, message below, `aria-invalid="true"` |
 | disabled | background `--ia-color-surface-sunken`, border `--ia-color-border-default`, `cursor: not-allowed` |

@@ -242,10 +242,11 @@ export class IAOTPInput extends LitElement {
           border-color: var(--ia-color-text-primary--);
         }
 
+        /* Over the border, inside the edge, like every text field. */
         input:focus-visible {
           outline: var(--ia-size-focus-ring--) solid
             var(--ia-color-border-focus--);
-          outline-offset: var(--ia-size-focus-ring-offset--);
+          outline-offset: calc(-1 * var(--ia-size-focus-ring--));
         }
       `,
     ];
