@@ -87,7 +87,7 @@ export default defineConfig({
         test: {
           name: 'node',
           environment: 'node',
-          include: ['src/**/*.node.test.ts'],
+          include: ['src/**/*.node.test.ts', 'demo/**/*.node.test.ts'],
           exclude,
         },
       },

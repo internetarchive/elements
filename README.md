@@ -4,6 +4,26 @@
 
 <https://internetarchive.github.io/elements>
 
+Alongside the elements, the demo shows the design system they implement: its
+principles, foundations and tokens, a reference spec for every component, whole
+screens, icons and stress tests. The docs behind it are in [docs/](docs/README.md).
+
+## Design system
+
+elements implements archive.org's design system: the tokens (colors, type, spacing, sizes, motion), the foundations they come from, a spec for each component, and page-level patterns. Components target **WCAG 2.2 level AA**; [accessibility.md](docs/foundations/accessibility.md) has the rules.
+
+| Part | Where |
+| --- | --- |
+| See it rendered | The [demo](https://internetarchive.github.io/elements)'s Principles, Foundations, Specs, Screens, Icons and Playground tabs |
+| Foundations, component specs, patterns | [docs/](docs/README.md), which also lists which components follow the system so far |
+| Token values | [tokens/tokens.json](tokens/tokens.json) |
+
+**Using components on a page.** They follow the tokens with no setup. To change one, set its public name, such as `--ia-color-text-link`, on `:root` or any ancestor; a component's own `--ia-theme-*` hooks still win over the tokens. Add the `ia-inverse` class for a dark surface, and set `--ia-unit` to scale sizes. [Design tokens](#design-tokens) has the details. A page can't yet read the tokens in its own CSS: they're private to each component.
+
+**Building a component.** Read the tokens as [Design tokens](#design-tokens) describes, preferring the semantic roles (`text`, `surface`, `border`, `action`, `status`) over the palette. A value the tokens don't have becomes a new token in `tokens/tokens.json`: a length goes in a group with a scale flag, and a color the component pairs with another gets that pairing in `src/themes/tokens.node.test.ts`. Write or update the component's spec in [docs/components/](docs/components/).
+
+**Changing the system.** Change `tokens/tokens.json` and the spec in one PR, and say why in the PR; [docs/README.md](docs/README.md#changing-the-system) has the two checks it needs.
+
 ## Installation
 
 ```zsh
@@ -298,7 +318,7 @@ const styleInputSettings: StyleInputSettings[] = [
 
 #### Creating a new theme style
 While working on a component, you may realize that a customizable style you need doesn't already have an associated variable in `theme-styles.ts`. If this happens, you can follow the following steps to add one:
-1. Select a rational default value for the style, preferably a design token, and add it to the defaults section at the top of the file:
+1. Select a rational default value for the style from the [design tokens](#design-tokens), snapped to the nearest token in the role that fits (a literal that stays needs a comment saying why), and add it to the defaults section at the top of the file:
 ```
 --default-font-size-xs: var(--ia-font-size-xs--); /* 11px */
 ```
