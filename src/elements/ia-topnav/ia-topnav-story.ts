@@ -162,13 +162,14 @@ export class IATopNavStory extends LitElement {
             <code>biblio</code> adds the book-scanning links for a texts item.
           </p>
           <p>
-            Sizes scale off the topnav's own <code>--topnavUnit--</code>, which
+            Sizes scale off elements' shared <code>--ia-unit</code>, which
             tracks the browser's default font size rather than the host page's
             <code>html</code> font size, so the topnav renders the same whether
             or not a page resets its root font size. It does grow with the
-            user's browser font-size setting, and <code>--topnavFontSize</code>
-            overrides that base size. The layout is verified up to 18px; at 20px
-            and up the media buttons can wrap at desktop widths.
+            user's browser font-size setting, and setting
+            <code>--ia-unit</code> on <code>ia-topnav</code> scales it on its
+            own (<code>2px</code> doubles it). The layout is verified up to
+            18px; at 20px and up the media buttons can wrap at desktop widths.
           </p>
           <p>
             The <code>language-picker</code> slot sits at the far right of the
