@@ -1,6 +1,7 @@
 import { msg } from '@lit/localize';
 import { downloadUrl } from '@src/utils/download-url/download-url';
 import { IATopNavConfig, IATopNavMenuConfig } from '../models';
+import { formatUrl } from '../lib/helpers';
 
 export const defaultTopNavConfig: IATopNavConfig = {
   // Google Analytics event category
@@ -15,6 +16,7 @@ export const defaultTopNavConfig: IATopNavConfig = {
  * @param { string } itemIdentifier The current item being viewed, to populate admin menu items
  * @param { string } uploader email of the item's uploader, for the uploader admin section
  * @param { string } biblio biblio URL for a texts item, for the biblio admin section
+ * @param { string } uploadUrl target of the mobile "Upload files" item. A path is joined to baseHost, an absolute URL is used as given.
  * @returns { object }
  */
 export function buildTopNavMenus(
@@ -23,6 +25,7 @@ export function buildTopNavMenus(
   itemIdentifier: string = '',
   uploader: string = '',
   biblio: string = '',
+  uploadUrl: string = '/upload',
 ): IATopNavMenuConfig {
   return {
     audio: {
@@ -589,7 +592,7 @@ export function buildTopNavMenus(
     },
     user: [
       {
-        url: `${baseHost}/upload`,
+        url: formatUrl(uploadUrl || '/upload', baseHost),
         title: msg('Upload files'),
         key: 'Upload files',
         analyticsEvent: 'UserUpload',

@@ -326,6 +326,91 @@ describe('<ia-topnav>', () => {
     });
   });
 
+  describe('uploadUrl', () => {
+    const uploadLinks = (el: IATopNav) => {
+      const desktop = el.shadowRoot
+        ?.querySelector('ia-topnav-primary-nav')
+        ?.shadowRoot?.querySelector('a.upload')
+        ?.getAttribute('href');
+      const userMenu = el.shadowRoot?.querySelector(
+        'ia-topnav-user-menu',
+      ) as UserMenu;
+      const mobile = userMenu.menuItems
+        .flat()
+        .find((item) => item.class === 'mobile-upload')?.url;
+      return { desktop, mobile };
+    };
+
+    test('links to /upload on the base host by default', async () => {
+      const el = await fixture<IATopNav>(
+        html`<ia-topnav username="foopey"></ia-topnav>`,
+      );
+      expect(uploadLinks(el)).to.deep.equal({
+        desktop: 'https://archive.org/upload',
+        mobile: 'https://archive.org/upload',
+      });
+    });
+
+    test('joins a path to the base host', async () => {
+      const el = await fixture<IATopNav>(
+        html`<ia-topnav
+          username="foopey"
+          uploadUrl="/upload?collection=foo"
+        ></ia-topnav>`,
+      );
+      expect(uploadLinks(el)).to.deep.equal({
+        desktop: 'https://archive.org/upload?collection=foo',
+        mobile: 'https://archive.org/upload?collection=foo',
+      });
+    });
+
+    test('uses an absolute URL as given', async () => {
+      const el = await fixture<IATopNav>(
+        html`<ia-topnav
+          username="foopey"
+          uploadUrl="https://example.org/up"
+        ></ia-topnav>`,
+      );
+      expect(uploadLinks(el)).to.deep.equal({
+        desktop: 'https://example.org/up',
+        mobile: 'https://example.org/up',
+      });
+    });
+
+    test('falls back to /upload when the attribute is removed', async () => {
+      const el = await fixture<IATopNav>(
+        html`<ia-topnav
+          username="foopey"
+          uploadurl="/upload?collection=foo"
+        ></ia-topnav>`,
+      );
+      el.removeAttribute('uploadurl');
+      await elementUpdated(el);
+      await elementUpdated(
+        el.shadowRoot!.querySelector('ia-topnav-user-menu')!,
+      );
+      expect(uploadLinks(el)).to.deep.equal({
+        desktop: 'https://archive.org/upload',
+        mobile: 'https://archive.org/upload',
+      });
+    });
+
+    test('updates both links when uploadUrl changes', async () => {
+      const el = await fixture<IATopNav>(
+        html`<ia-topnav username="foopey"></ia-topnav>`,
+      );
+      el.uploadUrl = '/upload?collection=bar';
+      await elementUpdated(el);
+      await elementUpdated(
+        el.shadowRoot!.querySelector('ia-topnav-user-menu')!,
+      );
+      expect(uploadLinks(el)).to.deep.equal({
+        desktop: 'https://archive.org/upload?collection=bar',
+        mobile: 'https://archive.org/upload?collection=bar',
+      });
+    });
+  });
+
   describe('search slot', () => {
     test('forwards search slot to ia-topnav-primary-nav', async () => {
       const el = await fixture<IATopNav>(html`<ia-topnav></ia-topnav>`);
