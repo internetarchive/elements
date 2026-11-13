@@ -28,6 +28,7 @@ import topnavFocusStyles from './focus-styles';
 export class PrimaryNav extends TrackedElement {
   @property({ type: String }) mediaBaseHost = 'https://archive.org';
   @property({ type: String }) baseHost = '';
+  @property({ type: String }) uploadUrl = '/upload';
   @property({ type: Boolean }) hideSearch = false;
   @property({ type: Object }) config: IATopNavConfig = defaultTopNavConfig;
   @property({ type: String }) openMenu = '';
@@ -329,7 +330,10 @@ export class PrimaryNav extends TrackedElement {
 
   get uploadButtonTemplate() {
     return html` <a
-      .href="${formatUrl('/upload' as string & Location, this.baseHost)}"
+      .href="${formatUrl(
+        (this.uploadUrl || '/upload') as string & Location,
+        this.baseHost,
+      )}"
       class="upload"
       aria-label=${msg('Upload')}
       @focus=${this.toggleMediaMenu}
