@@ -154,7 +154,7 @@ export class IAWaybackSearchForm extends LitElement {
           box-sizing: border-box;
           text-align: center;
           border: none;
-          /* The cream is the panel; no offset shadow (D-14). */
+          /* The cream is the panel; no offset shadow. */
           border-radius: var(--ia-radius-lg--);
           background-color: var(--ia-color-brand-wayback--);
         }
