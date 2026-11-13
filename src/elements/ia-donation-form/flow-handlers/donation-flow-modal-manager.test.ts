@@ -75,7 +75,9 @@ describe('DonationFlowModalManager', () => {
     manager.showProcessingModal();
 
     const config = modalManager.showModalOptions?.config;
-    expect(config?.headerColor).to.equal('#497fbf');
+    expect(config?.headerColor).to.equal(
+      'var(--ia-color-status-info, #194880)',
+    );
     expect(config?.showProcessingIndicator).to.be.true;
     expect(config?.processingImageMode).to.equal('processing');
     expect(config?.closeOnBackdropClick).to.be.false;
@@ -88,7 +90,9 @@ describe('DonationFlowModalManager', () => {
     manager.showErrorModal({ message: 'foo-error' });
 
     const options = modalManager.showModalOptions;
-    expect(options?.config.headerColor).to.equal('#691916');
+    expect(options?.config.headerColor).to.equal(
+      'var(--ia-color-status-danger, #b8161c)',
+    );
     expect(options?.config.showProcessingIndicator).to.be.false;
     expect(options?.config.closeOnBackdropClick).to.be.true;
     expect(options?.config.showCloseButton).to.be.true;
@@ -107,7 +111,9 @@ describe('DonationFlowModalManager', () => {
     manager.showThankYouModal({ successResponse: mockSuccessResponse });
 
     const config = modalManager.showModalOptions?.config;
-    expect(config?.headerColor).to.equal('#55A183');
+    expect(config?.headerColor).to.equal(
+      'var(--ia-color-status-success, #20705a)',
+    );
     expect(config?.processingImageMode).to.equal('complete');
     expect(config?.showProcessingIndicator).to.be.true;
     expect(templateText(config?.title)).to.equal('Thank You!');
@@ -147,7 +153,9 @@ describe('DonationFlowModalManager', () => {
     });
 
     const config = modalManager.showModalOptions?.config;
-    expect(config?.headerColor).to.equal('#55A183');
+    expect(config?.headerColor).to.equal(
+      'var(--ia-color-status-success, #20705a)',
+    );
     expect(config?.closeOnBackdropClick).to.be.false;
     expect(templateText(config?.title)).to.equal('Confirm monthly donation');
     expect(templateText(config?.message)).to.include(

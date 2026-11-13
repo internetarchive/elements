@@ -26,6 +26,7 @@ import {
 } from './legacy-review-service';
 import './ia-review';
 import './ia-review-form';
+import { tokenStyles } from '@src/themes/tokens';
 
 /**
  * Renders the full IA reviews piece
@@ -373,6 +374,7 @@ export class IAReviews extends LitElement {
 
   static get styles(): CSSResultGroup {
     return [
+      tokenStyles,
       css`
         :host {
           font-family: var(
@@ -383,28 +385,38 @@ export class IAReviews extends LitElement {
             sans-serif
           );
 
-          color: var(--ia-text-color, #2c2c2c);
+          color: var(--ia-text-color, var(--ia-color-text-primary--));
         }
 
         .reviews-list {
           display: flex;
           flex-direction: column;
-          gap: 2rem;
+          gap: var(--ia-space-4--);
           width: 100%;
         }
 
         .own-review-container {
-          --error-color: var(--container-error-color, #ea0202);
-          --link-color: var(--container-link-color, #4f65f5);
-          --container-error-color: #ea0202;
-          --container-link-color: #4f65f5;
-          --container-bg-color: #fbfbfd;
-          --container-border-color: #999999;
+          --error-color: var(
+            --container-error-color,
+            var(--ia-color-text-danger--)
+          );
+          --link-color: var(
+            --container-link-color,
+            var(--ia-color-text-link--)
+          );
+          --container-error-color: var(--ia-color-text-danger--);
+          --container-link-color: var(--ia-color-text-link--);
+          --container-bg-color: var(--ia-color-surface-page--);
+          --container-border-color: var(--ia-color-border-strong--);
 
-          border: 2px solid var(--container-border-color, #999999);
-          border-radius: 5px;
-          background-color: var(--container-bg-color, #fbfbfd);
-          padding: 10px;
+          border: 2px solid
+            var(--container-border-color, var(--ia-color-border-strong--));
+          border-radius: var(--ia-radius-default--);
+          background-color: var(
+            --container-bg-color,
+            var(--ia-color-surface-page--)
+          );
+          padding: var(--ia-space-2--);
         }
 
         .message {
