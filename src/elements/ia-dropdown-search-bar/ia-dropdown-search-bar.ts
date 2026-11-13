@@ -237,9 +237,12 @@ export class IADropdownSearchBar extends LitElement {
   static get styles() {
     const ownStyles = css`
       :host {
-        --search-bar-height--: var(--search-bar-height, 30px);
+        --search-bar-height--: var(
+          --search-bar-height,
+          var(--ia-size-control-sm--)
+        );
         --search-bar-width--: var(--search-bar-width, 300px);
-        --search-bar-internal-padding--: var(--padding-sm, 5px);
+        --search-bar-internal-padding--: var(--padding-sm, var(--ia-space-1--));
         --clear-button-offset--: var(--clear-button-offset, 0);
         /* While it would be nice to fall back to ia-dropdown's own default here by making this var
            fall back to "initial", older Safari versions don't support that keyword in a var() fallback.
@@ -254,7 +257,7 @@ export class IADropdownSearchBar extends LitElement {
 
       #main-bar {
         display: flex;
-        height: var(--search-bar-height--, 30px);
+        height: var(--search-bar-height--, var(--ia-size-control-sm--));
         flex: 1;
       }
 
@@ -264,41 +267,58 @@ export class IADropdownSearchBar extends LitElement {
         height: 100%;
         box-sizing: border-box;
 
-        background-color: #f5f5f7;
-        border: 1px solid #999;
-        border-radius: 5px 0 0 5px;
+        background-color: var(--ia-color-surface-sunken--);
+        border: var(--ia-size-border-width--) solid
+          var(--ia-color-border-strong--);
+        border-radius: var(--ia-radius-default--) 0 0 var(--ia-radius-default--);
 
-        --dropdownMainButtonPadding: 0 var(--search-bar-internal-padding--, 5px);
-        --dropdownBgColor: #2c2c2c;
-        --dropdownTextColor: #fff;
-        --dropdownBorderColor: #ddd;
-        --dropdownCaretColor: var(--ia-theme-primary-text-color, #2c2c2c);
-        --dropdownHoverBgColor: rgba(255, 255, 255, 0.3);
-        --dropdownHoverTextColor: #fff;
-        --dropdownSelectedBgColor: rgba(255, 255, 255, 0.3);
-        --dropdownSelectedTextColor: #fff;
+        --dropdownMainButtonPadding: 0
+          var(--search-bar-internal-padding--, var(--ia-space-1--));
+        /* The trigger sits on the light sunken surface. */
+        --dropdownFocusRingColor: var(--ia-color-border-focus--);
+        --dropdownFocusBand: var(--ia-shadow-focus-band--);
+        /* The open picker is the dark dropdown panel. */
+        --dropdownBgColor: var(--ia-color-surface-inverse--);
+        --dropdownTextColor: var(--ia-color-text-inverse--);
+        --dropdownBorderColor: var(--ia-color-border-inverse--);
+        --dropdownCaretColor: var(
+          --ia-theme-primary-text-color,
+          var(--ia-color-text-primary--)
+        );
+        --dropdownHoverBgColor: var(--ia-color-hover-overlay-inverse--);
+        --dropdownHoverTextColor: var(--ia-color-text-inverse--);
+        --dropdownSelectedBgColor: var(--ia-color-selected-soft-fill-inverse--);
+        --dropdownSelectedTextColor: var(--ia-color-text-inverse--);
         --dropdownWhiteSpace: nowrap;
         --dropdownOffsetTop: 2px;
-        --caretHeight: 8px;
-        --caretWidth: 12px;
-        --caretPadding: 0 0 0 5px;
+        --caretHeight: var(--ia-size-icon-xs--);
+        --caretWidth: var(--ia-size-icon-xs--);
+        --caretPadding: 0 0 0 var(--ia-space-1--);
         --dropdownFontSize: inherit;
-        --dropdownBorderRadius: 4px;
+        --dropdownBorderRadius: var(--ia-radius-default--);
         --buttonSlotPaddingRight: 0;
         --dropdownTextAlign: left;
         --dropdownListZIndex: var(--dropdown-z-index--);
       }
 
+      #category-dropdown:hover {
+        background-color: var(--ia-color-border-subtle--);
+      }
+
       #category-dropdown [slot='dropdown-label'] {
-        color: var(--ia-theme-primary-text-color, #2c2c2c);
-        font-size: 1.4rem;
+        color: var(
+          --ia-theme-primary-text-color,
+          var(--ia-color-text-primary--)
+        );
+        font-size: var(--ia-font-size-md--);
         font-family: inherit;
         white-space: nowrap;
       }
 
       .no-dropdown #search-input {
-        border-left: 1px solid #999;
-        border-radius: 5px 0 0 5px;
+        border-left: var(--ia-size-border-width--) solid
+          var(--ia-color-border-strong--);
+        border-radius: var(--ia-radius-default--) 0 0 var(--ia-radius-default--);
         overflow: hidden;
       }
 
@@ -306,20 +326,25 @@ export class IADropdownSearchBar extends LitElement {
         width: 100%;
         height: 100%;
         box-sizing: border-box;
-        border-top: 1px solid #999;
-        border-bottom: 1px solid #999;
+        border-top: var(--ia-size-border-width--) solid
+          var(--ia-color-border-strong--);
+        border-bottom: var(--ia-size-border-width--) solid
+          var(--ia-color-border-strong--);
         font-size: inherit;
 
         --input-height: calc(var(--search-bar-height--) - 2px);
-        --input-padding: 0 var(--search-bar-internal-padding--, 5px);
+        --input-padding: 0
+          var(--search-bar-internal-padding--, var(--ia-space-1--));
         --input-background-color: var(
           --ia-theme-secondary-background-color,
-          #fff
+          var(--ia-color-surface-raised--)
         );
+        --input-color: var(--ia-color-text-primary--);
+        /* Inside the border, so the picker and the submit don't hide it. */
+        --input-focus-ring-offset: calc(-1 * var(--ia-size-focus-ring--));
         --input-border-radius: 0;
         --input-border-width: 0;
         --input-box-shadow: none;
-        --input-focused-box-shadow: none;
         --input-font-size: auto;
         --clear-button-top: var(--clear-button-offset--, 0);
         --clear-button-right: 2px;
@@ -328,12 +353,17 @@ export class IADropdownSearchBar extends LitElement {
       #search-button {
         appearance: none;
         box-sizing: border-box;
-        border-radius: 0 5px 5px 0;
-        background-color: var(--ia-theme-secondary-background-color, #fff);
-        border: 1px solid #999;
+        border-radius: 0 var(--ia-radius-default--) var(--ia-radius-default--) 0;
+        background-color: var(
+          --ia-theme-secondary-background-color,
+          var(--ia-color-surface-raised--)
+        );
+        border: var(--ia-size-border-width--) solid
+          var(--ia-color-border-strong--);
         border-left: 0;
-        padding: 0 var(--search-bar-internal-padding--, 5px) 0 5px;
-        min-width: 30px;
+        padding: 0 var(--search-bar-internal-padding--, var(--ia-space-1--)) 0
+          var(--ia-space-1--);
+        min-width: var(--ia-size-control-sm--);
         height: 100%;
         cursor: pointer;
         display: flex;
@@ -342,14 +372,26 @@ export class IADropdownSearchBar extends LitElement {
         flex-shrink: 0;
       }
 
+      #search-button:hover {
+        background-color: var(--ia-color-surface-sunken--);
+      }
+
+      #search-button:focus-visible {
+        outline: var(--ia-size-focus-ring--) solid
+          var(--ia-color-border-focus--);
+        outline-offset: var(--ia-size-focus-ring-offset--);
+      }
+
       #search-button svg {
+        /* The live search icon's size, halfway between the 16px and 20px
+           icon tokens, so neither one matches it. */
         width: 18px;
         height: 18px;
-        color: #2c2c2c;
+        color: var(--ia-color-text-primary--);
       }
 
       .search-button-loading-icon {
-        --icon-width: 20px;
+        --icon-width: var(--ia-size-icon-md--);
         margin-top: 2px;
       }
     `;
