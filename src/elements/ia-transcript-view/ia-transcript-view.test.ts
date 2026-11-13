@@ -1,5 +1,5 @@
 import { fixture, oneEvent, elementUpdated } from '@open-wc/testing-helpers';
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { html } from 'lit';
 
 import { formatDuration } from './duration-formatter';
@@ -408,6 +408,46 @@ describe('IA Transcript View', () => {
     await elementUpdated(el);
 
     expect(el.selectedSearchResultIndex).to.equal(0);
+  });
+
+  test('drops the pending autoscroll-resume timer when removed', async () => {
+    const el = await scrollableFixture();
+    el.scrollTimerDelay = 50;
+
+    wheel(el, 100);
+    expect(el.autoScroll).to.be.false;
+
+    el.remove();
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 80);
+    });
+
+    // The timer would have flipped autoscroll back on by now had it survived
+    // the removal, writing to an element that is no longer in the document.
+    expect(el.autoScroll).to.be.false;
+  });
+
+  test('stops the scroll animation when removed', async () => {
+    const el = await scrollableFixture();
+    const cancel = vi.spyOn(globalThis, 'cancelAnimationFrame');
+
+    try {
+      // Jumping the playhead well down the transcript starts an animated
+      // scroll, which runs across many frames.
+      el.currentTime = 200;
+      await elementUpdated(el);
+
+      // Starting a scroll cancels any previous one, so only calls made from
+      // here on say anything about what removing the element does.
+      cancel.mockClear();
+
+      el.remove();
+
+      expect(cancel).toHaveBeenCalled();
+    } finally {
+      cancel.mockRestore();
+    }
   });
 });
 
