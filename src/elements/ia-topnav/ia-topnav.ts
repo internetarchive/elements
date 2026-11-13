@@ -25,12 +25,6 @@ import type { PrimaryNav } from './ia-topnav-primary-nav';
 import './ia-topnav-signed-out-dropdown';
 import './ia-topnav-user-menu';
 import themeStyles from '@src/themes/theme-styles';
-import {
-  applyTopnavUnitFallback,
-  registerTopnavUnit,
-} from './lib/register-topnav-unit';
-
-const topnavUnitRegistered = registerTopnavUnit();
 
 @customElement('ia-topnav')
 export class IATopNav extends LitElement {
@@ -117,12 +111,6 @@ export class IATopNav extends LitElement {
     window.addEventListener(LOCALE_STATUS_EVENT, this.boundHandleLocaleStatus);
     document.addEventListener('keydown', this.boundHandleKeydown);
     document.addEventListener('click', this.boundHandleClick);
-    // Only matters on a browser without CSS.registerProperty. Reads the
-    // font-size this connect resolved to, so a later change to
-    // --topnavFontSize on an already-connected instance won't move it again.
-    // That's an accepted limitation on those older browsers, not a bug on
-    // the registered path above.
-    if (!topnavUnitRegistered) applyTopnavUnitFallback(this);
   }
 
   disconnectedCallback() {
@@ -418,22 +406,25 @@ export class IATopNav extends LitElement {
       css`
         :host {
           /**
-           * 'medium' is the browser's default font size (16px, or whatever
-           * the user raised it to), so this ignores a page's own root
-           * font-size reset (e.g. archive.org and offshoot's 10px html).
-           * --topnavUnit-- is 1px at that default, computed here (where it's
-           * registered as an inheriting <length> so it resolves once and
-           * doesn't re-evaluate against a descendant's own font-size) and
-           * reaches every part of the topnav sized with
-           * calc(N * var(--topnavUnit--)).
+           * Every part of the topnav is sized with
+           * calc(N * var(--topnavUnit--)). It's elements' shared --ia-unit:
+           * 1px at the browser's default font size, growing with the user's
+           * own setting, whatever the page's root font size. Set --ia-unit on
+           * <ia-topnav> to scale it on its own (2px doubles it).
            *
-           * Public override: --topnavFontSize sets that base size. The layout
-           * is verified from 16px (the browser default) up to 18px. Past
-           * that, at desktop widths around 1440px, the media buttons can
-           * wrap onto a second row (seen at 20px and up).
+           * Deprecated: --topnavFontSize, the topnav's base font size, still
+           * sets the unit at a sixteenth of it (32px doubles it). It has to
+           * be an absolute length such as px, since an em here would resolve
+           * against each part's own font size.
+           *
+           * The layout is verified from 16px (the browser default) up to
+           * 18px. Past that, at desktop widths around 1440px, the media
+           * buttons can wrap onto a second row (seen at 20px and up).
            */
-          font-size: var(--topnavFontSize, medium);
-          --topnavUnit--: calc(1em / 16);
+          --topnavUnit--: calc(
+            var(--topnavFontSize, calc(16 * var(--ia-unit, 1px))) / 16
+          );
+          font-size: calc(16 * var(--topnavUnit--));
 
           --white: #fff;
           --grey13: #222;

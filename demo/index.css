@@ -1,4 +1,4 @@
-/* archive.org's root font size, which the components and tokens assume: 1rem = 10px. */
+/* archive.org's root font size, which components' own rem values assume: 1rem = 10px. */
 html {
   font-size: 62.5%;
 }

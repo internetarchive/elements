@@ -115,9 +115,11 @@
     "./dist/src/elements/**",
     "./dist/src/labs/**",
     "./dist/src/locales/**",
+    "./dist/src/themes/unit.js",
     "./src/elements/**",
     "./src/labs/**",
     "./src/locales/**",
+    "./src/themes/unit.ts",
     "./demo/**"
   ],
   "files": [
