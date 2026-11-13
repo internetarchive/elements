@@ -26,6 +26,8 @@ Services (code with no UI, like a metadata fetcher or a parser) import the same 
 import { FoobarService } from "@internetarchive/elements/services/foobar-service/foobar-service";
 ```
 
+Sizes from the design tokens don't depend on the page's root font size, so a component looks the same on archive.org's 10px root and on a page with the browser's default 16px. Text, spacing, control heights, icons and containers grow with the user's browser font-size setting; borders, focus rings, corners, the 44px touch minimum, shadows and breakpoints stay fixed. elements does this by setting `--ia-unit` on `<html>` when it loads: `1px` at the browser's default 16px, `1.25px` at 20px. A page can set `--ia-unit` itself, on `:root` or on one element, to scale components on its own.
+
 ## Build Dependencies
 
 We use SVGs in this repo, which not all build systems support out of the box. Here's how to support SVGs:
@@ -245,6 +247,21 @@ For styling, our components use a series of rational CSS variable fallbacks to e
 1. All components render out of the box with reasonable defaults for colors, sizing, etc.
 2. Customizable styles can be adjusted by the consumer by setting a CSS variable at the component or global level
 3. The available variables are easy to find in the component file and visible in the story
+
+#### Design tokens
+
+The design system's values (colors, type, spacing, radius, sizing, motion and more) are design tokens, defined in [tokens/tokens.json](tokens/tokens.json). `pnpm run tokens` generates `src/themes/tokens.ts` from it; `dev`, `build`, `test` and `typecheck` run it first. Never edit the generated file.
+
+`tokenStyles` (`@src/themes/tokens`) declares every token as a private alias on `:host`, named after the token with a trailing `--`. Put it in the component's `styles` array; pasting it into a `css` template with `${}` copies the whole token sheet into that component's stylesheet. Read the alias, never the token itself:
+```
+color: var(--ia-color-text-primary--);
+padding: var(--ia-space-2--);
+```
+A page overrides a token by setting its public name, e.g. `--ia-color-text-link`, on `:root` or any ancestor. Setting a palette value such as `--ia-color-palette-navy-700` changes every role that points at it. Use the semantic roles (`text`, `surface`, `border`, `action`, `status`, ...) in components, not the palette.
+
+For a dark surface, add the `ia-inverse` class, either inside the shadow root or on the element itself. It re-points the text, border, focus, surface, hover and selected aliases to values that clear contrast on dark backgrounds. It reaches only that element's own shadow root: a nested elements component sets its aliases afresh, so it needs the class too.
+
+Length tokens are px at the browser's default font size. Each group of lengths in `tokens/tokens.json` sets `$extensions.ia.scale`: `true` builds as `calc(N * var(--ia-unit, 1px))`, `false` as plain px, and a length outside either fails the build. `src/themes/tokens.node.test.ts` checks every color pairing the system recommends against its WCAG contrast minimum, so a token change that breaks one fails the tests.
 
 #### Setting up styles
 
