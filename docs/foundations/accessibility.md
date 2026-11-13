@@ -34,8 +34,19 @@ One focus style, everywhere, non-negotiable:
 - The offset is what makes the ring visible on a dark button — without it the ring sits
   on the fill and disappears. The gap shows the surface, so the ring always has the
   surface on both sides.
-- Where a container clips or wraps the control — a facet row, a choice, the search
-  field, a menu item — the ring is inset instead (a negative offset), so it is drawn
+- Text fields (inputs, textareas, the search field) draw the ring over their border
+  instead, inset by its own width, with no band. The field looks like it took focus
+  rather than gained a second box, and the ring sits between the page and the field's
+  own surface, which it clears either way (the inverse ring on a dark field):
+
+  ```css
+  outline-offset: calc(var(--ia-size-focus-ring) * -1);
+  ```
+
+  A browser matches `:focus-visible` on a text field however it got focus, a click
+  included, because the reader needs to see where typing goes.
+- Where a container clips or wraps any other control — a facet row, a choice, a menu
+  item — the ring is inset too (a negative offset), so it is drawn
   inside the edge rather than cut off. An inset ring sits on the control's own fill,
   which no single ring color can clear on every fill (`#9aa8ff` is 2.58:1 on a `#666`
   selected row), so it carries a band in its surface color just inside it:
@@ -196,7 +207,7 @@ scrollbar (1.4.10). The homepage carousel overflow breaks this today. Text must 
 Before shipping a component — and put it in the Playground (`playground.html` in the demo),
 which runs the alignment, overflow and coarse-pointer checks for you:
 
-- [ ] Tab to it. The focus ring is visible, 2px, offset 2px.
+- [ ] Tab to it. The focus ring is visible, 2px, offset 2px (a text field: inset over its border).
 - [ ] Operate it with the keyboard alone. Enter and Space where expected; Escape closes.
 - [ ] `pnpm run test` passes, including `src/themes/tokens.node.test.ts`.
 - [ ] Every target is ≥44×44 at 375px, and ≥24×24 at 1280px.
