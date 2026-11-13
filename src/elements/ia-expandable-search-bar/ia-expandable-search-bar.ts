@@ -334,11 +334,12 @@ export class IAExpandableSearchBar extends LitElement {
           outline: none;
         }
 
-        /* The ring in its dark-surface color, on keyboard focus. */
+        /* The ring in its dark-surface color, over the border and inside the
+           edge, like every text field. */
         #search-input:focus-visible {
           outline: var(--ia-size-focus-ring--) solid
             var(--ia-color-border-focus-inverse--);
-          outline-offset: var(--ia-size-focus-ring-offset--);
+          outline-offset: calc(-1 * var(--ia-size-focus-ring--));
         }
 
         .quick-search {
