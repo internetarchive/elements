@@ -38,6 +38,9 @@ async function run(
   }
   await story.updateComplete;
   (root.querySelector('form') as HTMLFormElement).requestSubmit();
+  // Running clears the last answer, so wait for that before waiting for the
+  // new one.
+  await story.updateComplete;
   await vi.waitFor(() => {
     if (!root.querySelector('.output')) throw new Error('still running');
   });
@@ -253,6 +256,20 @@ describe('userlist-service story', () => {
     const fetched = await run('fetchList', { listId: '2' });
     expect(fetched.json().list_name).to.equal('Watched');
     expect(fetched.json().date_updated).not.to.equal('2025-01-02T00:00:00Z');
+  });
+
+  test("keeps date_updated when an update doesn't change anything", async () => {
+    await run('updateList', { listId: '2', listName: 'To watch' });
+
+    const fetched = await run('fetchList', { listId: '2' });
+    expect(fetched.json().date_updated).to.equal('2025-01-02T00:00:00Z');
+  });
+
+  test('shows the new answer when the same method runs again', async () => {
+    await run('fetchList', { listId: '1' });
+    const second = await run('fetchList', { listId: '2' });
+
+    expect(second.json().list_name).to.equal('To watch');
   });
 
   test('updates only the fields that are filled in', async () => {

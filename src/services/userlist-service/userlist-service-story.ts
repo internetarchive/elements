@@ -260,8 +260,13 @@ class SampleListsBackend {
     );
     // Like the backend, answer with the list as it was plus the changes: the
     // stored `date_updated` moves on, but the one in the answer doesn't.
+    // It also moves only when a value really differs from the stored one.
     const answer = { ...list, ...changes };
-    if (Object.keys(changes).length) {
+    if (
+      Object.entries(changes).some(
+        ([field, value]) => list[field as keyof SampleList] !== value,
+      )
+    ) {
       Object.assign(list, changes, { date_updated: timestamp() });
     }
     return this.ok(answer);
@@ -351,8 +356,9 @@ type Source = 'sample' | 'live';
 const LIVE_AVAILABLE = import.meta.env.DEV;
 
 /**
- * The proxy sends no cookies, so the live source is signed out: it offers the
- * reads that work on public lists, and nothing that needs `me` or writes.
+ * archive.org's sign-in cookies never reach localhost, so the live source is
+ * signed out: it offers the reads that work on public lists, and nothing that
+ * needs `me` or writes.
  */
 const LIVE_METHODS: readonly Method[] = [
   'fetchListsForUser',
@@ -525,8 +531,8 @@ export class UserListServiceStory extends LitElement {
             so the browser blocks a direct call from here (CORS). Run
             <code>pnpm run dev</code> to get real data: the dev server fetches
             <code>/__archive__/…</code> from archive.org on the page's behalf.
-            It sends no cookies, so it's signed out and offers only the reads of
-            public lists.
+            archive.org's sign-in cookies never reach this page, so it's signed
+            out and offers only the reads of public lists.
           </p>
         </div>
       </service-template>
@@ -656,6 +662,7 @@ export class UserListServiceStory extends LitElement {
     const call = `${this.method}(${args.map((a) => JSON.stringify(a)).join(', ')})`;
 
     recorder.last = undefined;
+    this.result = undefined;
     this.running = true;
     let output: string;
     try {

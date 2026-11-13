@@ -430,8 +430,9 @@ describe('UserListError', () => {
   });
 
   it('keeps the reason values consumers compare against', () => {
+    // These are 1.1.2's strings, unchanged by the userlist rename.
     expect(UserListErrorReason).to.deep.equal({
-      NETWORK: 'failed to connect to userlist backend service',
+      NETWORK: 'failed to connect to user lists backend service',
       BAD_RESPONSE: 'malformed response from backend',
       USER_NOT_FOUND: 'user with the given id was not found',
       LIST_NOT_FOUND: 'user list with the given id was not found',
