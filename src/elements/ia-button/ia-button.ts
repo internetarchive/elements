@@ -15,6 +15,8 @@ import themeStyles from '@src/themes/theme-styles';
 
 import '../ia-status-indicator/ia-status-indicator';
 
+let warnedTransparent = false;
+
 /**
  * Renders a standardized button built off the ia-button styling and the activity indicator, with the option to show
  * a loading indicator instead of the text or to customize the text, and the ability to pass in any
@@ -31,7 +33,11 @@ import '../ia-status-indicator/ia-status-indicator';
  */
 @customElement('ia-button')
 export class IAButton extends LitElement {
-  /* Which version of the button to display */
+  /**
+   * Which version of the button to display. `'transparent'` is deprecated:
+   * use `'ghost'`. It still renders as `'ghost'`, and logs a console warning
+   * once per page.
+   */
   @property({ type: String }) mode:
     | 'primary'
     | 'secondary'
@@ -40,7 +46,7 @@ export class IAButton extends LitElement {
     | 'donate'
     | 'disabled'
     | 'ghost'
-    | 'transparent' // the old name for ghost
+    | 'transparent'
     | 'custom'
     | 'link'
     | 'danger-link' = 'primary';
@@ -78,6 +84,16 @@ export class IAButton extends LitElement {
   }
 
   protected willUpdate(changed: PropertyValues): void {
+    if (
+      changed.has('mode') &&
+      this.mode === 'transparent' &&
+      !warnedTransparent
+    ) {
+      warnedTransparent = true;
+      console.warn(
+        'ia-button: mode="transparent" is deprecated; use mode="ghost".',
+      );
+    }
     if (changed.has('type')) {
       this.setButtonTypeEmulation();
     }

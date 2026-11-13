@@ -121,7 +121,7 @@ document.getElementById('panel').addEventListener('click', e => {
   dialog.showModal();
 });
 
-(tabs.querySelector(`[data-tab="${location.hash.slice(1)}"]`) ?? tabs.querySelector('[role=tab]')).click();
+(tabs.querySelector(`[data-tab="${CSS.escape(location.hash.slice(1))}"]`) ?? tabs.querySelector('[role=tab]')).click();
 hydrateIcons();
 </script>
 
