@@ -206,14 +206,14 @@ export class FetchHandlerStory extends LitElement {
         display: flex;
         flex-wrap: wrap;
         align-items: flex-end;
-        gap: 0.5rem;
+        gap: 0.8rem;
       }
 
       label {
         display: flex;
         flex-direction: column;
         gap: 2px;
-        font-size: 0.8rem;
+        font-size: 1.28rem;
       }
 
       label.check {
@@ -223,7 +223,7 @@ export class FetchHandlerStory extends LitElement {
       }
 
       label.path {
-        flex: 1 1 18rem;
+        flex: 1 1 28.8rem;
       }
 
       label.path input {
@@ -244,10 +244,10 @@ export class FetchHandlerStory extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 4px;
-        padding: 0.5rem;
+        padding: 0.8rem;
         background: #fff;
         border: 1px solid #ccc;
-        font-size: 0.85rem;
+        font-size: 1.36rem;
       }
 
       .call,

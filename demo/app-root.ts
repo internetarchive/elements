@@ -133,6 +133,11 @@ export class AppRoot extends LitElement {
   private _spyFrame?: number;
   private _abortController?: AbortController;
 
+  // Where the page sat before anything scrolled it, and whether the reader
+  // has done anything yet. See _onScrollSettle.
+  private _settledScrollY = 0;
+  private _readerActed = false;
+
   connectedCallback() {
     super.connectedCallback();
     // Built per connection, since aborting on disconnect spends the controller
@@ -142,6 +147,18 @@ export class AppRoot extends LitElement {
     // The hash can move while this element is detached.
     this._focused = entryFromHash(window.location.hash);
     window.addEventListener('hashchange', this._onHashChange, { signal });
+    this._settledScrollY = window.scrollY;
+    window.addEventListener('scroll', this._onScrollSettle, {
+      signal,
+      passive: true,
+    });
+    for (const type of ['keydown', 'pointerdown', 'wheel', 'touchstart']) {
+      window.addEventListener(type, this._onReaderActed, {
+        signal,
+        capture: true,
+        passive: true,
+      });
+    }
     // So can the viewport, and its width is what picks the nav's default.
     const narrowQuery = window.matchMedia(NARROW_VIEWPORT);
     narrowQuery.addEventListener('change', this._onNarrowChange, { signal });
@@ -179,7 +196,13 @@ export class AppRoot extends LitElement {
   };
 
   private _onHashChange = () => {
-    const focused = entryFromHash(window.location.hash);
+    const { hash } = window.location;
+    // A hash naming something on the page rather than an element, like the
+    // skip link's #ia-content, is a jump within the current view.
+    if (!tagFromHash(hash) && document.getElementById(hash.slice(1))) {
+      return;
+    }
+    const focused = entryFromHash(hash);
     if (focused === this._focused) return;
     this._focused = focused;
     // Cleared alongside _focused so both land in a single render: whichever
@@ -188,6 +211,36 @@ export class AppRoot extends LitElement {
     // The browser's own anchor jump ran before this view existed, so put the
     // new one at the top of the page rather than wherever the last scroll left it.
     window.scrollTo({ top: 0 });
+  };
+
+  private _onReaderActed = () => {
+    this._readerActed = true;
+  };
+
+  /**
+   * An element that focuses itself as its story loads (ia-otp-input does,
+   * for the login form it lives in) takes the reader's focus and scrolls the
+   * page down to it. In the all-elements view, until the reader has done
+   * anything, a scroll with focus inside a story is that, so put the focus
+   * and the page back. Watched as a scroll rather than as focus, since a page
+   * without window focus scrolls to the element without firing focus events.
+   */
+  private _onScrollSettle = () => {
+    if (!this._readerActed && !this._focused) {
+      let active = document.activeElement;
+      while (active?.shadowRoot?.activeElement) {
+        active = active.shadowRoot.activeElement;
+      }
+      if (
+        active &&
+        this.querySelector('#ia-content')?.contains(document.activeElement)
+      ) {
+        (active as HTMLElement).blur();
+        window.scrollTo({ top: this._settledScrollY });
+        return;
+      }
+    }
+    this._settledScrollY = window.scrollY;
   };
 
   private _onNarrowChange = (event: MediaQueryListEvent) => {
@@ -406,7 +459,7 @@ export class AppRoot extends LitElement {
       <div id="ia-content" class=${classMap(contentClasses)}>
         <div id="ia-content-header">
           ${this._narrow ? nothing : this._renderNavToggle()}
-          <h1>Internet Archive Elements</h1>
+          <h1>Components</h1>
           ${this._narrow ? nothing : this._renderLocaleSwitch()}
         </div>
         ${this._focused
