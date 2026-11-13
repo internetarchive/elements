@@ -1042,131 +1042,134 @@ export class IAHistogramDateRange extends LitElement {
     `;
   }
 
-  static styles = [
-    tokenStyles,
-    css`
-      .missing-data-message {
-        text-align: center;
-      }
-      #container {
-        margin: 0;
-        touch-action: none;
-        position: relative;
-      }
-      .disabled {
-        opacity: 0.3;
-      }
-      ia-status-indicator {
-        position: absolute;
-        left: calc(50% - var(--ia-size-icon-md--) / 2);
-        top: var(--ia-space-2--);
-        --icon-width: var(--ia-size-icon-md--);
-        --loading-ring-color--: ${activityIndicatorColor};
-      }
+  /*
+   * tokenStyles is pasted in rather than listed beside this css because the
+   * class's public `styles` type is a single CSSResult.
+   */
+  static styles = css`
+    ${tokenStyles}
 
-      /* prevent selection from interfering with tooltip, especially on mobile */
-      /* https://stackoverflow.com/a/4407335/1163042 */
-      .noselect {
-        -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none; /* Safari */
-        -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-        user-select: none; /* current Chrome, Edge, Opera and Firefox */
-      }
-      .bar,
-      .bar-pointer-target {
-        /* create a transparent border around the hist bars to prevent "gaps" and
+    .missing-data-message {
+      text-align: center;
+    }
+    #container {
+      margin: 0;
+      touch-action: none;
+      position: relative;
+    }
+    .disabled {
+      opacity: 0.3;
+    }
+    ia-status-indicator {
+      position: absolute;
+      left: calc(50% - var(--ia-size-icon-md--) / 2);
+      top: var(--ia-space-2--);
+      --icon-width: var(--ia-size-icon-md--);
+      --loading-ring-color--: ${activityIndicatorColor};
+    }
+
+    /* prevent selection from interfering with tooltip, especially on mobile */
+    /* https://stackoverflow.com/a/4407335/1163042 */
+    .noselect {
+      -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+      -moz-user-select: none; /* Old versions of Firefox */
+      -ms-user-select: none; /* Internet Explorer/Edge */
+      user-select: none; /* current Chrome, Edge, Opera and Firefox */
+    }
+    .bar,
+    .bar-pointer-target {
+      /* create a transparent border around the hist bars to prevent "gaps" and
       flickering when moving around between bars. this also helps with handling
       clicks on the bars, preventing users from being able to click in between
       bars */
-        stroke: rgba(0, 0, 0, 0);
-        /* ensure transparent stroke wide enough to cover gap between bars */
-        stroke-width: 2px;
-      }
-      .bar {
-        /* ensure the bar's pointer target receives events, not the bar itself */
-        pointer-events: none;
-      }
-      .bar-pointer-target:hover + .bar {
-        /* highlight currently hovered bar */
-        fill-opacity: 0.7;
-      }
-      .disabled .bar-pointer-target:hover + .bar {
-        /* ensure no visual hover interaction when disabled */
-        fill-opacity: 1;
-      }
-      /****** histogram ********/
-      #tooltip {
-        position: absolute;
-        background: ${tooltipBackgroundColor};
-        margin: 0;
-        border: 0;
-        color: ${tooltipTextColor};
-        text-align: center;
-        border-radius: var(--ia-radius-sm--);
-        padding: 2px;
-        font-size: ${tooltipFontSize};
-        font-family: ${tooltipFontFamily};
-        touch-action: none;
-        pointer-events: none;
-        overflow: visible;
-      }
-      #tooltip:after {
-        content: '';
-        position: absolute;
-        margin-left: -5px;
-        top: 100%;
-        left: 50%;
-        /* arrow */
-        border: 5px solid ${tooltipTextColor};
-        border-color: ${tooltipBackgroundColor} transparent transparent
-          transparent;
-      }
-      /****** slider ********/
-      .slider {
-        shape-rendering: crispEdges; /* So the slider doesn't get blurry if dragged between pixels */
-      }
-      .draggable:hover {
-        cursor: grab;
-      }
-      .dragging {
-        cursor: grabbing !important;
-      }
-      /****** inputs ********/
-      #inputs {
-        display: flex;
-        justify-content: center;
-        margin: ${inputRowMargin};
-      }
-      #inputs .dash {
-        position: relative;
-        bottom: -1px;
-        align-self: center; /* Otherwise the dash sticks to the top while the inputs grow */
-      }
-      input {
-        width: ${inputWidth};
-        margin: 0 3px;
-        border: ${inputBorder};
-        border-radius: var(--ia-radius-sm--) !important;
-        text-align: center;
-        font-size: ${inputFontSize};
-        font-family: ${inputFontFamily};
-      }
-      .sr-only {
-        position: absolute !important;
-        width: 1px !important;
-        height: 1px !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: 0 !important;
-        overflow: hidden !important;
-        white-space: nowrap !important;
-        clip: rect(1px, 1px, 1px, 1px) !important;
-        -webkit-clip-path: inset(50%) !important;
-        clip-path: inset(50%) !important;
-      }
-    `,
-  ];
+      stroke: rgba(0, 0, 0, 0);
+      /* ensure transparent stroke wide enough to cover gap between bars */
+      stroke-width: 2px;
+    }
+    .bar {
+      /* ensure the bar's pointer target receives events, not the bar itself */
+      pointer-events: none;
+    }
+    .bar-pointer-target:hover + .bar {
+      /* highlight currently hovered bar */
+      fill-opacity: 0.7;
+    }
+    .disabled .bar-pointer-target:hover + .bar {
+      /* ensure no visual hover interaction when disabled */
+      fill-opacity: 1;
+    }
+    /****** histogram ********/
+    #tooltip {
+      position: absolute;
+      background: ${tooltipBackgroundColor};
+      margin: 0;
+      border: 0;
+      color: ${tooltipTextColor};
+      text-align: center;
+      border-radius: var(--ia-radius-sm--);
+      padding: 2px;
+      font-size: ${tooltipFontSize};
+      font-family: ${tooltipFontFamily};
+      touch-action: none;
+      pointer-events: none;
+      overflow: visible;
+    }
+    #tooltip:after {
+      content: '';
+      position: absolute;
+      margin-left: -5px;
+      top: 100%;
+      left: 50%;
+      /* arrow */
+      border: 5px solid ${tooltipTextColor};
+      border-color: ${tooltipBackgroundColor} transparent transparent
+        transparent;
+    }
+    /****** slider ********/
+    .slider {
+      shape-rendering: crispEdges; /* So the slider doesn't get blurry if dragged between pixels */
+    }
+    .draggable:hover {
+      cursor: grab;
+    }
+    .dragging {
+      cursor: grabbing !important;
+    }
+    /****** inputs ********/
+    #inputs {
+      display: flex;
+      justify-content: center;
+      margin: ${inputRowMargin};
+    }
+    #inputs .dash {
+      position: relative;
+      bottom: -1px;
+      align-self: center; /* Otherwise the dash sticks to the top while the inputs grow */
+    }
+    input {
+      width: ${inputWidth};
+      margin: 0 3px;
+      border: ${inputBorder};
+      border-radius: var(--ia-radius-sm--) !important;
+      text-align: center;
+      font-size: ${inputFontSize};
+      font-family: ${inputFontFamily};
+    }
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      clip: rect(1px, 1px, 1px, 1px) !important;
+      -webkit-clip-path: inset(50%) !important;
+      clip-path: inset(50%) !important;
+    }
+  `;
 
   render(): TemplateResult {
     if (!this.hasBinData) {
