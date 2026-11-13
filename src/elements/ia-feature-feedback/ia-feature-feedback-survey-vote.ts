@@ -22,6 +22,7 @@ import { thumbsUp } from './assets/img/thumb-up';
 import { thumbsDown } from './assets/img/thumb-down';
 
 import './ia-feature-feedback-survey-comment';
+import { tokenStyles } from '@src/themes/tokens';
 
 @customElement('ia-feature-feedback-survey-vote')
 @localized()
@@ -346,149 +347,154 @@ export class IAFeatureFeedbackSurveyVote
   }
 
   static get styles(): CSSResultGroup {
-    const questionMargin = css`var(--surveyQuestionMargin, 0 0 15px 0)`;
+    const questionMargin = css`var(--surveyQuestionMargin, 0 0 var(--ia-space-3--) 0)`;
 
-    const darkGrayColor = css`var(--featureFeedbackDarkGrayColor, #767676)`;
-    const darkGrayColorSvgFilter = css`var(--defaultColorSvgFilter, invert(52%) sepia(0%) saturate(1%) hue-rotate(331deg) brightness(87%) contrast(89%))`;
+    const darkGrayColor = css`var(--featureFeedbackDarkGrayColor, var(--ia-color-border-strong--))`;
+    const darkGrayColorSvgFilter = css`var(--defaultColorSvgFilter, invert(43%) sepia(5%) saturate(0%) hue-rotate(352deg) brightness(89%) contrast(88%))`;
 
     const defaultColor = css`var(--defaultColor, ${darkGrayColor})`;
     const defaultColorSvgFilter = css`var(--defaultColorSvgFilter, ${darkGrayColorSvgFilter})`;
 
-    const upvoteColor = css`var(--upvoteColor, #23765D)`;
-    const upvoteColorSvgFilter = css`var(--upvoteColorSvgFilter, invert(34%) sepia(72%) saturate(357%) hue-rotate(111deg) brightness(97%) contrast(95%))`;
+    const upvoteColor = css`var(--upvoteColor, var(--ia-color-status-success--))`;
+    const upvoteColorSvgFilter = css`var(--upvoteColorSvgFilter, invert(32%) sepia(61%) saturate(448%) hue-rotate(113deg) brightness(99%) contrast(91%))`;
 
-    const downvoteColor = css`var(--downvoteColor, #720D11)`;
-    const downvoteColorSvgFilter = css`var(--downvoteColorSvgFilter, invert(5%) sepia(81%) saturate(5874%) hue-rotate(352deg) brightness(105%) contrast(95%))`;
+    const downvoteColor = css`var(--downvoteColor, var(--ia-color-status-danger--))`;
+    const downvoteColorSvgFilter = css`var(--downvoteColorSvgFilter, invert(10%) sepia(66%) saturate(7048%) hue-rotate(353deg) brightness(95%) contrast(90%))`;
 
-    const unselectedColor = css`var(--unselectedColor, #CCCCCC)`;
+    const unselectedColor = css`var(--unselectedColor, var(--ia-color-border-strong--))`;
     const unselectedColorSvgFilter = css`var(--unselectedColorSvgFilter, invert(100%) sepia(0%) saturate(107%) hue-rotate(138deg) brightness(89%) contrast(77%))`;
 
     const promptFontWeight = css`var(--featureFeedbackPromptFontWeight, bold)`;
-    const promptFontSize = css`var(--featureFeedbackPromptFontSize, 1.4rem)`;
+    const promptFontSize = css`var(--featureFeedbackPromptFontSize, var(--ia-font-size-md--))`;
 
-    return css`
-      #container {
-        margin: ${questionMargin};
-      }
+    return [
+      tokenStyles,
+      css`
+        #container {
+          margin: ${questionMargin};
+        }
 
-      #prompt-row {
-        display: flex;
-        align-items: center;
-        margin-bottom: 5px;
-      }
+        #prompt-row {
+          display: flex;
+          align-items: center;
+          margin-bottom: var(--ia-space-1--);
+        }
 
-      #prompt-text {
-        text-align: left;
-        flex-grow: 1;
-        font-size: ${promptFontSize};
-        font-weight: ${promptFontWeight};
-      }
+        #prompt-text {
+          text-align: left;
+          flex-grow: 1;
+          font-size: ${promptFontSize};
+          font-weight: ${promptFontWeight};
+        }
 
-      .vote-button {
-        background-color: #ffffff;
-        border: 1px solid #767676;
-        border-radius: 2px;
-        margin-left: 10px;
-        padding: 0;
-        width: 25px;
-        height: 25px;
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex: none;
-        cursor: pointer;
-      }
+        .vote-button {
+          background-color: var(--ia-color-action-secondary-fill--);
+          border: var(--ia-size-border-width--) solid
+            var(--ia-color-action-secondary-border--);
+          border-radius: var(--ia-radius-sm--);
+          margin-left: var(--ia-space-2--);
+          padding: 0;
+          width: var(--ia-size-control-sm--);
+          height: var(--ia-size-control-sm--);
+          box-sizing: border-box;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex: none;
+          cursor: pointer;
+        }
 
-      .vote-button:focus-within {
-        outline: 2px solid black;
-        outline-offset: 1px;
-      }
+        .vote-button:focus-within {
+          outline: var(--ia-size-focus-ring--) solid
+            var(--ia-color-border-focus--);
+          outline-offset: var(--ia-size-focus-ring-offset--);
+        }
 
-      .vote-button svg {
-        width: 15px;
-        height: 15px;
-      }
+        .vote-button svg {
+          width: var(--ia-size-icon-sm--);
+          height: var(--ia-size-icon-sm--);
+        }
 
-      .vote-button input {
-        margin: 0;
-        padding: 0;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-      }
+        .vote-button input {
+          margin: 0;
+          padding: 0;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+        }
 
-      .vote-button.noselection {
-        border-color: ${defaultColor};
-      }
+        .vote-button.noselection {
+          border-color: ${defaultColor};
+        }
 
-      .vote-button.noselection svg {
-        filter: ${defaultColorSvgFilter};
-      }
+        .vote-button.noselection svg {
+          filter: ${defaultColorSvgFilter};
+        }
 
-      .vote-button.unselected {
-        border-color: ${unselectedColor};
-      }
+        .vote-button.unselected {
+          border-color: ${unselectedColor};
+        }
 
-      .vote-button.unselected svg {
-        filter: ${unselectedColorSvgFilter};
-      }
+        .vote-button.unselected svg {
+          filter: ${unselectedColorSvgFilter};
+        }
 
-      #upvote.selected {
-        border-color: ${upvoteColor};
-      }
+        #upvote.selected {
+          border-color: ${upvoteColor};
+        }
 
-      #upvote.selected svg {
-        filter: ${upvoteColorSvgFilter};
-      }
+        #upvote.selected svg {
+          filter: ${upvoteColorSvgFilter};
+        }
 
-      #downvote.selected {
-        border-color: ${downvoteColor};
-      }
+        #downvote.selected {
+          border-color: ${downvoteColor};
+        }
 
-      #downvote.selected svg {
-        filter: ${downvoteColorSvgFilter};
-      }
+        #downvote.selected svg {
+          filter: ${downvoteColorSvgFilter};
+        }
 
-      .vote-button.error {
-        box-shadow: 0 0 4px red;
-      }
+        .vote-button.error {
+          box-shadow: 0 0 4px var(--ia-color-status-danger--);
+        }
 
-      .vote-button.noselection[disabled],
-      .vote-button.unselected[disabled] {
-        border-color: ${unselectedColor};
-        cursor: not-allowed;
-      }
+        .vote-button.noselection[disabled],
+        .vote-button.unselected[disabled] {
+          border-color: ${unselectedColor};
+          cursor: not-allowed;
+        }
 
-      .vote-button.noselection[disabled] svg,
-      .vote-button.unselected[disabled] svg {
-        filter: ${unselectedColorSvgFilter};
-      }
+        .vote-button.noselection[disabled] svg,
+        .vote-button.unselected[disabled] svg {
+          filter: ${unselectedColorSvgFilter};
+        }
 
-      :host(:invalid) #upvote,
-      :host(:invalid) #downvote {
-        box-shadow: 0 0 4px red;
-      }
+        :host(:invalid) #upvote,
+        :host(:invalid) #downvote {
+          box-shadow: 0 0 4px var(--ia-color-status-danger--);
+        }
 
-      #comments {
-        --surveyQuestionMargin: 0;
-      }
+        #comments {
+          --surveyQuestionMargin: 0;
+        }
 
-      .sr-only {
-        position: absolute !important;
-        width: 1px !important;
-        height: 1px !important;
-        margin: -1px !important;
-        padding: 0 !important;
-        border: 0 !important;
-        overflow: hidden !important;
-        white-space: nowrap !important;
-        clip: rect(1px, 1px, 1px, 1px) !important;
-        -webkit-clip-path: inset(50%) !important;
-        clip-path: inset(50%) !important;
-        user-select: none !important;
-      }
-    `;
+        .sr-only {
+          position: absolute !important;
+          width: 1px !important;
+          height: 1px !important;
+          margin: -1px !important;
+          padding: 0 !important;
+          border: 0 !important;
+          overflow: hidden !important;
+          white-space: nowrap !important;
+          clip: rect(1px, 1px, 1px, 1px) !important;
+          -webkit-clip-path: inset(50%) !important;
+          clip-path: inset(50%) !important;
+          user-select: none !important;
+        }
+      `,
+    ];
   }
 }
 

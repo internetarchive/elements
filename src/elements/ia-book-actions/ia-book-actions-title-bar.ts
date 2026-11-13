@@ -9,6 +9,7 @@ import {
 import ActionsHandler from './core/services/actions-handler/actions-handler';
 
 import { archiveLogo } from './assets/data/archive-logo';
+import { tokenStyles } from '@src/themes/tokens';
 
 @customElement('ia-book-actions-title-bar')
 export class IABookActionsTitleBar extends ActionsHandler {
@@ -54,35 +55,38 @@ export class IABookActionsTitleBar extends ActionsHandler {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        padding: 0 10px;
-        height: 3.4rem;
-        display: flex;
-      }
-      .embed-link {
-        display: inline-flex;
-        align-items: center;
-        text-decoration: none;
-        color: var(--primaryTextColor, #fff);
-        font-size: 1.4rem;
-      }
-      .embed-link .title {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
-        text-align: left;
-        line-height: initial;
-      }
-      .embed-link svg {
-        margin-right: 0.5rem;
-        display: block;
-      }
-      .embed-link:hover {
-        text-decoration: underline;
-      }
-    `;
+    return [
+      tokenStyles,
+      css`
+        :host {
+          padding: 0 var(--ia-space-2--);
+          height: calc(34 * var(--ia-unit, 1px));
+          display: flex;
+        }
+        .embed-link {
+          display: inline-flex;
+          align-items: center;
+          text-decoration: none;
+          color: var(--primaryTextColor, var(--ia-color-text-inverse--));
+          font-size: var(--ia-font-size-md--);
+        }
+        .embed-link .title {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          text-align: left;
+          line-height: initial;
+        }
+        .embed-link svg {
+          margin-right: var(--ia-space-1--);
+          display: block;
+        }
+        .embed-link:hover {
+          text-decoration: underline;
+        }
+      `,
+    ];
   }
 }
 

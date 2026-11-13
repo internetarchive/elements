@@ -111,11 +111,11 @@ export class IAItemNavMenuButton extends LitElement {
         :host {
           --item-navigator-text-color--: var(
             --item-navigator-text-color,
-            var(--true-white)
+            var(--ia-color-text-inverse--)
           );
           --item-navigator-active-button-bg--: var(
             --item-navigator-active-button-bg,
-            var(--mid-gray)
+            var(--ia-color-surface-chrome-secondary--)
           );
           --item-navigator-menu-button-label-display--: var(
             --item-navigator-menu-button-label-display,
@@ -123,7 +123,7 @@ export class IAItemNavMenuButton extends LitElement {
           );
           --item-navigator-icon-inactive-color--: var(
             --item-navigator-icon-inactive-color,
-            var(--lighter-gray)
+            var(--ia-color-text-inverse-tertiary--)
           );
           --item-navigator-icon-active-color--: var(
             --item-navigator-icon-active-color,
@@ -163,11 +163,11 @@ export class IAItemNavMenuButton extends LitElement {
           border: none;
           cursor: pointer;
           transition: background-color 0.2s;
-          border-radius: 6px;
+          border-radius: var(--ia-radius-default--);
         }
 
         .menu-item:hover {
-          background-color: rgba(255, 255, 255, 0.1);
+          background-color: var(--ia-color-hover-overlay-inverse--);
         }
 
         .label {

@@ -9,6 +9,7 @@ import {
 } from 'lit';
 import { property, query, queryAll, state } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
+import themeStyles from '@src/themes/theme-styles';
 import { keyed } from 'lit/directives/keyed.js';
 import { map } from 'lit/directives/map.js';
 import {
@@ -961,7 +962,9 @@ export class IAInfiniteScroller
     if (this.estimatedCellHeight != null) return this.estimatedCellHeight;
     if (!this.container) return INITIAL_ROW_HEIGHT;
     const temp = document.createElement('div');
-    temp.style.height = 'var(--infiniteScrollerCellMinHeight, 22.5rem)';
+    // Mirrors the .cell-container min-height default in styles
+    temp.style.height =
+      'var(--infiniteScrollerCellMinHeight, calc(225 * var(--ia-unit, 1px)))';
     this.container.appendChild(temp);
     const height = temp.offsetHeight;
     temp.remove();
@@ -1444,13 +1447,14 @@ export class IAInfiniteScroller
             // incorrect position with the collapsed cells.
             const row = Math.floor(index / this.cachedColumnsPerRow);
             const rowHeight = this.rowHeightCache.rowHeightFor(row);
+            // The fallback mirrors the .cell-container min-height default.
             return html`<article
               class="cell-container"
               aria-posinset=${index + 1}
               aria-setsize=${itemCount}
               data-cell-index=${index}
               ?data-rendered=${cellTemplate != null}
-              style="min-height: max(${rowHeight}px, var(--infiniteScrollerCellMinHeight, 22.5rem))"
+              style="min-height: max(${rowHeight}px, var(--infiniteScrollerCellMinHeight, calc(225 * var(--ia-unit, 1px))))"
               @click=${this.handleCellClick}
               @keyup=${this.handleCellKeyup}
             >
@@ -1555,94 +1559,97 @@ export class IAInfiniteScroller
   //
 
   static get styles(): CSSResultGroup {
-    const sentinelHeightCss = css`var(--infiniteScrollerSentinelDistanceFromEnd, 200rem)`;
-    const rowGapSizeCss = css`var(--infiniteScrollerRowGap, 1.7rem)`;
-    const colGapSizeCss = css`var(--infiniteScrollerColGap, 1.7rem)`;
-    const cellMinWidth = css`var(--infiniteScrollerCellMinWidth, 16rem)`;
+    const sentinelHeightCss = css`var(--infiniteScrollerSentinelDistanceFromEnd, calc(2000 * var(--ia-unit, 1px)))`;
+    const rowGapSizeCss = css`var(--infiniteScrollerRowGap, var(--ia-space-3--))`;
+    const colGapSizeCss = css`var(--infiniteScrollerColGap, var(--ia-space-3--))`;
+    const cellMinWidth = css`var(--infiniteScrollerCellMinWidth, calc(160 * var(--ia-unit, 1px)))`;
     const cellMaxWidth = css`var(--infiniteScrollerCellMaxWidth, 1fr)`;
-    const cellMinHeight = css`var(--infiniteScrollerCellMinHeight, 22.5rem)`;
+    const cellMinHeight = css`var(--infiniteScrollerCellMinHeight, calc(225 * var(--ia-unit, 1px)))`;
     const cellMaxHeight = css`var(--infiniteScrollerCellMaxHeight, none)`;
     const cellOutline = css`var(--infiniteScrollerCellOutline, 0)`;
 
-    return css`
-      :host {
-        /**
+    return [
+      themeStyles,
+      css`
+        :host {
+          /**
          * We handle scroll anchoring ourselves for fine-tuning, so opt out
          * of the browser's built-in anchoring (which can interfere with ours
          * and cause undesirable content jitter). 
          */
-        overflow-anchor: none;
-      }
+          overflow-anchor: none;
+        }
 
-      #scroll-spacer,
-      #container,
-      .cell-container {
-        /**
+        #scroll-spacer,
+        #container,
+        .cell-container {
+          /**
          * overflow-anchor does not cascade, so descendents need to opt out too
          */
-        overflow-anchor: none;
-      }
+          overflow-anchor: none;
+        }
 
-      #container {
-        position: relative;
-        display: flex;
-        flex-wrap: wrap;
-        grid-row-gap: ${rowGapSizeCss};
-        row-gap: ${rowGapSizeCss};
-        grid-column-gap: ${colGapSizeCss};
-        column-gap: ${colGapSizeCss};
-
-        /* This transition allows us to listen for changes to the row-gap */
-        transition: row-gap 1ms linear;
-      }
-
-      @supports (display: grid) {
         #container {
-          display: grid;
-          flex-wrap: nowrap;
-          grid-template-columns: repeat(
-            auto-fill,
-            minmax(${cellMinWidth}, ${cellMaxWidth})
-          );
+          position: relative;
+          display: flex;
+          flex-wrap: wrap;
+          grid-row-gap: ${rowGapSizeCss};
+          row-gap: ${rowGapSizeCss};
+          grid-column-gap: ${colGapSizeCss};
+          column-gap: ${colGapSizeCss};
+
+          /* This transition allows us to listen for changes to the row-gap */
+          transition: row-gap 1ms linear;
         }
-      }
 
-      .cell-container {
-        outline: ${cellOutline};
-        min-height: ${cellMinHeight};
-        max-height: ${cellMaxHeight};
-        min-width: ${cellMinWidth};
-        max-width: ${cellMaxWidth};
-      }
+        @supports (display: grid) {
+          #container {
+            display: grid;
+            flex-wrap: nowrap;
+            grid-template-columns: repeat(
+              auto-fill,
+              minmax(${cellMinWidth}, ${cellMaxWidth})
+            );
+          }
+        }
 
-      @supports (display: grid) {
-        /* the grid takes care of the width */
         .cell-container {
-          min-width: auto;
-          max-width: none;
+          outline: ${cellOutline};
+          min-height: ${cellMinHeight};
+          max-height: ${cellMaxHeight};
+          min-width: ${cellMinWidth};
+          max-width: ${cellMaxWidth};
         }
-      }
 
-      #scroll-spacer {
-        position: relative;
-      }
+        @supports (display: grid) {
+          /* the grid takes care of the width */
+          .cell-container {
+            min-width: auto;
+            max-width: none;
+          }
+        }
 
-      #sentinel {
-        position: absolute;
-        height: ${sentinelHeightCss};
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: -1;
-        /**
+        #scroll-spacer {
+          position: relative;
+        }
+
+        #sentinel {
+          position: absolute;
+          height: ${sentinelHeightCss};
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: -1;
+          /**
         Chrome and Firefox try to maintain scroll position when the page increases and
         decreases in size, but the scroll position is being focused on the sentinel
         so it's causing the "load more" event to keep firing because it thinks the
         user has scrolled to the sentinel. "overflow-anchor: none" prevents that anchoring
         */
-        overflow-anchor: none;
-      }
-    `;
+          overflow-anchor: none;
+        }
+      `,
+    ];
   }
 }
 

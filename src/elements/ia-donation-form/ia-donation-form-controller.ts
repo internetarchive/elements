@@ -569,6 +569,11 @@ export class IADonationFormController extends LitElement {
    * The `--ia-donation-form-*` variables set here are the consumer-facing
    * theming for the whole form; they fan out to the sections, the amount
    * picker and the payment buttons.
+   *
+   * The token aliases (`--ia-x--`) exist only inside a shadow root, so these
+   * styles read a token by its public name with its value as the fallback.
+   * `src/themes/token-fallbacks.node.test.ts` checks each fallback against
+   * tokens.json.
    */
   private get getStyles(): TemplateResult {
     return html`
@@ -578,7 +583,10 @@ export class IADonationFormController extends LitElement {
             --ia-donation-form-base-font-size,
             10px
           );
-          color: var(--ia-donation-form-text-color, #333);
+          color: var(
+            --ia-donation-form-text-color,
+            var(--ia-color-text-primary, #2c2c2c)
+          );
           background-color: var(
             --ia-donation-form-background-color,
             transparent
@@ -595,20 +603,20 @@ export class IADonationFormController extends LitElement {
 
           --ia-donation-section-badge-background-color: var(
             --ia-donation-form-badge-background-color,
-            #333
+            var(--ia-color-surface-chrome-secondary, #333333)
           );
           --ia-donation-edit-badge-background-color: var(
             --ia-donation-form-badge-background-color,
-            #333
+            var(--ia-color-surface-chrome-secondary, #333333)
           );
 
           --ia-donation-section-badge-font-color: var(
             --ia-donation-form-badge-text-color,
-            #fff
+            var(--ia-color-text-inverse, #ffffff)
           );
           --ia-donation-edit-badge-font-color: var(
             --ia-donation-form-badge-text-color,
-            #fff
+            var(--ia-color-text-inverse, #ffffff)
           );
 
           --ia-donation-edit-button-font-color: var(
@@ -639,7 +647,7 @@ export class IADonationFormController extends LitElement {
 
         .ia-donation-form-controller-container
           div[slot='braintree-hosted-fields'] {
-          background-color: white;
+          background-color: var(--ia-color-surface-raised, #ffffff);
         }
       </style>
     `;

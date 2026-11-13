@@ -1,6 +1,7 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
+import { tokenStyles } from '@src/themes/tokens';
 
 @customElement('ia-book-actions-text-group')
 export class IABookActionsTextGroup extends LitElement {
@@ -15,22 +16,25 @@ export class IABookActionsTextGroup extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        display: inline-block;
-      }
-      .variable-texts {
-        margin-right: 10px;
-        vertical-align: middle;
-        font-size: 1.7rem;
-      }
-      .hidden {
-        display: none;
-      }
-      .visible {
-        display: inline-block;
-      }
-    `;
+    return [
+      tokenStyles,
+      css`
+        :host {
+          display: inline-block;
+        }
+        .variable-texts {
+          margin-right: var(--ia-space-2--);
+          vertical-align: middle;
+          font-size: var(--ia-font-size-lg--);
+        }
+        .hidden {
+          display: none;
+        }
+        .visible {
+          display: inline-block;
+        }
+      `,
+    ];
   }
 }
 

@@ -38,7 +38,7 @@ const styleInputSettings: StyleInputSettings[] = [
     section: 'Color',
     label: 'Button text',
     cssVariable: '--ia-donation-edit-button-font-color',
-    defaultValue: '#000000',
+    defaultValue: '#2c2c2c',
     inputType: 'color',
   },
   {
@@ -63,7 +63,7 @@ const styleInputSettings: StyleInputSettings[] = [
     section: 'Color',
     label: 'Selected button text',
     cssVariable: '--ia-donation-edit-button-selected-font-color',
-    defaultValue: '#000000',
+    defaultValue: '#2c2c2c',
     inputType: 'color',
   },
   {

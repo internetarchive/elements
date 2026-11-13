@@ -66,7 +66,7 @@ describe('IA Icon', () => {
     const icon = el.shadowRoot?.querySelector('.icon');
     const height = icon?.computedStyleMap().get('height')?.toString();
     const width = icon?.computedStyleMap().get('width')?.toString();
-    // The theme default is 1.25rem, and the root size for the test is 16px
+    // The theme default is the 20px icon token, at the browser's default font size
     expect(height).to.include('20px');
     expect(width).to.include('20px');
   });

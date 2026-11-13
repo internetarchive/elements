@@ -10,6 +10,7 @@ import {
 import { property } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 import { customElement } from '@src/utils/custom-element';
+import { tokenStyles } from '@src/themes/tokens';
 
 import {
   SharedResizeObserver,
@@ -94,9 +95,11 @@ export const events = {
  * custom styling for modal-manager buttons
  * TODO: lets allow modal-manager to know ia-button classes
  */
+// Inline styles in the page's modal-manager, which may be the page's own
+// (@internetarchive/modal-manager) and so have no token aliases: no tokens.
 export const modalButtonStyle = {
   iaButton:
-    'min-height:3.5rem;cursor:pointer;color:white;border-radius:0.4rem;border:1px solid #c5d1df;padding:4px 8px;width:auto;user-select:none;',
+    'min-height:calc(35 * var(--ia-unit, 1px));cursor:pointer;color:white;border-radius:4px;border:1px solid #c5d1df;padding:4px 8px;width:auto;user-select:none;',
   renew: 'background:#194880;width:110px;',
   return: 'background:#d9534f;width:120px;',
   loaderIcon:
@@ -1344,30 +1347,33 @@ export class IABookActions
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        display: block;
-      }
+    return [
+      tokenStyles,
+      css`
+        :host {
+          display: block;
+        }
 
-      .hide {
-        display: none;
-      }
+        .hide {
+          display: none;
+        }
 
-      .lending-wrapper {
-        width: 100%;
-        margin: 0 auto;
-        background: var(--primaryBGColor, #000);
-        color: var(--primaryTextColor, #fff);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
+        .lending-wrapper {
+          width: 100%;
+          margin: 0 auto;
+          background: var(--primaryBGColor, var(--ia-color-surface-theater--));
+          color: var(--primaryTextColor, var(--ia-color-text-inverse--));
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
 
-      #action-bar-modal {
-        --modalWidth: 36rem;
-      }
-    `;
+        #action-bar-modal {
+          --modalWidth: calc(360 * var(--ia-unit, 1px));
+        }
+      `,
+    ];
   }
 }
 

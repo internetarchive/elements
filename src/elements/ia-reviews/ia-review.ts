@@ -25,6 +25,7 @@ import linkUrlsInText from './utils/link-urls-in-text';
 import collapseSpace from './utils/collapse-space';
 
 import deleteIcon from './assets/delete-icon.svg';
+import { tokenStyles } from '@src/themes/tokens';
 
 /** What became of a deletion: queued, or failed with the server's message if it sent one */
 type DeleteOutcome =
@@ -335,84 +336,87 @@ export class IAReview extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        font-family: var(
-          --ia-font-stack,
-          'Helvetica Neue',
-          Helvetica,
-          Arial,
-          sans-serif
-        );
+    return [
+      tokenStyles,
+      css`
+        :host {
+          font-family: var(
+            --ia-font-stack,
+            'Helvetica Neue',
+            Helvetica,
+            Arial,
+            sans-serif
+          );
 
-        font-size: inherit;
-        --container-bg-color: #fbfbfd;
-        --container-border-color: #999999;
-      }
+          font-size: inherit;
+          --container-bg-color: var(--ia-color-surface-page--);
+          --container-border-color: var(--ia-color-border-strong--);
+        }
 
-      .review {
-        position: relative;
-        padding-right: 30px;
-      }
+        .review {
+          position: relative;
+          padding-right: var(--ia-space-6--);
+        }
 
-      .error {
-        color: var(--error-color, #cc0000);
-      }
+        .error {
+          color: var(--error-color, var(--ia-color-text-danger--));
+        }
 
-      .top-line {
-        margin-bottom: 0.5rem;
-      }
+        .top-line {
+          margin-bottom: var(--ia-space-1--);
+        }
 
-      .top-line > * {
-        display: inline-block;
-      }
+        .top-line > * {
+          display: inline-block;
+        }
 
-      .review-star {
-        width: 1rem;
-        display: inline-block;
-      }
+        .review-star {
+          width: var(--ia-size-icon-xs--);
+          display: inline-block;
+        }
 
-      .star-basic {
-        display: block;
-        width: 100%;
-      }
+        .star-basic {
+          display: block;
+          width: 100%;
+        }
 
-      .simple-link,
-      .body a {
-        color: var(--link-color, #4b64ff);
-        text-decoration: none;
-        background: transparent;
-        border: none;
-        padding: 0px;
-      }
+        .simple-link,
+        .body a {
+          color: var(--link-color, var(--ia-color-text-link--));
+          text-decoration: none;
+          background: transparent;
+          border: none;
+          padding: 0px;
+        }
 
-      .simple-link:hover,
-      .body a:hover {
-        cursor: pointer;
-        text-decoration: underline;
-      }
+        .simple-link:hover,
+        .body a:hover {
+          cursor: pointer;
+          text-decoration: underline;
+        }
 
-      .subject {
-        margin-bottom: 0.5rem;
-      }
+        .subject {
+          margin-bottom: var(--ia-space-1--);
+        }
 
-      .delete-btn {
-        position: absolute;
-        top: 0;
-        right: 0;
-        padding: 0;
-        background: none;
-        border: 0;
-      }
+        .delete-btn {
+          position: absolute;
+          top: 0;
+          right: 0;
+          padding: 0;
+          background: none;
+          border: 0;
+        }
 
-      .delete-btn:hover {
-        cursor: pointer;
-      }
+        .delete-btn:hover {
+          cursor: pointer;
+        }
 
-      .delete-icon {
-        width: 20px;
-        mix-blend-mode: multiply;
-      }
-    `;
+        .delete-icon {
+          width: var(--ia-size-icon-md--);
+          mix-blend-mode: multiply;
+        }
+      `,
+    ];
   }
 }

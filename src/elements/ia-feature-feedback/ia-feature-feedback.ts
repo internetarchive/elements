@@ -26,6 +26,7 @@ import type {
 
 import { thumbsUp } from './assets/img/thumb-up';
 import { thumbsDown } from './assets/img/thumb-down';
+import { tokenStyles } from '@src/themes/tokens';
 
 @customElement('ia-feature-feedback')
 @localized()
@@ -562,9 +563,9 @@ export class IAFeatureFeedback
   }
 
   static get styles(): CSSResultGroup {
-    const blueColor = css`var(--featureFeedbackBlueColor, #194880)`;
-    const darkGrayColor = css`var(--featureFeedbackDarkGrayColor, #767676)`;
-    const darkGrayColorSvgFilter = css`var(--defaultColorSvgFilter, invert(52%) sepia(0%) saturate(1%) hue-rotate(331deg) brightness(87%) contrast(89%))`;
+    const blueColor = css`var(--featureFeedbackBlueColor, var(--ia-color-action-primary-fill--))`;
+    const darkGrayColor = css`var(--featureFeedbackDarkGrayColor, var(--ia-color-border-strong--))`;
+    const darkGrayColorSvgFilter = css`var(--defaultColorSvgFilter, invert(43%) sepia(5%) saturate(0%) hue-rotate(352deg) brightness(89%) contrast(88%))`;
 
     const backdropZindex = css`var(--featureFeedbackBackdropZindex, 5)`;
     const modalZindex = css`var(--featureFeedbackModalZindex, 6)`;
@@ -576,255 +577,260 @@ export class IAFeatureFeedback
     const betaButtonBackground = css`var(--featureFeedbackBetaButtonBackground, none)`;
     const betaButtonSvgFilter = css`var(--featureFeedbackBetaButtonSvgFilter, ${darkGrayColorSvgFilter})`;
 
-    const cancelButtonColor = css`var(--featureFeedbackCancelButtonColor, #515151)`;
-    const popupBlockerColor = css`var(--featureFeedbackPopupBlockerColor, rgba(255, 255, 255, 0.3))`;
+    const cancelButtonColor = css`var(--featureFeedbackCancelButtonColor, var(--ia-color-palette-gray-700--))`;
+    const popupBlockerColor = css`var(--featureFeedbackPopupBlockerColor, var(--ia-color-surface-scrim--))`;
 
-    const popupBackgroundColor = css`var(--featureFeedbackPopupBackgroundColor, #F5F5F7)`;
+    const popupBackgroundColor = css`var(--featureFeedbackPopupBackgroundColor, var(--ia-color-surface-sunken--))`;
 
     const promptFontWeight = css`var(--featureFeedbackPromptFontWeight, bold)`;
-    const promptFontSize = css`var(--featureFeedbackPromptFontSize, 1.4rem)`;
+    const promptFontSize = css`var(--featureFeedbackPromptFontSize, var(--ia-font-size-md--))`;
 
     const commentButtonFontWeight = css`var(--featureFeedbackCommentButtonFontWeight, normal)`;
-    const commentButtonFontSize = css`var(--featureFeedbackCommentButtonFontWeight, 1.4rem)`;
+    const commentButtonFontSize = css`var(--featureFeedbackCommentButtonFontSize, var(--ia-font-size-md--))`;
 
     const defaultColor = css`var(--defaultColor, ${darkGrayColor});`;
     const defaultColorSvgFilter = css`var(--defaultColorSvgFilter, ${darkGrayColorSvgFilter});`;
 
-    const upvoteColor = css`var(--upvoteColor, #23765D);`;
-    const upvoteColorSvgFilter = css`var(--upvoteColorSvgFilter, invert(34%) sepia(72%) saturate(357%) hue-rotate(111deg) brightness(97%) contrast(95%));`;
+    const upvoteColor = css`var(--upvoteColor, var(--ia-color-status-success--));`;
+    const upvoteColorSvgFilter = css`var(--upvoteColorSvgFilter, invert(32%) sepia(61%) saturate(448%) hue-rotate(113deg) brightness(99%) contrast(91%));`;
 
-    const downvoteColor = css`var(--downvoteColor, #720D11);`;
-    const downvoteColorSvgFilter = css`var(--downvoteColorSvgFilter, invert(5%) sepia(81%) saturate(5874%) hue-rotate(352deg) brightness(105%) contrast(95%));`;
+    const downvoteColor = css`var(--downvoteColor, var(--ia-color-status-danger--));`;
+    const downvoteColorSvgFilter = css`var(--downvoteColorSvgFilter, invert(10%) sepia(66%) saturate(7048%) hue-rotate(353deg) brightness(95%) contrast(90%));`;
 
-    const unselectedColor = css`var(--unselectedColor, #CCCCCC);`;
+    const unselectedColor = css`var(--unselectedColor, var(--ia-color-border-strong--));`;
     const unselectedColorSvgFilter = css`var(--unselectedColorSvgFilter, invert(100%) sepia(0%) saturate(107%) hue-rotate(138deg) brightness(89%) contrast(77%));`;
 
-    return css`
-      #container {
-        display: inline-block;
-      }
+    return [
+      tokenStyles,
+      css`
+        #container {
+          display: inline-block;
+        }
 
-      #beta-button {
-        font-size: 12px;
-        font-weight: bold;
-        font-style: italic;
-        color: ${betaButtonTextColor};
-        background: ${betaButtonBackground};
-        border: 1px solid ${betaButtonBorderColor};
-        border-radius: 4px;
-        padding: 1px 5px;
-      }
+        #beta-button {
+          font-size: var(--ia-font-size-sm--);
+          font-weight: bold;
+          font-style: italic;
+          color: ${betaButtonTextColor};
+          background: ${betaButtonBackground};
+          border: var(--ia-size-border-width--) solid ${betaButtonBorderColor};
+          border-radius: var(--ia-radius-default--);
+          padding: 1px var(--ia-space-1--);
+        }
 
-      .beta-button-thumb svg {
-        height: 10px;
-        width: 10px;
-        filter: ${betaButtonSvgFilter};
-      }
+        .beta-button-thumb svg {
+          height: var(--ia-size-icon-xs--);
+          width: var(--ia-size-icon-xs--);
+          filter: ${betaButtonSvgFilter};
+        }
 
-      .beta-button-thumb.unselected svg {
-        filter: ${unselectedColorSvgFilter};
-      }
+        .beta-button-thumb.unselected svg {
+          filter: ${unselectedColorSvgFilter};
+        }
 
-      #error {
-        color: red;
-        font-size: 14px;
-        text-align: center;
-        font-weight: bold;
-      }
+        #error {
+          color: var(--ia-color-text-danger--);
+          font-size: var(--ia-font-size-md--);
+          text-align: center;
+          font-weight: bold;
+        }
 
-      #popup-background {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: ${backdropZindex};
-        background-color: ${popupBlockerColor};
-        overflow: hidden;
-      }
+        #popup-background {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: ${backdropZindex};
+          background-color: ${popupBlockerColor};
+          overflow: hidden;
+        }
 
-      #popup-background.closed {
-        visibility: hidden;
-        top: -100%;
-        left: -100%;
-      }
+        #popup-background.closed {
+          visibility: hidden;
+          top: -100%;
+          left: -100%;
+        }
 
-      #popup {
-        position: absolute;
-        padding: 10px;
-        background-color: ${popupBackgroundColor};
-        border: 1px ${popupBorderColor} solid;
-        border-radius: 5px;
-        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        z-index: ${modalZindex};
-        max-width: 300px;
-        margin-left: 10px;
-        margin-right: 10px;
-      }
+        #popup {
+          position: absolute;
+          padding: var(--ia-space-2--);
+          background-color: ${popupBackgroundColor};
+          border: var(--ia-size-border-width--) ${popupBorderColor} solid;
+          border-radius: var(--ia-radius-default--);
+          box-shadow: var(--ia-shadow-overlay--);
+          z-index: ${modalZindex};
+          max-width: 300px;
+          margin-left: var(--ia-space-2--);
+          margin-right: var(--ia-space-2--);
+        }
 
-      button,
-      input,
-      a,
-      textarea {
-        font-family: inherit;
-      }
+        button,
+        input,
+        a,
+        textarea {
+          font-family: inherit;
+        }
 
-      button,
-      input[type='submit'] {
-        background: none;
-        cursor: pointer;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        border: none;
-      }
+        button,
+        input[type='submit'] {
+          background: none;
+          cursor: pointer;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          border: none;
+        }
 
-      button:disabled,
-      input[type='submit']:disabled {
-        cursor: default;
-        opacity: 0.5;
-      }
+        button:disabled,
+        input[type='submit']:disabled {
+          cursor: default;
+          opacity: 0.5;
+        }
 
-      #form > div {
-        margin-bottom: 10px;
-      }
+        #form > div {
+          margin-bottom: var(--ia-space-2--);
+        }
 
-      #form > div:last-child {
-        margin-bottom: 0;
-      }
+        #form > div:last-child {
+          margin-bottom: 0;
+        }
 
-      .prompt {
-        display: flex;
-        align-items: center;
-        font-size: ${promptFontSize};
-        font-weight: ${promptFontWeight};
-      }
+        .prompt {
+          display: flex;
+          align-items: center;
+          font-size: ${promptFontSize};
+          font-weight: ${promptFontWeight};
+        }
 
-      .prompt > label {
-        flex: none;
-        cursor: pointer;
-      }
+        .prompt > label {
+          flex: none;
+          cursor: pointer;
+        }
 
-      .prompt-text {
-        text-align: left;
-      }
+        .prompt-text {
+          text-align: left;
+        }
 
-      #comments {
-        width: 100%;
-        height: 50px;
-        background-color: #ffffff;
-        border: 1px #2c2c2c solid;
-        border-radius: 4px;
-        padding: 7px;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        resize: none;
-      }
+        #comments {
+          width: 100%;
+          height: var(--ia-size-control-xl--);
+          background-color: var(--ia-color-surface-raised--);
+          border: var(--ia-size-border-width--) var(--ia-color-border-strong--)
+            solid;
+          border-radius: var(--ia-radius-default--);
+          padding: var(--ia-space-1--);
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+          resize: none;
+        }
 
-      #comments::placeholder {
-        color: #767676;
-      }
+        #comments::placeholder {
+          color: var(--ia-color-text-secondary--);
+        }
 
-      #actions {
-        display: flex;
-        justify-content: center;
-      }
+        #actions {
+          display: flex;
+          justify-content: center;
+        }
 
-      .cta-button {
-        color: white;
-        font-size: 14px;
-        border-radius: 4px;
-        height: 30px;
-        margin: 0;
-      }
+        .cta-button {
+          color: var(--ia-color-action-primary-text--);
+          font-size: var(--ia-font-size-md--);
+          border-radius: var(--ia-radius-default--);
+          height: var(--ia-size-control-sm--);
+          margin: 0;
+        }
 
-      #cancel-button {
-        background-color: ${cancelButtonColor};
-      }
+        #cancel-button {
+          background-color: ${cancelButtonColor};
+        }
 
-      #submit-button {
-        background-color: ${submitButtonColor};
-        margin-left: 10px;
-      }
+        #submit-button {
+          background-color: ${submitButtonColor};
+          margin-left: var(--ia-space-2--);
+        }
 
-      .vote-button {
-        background-color: #ffffff;
-        border: 1px solid #767676;
-        border-radius: 2px;
-        padding: 0;
-        width: 25px;
-        height: 25px;
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-left: 10px;
-      }
+        .vote-button {
+          background-color: var(--ia-color-action-secondary-fill--);
+          border: var(--ia-size-border-width--) solid
+            var(--ia-color-action-secondary-border--);
+          border-radius: var(--ia-radius-sm--);
+          padding: 0;
+          width: var(--ia-size-control-sm--);
+          height: var(--ia-size-control-sm--);
+          box-sizing: border-box;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-left: var(--ia-space-2--);
+        }
 
-      .vote-button svg {
-        width: 15px;
-        height: 15px;
-      }
+        .vote-button svg {
+          width: var(--ia-size-icon-sm--);
+          height: var(--ia-size-icon-sm--);
+        }
 
-      .vote-button input {
-        margin: 0;
-        padding: 0;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-      }
+        .vote-button input {
+          margin: 0;
+          padding: 0;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+        }
 
-      .vote-button.noselection {
-        border-color: ${defaultColor};
-      }
+        .vote-button.noselection {
+          border-color: ${defaultColor};
+        }
 
-      .vote-button.noselection svg {
-        filter: ${defaultColorSvgFilter};
-      }
+        .vote-button.noselection svg {
+          filter: ${defaultColorSvgFilter};
+        }
 
-      .vote-button.unselected {
-        border-color: ${unselectedColor};
-      }
+        .vote-button.unselected {
+          border-color: ${unselectedColor};
+        }
 
-      .vote-button.unselected svg {
-        filter: ${unselectedColorSvgFilter};
-      }
+        .vote-button.unselected svg {
+          filter: ${unselectedColorSvgFilter};
+        }
 
-      .upvote-button.selected {
-        border-color: ${upvoteColor};
-      }
+        .upvote-button.selected {
+          border-color: ${upvoteColor};
+        }
 
-      .upvote-button.selected svg {
-        filter: ${upvoteColorSvgFilter};
-      }
+        .upvote-button.selected svg {
+          filter: ${upvoteColorSvgFilter};
+        }
 
-      .downvote-button.selected {
-        border-color: ${downvoteColor};
-      }
+        .downvote-button.selected {
+          border-color: ${downvoteColor};
+        }
 
-      .downvote-button.selected svg {
-        filter: ${downvoteColorSvgFilter};
-      }
+        .downvote-button.selected svg {
+          filter: ${downvoteColorSvgFilter};
+        }
 
-      .vote-button.error {
-        box-shadow: 0 0 4px red;
-      }
+        .vote-button.error {
+          box-shadow: 0 0 4px var(--ia-color-status-danger--);
+        }
 
-      form[disabled] .vote-button.unselected {
-        cursor: not-allowed;
-      }
+        form[disabled] .vote-button.unselected {
+          cursor: not-allowed;
+        }
 
-      #comment-button {
-        color: var(--ia-theme-link-color, #4b64ff);
-        font-weight: ${commentButtonFontWeight};
-        font-size: ${commentButtonFontSize};
-      }
-      #comment-button:not([disabled]):hover,
-      #comment-button:not([disabled]):active {
-        text-decoration: underline;
-      }
-    `;
+        #comment-button {
+          color: var(--ia-theme-link-color, var(--ia-color-text-link--));
+          font-weight: ${commentButtonFontWeight};
+          font-size: ${commentButtonFontSize};
+        }
+        #comment-button:not([disabled]):hover,
+        #comment-button:not([disabled]):active {
+          text-decoration: underline;
+        }
+      `,
+    ];
   }
 }
 

@@ -410,13 +410,13 @@ export class IAItemNavigatorStory extends LitElement {
         {
           label: 'Border color',
           cssVariable: '--item-navigator-border-color',
-          defaultValue: '#4b4b4b',
+          defaultValue: '#474747',
           inputType: 'color',
         },
         {
           label: 'Active file border',
           cssVariable: '--item-navigator-active-file-border-color',
-          defaultValue: '#538bc5',
+          defaultValue: '#98adc6',
           inputType: 'color',
         },
         // Backgrounds
@@ -429,7 +429,7 @@ export class IAItemNavigatorStory extends LitElement {
         {
           label: 'Menu drawer background',
           cssVariable: '--item-navigator-menu-slider-bg',
-          defaultValue: '#212121',
+          defaultValue: '#222222',
           inputType: 'color',
         },
         {
@@ -441,7 +441,7 @@ export class IAItemNavigatorStory extends LitElement {
         {
           label: 'Embed field background',
           cssVariable: '--item-navigator-share-embed-bg',
-          defaultValue: '#151515',
+          defaultValue: '#222222',
           inputType: 'color',
         },
       ],

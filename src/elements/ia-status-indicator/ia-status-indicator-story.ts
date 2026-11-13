@@ -39,14 +39,14 @@ const styleInputSettings: StyleInputSettings[] = [
     section: 'Color',
     label: 'Success',
     cssVariable: '--ia-theme-color-success',
-    defaultValue: '#31a481',
+    defaultValue: '#20705a',
     inputType: 'color',
   },
   {
     section: 'Color',
     label: 'Error',
     cssVariable: '--ia-theme-color-danger',
-    defaultValue: '#e51c23',
+    defaultValue: '#b8161c',
     inputType: 'color',
   },
 ];
@@ -225,15 +225,15 @@ export class IAStatusIndicatorStory extends LitElement {
       .row {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.5rem;
+        gap: 0.8rem;
       }
 
       button {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.15rem;
-        padding: 0.4rem 0.6rem;
+        gap: 0.24rem;
+        padding: 0.64rem 0.96rem;
         cursor: pointer;
       }
 
@@ -250,7 +250,7 @@ export class IAStatusIndicatorStory extends LitElement {
       label {
         display: flex;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.64rem;
       }
 
       .reset {
