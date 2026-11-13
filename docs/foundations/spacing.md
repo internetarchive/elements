@@ -30,10 +30,11 @@ distinct values rather than letting a 25px creep in. Zero space is written `0`, 
 
 | Token | Step | px | Use |
 | --- | --- | --- | --- |
-| `--ia-space-page-block` | `space-16` | 80 (40 below md) | above and below the page content |
+| `--ia-space-page-block` | `space-16` | 80 | above and below the page content |
+| `--ia-space-page-block-narrow` | `space-8` | 40 | the same, below the `md` breakpoint |
 
-The one spacing token that isn't a step: it re-points itself below the `md` breakpoint, so
-page shells don't write their own media query ([D-48](../DECISIONS.md#d-48)). Everything else in a spec names a step
+The page shell switches to `page-block-narrow` below `md`, the same way it switches
+`--ia-container-gutter` for `--ia-container-gutter-narrow`. Beyond these, a spec names a step
 directly — `--ia-space-1` from label to control, `--ia-space-4` between fields. Inline page
 gutters are `--ia-container-gutter` and `--ia-container-gutter-narrow`
 ([Page gutters](#page-gutters)).
@@ -69,15 +70,15 @@ region.
 ## Page rhythm
 
 ```
---ia-space-page-block   above and below the page content       80, 40 below md
+--ia-space-page-block   above and below the page content       80, --ia-space-page-block-narrow (40) below md
 --ia-space-12           between major page sections            60, --ia-space-6 below md
 --ia-space-8            between blocks inside a section        40
 --ia-space-4            between items inside a block           20
 --ia-space-1            between a label and its control         5
 ```
 
-Below the `md` breakpoint (768px) the two largest halve: `page-block` by itself, section
-separation by switching to `--ia-space-6`. Everything smaller stays put. 80px of top margin on a 375px screen is most of the first
+Below the `md` breakpoint (768px) the two largest halve: page block by switching to
+`--ia-space-page-block-narrow`, section separation by switching to `--ia-space-6`. Everything smaller stays put. 80px of top margin on a 375px screen is most of the first
 viewport.
 
 ## Page gutters
