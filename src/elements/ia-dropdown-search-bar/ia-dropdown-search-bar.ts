@@ -335,13 +335,11 @@ export class IADropdownSearchBar extends LitElement {
           var(--ia-color-surface-raised--)
         );
         --input-color: var(--ia-color-text-primary--);
-        /* Inside the border, so the picker and the submit don't hide it, and
-           so with its band. */
+        /* Inside the border, so the picker and the submit don't hide it. */
         --input-focus-ring-offset: calc(-1 * var(--ia-size-focus-ring--));
         --input-border-radius: 0;
         --input-border-width: 0;
         --input-box-shadow: none;
-        --input-focused-box-shadow: var(--ia-shadow-focus-band--);
         --input-font-size: auto;
         --clear-button-top: var(--clear-button-offset--, 0);
         --clear-button-right: 2px;
