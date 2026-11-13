@@ -199,12 +199,11 @@ export class IAWaybackSearchForm extends LitElement {
           outline: none;
         }
 
-        /* Inside the edge: the field's wrapper clips anything outside it. */
+        /* Over the border, inside the edge, like every text field. */
         input:focus-visible {
           outline: var(--ia-size-focus-ring--) solid
             var(--ia-color-border-focus--);
           outline-offset: calc(-1 * var(--ia-size-focus-ring--));
-          box-shadow: var(--ia-shadow-focus-band--);
         }
 
         .search-field {

@@ -184,7 +184,8 @@ export class IaClearableTextInput extends LitElement {
         border-color: var(--input-hover-border-color, currentColor);
       }
 
-      /* The shared focus ring; the border stays as it is. */
+      /* A text field's focus ring is drawn over its border, inside the edge,
+         so the field looks like it took focus rather than gained a box. */
       #text-input:focus {
         outline: none;
       }
@@ -199,7 +200,7 @@ export class IaClearableTextInput extends LitElement {
           var(--ia-color-border-focus--);
         outline-offset: var(
           --input-focus-ring-offset,
-          var(--ia-size-focus-ring-offset--)
+          calc(-1 * var(--ia-size-focus-ring--))
         );
       }
 
