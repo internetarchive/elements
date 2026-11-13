@@ -44,7 +44,9 @@ const themeStyles = css`
     --coral: var(--ia-color-legacy-coral--);
     --dark-cantaloupe: var(--ia-color-legacy-orange-500--);
     --cantaloupe: var(--ia-color-legacy-orange-400--);
-    --mint-green: var(--ia-color-palette-green-700--); /* D-10 */
+    --mint-green: var(
+      --ia-color-palette-green-700--
+    ); /* dark enough to carry white text */
     --navy-blue: var(--ia-color-palette-navy-700--);
     --bright-blue: var(--ia-color-legacy-blue-500--);
     --default-icon-color: currentColor;
