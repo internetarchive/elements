@@ -22,7 +22,7 @@ let warnedTransparent = false;
  * a loading indicator instead of the text or to customize the text, and the ability to pass in any
  * function to run on click. Follows the button spec in docs/components/button.md.
  *
- * A disabled or loading button stays in the tab order (`aria-disabled`, D-32)
+ * A disabled or loading button stays in the tab order (`aria-disabled`)
  * and swallows its own clicks, so neither a listener on the element nor a
  * form submission sees them. With `href`, it renders a link styled as a button.
  *
@@ -305,7 +305,7 @@ export class IAButton extends LitElement {
           --base-font-family--: var(--base-font-family);
           --font-size-standard--: var(--font-size-standard);
 
-          /* Hover snaps (D-54); only the press moves. */
+          /* Hover snaps; only the press moves. */
           --ia-button-transition--: var(
             --ia-button-transition,
             transform var(--ia-motion-duration-instant--)
@@ -361,7 +361,7 @@ export class IAButton extends LitElement {
           width: var(--button-width--);
           max-width: 100%;
           /* A minimum, not a height: a label longer than its container wraps
-             inside the button instead of overflowing it (D-51). */
+             inside the button instead of overflowing it. */
           min-height: var(--_height);
           margin: 0;
           padding: var(--_padding);
@@ -439,7 +439,7 @@ export class IAButton extends LitElement {
           border-color: var(--primary-cta-border--);
         }
 
-        /* Light, so it never outweighs the primary (D-52); the shadow is what
+        /* Light, so it never outweighs the primary; the shadow is what
            sets it apart from ghost, which sits flat. */
         .secondary {
           color: var(--secondary-cta-text-color--);
@@ -466,7 +466,7 @@ export class IAButton extends LitElement {
           border-color: var(--donate-cta-border--);
         }
 
-        /* No boundary: the label or icon identifies it (D-55). */
+        /* No boundary: the label or icon identifies it. */
         .ghost {
           border-width: 0;
         }
