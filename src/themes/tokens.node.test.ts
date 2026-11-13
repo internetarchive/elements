@@ -88,6 +88,16 @@ for (const bg of ['chrome', 'inverse', 'theater']) {
     'dim text on the darkest surfaces',
   );
 }
+// The topnav's save-page message sits in the Wayback panel: #333 narrow,
+// #474747 wide.
+for (const bg of ['chrome', 'chrome-secondary', 'chrome-tertiary']) {
+  add(
+    'color.text.inverse-warning',
+    `color.surface.${bg}`,
+    TEXT,
+    'warning text on the dark chrome',
+  );
+}
 // An inset ring sits on the control's fill, so it carries its own band.
 add(
   'color.border.focus',

@@ -8,6 +8,7 @@ import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
 import { localized, msg } from '@lit/localize';
+import topnavFocusStyles from './focus-styles';
 
 @customElement('ia-topnav-login-button')
 @localized()
@@ -85,13 +86,13 @@ export class LoginButton extends TrackedElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      topnavFocusStyles,
       css`
         .logged-out-menu {
           background: inherit;
           border: none;
         }
         .logged-out-menu:focus-visible {
-          outline: none;
           border: none;
         }
         .dropdown-toggle {
@@ -133,15 +134,12 @@ export class LoginButton extends TrackedElement {
         span a {
           color: inherit;
           text-decoration: none;
-          outline: 0;
         }
 
         a:hover,
         a:active,
         a:focus {
           color: var(--linkHoverColor) !important;
-          outline: none !important;
-          outline-offset: inherit !important;
         }
 
         @media (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) {
