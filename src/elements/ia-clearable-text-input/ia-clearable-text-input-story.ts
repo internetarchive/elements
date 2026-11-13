@@ -17,24 +17,24 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Text color',
     cssVariable: '--input-color',
-    defaultValue: '#555555',
+    defaultValue: '#2c2c2c',
     inputType: 'color',
   },
   {
     label: 'Border color',
     cssVariable: '--input-border-color',
-    defaultValue: '#cccccc',
+    defaultValue: '#666666',
     inputType: 'color',
   },
   {
     label: 'Border radius',
     cssVariable: '--input-border-radius',
-    defaultValue: '2rem',
+    defaultValue: '999rem',
   },
   {
     label: 'Font size',
     cssVariable: '--input-font-size',
-    defaultValue: '1.7rem',
+    defaultValue: '16px',
   },
   {
     label: 'Clear icon background',

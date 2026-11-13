@@ -1230,25 +1230,28 @@ export class IAComboBox extends LitElement {
         display: inline-flex;
         align-items: stretch;
         flex-wrap: nowrap;
-        background: white;
-        border: 1px solid black;
+        background: var(--ia-color-surface-raised--);
+        border: var(--ia-border-control--);
+        border-radius: var(--ia-radius-default--);
         width: 100%;
       }
 
       #main-widget-row:not(.focused, .disabled):hover,
       #main-widget-row:not(.focused, .disabled):active {
-        background: #fafafa;
+        border-color: var(--ia-color-text-primary--);
       }
 
+      /* Over the border, inside the edge, like every text field. */
       #main-widget-row.focused {
-        outline: black auto 1px;
-        outline-offset: 3px;
+        outline: var(--ia-size-focus-ring--) solid
+          var(--ia-color-border-focus--);
+        outline-offset: calc(-1 * var(--ia-size-focus-ring--));
       }
 
       #main-widget-row.disabled {
-        background: #f4f4f4;
-        border-color: #a0a0a0;
-        color: #404040;
+        background: var(--ia-color-surface-sunken--);
+        border-color: var(--ia-color-border-default--);
+        color: var(--ia-color-text-disabled--);
       }
 
       #text-input {
@@ -1268,7 +1271,7 @@ export class IAComboBox extends LitElement {
       }
 
       #text-input.clear-padding {
-        padding-right: 30px;
+        padding-right: var(--ia-size-control-sm--);
       }
 
       #text-input:read-only {
@@ -1282,8 +1285,7 @@ export class IAComboBox extends LitElement {
         appearance: none;
         background: transparent;
         border: none;
-        padding: var(--combo-box-padding--) 5px;
-        outline: none;
+        padding: var(--combo-box-padding--) var(--ia-space-1--);
         font-size: inherit;
         font-family: inherit;
         font-weight: inherit;
@@ -1291,8 +1293,16 @@ export class IAComboBox extends LitElement {
         cursor: pointer;
       }
 
+      #clear-button:focus-visible,
+      #caret-button:focus-visible {
+        outline: var(--ia-size-focus-ring--) solid
+          var(--ia-color-border-focus--);
+        outline-offset: calc(-1 * var(--ia-size-focus-ring--));
+        box-shadow: var(--ia-shadow-focus-band--);
+      }
+
       #clear-button {
-        flex: 0 0 30px;
+        flex: 0 0 var(--ia-size-control-sm--);
       }
 
       #clear-button[hidden] {
@@ -1309,10 +1319,13 @@ export class IAComboBox extends LitElement {
         margin: 1px 0 0;
         border: none;
         padding: 0;
-        background: white;
+        background: var(--ia-color-surface-raised--);
+        border-radius: var(--ia-radius-default--);
         width: var(--combo-box-list-width--);
+        /* Fixed: a cap on how long the open list grows, which no token
+           covers. */
         max-height: 400px;
-        box-shadow: 0 0 1px 1px #ddd;
+        box-shadow: var(--ia-shadow-overlay--);
         opacity: 0;
         transition: opacity var(--combo-box-list-fade-duration--) ease;
       }
@@ -1322,8 +1335,8 @@ export class IAComboBox extends LitElement {
       }
 
       #empty-options {
-        padding: 5px;
-        color: #606060;
+        padding: var(--ia-space-1--);
+        color: var(--ia-color-text-secondary--);
         font-style: italic;
         text-align: center;
       }
@@ -1331,7 +1344,7 @@ export class IAComboBox extends LitElement {
       /* The svg fills this box, so its width and height are the glyph's size. */
       .icon {
         display: inline-block;
-        color: #000;
+        color: var(--ia-color-text-primary--);
       }
 
       .icon > svg {
@@ -1351,17 +1364,24 @@ export class IAComboBox extends LitElement {
       }
 
       .option {
-        padding: 7px 5px;
+        padding: var(--ia-space-1--) var(--ia-space-2--);
         width: 100%;
         box-sizing: border-box;
-        line-height: 1.1;
+        line-height: var(--ia-font-line-height-tight--);
         text-overflow: ellipsis;
         overflow: hidden;
         cursor: pointer;
       }
 
+      /* The option the keyboard is on: the soft selected tier, marked with
+         the inset focus ring and its band, since the fill alone is 1.18:1 on
+         white. */
       .highlight {
-        background-color: #dbe0ff;
+        background-color: var(--ia-color-selected-soft-fill--);
+        outline: var(--ia-size-focus-ring--) solid
+          var(--ia-color-border-focus--);
+        outline-offset: calc(-1 * var(--ia-size-focus-ring--));
+        box-shadow: var(--ia-shadow-focus-band--);
       }
 
       .disabled,
