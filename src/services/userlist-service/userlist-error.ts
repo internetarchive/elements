@@ -1,6 +1,6 @@
 /** Reasons the service can produce an error */
-export const UserListsErrorReason = {
-  NETWORK: 'failed to connect to user lists backend service',
+export const UserListErrorReason = {
+  NETWORK: 'failed to connect to userlist backend service',
   BAD_RESPONSE: 'malformed response from backend',
   USER_NOT_FOUND: 'user with the given id was not found',
   LIST_NOT_FOUND: 'user list with the given id was not found',
@@ -8,16 +8,16 @@ export const UserListsErrorReason = {
   ITEM_NOT_TOUND: 'item with the given id was not found',
 } as const;
 
-export type UserListsErrorReason =
-  (typeof UserListsErrorReason)[keyof typeof UserListsErrorReason];
+export type UserListErrorReason =
+  (typeof UserListErrorReason)[keyof typeof UserListErrorReason];
 
-/** Typed error for user lists service results */
-export class UserListsError extends Error {
+/** Typed error for userlist service results */
+export class UserListError extends Error {
   // Note that `reason` is an additional property of this subclass, not recognized by the Error superclass.
-  reason: UserListsErrorReason;
+  reason: UserListErrorReason;
 
   constructor(
-    reason: UserListsErrorReason,
+    reason: UserListErrorReason,
     message?: string,
     options?: { cause?: unknown },
   ) {

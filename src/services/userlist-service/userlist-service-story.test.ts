@@ -2,10 +2,10 @@ import { fixture } from '@open-wc/testing-helpers';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { html } from 'lit';
 
-import type { UserListsServiceStory } from './userlist-service-story';
+import type { UserListServiceStory } from './userlist-service-story';
 import './userlist-service-story';
 
-let story: UserListsServiceStory;
+let story: UserListServiceStory;
 
 /** Picks a method, fills its inputs, runs it and returns what's shown. */
 async function run(
@@ -56,7 +56,7 @@ describe('userlist-service story', () => {
 
   beforeEach(async () => {
     fetchSpy = vi.spyOn(window, 'fetch');
-    story = await fixture<UserListsServiceStory>(
+    story = await fixture<UserListServiceStory>(
       html`<userlist-service-story></userlist-service-story>`,
     );
   });
@@ -72,10 +72,10 @@ describe('userlist-service story', () => {
       'service-template',
     ) as unknown as { apiSource: string };
 
-    expect(apiSource).to.contain('export interface UserListsServiceInterface');
-    expect(apiSource).to.contain('export declare class UserListsService');
+    expect(apiSource).to.contain('export interface UserListServiceInterface');
+    expect(apiSource).to.contain('export declare class UserListService');
     expect(apiSource).to.contain('export interface UserList ');
-    expect(apiSource).to.contain('class UserListsError');
+    expect(apiSource).to.contain('class UserListError');
     expect(apiSource).not.to.contain('fetchEndpoint');
     expect(apiSource).not.to.match(/^\s*private /m);
   });
