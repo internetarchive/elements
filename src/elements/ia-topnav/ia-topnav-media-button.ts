@@ -274,7 +274,7 @@ export class MediaButton extends TrackedElement {
           }
 
           /* An open media type's glyph takes its media type's color, in the
-             values that read on the dark tab (D-43). */
+             values that read on the dark tab. */
           .web.selected svg {
             color: var(--ia-color-mediatype-inverse-web--);
           }
