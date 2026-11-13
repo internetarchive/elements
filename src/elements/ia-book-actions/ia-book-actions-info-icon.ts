@@ -27,29 +27,30 @@ export class IABookActionsInfoIcon extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      ${tokenStyles}
-
-      ia-icon-info {
-        display: inline-block;
-        width: var(--ia-size-icon-sm--);
-        height: var(--ia-size-icon-md--);
-        vertical-align: middle;
-        --iconFillColor: var(--ia-color-text-inverse--);
-      }
-      .more-info-icon img {
-        width: var(--ia-size-icon-lg--);
-        height: var(--ia-size-icon-lg--);
-        vertical-align: middle;
-        background: var(--ia-color-surface-raised--);
-      }
-      .hidden {
-        display: none;
-      }
-      .visible {
-        display: inline-block;
-      }
-    `;
+    return [
+      tokenStyles,
+      css`
+        ia-icon-info {
+          display: inline-block;
+          width: var(--ia-size-icon-sm--);
+          height: var(--ia-size-icon-md--);
+          vertical-align: middle;
+          --iconFillColor: var(--ia-color-text-inverse--);
+        }
+        .more-info-icon img {
+          width: var(--ia-size-icon-lg--);
+          height: var(--ia-size-icon-lg--);
+          vertical-align: middle;
+          background: var(--ia-color-surface-raised--);
+        }
+        .hidden {
+          display: none;
+        }
+        .visible {
+          display: inline-block;
+        }
+      `,
+    ];
   }
 }
 

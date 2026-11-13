@@ -1347,32 +1347,33 @@ export class IABookActions
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      ${tokenStyles}
+    return [
+      tokenStyles,
+      css`
+        :host {
+          display: block;
+        }
 
-      :host {
-        display: block;
-      }
+        .hide {
+          display: none;
+        }
 
-      .hide {
-        display: none;
-      }
+        .lending-wrapper {
+          width: 100%;
+          margin: 0 auto;
+          background: var(--primaryBGColor, var(--ia-color-surface-theater--));
+          color: var(--primaryTextColor, var(--ia-color-text-inverse--));
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
 
-      .lending-wrapper {
-        width: 100%;
-        margin: 0 auto;
-        background: var(--primaryBGColor, var(--ia-color-surface-theater--));
-        color: var(--primaryTextColor, var(--ia-color-text-inverse--));
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-
-      #action-bar-modal {
-        --modalWidth: calc(360 * var(--ia-unit, 1px));
-      }
-    `;
+        #action-bar-modal {
+          --modalWidth: calc(360 * var(--ia-unit, 1px));
+        }
+      `,
+    ];
   }
 }
 

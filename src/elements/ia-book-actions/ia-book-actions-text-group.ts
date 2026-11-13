@@ -16,24 +16,25 @@ export class IABookActionsTextGroup extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      ${tokenStyles}
-
-      :host {
-        display: inline-block;
-      }
-      .variable-texts {
-        margin-right: var(--ia-space-2--);
-        vertical-align: middle;
-        font-size: var(--ia-font-size-lg--);
-      }
-      .hidden {
-        display: none;
-      }
-      .visible {
-        display: inline-block;
-      }
-    `;
+    return [
+      tokenStyles,
+      css`
+        :host {
+          display: inline-block;
+        }
+        .variable-texts {
+          margin-right: var(--ia-space-2--);
+          vertical-align: middle;
+          font-size: var(--ia-font-size-lg--);
+        }
+        .hidden {
+          display: none;
+        }
+        .visible {
+          display: inline-block;
+        }
+      `,
+    ];
   }
 }
 

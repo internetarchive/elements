@@ -287,6 +287,8 @@ export class IAModalManager
     const modalMaxWidth = css`var(--modalMaxWidth, 95%)`;
     const modalZindex = css`var(--modalZindex, 2000)`;
 
+    // tokenStyles is pasted in rather than listed beside this css because
+    // this getter's public return type is a single CSSResult.
     return css`
       ${tokenStyles}
 

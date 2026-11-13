@@ -1568,87 +1568,88 @@ export class IAInfiniteScroller
     const cellMaxHeight = css`var(--infiniteScrollerCellMaxHeight, none)`;
     const cellOutline = css`var(--infiniteScrollerCellOutline, 0)`;
 
-    return css`
-      ${themeStyles}
-
-      :host {
-        /**
+    return [
+      themeStyles,
+      css`
+        :host {
+          /**
          * We handle scroll anchoring ourselves for fine-tuning, so opt out
          * of the browser's built-in anchoring (which can interfere with ours
          * and cause undesirable content jitter). 
          */
-        overflow-anchor: none;
-      }
+          overflow-anchor: none;
+        }
 
-      #scroll-spacer,
-      #container,
-      .cell-container {
-        /**
+        #scroll-spacer,
+        #container,
+        .cell-container {
+          /**
          * overflow-anchor does not cascade, so descendents need to opt out too
          */
-        overflow-anchor: none;
-      }
+          overflow-anchor: none;
+        }
 
-      #container {
-        position: relative;
-        display: flex;
-        flex-wrap: wrap;
-        grid-row-gap: ${rowGapSizeCss};
-        row-gap: ${rowGapSizeCss};
-        grid-column-gap: ${colGapSizeCss};
-        column-gap: ${colGapSizeCss};
-
-        /* This transition allows us to listen for changes to the row-gap */
-        transition: row-gap 1ms linear;
-      }
-
-      @supports (display: grid) {
         #container {
-          display: grid;
-          flex-wrap: nowrap;
-          grid-template-columns: repeat(
-            auto-fill,
-            minmax(${cellMinWidth}, ${cellMaxWidth})
-          );
+          position: relative;
+          display: flex;
+          flex-wrap: wrap;
+          grid-row-gap: ${rowGapSizeCss};
+          row-gap: ${rowGapSizeCss};
+          grid-column-gap: ${colGapSizeCss};
+          column-gap: ${colGapSizeCss};
+
+          /* This transition allows us to listen for changes to the row-gap */
+          transition: row-gap 1ms linear;
         }
-      }
 
-      .cell-container {
-        outline: ${cellOutline};
-        min-height: ${cellMinHeight};
-        max-height: ${cellMaxHeight};
-        min-width: ${cellMinWidth};
-        max-width: ${cellMaxWidth};
-      }
+        @supports (display: grid) {
+          #container {
+            display: grid;
+            flex-wrap: nowrap;
+            grid-template-columns: repeat(
+              auto-fill,
+              minmax(${cellMinWidth}, ${cellMaxWidth})
+            );
+          }
+        }
 
-      @supports (display: grid) {
-        /* the grid takes care of the width */
         .cell-container {
-          min-width: auto;
-          max-width: none;
+          outline: ${cellOutline};
+          min-height: ${cellMinHeight};
+          max-height: ${cellMaxHeight};
+          min-width: ${cellMinWidth};
+          max-width: ${cellMaxWidth};
         }
-      }
 
-      #scroll-spacer {
-        position: relative;
-      }
+        @supports (display: grid) {
+          /* the grid takes care of the width */
+          .cell-container {
+            min-width: auto;
+            max-width: none;
+          }
+        }
 
-      #sentinel {
-        position: absolute;
-        height: ${sentinelHeightCss};
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: -1;
-        /**
+        #scroll-spacer {
+          position: relative;
+        }
+
+        #sentinel {
+          position: absolute;
+          height: ${sentinelHeightCss};
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: -1;
+          /**
         Chrome and Firefox try to maintain scroll position when the page increases and
         decreases in size, but the scroll position is being focused on the sentinel
         so it's causing the "load more" event to keep firing because it thinks the
         user has scrolled to the sentinel. "overflow-anchor: none" prevents that anchoring
         */
-        overflow-anchor: none;
-      }
-    `;
+          overflow-anchor: none;
+        }
+      `,
+    ];
   }
 }
 

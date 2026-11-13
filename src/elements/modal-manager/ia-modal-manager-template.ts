@@ -177,6 +177,8 @@ export class IAModalManagerTemplate extends LitElement {
     const headlineLineHeight = css`var(--modalHeadlineLineHeight, normal)`;
     const messageLineHeight = css`var(--modalMessageLineHeight, normal)`;
 
+    // tokenStyles is pasted in rather than listed beside this css because
+    // this getter's public return type is a single CSSResult.
     return css`
       ${tokenStyles}
 

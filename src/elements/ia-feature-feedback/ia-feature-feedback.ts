@@ -600,236 +600,237 @@ export class IAFeatureFeedback
     const unselectedColor = css`var(--unselectedColor, var(--ia-color-border-strong--));`;
     const unselectedColorSvgFilter = css`var(--unselectedColorSvgFilter, invert(100%) sepia(0%) saturate(107%) hue-rotate(138deg) brightness(89%) contrast(77%));`;
 
-    return css`
-      ${tokenStyles}
+    return [
+      tokenStyles,
+      css`
+        #container {
+          display: inline-block;
+        }
 
-      #container {
-        display: inline-block;
-      }
+        #beta-button {
+          font-size: var(--ia-font-size-sm--);
+          font-weight: bold;
+          font-style: italic;
+          color: ${betaButtonTextColor};
+          background: ${betaButtonBackground};
+          border: var(--ia-size-border-width--) solid ${betaButtonBorderColor};
+          border-radius: var(--ia-radius-default--);
+          padding: 1px var(--ia-space-1--);
+        }
 
-      #beta-button {
-        font-size: var(--ia-font-size-sm--);
-        font-weight: bold;
-        font-style: italic;
-        color: ${betaButtonTextColor};
-        background: ${betaButtonBackground};
-        border: var(--ia-size-border-width--) solid ${betaButtonBorderColor};
-        border-radius: var(--ia-radius-default--);
-        padding: 1px var(--ia-space-1--);
-      }
+        .beta-button-thumb svg {
+          height: var(--ia-size-icon-xs--);
+          width: var(--ia-size-icon-xs--);
+          filter: ${betaButtonSvgFilter};
+        }
 
-      .beta-button-thumb svg {
-        height: var(--ia-size-icon-xs--);
-        width: var(--ia-size-icon-xs--);
-        filter: ${betaButtonSvgFilter};
-      }
+        .beta-button-thumb.unselected svg {
+          filter: ${unselectedColorSvgFilter};
+        }
 
-      .beta-button-thumb.unselected svg {
-        filter: ${unselectedColorSvgFilter};
-      }
+        #error {
+          color: var(--ia-color-text-danger--);
+          font-size: var(--ia-font-size-md--);
+          text-align: center;
+          font-weight: bold;
+        }
 
-      #error {
-        color: var(--ia-color-text-danger--);
-        font-size: var(--ia-font-size-md--);
-        text-align: center;
-        font-weight: bold;
-      }
+        #popup-background {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: ${backdropZindex};
+          background-color: ${popupBlockerColor};
+          overflow: hidden;
+        }
 
-      #popup-background {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: ${backdropZindex};
-        background-color: ${popupBlockerColor};
-        overflow: hidden;
-      }
+        #popup-background.closed {
+          visibility: hidden;
+          top: -100%;
+          left: -100%;
+        }
 
-      #popup-background.closed {
-        visibility: hidden;
-        top: -100%;
-        left: -100%;
-      }
+        #popup {
+          position: absolute;
+          padding: var(--ia-space-2--);
+          background-color: ${popupBackgroundColor};
+          border: var(--ia-size-border-width--) ${popupBorderColor} solid;
+          border-radius: var(--ia-radius-default--);
+          box-shadow: var(--ia-shadow-overlay--);
+          z-index: ${modalZindex};
+          max-width: 300px;
+          margin-left: var(--ia-space-2--);
+          margin-right: var(--ia-space-2--);
+        }
 
-      #popup {
-        position: absolute;
-        padding: var(--ia-space-2--);
-        background-color: ${popupBackgroundColor};
-        border: var(--ia-size-border-width--) ${popupBorderColor} solid;
-        border-radius: var(--ia-radius-default--);
-        box-shadow: var(--ia-shadow-overlay--);
-        z-index: ${modalZindex};
-        max-width: 300px;
-        margin-left: var(--ia-space-2--);
-        margin-right: var(--ia-space-2--);
-      }
+        button,
+        input,
+        a,
+        textarea {
+          font-family: inherit;
+        }
 
-      button,
-      input,
-      a,
-      textarea {
-        font-family: inherit;
-      }
+        button,
+        input[type='submit'] {
+          background: none;
+          cursor: pointer;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          border: none;
+        }
 
-      button,
-      input[type='submit'] {
-        background: none;
-        cursor: pointer;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        border: none;
-      }
+        button:disabled,
+        input[type='submit']:disabled {
+          cursor: default;
+          opacity: 0.5;
+        }
 
-      button:disabled,
-      input[type='submit']:disabled {
-        cursor: default;
-        opacity: 0.5;
-      }
+        #form > div {
+          margin-bottom: var(--ia-space-2--);
+        }
 
-      #form > div {
-        margin-bottom: var(--ia-space-2--);
-      }
+        #form > div:last-child {
+          margin-bottom: 0;
+        }
 
-      #form > div:last-child {
-        margin-bottom: 0;
-      }
+        .prompt {
+          display: flex;
+          align-items: center;
+          font-size: ${promptFontSize};
+          font-weight: ${promptFontWeight};
+        }
 
-      .prompt {
-        display: flex;
-        align-items: center;
-        font-size: ${promptFontSize};
-        font-weight: ${promptFontWeight};
-      }
+        .prompt > label {
+          flex: none;
+          cursor: pointer;
+        }
 
-      .prompt > label {
-        flex: none;
-        cursor: pointer;
-      }
+        .prompt-text {
+          text-align: left;
+        }
 
-      .prompt-text {
-        text-align: left;
-      }
+        #comments {
+          width: 100%;
+          height: var(--ia-size-control-xl--);
+          background-color: var(--ia-color-surface-raised--);
+          border: var(--ia-size-border-width--) var(--ia-color-border-strong--)
+            solid;
+          border-radius: var(--ia-radius-default--);
+          padding: var(--ia-space-1--);
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+          resize: none;
+        }
 
-      #comments {
-        width: 100%;
-        height: var(--ia-size-control-xl--);
-        background-color: var(--ia-color-surface-raised--);
-        border: var(--ia-size-border-width--) var(--ia-color-border-strong--)
-          solid;
-        border-radius: var(--ia-radius-default--);
-        padding: var(--ia-space-1--);
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        resize: none;
-      }
+        #comments::placeholder {
+          color: var(--ia-color-text-secondary--);
+        }
 
-      #comments::placeholder {
-        color: var(--ia-color-text-secondary--);
-      }
+        #actions {
+          display: flex;
+          justify-content: center;
+        }
 
-      #actions {
-        display: flex;
-        justify-content: center;
-      }
+        .cta-button {
+          color: var(--ia-color-action-primary-text--);
+          font-size: var(--ia-font-size-md--);
+          border-radius: var(--ia-radius-default--);
+          height: var(--ia-size-control-sm--);
+          margin: 0;
+        }
 
-      .cta-button {
-        color: var(--ia-color-action-primary-text--);
-        font-size: var(--ia-font-size-md--);
-        border-radius: var(--ia-radius-default--);
-        height: var(--ia-size-control-sm--);
-        margin: 0;
-      }
+        #cancel-button {
+          background-color: ${cancelButtonColor};
+        }
 
-      #cancel-button {
-        background-color: ${cancelButtonColor};
-      }
+        #submit-button {
+          background-color: ${submitButtonColor};
+          margin-left: var(--ia-space-2--);
+        }
 
-      #submit-button {
-        background-color: ${submitButtonColor};
-        margin-left: var(--ia-space-2--);
-      }
+        .vote-button {
+          background-color: var(--ia-color-action-secondary-fill--);
+          border: var(--ia-size-border-width--) solid
+            var(--ia-color-action-secondary-border--);
+          border-radius: var(--ia-radius-sm--);
+          padding: 0;
+          width: var(--ia-size-control-sm--);
+          height: var(--ia-size-control-sm--);
+          box-sizing: border-box;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-left: var(--ia-space-2--);
+        }
 
-      .vote-button {
-        background-color: var(--ia-color-action-secondary-fill--);
-        border: var(--ia-size-border-width--) solid
-          var(--ia-color-action-secondary-border--);
-        border-radius: var(--ia-radius-sm--);
-        padding: 0;
-        width: var(--ia-size-control-sm--);
-        height: var(--ia-size-control-sm--);
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-left: var(--ia-space-2--);
-      }
+        .vote-button svg {
+          width: var(--ia-size-icon-sm--);
+          height: var(--ia-size-icon-sm--);
+        }
 
-      .vote-button svg {
-        width: var(--ia-size-icon-sm--);
-        height: var(--ia-size-icon-sm--);
-      }
+        .vote-button input {
+          margin: 0;
+          padding: 0;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+        }
 
-      .vote-button input {
-        margin: 0;
-        padding: 0;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-      }
+        .vote-button.noselection {
+          border-color: ${defaultColor};
+        }
 
-      .vote-button.noselection {
-        border-color: ${defaultColor};
-      }
+        .vote-button.noselection svg {
+          filter: ${defaultColorSvgFilter};
+        }
 
-      .vote-button.noselection svg {
-        filter: ${defaultColorSvgFilter};
-      }
+        .vote-button.unselected {
+          border-color: ${unselectedColor};
+        }
 
-      .vote-button.unselected {
-        border-color: ${unselectedColor};
-      }
+        .vote-button.unselected svg {
+          filter: ${unselectedColorSvgFilter};
+        }
 
-      .vote-button.unselected svg {
-        filter: ${unselectedColorSvgFilter};
-      }
+        .upvote-button.selected {
+          border-color: ${upvoteColor};
+        }
 
-      .upvote-button.selected {
-        border-color: ${upvoteColor};
-      }
+        .upvote-button.selected svg {
+          filter: ${upvoteColorSvgFilter};
+        }
 
-      .upvote-button.selected svg {
-        filter: ${upvoteColorSvgFilter};
-      }
+        .downvote-button.selected {
+          border-color: ${downvoteColor};
+        }
 
-      .downvote-button.selected {
-        border-color: ${downvoteColor};
-      }
+        .downvote-button.selected svg {
+          filter: ${downvoteColorSvgFilter};
+        }
 
-      .downvote-button.selected svg {
-        filter: ${downvoteColorSvgFilter};
-      }
+        .vote-button.error {
+          box-shadow: 0 0 4px var(--ia-color-status-danger--);
+        }
 
-      .vote-button.error {
-        box-shadow: 0 0 4px var(--ia-color-status-danger--);
-      }
+        form[disabled] .vote-button.unselected {
+          cursor: not-allowed;
+        }
 
-      form[disabled] .vote-button.unselected {
-        cursor: not-allowed;
-      }
-
-      #comment-button {
-        color: var(--ia-theme-link-color, var(--ia-color-text-link--));
-        font-weight: ${commentButtonFontWeight};
-        font-size: ${commentButtonFontSize};
-      }
-      #comment-button:not([disabled]):hover,
-      #comment-button:not([disabled]):active {
-        text-decoration: underline;
-      }
-    `;
+        #comment-button {
+          color: var(--ia-theme-link-color, var(--ia-color-text-link--));
+          font-weight: ${commentButtonFontWeight};
+          font-size: ${commentButtonFontSize};
+        }
+        #comment-button:not([disabled]):hover,
+        #comment-button:not([disabled]):active {
+          text-decoration: underline;
+        }
+      `,
+    ];
   }
 }
 

@@ -53,38 +53,39 @@ export class IABookActionsTimerCountdown extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      ${tokenStyles}
+    return [
+      tokenStyles,
+      css`
+        :host {
+          right: 0;
+          margin-right: var(--ia-space-2--);
+          position: absolute;
+        }
 
-      :host {
-        right: 0;
-        margin-right: var(--ia-space-2--);
-        position: absolute;
-      }
+        .sr-only {
+          position: absolute;
+          left: -9999px;
+          width: 1px;
+          height: 1px;
+          margin: 0;
+          padding: 0;
+          border: none;
+          overflow: hidden;
+        }
 
-      .sr-only {
-        position: absolute;
-        left: -9999px;
-        width: 1px;
-        height: 1px;
-        margin: 0;
-        padding: 0;
-        border: none;
-        overflow: hidden;
-      }
+        button#timer-counter {
+          cursor: pointer;
+        }
 
-      button#timer-counter {
-        cursor: pointer;
-      }
+        .hide {
+          opacity: 0;
+        }
 
-      .hide {
-        opacity: 0;
-      }
-
-      .show {
-        opacity: 1;
-      }
-    `;
+        .show {
+          opacity: 1;
+        }
+      `,
+    ];
   }
 }
 

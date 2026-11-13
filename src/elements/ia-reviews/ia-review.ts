@@ -336,86 +336,87 @@ export class IAReview extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      ${tokenStyles}
+    return [
+      tokenStyles,
+      css`
+        :host {
+          font-family: var(
+            --ia-font-stack,
+            'Helvetica Neue',
+            Helvetica,
+            Arial,
+            sans-serif
+          );
 
-      :host {
-        font-family: var(
-          --ia-font-stack,
-          'Helvetica Neue',
-          Helvetica,
-          Arial,
-          sans-serif
-        );
+          font-size: inherit;
+          --container-bg-color: var(--ia-color-surface-page--);
+          --container-border-color: var(--ia-color-border-strong--);
+        }
 
-        font-size: inherit;
-        --container-bg-color: var(--ia-color-surface-page--);
-        --container-border-color: var(--ia-color-border-strong--);
-      }
+        .review {
+          position: relative;
+          padding-right: var(--ia-space-6--);
+        }
 
-      .review {
-        position: relative;
-        padding-right: var(--ia-space-6--);
-      }
+        .error {
+          color: var(--error-color, var(--ia-color-text-danger--));
+        }
 
-      .error {
-        color: var(--error-color, var(--ia-color-text-danger--));
-      }
+        .top-line {
+          margin-bottom: var(--ia-space-1--);
+        }
 
-      .top-line {
-        margin-bottom: var(--ia-space-1--);
-      }
+        .top-line > * {
+          display: inline-block;
+        }
 
-      .top-line > * {
-        display: inline-block;
-      }
+        .review-star {
+          width: var(--ia-size-icon-xs--);
+          display: inline-block;
+        }
 
-      .review-star {
-        width: var(--ia-size-icon-xs--);
-        display: inline-block;
-      }
+        .star-basic {
+          display: block;
+          width: 100%;
+        }
 
-      .star-basic {
-        display: block;
-        width: 100%;
-      }
+        .simple-link,
+        .body a {
+          color: var(--link-color, var(--ia-color-text-link--));
+          text-decoration: none;
+          background: transparent;
+          border: none;
+          padding: 0px;
+        }
 
-      .simple-link,
-      .body a {
-        color: var(--link-color, var(--ia-color-text-link--));
-        text-decoration: none;
-        background: transparent;
-        border: none;
-        padding: 0px;
-      }
+        .simple-link:hover,
+        .body a:hover {
+          cursor: pointer;
+          text-decoration: underline;
+        }
 
-      .simple-link:hover,
-      .body a:hover {
-        cursor: pointer;
-        text-decoration: underline;
-      }
+        .subject {
+          margin-bottom: var(--ia-space-1--);
+        }
 
-      .subject {
-        margin-bottom: var(--ia-space-1--);
-      }
+        .delete-btn {
+          position: absolute;
+          top: 0;
+          right: 0;
+          padding: 0;
+          background: none;
+          border: 0;
+        }
 
-      .delete-btn {
-        position: absolute;
-        top: 0;
-        right: 0;
-        padding: 0;
-        background: none;
-        border: 0;
-      }
+        .delete-btn:hover {
+          cursor: pointer;
+        }
 
-      .delete-btn:hover {
-        cursor: pointer;
-      }
-
-      .delete-icon {
-        width: var(--ia-size-icon-md--);
-        mix-blend-mode: multiply;
-      }
-    `;
+        .delete-icon {
+          width: var(--ia-size-icon-md--);
+          mix-blend-mode: multiply;
+        }
+      `,
+    ];
   }
 }

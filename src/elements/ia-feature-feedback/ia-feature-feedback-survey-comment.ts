@@ -215,44 +215,45 @@ export class IAFeatureFeedbackSurveyComment
     const promptFontWeight = css`var(--featureFeedbackPromptFontWeight, bold)`;
     const promptFontSize = css`var(--featureFeedbackPromptFontSize, var(--ia-font-size-md--))`;
 
-    return css`
-      ${tokenStyles}
+    return [
+      tokenStyles,
+      css`
+        #container {
+          margin: ${questionMargin};
+        }
 
-      #container {
-        margin: ${questionMargin};
-      }
+        #prompt-text {
+          text-align: left;
+          margin-bottom: var(--ia-space-1--);
+          flex-grow: 1;
+          font-size: ${promptFontSize};
+          font-weight: ${promptFontWeight};
+        }
 
-      #prompt-text {
-        text-align: left;
-        margin-bottom: var(--ia-space-1--);
-        flex-grow: 1;
-        font-size: ${promptFontSize};
-        font-weight: ${promptFontWeight};
-      }
+        #comments {
+          width: 100%;
+          height: ${height};
+          background-color: var(--ia-color-surface-raised--);
+          border: var(--ia-size-border-width--) var(--ia-color-border-strong--)
+            solid;
+          border-radius: var(--ia-radius-default--);
+          padding: var(--ia-space-1--);
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+          font-family: inherit;
+          resize: ${resize};
+        }
 
-      #comments {
-        width: 100%;
-        height: ${height};
-        background-color: var(--ia-color-surface-raised--);
-        border: var(--ia-size-border-width--) var(--ia-color-border-strong--)
-          solid;
-        border-radius: var(--ia-radius-default--);
-        padding: var(--ia-space-1--);
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        font-family: inherit;
-        resize: ${resize};
-      }
+        #comments::placeholder {
+          color: var(--ia-color-text-secondary--);
+        }
 
-      #comments::placeholder {
-        color: var(--ia-color-text-secondary--);
-      }
-
-      :host(:invalid) #comments {
-        box-shadow: 0 0 4px var(--ia-color-status-danger--);
-      }
-    `;
+        :host(:invalid) #comments {
+          box-shadow: 0 0 4px var(--ia-color-status-danger--);
+        }
+      `,
+    ];
   }
 }
 
