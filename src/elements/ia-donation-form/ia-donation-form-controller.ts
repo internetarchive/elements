@@ -569,6 +569,11 @@ export class IADonationFormController extends LitElement {
    * The `--ia-donation-form-*` variables set here are the consumer-facing
    * theming for the whole form; they fan out to the sections, the amount
    * picker and the payment buttons.
+   *
+   * The token aliases (`--ia-x--`) exist only inside a shadow root, so these
+   * styles read a token by its public name with its value as the fallback.
+   * `src/themes/token-fallbacks.node.test.ts` checks each fallback against
+   * tokens.json.
    */
   private get getStyles(): TemplateResult {
     return html`

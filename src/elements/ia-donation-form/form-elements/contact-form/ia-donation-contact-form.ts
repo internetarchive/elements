@@ -372,6 +372,11 @@ export class IADonationContactForm extends LitElement {
    * The element renders into the light DOM, so instead of a `styles` block
    * it writes its own `<style>` tag, with every selector prefixed by the tag
    * name so nothing leaks onto the rest of the page.
+   *
+   * The token aliases (`--ia-x--`) exist only inside a shadow root, so these
+   * styles read a token by its public name with its value as the fallback.
+   * `src/themes/token-fallbacks.node.test.ts` checks each fallback against
+   * tokens.json.
    */
   private get getStyles(): TemplateResult {
     const noIconSpacerWidth = css`var(--ia-donation-badged-input-no-icon-spacer-width, calc(var(--donation-contact-base-font-size--) * 3))`;

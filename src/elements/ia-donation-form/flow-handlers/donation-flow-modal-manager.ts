@@ -22,7 +22,8 @@ import '../modals/ia-donation-upsell-modal-content';
 /*
  * The status tokens, by their public names with each token's value as the
  * fallback: the header renders in whatever modal manager the page supplies,
- * which may not carry the tokens.
+ * which may not carry the tokens. src/themes/token-fallbacks.node.test.ts
+ * checks each fallback against tokens.json.
  */
 const ModalHeaderColor = {
   Blue: 'var(--ia-color-status-info, #194880)',
