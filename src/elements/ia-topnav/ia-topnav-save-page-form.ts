@@ -6,6 +6,7 @@ import { IATopNavConfig, TOPNAV_MOBILE_BREAKPOINT } from './models';
 import { defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
 import { localized, msg } from '@lit/localize';
+import topnavFocusStyles from './focus-styles';
 
 @customElement('ia-topnav-save-page-form')
 @localized()
@@ -68,6 +69,7 @@ export class SavePageForm extends TrackedElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      topnavFocusStyles,
       css`
         div {
           display: grid;

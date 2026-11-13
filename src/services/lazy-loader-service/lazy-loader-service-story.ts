@@ -180,18 +180,18 @@ export class LazyLoaderServiceStory extends LitElement {
         display: flex;
         flex-wrap: wrap;
         align-items: flex-end;
-        gap: 0.5rem;
+        gap: 0.8rem;
       }
 
       label {
         display: flex;
         flex-direction: column;
         gap: 2px;
-        font-size: 0.8rem;
+        font-size: 1.28rem;
       }
 
       input[type='number'] {
-        width: 6rem;
+        width: 9.6rem;
       }
 
       .result[hidden] {
@@ -206,10 +206,10 @@ export class LazyLoaderServiceStory extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 4px;
-        padding: 0.5rem;
+        padding: 0.8rem;
         background: #fff;
         border: 1px solid #ccc;
-        font-size: 0.85rem;
+        font-size: 1.36rem;
       }
 
       .output {
@@ -219,13 +219,13 @@ export class LazyLoaderServiceStory extends LitElement {
 
       .events {
         margin: 0;
-        padding-left: 1.2rem;
+        padding-left: 1.92rem;
       }
 
       .tags {
         white-space: pre-wrap;
         overflow-wrap: anywhere;
-        font-size: 0.75rem;
+        font-size: 1.2rem;
       }
     `;
   }

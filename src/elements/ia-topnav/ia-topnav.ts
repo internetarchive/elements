@@ -25,12 +25,7 @@ import type { PrimaryNav } from './ia-topnav-primary-nav';
 import './ia-topnav-signed-out-dropdown';
 import './ia-topnav-user-menu';
 import themeStyles from '@src/themes/theme-styles';
-import {
-  applyTopnavUnitFallback,
-  registerTopnavUnit,
-} from './lib/register-topnav-unit';
-
-const topnavUnitRegistered = registerTopnavUnit();
+import topnavFocusStyles from './focus-styles';
 
 @customElement('ia-topnav')
 export class IATopNav extends LitElement {
@@ -117,12 +112,6 @@ export class IATopNav extends LitElement {
     window.addEventListener(LOCALE_STATUS_EVENT, this.boundHandleLocaleStatus);
     document.addEventListener('keydown', this.boundHandleKeydown);
     document.addEventListener('click', this.boundHandleClick);
-    // Only matters on a browser without CSS.registerProperty. Reads the
-    // font-size this connect resolved to, so a later change to
-    // --topnavFontSize on an already-connected instance won't move it again.
-    // That's an accepted limitation on those older browsers, not a bug on
-    // the registered path above.
-    if (!topnavUnitRegistered) applyTopnavUnitFallback(this);
   }
 
   disconnectedCallback() {
@@ -415,43 +404,49 @@ export class IATopNav extends LitElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      topnavFocusStyles,
       css`
         :host {
           /**
-           * 'medium' is the browser's default font size (16px, or whatever
-           * the user raised it to), so this ignores a page's own root
-           * font-size reset (e.g. archive.org and offshoot's 10px html).
-           * --topnavUnit-- is 1px at that default, computed here (where it's
-           * registered as an inheriting <length> so it resolves once and
-           * doesn't re-evaluate against a descendant's own font-size) and
-           * reaches every part of the topnav sized with
-           * calc(N * var(--topnavUnit--)).
+           * Every part of the topnav is sized with
+           * calc(N * var(--topnavUnit--)). It's elements' shared --ia-unit:
+           * 1px at the browser's default font size, growing with the user's
+           * own setting, whatever the page's root font size. Set --ia-unit on
+           * <ia-topnav> to scale it on its own (2px doubles it).
            *
-           * Public override: --topnavFontSize sets that base size. The layout
-           * is verified from 16px (the browser default) up to 18px. Past
-           * that, at desktop widths around 1440px, the media buttons can
-           * wrap onto a second row (seen at 20px and up).
+           * Deprecated: --topnavFontSize, the topnav's base font size, still
+           * sets the unit at a sixteenth of it (32px doubles it). It has to
+           * be an absolute length such as px, since an em here would resolve
+           * against each part's own font size.
+           *
+           * The layout is verified from 16px (the browser default) up to
+           * 18px. Past that, at desktop widths around 1440px, the media
+           * buttons can wrap onto a second row (seen at 20px and up).
            */
-          font-size: var(--topnavFontSize, medium);
-          --topnavUnit--: calc(1em / 16);
+          --topnavUnit--: calc(
+            var(--topnavFontSize, calc(16 * var(--ia-unit, 1px))) / 16
+          );
+          font-size: calc(16 * var(--topnavUnit--));
 
-          --white: #fff;
-          --grey13: #222;
-          --grey20: #333;
-          --grey40: #666;
-          --grey28: #474747;
-          --grey60: #999;
-          --grey66: #aaa;
-          --grey80: #ccc;
-          --greya0: #a0a0a0;
-          --grey6f: #6f6f6f;
-          --errorYellow: #ffcd27;
+          /* The topnav's palette, on the design tokens. The roles below read
+             it; set any of them on <ia-topnav> to restyle a part. Each name
+             still sets the parts it always has, so its value is the spec's
+             color for those parts rather than the gray in its name. */
+          --white: var(--ia-color-text-inverse--);
+          --grey13: var(--ia-color-surface-chrome--);
+          --grey20: var(--ia-color-surface-chrome-secondary--);
+          --grey40: var(--ia-color-palette-gray-600--);
+          --grey28: var(--ia-color-surface-chrome-tertiary--);
+          --grey60: var(--ia-color-text-inverse-secondary--);
+          --grey66: var(--ia-color-text-inverse-secondary--);
+          --grey80: var(--ia-color-text-inverse-secondary--);
+          --greya0: var(--ia-color-text-inverse-secondary--);
+          --grey6f: var(--ia-color-legacy-gray-550--);
+          --errorYellow: var(--ia-color-text-inverse-warning--);
 
-          --linkColor: #4b64ff;
           --linkHoverColor: var(--white);
           --subnavLinkColor: var(--grey66);
           --primaryTextColor: var(--white);
-          --inverseTextColor: var(--grey20);
           --lightTextColor: var(--grey60);
           --activeColor: var(--white);
           --activeButtonBg: var(--grey20);
@@ -460,6 +455,7 @@ export class IATopNav extends LitElement {
 
           --mediaMenuBg: var(--grey13);
           --mediaLabelDesktopColor: var(--grey60);
+          /* The open media tab matches the panel it opens. */
           --activeDesktopMenuIcon: var(--grey28);
 
           --mediaSliderBg: var(--grey20);
@@ -473,24 +469,26 @@ export class IATopNav extends LitElement {
           --dropdownMenuBg: var(--grey20);
           --dropdownMenuInfoItem: var(--greya0);
           --dropdownMenuDivider: var(--grey40);
-          --inverseDropdownMenuInfoItem: var(--grey6f);
+
+          /* The wide dropdown's roles. Its panel is dark now (D-41), so they
+             hold dark-panel values; --linkColor is a fill under the hover
+             overlay, none by default. */
+          --linkColor: transparent;
+          --inverseTextColor: var(--ia-color-text-inverse--);
+          --inverseDropdownMenuInfoItem: var(--dropdownMenuInfoItem);
 
           --loginTextColor: var(--grey60);
 
-          --themeFontFamily: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+          --themeFontFamily: var(--ia-font-family-base--);
           --logoWidthTablet: 263px;
 
           --savePageSubmitBg: var(--grey13);
           --savePageSubmitText: var(--white);
-          --savePageInputBorder: var(--grey60);
+          --savePageInputBorder: var(--ia-color-text-inverse-tertiary--);
           --savePageErrorText: var(--errorYellow);
 
           color: var(--primaryTextColor);
           font-family: var(--themeFontFamily);
-        }
-
-        ia-topnav-primary-nav:focus {
-          outline: none !important;
         }
 
         #close-layer {

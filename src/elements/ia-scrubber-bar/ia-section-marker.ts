@@ -12,6 +12,7 @@ import { SectionMarkerMode } from './models';
 
 import nextSectionIcon from '@src/icons/scrubber-next-section';
 import previousSectionIcon from '@src/icons/scrubber-previous-section';
+import { tokenStyles } from '@src/themes/tokens';
 
 /**
  * A single section boundary drawn on the scrubber bar.
@@ -37,80 +38,86 @@ export class IASectionMarker extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        --section-marker-color--: var(--ia-theme-scrubber-marker-color, #fff);
-        /*
+    return [
+      tokenStyles,
+      css`
+        :host {
+          --section-marker-color--: var(
+            --ia-theme-scrubber-marker-color,
+            var(--ia-color-text-inverse--)
+          );
+          /*
           Relative to the marker, which the scrubber sizes to the track, so a
           collapsed divider is exactly as tall as the track it sits on and an
           expanded one stands proportionally above it. A fixed pixel height
           here only lines up at one track height.
         */
-        --section-marker-height-collapsed--: var(
-          --ia-theme-scrubber-marker-height-collapsed,
-          100%
-        );
-        --section-marker-height-expanded--: var(
-          --ia-theme-scrubber-marker-height-expanded,
-          250%
-        );
-        --section-marker-animation-speed--: 0.1s;
+          --section-marker-height-collapsed--: var(
+            --ia-theme-scrubber-marker-height-collapsed,
+            100%
+          );
+          --section-marker-height-expanded--: var(
+            --ia-theme-scrubber-marker-height-expanded,
+            250%
+          );
+          --section-marker-animation-speed--: 0.1s;
 
-        color: var(--section-marker-color--);
-      }
+          color: var(--section-marker-color--);
+        }
 
-      .container {
-        display: flex;
-        justify-content: center;
-        height: 100%;
-      }
+        .container {
+          display: flex;
+          justify-content: center;
+          height: 100%;
+        }
 
-      .arrow svg {
-        width: 8px;
-        height: 10px;
-      }
+        .arrow svg {
+          width: 8px;
+          height: 10px;
+        }
 
-      .arrow {
-        padding-top: 10px;
-        opacity: 1;
-        /*
+        .arrow {
+          padding-top: 10px;
+          opacity: 1;
+          /*
           The arrows are hidden in every mode. The mode rules below vary only
           opacity, which cannot reveal a hidden element, so nothing here brings
           them back. Reveal them by dropping this line, not by touching the
           mode rules.
         */
-        visibility: hidden;
-        transition:
-          opacity var(--section-marker-animation-speed--) ease-out,
-          padding-top var(--section-marker-animation-speed--) ease-out;
-      }
+          visibility: hidden;
+          transition:
+            opacity var(--section-marker-animation-speed--) ease-out,
+            padding-top var(--section-marker-animation-speed--) ease-out;
+        }
 
-      .container.mode-left .right-arrow {
-        opacity: 0;
-      }
+        .container.mode-left .right-arrow {
+          opacity: 0;
+        }
 
-      .container.mode-right .left-arrow {
-        opacity: 0;
-      }
+        .container.mode-right .left-arrow {
+          opacity: 0;
+        }
 
-      .container.mode-neither .left-arrow,
-      .container.mode-neither .right-arrow {
-        opacity: 0;
-        padding-top: 75%;
-      }
+        .container.mode-neither .left-arrow,
+        .container.mode-neither .right-arrow {
+          opacity: 0;
+          padding-top: 75%;
+        }
 
-      .container.mode-neither .center-divider {
-        height: var(--section-marker-height-collapsed--);
-      }
+        .container.mode-neither .center-divider {
+          height: var(--section-marker-height-collapsed--);
+        }
 
-      .center-divider {
-        border-left: 1px solid currentColor;
-        width: 1px;
-        left: 50%;
-        height: var(--section-marker-height-expanded--);
-        align-self: flex-end;
-        transition: height var(--section-marker-animation-speed--) ease-out;
-      }
-    `;
+        .center-divider {
+          border-left: 1px solid currentColor;
+          width: 1px;
+          left: 50%;
+          height: var(--section-marker-height-expanded--);
+          align-self: flex-end;
+          transition: height var(--section-marker-animation-speed--) ease-out;
+        }
+      `,
+    ];
   }
 }

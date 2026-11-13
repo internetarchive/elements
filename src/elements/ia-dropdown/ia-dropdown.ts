@@ -2,6 +2,7 @@ import {
   html,
   css,
   LitElement,
+  nothing,
   TemplateResult,
   PropertyValues,
   CSSResultGroup,
@@ -262,18 +263,27 @@ export class IADropdown extends LitElement {
    * @returns
    */
   renderOption(availableOption: OptionInterface): TemplateResult {
-    const { label, url = undefined, id } = availableOption;
+    const { url = undefined, id } = availableOption;
     let component;
     const selected = this.selectedOption === id ? 'selected' : '';
+    // The option's padding sits on its first element, so a plain-text label
+    // gets an element of its own; otherwise it would run flush to the edge.
+    const isText = typeof availableOption.label === 'string';
+    const label = isText
+      ? html`<span class="option-text">${availableOption.label}</span>`
+      : availableOption.label;
+    const optionClass = isText ? 'text-option' : nothing;
 
     if (url) {
       component = html`<a
         href=${url}
+        class=${optionClass}
         @click=${(e: Event) => this.optionClicked(e, availableOption)}
         >${label}</a
       >`;
     } else {
       component = html`<button
+        class=${optionClass}
         @click=${(e: Event) => this.optionClicked(e, availableOption)}
       >
         ${label}
@@ -485,12 +495,15 @@ export class IADropdown extends LitElement {
 
   static get styles(): CSSResultGroup {
     const dropdownBorderWidth = css`var(--dropdownBorderWidth, 1px)`;
-    const dropdownBorderRadius = css`var(--dropdownBorderRadius, 4px)`;
-    const dropdownBorderColor = css`var(--dropdownBorderColor, #fff)`;
-    const dropdownBgColor = css`var(--dropdownBgColor, #333)`;
-    const dropdownTextColor = css`var(--dropdownTextColor, #fff)`;
-    const dropdownHoverBgColor = css`var(--dropdownHoverBgColor, rgba(255, 255, 255, 0.3))`;
-    const dropdownSelectedBgColor = css`var(--dropdownSelectedBgColor, #fff)`;
+    /* The dark dropdown panel of docs/components/dropdown.md, on tokens. */
+    const dropdownBorderRadius = css`var(--dropdownBorderRadius, var(--ia-radius-default--))`;
+    const dropdownBorderColor = css`var(--dropdownBorderColor, var(--ia-color-border-inverse--))`;
+    const dropdownBgColor = css`var(--dropdownBgColor, var(--ia-color-surface-inverse--))`;
+    const dropdownTextColor = css`var(--dropdownTextColor, var(--ia-color-text-inverse--))`;
+    const dropdownHoverBgColor = css`var(--dropdownHoverBgColor, var(--ia-color-hover-overlay-inverse--))`;
+    // An overlay on the panel: #666 on the default one, and on a panel a host
+    // recolors, a lighter shade of it rather than a dark bar.
+    const dropdownSelectedBgColor = css`var(--dropdownSelectedBgColor, var(--ia-color-selected-soft-overlay-inverse--))`;
     const dropdownMainButtonBgColor = css`var(--dropdownMainButtonBgColor, transparent)`;
     const dropdownTextAlign = css`var(--dropdownTextAlign, inherit)`;
     const dropdownBackdropZIndex = css`var(--dropdownBackdropZIndex, 1)`;
@@ -508,7 +521,7 @@ export class IADropdown extends LitElement {
         svg.caret-down-svg,
         ::slotted(svg.caret-up-svg),
         ::slotted(svg.caret-down-svg) {
-          fill: var(--dropdownCaretColor, #fff);
+          fill: var(--dropdownCaretColor, var(--ia-color-text-inverse--));
           vertical-align: middle;
         }
 
@@ -561,6 +574,26 @@ export class IADropdown extends LitElement {
           background-color: var(
             --dropdownMainButtonFocusBgColor,
             ${dropdownMainButtonBgColor}
+          );
+        }
+
+        /* The ring defaults to the dark-surface focus color, since the
+           trigger's own defaults (white text and caret) assume a dark host. A
+           host on a light surface sets --dropdownFocusRingColor to
+           --ia-color-border-focus. The ring is inside the trigger's edge, so
+           it lines up with the panel that opens under it, and carries its band.
+           The band follows the ring, so a host that sets
+           --dropdownFocusRingColor sets --dropdownFocusBand with it. */
+        button.click-main:focus-visible {
+          outline: var(--ia-size-focus-ring--) solid
+            var(
+              --dropdownFocusRingColor,
+              var(--ia-color-border-focus-inverse--)
+            );
+          outline-offset: calc(-1 * var(--ia-size-focus-ring--));
+          box-shadow: var(
+            --dropdownFocusBand,
+            var(--ia-shadow-focus-band-inverse--)
           );
         }
 
@@ -647,7 +680,7 @@ export class IADropdown extends LitElement {
           color: ${dropdownTextColor};
           background: ${dropdownBgColor};
 
-          font-size: var(--dropdownFontSize, inherit);
+          font-size: var(--dropdownFontSize, var(--ia-font-size-md--));
 
           border-top: var(--dropdownBorderTopWidth, ${dropdownBorderWidth});
           border-right: var(--dropdownBorderRightWidth, ${dropdownBorderWidth});
@@ -668,7 +701,9 @@ export class IADropdown extends LitElement {
             var(--dropdownBorderBottomRightRadius, ${dropdownBorderRadius})
             var(--dropdownBorderBottomLeftRadius, ${dropdownBorderRadius});
 
-          white-space: var(--dropdownWhiteSpace, normal);
+          /* One line per option, as the search bar's picker has it: the panel
+             grows to its longest option instead of wrapping out of the row. */
+          white-space: var(--dropdownWhiteSpace, nowrap);
 
           /* Prevent top/bottom inner li from overlapping inner border */
           overflow: hidden;
@@ -676,7 +711,7 @@ export class IADropdown extends LitElement {
 
         #dropdown-main li:hover {
           background-color: ${dropdownHoverBgColor};
-          color: var(--dropdownHoverTextColor, #fff);
+          color: var(--dropdownHoverTextColor, var(--ia-color-text-inverse--));
           list-style: none;
           cursor: pointer;
         }
@@ -690,11 +725,18 @@ export class IADropdown extends LitElement {
         }
 
         #dropdown-main li:hover:not(:first-child) {
-          border-top: 0.5px solid var(--dropdownHoverTopBottomBorderColor, #333);
+          border-top: 0.5px solid
+            var(
+              --dropdownHoverTopBottomBorderColor,
+              var(--ia-color-surface-inverse--)
+            );
         }
         #dropdown-main li:hover:not(:last-child) {
           border-bottom: 0.5px solid
-            var(--dropdownHoverTopBottomBorderColor, #333);
+            var(
+              --dropdownHoverTopBottomBorderColor,
+              var(--ia-color-surface-inverse--)
+            );
         }
 
         #dropdown-main li.selected:last-child {
@@ -708,12 +750,12 @@ export class IADropdown extends LitElement {
         #dropdown-main li:hover > *,
         #dropdown-main li:focus-within > * {
           background-color: ${dropdownHoverBgColor};
-          color: var(--dropdownHoverTextColor, #fff);
+          color: var(--dropdownHoverTextColor, var(--ia-color-text-inverse--));
         }
 
         #dropdown-main li.selected > * {
           background-color: ${dropdownSelectedBgColor};
-          color: var(--dropdownSelectedTextColor, #2c2c2c);
+          color: var(--dropdownSelectedTextColor, ${dropdownTextColor});
         }
 
         #dropdown-main li {
@@ -734,6 +776,23 @@ export class IADropdown extends LitElement {
           outline: inherit;
         }
 
+        /* An option's focus: the trigger's ring, inside the row, with its
+           band, so it shows on any row fill. On the selected #666 row the
+           ring alone is 2.58:1. A host on a light panel sets the same two
+           hooks as for the trigger. */
+        #dropdown-main li > *:focus-visible {
+          outline: var(--ia-size-focus-ring--) solid
+            var(
+              --dropdownFocusRingColor,
+              var(--ia-color-border-focus-inverse--)
+            );
+          outline-offset: calc(-1 * var(--ia-size-focus-ring--));
+          box-shadow: var(
+            --dropdownFocusBand,
+            var(--ia-shadow-focus-band-inverse--)
+          );
+        }
+
         #dropdown-main li a {
           text-decoration: none;
           display: block;
@@ -741,16 +800,25 @@ export class IADropdown extends LitElement {
         }
 
         #dropdown-main li:first-child {
-          border-top-left-radius: var(--dropdownBorderTopLeftRadius, 4px);
-          border-top-right-radius: var(--dropdownBorderTopRightRadius, 4px);
+          border-top-left-radius: var(
+            --dropdownBorderTopLeftRadius,
+            var(--ia-radius-default--)
+          );
+          border-top-right-radius: var(
+            --dropdownBorderTopRightRadius,
+            var(--ia-radius-default--)
+          );
         }
 
         #dropdown-main li:last-child {
           border-bottom-right-radius: var(
             --dropdownBorderBottomRightRadius,
-            4px
+            var(--ia-radius-default--)
           );
-          border-bottom-left-radius: var(--dropdownBorderBottomLeftRadius, 4px);
+          border-bottom-left-radius: var(
+            --dropdownBorderBottomLeftRadius,
+            var(--ia-radius-default--)
+          );
         }
 
         /* cover the list with the label */
@@ -762,10 +830,12 @@ export class IADropdown extends LitElement {
           align-content: center;
           flex-wrap: nowrap;
           height: 100%;
+          /* The option's whole inset: 20px at the sides, from this padding
+             alone, so an override of --dropdownItemPadding* is exact. */
           padding: var(--dropdownItemPaddingTop, 5px)
-            var(--dropdownItemPaddingRight, 10px)
+            var(--dropdownItemPaddingRight, var(--ia-space-4--))
             var(--dropdownItemPaddingBottom, 5px)
-            var(--dropdownItemPaddingLeft, 10px);
+            var(--dropdownItemPaddingLeft, var(--ia-space-4--));
           box-sizing: border-box;
         }
 
@@ -776,6 +846,23 @@ export class IADropdown extends LitElement {
           background: var(--dropdownItemButtonBgColor, transparent);
           padding: var(--dropdownItemButtonPadding, 0);
           text-align: ${dropdownTextAlign};
+        }
+
+        /* A plain-text option's inset is its text's alone. A host's
+           --dropdownItemButtonPadding sets it, as it did when the text had
+           no element of its own; otherwise the option padding applies. */
+        #dropdown-main li > .text-option {
+          padding: 0;
+        }
+
+        #dropdown-main li > * > .option-text {
+          padding: var(
+            --dropdownItemButtonPadding,
+            var(--dropdownItemPaddingTop, 5px)
+              var(--dropdownItemPaddingRight, var(--ia-space-4--))
+              var(--dropdownItemPaddingBottom, 5px)
+              var(--dropdownItemPaddingLeft, var(--ia-space-4--))
+          );
         }
       `,
     ];

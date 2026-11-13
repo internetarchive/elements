@@ -14,6 +14,7 @@ import { defaultTopNavConfig } from './data/menus';
 import { subnavListCSS } from './subnav-list-styles';
 import themeStyles from '@src/themes/theme-styles';
 import { localized, msg } from '@lit/localize';
+import topnavFocusStyles from './focus-styles';
 
 @customElement('ia-topnav-wayback-slider')
 @localized()
@@ -92,6 +93,7 @@ export class WaybackSlider extends TrackedElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      topnavFocusStyles,
       subnavListCSS,
       css`
         @media (min-width: ${TOPNAV_MOBILE_BREAKPOINT}px) {
@@ -103,8 +105,6 @@ export class WaybackSlider extends TrackedElement {
 
           h4 {
             margin-top: 0;
-            font: normal 100 calc(16 * var(--topnavUnit--))
-              var(--themeFontFamily);
           }
 
           .grid {

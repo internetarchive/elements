@@ -4,6 +4,26 @@
 
 <https://internetarchive.github.io/elements>
 
+Alongside the elements, the demo shows the design system they implement: its
+principles, foundations and tokens, a reference spec for every component, whole
+screens, icons and stress tests. The docs behind it are in [docs/](docs/README.md).
+
+## Design system
+
+elements implements archive.org's design system: the tokens (colors, type, spacing, sizes, motion), the foundations they come from, a spec for each component, and page-level patterns. Components target **WCAG 2.2 level AA**; [accessibility.md](docs/foundations/accessibility.md) has the rules.
+
+| Part | Where |
+| --- | --- |
+| See it rendered | The [demo](https://internetarchive.github.io/elements)'s Principles, Foundations, Specs, Screens, Icons and Playground tabs |
+| Foundations, component specs, patterns | [docs/](docs/README.md), which also lists which components follow the system so far |
+| Token values | [tokens/tokens.json](tokens/tokens.json) |
+
+**Using components on a page.** They follow the tokens with no setup. To change one, set its public name, such as `--ia-color-text-link`, on `:root` or any ancestor; a component's own `--ia-theme-*` hooks still win over the tokens. Add the `ia-inverse` class for a dark surface, and set `--ia-unit` to scale sizes. [Design tokens](#design-tokens) has the details. A page can't yet read the tokens in its own CSS: they're private to each component.
+
+**Building a component.** Read the tokens as [Design tokens](#design-tokens) describes, preferring the semantic roles (`text`, `surface`, `border`, `action`, `status`) over the palette. A value the tokens don't have becomes a new token in `tokens/tokens.json`: a length goes in a group with a scale flag, and a color the component pairs with another gets that pairing in `src/themes/tokens.node.test.ts`. Write or update the component's spec in [docs/components/](docs/components/).
+
+**Changing the system.** Change `tokens/tokens.json` and the spec in one PR, and say why in the PR; [docs/README.md](docs/README.md#changing-the-system) has the two checks it needs.
+
 ## Installation
 
 ```zsh
@@ -25,6 +45,10 @@ Services (code with no UI, like a metadata fetcher or a parser) import the same 
 ```typescript
 import { FoobarService } from "@internetarchive/elements/services/foobar-service/foobar-service";
 ```
+
+Sizes from the design tokens don't depend on the page's root font size, so a component looks the same on archive.org's 10px root and on a page with the browser's default 16px. Text, spacing, control heights, icons and containers grow with the user's browser font-size setting; borders, focus rings, corners, the 44px touch minimum, shadows and breakpoints stay fixed. elements does this by setting `--ia-unit` on `<html>` when it loads: `1px` at the browser's default 16px, `1.25px` at 20px. A page can set `--ia-unit` itself, on `:root` or on one element, to scale components on its own.
+
+A few components still have `rem` values of their own that aren't on tokens yet. Those assume archive.org's 10px root font size and render 1.6 times larger on a 16px root.
 
 ## Build Dependencies
 
@@ -246,6 +270,21 @@ For styling, our components use a series of rational CSS variable fallbacks to e
 2. Customizable styles can be adjusted by the consumer by setting a CSS variable at the component or global level
 3. The available variables are easy to find in the component file and visible in the story
 
+#### Design tokens
+
+The design system's values (colors, type, spacing, radius, sizing, motion and more) are design tokens, defined in [tokens/tokens.json](tokens/tokens.json). `pnpm run tokens` generates `src/themes/tokens.ts` from it; `dev`, `build`, `test` and `typecheck` run it first. Never edit the generated file.
+
+`tokenStyles` (`@src/themes/tokens`) declares every token as a private alias on `:host`, named after the token with a trailing `--`. `themeStyles` includes `tokenStyles` and adds the older `--ia-theme-*` defaults, so a component that reads only tokens takes `tokenStyles`, and one that also reads a `--ia-theme-*` default takes `themeStyles`. Put either one in the component's `styles` array; pasting it into a `css` template with `${}` copies the whole token sheet into that component's stylesheet. Read the alias, never the token itself:
+```
+color: var(--ia-color-text-primary--);
+padding: var(--ia-space-2--);
+```
+A page overrides a token by setting its public name, e.g. `--ia-color-text-link`, on `:root` or any ancestor. Setting a palette value such as `--ia-color-palette-navy-700` changes every role that points at it. Use the semantic roles (`text`, `surface`, `border`, `action`, `status`, ...) in components, not the palette.
+
+For a dark surface, add the `ia-inverse` class, either inside the shadow root or on the element itself. It re-points the text, border, focus, surface, hover and selected aliases to values that clear contrast on dark backgrounds. It reaches only that element's own shadow root: a nested elements component sets its aliases afresh, so it needs the class too. Inside a shadow root it flips only what reads the `--ia-*--` aliases directly; on the element itself (`:host(.ia-inverse)`), the `--ia-theme-*` defaults built on them flip as well.
+
+Length tokens are px at the browser's default font size. Each group of lengths in `tokens/tokens.json` sets `$extensions.ia.scale`: `true` builds as `calc(N * var(--ia-unit, 1px))`, `false` as plain px, and a length outside either fails the build. `src/themes/tokens.node.test.ts` checks every color pairing the system recommends against its WCAG contrast minimum, so a token change that breaks one fails the tests.
+
 #### Setting up styles
 
 1. In the component's CSS, include the elements-wide `themeStyles` defaults
@@ -257,7 +296,7 @@ static get styles(): CSSResultGroup {
       themeStyles,
       css`
 ```
-2. Check the theme styles to see if an existing theme variable exists you can use as a default, i.e. for an error message color you could use `--color-danger` if no variable exists but the style you want seems fairly reusable, see [Creating a new theme style](#creating-a-new-theme-style) below. If the variable is _not_ reusable, see [Non-reusable styles](#non-reusable-styles) below.
+2. Check the theme styles and the [design tokens](#design-tokens) to see if an existing variable exists you can use as a default, i.e. for an error message color you could use `--color-danger` if no variable exists but the style you want seems fairly reusable, see [Creating a new theme style](#creating-a-new-theme-style) below. If the variable is _not_ reusable, see [Non-reusable styles](#non-reusable-styles) below.
 3. In the component, create a private CSS variable in the top-level `:host` section to make your chosen variable obvious to consumers, and then use this private variable wherever you need the value
 ```
 css`
@@ -274,16 +313,16 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Error color',
     cssVariable: '--ia-theme-color-danger',
-    defaultValue: '#e51c23',
+    defaultValue: '#b8161c',
     inputType: 'color',
   },
 ```
 
 #### Creating a new theme style
 While working on a component, you may realize that a customizable style you need doesn't already have an associated variable in `theme-styles.ts`. If this happens, you can follow the following steps to add one:
-1. Select a rational default value for the style, and add it to the defaults section at the top of the file:
+1. Select a rational default value for the style from the [design tokens](#design-tokens), snapped to the nearest token in the role that fits (a literal that stays needs a comment saying why), and add it to the defaults section at the top of the file:
 ```
---default-font-size-xs: 0.625rem /* 10px with 16px root font size */
+--default-font-size-xs: var(--ia-font-size-xs--); /* 11px */
 ```
 2. Name the variable and add it to the adjustable styles list with the following structure:
 ```
