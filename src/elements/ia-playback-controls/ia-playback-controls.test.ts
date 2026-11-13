@@ -286,4 +286,98 @@ describe('IA Playback Controls', () => {
       ),
     ).to.exist;
   });
+
+  test('the themed icon colour reaches the buttons', async () => {
+    const el = await controlsFixture();
+    el.style.setProperty(
+      '--ia-theme-playback-controls-icon-color',
+      'rgb(255, 0, 0)',
+    );
+    await elementUpdated(el);
+
+    // Buttons don't inherit colour from their parent by default, so without
+    // `color: inherit` on .unstyled-button the container's themed colour never
+    // reaches the icons and their currentColor falls back to the UA default.
+    // The play/pause button is excluded on purpose: it sets its own colour.
+    ['prev-section-btn', 'back-btn', 'forward-btn', 'next-section-btn'].forEach(
+      (id) => {
+        expect(getComputedStyle(buttonIn(el, id)).color, id).to.equal(
+          'rgb(255, 0, 0)',
+        );
+      },
+    );
+  });
+
+  test('hides the decorative icons from assistive tech', async () => {
+    const el = await controlsFixture();
+
+    // Three of the ten icons only appear in a state the default fixture is
+    // not in: pause while playing, and the two quieter volume icons.
+    const states: Array<() => void> = [
+      () => {},
+      () => {
+        el.playbackMode = PlaybackMode.playing;
+      },
+      () => {
+        el.volume = 0.5;
+      },
+      () => {
+        el.volume = 0;
+      },
+    ];
+
+    const seen = new Set<string>();
+    for (const enterState of states) {
+      enterState();
+
+      await elementUpdated(el);
+
+      el.shadowRoot?.querySelectorAll('button svg').forEach((icon) => {
+        seen.add(icon.parentElement?.id ?? '');
+        expect(
+          icon.getAttribute('aria-hidden'),
+          `${icon.parentElement?.id} icon should be aria-hidden`,
+        ).to.equal('true');
+      });
+    }
+
+    // Every button's icon has now been through the assertion above.
+    expect([...seen].sort()).to.deep.equal([
+      'back-btn',
+      'forward-btn',
+      'next-section-btn',
+      'play-pause-btn',
+      'playback-rate-btn',
+      'prev-section-btn',
+      'volume-control-btn',
+    ]);
+  });
+
+  test('renders the playback rate formatted for the locale', async () => {
+    const el = await controlsFixture();
+    // A rate the two treatments disagree about in every locale: number
+    // formatting stops at three fraction digits, while dropping the raw value
+    // into the template spells out all sixteen.
+    el.playbackRate = 1 / 3;
+    await elementUpdated(el);
+
+    const formatted = new Intl.NumberFormat().format(1 / 3);
+    const value = el.shadowRoot?.querySelector('.vertical-button-value');
+
+    expect(value?.textContent?.trim()).to.equal(`${formatted}x`);
+    expect(
+      buttonIn(el, 'playback-rate-btn').getAttribute('aria-label'),
+    ).to.contain(formatted);
+  });
+
+  test('never announces an unusable playback rate', async () => {
+    const el = await fixture<IAPlaybackControls>(
+      html`<ia-playback-controls playbackRate="fast"></ia-playback-controls>`,
+    );
+
+    expect(
+      buttonIn(el, 'playback-rate-btn').getAttribute('aria-label'),
+    ).to.equal('Playback speed, currently 1');
+    expect(el.shadowRoot?.textContent).to.include('1x');
+  });
 });

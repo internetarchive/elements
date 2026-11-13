@@ -1,13 +1,16 @@
 /**
  * @file Skip back ten seconds icon
  *
- * Inline so the button can recolor it with `currentColor`, which is not
- * possible on the contents of an `<img>`.
+ * Decorative: the button around it carries the accessible name, so the icon
+ * is hidden from assistive tech. Inline so the button can recolor it with
+ * `currentColor`, which is not possible on the contents of an `<img>`.
  */
 import { svg } from 'lit';
 
 export default svg`
-<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
   <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
     <polyline
       stroke="currentColor"
