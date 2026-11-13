@@ -258,7 +258,7 @@ export default class DropdownMenu extends TrackedElement {
             z-index: 5;
             transition: opacity 0.2s ease-in-out;
             font-size: calc(14 * var(--topnavUnit--));
-            /* The menu spec's dark panel, one family with the dropdown (D-41). */
+            /* The menu spec's dark panel, one family with the dropdown. */
             border-radius: calc(4 * var(--topnavUnit--));
             background: var(--ia-color-surface-inverse--);
             box-shadow: var(--ia-shadow-overlay--);
@@ -314,7 +314,7 @@ export default class DropdownMenu extends TrackedElement {
             color: var(--inverseDropdownMenuInfoItem);
           }
 
-          /* Hover lays the overlay on the row, instantly (D-54). */
+          /* Hover lays the overlay on the row, instantly. */
           a:hover,
           a:active,
           a:focus-visible {
