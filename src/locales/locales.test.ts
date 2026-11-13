@@ -31,7 +31,7 @@ function translatedUnits(source: string): string[] {
     ),
   ]
     .filter(([, , unit]) => {
-      const target = /<target>([\s\S]*?)<\/target>/.exec(unit);
+      const target = /<target(?:\s[^>]*)?>([\s\S]*?)<\/target>/.exec(unit);
       return target !== null && target[1].trim() !== '';
     })
     .map(([, id]) => id);
