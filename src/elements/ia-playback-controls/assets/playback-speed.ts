@@ -1,13 +1,16 @@
 /**
  * @file Playback speed icon, a speedometer
  *
- * Inline so the button can recolor it with `currentColor`, which is not
- * possible on the contents of an `<img>`.
+ * Decorative: the button around it carries the accessible name, so the icon
+ * is hidden from assistive tech. Inline so the button can recolor it with
+ * `currentColor`, which is not possible on the contents of an `<img>`.
  */
 import { svg } from 'lit';
 
 export default svg`
-<svg xmlns="http://www.w3.org/2000/svg" width="23" height="17" viewBox="0 0 23 17">
+<svg xmlns="http://www.w3.org/2000/svg" width="23" height="17" viewBox="0 0 23 17"
+  aria-hidden="true"
+>
   <g fill="none" fill-rule="evenodd" stroke="currentColor" transform="translate(1 1)">
     <g stroke-linecap="round" transform="translate(2 2.522)">
       <path d="M8.5,9.97826087 L15.5,2.97826087" transform="rotate(180 12 6.478)" />
