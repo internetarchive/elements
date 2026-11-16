@@ -37,10 +37,16 @@ export class IADonationConfirmModal extends LitElement {
     return currency(this.amount, { symbol: this.currencySymbol }).format();
   }
 
+  private get donationTypeLabel(): string {
+    return this.donationType === DonationType.Monthly
+      ? msg('monthly')
+      : msg('one-time');
+  }
+
   get confirmationText(): TemplateResult {
     return msg(html`
       <p>
-        You are about to make a <b>${this.donationType}</b> donation of
+        You are about to make a <b>${this.donationTypeLabel}</b> donation of
         <b>${this.formattedAmount} ${this.currencyType}</b> to the Internet
         Archive.
       </p>

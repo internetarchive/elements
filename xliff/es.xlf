@@ -1241,7 +1241,7 @@
 <trans-unit id="h33a6ec5964686e4c">
   <source>
       <x id="0" equiv-text="&lt;p&gt;"/>
-        You are about to make a <x id="1" equiv-text="&lt;b&gt;${this.donationType}&lt;/b&gt;"/> donation of
+        You are about to make a <x id="1" equiv-text="&lt;b&gt;${this.donationTypeLabel}&lt;/b&gt;"/> donation of
         <x id="2" equiv-text="&lt;b&gt;${this.formattedAmount} ${this.currencyType}&lt;/b&gt;"/> to the Internet
         Archive.
       <x id="3" equiv-text="&lt;/p&gt;&#10;    "/></source>
@@ -1318,6 +1318,14 @@
 <trans-unit id="s3aa2789183447d53">
   <source>Toggle <x id="0" equiv-text="${this.optionGroup}"/></source>
 <target>Mostrar u ocultar <x id="0" equiv-text="${this.optionGroup}"/></target>
+</trans-unit>
+<trans-unit id="sdee66b040a9bd036">
+  <source>monthly</source>
+<target state="needs-review-translation">mensual</target>
+</trans-unit>
+<trans-unit id="s6d4996ed9ab0a5ff">
+  <source>one-time</source>
+<target state="needs-review-translation">única</target>
 </trans-unit>
 </body>
 </file>
