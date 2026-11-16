@@ -80,7 +80,7 @@ describe('userlist-service story', () => {
 
     expect(apiSource).to.contain('export interface UserListServiceInterface');
     expect(apiSource).to.contain('export declare class UserListService');
-    expect(apiSource).to.contain('export interface UserList ');
+    expect(apiSource).to.contain('export type UserList = ');
     expect(apiSource).to.contain('class UserListError');
     expect(apiSource).not.to.contain('fetchEndpoint');
     expect(apiSource).not.to.match(/^\s*private /m);

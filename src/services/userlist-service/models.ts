@@ -1,4 +1,4 @@
-export interface UserListMember {
+export type UserListMember = {
   /** The id of this list member, unique within the current list */
   member_id: string;
   /** The identifier of the Archive item that this member represents */
@@ -9,9 +9,9 @@ export interface UserListMember {
   file?: string;
   /** (Optional) The search term within the item that this member represents */
   search_term?: string;
-}
+};
 
-export interface UserList {
+export type UserList = {
   /** The id of this list, unique among the current user's lists */
   id: string;
   /** The user-generated title for the list */
@@ -30,24 +30,24 @@ export interface UserList {
   members?: UserListMember[];
   /** Whether this list contains the queried item (only present on item-specific requests) */
   item_is_member?: boolean;
-}
+};
 
 /** Options that can be specified when creating or editing a list */
-export interface UserListOptions {
+export type UserListOptions = {
   /** The title to apply to the list */
   list_name: string;
   /** The description to apply to the list */
   description: string;
   /** Whether the list should be marked private */
   is_private: boolean;
-}
+};
 
 /** Options that can be specified when adding a member to a list */
-export interface UserListMemberOptions {
+export type UserListMemberOptions = {
   /** The identifier of the Archive item that the new member should represent */
   identifier: string;
   /** (Optional) A subfile path within the item that the new member should represent */
   file?: string;
   /** (Optional) A search term within the item that the new member should represent */
   search_term?: string;
-}
+};

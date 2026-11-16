@@ -185,6 +185,9 @@ describe('UserListService', () => {
       expect(result.error?.reason).to.equal(UserListErrorReason.LIST_NOT_FOUND);
     });
 
+    // 1.1.2's behavior, kept for now. WEBDEV-10032 makes it return an error
+    // result instead, and this test flips with it.
+    // https://webarchive.jira.com/browse/WEBDEV-10032
     it('throws a bad response error when the list has no members array', async () => {
       const { service } = setup({
         answer: { success: true, value: { ...list, members: undefined } },

@@ -356,9 +356,8 @@ type Source = 'sample' | 'live';
 const LIVE_AVAILABLE = import.meta.env.DEV;
 
 /**
- * archive.org's sign-in cookies never reach localhost, so the live source is
- * signed out: it offers the reads that work on public lists, and nothing that
- * needs `me` or writes.
+ * The proxy drops cookies, so the live source is signed out: it offers the
+ * reads that work on public lists, and nothing that needs `me` or writes.
  */
 const LIVE_METHODS: readonly Method[] = [
   'fetchListsForUser',
@@ -531,8 +530,8 @@ export class UserListServiceStory extends LitElement {
             so the browser blocks a direct call from here (CORS). Run
             <code>pnpm run dev</code> to get real data: the dev server fetches
             <code>/__archive__/…</code> from archive.org on the page's behalf.
-            archive.org's sign-in cookies never reach this page, so it's signed
-            out and offers only the reads of public lists.
+            It drops cookies, so it's signed out and offers only the reads of
+            public lists.
           </p>
         </div>
       </service-template>
