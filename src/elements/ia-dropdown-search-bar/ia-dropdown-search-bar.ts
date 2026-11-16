@@ -379,7 +379,9 @@ export class IADropdownSearchBar extends LitElement {
       #search-button:focus-visible {
         outline: var(--ia-size-focus-ring--) solid
           var(--ia-color-border-focus--);
-        outline-offset: var(--ia-size-focus-ring-offset--);
+        /* Inside the border, so the field beside it doesn't hide it. */
+        outline-offset: calc(-1 * var(--ia-size-focus-ring--));
+        box-shadow: var(--ia-shadow-focus-band--);
       }
 
       #search-button svg {
