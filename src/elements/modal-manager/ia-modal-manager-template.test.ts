@@ -126,6 +126,39 @@ describe('Modal Manager Template', () => {
     expect(leftNavButton).to.exist;
   });
 
+  test('sizes the close button at 2rem, 1.2rem from the corner, by default', async () => {
+    const el = await fixture<IAModalManagerTemplate>(html`
+      <ia-modal-manager-template></ia-modal-manager-template>
+    `);
+
+    const rootFontSize = parseFloat(
+      getComputedStyle(document.documentElement).fontSize,
+    );
+    const style = getComputedStyle(
+      el.shadowRoot!.querySelector('.close-button')!,
+    );
+    expect(style.width).to.equal(`${2 * rootFontSize}px`);
+    expect(style.height).to.equal(`${2 * rootFontSize}px`);
+    expect(style.top).to.equal(`${1.2 * rootFontSize}px`);
+    expect(style.right).to.equal(`${1.2 * rootFontSize}px`);
+  });
+
+  test('takes the close button size and offset from CSS variables', async () => {
+    const el = await fixture<IAModalManagerTemplate>(html`
+      <ia-modal-manager-template
+        style="--modalCloseButtonSize: 20px; --modalCloseButtonOffset: 12px"
+      ></ia-modal-manager-template>
+    `);
+
+    const style = getComputedStyle(
+      el.shadowRoot!.querySelector('.close-button')!,
+    );
+    expect(style.width).to.equal('20px');
+    expect(style.height).to.equal('20px');
+    expect(style.top).to.equal('12px');
+    expect(style.right).to.equal('12px');
+  });
+
   test('hides the close button when showCloseButton is false', async () => {
     const config = new ModalConfig();
     config.showCloseButton = false;
