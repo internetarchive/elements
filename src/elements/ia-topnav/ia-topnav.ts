@@ -26,6 +26,9 @@ import './ia-topnav-signed-out-dropdown';
 import './ia-topnav-user-menu';
 import themeStyles from '@src/themes/theme-styles';
 import topnavFocusStyles from './focus-styles';
+import { registerTopnavUnit } from './lib/register-topnav-unit';
+
+registerTopnavUnit();
 
 @customElement('ia-topnav')
 export class IATopNav extends LitElement {
@@ -415,18 +418,18 @@ export class IATopNav extends LitElement {
            * <ia-topnav> to scale it on its own (2px doubles it).
            *
            * Deprecated: --topnavFontSize, the topnav's base font size, still
-           * sets the unit at a sixteenth of it (32px doubles it). It has to
-           * be an absolute length such as px, since an em here would resolve
-           * against each part's own font size.
+           * sets the unit at a sixteenth of it (32px doubles it). A relative
+           * value such as 1.25em resolves against the topnav's parent.
+           * --topnavUnit-- is registered as a <length>, so it's worked out
+           * once here and inherits as px rather than as an em each part
+           * would resolve against its own font size.
            *
            * The layout is verified from 16px (the browser default) up to
            * 18px. Past that, at desktop widths around 1440px, the media
            * buttons can wrap onto a second row (seen at 20px and up).
            */
-          --topnavUnit--: calc(
-            var(--topnavFontSize, calc(16 * var(--ia-unit, 1px))) / 16
-          );
-          font-size: calc(16 * var(--topnavUnit--));
+          font-size: var(--topnavFontSize, calc(16 * var(--ia-unit, 1px)));
+          --topnavUnit--: calc(1em / 16);
 
           /* The topnav's palette, on the design tokens. The roles below read
              it; set any of them on <ia-topnav> to restyle a part. Each name

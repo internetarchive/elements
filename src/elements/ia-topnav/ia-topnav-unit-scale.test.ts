@@ -82,6 +82,33 @@ describe('<ia-topnav> font-size scale unit', () => {
     expect(labelFontSize).to.equal('32px');
   });
 
+  test('resolves a relative --topnavFontSize against its parent, once', async () => {
+    const parent = await fixture<HTMLDivElement>(
+      html`<div style="font-size: 16px">
+        <ia-topnav style="--topnavFontSize: 1.25em"></ia-topnav>
+      </div>`,
+    );
+    const el = parent.querySelector<IATopNav>('ia-topnav')!;
+    await el.updateComplete;
+    const { barHeight, labelFontSize } = measurements(el);
+
+    // 1.25em of 16px is a 20px base, a 1.25px unit.
+    expect(getComputedStyle(el).fontSize).to.equal('20px');
+    expect(barHeight).to.equal('50px');
+    expect(labelFontSize).to.equal('20px');
+
+    // Parts such as the desktop dropdown set their own font size from the
+    // unit. Inside one, a unit that compounded would come out larger.
+    const part = document.createElement('div');
+    part.style.fontSize = 'calc(14 * var(--topnavUnit--))';
+    const probe = document.createElement('div');
+    probe.style.width = 'var(--topnavUnit--)';
+    part.append(probe);
+    el.shadowRoot!.append(part);
+    expect(getComputedStyle(probe).width).to.equal('1.25px');
+    part.remove();
+  });
+
   test('stays fixed through a nested component that sets its own font-size', async () => {
     // ia-topnav-wayback-search's own :host sets font-size to
     // calc(12 * var(--topnavUnit--)), a container with a font-size

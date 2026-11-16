@@ -5,12 +5,13 @@ import {
   registerTopnavUnit,
 } from './register-topnav-unit';
 
-describe('register-topnav-unit, kept for consumers that still import it', () => {
-  test('registerTopnavUnit reports the unit as active', () => {
+describe('register-topnav-unit', () => {
+  test('registerTopnavUnit can run more than once', () => {
+    expect(registerTopnavUnit()).toBe(true);
     expect(registerTopnavUnit()).toBe(true);
   });
 
-  test('applyTopnavUnitFallback leaves the host alone', () => {
+  test('applyTopnavUnitFallback, kept for consumers that still call it, leaves the host alone', () => {
     const host = document.createElement('div');
     applyTopnavUnitFallback(host);
     expect(host.style.getPropertyValue('--topnavUnit--')).toBe('');
