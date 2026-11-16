@@ -26,8 +26,6 @@ Services (code with no UI, like a metadata fetcher or a parser) import the same 
 import { FoobarService } from "@internetarchive/elements/services/foobar-service/foobar-service";
 ```
 
-Sizes from the design tokens don't depend on the page's root font size, so a component looks the same on archive.org's 10px root and on a page with the browser's default 16px. Text, spacing, control heights, icons and containers grow with the user's browser font-size setting; borders, focus rings, corners, the 44px touch minimum, shadows and breakpoints stay fixed. elements does this by setting `--ia-unit` on `<html>` when it loads: `1px` at the browser's default 16px, `1.25px` at 20px. A page can set `--ia-unit` itself, on `:root` or on one element, to scale components on its own.
-
 ## Build Dependencies
 
 We use SVGs in this repo, which not all build systems support out of the box. Here's how to support SVGs:
