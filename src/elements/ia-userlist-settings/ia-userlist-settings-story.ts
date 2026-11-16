@@ -25,18 +25,6 @@ const styleInputSettings: StyleInputSettings[] = [
     inputType: 'text',
   },
   {
-    label: 'Text color',
-    cssVariable: '--ia-theme-primary-text-color',
-    defaultValue: '#2c2c2c',
-    inputType: 'color',
-  },
-  {
-    label: 'Font family',
-    cssVariable: '--ia-theme-base-font-family',
-    defaultValue: "'Helvetica Neue', Helvetica, Arial, sans-serif",
-    inputType: 'text',
-  },
-  {
     label: 'Input border color',
     cssVariable: '--ia-theme-secondary-cta-border',
     defaultValue: '#999999',

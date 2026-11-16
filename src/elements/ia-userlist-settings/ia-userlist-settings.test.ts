@@ -1,6 +1,7 @@
 import { fixture, oneEvent, waitUntil } from '@open-wc/testing-helpers';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { html } from 'lit';
+import { userEvent } from 'vitest/browser';
 
 import type { IAButton } from '@src/elements/ia-button/ia-button';
 import type { IAModalManager } from '@src/elements/modal-manager/modal-manager';
@@ -266,6 +267,27 @@ describe('ia-userlist-settings', () => {
     expect(fields(el).save.disabled).to.be.false;
   });
 
+  test('ignores Enter and repeat clicks while a save is in progress', async () => {
+    const service = new MockUserListService();
+    service.delay = 50;
+    const el = await fixture<IAUserListSettings>(
+      html`<ia-userlist-settings
+        .userListsService=${service}
+      ></ia-userlist-settings>`,
+    );
+
+    const saved = oneEvent(el, 'userListSaved');
+    fillAndSave(el, { name: 'New list', description: '', isPrivate: false });
+    await el.updateComplete;
+
+    fields(el).name.focus();
+    await userEvent.keyboard('{Enter}{Enter}');
+    fields(el).save.click();
+    await saved;
+
+    expect(service.calls).to.have.length(1);
+  });
+
   test('shows a white saving indicator in Save while saving', async () => {
     const service = new MockUserListService();
     service.delay = 200;
@@ -371,7 +393,6 @@ describe('ia-userlist-settings', () => {
   });
 
   test('emits userListError and re-enables Save when the save fails', async () => {
-    vi.spyOn(console, 'log').mockImplementation(() => {});
     const service = new MockUserListService();
     service.saveError = new UserListError(
       UserListErrorReason.BAD_RESPONSE,
@@ -412,7 +433,6 @@ describe('ia-userlist-settings', () => {
   });
 
   test('clears the error message when saving again succeeds', async () => {
-    vi.spyOn(console, 'log').mockImplementation(() => {});
     const service = new MockUserListService();
     service.saveError = new UserListError(
       UserListErrorReason.BAD_RESPONSE,
@@ -441,7 +461,6 @@ describe('ia-userlist-settings', () => {
   });
 
   test('clears the error message when switched to another list', async () => {
-    vi.spyOn(console, 'log').mockImplementation(() => {});
     const el = await fixture<IAUserListSettings>(
       html`<ia-userlist-settings></ia-userlist-settings>`,
     );
@@ -461,7 +480,6 @@ describe('ia-userlist-settings', () => {
   });
 
   test('emits userListError when it has no service', async () => {
-    vi.spyOn(console, 'log').mockImplementation(() => {});
     const el = await fixture<IAUserListSettings>(
       html`<ia-userlist-settings></ia-userlist-settings>`,
     );
@@ -573,7 +591,6 @@ describe('ia-userlist-settings', () => {
     });
 
     test('shows the error when the backend refuses the save', async () => {
-      vi.spyOn(console, 'log').mockImplementation(() => {});
       const { service } = setupService({
         success: false,
         error: 'Bad Request',
@@ -597,7 +614,6 @@ describe('ia-userlist-settings', () => {
     });
 
     test('reports a network failure as a NETWORK error', async () => {
-      vi.spyOn(console, 'log').mockImplementation(() => {});
       const { service } = setupService(new TypeError('Failed to fetch'));
       const el = await fixture<IAUserListSettings>(
         html`<ia-userlist-settings
@@ -622,7 +638,6 @@ describe('ia-userlist-settings', () => {
 
     /** Saves the form against a service whose saves fail, and waits for it */
     const failSave = async (list?: UserListModel) => {
-      vi.spyOn(console, 'log').mockImplementation(() => {});
       const service = new MockUserListService();
       service.saveError = new UserListError(
         UserListErrorReason.BAD_RESPONSE,

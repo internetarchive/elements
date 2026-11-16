@@ -93,6 +93,9 @@ export class IAUserListSettings extends LitElement {
   /** Saves the form through the service, on submit */
   private async saveListDetails(event: Event): Promise<void> {
     event.preventDefault();
+    // Enter in a field still submits while Save is disabled, so a save in
+    // progress would otherwise start a second one
+    if (this.saving) return;
     this.saving = true;
     this.saveFailed = false;
     this.dispatchEvent(new Event('userListSaving'));
@@ -144,7 +147,6 @@ export class IAUserListSettings extends LitElement {
       }),
     );
 
-    console.log('error', error);
     this.saving = false;
     this.saveFailed = true;
     this.reportError(error, listId);
@@ -362,5 +364,11 @@ export class IAUserListSettings extends LitElement {
         }
       `,
     ];
+  }
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'ia-userlist-settings': IAUserListSettings;
   }
 }
