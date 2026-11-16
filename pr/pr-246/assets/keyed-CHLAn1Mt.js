@@ -1,0 +1,1 @@
+import{g as s,h as i,A as o}from"./index-ERC-161_.js";import{p as n}from"./directive-helpers-C0q1VpcI.js";const a=s(class extends i{constructor(){super(...arguments),this.key=o}render(r,e){return this.key=r,e}update(r,[e,t]){return e!==this.key&&(n(r),this.key=e),t}});export{a as i};
