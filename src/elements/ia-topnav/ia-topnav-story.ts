@@ -181,9 +181,9 @@ export class IATopNavStory extends LitElement {
           </p>
           <p>
             A search bar goes in the <code>search</code> slot. Offshoot slots an
-            <code>ia-dropdown-search-bar</code> in there. It sizes its own text,
-            so it follows the page's <code>html</code> font size rather than the
-            topnav's scale.
+            <code>ia-dropdown-search-bar</code> in there. It sizes its own text
+            from the design tokens, so it follows the reader's font size the
+            same way the topnav does.
           </p>
         </div>
       </story-template>

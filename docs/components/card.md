@@ -41,7 +41,11 @@ background, 8px radius, `--ia-space-6` padding. This is the only place the cream
 used and it should stay that way.
 
 The live hero is iaux's `ia-wayback-search` (1.0.4, as offshoot's homepage and the
-topnav's Web menu load it). It departs from this spec as the table shows.
+topnav's Web menu load it). It departs from this spec as the table shows. Elements'
+`ia-wayback-search-form` follows the right-hand column: no shadow,
+`--ia-radius-lg`, weights 400 and 700, the focus ring, `--ia-color-text-primary` text.
+Its one remaining departure is padding: `--ia-space-1` / `--ia-space-4` rather than
+`--ia-space-6`.
 
 | Live | This system |
 | --- | --- |
