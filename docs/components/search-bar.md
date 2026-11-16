@@ -154,7 +154,7 @@ field text.
 | --- | --- |
 | rest | as above |
 | hover | picker fill → `--ia-color-border-subtle`; submit fill → `--ia-color-surface-sunken` |
-| focus | each segment shows the universal ring; the field's ring is drawn inside its border so the neighbors do not hide it |
+| focus | each segment shows the universal ring, drawn inside its border so the neighbors do not hide it |
 | has value | clear button appears |
 | loading | activity indicator replaces the submit glyph; `aria-busy` on the form |
 
