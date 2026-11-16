@@ -89,7 +89,7 @@ focus ring — stays as the table shows:
 | Selected option | white at 30% over the panel, no mark | `--ia-color-selected-soft-fill-inverse` fill and a check |
 | Option focus | no ring of its own | the inverse focus ring, inset, with its band |
 
-Elements' own `ia-dropdown` (on tokens, PR #201) now follows this spec's panel color
+Elements' own `ia-dropdown` follows this spec's panel color
 (`--ia-color-surface-inverse`), radius, option height, 20px option inset, soft selected
 fill (`#666`), hover overlay and the inverse focus ring with its band. It still draws a
 1px `--ia-color-border-inverse` panel border and no shadow or check, and pads plain-text
