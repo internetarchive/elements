@@ -158,13 +158,13 @@
       ]
     },
     "lint": {
-      "command": "eslint . && prettier \"**/*.ts\" --check",
+      "command": "eslint . && prettier \"**/*.{ts,mts}\" --check",
       "dependencies": [
         "icons:lint"
       ]
     },
     "format": {
-      "command": "eslint . --fix && prettier \"**/*.ts\" --write"
+      "command": "eslint . --fix && prettier \"**/*.{ts,mts}\" --write"
     },
     "prepare": {
       "dependencies": [
