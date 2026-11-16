@@ -294,6 +294,7 @@ interface LogEntry {
 /** The part of the Navigation API the story uses to stop page loads. */
 interface NavigateEventLike extends Event {
   destination: { url: string; sameDocument: boolean };
+  userInitiated: boolean;
 }
 
 /**
@@ -306,8 +307,9 @@ interface NavigateEventLike extends Event {
  * - `window.archive_analytics` and `window.Sentry` are replaced with versions
  *   that write to the log, and put back afterward.
  * - The loader image is a data URI.
- * - Same-origin page loads (link clicks, reloads, the redirects after a
- *   borrow or return) are cancelled and logged. Links inside the bar and its
+ * - Same-origin page loads the page starts itself (the redirects after a
+ *   borrow or return) are cancelled and logged. Loads the reader starts,
+ *   like the demo's tabs or a reload, go ahead. Links inside the bar and its
  *   modals are cancelled on click. Redirects come from the element's own
  *   `location` changes, which only the Navigation API can cancel, so a
  *   browser without it will load the page when a borrow completes.
@@ -512,8 +514,10 @@ export class IABookActionsStory extends LitElement {
     if (!navigation) return;
 
     this.navigationGuard = (event: Event) => {
-      const { destination } = event as NavigateEventLike;
-      if (destination.sameDocument || !event.cancelable) return;
+      const { destination, userInitiated } = event as NavigateEventLike;
+      if (destination.sameDocument || !event.cancelable || userInitiated) {
+        return;
+      }
       if (new URL(destination.url).origin !== window.location.origin) return;
 
       event.preventDefault();
@@ -709,10 +713,7 @@ export class IABookActionsStory extends LitElement {
             the automatic renewal and the auto-return in under two minutes. Fail
             lending requests makes borrow, return, renew and waitlist calls
             fail. create_token still succeeds, since it repeats for as long as a
-            loan is active. archive.org font size, under the settings, sets the
-            page's root font size to 10px, which the bar is built for. It
-            applies to the whole demo page, so it's on by default only when this
-            element is the one being viewed.
+            loan is active.
           </p>
           <p>
             Pass a <code>fetchHandler</code> to the bar to control how it

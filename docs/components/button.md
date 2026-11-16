@@ -217,7 +217,7 @@ and loading.
 
 | Spec | `ia-button` |
 | --- | --- |
-| Intents | `mode`: `primary`, `secondary`, `danger`, `warning`, `donate`, `ghost`, `link`. `transparent` is the old name for `ghost`; `custom` and `danger-link` are its own |
+| Intents | `mode`: `primary`, `secondary`, `danger`, `warning`, `donate`, `ghost`, `link`. `transparent` is deprecated in favor of `ghost`; `custom` and `danger-link` are its own |
 | Disabled | `disabled`: the `--ia-color-action-disabled-*` colors and `aria-disabled`, so it stays in the tab order (D-32). Its clicks stop inside the element, so neither a listener on it nor its form sees them |
 | Loading | `loading`: the indicator over the label, which stays in place hidden so the width holds; `aria-busy` and `aria-disabled`. `loadingText` sits beside the indicator |
 | With `href` | one `<a>`, styled as the button |

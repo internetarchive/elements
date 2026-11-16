@@ -214,10 +214,9 @@ app-root {
 }
 
 /* The phone layout's bar and picker are sized in px, and set their own font
-   size, rather than following the root font size. An element's story can
-   change that root size for the element's own sake, and the controls for
-   getting around have to stay the same size and keep 44px tap targets
-   whatever is showing. */
+   size, rather than following the root font size, so the controls for
+   getting around stay the same size and keep 44px tap targets whatever is
+   showing. */
 
 /* The phone layout's bar: previous, the current element's name (which opens
    the picker), and next. Pinned to the bottom where a thumb reaches it. */
