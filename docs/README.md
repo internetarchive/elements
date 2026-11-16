@@ -37,11 +37,7 @@ Where each element stands. "On tokens" means its colors and sizes come from the 
 
 | | Elements |
 | --- | --- |
-| On tokens | `ia-button`, `ia-otp-form`, `ia-otp-input`, `ia-donation-thermometer` · `ia-radio-player`, `ia-waveform-progress`, `ia-scrubber-bar`, `ia-transcript-view`, `ia-playback-controls`, `ia-expandable-search-bar` · `ia-topnav` · `ia-dropdown`, `ia-dropdown-search-bar`, `ia-combo-box`, `ia-clearable-text-input`, `ia-wayback-search-form` · `ia-donation-form`, `ia-feature-feedback`, `ia-reviews`, `ia-histogram-date-range`, `ia-image-viewer`, `ia-item-navigator`, `ia-infinite-scroller` |
-| Partly | `ia-book-actions`, `modal-manager`: their own styles are on tokens, but the modal header colors they pass to `modal-manager`, `ModalConfig`'s default header and body colors, and the inline styles on book-actions' light-DOM modal buttons are still literal |
-| Nothing to convert | `ia-icon`, `ia-status-indicator`, `ia-sr-only-text`, `ia-audio-element`: they inherit their colors or have no styles of their own |
-
-The donation form's light-DOM styles read the tokens by their public names, with the token's value as the fallback, since the private aliases exist only inside a shadow root. Its hosted payment fields keep literal colors: the payment provider styles them inside an iframe, which CSS custom properties can't reach.
+| On tokens | none yet |
 
 ## Changing the system
 
