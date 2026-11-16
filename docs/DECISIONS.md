@@ -62,7 +62,7 @@ changes after it are explained in their own PRs.
 | D-45 | [One selected look, in two token tiers: strong and soft](#d-45) | color |  |
 | D-46 | [Hover is a translucent overlay, not a surface](#d-46) | color |  |
 | D-47 | [Messages take a status tint and border; the leading stripe goes](#d-47) | components |  |
-| D-48 | [Specs name a step on the 5px scale; one responsive page token](#d-48) | layout |  |
+| D-48 | [Specs name a step on the 5px scale; two page-block tokens](#d-48) | layout |  |
 | D-49 | [Controls squeeze on press, tiered by width](#d-49) | motion |  |
 | D-50 | [Layers inside a component use isolation and local ordinals; no z-index 0 token](#d-50) | layout |  |
 | D-51 | [Buttons set a minimum height and wrap a label that doesn't fit](#d-51) | components |  |
@@ -615,7 +615,7 @@ changes after it are explained in their own PRs.
 
 <a id="d-48"></a>
 
-### D-48 · Specs name a step on the 5px scale; one responsive page token
+### D-48 · Specs name a step on the 5px scale; two page-block tokens
 
 **Status:** `accepted` · **Area:** layout
 
@@ -623,9 +623,9 @@ changes after it are explained in their own PRs.
 
 **The conflict.** A spec that names a pixel step rather than a relationship drifts from the next spec describing the same thing: the gap between a label and its field can be written as 5px in one place and 10px in another, and both look reasonable.
 
-**The decision.** Specs write the step: `--ia-space-1` (5px) through `--ia-space-16` (80px). The named spacing tokens are `--ia-space-page-block`, 80px, which halves below md by itself, and the container gutters, `--ia-container-gutter` and `--ia-container-gutter-narrow`. No inline/stack/inset aliases, and no `--ia-space-0`: zero space is written `0`. Label to control is `--ia-space-1`, 5px.
+**The decision.** Specs write the step: `--ia-space-1` (5px) through `--ia-space-16` (80px). The named spacing tokens are `--ia-space-page-block`, 80px, and `--ia-space-page-block-narrow`, 40px, which a page uses below md, and the container gutters, `--ia-container-gutter` and `--ia-container-gutter-narrow`. No inline/stack/inset aliases, and no `--ia-space-0`: zero space is written `0`. Label to control is `--ia-space-1`, 5px.
 
-**Why.** Aliases that rename a step under three axes (inline, stack and inset xs were all 5px) tripled the vocabulary for no distinction. The scale already forces the choice between distinct values; the page block earns a name because it changes at the breakpoint, and the gutters because every container shares them.
+**Why.** Aliases that rename a step under three axes (inline, stack and inset xs were all 5px) tripled the vocabulary for no distinction. The scale already forces the choice between distinct values; the page block earns its names because it changes at the breakpoint, and the gutters because every container shares them.
 
 **Blast radius.** Token names only. No visible change: every use moves to the step it already resolved to.
 
