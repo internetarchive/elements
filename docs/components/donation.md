@@ -32,24 +32,6 @@ beside the fill, the goal after it.
   not at render, so it doesn't follow the page's locale (see
   [Localization](README.md#localization)).
 
-### The live component
-
-`ia-donation-thermometer` takes its defaults from the tokens: the fill is
-`--ia-color-action-donate-fill`, the track `--ia-color-action-donate-subtle`, the radius
-`--ia-radius-pill`, the goal padding `0 var(--ia-space-2)`, and 20px tall. Its own
-variables override each:
-
-| Variable | Default |
-| --- | --- |
-| `--ia-donation-thermometer-fill-color` | `--ia-color-action-donate-fill` (`#20705a`) |
-| `--ia-donation-thermometer-track-color` | `--ia-color-action-donate-subtle` (`#b8f5e2`) |
-| `--ia-donation-thermometer-height` | 20px, scaled by `--ia-unit` |
-| `--ia-donation-thermometer-border-radius` | `--ia-radius-pill` |
-| `--ia-donation-thermometer-goal-padding` | `0 var(--ia-space-2)` |
-
-Set them on the element (or an ancestor; these are read straight, not through the theme
-layer).
-
 ## Form step
 
 One numbered step of the donation form: a round badge holding the step number, a
@@ -70,12 +52,6 @@ The headline is a `<div>`, not a heading. A form of several steps needs an outli
 the page gives each step a real heading and leaves `headline` empty, or the component
 gains a heading level.
 
-### The live component
-
-`ia-donation-section` takes its badge colors, weights and motion from the tokens. It
-still sizes everything from `--ia-donation-section-base-font-size` (10px), so its badge
-is 24px and its text 18px — off the type scale, between `lg` and `xl`.
-
 ## Amount picker
 
 The amounts a donor picks from, one button each, and a custom amount field. Its own
@@ -91,8 +67,7 @@ look, which stands apart from the system's selected tiers: the chosen amount is 
 | Custom amount field | `var(--ia-border-control)` |
 
 Each amount is a radio, so the chosen one carries `aria-checked` as well as the gold:
-the color is never the only cue. `ia-donation-edit-donation` reads these through its own
-`--ia-donation-edit-button-*` variables, which override each.
+the color is never the only cue.
 
 ## Don't
 
