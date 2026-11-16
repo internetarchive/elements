@@ -32,6 +32,24 @@ beside the fill, the goal after it.
   not at render, so it doesn't follow the page's locale (see
   [Localization](README.md#localization)).
 
+### The live component
+
+`ia-donation-thermometer` takes its defaults from the tokens: the fill is
+`--ia-color-action-donate-fill`, the track `--ia-color-action-donate-subtle`, the radius
+`--ia-radius-pill`, the goal padding `0 var(--ia-space-2)`, and 20px tall. Its own
+variables override each:
+
+| Variable | Default |
+| --- | --- |
+| `--ia-donation-thermometer-fill-color` | `--ia-color-action-donate-fill` (`#20705a`) |
+| `--ia-donation-thermometer-track-color` | `--ia-color-action-donate-subtle` (`#b8f5e2`) |
+| `--ia-donation-thermometer-height` | 20px, scaled by `--ia-unit` |
+| `--ia-donation-thermometer-border-radius` | `--ia-radius-pill` |
+| `--ia-donation-thermometer-goal-padding` | `0 var(--ia-space-2)` |
+
+Set them on the element (or an ancestor; these are read straight, not through the theme
+layer).
+
 ## Form step
 
 One numbered step of the donation form: a round badge holding the step number, a
