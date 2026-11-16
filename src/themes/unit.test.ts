@@ -56,6 +56,33 @@ describe('--ia-unit', () => {
     );
   });
 
+  test('keeps one probe in the document however often it runs', () => {
+    applyIaUnit();
+    applyIaUnit();
+    expect(document.querySelectorAll('[data-ia-unit-probe]')).to.have.length(1);
+  });
+
+  test('is read again when the default font size changes with the page open', async () => {
+    const probe = document.querySelector<HTMLElement>('[data-ia-unit-probe]')!;
+    const real = window.getComputedStyle.bind(window);
+    vi.spyOn(window, 'getComputedStyle').mockImplementation((el, pseudo) =>
+      el === probe
+        ? ({ fontSize: '20px' } as CSSStyleDeclaration)
+        : real(el, pseudo),
+    );
+    // The probe is 1em of the default size, so a new default resizes it.
+    probe.style.width = '20px';
+    try {
+      await vi.waitFor(() =>
+        expect(getComputedStyle(root).getPropertyValue('--ia-unit')).to.equal(
+          '1.25px',
+        ),
+      );
+    } finally {
+      probe.style.width = '1em';
+    }
+  });
+
   test('is the default font size over 16', () => {
     expect(iaUnitFromDefaultFontSize(16)).to.equal('1px');
     expect(iaUnitFromDefaultFontSize(20)).to.equal('1.25px');
