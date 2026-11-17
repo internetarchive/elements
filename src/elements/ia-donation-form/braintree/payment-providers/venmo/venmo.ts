@@ -1,5 +1,5 @@
 import type * as braintree from 'braintree-web';
-import { PromisedSingleton } from '@internetarchive/promised-singleton';
+import { PromisedSingleton } from '@src/services/promised-singleton/promised-singleton';
 
 import type { BraintreeManagerInterface } from '../../braintree-manager-interface';
 import type { VenmoHandlerInterface } from './venmo-interface';

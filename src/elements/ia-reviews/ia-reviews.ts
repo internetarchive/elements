@@ -11,9 +11,9 @@ import { property, queryAll, state } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
 import { localized, msg, str } from '@lit/localize';
 
-import type { Review } from '@internetarchive/metadata-service';
-import type { RecaptchaManagerInterface } from '@internetarchive/recaptcha-manager';
-import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
+import type { Review } from '@src/services/metadata-service';
+import type { RecaptchaManagerInterface } from '@src/services/recaptcha-manager/recaptcha-manager';
+import type { FetchHandlerInterface } from '@src/services/fetch-handler/fetch-handler-interface';
 
 import '@src/elements/ia-button/ia-button';
 

@@ -1,4 +1,4 @@
-import { PromisedSingleton } from '@internetarchive/promised-singleton';
+import { PromisedSingleton } from '@src/services/promised-singleton/promised-singleton';
 import { createNanoEvents, type Unsubscribe } from 'nanoevents';
 
 import type { BraintreeManagerInterface } from './braintree-manager-interface';

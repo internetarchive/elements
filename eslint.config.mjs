@@ -33,6 +33,42 @@ const customElementRestrictedImports = [
   },
 ];
 
+// Published `@internetarchive/*` packages that elements now carries its own copy
+// of under src/services. Importing the standalone package would pull in a second
+// copy, so each one is restricted. `paths` catches the bare specifier and
+// `patterns` catches deep imports like `<pkg>/dist/...`.
+// When a package is migrated into src/services, add it to `migratedPackages`.
+const migratedPackages = [
+  { pkg: 'analytics-manager', dir: 'analytics-manager' },
+  { pkg: 'fetch-handler', dir: 'fetch-handler' },
+  { pkg: 'field-parsers', dir: 'field-parsers' },
+  { pkg: 'iaux-item-metadata', dir: 'item-metadata' },
+  { pkg: 'lazy-loader-service', dir: 'lazy-loader-service' },
+  { pkg: 'metadata-service', dir: 'metadata-service' },
+  { pkg: 'promised-singleton', dir: 'promised-singleton' },
+  { pkg: 'recaptcha-manager', dir: 'recaptcha-manager' },
+  { pkg: 'result-type', dir: 'result-type' },
+  { pkg: 'search-service', dir: 'search-service' },
+  { pkg: 'user-service', dir: 'user-service' },
+];
+
+const migratedPackageMessage = (dir) =>
+  `Moved into elements. Import from '@src/services/${dir}' instead.`;
+
+const migratedPackageRestrictedImports = migratedPackages.map(
+  ({ pkg, dir }) => ({
+    name: `@internetarchive/${pkg}`,
+    message: migratedPackageMessage(dir),
+  }),
+);
+
+const migratedPackageRestrictedPatterns = migratedPackages.map(
+  ({ pkg, dir }) => ({
+    group: [`@internetarchive/${pkg}/*`],
+    message: migratedPackageMessage(dir),
+  }),
+);
+
 export default [
   ...compat.extends('plugin:@typescript-eslint/recommended'),
   {
@@ -65,7 +101,11 @@ export default [
       'no-restricted-imports': [
         'error',
         {
-          paths: [...customElementRestrictedImports],
+          paths: [
+            ...customElementRestrictedImports,
+            ...migratedPackageRestrictedImports,
+          ],
+          patterns: [...migratedPackageRestrictedPatterns],
         },
       ],
     },
@@ -111,6 +151,7 @@ export default [
         {
           paths: [
             ...customElementRestrictedImports,
+            ...migratedPackageRestrictedImports,
             {
               name: '@lit/localize',
               importNames: [
@@ -122,6 +163,7 @@ export default [
             },
           ],
           patterns: [
+            ...migratedPackageRestrictedPatterns,
             {
               // configureLocalization and configureTransformLocalization also
               // live at these deep import paths, which the `paths` entry

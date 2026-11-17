@@ -4,7 +4,7 @@ import axe from 'axe-core';
 import { html } from 'lit';
 
 import type { IAReviewForm } from './ia-review-form';
-import { Review } from '@internetarchive/metadata-service';
+import { Review } from '@src/services/metadata-service';
 import './ia-review-form';
 import { MockReviewService } from './mocks/mock-review-service';
 
