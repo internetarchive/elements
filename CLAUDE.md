@@ -173,6 +173,10 @@ consumers are tested against.
 `histogram-date-range@1.4.2`". A reviewer can check a number that's written down
 and can't check one that isn't.
 
+Once the copy is in, switch any elements code that still imports the standalone
+package over to `@src/services/<dir>`, drop the package from `package.json`, and
+add it to `migratedPackages` in `eslint.config.mjs` so nobody imports it again.
+
 Then prove it before calling the migration done: publish a prerelease, install it
 in the real consumer, and typecheck there. That is what catches a missing export.
 
