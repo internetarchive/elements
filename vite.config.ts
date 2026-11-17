@@ -46,6 +46,23 @@ const exclude = ['**/node_modules/**', '**/dist/**', '.claude/**'];
 // https://vitejs.dev/config/
 export default defineConfig({
   resolve: { alias },
+  server: {
+    proxy: {
+      // archive.org only answers CORS for https://archive.org, so a story can't
+      // read its endpoints from localhost. Under `pnpm run dev`, requests to
+      // `/__archive__/...` are made by the dev server instead and get the real
+      // answer. The proxy drops the browser's cookies, so the requests are
+      // signed out and only public data comes back. The GitHub Pages build has
+      // no server, so there the path is a 404.
+      '/__archive__': {
+        target: 'https://archive.org',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/__archive__/, ''),
+        configure: (proxy) =>
+          proxy.on('proxyReq', (proxyReq) => proxyReq.removeHeader('cookie')),
+      },
+    },
+  },
   test: {
     coverage: {
       // Stories are demo scaffolding, not shipped code. A demo test loads one
