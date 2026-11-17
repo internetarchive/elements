@@ -12,7 +12,7 @@ import { customElement } from '@src/utils/custom-element';
 import { localized, msg, str } from '@lit/localize';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
-import { Review } from '@internetarchive/metadata-service';
+import { Review } from '@src/services/metadata-service';
 
 import type { ReviewServiceInterface } from './models';
 import { createLegacyReviewService } from './legacy-review-service';

@@ -1,4 +1,4 @@
-import type { PromisedSingleton } from '@internetarchive/promised-singleton';
+import type { PromisedSingleton } from '@src/services/promised-singleton/promised-singleton';
 import type { Unsubscribe } from 'nanoevents';
 
 import type { ApplePayHandlerInterface } from './payment-providers/apple-pay/apple-pay-interface';

@@ -2,7 +2,7 @@ import { fixture, waitUntil } from '@open-wc/testing-helpers';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { html } from 'lit';
 
-import { Review } from '@internetarchive/metadata-service';
+import { Review } from '@src/services/metadata-service';
 
 import type { IAReviews } from './ia-reviews';
 import type { IAReview } from './ia-review';

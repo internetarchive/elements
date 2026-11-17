@@ -4,7 +4,7 @@ import axe from 'axe-core';
 import { html } from 'lit';
 
 import type { IAReviews } from './ia-reviews';
-import { Review } from '@internetarchive/metadata-service';
+import { Review } from '@src/services/metadata-service';
 import './ia-reviews';
 import { IAReviewForm } from './ia-review-form';
 import { IAReview } from './ia-review';

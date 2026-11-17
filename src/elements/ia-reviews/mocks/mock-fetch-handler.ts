@@ -1,8 +1,8 @@
+import type { FetchHandlerInterface } from '@src/services/fetch-handler/fetch-handler-interface';
 import type {
   ApiFetchOptions,
-  FetchHandlerInterface,
   FetchOptions,
-} from '@internetarchive/fetch-handler';
+} from '@src/services/fetch-handler/fetch-options';
 
 /** A fetch() call the service made */
 export type RecordedFetch = {

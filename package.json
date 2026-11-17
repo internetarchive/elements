@@ -38,17 +38,9 @@
     "i18n:status": "node scripts/i18n-status.mts"
   },
   "dependencies": {
-    "@internetarchive/analytics-manager": "^0.1.5",
-    "@internetarchive/fetch-handler": "^1.4.0",
-    "@internetarchive/ia-dropdown": "^2.2.0",
     "@internetarchive/icon-close": "^1.4.0",
     "@internetarchive/icon-info": "^1.4.1",
-    "@internetarchive/icon-user": "^1.4.0",
-    "@internetarchive/lazy-loader-service": "^0.2.0",
     "@internetarchive/local-cache": "^0.2.1",
-    "@internetarchive/metadata-service": "^1.0.4",
-    "@internetarchive/promised-singleton": "^0.2.1",
-    "@internetarchive/recaptcha-manager": "^1.0.0",
     "@internetarchive/shared-resize-observer": "^0.2.0",
     "@lit/localize": "^0.12.2",
     "@types/applepayjs": "^14.0.9",

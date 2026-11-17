@@ -1,5 +1,5 @@
 import type * as braintree from 'braintree-web';
-import { PromisedSingleton } from '@internetarchive/promised-singleton';
+import { PromisedSingleton } from '@src/services/promised-singleton/promised-singleton';
 
 import type { DonationPaymentInfo } from '../../../models/donation-payment-info';
 import { DonationType } from '../../../models/donation-type';

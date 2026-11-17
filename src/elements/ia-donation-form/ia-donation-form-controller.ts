@@ -8,15 +8,13 @@ import {
 import { property, query } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
 import { parseAmount } from './parse-amount';
-import {
-  LazyLoaderService,
-  type LazyLoaderServiceInterface,
-} from '@internetarchive/lazy-loader-service';
+import { LazyLoaderService } from '@src/services/lazy-loader-service/lazy-loader-service';
+import type { LazyLoaderServiceInterface } from '@src/services/lazy-loader-service/lazy-loader-service-interface';
 import type { ModalManagerInterface } from '@src/elements/modal-manager/models';
 import type {
   AnalyticsEvent,
   AnalyticsManagerInterface,
-} from '@internetarchive/analytics-manager';
+} from '@src/services/analytics-manager/analytics-manager';
 
 import { BraintreeManager } from './braintree/braintree-manager';
 import type {

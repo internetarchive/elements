@@ -1,5 +1,5 @@
 import type * as braintree from 'braintree-web';
-import { PromisedSingleton } from '@internetarchive/promised-singleton';
+import { PromisedSingleton } from '@src/services/promised-singleton/promised-singleton';
 import { createNanoEvents, type Unsubscribe } from 'nanoevents';
 
 import type { BillingInfo, CustomerInfo } from '../models/donor-contact-info';
