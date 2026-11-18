@@ -253,13 +253,21 @@
 
 <script type="module">
 import { mountChrome, viewportSwitch, tileThumb, tileStats, facetRows, sortBarMarkup, hydrateIcons,
-         wireRadioGroups, wireSwitches, token } from './demo/docs/assets/site.js';
+         wireRadioGroups, wireSwitches } from './demo/docs/assets/site.js';
 mountChrome('playground.html');
 document.getElementById('vp').append(viewportSwitch(document.getElementById('stage')));
 
 const verdict = (pass, text) =>
   `<span class="doc-ratio doc-ratio--${pass ? 'pass' : 'fail'}">${pass ? 'pass' : 'fail'} · ${text}</span>`;
-const px = name => parseFloat(token(name)) * parseFloat(getComputedStyle(document.documentElement).fontSize);
+// A token's length in px, resolved by the browser, so calc() and var() work.
+const px = name => {
+  const probe = document.createElement('div');
+  probe.style.cssText = `position: absolute; visibility: hidden; width: var(--ia-${name})`;
+  document.body.append(probe);
+  const width = probe.getBoundingClientRect().width;
+  probe.remove();
+  return width;
+};
 
 /* ---- density ---------------------------------------------------------- */
 document.getElementById('density-sort').innerHTML = sortBarMarkup('density', 'Weekly Views');
