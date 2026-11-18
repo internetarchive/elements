@@ -56,3 +56,5 @@ export function customElement(tagName: string) {
     else define();
   };
 }
+
+export const qaLooseValue: any = 1;
