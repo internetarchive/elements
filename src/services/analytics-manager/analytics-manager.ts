@@ -132,7 +132,7 @@ export class AnalyticsManager implements AnalyticsManagerInterface {
     try {
       // if `send` is `undefined` it'll throw and fall back to the image ping
       send!(url);
-    } catch (err) {
+    } catch {
       this.sendPingViaImage(url);
     }
   }
