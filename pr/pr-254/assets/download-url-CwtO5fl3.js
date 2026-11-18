@@ -1,1 +1,0 @@
-function d(n,e="",c="https://archive.org"){const o=e.split("/").filter((p,r,s)=>p!==""||r===s.length-1).map(encodeURIComponent).join("/"),t=`${c.replace(/\/+$/,"")}/download/${encodeURIComponent(n)}`;return o?`${t}/${o}`:t}export{d};
