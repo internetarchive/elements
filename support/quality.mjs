@@ -225,9 +225,15 @@ if (baseRef) {
   const base = baseBaseline(baseRef);
   if (base) {
     const improved = Object.keys(METRICS).filter((k) => baseline[k] < base[k]);
+    const pending = looser.filter((k) => metrics[k] < base[k]);
     if (improved.length) {
       out.push(
         `Goal met: this PR improved ${improved.map((k) => METRICS[k]).join(', ')}.`,
+        '',
+      );
+    } else if (pending.length && !worse.length) {
+      out.push(
+        `This PR improved ${pending.map((k) => METRICS[k]).join(', ')}. It only needs the baseline update above to meet the goal.`,
         '',
       );
     } else {
