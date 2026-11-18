@@ -104,6 +104,14 @@ pnpm install
 pnpm run dev
 ```
 
+### Code quality
+
+CI's `quality` job holds a few numbers (lint warnings, `any`, `@ts-ignore`,
+`eslint-disable`, duplication) at or below `quality-baseline.json`. A PR can't
+make one worse, and each PR should improve at least one. When a number improves,
+run `pnpm run quality:baseline` and commit the new baseline. `pnpm run quality`
+checks it locally.
+
 ## Versioning and Publishing
 
 ### Prerelease Version

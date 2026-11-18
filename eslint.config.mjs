@@ -87,6 +87,20 @@ export default [
     ],
   },
   {
+    // Complexity limits are warnings, not errors. The quality job counts them
+    // (support/quality.mjs) and holds the total at or below quality-baseline.json.
+    files: ['src/**/*.ts', 'demo/**/*.ts'],
+    ignores: ['**/*.test.ts'],
+    rules: {
+      complexity: ['warn', 15],
+      'max-depth': ['warn', 4],
+      'max-lines-per-function': [
+        'warn',
+        { max: 120, skipBlankLines: true, skipComments: true },
+      ],
+    },
+  },
+  {
     files: ['**/*.test.ts'],
     rules: {
       '@typescript-eslint/no-unused-expressions': 'off',
