@@ -14,9 +14,24 @@ pnpm run lint       # eslint + prettier --check
 pnpm run typecheck  # tsc --noEmit
 ```
 
-CI runs `lint`, `typecheck` and `test` as separate jobs. Nothing but `typecheck`
+CI runs `lint`, `typecheck`, `test` and `quality` as separate jobs. Nothing but `typecheck`
 checks types: vitest transpiles without checking and eslint isn't type-aware
 here, so run it before pushing rather than finding out from the PR.
+
+## Code quality
+
+The `quality` CI job measures ESLint errors and warnings (including complexity
+and function-size limits), explicit `any`, `@ts-ignore`-style directives,
+`eslint-disable` comments and duplicated lines. The numbers live in
+`quality-baseline.json`. Run it locally with `pnpm run quality`.
+
+- A PR can't make any number worse. That fails the job.
+- Leave each PR a bit better: improve at least one number, even by one. The job
+  summary says whether the goal was met and lists a few easy wins in the files
+  you touched. Missing the goal doesn't block the PR.
+- When a number improves, run `pnpm run quality:baseline` and commit the new
+  `quality-baseline.json` in the same PR. The job also fails if the baseline is
+  looser than the code, so it only ever tightens.
 
 ## Backwards compatibility
 
