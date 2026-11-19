@@ -361,7 +361,7 @@ export class IAFeatureFeedbackSurveyVote
     const downvoteColor = css`var(--downvoteColor, var(--ia-color-status-danger--))`;
     const downvoteColorSvgFilter = css`var(--downvoteColorSvgFilter, invert(10%) sepia(66%) saturate(7048%) hue-rotate(353deg) brightness(95%) contrast(90%))`;
 
-    const unselectedColor = css`var(--unselectedColor, var(--ia-color-border-strong--))`;
+    const unselectedColor = css`var(--unselectedColor, var(--ia-color-border-default--))`;
     const unselectedColorSvgFilter = css`var(--unselectedColorSvgFilter, invert(100%) sepia(0%) saturate(107%) hue-rotate(138deg) brightness(89%) contrast(77%))`;
 
     const promptFontWeight = css`var(--featureFeedbackPromptFontWeight, bold)`;

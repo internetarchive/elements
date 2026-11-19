@@ -74,6 +74,25 @@ describe('IAFeatureFeedbackSurveyVote', () => {
     expect(downvoteButton.classList.contains('selected')).to.be.true;
   });
 
+  test('borders the unselected button in light gray', async () => {
+    const el = (await fixture(html`
+      <ia-feature-feedback-survey-vote
+        prompt="foo"
+      ></ia-feature-feedback-survey-vote>
+    `)) as IAFeatureFeedbackSurveyVote;
+    const upvoteButton = el.shadowRoot!.querySelector(
+      '#upvote',
+    ) as HTMLLabelElement;
+    const downvoteButton = el.shadowRoot!.querySelector(
+      '#downvote',
+    ) as HTMLLabelElement;
+    upvoteButton.click();
+    await el.updateComplete;
+    expect(getComputedStyle(downvoteButton).borderTopColor).to.equal(
+      'rgb(204, 204, 204)',
+    );
+  });
+
   test('cannot vote by clicking buttons when disabled', async () => {
     const el = (await fixture(html`
       <ia-feature-feedback-survey-vote
