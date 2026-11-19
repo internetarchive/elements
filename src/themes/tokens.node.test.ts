@@ -31,8 +31,8 @@ function luminance(rgb: number[]): number {
 
 function contrast(a: string, b: string): number {
   const [l1, l2] = [luminance(toRgb(a)), luminance(toRgb(b))];
-  const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
-  return Math.round(ratio * 100) / 100;
+  // Unrounded: WCAG's thresholds aren't rounded, so 4.495:1 fails 4.5:1.
+  return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
 }
 
 /** Follows `{a.b.c}` references to the hex value they end at. */
