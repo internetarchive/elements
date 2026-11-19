@@ -143,7 +143,7 @@ export class IAOTPForm extends LitElement {
           flex-direction: row;
           align-items: center;
           justify-content: center;
-          gap: 5px;
+          gap: var(--ia-space-1--);
         }
 
         ia-status-indicator {
@@ -151,14 +151,14 @@ export class IAOTPForm extends LitElement {
         }
 
         .error-msg {
-          margin-top: 10px;
+          margin-top: var(--ia-space-2--);
           font-size: var(--font-size-standard--);
           color: var(--color-danger--);
-          margin-bottom: -10px;
+          margin-bottom: calc(-1 * var(--ia-space-2--));
         }
 
         .new-code-msg {
-          margin-top: 10px;
+          margin-top: var(--ia-space-2--);
           font-size: var(--font-size-standard--);
           color: var(--link-color--);
           display: flex;

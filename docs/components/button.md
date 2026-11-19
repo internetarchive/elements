@@ -211,6 +211,32 @@ Before `ia-button` upgrades, a server-rendered one is an unstyled inline element
 `ia-button:not(:defined)` in the page's blocking stylesheet so it takes its final box on
 first paint — see [the component contract](README.md#before-it-upgrades).
 
+`ia-button` is the button Lit pages ship. It follows this spec: the intents, the three
+sizes (`size="sm" | "md" | "lg"`, default `md`), hover, press, the focus ring, disabled
+and loading.
+
+| Spec | `ia-button` |
+| --- | --- |
+| Intents | `mode`: `primary`, `secondary`, `danger`, `warning`, `donate`, `ghost`, `link`. `transparent` is deprecated in favor of `ghost`; `custom` and `danger-link` are its own |
+| Disabled | `disabled`: the `--ia-color-action-disabled-*` colors and `aria-disabled`, so it stays in the tab order (D-32). Its clicks stop inside the element, so neither a listener on it nor its form sees them |
+| Loading | `loading`: the indicator over the label, which stays in place hidden so the width holds; `aria-busy` and `aria-disabled`. `loadingText` sits beside the indicator |
+| With `href` | one `<a>`, styled as the button |
+| `mode="disabled"` | the disabled look on a button that still works, kept for existing callers |
+
+Where it still differs:
+
+- `ghost` takes the surrounding text color rather than `--ia-color-text-primary`, so it
+  stays legible when it sits on a dark surface.
+- A disabled `ghost`, `link` or `danger-link` button keeps no fill and no border: it stays
+  transparent with `--ia-color-text-disabled` (`#666`) text, where the spec gives every
+  disabled button the `#666` disabled fill. `mode="disabled"` still takes the fill.
+- The `--ia-theme-button-*` hooks set the `md` size. `sm` and `lg` use their tokens.
+- An `md` button whose host sets `--ia-theme-button-height` keeps that height on a coarse
+  pointer, since the host is fitting it to a layout of its own; the 44px floor applies to
+  the token heights.
+- A disabled `custom` button keeps the host's `--ia-button-custom-*` colors at half
+  opacity rather than taking the disabled fill.
+
 Its size comes from `--ia-theme-button-width` (default `fit-content`) and
 `--ia-theme-button-height`. Setting `width` on the element does nothing to the button
 inside it. `ia.css` sizes the element itself from `--ia-theme-button-width`, so a
