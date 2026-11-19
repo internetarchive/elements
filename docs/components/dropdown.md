@@ -89,6 +89,12 @@ focus ring — stays as the table shows:
 | Selected option | white at 30% over the panel, no mark | `--ia-color-selected-soft-fill-inverse` fill and a check |
 | Option focus | no ring of its own | the inverse focus ring, inset, with its band |
 
+Elements' own `ia-dropdown` follows this spec's panel color
+(`--ia-color-surface-inverse`), radius, option height, 20px option inset, soft selected
+fill (`#666`), hover overlay and the inverse focus ring with its band. It still draws a
+1px `--ia-color-border-inverse` panel border and no shadow or check, and pads plain-text
+labels itself: it wraps them in a span.
+
 One detail of the API matters to anyone building with it: the component pads each
 option's *first child element*, not the option itself. A plain-text label has no element,
 so it renders flush against the panel edge. Live wraps every label in a span
