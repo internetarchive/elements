@@ -125,6 +125,11 @@ gh release create v0.2.13 --latest --generate-notes --title v0.2.13
 Publishing the release is what triggers `npm-publish.yml`, so nothing gets run
 by hand after this.
 
+After a release that changes `tokens/` or `docs/`, republish the
+[design-system artifact](https://claude.ai/artifact/QH1DfJLQ5oA9KQtbnkiL8j) and
+stamp the version and commit in its `lastChange` note and README. It's the org
+default for Claude's decks and designs, so a stale copy spreads.
+
 ### Gotchas
 
 - **A failing test blocks the publish.** `pnpm test` runs first. If the GitHub
