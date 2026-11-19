@@ -855,7 +855,14 @@ export class IADropdown extends LitElement {
           padding: 0;
         }
 
+        /* A grid, not the flex box the rule above makes it: its one item
+           stretches across the row, so the option's text-align
+           (--dropdownTextAlign) places the text, while it stays centered
+           vertically. */
         #dropdown-main li > * > .option-text {
+          display: grid;
+          justify-content: stretch;
+          align-items: center;
           padding: var(
             --dropdownItemButtonPadding,
             var(--dropdownItemPaddingTop, 5px)

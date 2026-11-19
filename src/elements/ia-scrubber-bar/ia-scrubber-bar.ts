@@ -304,7 +304,7 @@ export class IAScrubberBar extends LitElement {
           );
           --scrubber-track-border-radius--: var(
             --ia-theme-scrubber-track-border-radius,
-            var(--ia-radius-pill--)
+            5px
           );
           --scrubber-track-color--: var(
             --ia-theme-scrubber-track-color,

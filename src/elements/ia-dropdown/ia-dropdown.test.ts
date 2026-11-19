@@ -90,6 +90,39 @@ describe('IADropdown', () => {
     expect(getComputedStyle(label).paddingTop).to.equal('0px');
   });
 
+  test.each(['center', 'right'])(
+    'aligns a plain-text option by --dropdownTextAlign: %s',
+    async (align) => {
+      // The longer option widens the menu, so the short one has room to move.
+      const options: OptionInterface[] = [
+        { id: 'text', label: 'Texts' },
+        { id: 'long', label: 'A much longer option label' },
+      ];
+      const el = await fixture<IADropdown>(
+        html`<ia-dropdown
+          .options=${options}
+          open
+          style="--dropdownTextAlign: ${align}"
+        ></ia-dropdown>`,
+      );
+      const span = el.shadowRoot!.querySelector<HTMLElement>('.option-text')!;
+      const range = document.createRange();
+      range.selectNodeContents(span);
+      const text = range.getBoundingClientRect();
+      const box = span.getBoundingClientRect();
+      const style = getComputedStyle(span);
+      const left = box.left + parseFloat(style.paddingLeft);
+      const right = box.right - parseFloat(style.paddingRight);
+      if (align === 'right') {
+        expect(Math.abs(text.right - right)).to.be.lessThan(1);
+      } else {
+        expect(
+          Math.abs(text.left - left - (right - text.right)),
+        ).to.be.lessThan(1);
+      }
+    },
+  );
+
   test('keeps the blue ring on the selected row, with its dark band', async () => {
     const options: OptionInterface[] = [
       { id: 'a', label: 'Relevance' },
