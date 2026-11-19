@@ -275,6 +275,40 @@ describe('IA button', () => {
     expect(style.opacity).to.equal('0.5');
   });
 
+  test("shows a custom button's active colors while it has focus, however it got it", async () => {
+    const el = await fixture<IAButton>(
+      html`<ia-button
+        mode="custom"
+        style="--ia-button-custom-fill: rgb(1, 2, 3); --ia-button-custom-active-fill: rgb(7, 8, 9)"
+        >Save</ia-button
+      >`,
+    );
+    const button = el.shadowRoot?.querySelector('button') as HTMLElement;
+    // A mouse click focuses it without :focus-visible; moving away ends :hover.
+    await userEvent.click(button);
+    await userEvent.unhover(button);
+    expect(button.matches(':focus')).to.equal(true);
+    expect(getComputedStyle(button).backgroundColor).to.equal('rgb(7, 8, 9)');
+  });
+
+  test("carries the part's text decoration into the label", async () => {
+    const wrapper = await fixture<HTMLDivElement>(
+      html`<div>
+        <style>
+          .inline::part(button) {
+            display: inline;
+            text-decoration: underline;
+          }
+        </style>
+        <ia-button class="inline" mode="link">write a review</ia-button>
+      </div>`,
+    );
+    const el = wrapper.querySelector('ia-button') as IAButton;
+    await el.updateComplete;
+    const label = el.shadowRoot?.querySelector('.label') as HTMLElement;
+    expect(getComputedStyle(label).textDecorationLine).to.equal('underline');
+  });
+
   test('shows the progress cursor while loading', async () => {
     const el = await fixture<IAButton>(
       html`<ia-button ?loading=${true}>Submit</ia-button>`,

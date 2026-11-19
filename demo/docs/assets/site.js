@@ -769,7 +769,8 @@ export function validateForm(summary, checks, { title = 'Please fix the followin
     const input = document.getElementById(id);
     const error = document.getElementById(`${id}-error`);
     const bad = !test(input.value.trim());
-    input.toggleAttribute('aria-invalid', bad);
+    if (bad) input.setAttribute('aria-invalid', 'true');
+    else input.removeAttribute('aria-invalid');
     if (error) { error.hidden = !bad; error.textContent = bad ? message : ''; }
     const described = (input.getAttribute('aria-describedby') ?? '').split(' ').filter(x => x && x !== `${id}-error`);
     if (bad && error) described.push(`${id}-error`);

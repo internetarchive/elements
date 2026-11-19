@@ -43,6 +43,12 @@ describe('IA Dropdown Search Bar', () => {
     expect(el.shadowRoot?.querySelector('#search-button')).to.exist;
   });
 
+  test("passes a host's --input-color through to the field", async () => {
+    el.style.setProperty('--input-color', 'rgb(1, 2, 3)');
+    const field = searchInput.shadowRoot!.querySelector('#text-input')!;
+    expect(getComputedStyle(field).color).to.equal('rgb(1, 2, 3)');
+  });
+
   test('rings its category picker in the light-surface focus color', async () => {
     const dropdown = el.shadowRoot!.querySelector('#category-dropdown')!;
     expect(

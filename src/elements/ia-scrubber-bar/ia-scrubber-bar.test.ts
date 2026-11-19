@@ -44,6 +44,15 @@ describe('IA Scrubber Bar', () => {
     expect(fill).to.equal('#3a4fd6');
   });
 
+  test('rings the slider on keyboard focus', async () => {
+    const slider = sliderIn(await scrubberFixture());
+    slider.focus();
+    expect(slider.matches(':focus-visible')).to.equal(true);
+    const style = getComputedStyle(slider);
+    expect(style.outlineStyle).to.equal('solid');
+    expect(style.outlineWidth).to.equal('2px');
+  });
+
   test('defaults value to 0', async () => {
     const el = await scrubberFixture();
 

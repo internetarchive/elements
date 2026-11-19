@@ -444,7 +444,7 @@ export class IATopNav extends LitElement {
           --grey66: var(--ia-color-text-inverse-secondary--);
           --grey80: var(--ia-color-text-inverse-secondary--);
           --greya0: var(--ia-color-text-inverse-secondary--);
-          --grey6f: var(--ia-color-legacy-gray-550--);
+          --grey6f: var(--ia-color-text-inverse-secondary--);
           --errorYellow: var(--ia-color-text-inverse-warning--);
 
           --linkHoverColor: var(--white);
@@ -478,7 +478,7 @@ export class IATopNav extends LitElement {
              overlay, none by default. */
           --linkColor: transparent;
           --inverseTextColor: var(--ia-color-text-inverse--);
-          --inverseDropdownMenuInfoItem: var(--dropdownMenuInfoItem);
+          --inverseDropdownMenuInfoItem: var(--grey6f);
 
           --loginTextColor: var(--grey60);
 
@@ -487,7 +487,7 @@ export class IATopNav extends LitElement {
 
           --savePageSubmitBg: var(--grey13);
           --savePageSubmitText: var(--white);
-          --savePageInputBorder: var(--ia-color-text-inverse-tertiary--);
+          --savePageInputBorder: var(--grey60);
           --savePageErrorText: var(--errorYellow);
 
           color: var(--primaryTextColor);
