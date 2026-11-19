@@ -299,7 +299,7 @@ describe('IADonationThermometer', () => {
         .goalAmount=${1_000_000}
         .currentAmount=${500_000}
       ></ia-donation-thermometer>`,
-      200,
+      160,
     );
     expect(background(el).classList.contains('value-right')).to.be.true;
 

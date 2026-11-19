@@ -121,7 +121,7 @@ export class IAPlaybackControlsStory extends LitElement {
     return css`
       .controls {
         background-color: #151515;
-        padding: 1rem 0.5rem;
+        padding: 1.6rem 0.8rem;
         border-radius: 4px;
       }
 

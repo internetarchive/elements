@@ -103,7 +103,7 @@ export class IADonationSectionStory extends LitElement {
     return css`
       .content {
         margin: 0;
-        font-size: 0.9rem;
+        font-size: 1.44rem;
       }
     `;
   }

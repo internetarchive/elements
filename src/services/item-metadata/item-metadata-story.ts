@@ -280,14 +280,14 @@ export class ItemMetadataStory extends LitElement {
         display: flex;
         flex-wrap: wrap;
         align-items: flex-end;
-        gap: 0.5rem;
+        gap: 0.8rem;
       }
 
       label {
         display: flex;
         flex-direction: column;
         gap: 2px;
-        font-size: 0.8rem;
+        font-size: 1.28rem;
       }
 
       label.check {
@@ -298,7 +298,7 @@ export class ItemMetadataStory extends LitElement {
 
       label.id input {
         min-width: 0;
-        width: 14rem;
+        width: 22.4rem;
         max-width: 100%;
       }
 
@@ -314,10 +314,10 @@ export class ItemMetadataStory extends LitElement {
         display: flex;
         flex-direction: column;
         gap: 4px;
-        padding: 0.5rem;
+        padding: 0.8rem;
         background: #fff;
         border: 1px solid #ccc;
-        font-size: 0.85rem;
+        font-size: 1.36rem;
         overflow-x: auto;
       }
 
@@ -332,7 +332,7 @@ export class ItemMetadataStory extends LitElement {
 
       table {
         border-collapse: collapse;
-        font-size: 0.8rem;
+        font-size: 1.28rem;
       }
 
       th,
@@ -349,7 +349,7 @@ export class ItemMetadataStory extends LitElement {
 
       .unmodeled {
         margin: 0;
-        font-size: 0.8rem;
+        font-size: 1.28rem;
         overflow-wrap: anywhere;
       }
     `;

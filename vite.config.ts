@@ -81,6 +81,7 @@ export default defineConfig({
         test: {
           name: 'browser',
           include: ['**/*.{test,spec}.?(c|m)[jt]s?(x)'],
+          setupFiles: ['./support/root-font-size.ts'],
           exclude: [...exclude, '**/*.node.test.ts'],
           browser: {
             enabled: true,
@@ -103,7 +104,7 @@ export default defineConfig({
         test: {
           name: 'node',
           environment: 'node',
-          include: ['src/**/*.node.test.ts'],
+          include: ['src/**/*.node.test.ts', 'demo/**/*.node.test.ts'],
           exclude,
         },
       },

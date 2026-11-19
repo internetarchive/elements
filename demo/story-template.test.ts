@@ -255,7 +255,7 @@ describe('StoryTemplate', () => {
         <story-template elementTag="ia-button"></story-template>
       `);
 
-      expect(maxHeightFor(el)).to.equal('5.5rem');
+      expect(maxHeightFor(el)).to.equal('8.8rem');
     });
 
     test('leaves a section the reader closed alone on later renders', async () => {

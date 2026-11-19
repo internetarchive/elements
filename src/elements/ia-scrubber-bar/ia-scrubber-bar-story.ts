@@ -195,7 +195,7 @@ export class IAScrubberBarStory extends LitElement {
       .scrubber {
         display: block;
         background-color: #151515;
-        padding: 1.5rem 1rem;
+        padding: 2.4rem 1.6rem;
         border-radius: 4px;
       }
 

@@ -98,10 +98,12 @@ export class ServiceTemplate extends LitElement {
       themeStyles,
       css`
         #container {
-          background: #f0f0f0;
-          padding: 0 10px 10px;
-          margin-bottom: 1rem;
-          border: 1px solid #ccc;
+          background: var(--ia-color-surface-raised--);
+          padding: 0 var(--ia-space-3--) var(--ia-space-3--);
+          margin-bottom: 1.6rem;
+          border: var(--ia-border-card--);
+          border-radius: var(--ia-radius-default--);
+          box-shadow: var(--ia-shadow-raised--);
         }
 
         #details {
@@ -121,17 +123,17 @@ export class ServiceTemplate extends LitElement {
         }
 
         h2 {
-          font-size: 0.85rem;
+          font-size: 1.36rem;
           font-weight: 600;
           margin: 10px 0 8px;
         }
 
         h3 {
-          font-size: 0.7rem;
+          font-size: 1.12rem;
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.06em;
-          color: #666;
+          color: var(--ia-color-text-secondary--);
           margin: 8px 0 4px;
         }
 
@@ -140,11 +142,11 @@ export class ServiceTemplate extends LitElement {
           align-items: center;
           gap: 5px;
           margin-top: 6px;
-          font-size: 0.7rem;
+          font-size: 1.12rem;
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.06em;
-          color: #595959;
+          color: var(--ia-color-text-secondary--);
           cursor: pointer;
           user-select: none;
           border: none;
@@ -154,7 +156,7 @@ export class ServiceTemplate extends LitElement {
 
         .details-toggle::before {
           content: '▾';
-          font-size: 0.65rem;
+          font-size: 1.04rem;
           display: inline-block;
           transition: transform 0.15s;
         }
@@ -170,7 +172,7 @@ export class ServiceTemplate extends LitElement {
 
         .details-inner syntax-highlighter {
           display: block;
-          --syntax-max-height: 8rem;
+          --syntax-max-height: 12.8rem;
         }
 
         .details-inner.focused syntax-highlighter {

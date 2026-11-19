@@ -197,24 +197,24 @@ export class IADonationEditDonationStory extends LitElement {
     return css`
       ia-donation-edit-donation {
         display: block;
-        max-width: 32rem;
+        max-width: 51.2rem;
       }
 
       .slotted-title {
         margin: 0 0 5px 0;
-        font-size: 1.125rem;
-        line-height: 1.5rem;
+        font-size: 1.8rem;
+        line-height: 2.4rem;
       }
 
       .readout h4 {
-        margin: 0 0 0.25rem;
+        margin: 0 0 0.4rem;
       }
 
       .readout dl {
         margin: 0;
         display: grid;
         grid-template-columns: max-content 1fr;
-        gap: 0.25rem 1rem;
+        gap: 0.4rem 1.6rem;
       }
 
       .readout dt {

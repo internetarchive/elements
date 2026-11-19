@@ -18,13 +18,13 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Input font size',
     cssVariable: '--ia-theme-font-size-lg',
-    defaultValue: '2.25rem',
+    defaultValue: '3.6rem',
     inputType: 'text',
   },
   {
     label: 'Link and error font size',
     cssVariable: '--ia-theme-font-size-standard',
-    defaultValue: '0.875rem',
+    defaultValue: '1.4rem',
     inputType: 'text',
   },
   {

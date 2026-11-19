@@ -18,7 +18,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Font size',
     cssVariable: '--ia-theme-font-size-lg',
-    defaultValue: '2.25rem',
+    defaultValue: '3.6rem',
     inputType: 'text',
   },
 ];

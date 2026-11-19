@@ -358,7 +358,7 @@ export class StoryStylesSettings extends LitElement {
         .style-input-cell.presets-inline {
           flex-direction: row;
           align-items: center;
-          gap: 0.5rem;
+          gap: 0.8rem;
         }
 
         .style-input-cell.presets-inline .style-presets {
@@ -379,16 +379,16 @@ export class StoryStylesSettings extends LitElement {
         .style-presets {
           display: flex;
           flex-wrap: wrap;
-          gap: 0.3rem;
-          margin-top: 0.35rem;
+          gap: 0.48rem;
+          margin-top: 0.56rem;
         }
 
         .style-preset {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 0.1rem;
-          padding: 0.25rem 0.4rem;
+          gap: 0.16rem;
+          padding: 0.4rem 0.64rem;
           cursor: pointer;
         }
 
@@ -405,8 +405,8 @@ export class StoryStylesSettings extends LitElement {
         .style-var {
           margin-left: 0.75em;
           font-family: monospace;
-          font-size: 0.72rem;
-          color: #767676;
+          font-size: 1.152rem;
+          color: var(--ia-color-text-secondary--);
           white-space: nowrap;
         }
 
@@ -417,8 +417,8 @@ export class StoryStylesSettings extends LitElement {
         /* Names the theme the randomize control just applied. */
         .applied-palette {
           margin-left: 0.75em;
-          font-size: 0.78rem;
-          color: #595959;
+          font-size: 1.248rem;
+          color: var(--ia-color-text-secondary--);
         }
       `,
     ];

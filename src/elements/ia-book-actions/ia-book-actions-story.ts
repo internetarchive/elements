@@ -4,7 +4,6 @@ import { keyed } from 'lit/directives/keyed.js';
 import { customElement } from '@src/utils/custom-element';
 
 import '@demo/story-template';
-import { tagFromHash } from '@demo/element-hash';
 import type { PropInputSettings } from '@demo/story-components/story-prop-settings';
 import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
 
@@ -282,8 +281,6 @@ const TOKEN_ERROR = 'loan token not found. please try again later.';
 /** How long a renew or return takes, so the loading state can be seen. */
 const SLOW_ACTION_MS = 1500;
 
-const ARCHIVE_ROOT_FONT_SIZE = '10px';
-
 const MAX_LOG_ENTRIES = 100;
 
 type LogKind = 'request' | 'analytics' | 'sentry' | 'navigation' | 'event';
@@ -297,6 +294,7 @@ interface LogEntry {
 /** The part of the Navigation API the story uses to stop page loads. */
 interface NavigateEventLike extends Event {
   destination: { url: string; sameDocument: boolean };
+  userInitiated: boolean;
 }
 
 /**
@@ -309,8 +307,9 @@ interface NavigateEventLike extends Event {
  * - `window.archive_analytics` and `window.Sentry` are replaced with versions
  *   that write to the log, and put back afterward.
  * - The loader image is a data URI.
- * - Same-origin page loads (link clicks, reloads, the redirects after a
- *   borrow or return) are cancelled and logged. Links inside the bar and its
+ * - Same-origin page loads the page starts itself (the redirects after a
+ *   borrow or return) are cancelled and logged. Loads the reader starts,
+ *   like the demo's tabs or a reload, go ahead. Links inside the bar and its
  *   modals are cancelled on click. Redirects come from the element's own
  *   `location` changes, which only the Navigation API can cancel, so a
  *   browser without it will load the page when a borrow completes.
@@ -332,9 +331,6 @@ export class IABookActionsStory extends LitElement {
 
   @state() private failRequests = false;
 
-  @state() private archiveFontSize =
-    tagFromHash(window.location.hash) === 'ia-book-actions';
-
   @state() private entries: LogEntry[] = [];
 
   /**
@@ -351,8 +347,6 @@ export class IABookActionsStory extends LitElement {
   @state() private statusVersion = 0;
 
   @state() private loanConfig: LoanRenewTimeConfig = LOAN_LENGTHS['2m'];
-
-  private rootFontSizeBefore?: string;
 
   private previousAnalytics?: Window['archive_analytics'];
 
@@ -396,17 +390,6 @@ export class IABookActionsStory extends LitElement {
     this.removeModalManager();
     this.removeGlobalStubs();
     this.removeLoanCookies();
-    this.restoreRootFontSize();
-  }
-
-  updated(): void {
-    const root = document.documentElement.style;
-    if (this.archiveFontSize && this.rootFontSizeBefore === undefined) {
-      this.rootFontSizeBefore = root.fontSize;
-      root.fontSize = ARCHIVE_ROOT_FONT_SIZE;
-    } else if (!this.archiveFontSize) {
-      this.restoreRootFontSize();
-    }
   }
 
   private log(kind: LogKind, text: string): void {
@@ -531,8 +514,10 @@ export class IABookActionsStory extends LitElement {
     if (!navigation) return;
 
     this.navigationGuard = (event: Event) => {
-      const { destination } = event as NavigateEventLike;
-      if (destination.sameDocument || !event.cancelable) return;
+      const { destination, userInitiated } = event as NavigateEventLike;
+      if (destination.sameDocument || !event.cancelable || userInitiated) {
+        return;
+      }
       if (new URL(destination.url).origin !== window.location.origin) return;
 
       event.preventDefault();
@@ -559,12 +544,6 @@ export class IABookActionsStory extends LitElement {
         document.cookie = `${encodeURIComponent(name)}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
       }
     });
-  }
-
-  private restoreRootFontSize(): void {
-    if (this.rootFontSizeBefore === undefined) return;
-    document.documentElement.style.fontSize = this.rootFontSizeBefore;
-    this.rootFontSizeBefore = undefined;
   }
 
   /** Rebuilds the lending status and loan timing from the controls. */
@@ -722,25 +701,6 @@ export class IABookActionsStory extends LitElement {
               </ul>`}
         </div>
 
-        <div slot="settings">
-          <table>
-            <tr>
-              <td><label>archive.org font size</label></td>
-              <td>
-                <input
-                  type="checkbox"
-                  .checked=${this.archiveFontSize}
-                  @change=${(event: Event) => {
-                    this.archiveFontSize = (
-                      event.target as HTMLInputElement
-                    ).checked;
-                  }}
-                />
-              </td>
-            </tr>
-          </table>
-        </div>
-
         <div slot="usage-notes">
           <p>
             Put a <code>modal-manager</code> on the page. The bar finds it by
@@ -753,10 +713,7 @@ export class IABookActionsStory extends LitElement {
             the automatic renewal and the auto-return in under two minutes. Fail
             lending requests makes borrow, return, renew and waitlist calls
             fail. create_token still succeeds, since it repeats for as long as a
-            loan is active. archive.org font size, under the settings, sets the
-            page's root font size to 10px, which the bar is built for. It
-            applies to the whole demo page, so it's on by default only when this
-            element is the one being viewed.
+            loan is active.
           </p>
           <p>
             Pass a <code>fetchHandler</code> to the bar to control how it
