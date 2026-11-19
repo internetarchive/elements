@@ -286,8 +286,8 @@ export class IAPlaybackControls extends LitElement {
           display: flex;
           justify-content: center;
           align-items: center;
-          padding-left: 2.5px;
-          padding-right: 2.5px;
+          padding-left: calc(2.5 * var(--ia-unit, 1px));
+          padding-right: calc(2.5 * var(--ia-unit, 1px));
         }
 
         .container {
