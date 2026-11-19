@@ -29,25 +29,57 @@ afterEach(() => {
 });
 
 describe('<ia-topnav>', () => {
-  test('restyles the parts each palette name always set', async () => {
+  // Every role a palette name set before the design system, but
+  // --inverseTextColor: the wide dropdown's panel is dark now, so its text
+  // can't follow --grey20, the dark gray it used to be.
+  test.each([
+    [
+      '--white',
+      [
+        '--linkHoverColor',
+        '--primaryTextColor',
+        '--activeColor',
+        '--savePageSubmitText',
+      ],
+    ],
+    ['--grey13', ['--mediaMenuBg', '--primaryNavBg', '--savePageSubmitBg']],
+    [
+      '--grey20',
+      [
+        '--activeButtonBg',
+        '--desktopSearchIconFill',
+        '--mediaSliderBg',
+        '--primaryNavBottomBorder',
+        '--desktopSubnavBg',
+        '--dropdownMenuBg',
+      ],
+    ],
+    ['--grey28', ['--activeDesktopMenuIcon', '--mediaSliderDesktopBg']],
+    ['--grey40', ['--dropdownMenuDivider']],
+    [
+      '--grey60',
+      [
+        '--lightTextColor',
+        '--iconFill',
+        '--mediaLabelDesktopColor',
+        '--loginTextColor',
+        '--savePageInputBorder',
+      ],
+    ],
+    ['--grey66', ['--subnavLinkColor']],
+    ['--greya0', ['--dropdownMenuInfoItem']],
+    ['--grey6f', ['--inverseDropdownMenuInfoItem']],
+    ['--errorYellow', ['--savePageErrorText']],
+  ])('%s still sets the parts it always set', async (name, roles) => {
     const el = await fixture<IATopNav>(
-      html`<ia-topnav
-        style="--grey60: rgb(1, 2, 3); --grey66: rgb(4, 5, 6); --grey28: rgb(7, 8, 9)"
-      ></ia-topnav>`,
+      html`<ia-topnav style="${name}: rgb(1, 2, 3)"></ia-topnav>`,
     );
     const style = getComputedStyle(el);
-    const value = (name: string) => style.getPropertyValue(name).trim();
-    for (const role of [
-      '--iconFill',
-      '--lightTextColor',
-      '--loginTextColor',
-      '--mediaLabelDesktopColor',
-    ]) {
-      expect(value(role), role).to.equal('rgb(1, 2, 3)');
+    for (const role of roles) {
+      expect(style.getPropertyValue(role).trim(), role).to.equal(
+        'rgb(1, 2, 3)',
+      );
     }
-    expect(value('--subnavLinkColor')).to.equal('rgb(4, 5, 6)');
-    expect(value('--activeDesktopMenuIcon')).to.equal('rgb(7, 8, 9)');
-    expect(value('--mediaSliderDesktopBg')).to.equal('rgb(7, 8, 9)');
   });
 
   test('draws the menu divider in #666 and the open media tab in its panel color', async () => {
