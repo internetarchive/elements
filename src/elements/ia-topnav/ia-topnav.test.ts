@@ -29,6 +29,72 @@ afterEach(() => {
 });
 
 describe('<ia-topnav>', () => {
+  // Every role a palette name set before the design system, but
+  // --inverseTextColor: the wide dropdown's panel is dark now, so its text
+  // can't follow --grey20, the dark gray it used to be.
+  test.each([
+    [
+      '--white',
+      [
+        '--linkHoverColor',
+        '--primaryTextColor',
+        '--activeColor',
+        '--savePageSubmitText',
+      ],
+    ],
+    ['--grey13', ['--mediaMenuBg', '--primaryNavBg', '--savePageSubmitBg']],
+    [
+      '--grey20',
+      [
+        '--activeButtonBg',
+        '--desktopSearchIconFill',
+        '--mediaSliderBg',
+        '--primaryNavBottomBorder',
+        '--desktopSubnavBg',
+        '--dropdownMenuBg',
+      ],
+    ],
+    ['--grey28', ['--activeDesktopMenuIcon', '--mediaSliderDesktopBg']],
+    ['--grey40', ['--dropdownMenuDivider']],
+    [
+      '--grey60',
+      [
+        '--lightTextColor',
+        '--iconFill',
+        '--mediaLabelDesktopColor',
+        '--loginTextColor',
+        '--savePageInputBorder',
+      ],
+    ],
+    ['--grey66', ['--subnavLinkColor']],
+    ['--greya0', ['--dropdownMenuInfoItem']],
+    ['--grey6f', ['--inverseDropdownMenuInfoItem']],
+    ['--errorYellow', ['--savePageErrorText']],
+  ])('%s still sets the parts it always set', async (name, roles) => {
+    const el = await fixture<IATopNav>(
+      html`<ia-topnav style="${name}: rgb(1, 2, 3)"></ia-topnav>`,
+    );
+    const style = getComputedStyle(el);
+    for (const role of roles) {
+      expect(style.getPropertyValue(role).trim(), role).to.equal(
+        'rgb(1, 2, 3)',
+      );
+    }
+  });
+
+  test('draws the menu divider in #666 and the open media tab in its panel color', async () => {
+    const el = await fixture<IATopNav>(html`<ia-topnav></ia-topnav>`);
+    const style = getComputedStyle(el);
+    const value = (name: string) => style.getPropertyValue(name).trim();
+
+    expect(value('--dropdownMenuDivider')).to.equal('#666666');
+    // The open media tab matches the panel it opens.
+    expect(value('--activeDesktopMenuIcon')).to.equal(
+      value('--mediaSliderDesktopBg'),
+    );
+    expect(value('--activeDesktopMenuIcon')).to.equal('#474747');
+  });
+
   test('dispatches an analyticsClick event when trackClick event fired', async () => {
     const el = await fixture<IATopNav>(html` <ia-topnav></ia-topnav>`);
     const clickEvent = new MouseEvent('click');

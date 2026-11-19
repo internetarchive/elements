@@ -10,6 +10,7 @@ import {
 } from './models';
 import { buildTopNavMenus, defaultTopNavConfig } from './data/menus';
 import themeStyles from '@src/themes/theme-styles';
+import topnavFocusStyles from './focus-styles';
 
 @customElement('ia-topnav-media-slider')
 export class MediaSlider extends LitElement {
@@ -133,6 +134,7 @@ export class MediaSlider extends LitElement {
   static get styles(): CSSResultGroup {
     return [
       themeStyles,
+      topnavFocusStyles,
       css`
         .media-slider-container {
           position: relative;
