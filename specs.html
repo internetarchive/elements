@@ -1092,9 +1092,9 @@ wireFacets(document.getElementById('facets'));
     dialog.querySelector('[data-pages=prev]').disabled = values.scrollLeft <= 0;
     dialog.querySelector('[data-pages=next]').disabled = values.scrollLeft + values.clientWidth >= values.scrollWidth - 1;
   }, { passive: true });
-  wireFacets(dialog);
+  // The dialog sits inside #facets, whose wireFacets already handles its clicks.
   document.getElementById('open-more-facets').addEventListener('click', () => dialog.showModal());
-  dialog.addEventListener('click', e => { if (e.target.closest('.ia-modal__close, [value]')) dialog.close(); });
+  dialog.addEventListener('click', e => { if (e.target.closest('.ia-modal__close, button[value]')) dialog.close(); });
 }
 
 document.getElementById('skeleton-grid').innerHTML = Array.from({ length: 6 }, () => `

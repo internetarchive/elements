@@ -28,7 +28,9 @@ function probeFor(doc: Document, root: HTMLElement): HTMLElement {
   probe.style.cssText =
     'position: absolute; top: 0; left: 0; width: 1em; height: 0; ' +
     'overflow: hidden; visibility: hidden; pointer-events: none; ' +
-    'font-size: medium';
+    // A generic monospace family makes medium the monospace default
+    // (13px), not the reader's 16px, so the probe names its own family.
+    'font-size: medium; font-family: serif';
   root.append(probe);
   probes.set(doc, probe);
   const view = doc.defaultView;
