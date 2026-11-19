@@ -110,9 +110,25 @@ describe('IaClearableTextInput', () => {
     await userEvent.keyboard('{Tab}');
     input.focus();
     const style = getComputedStyle(input);
-    expect(style.outlineWidth).to.equal('2px');
-    expect(style.outlineOffset).to.equal('-2px');
-    expect(style.boxShadow).to.equal('none');
+    // The 1px border in the ring's color, and 1px more inside it.
+    expect(style.borderTopColor).to.equal('rgb(58, 79, 214)');
+    expect(style.boxShadow).to.equal('rgb(58, 79, 214) 0px 0px 0px 1px inset');
+    expect(style.outlineColor).to.equal('rgba(0, 0, 0, 0)');
+  });
+
+  test("lets a host's --input-focused-box-shadow replace the ring", async () => {
+    const el = await fixture<IaClearableTextInput>(
+      html`<ia-clearable-text-input
+        style="--input-focused-box-shadow: 0 0 0 2px rgb(1, 2, 3)"
+      ></ia-clearable-text-input>`,
+    );
+    const input =
+      el.shadowRoot!.querySelector<HTMLInputElement>('#text-input')!;
+    await userEvent.keyboard('{Tab}');
+    input.focus();
+    const style = getComputedStyle(input);
+    expect(style.boxShadow).to.equal('rgb(1, 2, 3) 0px 0px 0px 2px');
+    expect(style.outlineColor).to.equal('rgba(0, 0, 0, 0)');
   });
 
   test('shows the clear button when the input field has initial text', async () => {

@@ -185,7 +185,12 @@ export class IaClearableTextInput extends LitElement {
       }
 
       /* A text field's focus ring is drawn over its border, inside the edge,
-         so the field looks like it took focus rather than gained a box. */
+         so the field looks like it took focus rather than gained a box: the
+         border takes the ring's color and an inset shadow makes up the rest
+         of its width. It's the default of --input-focused-box-shadow, so a
+         host's own focus shadow replaces it rather than adding a second ring.
+         The transparent outline is what forced-colors mode shows, since it
+         drops box shadows. */
       #text-input:focus {
         outline: none;
       }
@@ -193,11 +198,20 @@ export class IaClearableTextInput extends LitElement {
       #text-input:focus-visible {
         border-color: var(
           --input-focused-border-color,
-          var(--input-border-color, var(--ia-color-border-strong--))
+          var(--ia-color-border-focus--)
         );
-        box-shadow: var(--input-focused-box-shadow, none);
-        outline: var(--ia-size-focus-ring--) solid
-          var(--ia-color-border-focus--);
+        box-shadow: var(
+          --input-focused-box-shadow,
+          inset 0 0 0
+            calc(
+              var(--ia-size-focus-ring--) - var(
+                  --input-border-width,
+                  var(--ia-size-border-width--)
+                )
+            )
+            var(--ia-color-border-focus--)
+        );
+        outline: var(--ia-size-focus-ring--) solid transparent;
         outline-offset: var(
           --input-focus-ring-offset,
           calc(-1 * var(--ia-size-focus-ring--))
