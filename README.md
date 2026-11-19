@@ -246,6 +246,21 @@ For styling, our components use a series of rational CSS variable fallbacks to e
 2. Customizable styles can be adjusted by the consumer by setting a CSS variable at the component or global level
 3. The available variables are easy to find in the component file and visible in the story
 
+#### Design tokens
+
+The design system's values (colors, type, spacing, radius, sizing, motion and more) are design tokens, defined in [tokens/tokens.json](tokens/tokens.json). `pnpm run tokens` generates `src/themes/tokens.ts` from it; `dev`, `build`, `test` and `typecheck` run it first. Never edit the generated file.
+
+`tokenStyles` (`@src/themes/tokens`) declares every token as a private alias on `:host`, named after the token with a trailing `--`. Put it in the component's `styles` array; pasting it into a `css` template with `${}` copies the whole token sheet into that component's stylesheet. Read the alias, never the token itself:
+```
+color: var(--ia-color-text-primary--);
+padding: var(--ia-space-2--);
+```
+A page overrides a token by setting its public name, e.g. `--ia-color-text-link`, on `:root` or any ancestor. Setting a palette value such as `--ia-color-palette-navy-700` changes every role that points at it. Use the semantic roles (`text`, `surface`, `border`, `action`, `status`, ...) in components, not the palette.
+
+For a dark surface, add the `ia-inverse` class, either inside the shadow root or on the element itself. It re-points the text, border, focus, surface, hover and selected aliases to values that clear contrast on dark backgrounds. It reaches only that element's own shadow root: a nested elements component sets its aliases afresh, so it needs the class too.
+
+Length tokens are px at the browser's default font size. Each group of lengths in `tokens/tokens.json` sets `$extensions.ia.scale`: `true` builds as `calc(N * var(--ia-unit, 1px))`, `false` as plain px, and a length outside either fails the build. `src/themes/tokens.node.test.ts` checks every color pairing the system recommends against its WCAG contrast minimum, so a token change that breaks one fails the tests.
+
 #### Setting up styles
 
 1. In the component's CSS, include the elements-wide `themeStyles` defaults
