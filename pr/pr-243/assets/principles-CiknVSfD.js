@@ -1,4 +1,4 @@
-import"./modulepreload-polyfill-B5Qt9EMX.js";import{r as g,i as f,g as h,j as v,B as b,y,E as w,M as k}from"./site-BqYl-RGX.js";/* empty css             */const D=`# Principles
+import"./modulepreload-polyfill-B5Qt9EMX.js";import{r as g,i as f,g as h,j as v,B as b,y,E as w,M as k}from"./site-CHpDHekc.js";/* empty css             */const D=`# Principles
 
 What the interface is going for, and where it has to choose. Each principle comes with a
 case where both directions are reasonable and the principle tips the decision — most of them
