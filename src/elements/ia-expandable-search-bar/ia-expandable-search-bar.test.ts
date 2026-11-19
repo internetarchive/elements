@@ -327,4 +327,13 @@ describe('IA Quick Search', () => {
     // so entries have to be real buttons.
     expect(el.shadowRoot?.querySelectorAll('li a').length).to.equal(0);
   });
+
+  test('rings the search field on focus', async () => {
+    const el = await searchBarFixture();
+    const input = el.shadowRoot?.querySelector('#search-input') as HTMLElement;
+    input.focus();
+    const style = getComputedStyle(input);
+    expect(style.outlineStyle).to.equal('solid');
+    expect(style.outlineWidth).to.equal('2px');
+  });
 });

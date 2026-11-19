@@ -34,6 +34,25 @@ function slideTo(el: IAScrubberBar, value: number): void {
 }
 
 describe('IA Scrubber Bar', () => {
+  test('fills the played part of the track with the link blue by default', async () => {
+    const el = await fixture<IAScrubberBar>(
+      html`<ia-scrubber-bar></ia-scrubber-bar>`,
+    );
+    const fill = getComputedStyle(el)
+      .getPropertyValue('--scrubber-track-fill-color--')
+      .trim();
+    expect(fill).to.equal('#3a4fd6');
+  });
+
+  test('rings the slider on keyboard focus', async () => {
+    const slider = sliderIn(await scrubberFixture());
+    slider.focus();
+    expect(slider.matches(':focus-visible')).to.equal(true);
+    const style = getComputedStyle(slider);
+    expect(style.outlineStyle).to.equal('solid');
+    expect(style.outlineWidth).to.equal('2px');
+  });
+
   test('defaults value to 0', async () => {
     const el = await scrubberFixture();
 
