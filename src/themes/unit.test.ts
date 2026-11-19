@@ -56,6 +56,19 @@ describe('--ia-unit', () => {
     );
   });
 
+  test("isn't thrown off by a monospace page font", () => {
+    const familyBefore = root.style.fontFamily;
+    root.style.fontFamily = 'monospace';
+    try {
+      applyIaUnit();
+      expect(getComputedStyle(root).getPropertyValue('--ia-unit')).to.equal(
+        '1px',
+      );
+    } finally {
+      root.style.fontFamily = familyBefore;
+    }
+  });
+
   test('keeps one probe in the document however often it runs', () => {
     applyIaUnit();
     applyIaUnit();

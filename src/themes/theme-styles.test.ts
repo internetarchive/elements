@@ -94,3 +94,27 @@ describe('themeStyles', () => {
     expect(el.getBoundingClientRect().height).to.equal(36);
   });
 });
+
+/** Every `--name: var(--ia-theme-hook, …)` in themeStyles, hook first. */
+const hookPairs = [
+  ...themeStyles.cssText.matchAll(/(--[\w-]+):\s*var\(\s*(--ia-theme-[\w-]+)/g),
+].map(([, name, hook]) => ({ name, hook }));
+
+describe('themeStyles hooks', () => {
+  test('finds the hooks to check', () => {
+    expect(hookPairs.length).to.be.greaterThan(30);
+  });
+
+  // Set on the root, as a page such as offshoot sets them.
+  test.each(hookPairs)('$hook on :root sets $name', async ({ name, hook }) => {
+    document.documentElement.style.setProperty(hook, 'hook-value');
+    try {
+      const el = await fixture<ThemeStylesTestElement>(
+        html`<theme-styles-test-element></theme-styles-test-element>`,
+      );
+      expect(read(el, name)).to.equal('hook-value');
+    } finally {
+      document.documentElement.style.removeProperty(hook);
+    }
+  });
+});

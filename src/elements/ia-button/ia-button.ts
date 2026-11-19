@@ -415,6 +415,9 @@ export class IAButton extends LitElement {
           align-items: center;
           justify-content: center;
           gap: var(--ia-space-1--);
+          /* A link's hover underline doesn't reach into an inline-flex box
+             when a host makes the part inline, as ia-reviews' message does. */
+          text-decoration: inherit;
         }
 
         /* Full width, so slotted content with width: 100% fills the button.
@@ -477,9 +480,11 @@ export class IAButton extends LitElement {
           border-color: var(--ia-button-custom-border--);
         }
 
+        /* :focus, not :focus-visible, so a clicked custom button keeps its
+           active colors, as hosts that style it that way expect. */
         .custom:not([aria-disabled='true']):is(
             :hover,
-            :focus-visible,
+            :focus,
             :active,
             .active
           ) {
