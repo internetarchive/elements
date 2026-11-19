@@ -73,7 +73,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Danger button fill',
     cssVariable: '--primaryErrorCTAFill',
-    defaultValue: '#d9534f',
+    defaultValue: '#e51c23',
     inputType: 'color',
   },
   {
@@ -85,19 +85,19 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Danger button border',
     cssVariable: '--primaryErrorCTABorder',
-    defaultValue: '#d43f3a',
+    defaultValue: '#b8161c',
     inputType: 'color',
   },
   {
     label: 'Disabled button fill',
     cssVariable: '--primaryDisableCTAFill',
-    defaultValue: '#767676',
+    defaultValue: '#666666',
     inputType: 'color',
   },
   {
     label: 'Dropdown background',
     cssVariable: '--iaBookActionsDropdownBGColor',
-    defaultValue: '#2d2d2d',
+    defaultValue: '#2c2c2c',
     inputType: 'color',
   },
 ];
@@ -731,8 +731,8 @@ export class IABookActionsStory extends LitElement {
             <code>lendingBarPostInit</code> is called once access to the book is
             confirmed, and is where the host starts BookReader. The
             <code>IABookReader:BrowsingHasExpired</code> event bubbles when a 1
-            hour loan runs out. Sizes are in rem and assume the host page sets
-            <code>html { font-size: 10px }</code>.
+            hour loan runs out. Its sizes come from the design tokens, so they
+            don't depend on the host page's root font size.
           </p>
         </div>
       </story-template>

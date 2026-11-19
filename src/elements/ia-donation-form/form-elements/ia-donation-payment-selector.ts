@@ -275,7 +275,7 @@ export class IADonationPaymentSelector extends LitElement {
           );
           --donation-selector-cc-color--: var(
             --ia-donation-credit-card-button-color,
-            var(--true-white)
+            var(--ia-color-action-secondary-fill--)
           );
         }
 
@@ -310,8 +310,9 @@ export class IADonationPaymentSelector extends LitElement {
         }
 
         .provider-button.loading {
-          border: 1px solid #ddd;
-          border-radius: 2px;
+          border: var(--ia-size-border-width--) solid
+            var(--ia-color-border-subtle--);
+          border-radius: var(--ia-radius-sm--);
           /* Accounts for the border that goes away once the provider loads, so the layout doesn't shift */
           margin-bottom: -2px;
         }
@@ -347,8 +348,8 @@ export class IADonationPaymentSelector extends LitElement {
         .credit-card-button {
           color: var(--donation-selector-cc-font-color--);
           background-color: var(--donation-selector-cc-color--);
-          border: 1px solid var(--mid-gray);
-          border-radius: 4px;
+          border: var(--ia-size-border-width--) solid var(--mid-gray);
+          border-radius: var(--ia-radius-default--);
           cursor: pointer;
           margin: 0;
           padding: calc(var(--donation-selector-base-font-size--) * 0.7)
@@ -372,12 +373,12 @@ export class IADonationPaymentSelector extends LitElement {
         }
 
         button#change-payment-method {
-          margin-top: 10px;
-          margin-bottom: 10px;
-          background: var(--true-white);
-          border: 1px solid;
-          border-radius: 3px;
-          padding: 5px;
+          margin-top: var(--ia-space-2--);
+          margin-bottom: var(--ia-space-2--);
+          background: var(--ia-color-action-secondary-fill--);
+          border: var(--ia-size-border-width--) solid;
+          border-radius: var(--ia-radius-sm--);
+          padding: var(--ia-space-1--);
           cursor: pointer;
         }
 

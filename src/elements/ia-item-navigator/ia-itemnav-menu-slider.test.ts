@@ -379,4 +379,23 @@ describe('IAItemNavMenuSlider', () => {
       expect(close?.getAttribute('aria-label')).to.equal('Close navigation');
     });
   });
+
+  test('draws the drawer from the dark-surface tokens by default', async () => {
+    const el = await sliderWith([provider('a')]);
+    const menu = el.shadowRoot?.querySelector('.menu') as HTMLElement;
+    const content = el.shadowRoot?.querySelector('.content') as HTMLElement;
+
+    // --ia-color-surface-chrome-- (#222222)
+    expect(getComputedStyle(menu).backgroundColor).to.equal('rgb(34, 34, 34)');
+    // --ia-color-text-inverse-- (#ffffff)
+    expect(getComputedStyle(menu).color).to.equal('rgb(255, 255, 255)');
+    // --ia-color-surface-chrome-secondary-- (#333333)
+    expect(getComputedStyle(content).backgroundColor).to.equal(
+      'rgb(51, 51, 51)',
+    );
+    // --ia-color-border-inverse-- (#474747)
+    expect(getComputedStyle(content).borderRightColor).to.equal(
+      'rgb(71, 71, 71)',
+    );
+  });
 });

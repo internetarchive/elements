@@ -1,6 +1,7 @@
 import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { property } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
+import { tokenStyles } from '@src/themes/tokens';
 
 @customElement('ia-book-actions-timer-countdown')
 export class IABookActionsTimerCountdown extends LitElement {
@@ -52,36 +53,39 @@ export class IABookActionsTimerCountdown extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        right: 0;
-        margin-right: 10px;
-        position: absolute;
-      }
+    return [
+      tokenStyles,
+      css`
+        :host {
+          right: 0;
+          margin-right: var(--ia-space-2--);
+          position: absolute;
+        }
 
-      .sr-only {
-        position: absolute;
-        left: -9999px;
-        width: 1px;
-        height: 1px;
-        margin: 0;
-        padding: 0;
-        border: none;
-        overflow: hidden;
-      }
+        .sr-only {
+          position: absolute;
+          left: -9999px;
+          width: 1px;
+          height: 1px;
+          margin: 0;
+          padding: 0;
+          border: none;
+          overflow: hidden;
+        }
 
-      button#timer-counter {
-        cursor: pointer;
-      }
+        button#timer-counter {
+          cursor: pointer;
+        }
 
-      .hide {
-        opacity: 0;
-      }
+        .hide {
+          opacity: 0;
+        }
 
-      .show {
-        opacity: 1;
-      }
-    `;
+        .show {
+          opacity: 1;
+        }
+      `,
+    ];
   }
 }
 

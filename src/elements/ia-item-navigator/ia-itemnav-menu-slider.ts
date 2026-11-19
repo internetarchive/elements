@@ -249,19 +249,19 @@ export class IAItemNavMenuSlider extends LitElement {
           );
           --item-navigator-text-color--: var(
             --item-navigator-text-color,
-            var(--true-white)
+            var(--ia-color-text-inverse--)
           );
           --item-navigator-menu-slider-bg--: var(
             --item-navigator-menu-slider-bg,
-            #212121
+            var(--ia-color-surface-chrome--)
           );
           --item-navigator-active-button-bg--: var(
             --item-navigator-active-button-bg,
-            var(--mid-gray)
+            var(--ia-color-surface-chrome-secondary--)
           );
           --item-navigator-border-color--: var(
             --item-navigator-border-color,
-            #4b4b4b
+            var(--ia-color-border-inverse--)
           );
           /* Every glyph is square, so one knob sizes both axes. */
           --item-navigator-header-icon-size--: var(
@@ -344,8 +344,8 @@ export class IAItemNavMenuSlider extends LitElement {
           /* Reset to the base so the header icon (em) doesn't compound
              against .menu's enlarged font-size. */
           font-size: var(--item-navigator-base-font-size--);
-          min-width: 38px;
-          min-height: 38px;
+          min-width: var(--ia-size-control-md--);
+          min-height: var(--ia-size-control-md--);
           display: flex;
           justify-content: center;
           align-items: center;

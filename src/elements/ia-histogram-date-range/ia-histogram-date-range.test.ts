@@ -63,6 +63,18 @@ describe('IAHistogramDateRange', () => {
     expect(heights).toEqual([38, 7, 50]);
   });
 
+  test('takes its default colors from the design tokens', async () => {
+    const el = await createCustomElementInHTMLContainer();
+    const root = el.shadowRoot as ShadowRoot;
+    const slider = root.querySelector('#slider-min path') as SVGPathElement;
+    const bar = root.querySelector('.bar') as SVGRectElement;
+
+    // --ia-color-selected-strong-fill (navy-700)
+    expect(getComputedStyle(slider).fill).toBe('rgb(25, 72, 128)');
+    // --ia-color-text-primary (gray-850)
+    expect(getComputedStyle(bar).fill).toBe('rgb(44, 44, 44)');
+  });
+
   test('uses linear bar height scaling when specified', async () => {
     const el = await createCustomElementInHTMLContainer();
     el.barScaling = 'linear';

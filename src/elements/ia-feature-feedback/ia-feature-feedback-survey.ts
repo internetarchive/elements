@@ -41,6 +41,7 @@ import { thumbsDown } from './assets/img/thumb-down';
 import './ia-feature-feedback-survey-vote';
 import './ia-feature-feedback-survey-comment';
 import './ia-feature-feedback-survey-extra';
+import { tokenStyles } from '@src/themes/tokens';
 
 @customElement('ia-feature-feedback-survey')
 @localized()
@@ -773,15 +774,15 @@ export class IAFeatureFeedbackSurvey
   }
 
   static get styles(): CSSResultGroup {
-    const blueColor = css`var(--featureFeedbackBlueColor, #194880)`;
-    const darkGrayColorSvgFilter = css`var(--defaultColorSvgFilter, invert(52%) sepia(0%) saturate(1%) hue-rotate(331deg) brightness(87%) contrast(89%))`;
+    const blueColor = css`var(--featureFeedbackBlueColor, var(--ia-color-action-primary-fill--))`;
+    const darkGrayColorSvgFilter = css`var(--defaultColorSvgFilter, invert(43%) sepia(5%) saturate(0%) hue-rotate(352deg) brightness(89%) contrast(88%))`;
 
     const backdropZindex = css`var(--featureFeedbackBackdropZindex, 5)`;
     const modalZindex = css`var(--featureFeedbackModalZindex, 6)`;
 
     const popupMaxWidth = css`var(--featureFeedbackPopupMaxWidth, 300px)`;
-    const popupVerticalPadding = css`var(--featureFeedbackPopupVerticalPadding, 10px)`;
-    const popupHorizontalPadding = css`var(--featureFeedbackPopupHorizontalPadding, 10px)`;
+    const popupVerticalPadding = css`var(--featureFeedbackPopupVerticalPadding, var(--ia-space-2--))`;
+    const popupHorizontalPadding = css`var(--featureFeedbackPopupHorizontalPadding, var(--ia-space-2--))`;
     const popupPadding = css`
       ${popupVerticalPadding} ${popupHorizontalPadding}
     `;
@@ -791,34 +792,34 @@ export class IAFeatureFeedbackSurvey
     const betaButtonBackground = css`var(--featureFeedbackBetaButtonBackground, none)`;
     const betaButtonSvgFilter = css`var(--featureFeedbackBetaButtonSvgFilter, ${darkGrayColorSvgFilter})`;
 
-    const popupBlockerColor = css`var(--featureFeedbackPopupBlockerColor, rgba(255, 255, 255, 0.3))`;
-    const popupBackgroundColor = css`var(--featureFeedbackPopupBackgroundColor, #FBFBFD)`;
+    const popupBlockerColor = css`var(--featureFeedbackPopupBlockerColor, var(--ia-color-surface-scrim--))`;
+    const popupBackgroundColor = css`var(--featureFeedbackPopupBackgroundColor, var(--ia-color-surface-page--))`;
 
-    const upvoteColorSvgFilter = css`var(--upvoteColorSvgFilter, invert(34%) sepia(72%) saturate(357%) hue-rotate(111deg) brightness(97%) contrast(95%))`;
+    const upvoteColorSvgFilter = css`var(--upvoteColorSvgFilter, invert(32%) sepia(61%) saturate(448%) hue-rotate(113deg) brightness(99%) contrast(91%))`;
 
-    const whiteColor = css`var(--white, #fff)`;
+    const whiteColor = css`var(--white, var(--ia-color-action-primary-text--))`;
 
-    const disabledButtonFillColor = css`var(--primaryDisableCTAFill, #767676)`;
-    const disabledButtonBorderColor = css`var(--secondaryCTABorder, #999)`;
+    const disabledButtonFillColor = css`var(--primaryDisableCTAFill, var(--ia-color-action-disabled-fill--))`;
+    const disabledButtonBorderColor = css`var(--secondaryCTABorder, var(--ia-color-action-disabled-border--))`;
 
-    const primaryButtonFillColor = css`var(--primaryCTAFill, #194880)`;
+    const primaryButtonFillColor = css`var(--primaryCTAFill, var(--ia-color-action-primary-fill--))`;
     const primaryButtonFillColorRGB = css`var(--primaryCTAFillRGB, 25, 72, 128)`;
-    const primaryButtonBorderColor = css`var(--primaryCTABorder, #c5d1df)`;
+    const primaryButtonBorderColor = css`var(--primaryCTABorder, var(--ia-color-action-primary-border--))`;
 
-    const darkButtonFillColor = css`var(--secondaryCTAFill, #333)`;
+    const darkButtonFillColor = css`var(--secondaryCTAFill, var(--ia-color-palette-gray-800--))`;
     const darkButtonFillColorRGB = css`var(--secondaryCTAFillRGB, 51, 51, 51)`;
-    const darkButtonBorderColor = css`var(--primaryCTABorder, #979797)`;
+    const darkButtonBorderColor = css`var(--primaryCTABorder, var(--ia-color-action-secondary-border--))`;
 
     const buttonStyles = css`
       .ia-button {
-        min-height: 3rem;
+        min-height: var(--ia-size-control-sm--);
         cursor: pointer;
         color: ${whiteColor};
         line-height: normal;
-        border-radius: 0.4rem;
-        font-size: 1.4rem;
+        border-radius: var(--ia-radius-default--);
+        font-size: var(--ia-font-size-md--);
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        border: 1px solid transparent;
+        border: var(--ia-size-border-width--) solid transparent;
         white-space: nowrap;
         appearance: auto;
         box-sizing: border-box;
@@ -826,7 +827,7 @@ export class IAFeatureFeedbackSurvey
         align-items: center;
         transition: all 0.1s ease 0s;
         vertical-align: middle;
-        padding: 0 3rem;
+        padding: 0 var(--ia-space-6--);
         outline-color: ${whiteColor};
         outline-offset: -4px;
         user-select: none;
@@ -843,7 +844,7 @@ export class IAFeatureFeedbackSurvey
       .ia-button:disabled {
         cursor: not-allowed;
         background-color: ${disabledButtonFillColor};
-        border: 1px solid ${disabledButtonBorderColor};
+        border: var(--ia-size-border-width--) solid ${disabledButtonBorderColor};
       }
 
       .ia-button.primary:disabled,
@@ -886,13 +887,13 @@ export class IAFeatureFeedbackSurvey
       }
 
       #beta-button {
-        font-size: 12px;
+        font-size: var(--ia-font-size-sm--);
         font-weight: bold;
         font-style: italic;
         color: ${betaButtonTextColor};
-        border: 1px solid ${betaButtonBorderColor};
-        border-radius: 4px;
-        padding: 1px 5px;
+        border: var(--ia-size-border-width--) solid ${betaButtonBorderColor};
+        border-radius: var(--ia-radius-default--);
+        padding: 1px var(--ia-space-1--);
         background: ${betaButtonBackground};
         -webkit-appearance: none;
         -moz-appearance: none;
@@ -901,12 +902,12 @@ export class IAFeatureFeedbackSurvey
       }
 
       .beta-button-icon {
-        line-height: 100%;
+        line-height: 1;
       }
 
       .beta-button-icon svg {
-        height: 10px;
-        width: 10px;
+        height: var(--ia-size-icon-xs--);
+        width: var(--ia-size-icon-xs--);
         filter: ${betaButtonSvgFilter};
       }
 
@@ -915,9 +916,9 @@ export class IAFeatureFeedbackSurvey
       }
 
       #error {
-        margin-bottom: 10px;
-        color: red;
-        font-size: 14px;
+        margin-bottom: var(--ia-space-2--);
+        color: var(--ia-color-text-danger--);
+        font-size: var(--ia-font-size-md--);
         text-align: center;
         font-weight: bold;
       }
@@ -942,15 +943,17 @@ export class IAFeatureFeedbackSurvey
       #popup {
         position: absolute;
         max-width: ${popupMaxWidth};
-        max-height: calc(100vh - 2 * ${popupVerticalPadding} - 10px);
+        max-height: calc(
+          100vh - 2 * ${popupVerticalPadding} - var(--ia-space-2--)
+        );
         padding: ${popupPadding};
-        border: 1px ${popupBorderColor} solid;
-        border-radius: 5px;
+        border: var(--ia-size-border-width--) ${popupBorderColor} solid;
+        border-radius: var(--ia-radius-default--);
         background-color: ${popupBackgroundColor};
-        box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        box-shadow: var(--ia-shadow-overlay--);
         z-index: ${modalZindex};
-        margin-left: 10px;
-        margin-right: 10px;
+        margin-left: var(--ia-space-2--);
+        margin-right: var(--ia-space-2--);
         overflow-y: auto;
         scrollbar-width: thin;
       }
@@ -970,14 +973,14 @@ export class IAFeatureFeedbackSurvey
         display: flex;
         justify-content: center;
         align-items: center;
-        column-gap: 10px;
+        column-gap: var(--ia-space-2--);
       }
 
       .cta-button {
-        color: white;
-        font-size: 14px;
-        border-radius: 4px;
-        height: 30px;
+        color: var(--ia-color-action-primary-text--);
+        font-size: var(--ia-font-size-md--);
+        border-radius: var(--ia-radius-default--);
+        height: var(--ia-size-control-sm--);
         margin: 0;
       }
 
@@ -998,7 +1001,7 @@ export class IAFeatureFeedbackSurvey
       }
     `;
 
-    return [buttonStyles, surveyStyles];
+    return [tokenStyles, buttonStyles, surveyStyles];
   }
 }
 
