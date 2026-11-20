@@ -128,23 +128,29 @@ by hand after this.
 ### Republishing the design-system artifact
 
 After a release that changes `tokens/`, `docs/` or a component, republish the
-[design-system artifact](https://claude.ai/artifact/QH1DfJLQ5oA9KQtbnkiL8j) and
-stamp the version and commit in its `lastChange` note and README. It's the org
-default for Claude's decks and designs, so a stale copy spreads.
+[design-system artifact](https://claude.ai/artifact/QH1DfJLQ5oA9KQtbnkiL8j). It's
+the org default for Claude's decks and designs, so a stale copy spreads.
+
+`pnpm run design-system` builds its files into `temp/design-system-artifact/`,
+with the version and commit in their README and headers.
+[scripts/design-system-artifact/README.md](scripts/design-system-artifact/README.md)
+covers publishing them, stamping the artifact's `lastChange` note, and adding a
+component.
 
 - **Every component gets a preview.** A component left out is a gap that
   designs fill by guessing. When one needs a service a preview can't reach
   (Braintree, the lending API, item files, a `<modal-manager>`), preview it over
   mocks instead of dropping it. Start from the repo's own test helpers and story
-  data (`braintree/test-helpers/`, the `*-story.ts` demo data), put the mocks on
-  `IADesignSystem.demo`, and say in the component's README what is mocked and
-  what a real page supplies.
+  data (`braintree/test-helpers/`, the `*-story.ts` demo data), put the mocks in
+  the build's `mocks.ts` (they land on `IADesignSystem.demo`), and say in the
+  component's README what is mocked and what a real page supplies.
 - **Previews make no network requests.** Draw images as SVG data URLs and answer
   fetches locally. Nothing from archive.org or a payment SDK loads in an artifact.
 - **Show each component on the surface it's drawn for.** The player parts and the
   image viewer are drawn for `--ia-color-surface-theater`, and look broken on white.
 - **Check every preview in a browser before publishing:** no runtime errors, no
-  requests off the page.
+  requests off the page. The build's `test/index.html` loads them all and lists
+  each one's errors.
 
 ### Gotchas
 
