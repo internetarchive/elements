@@ -1,0 +1,56 @@
+<!-- @dsCard height=320 -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  html,body{margin:0;background:var(--ia-color-surface-page)}
+  .cover{position:relative;width:960px;height:320px;overflow:hidden;background:var(--ia-color-surface-page);font-family:var(--font-base)}
+  .cover svg{position:absolute;left:0;top:0;display:block}
+  .navy{fill:var(--ia-color-brand-navy);rx:var(--ia-radius-lg)}
+  .chrome{fill:var(--ia-color-surface-chrome);rx:var(--ia-radius-lg)}
+  .tint{fill:var(--ia-color-surface-highlight);rx:var(--ia-radius-lg)}
+  .audio{fill:var(--ia-color-mediatype-audio);rx:var(--ia-radius-lg)}
+  .movies{fill:var(--ia-color-mediatype-movies);rx:var(--ia-radius-lg)}
+  .slab-tile{fill:var(--ia-color-surface-raised);rx:var(--ia-radius-default)}
+  .grid-tile{fill:var(--ia-color-surface-chrome);rx:var(--ia-radius-sm)}
+  h1{position:absolute;left:40px;top:132px;margin:0;font-size:64px;line-height:.95;font-weight:700;color:var(--ia-color-text-primary)}
+  p{position:absolute;left:40px;top:264px;margin:0;font-size:14px;line-height:1.25;color:var(--ia-color-text-secondary)}
+</style></head><body>
+<div class="cover">
+  <svg width="960" height="112" viewBox="0 0 960 112" aria-hidden="true">
+    <!-- blocks: brand-navy 340x112, surface-chrome 200x112, surface-highlight 120x60 over mediatype-audio 120x42, mediatype-movies 130x112.
+         arrangement: a strip of unequal bands bleeding off the top edge, as the item grid composes in rows.
+         pattern: tiles cut by radius-default and radius-sm at a 10px gap (space-2) — "geometric, modular, dense UI": the result tile grid, some tiles merged two-wide.
+         steps: 10, 20, 40, 60, 80, 120; radii: radius-lg on blocks, radius-default and radius-sm on tiles. -->
+    <rect class="navy" x="0" y="0" width="340" height="112"/>
+    <rect class="chrome" x="350" y="0" width="200" height="112"/>
+    <rect class="tint" x="560" y="0" width="120" height="60"/>
+    <rect class="audio" x="560" y="70" width="120" height="42"/>
+    <rect class="movies" x="690" y="0" width="130" height="112"/>
+    <rect class="slab-tile" x="20" y="10" width="90" height="40"/>
+    <rect class="slab-tile" x="120" y="10" width="40" height="40"/>
+    <rect class="slab-tile" x="170" y="10" width="40" height="40"/>
+    <rect class="slab-tile" x="220" y="10" width="40" height="40"/>
+    <rect class="slab-tile" x="270" y="10" width="40" height="40"/>
+    <rect class="slab-tile" x="20" y="60" width="40" height="40"/>
+    <rect class="slab-tile" x="70" y="60" width="40" height="40"/>
+    <rect class="slab-tile" x="120" y="60" width="40" height="40"/>
+    <rect class="slab-tile" x="170" y="60" width="40" height="40"/>
+    <rect class="slab-tile" x="220" y="60" width="40" height="40"/>
+    <rect class="slab-tile" x="270" y="60" width="40" height="40"/>
+    <rect class="grid-tile" x="840" y="10" width="20" height="20"/>
+    <rect class="grid-tile" x="870" y="10" width="20" height="20"/>
+    <rect class="grid-tile" x="900" y="10" width="20" height="20"/>
+    <rect class="grid-tile" x="930" y="10" width="20" height="20"/>
+    <rect class="grid-tile" x="840" y="40" width="20" height="20"/>
+    <rect class="grid-tile" x="870" y="40" width="20" height="20"/>
+    <rect class="grid-tile" x="900" y="40" width="20" height="20"/>
+    <rect class="grid-tile" x="930" y="40" width="20" height="20"/>
+    <rect class="grid-tile" x="840" y="70" width="20" height="20"/>
+    <rect class="grid-tile" x="870" y="70" width="20" height="20"/>
+    <rect class="grid-tile" x="900" y="70" width="20" height="20"/>
+    <rect class="grid-tile" x="930" y="70" width="20" height="20"/>
+  </svg>
+  <h1>Internet Archive<br>Design System</h1>
+  <p>{{Count}} components, tokens and the ia-* class vocabulary.</p>
+</div>
+</body></html>
