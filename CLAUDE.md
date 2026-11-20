@@ -125,10 +125,26 @@ gh release create v0.2.13 --latest --generate-notes --title v0.2.13
 Publishing the release is what triggers `npm-publish.yml`, so nothing gets run
 by hand after this.
 
-After a release that changes `tokens/` or `docs/`, republish the
+### Republishing the design-system artifact
+
+After a release that changes `tokens/`, `docs/` or a component, republish the
 [design-system artifact](https://claude.ai/artifact/QH1DfJLQ5oA9KQtbnkiL8j) and
 stamp the version and commit in its `lastChange` note and README. It's the org
 default for Claude's decks and designs, so a stale copy spreads.
+
+- **Every component gets a preview.** A component left out is a gap that
+  designs fill by guessing. When one needs a service a preview can't reach
+  (Braintree, the lending API, item files, a `<modal-manager>`), preview it over
+  mocks instead of dropping it. Start from the repo's own test helpers and story
+  data (`braintree/test-helpers/`, the `*-story.ts` demo data), put the mocks on
+  `IADesignSystem.demo`, and say in the component's README what is mocked and
+  what a real page supplies.
+- **Previews make no network requests.** Draw images as SVG data URLs and answer
+  fetches locally. Nothing from archive.org or a payment SDK loads in an artifact.
+- **Show each component on the surface it's drawn for.** The player parts and the
+  image viewer are drawn for `--ia-color-surface-theater`, and look broken on white.
+- **Check every preview in a browser before publishing:** no runtime errors, no
+  requests off the page.
 
 ### Gotchas
 
