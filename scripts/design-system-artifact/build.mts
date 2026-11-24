@@ -83,12 +83,14 @@ rmSync(testDir, { recursive: true, force: true });
 const svgPlugin: Plugin = {
   name: 'svg',
   setup(b) {
+    // Relative to the repository: esbuild prints this path in a comment in the
+    // published bundle, and an absolute one would name the build machine.
     b.onResolve({ filter: /\.svg\?raw$/ }, (a) => ({
-      path: join(a.resolveDir, a.path.replace(/\?raw$/, '')),
+      path: relative(root, join(a.resolveDir, a.path.replace(/\?raw$/, ''))),
       namespace: 'raw',
     }));
     b.onLoad({ filter: /.*/, namespace: 'raw' }, (a) => ({
-      contents: readFileSync(a.path, 'utf8'),
+      contents: readFileSync(join(root, a.path), 'utf8'),
       loader: 'text',
     }));
     b.onLoad({ filter: /\.svg$/ }, (a) => ({
@@ -126,6 +128,9 @@ const bundled = await build({
   // register their element from the file `module` names.
   mainFields: ['browser', 'module', 'main'],
   target: 'es2021',
+  // The bundle's module comments are paths relative to this, so keep it the
+  // repository wherever the script is run from.
+  absWorkingDir: root,
   legalComments: 'none',
   tsconfig: join(root, 'tsconfig.json'),
   define: { 'import.meta.env': '{}' },
@@ -137,6 +142,19 @@ const bundled = await build({
 const bundleBody = bundled.outputFiles[0].text.replace(/<!--/g, '\\x3C!--');
 if (/<\/script/i.test(bundleBody)) {
   throw new Error('bundle.js contains "</script"; the artifact inlines it');
+}
+
+// The bundle is published org-wide; it mustn't name the machine it was built
+// on. esbuild comments each module with its path, which has to stay relative
+// to the repository.
+const localPath =
+  /^\s*\/\/ (?:[\w-]+:)?(?:\/(?!\/)|\.\.\/).*$|\/Users\/[^\s'"`]*|\/private\/tmp\/[^\s'"`]*/m.exec(
+    bundleBody,
+  );
+if (localPath) {
+  throw new Error(
+    `bundle.js contains a path from this machine: ${localPath[0].trim()}`,
+  );
 }
 
 const STATIC_COMPONENTS = readdirSync(join(staticDir, 'components'), {
