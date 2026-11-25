@@ -172,7 +172,10 @@ describe('IA OTP form', () => {
     await otp.updateComplete;
 
     const inputs = [...otp.shadowRoot!.querySelectorAll('input')];
+    expect(inputs.length).to.equal(6);
     const box = wrapper.getBoundingClientRect();
+    const indicator = form.shadowRoot!.querySelector('ia-status-indicator')!;
+    expect(indicator.getBoundingClientRect().width).to.be.closeTo(47.88, 0.5);
     expect(inputs[0].getBoundingClientRect().left).to.be.at.least(box.left);
     expect(
       inputs[inputs.length - 1].getBoundingClientRect().right,
@@ -184,7 +187,9 @@ describe('IA OTP form', () => {
     const otp = el.shadowRoot?.querySelector('ia-otp-input') as IAOTPInput;
     await otp.updateComplete;
 
-    for (const input of otp.shadowRoot!.querySelectorAll('input')) {
+    const inputs = otp.shadowRoot!.querySelectorAll('input');
+    expect(inputs.length).to.equal(6);
+    for (const input of inputs) {
       expect(input.getBoundingClientRect().width).to.equal(38);
     }
   });
