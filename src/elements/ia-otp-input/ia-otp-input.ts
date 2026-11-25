@@ -233,7 +233,9 @@ export class IAOTPInput extends LitElement {
           height: calc(var(--font-size-lg--) + var(--ia-space-4--));
           text-align: center;
           text-transform: uppercase;
-          padding: 0 var(--ia-space-1--);
+          padding: 0;
+          /* Shrinks to fit a narrow container rather than overflow it. */
+          min-width: 0;
           border: var(--ia-border-control--);
           border-radius: var(--ia-radius-default--);
         }
