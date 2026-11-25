@@ -15,6 +15,17 @@ import themeStyles from '@src/themes/theme-styles';
 import '../ia-status-indicator/ia-status-indicator';
 
 /**
+ * An ARIA property's value as an attribute value. `null`, `undefined` and `''`
+ * leave the attribute off. Anything else, a boolean `false` from an untyped
+ * binding included, is stringified, so `aria-expanded` can still say "false".
+ */
+function ariaValue(value: unknown): string | typeof nothing {
+  return value === null || value === undefined || value === ''
+    ? nothing
+    : String(value);
+}
+
+/**
  * Renders a standardized button built off the ia-button styling and the activity indicator, with the option to show
  * a loading indicator instead of the text or to customize the text, and the ability to pass in any
  * function to run on click.
@@ -24,17 +35,27 @@ import '../ia-status-indicator/ia-status-indicator';
  * whether the form is submitted via enter or by clicking the button directly, the button will always
  * run doSideEffects() and then submit the form.
  *
- * The inner `<button>` is what takes focus, so that's where its role and ARIA
- * state belong. Set them with the `role`, `ariaChecked`, `ariaDisabled`,
+ * The inner `<button>` takes focus, so that's where its role and ARIA state
+ * belong. Set them with the `role`, `ariaChecked`, `ariaDisabled`,
  * `ariaHasPopup`, `ariaExpanded` and `ariaBusy` properties, e.g.
  * `<ia-button .role=${'menuitemcheckbox'} .ariaChecked=${'false'}>`. These
  * shadow the native ARIA reflection properties, so nothing lands on the host
- * and a screen reader hears the role or state once. A `role` or `aria-*`
- * *attribute* written on `<ia-button>` still stays on the host, as before.
+ * and a screen reader hears the role or state once. `null`, `undefined` and
+ * `''` leave an attribute off; anything else, `false` included, is set as a
+ * string. Note:
+ * - A `role` or `aria-*` *attribute* written on `<ia-button>` stays on the
+ *   host, as before, and these properties don't read it back: with
+ *   `<ia-button aria-disabled="true">`, `ariaDisabled` is `null`.
+ * - Set them once `ia-button` is defined. Before that, the native setter
+ *   writes the attribute onto the host instead.
  *
  * `description` becomes the inner button's accessible description, e.g.
- * "List full". Focus is delegated, so `focus()` on `<ia-button>` focuses the
- * inner button.
+ * "List full". It isn't part of the button's name.
+ *
+ * Focus is delegated, so `focus()` on `<ia-button>` focuses the inner button.
+ * With `href`, the wrapping link is the first thing that can take focus, so
+ * it takes it instead; the ARIA properties and description stay on the
+ * button.
  */
 @customElement('ia-button')
 export class IAButton extends LitElement {
@@ -78,7 +99,7 @@ export class IAButton extends LitElement {
 
   /*
    * Role and ARIA state for the inner button. Property-only (no attribute), so
-   * the host doesn't expose them too. An empty string leaves it off.
+   * the host doesn't expose them too. See the class comment.
    */
   @property({ attribute: false }) role: string | null = null;
 
@@ -98,13 +119,15 @@ export class IAButton extends LitElement {
   render(): TemplateResult {
     // No whitespace between the top-level nodes: a text node in the shadow
     // root renders as a space when the host is display:inline.
-    return html`${this.href
-        ? html`<a
-            href=${this.href}
-            target=${this.openLinksNewTab ? '_blank' : '_self'}
-            >${this.buttonTemplate}</a
-          >`
-        : this.buttonTemplate}${this.descriptionTemplate}<slot name="hidden-button"
+    const control = this.href
+      ? html`<a
+          href=${this.href}
+          target=${this.openLinksNewTab ? '_blank' : '_self'}
+          >${this.buttonTemplate}</a
+        >`
+      : this.buttonTemplate;
+    return html`${control}${this.descriptionTemplate}<slot
+        name="hidden-button"
       ></slot>`;
   }
 
@@ -120,12 +143,12 @@ export class IAButton extends LitElement {
       part="button"
       class=${this.mode}
       ?disabled=${this.disabled || this.loading}
-      role=${this.role || nothing}
-      aria-checked=${this.ariaChecked || nothing}
-      aria-disabled=${this.ariaDisabled || nothing}
-      aria-haspopup=${this.ariaHasPopup || nothing}
-      aria-expanded=${this.ariaExpanded || nothing}
-      aria-busy=${this.ariaBusy || nothing}
+      role=${ariaValue(this.role)}
+      aria-checked=${ariaValue(this.ariaChecked)}
+      aria-disabled=${ariaValue(this.ariaDisabled)}
+      aria-haspopup=${ariaValue(this.ariaHasPopup)}
+      aria-expanded=${ariaValue(this.ariaExpanded)}
+      aria-busy=${ariaValue(this.ariaBusy)}
       aria-describedby=${this.description ? 'description' : nothing}
     >
       ${this.buttonTextTemplate}

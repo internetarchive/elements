@@ -186,6 +186,27 @@ describe('IA button', () => {
       expect(button?.hasAttribute('aria-disabled')).to.equal(false);
     });
 
+    test('sets a boolean false as "false"', async () => {
+      const el = await fixture<IAButton>(html`<ia-button>Menu</ia-button>`);
+      // An untyped binding such as `.ariaExpanded=${this.open}`
+      (el as unknown as { ariaExpanded: boolean }).ariaExpanded = false;
+      await el.updateComplete;
+
+      const button = el.shadowRoot?.querySelector('button');
+      expect(button?.getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    test('leaves an attribute written on the host there', async () => {
+      const el = await fixture<IAButton>(
+        html`<ia-button aria-disabled="true">Go</ia-button>`,
+      );
+
+      const button = el.shadowRoot?.querySelector('button');
+      expect(el.getAttribute('aria-disabled')).to.equal('true');
+      expect(el.ariaDisabled).to.equal(null);
+      expect(button?.hasAttribute('aria-disabled')).to.equal(false);
+    });
+
     test('sets them on the button inside a link too', async () => {
       const el = await fixture<IAButton>(
         html`<ia-button href="/foo" .role=${'menuitem'}>Go</ia-button>`,
@@ -247,6 +268,17 @@ describe('IA button', () => {
       const button = el.shadowRoot?.querySelector('button');
       expect(el.shadowRoot?.activeElement).to.equal(button);
       expect(document.activeElement).to.equal(el);
+    });
+
+    test('focus() on the host focuses the link when there is an href', async () => {
+      const el = await fixture<IAButton>(
+        html`<ia-button href="/foo">Go</ia-button>`,
+      );
+
+      el.focus();
+
+      const link = el.shadowRoot?.querySelector('a');
+      expect(el.shadowRoot?.activeElement).to.equal(link);
     });
   });
 
