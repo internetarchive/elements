@@ -15,7 +15,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Played colour',
     cssVariable: '--ia-theme-scrubber-track-fill-color',
-    defaultValue: '#3272b6',
+    defaultValue: '#3a4fd6',
     inputType: 'color',
   },
   {

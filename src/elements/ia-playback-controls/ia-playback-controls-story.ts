@@ -25,18 +25,18 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Play icon colour',
     cssVariable: '--ia-theme-playback-controls-play-icon-color',
-    defaultValue: '#333333',
+    defaultValue: '#2c2c2c',
     inputType: 'color',
   },
   {
     label: 'Play button size',
     cssVariable: '--ia-theme-playback-controls-play-button-diameter',
-    defaultValue: 4,
+    defaultValue: 44,
     inputType: 'range',
-    min: 2,
-    max: 8,
-    step: 0.5,
-    unit: 'rem',
+    min: 20,
+    max: 80,
+    step: 2,
+    unit: 'px',
   },
 ];
 

@@ -12,6 +12,7 @@ import { localized, msg, str } from '@lit/localize';
 
 import nextResultIcon from './assets/next-result';
 import previousResultIcon from './assets/previous-result';
+import { tokenStyles } from '@src/themes/tokens';
 
 /**
  * Event names emitted by this component
@@ -112,39 +113,45 @@ export class IASearchResultsSwitcher extends LitElement {
   }
 
   static get styles(): CSSResultGroup {
-    return css`
-      :host {
-        --search-switcher-color--: var(--ia-theme-search-switcher-color, #fff);
+    return [
+      tokenStyles,
+      css`
+        :host {
+          --search-switcher-color--: var(
+            --ia-theme-search-switcher-color,
+            var(--ia-color-text-inverse--)
+          );
 
-        color: var(--search-switcher-color--);
-      }
+          color: var(--search-switcher-color--);
+        }
 
-      .container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5em;
-      }
+        .container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5em;
+        }
 
-      button {
-        background: none;
-        border: 0;
-        padding: 0;
-        color: inherit;
-        cursor: pointer;
-      }
+        button {
+          background: none;
+          border: 0;
+          padding: 0;
+          color: inherit;
+          cursor: pointer;
+        }
 
-      .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-      }
-    `;
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+      `,
+    ];
   }
 }

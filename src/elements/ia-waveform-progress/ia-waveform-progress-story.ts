@@ -44,13 +44,13 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Progress fill colour',
     cssVariable: '--ia-theme-waveform-fill-color',
-    defaultValue: '#3272b6',
+    defaultValue: '#3a4fd6',
     inputType: 'color',
   },
   {
     label: 'Zone of silence colour',
     cssVariable: '--ia-theme-waveform-zone-of-silence-color',
-    defaultValue: '#f6e652',
+    defaultValue: '#ffb000',
     inputType: 'color',
   },
   {
