@@ -356,6 +356,13 @@ export class IAPlaybackControls extends LitElement {
           cursor: pointer;
         }
 
+        /* The shared ring, in its dark-surface color. */
+        button:focus-visible {
+          outline: var(--ia-size-focus-ring--) solid
+            var(--ia-color-border-focus-inverse--);
+          outline-offset: var(--ia-size-focus-ring-offset--);
+        }
+
         .jump-btn:active {
           opacity: 0.75;
         }
