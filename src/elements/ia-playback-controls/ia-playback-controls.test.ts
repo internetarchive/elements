@@ -286,4 +286,20 @@ describe('IA Playback Controls', () => {
       ),
     ).to.exist;
   });
+
+  test('rings every button on keyboard focus', async () => {
+    const el = await fixture<IAPlaybackControls>(
+      html`<ia-playback-controls></ia-playback-controls>`,
+    );
+    const buttons = el.shadowRoot!.querySelectorAll('button');
+    expect(buttons.length).to.equal(7);
+
+    for (const button of buttons) {
+      button.focus();
+      expect(button.matches(':focus-visible'), button.id).to.equal(true);
+      const style = getComputedStyle(button);
+      expect(style.outlineStyle, button.id).to.equal('solid');
+      expect(style.outlineWidth, button.id).to.equal('2px');
+    }
+  });
 });

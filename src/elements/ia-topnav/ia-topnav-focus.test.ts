@@ -35,12 +35,16 @@ describe('ia-topnav focus', () => {
     const missing: string[] = [];
     for (const stop of stops) {
       stop.focus();
+      const label = stop.getAttribute('aria-label') ?? stop.textContent;
+      const name = `${stop.tagName.toLowerCase()} "${label?.trim()}"`;
       // A focus with no pointer before it counts as keyboard focus.
-      if (!stop.matches(':focus-visible')) continue;
+      if (!stop.matches(':focus-visible')) {
+        missing.push(`${name} (not focus-visible)`);
+        continue;
+      }
       const style = getComputedStyle(stop);
       if (style.outlineStyle === 'none' || style.outlineWidth === '0px') {
-        const label = stop.getAttribute('aria-label') ?? stop.textContent;
-        missing.push(`${stop.tagName.toLowerCase()} "${label?.trim()}"`);
+        missing.push(name);
       }
     }
     expect(missing, 'stops with no focus ring').to.deep.equal([]);
