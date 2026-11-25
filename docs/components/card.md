@@ -54,7 +54,7 @@ Its one remaining departure is padding: `--ia-space-1` / `--ia-space-4` rather t
 | intro text at weight 200, the count at 500 | 400 and 700 ([D-03](../DECISIONS.md#d-03)) |
 | focused field: `border-color: #66afe9; outline: none` | the universal focus ring ([D-19](../DECISIONS.md#d-19)) |
 | field text `--ia-theme-secondary-text-color` (`#666`) in both; `#8e8e8e` (3.28:1 on white) in iaux's topnav copy | `--ia-color-text-primary`, placeholder `--ia-color-text-secondary` |
-| colors from the topnav's variables (`--grey80`, `--themeFontFamily`, `--activeColor`, `--iconFill`) | tokens; mounted outside the topnav those variables are unset and the field's border declaration is invalid |
+| colors from the topnav's variables (`--grey80`, `--themeFontFamily`, `--activeColor`, `--iconFill`) | tokens, except the field border: a host's `--grey80` still sets it, falling back to `--ia-color-border-strong` |
 
 ## Interactive cards
 
