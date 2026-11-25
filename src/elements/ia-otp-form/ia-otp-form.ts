@@ -152,8 +152,10 @@ export class IAOTPForm extends LitElement {
           min-width: 0;
         }
 
+        /* Only the boxes give up width in a narrow form. */
         ia-status-indicator {
           --icon-width: calc(var(--font-size-lg--) * 1.33);
+          flex-shrink: 0;
         }
 
         .error-msg {
