@@ -78,6 +78,21 @@ describe('IAWaybackSearchForm', () => {
     );
   });
 
+  test('colors the field text from the secondary text hook, then the primary', async () => {
+    const both = await fixture<IAWaybackSearchForm>(
+      html`<ia-wayback-search-form
+        style="--ia-theme-secondary-text-color: rgb(1, 2, 3); --ia-theme-primary-text-color: rgb(4, 5, 6)"
+      ></ia-wayback-search-form>`,
+    );
+    expect(getComputedStyle(inputOf(both)!).color).to.equal('rgb(1, 2, 3)');
+    const primary = await fixture<IAWaybackSearchForm>(
+      html`<ia-wayback-search-form
+        style="--ia-theme-primary-text-color: rgb(4, 5, 6)"
+      ></ia-wayback-search-form>`,
+    );
+    expect(getComputedStyle(inputOf(primary)!).color).to.equal('rgb(4, 5, 6)');
+  });
+
   test('shows the page count the host passes', async () => {
     const el = await fixture<IAWaybackSearchForm>(
       html`<ia-wayback-search-form
@@ -131,5 +146,27 @@ describe('IAWaybackSearchForm', () => {
     el.shadowRoot?.querySelector<HTMLAnchorElement>('p a')?.click();
 
     expect(clicked).toHaveBeenCalledOnce();
+  });
+
+  test('takes its field border from a host-set --grey80', async () => {
+    const el = await fixture<IAWaybackSearchForm>(
+      html`<ia-wayback-search-form
+        style="--grey80: rgb(1, 2, 3)"
+      ></ia-wayback-search-form>`,
+    );
+    const input = el.shadowRoot?.querySelector('input') as HTMLInputElement;
+
+    expect(getComputedStyle(input).borderTopColor).to.equal('rgb(1, 2, 3)');
+  });
+
+  test('draws its field border in the strong border color by default', async () => {
+    const el = await fixture<IAWaybackSearchForm>(
+      html`<ia-wayback-search-form></ia-wayback-search-form>`,
+    );
+    const input = el.shadowRoot?.querySelector('input') as HTMLInputElement;
+
+    expect(getComputedStyle(input).borderTopColor).to.equal(
+      'rgb(102, 102, 102)',
+    );
   });
 });

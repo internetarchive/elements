@@ -106,7 +106,10 @@ still shows live's version of each:
 | Open picker | a custom list of `<button>`s: `#2c2c2c`, 1px `#ddd`, 4px corners, no shadow. Options padded `0 10px` where the placement sets it (search page, homepage) and flush against the edge in the topnav, which doesn't; the selected one tinted white at 30%, no check | the native picker from [dropdown.md](dropdown.md): `--ia-color-surface-inverse`, `--ia-shadow-overlay`, rows padded `--ia-space-4`, a check on the selected one |
 | Large field text | 17px | `--ia-font-size-lg` (16px) |
 
-The table describes live.
+The table describes live. Elements' `ia-dropdown-search-bar` now
+uses the spec's picker (`--ia-color-surface-sunken`, 1px `--ia-color-border-strong`,
+`--ia-radius-default`), `--ia-color-border-strong` borders and `--ia-color-text-primary`
+field text.
 
 `#999`, `#555` and `#f5f5f7` have no token; each is a value this spec retires.
 
@@ -151,7 +154,7 @@ The table describes live.
 | --- | --- |
 | rest | as above |
 | hover | picker fill → `--ia-color-border-subtle`; submit fill → `--ia-color-surface-sunken` |
-| focus | each segment shows the universal ring; the field's ring is drawn inside its border so the neighbors do not hide it |
+| focus | each segment shows the universal ring, drawn inside its border so the neighbors do not hide it |
 | has value | clear button appears |
 | loading | activity indicator replaces the submit glyph; `aria-busy` on the form |
 
