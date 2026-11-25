@@ -147,4 +147,26 @@ describe('IAWaybackSearchForm', () => {
 
     expect(clicked).toHaveBeenCalledOnce();
   });
+
+  test('takes its field border from a host-set --grey80', async () => {
+    const el = await fixture<IAWaybackSearchForm>(
+      html`<ia-wayback-search-form
+        style="--grey80: rgb(1, 2, 3)"
+      ></ia-wayback-search-form>`,
+    );
+    const input = el.shadowRoot?.querySelector('input') as HTMLInputElement;
+
+    expect(getComputedStyle(input).borderTopColor).to.equal('rgb(1, 2, 3)');
+  });
+
+  test('draws its field border in the strong border color by default', async () => {
+    const el = await fixture<IAWaybackSearchForm>(
+      html`<ia-wayback-search-form></ia-wayback-search-form>`,
+    );
+    const input = el.shadowRoot?.querySelector('input') as HTMLInputElement;
+
+    expect(getComputedStyle(input).borderTopColor).to.equal(
+      'rgb(102, 102, 102)',
+    );
+  });
 });
