@@ -1,0 +1,189 @@
+<!-- @dsCard group="general" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+  <style>
+    body{margin:0;padding:24px;background:#fff}
+    /* auto-fit (not auto-fill): empty tracks collapse, so a 1-2 story card
+       fills the width instead of stranding stories in a half-width left
+       column beside phantom empty columns */
+    .ds-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;align-items:start}
+    .ds-grid.ds-col{grid-template-columns:1fr}
+    .ds-cell{border:1px solid #e5e7eb;border-radius:8px;padding:12px;min-width:0;overflow:hidden;transform:translateZ(0)}
+    .ds-cell>h4{margin:0 0 8px;font:600 12px system-ui;color:#6b7280;text-transform:uppercase;letter-spacing:.04em}
+    .ds-single{transform:translateZ(0)}
+  </style>
+</head><body>
+  <div class="ds-grid" id="g"></div>
+  <script>
+var __dsPreview = (() => {
+  var __create = Object.create;
+  var __defProp = Object.defineProperty;
+  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+  var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __getProtoOf = Object.getPrototypeOf;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __esm = (fn, res, err) => function __init() {
+    if (err) throw err[0];
+    try {
+      return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+    } catch (e) {
+      throw err = [e], e;
+    }
+  };
+  var __commonJS = (cb, mod) => function __require() {
+    try {
+      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    } catch (e) {
+      throw mod = 0, e;
+    }
+  };
+  var __export = (target, all) => {
+    for (var name in all)
+      __defProp(target, name, { get: all[name], enumerable: true });
+  };
+  var __copyProps = (to, from, except, desc) => {
+    if (from && typeof from === "object" || typeof from === "function") {
+      for (let key of __getOwnPropNames(from))
+        if (!__hasOwnProp.call(to, key) && key !== except)
+          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+    }
+    return to;
+  };
+  var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
+  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
+    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+    mod
+  ));
+  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+  // <define:import.meta.env>
+  var init_define_import_meta_env = __esm({
+    "<define:import.meta.env>"() {
+    }
+  });
+
+  // ds-raw:__ds_raw__
+  var require_ds_raw = __commonJS({
+    "ds-raw:__ds_raw__"(exports, module) {
+      init_define_import_meta_env();
+      module.exports = window.IADesignSystem;
+    }
+  });
+
+  // shim:react-shim
+  var require_react_shim = __commonJS({
+    "shim:react-shim"(exports, module) {
+      init_define_import_meta_env();
+      var R = window.React;
+      function np(p, k) {
+        var o = {};
+        for (var x in p) if (x !== "children") o[x] = p[x];
+        if (k !== void 0) o.key = k;
+        return o;
+      }
+      function jsx2(t, p, k) {
+        var c = p && p.children;
+        return c === void 0 ? R.createElement(t, np(p, k)) : R.createElement(t, np(p, k), c);
+      }
+      function jsxs(t, p, k) {
+        return R.createElement.apply(R, [t, np(p, k)].concat(p.children));
+      }
+      module.exports = R;
+      module.exports.jsx = jsx2;
+      module.exports.jsxs = jsxs;
+      module.exports.jsxDEV = function(t, p, k, s) {
+        return (s ? jsxs : jsx2)(t, p, k);
+      };
+      module.exports.Fragment = R.Fragment;
+    }
+  });
+
+  // .design-sync/previews/IAHistogramDateRange.tsx
+  var IAHistogramDateRange_exports = {};
+  __export(IAHistogramDateRange_exports, {
+    Default: () => Default,
+    Disabled: () => Disabled,
+    Loading: () => Loading,
+    RangeSelected: () => RangeSelected
+  });
+  init_define_import_meta_env();
+
+  // ds-shim:ds
+  var ds_exports = {};
+  __export(ds_exports, {
+    default: () => ds_default
+  });
+  init_define_import_meta_env();
+  __reExport(ds_exports, __toESM(require_ds_raw()));
+  var g = window.IADesignSystem;
+  var ds_default = "default" in g ? g.default : g;
+
+  // .design-sync/previews/IAHistogramDateRange.tsx
+  var import_jsx_runtime = __toESM(require_react_shim(), 1);
+  var bins = [3, 8, 15, 40, 90, 130, 175, 140, 95, 60, 30, 12, 4];
+  var facet = {
+    "--histogramDateRangeBarIncludedFill": "var(--ia-color-border-strong)",
+    "--histogramDateRangeBarExcludedFill": "var(--ia-color-border-default)",
+    "--histogramDateRangeSliderColor": "var(--ia-color-text-link)",
+    "--histogramDateRangeSelectedRangeColor": "var(--ia-color-surface-sunken)",
+    "--histogramDateRangeActivityIndicator": "var(--ia-color-text-primary)",
+    "--histogramDateRangeInputBorder": "var(--ia-size-border-width) solid var(--ia-color-border-strong)",
+    "--histogramDateRangeInputFontFamily": "var(--ia-font-family-base)",
+    "--histogramDateRangeInputFontSize": "var(--ia-font-size-sm)",
+    "--histogramDateRangeTooltipBackgroundColor": "var(--ia-color-surface-inverse)",
+    "--histogramDateRangeTooltipTextColor": "var(--ia-color-text-inverse)",
+    "--histogramDateRangeTooltipFontFamily": "var(--ia-font-family-base)",
+    "--histogramDateRangeTooltipFontSize": "var(--ia-font-size-xs)"
+  };
+  var Default = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ds_exports.IAHistogramDateRange, { style: facet, bins, minDate: "1975", maxDate: "2025" });
+  var RangeSelected = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ds_exports.IAHistogramDateRange, { style: facet, bins, minDate: "1975", maxDate: "2025", minSelectedDate: "1990", maxSelectedDate: "2010" });
+  var Loading = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ds_exports.IAHistogramDateRange, { style: facet, bins, minDate: "1975", maxDate: "2025", loading: true });
+  var Disabled = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ds_exports.IAHistogramDateRange, { style: facet, bins, minDate: "1975", maxDate: "2025", disabled: true });
+  return __toCommonJS(IAHistogramDateRange_exports);
+})();
+</script>
+  <script>
+    var h=React.createElement, g=document.getElementById('g');
+    var E=[]; for (var k in (window.__dsPreview||{})) {
+      if (typeof window.__dsPreview[k]==='function' && /^[A-Z]/.test(k)) E.push(k);
+    }
+    window.__dsCells=E.slice();
+    var q=null; try{q=new URLSearchParams(location.search).get('story')}catch(e){}
+    var MODE="grid";
+    window.__dsMode=MODE;
+    var PRIMARY="";
+    if(MODE==='column'){
+      g.className+=' ds-col';
+      // primaryStory renders first — it's what shows above the product's fold.
+      var cpi=PRIMARY?E.indexOf(PRIMARY):-1;
+      if(cpi>0){E.splice(cpi,1);E.unshift(PRIMARY)}
+    }
+    function mount(id,key){try{ReactDOM.createRoot(document.getElementById(id)).render(h(window.__dsPreview[key]))}catch(e){document.getElementById(id).textContent='⚠ '+(e&&e.message||e)}}
+    var pick=null;
+    if(q){for(var j=0;j<E.length;j++){if(E[j]===q||E[j].toLowerCase()===q.toLowerCase()){pick=E[j];break}}}
+    else if(MODE==='single'&&E.length){pick=E.indexOf(PRIMARY)>=0?PRIMARY:E[0]}
+    if(q&&!pick){g.textContent='⚠ no export named '+q}
+    else if(pick){
+      var s=document.createElement('div'); s.className='ds-single'; s.id='r0';
+      // The PRODUCT's default single render is full-bleed: a full-viewport
+      // story root (100vh / Grommet full) plus body padding guarantees a
+      // permanent 48px whitespace scrollbar in the card otherwise. Gated on
+      // !q so ?story= captures keep the padding gutter — the graded framing
+      // (and its edge-shadow room vs the storybook reference) stays
+      // byte-identical to what every existing verdict was minted on.
+      if(!q)document.body.style.padding='0';
+      g.parentNode.replaceChild(s,g); mount('r0',pick);
+    } else {
+      for(var i=0;i<E.length;i++){
+        var cell=document.createElement('section'); cell.className='ds-cell';
+        cell.innerHTML='<h4>'+E[i]+'</h4><div id="r'+i+'"></div>'; g.appendChild(cell);
+        mount('r'+i,E[i]);
+      }
+      if(E.length===0){g.textContent='⚠ no PascalCase exports in _preview/IAHistogramDateRange.js'}
+    }
+  </script>
+</body></html>
