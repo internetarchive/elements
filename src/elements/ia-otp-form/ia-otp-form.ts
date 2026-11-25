@@ -138,12 +138,18 @@ export class IAOTPForm extends LitElement {
           justify-content: center;
         }
 
+        /* No wider than the form, so the boxes shrink on a narrow screen. */
         .input-section {
           display: flex;
           flex-direction: row;
           align-items: center;
           justify-content: center;
           gap: var(--ia-space-1--);
+          max-width: 100%;
+        }
+
+        ia-otp-input {
+          min-width: 0;
         }
 
         ia-status-indicator {

@@ -161,4 +161,31 @@ describe('IA OTP form', () => {
     const errorMessage = el.shadowRoot?.querySelector('.error-msg');
     expect(errorMessage).to.exist;
   });
+
+  test('keeps the boxes inside a 248px column, as on a 320px phone', async () => {
+    const wrapper = await fixture<HTMLDivElement>(
+      html`<div style="width: 248px"><ia-otp-form></ia-otp-form></div>`,
+    );
+    const form = wrapper.querySelector('ia-otp-form') as IAOTPForm;
+    await form.updateComplete;
+    const otp = form.shadowRoot?.querySelector('ia-otp-input') as IAOTPInput;
+    await otp.updateComplete;
+
+    const inputs = [...otp.shadowRoot!.querySelectorAll('input')];
+    const box = wrapper.getBoundingClientRect();
+    expect(inputs[0].getBoundingClientRect().left).to.be.at.least(box.left);
+    expect(
+      inputs[inputs.length - 1].getBoundingClientRect().right,
+    ).to.be.at.most(box.right);
+  });
+
+  test('draws each box 38px wide when there is room', async () => {
+    const el = await fixture<IAOTPForm>(html`<ia-otp-form></ia-otp-form>`);
+    const otp = el.shadowRoot?.querySelector('ia-otp-input') as IAOTPInput;
+    await otp.updateComplete;
+
+    for (const input of otp.shadowRoot!.querySelectorAll('input')) {
+      expect(input.getBoundingClientRect().width).to.equal(38);
+    }
+  });
 });

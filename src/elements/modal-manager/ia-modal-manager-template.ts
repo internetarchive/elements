@@ -167,7 +167,7 @@ export class IAModalManagerTemplate extends LitElement {
     const modalBottomPadding = css`var(--modalBottomPadding, var(--ia-space-4--))`;
     const scrollOffset = css`var(--modalScrollOffset, var(--ia-space-1--))`;
 
-    const titleFontSize = css`var(--modalTitleFontSize, var(--ia-font-size-lg--))`;
+    const titleFontSize = css`var(--modalTitleFontSize, var(--ia-font-size-xl--))`;
     const subtitleFontSize = css`var(--modalSubtitleFontSize, var(--ia-font-size-md--))`;
     const headlineFontSize = css`var(--modalHeadlineFontSize, var(--ia-font-size-lg--))`;
     const messageFontSize = css`var(--modalMessageFontSize, var(--ia-font-size-md--))`;

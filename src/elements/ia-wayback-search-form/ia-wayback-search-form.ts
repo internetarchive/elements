@@ -187,6 +187,8 @@ export class IAWaybackSearchForm extends LitElement {
           color: var(--wayback-search-input-text-color--);
           box-sizing: border-box;
           border: var(--ia-border-control--);
+          /* A host's --grey80 has always set this border. */
+          border-color: var(--grey80, var(--ia-color-border-strong--));
           border-radius: var(--ia-radius-pill--);
           background: var(--wayback-search-input-bg--);
         }

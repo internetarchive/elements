@@ -114,7 +114,7 @@ export class IAImageViewerControls extends LitElement {
         .nav-btn:focus-visible {
           outline: var(--ia-size-focus-ring--) solid
             var(--ia-color-border-focus-inverse--);
-          outline-offset: calc(-1 * var(--ia-size-focus-ring-offset--));
+          outline-offset: calc(-1 * var(--ia-size-focus-ring--));
         }
 
         .counter {
