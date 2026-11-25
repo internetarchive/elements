@@ -214,13 +214,11 @@ export class IAUserListSettingsStory extends LitElement {
             <code>userListSaved</code> with the saved list as
             <code>detail</code>, <code>userListError</code> with the error in
             <code>detail.error</code>, and <code>listModalClosed</code> on
-            Cancel. Save is disabled while a save is in progress. Saving a new
-            list clears the form. A failed save shows an error message in the
-            form, which clears on the next save or when
-            <code>userList</code> changes; tick "Make saves fail" to see it.
-            Failed saves are also reported to Sentry through
-            <code>window.Sentry</code>, when the page has it, unless the browser
-            is offline.
+            Cancel. While a save is in progress, Save is disabled and reads
+            "Saving…" beside a spinner. Saving a new list clears the form. A
+            failed save shows an error message in the form, which clears on the
+            next save or when <code>userList</code> changes; tick "Make saves
+            fail" to see it.
           </p>
           <p>
             Parts for styling: <code>form</code>, <code>error</code>,

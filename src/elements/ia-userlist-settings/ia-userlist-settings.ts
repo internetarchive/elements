@@ -14,7 +14,7 @@ import themeStyles from '@src/themes/theme-styles';
 
 import type { Result } from '@src/services/result-type/result-type';
 import type { UserListServiceInterface } from '@src/services/userlist-service/userlist-service-interface';
-import { UserListError } from '@src/services/userlist-service/userlist-error';
+import type { UserListError } from '@src/services/userlist-service/userlist-error';
 import type {
   UserList,
   UserListOptions,
@@ -22,8 +22,6 @@ import type {
 import type { UserListModel } from './models';
 
 import '@src/elements/ia-button/ia-button';
-import '@src/utils/sentry-global';
-import '@src/elements/ia-status-indicator/ia-status-indicator';
 
 export type { UserListModel } from './models';
 
@@ -36,8 +34,7 @@ export type { UserListModel } from './models';
  * @fires userListSaved - The list was saved; `detail` is the saved `UserList`
  * @fires userListError - The save failed; `detail.error` holds the error
  *
- * A failed save shows an error message in the form and is reported to Sentry
- * through `window.Sentry`, when the page has it.
+ * A failed save shows an error message in the form.
  */
 @customElement('ia-userlist-settings')
 @localized()
@@ -106,7 +103,7 @@ export class IAUserListSettings extends LitElement {
       if (!response.success) throw response.error;
       this.handleSaveSuccess(response.success, listId);
     } catch (error) {
-      this.handleSaveError(error, listId);
+      this.handleSaveError(error);
     }
   }
 
@@ -140,7 +137,7 @@ export class IAUserListSettings extends LitElement {
     );
   }
 
-  private handleSaveError(error: unknown, listId?: string): void {
+  private handleSaveError(error: unknown): void {
     this.dispatchEvent(
       new CustomEvent('userListError', {
         detail: { error },
@@ -149,26 +146,6 @@ export class IAUserListSettings extends LitElement {
 
     this.saving = false;
     this.saveFailed = true;
-    this.reportError(error, listId);
-  }
-
-  /** Reports a failed save to Sentry, unless the user is offline */
-  private reportError(error: unknown, listId?: string): void {
-    // Offline isn't something we can fix
-    if (!navigator.onLine) return;
-
-    window.Sentry?.captureException(error, {
-      tags: {
-        component: 'ia-userlist-settings',
-        operation: listId ? 'update' : 'create',
-      },
-      extra: {
-        listId,
-        // The service's failure reason isn't in the message, so Sentry
-        // wouldn't otherwise see it
-        reason: error instanceof UserListError ? error.reason : undefined,
-      },
-    });
   }
 
   /** The list details as typed into the form */
@@ -249,10 +226,10 @@ export class IAUserListSettings extends LitElement {
         id="save-list-settings"
         part="save-button"
         .disabled=${this.saving}
+        .loading=${this.saving}
+        .loadingText=${msg('Saving…')}
       >
-        ${this.saving
-          ? html`<ia-status-indicator></ia-status-indicator>`
-          : msg('Save')}
+        ${msg('Save')}
       </ia-button>
     </div>`;
   }
@@ -331,11 +308,6 @@ export class IAUserListSettings extends LitElement {
         .error {
           margin: 0;
           color: var(--color-danger--);
-        }
-
-        /* The saving indicator takes the Save button's text color */
-        #save-list-settings ia-status-indicator {
-          --ia-theme-primary-text-color: currentColor;
         }
 
         .footer {

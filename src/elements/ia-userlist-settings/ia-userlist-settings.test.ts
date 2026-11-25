@@ -288,7 +288,7 @@ describe('ia-userlist-settings', () => {
     expect(service.calls).to.have.length(1);
   });
 
-  test('shows a white saving indicator in Save while saving', async () => {
+  test('shows a named, white saving indicator in Save while saving', async () => {
     const service = new MockUserListService();
     service.delay = 200;
     const el = await fixture<IAUserListSettings>(
@@ -300,8 +300,15 @@ describe('ia-userlist-settings', () => {
     const saved = oneEvent(el, 'userListSaved');
     fillAndSave(el, { name: 'New list', description: '', isPrivate: false });
     await el.updateComplete;
+    const { save } = fields(el);
+    await save.updateComplete;
 
-    const indicator = fields(el).save.querySelector('ia-status-indicator')!;
+    // The button still has an accessible name while the indicator shows
+    const button = save.shadowRoot!.querySelector('button')!;
+    expect(button.disabled).to.be.true;
+    expect(button.textContent?.trim()).to.equal('Saving…');
+
+    const indicator = button.querySelector('ia-status-indicator')!;
     await indicator.updateComplete;
     const ring = indicator.shadowRoot!.querySelector('.loading-ring')!;
     const dots = indicator.shadowRoot!.querySelector('.loading-dots')!;
@@ -309,6 +316,9 @@ describe('ia-userlist-settings', () => {
     expect(getComputedStyle(dots).fill).to.equal('rgb(255, 255, 255)');
 
     await saved;
+    await save.updateComplete;
+    expect(button.querySelector('ia-status-indicator')).to.be.null;
+    expect(save.textContent?.trim()).to.equal('Save');
   });
 
   test('clears the form once a new list is saved', async () => {
@@ -626,98 +636,6 @@ describe('ia-userlist-settings', () => {
 
       const event = (await failed) as CustomEvent<{ error: UserListError }>;
       expect(event.detail.error.reason).to.equal(UserListErrorReason.NETWORK);
-    });
-  });
-
-  describe('Sentry', () => {
-    const originalSentry = window.Sentry;
-
-    afterEach(() => {
-      window.Sentry = originalSentry;
-    });
-
-    /** Saves the form against a service whose saves fail, and waits for it */
-    const failSave = async (list?: UserListModel) => {
-      const service = new MockUserListService();
-      service.saveError = new UserListError(
-        UserListErrorReason.BAD_RESPONSE,
-        'Bad Request',
-      );
-      const el = await fixture<IAUserListSettings>(
-        html`<ia-userlist-settings
-          .userList=${list}
-          .userListsService=${service}
-        ></ia-userlist-settings>`,
-      );
-
-      const failed = oneEvent(el, 'userListError');
-      fillAndSave(el, { name: 'A list', description: '', isPrivate: false });
-      await failed;
-      await el.updateComplete;
-      return { el, error: service.saveError };
-    };
-
-    test('reports a failed create with its operation and reason', async () => {
-      window.Sentry = { captureMessage: vi.fn(), captureException: vi.fn() };
-
-      const { error } = await failSave();
-
-      expect(window.Sentry.captureException).toHaveBeenCalledOnce();
-      expect(window.Sentry.captureException).toHaveBeenCalledWith(error, {
-        tags: { component: 'ia-userlist-settings', operation: 'create' },
-        extra: {
-          listId: undefined,
-          reason: UserListErrorReason.BAD_RESPONSE,
-        },
-      });
-    });
-
-    test('reports a failed update with the list id', async () => {
-      window.Sentry = { captureMessage: vi.fn(), captureException: vi.fn() };
-
-      const { error } = await failSave(userList);
-
-      expect(window.Sentry.captureException).toHaveBeenCalledWith(error, {
-        tags: { component: 'ia-userlist-settings', operation: 'update' },
-        extra: {
-          listId: 'initial-list-id',
-          reason: UserListErrorReason.BAD_RESPONSE,
-        },
-      });
-    });
-
-    test('does not report a failure while offline', async () => {
-      window.Sentry = { captureMessage: vi.fn(), captureException: vi.fn() };
-      vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false);
-
-      await failSave();
-
-      expect(window.Sentry.captureException).not.toHaveBeenCalled();
-    });
-
-    test('does not report a successful save', async () => {
-      window.Sentry = { captureMessage: vi.fn(), captureException: vi.fn() };
-      const el = await fixture<IAUserListSettings>(
-        html`<ia-userlist-settings
-          .userListsService=${new MockUserListService()}
-        ></ia-userlist-settings>`,
-      );
-
-      const saved = oneEvent(el, 'userListSaved');
-      fillAndSave(el, { name: 'A list', description: '', isPrivate: false });
-      await saved;
-
-      expect(window.Sentry.captureException).not.toHaveBeenCalled();
-    });
-
-    test('still shows the error on a page without Sentry', async () => {
-      window.Sentry = undefined;
-
-      const { el } = await failSave();
-
-      expect(
-        el.shadowRoot!.querySelector('.error')?.textContent?.trim(),
-      ).to.equal('The list could not be saved. Please try again.');
     });
   });
 
