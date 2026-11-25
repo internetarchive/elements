@@ -4,6 +4,7 @@ import {
   TemplateResult,
   CSSResultGroup,
   css,
+  nothing,
   PropertyValues,
   render,
 } from 'lit';
@@ -22,9 +23,26 @@ import '../ia-status-indicator/ia-status-indicator';
  * i.e. for an <ia-button type="submit" @click=${doSideEffects}></ia-button>,
  * whether the form is submitted via enter or by clicking the button directly, the button will always
  * run doSideEffects() and then submit the form.
+ *
+ * The inner `<button>` is what takes focus, so that's where its role and ARIA
+ * state belong. Set them with the `role`, `ariaChecked`, `ariaDisabled`,
+ * `ariaHasPopup`, `ariaExpanded` and `ariaBusy` properties, e.g.
+ * `<ia-button .role=${'menuitemcheckbox'} .ariaChecked=${'false'}>`. These
+ * shadow the native ARIA reflection properties, so nothing lands on the host
+ * and a screen reader hears the role or state once. A `role` or `aria-*`
+ * *attribute* written on `<ia-button>` still stays on the host, as before.
+ *
+ * `description` becomes the inner button's accessible description, e.g.
+ * "List full". Focus is delegated, so `focus()` on `<ia-button>` focuses the
+ * inner button.
  */
 @customElement('ia-button')
 export class IAButton extends LitElement {
+  static shadowRootOptions: ShadowRootInit = {
+    ...LitElement.shadowRootOptions,
+    delegatesFocus: true,
+  };
+
   /* Which version of the button to display */
   @property({ type: String }) mode:
     | 'primary'
@@ -58,6 +76,25 @@ export class IAButton extends LitElement {
   /* Whether to add a target="_blank" to any wrapping link */
   @property({ type: Boolean }) openLinksNewTab: boolean = false;
 
+  /*
+   * Role and ARIA state for the inner button. Property-only (no attribute), so
+   * the host doesn't expose them too. An empty string leaves it off.
+   */
+  @property({ attribute: false }) role: string | null = null;
+
+  @property({ attribute: false }) ariaChecked: string | null = null;
+
+  @property({ attribute: false }) ariaDisabled: string | null = null;
+
+  @property({ attribute: false }) ariaHasPopup: string | null = null;
+
+  @property({ attribute: false }) ariaExpanded: string | null = null;
+
+  @property({ attribute: false }) ariaBusy: string | null = null;
+
+  /* The inner button's accessible description, e.g. "List full" */
+  @property({ type: String }) description: string = '';
+
   render(): TemplateResult {
     // No whitespace between the top-level nodes: a text node in the shadow
     // root renders as a space when the host is display:inline.
@@ -67,7 +104,8 @@ export class IAButton extends LitElement {
             target=${this.openLinksNewTab ? '_blank' : '_self'}
             >${this.buttonTemplate}</a
           >`
-        : this.buttonTemplate}<slot name="hidden-button"></slot>`;
+        : this.buttonTemplate}${this.descriptionTemplate}<slot name="hidden-button"
+      ></slot>`;
   }
 
   protected willUpdate(changed: PropertyValues): void {
@@ -82,9 +120,26 @@ export class IAButton extends LitElement {
       part="button"
       class=${this.mode}
       ?disabled=${this.disabled || this.loading}
+      role=${this.role || nothing}
+      aria-checked=${this.ariaChecked || nothing}
+      aria-disabled=${this.ariaDisabled || nothing}
+      aria-haspopup=${this.ariaHasPopup || nothing}
+      aria-expanded=${this.ariaExpanded || nothing}
+      aria-busy=${this.ariaBusy || nothing}
+      aria-describedby=${this.description ? 'description' : nothing}
     >
       ${this.buttonTextTemplate}
     </button>`;
+  }
+
+  /*
+   * The description, in the shadow root because aria-describedby can't point
+   * across it. Outside the button, so it isn't part of the button's name, and
+   * hidden, since aria-describedby still reads a hidden element.
+   */
+  private get descriptionTemplate(): TemplateResult | typeof nothing {
+    if (!this.description) return nothing;
+    return html`<span id="description" hidden>${this.description}</span>`;
   }
 
   /* The text to render within the button */

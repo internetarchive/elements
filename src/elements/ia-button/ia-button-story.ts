@@ -66,6 +66,55 @@ const propInputSettings: PropInputSettings<IAButton>[] = [
     inputType: 'radio',
     radioOptions: [true, false],
   },
+  {
+    label: 'Role',
+    propertyName: 'role',
+    defaultValue: '',
+    inputType: 'text',
+    section: 'Accessibility (set on the inner button)',
+  },
+  {
+    label: 'aria-checked',
+    propertyName: 'ariaChecked',
+    defaultValue: '',
+    inputType: 'text',
+    section: 'Accessibility (set on the inner button)',
+  },
+  {
+    label: 'aria-disabled',
+    propertyName: 'ariaDisabled',
+    defaultValue: '',
+    inputType: 'text',
+    section: 'Accessibility (set on the inner button)',
+  },
+  {
+    label: 'aria-haspopup',
+    propertyName: 'ariaHasPopup',
+    defaultValue: '',
+    inputType: 'text',
+    section: 'Accessibility (set on the inner button)',
+  },
+  {
+    label: 'aria-expanded',
+    propertyName: 'ariaExpanded',
+    defaultValue: '',
+    inputType: 'text',
+    section: 'Accessibility (set on the inner button)',
+  },
+  {
+    label: 'aria-busy',
+    propertyName: 'ariaBusy',
+    defaultValue: '',
+    inputType: 'text',
+    section: 'Accessibility (set on the inner button)',
+  },
+  {
+    label: 'Description',
+    propertyName: 'description',
+    defaultValue: '',
+    inputType: 'text',
+    section: 'Accessibility (set on the inner button)',
+  },
 ];
 
 const styleInputSettings: StyleInputSettings[] = [
