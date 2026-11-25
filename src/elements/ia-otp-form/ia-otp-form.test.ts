@@ -174,9 +174,9 @@ describe('IA OTP form', () => {
     const inputs = [...otp.shadowRoot!.querySelectorAll('input')];
     const box = wrapper.getBoundingClientRect();
     expect(inputs[0].getBoundingClientRect().left).to.be.at.least(box.left);
-    expect(inputs.at(-1)!.getBoundingClientRect().right).to.be.at.most(
-      box.right,
-    );
+    expect(
+      inputs[inputs.length - 1].getBoundingClientRect().right,
+    ).to.be.at.most(box.right);
   });
 
   test('draws each box 38px wide when there is room', async () => {
