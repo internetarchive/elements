@@ -28,4 +28,30 @@ describe('<ia-topnav-icon-hamburger>', () => {
 
     expect(titleId()).to.equal('hamburgerTitleID');
   });
+
+  test('draws the close icon in the active color, the menu icon in the icon color', async () => {
+    const icon = await fixture<HamBurger>(
+      html`<ia-topnav-icon-hamburger
+        style="--iconFill: rgb(1, 2, 3); --activeColor: rgb(4, 5, 6)"
+      ></ia-topnav-icon-hamburger>`,
+    );
+    const color = () =>
+      getComputedStyle(icon.shadowRoot!.querySelector('svg')!).color;
+
+    expect(color()).to.equal('rgb(1, 2, 3)');
+
+    icon.active = true;
+    await icon.updateComplete;
+    expect(color()).to.equal('rgb(4, 5, 6)');
+  });
+
+  test('falls back to the inverse text colors on its own', async () => {
+    const icon = await fixture<HamBurger>(
+      html`<ia-topnav-icon-hamburger
+        .active=${true}
+      ></ia-topnav-icon-hamburger>`,
+    );
+    const svg = icon.shadowRoot!.querySelector('svg')!;
+    expect(getComputedStyle(svg).color).to.equal('rgb(255, 255, 255)');
+  });
 });
