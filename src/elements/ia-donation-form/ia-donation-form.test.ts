@@ -41,6 +41,25 @@ describe('IADonationForm', () => {
     expect(el.donationRequest).to.be.undefined;
   });
 
+  // The button is hidden until a payment method is chosen, so this reads the
+  // rule rather than hovering it.
+  test("hovers the donate button in its hover color alone, so a host's shows as set", async () => {
+    const el = await fixture<IADonationForm>(
+      html`<ia-donation-form></ia-donation-form>`,
+    );
+    const rule = el
+      .shadowRoot!.adoptedStyleSheets.flatMap((sheet) => [...sheet.cssRules])
+      .find(
+        (r): r is CSSStyleRule =>
+          r instanceof CSSStyleRule &&
+          r.selectorText === '#donate-button:hover',
+      )!;
+    expect(rule.style.backgroundColor).to.equal(
+      'var(--donation-form-donate-button-hover-color--)',
+    );
+    expect(rule.style.filter).to.equal('');
+  });
+
   test('updates donationInfo when the donor changes it in the header', async () => {
     const el = await fixture<IADonationForm>(
       html`<ia-donation-form

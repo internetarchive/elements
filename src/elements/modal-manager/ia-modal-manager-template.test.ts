@@ -277,4 +277,32 @@ describe('Modal Manager Template', () => {
     ) as HTMLElement;
     expect(getComputedStyle(indicator).display).to.equal('none');
   });
+
+  test('draws the body text and header text from the tokens', async () => {
+    const el = await fixture<IAModalManagerTemplate>(html`
+      <ia-modal-manager-template></ia-modal-manager-template>
+    `);
+
+    const body = el.shadowRoot?.querySelector('.modal-body') as HTMLElement;
+    const header = el.shadowRoot?.querySelector('header') as HTMLElement;
+    // --ia-color-text-primary-- (#2c2c2c)
+    expect(getComputedStyle(body).color).to.equal('rgb(44, 44, 44)');
+    // --ia-color-text-inverse-- (#ffffff)
+    expect(getComputedStyle(header).color).to.equal('rgb(255, 255, 255)');
+  });
+
+  test('sets the title larger than the headline by default', async () => {
+    const config = new ModalConfig();
+    config.title = html`Boop`;
+    config.headline = html`Foo`;
+
+    const el = await fixture<IAModalManagerTemplate>(html`
+      <ia-modal-manager-template .config=${config}></ia-modal-manager-template>
+    `);
+
+    const size = (selector: string) =>
+      getComputedStyle(el.shadowRoot!.querySelector(selector)!).fontSize;
+    expect(size('h1.title')).to.equal('20px');
+    expect(size('h1.headline')).to.equal('16px');
+  });
 });

@@ -36,13 +36,13 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Upvote color',
     cssVariable: '--upvoteColor',
-    defaultValue: '#23765D',
+    defaultValue: '#20705a',
     inputType: 'color',
   },
   {
     label: 'Downvote color',
     cssVariable: '--downvoteColor',
-    defaultValue: '#720D11',
+    defaultValue: '#b8161c',
     inputType: 'color',
   },
 ];

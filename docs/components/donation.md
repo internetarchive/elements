@@ -70,6 +70,12 @@ The headline is a `<div>`, not a heading. A form of several steps needs an outli
 the page gives each step a real heading and leaves `headline` empty, or the component
 gains a heading level.
 
+### The live component
+
+`ia-donation-section` takes its badge colors, weights and motion from the tokens. It
+still sizes everything from `--ia-donation-section-base-font-size` (10px), so its badge
+is 24px and its text 18px — off the type scale, between `lg` and `xl`.
+
 ## Amount picker
 
 The amounts a donor picks from, one button each, and a custom amount field. Its own
@@ -85,7 +91,8 @@ look, which stands apart from the system's selected tiers: the chosen amount is 
 | Custom amount field | `var(--ia-border-control)` |
 
 Each amount is a radio, so the chosen one carries `aria-checked` as well as the gold:
-the color is never the only cue.
+the color is never the only cue. `ia-donation-edit-donation` reads these through its own
+`--ia-donation-edit-button-*` variables, which override each.
 
 ## Don't
 

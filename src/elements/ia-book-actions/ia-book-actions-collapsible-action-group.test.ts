@@ -60,6 +60,27 @@ describe('<ia-book-actions-collapsible-action-group>', () => {
     expect(primaryButton.innerText).to.equal('Borrow');
   });
 
+  test('draws a warning action amber with dark text', async () => {
+    const el = await fixture<IABookActionsCollapsibleActionGroup>(
+      container({
+        primaryActions: [
+          {
+            analyticsEvent: { action: '', category: '' },
+            className: 'warning',
+            text: 'Log In and Join Waitlist',
+            id: 'loginAndWaitlist',
+          },
+        ],
+      }),
+    );
+    const button =
+      el.shadowRoot!.querySelector<HTMLElement>('.ia-button.warning')!;
+    const style = getComputedStyle(button);
+    // --ia-color-action-warning-fill and --ia-color-action-warning-text
+    expect(style.backgroundColor).to.equal('rgb(255, 176, 0)');
+    expect(style.color).to.equal('rgb(44, 44, 44)');
+  });
+
   test('check if loader is active and action-group is disabled', async () => {
     const el = await fixture<IABookActionsCollapsibleActionGroup>(container());
 

@@ -105,6 +105,11 @@ export class IADonationCreditCardFields extends LitElement {
    * The element renders into the light DOM, so instead of a `styles` block
    * it writes its own `<style>` tag, with every selector prefixed by the tag
    * name so nothing leaks onto the rest of the page.
+   *
+   * The token aliases (`--ia-x--`) exist only inside a shadow root, so these
+   * styles read a token by its public name with its value as the fallback.
+   * `src/themes/token-fallbacks.node.test.ts` checks each fallback against
+   * tokens.json.
    */
   private get getStyles(): TemplateResult {
     return html`
@@ -130,7 +135,7 @@ export class IADonationCreditCardFields extends LitElement {
           );
           --donation-card-label-color--: var(
             --ia-donation-field-label-color,
-            #2c2c2c
+            var(--ia-color-text-primary, #2c2c2c)
           );
           --donation-card-label-margin-bottom--: var(
             --ia-donation-field-label-margin-bottom,
@@ -142,9 +147,12 @@ export class IADonationCreditCardFields extends LitElement {
           );
           --donation-card-required-color--: var(
             --ia-donation-badged-input-required-color,
-            var(--ia-theme-color-danger, #e51c23)
+            var(--ia-theme-color-danger, var(--ia-color-text-danger, #b8161c))
           );
-          --donation-card-error-color--: var(--ia-theme-color-danger, #e51c23);
+          --donation-card-error-color--: var(
+            --ia-theme-color-danger,
+            var(--ia-color-text-danger, #b8161c)
+          );
         }
 
         ia-donation-credit-card-fields .field-label {

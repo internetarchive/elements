@@ -78,7 +78,7 @@ export class IADonationBadgedInput extends LitElement {
           );
           --donation-badged-input-border--: var(
             --ia-donation-form-input-border,
-            1px solid #d9d9d9
+            var(--ia-border-control--)
           );
           --donation-badged-input-error-color--: var(
             --ia-donation-badged-input-error-color,
@@ -90,7 +90,7 @@ export class IADonationBadgedInput extends LitElement {
           );
           --donation-badged-input-icon-color--: var(
             --ia-donation-badged-input-icon-color,
-            #2c2c2c
+            var(--ia-color-text-primary--)
           );
           --donation-badged-input-icon-spacer-width--: var(
             --ia-donation-badged-input-icon-spacer-width,
@@ -110,7 +110,7 @@ export class IADonationBadgedInput extends LitElement {
           );
           --donation-badged-input-required-margin--: var(
             --ia-donation-badged-input-required-margin,
-            0 0.25rem 0 0
+            0 2.5px 0 0
           );
           --donation-badged-input-required-font-size--: var(
             --ia-donation-badged-input-required-font-size,
@@ -126,7 +126,7 @@ export class IADonationBadgedInput extends LitElement {
         }
 
         .input-wrapper.error {
-          box-shadow: inset 0px 0px 0px 1px
+          box-shadow: inset 0 0 0 var(--ia-size-border-width--)
             var(--donation-badged-input-error-color--);
           border-color: var(--donation-badged-input-error-color--);
         }

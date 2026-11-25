@@ -71,7 +71,7 @@ export class IADonationSection extends LitElement {
 
           --donation-section-badge-transition--: var(
             --ia-donation-section-badge-transition,
-            0.25s ease-out
+            var(--ia-motion-duration-base--) var(--ia-motion-easing-enter--)
           );
           --donation-section-badge-margin--: var(
             --ia-donation-section-badge-margin,
@@ -79,7 +79,7 @@ export class IADonationSection extends LitElement {
           );
           --donation-section-badge-background-color--: var(
             --ia-donation-section-badge-background-color,
-            var(--mid-gray)
+            var(--ia-color-surface-chrome-secondary--)
           );
           --donation-section-badge-radius--: var(
             --ia-donation-section-badge-radius,
@@ -94,11 +94,11 @@ export class IADonationSection extends LitElement {
           );
           --donation-section-badge-font-weight--: var(
             --ia-donation-section-badge-font-weight,
-            bold
+            var(--ia-font-weight-bold--)
           );
           --donation-section-badge-font-color--: var(
             --ia-donation-section-badge-font-color,
-            var(--true-white)
+            var(--ia-color-text-inverse--)
           );
           --donation-section-title-font-size--: var(
             --ia-donation-section-title-font-size,
@@ -106,7 +106,7 @@ export class IADonationSection extends LitElement {
           );
           --donation-section-title-font-weight--: var(
             --ia-donation-section-title-font-weight,
-            bold
+            var(--ia-font-weight-bold--)
           );
           --donation-section-background-color--: var(
             --ia-donation-section-background-color,

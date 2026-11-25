@@ -15,13 +15,13 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Slider color',
     cssVariable: '--histogramDateRangeSliderColor',
-    defaultValue: '#4b65fe',
+    defaultValue: '#194880',
     inputType: 'color',
   },
   {
     label: 'Selected range color',
     cssVariable: '--histogramDateRangeSelectedRangeColor',
-    defaultValue: '#dbe0ff',
+    defaultValue: '#e8edf2',
     inputType: 'color',
   },
   {

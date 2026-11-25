@@ -24,7 +24,7 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Cell min width',
     cssVariable: '--infiniteScrollerCellMinWidth',
-    defaultValue: '16rem',
+    defaultValue: '160px',
     inputType: 'text',
   },
   {
@@ -42,13 +42,13 @@ const styleInputSettings: StyleInputSettings[] = [
   {
     label: 'Row gap',
     cssVariable: '--infiniteScrollerRowGap',
-    defaultValue: '1.7rem',
+    defaultValue: '15px',
     inputType: 'text',
   },
   {
     label: 'Column gap',
     cssVariable: '--infiniteScrollerColGap',
-    defaultValue: '1.7rem',
+    defaultValue: '15px',
     inputType: 'text',
   },
 ];

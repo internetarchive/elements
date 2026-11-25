@@ -550,15 +550,17 @@ export class IADonationForm extends LitElement {
           );
           --donation-form-donate-button-color--: var(
             --ia-donation-form-donate-button-color,
-            var(--mint-green)
+            var(--ia-color-action-donate-fill--)
           );
           --donation-form-donate-button-text-color--: var(
             --ia-donation-form-donate-button-text-color,
-            var(--true-white)
+            var(--ia-color-action-donate-text--)
           );
+          /* A step darker than the fill, as ia-button's donate mode hovers. A
+             color rather than a filter, so a host's hover color shows as set. */
           --donation-form-donate-button-hover-color--: var(
             --ia-donation-form-donate-button-hover-color,
-            #278367
+            color-mix(in srgb, var(--ia-color-action-donate-fill--) 88%, black)
           );
           --donation-form-total-top-margin--: var(
             --ia-donation-form-total-amount-top-margin,
@@ -600,7 +602,7 @@ export class IADonationForm extends LitElement {
           color: var(--donation-form-donate-button-text-color--);
           cursor: pointer;
           border: none;
-          border-radius: 5px;
+          border-radius: var(--ia-radius-default--);
           background-color: var(--donation-form-donate-button-color--);
           padding-top: var(--padding-sm);
           padding-bottom: var(--padding-sm);
