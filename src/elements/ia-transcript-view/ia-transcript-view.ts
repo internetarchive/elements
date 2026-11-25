@@ -547,6 +547,8 @@ export class IATranscriptView extends LitElement {
           pointer-events: none;
         }
 
+        /* A debugging guide, drawn only with showContextZones, so it keeps a
+           color no part of the design uses rather than a token. */
         .context-overlay.top {
           top: 0;
           border-bottom: 1px solid green;
