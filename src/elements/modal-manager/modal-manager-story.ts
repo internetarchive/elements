@@ -81,6 +81,18 @@ const styleInputSettings: StyleInputSettings[] = [
     inputType: 'text',
   },
   {
+    label: 'Close button size',
+    cssVariable: '--modalCloseButtonSize',
+    defaultValue: '2rem',
+    inputType: 'text',
+  },
+  {
+    label: 'Close button distance from the corner',
+    cssVariable: '--modalCloseButtonOffset',
+    defaultValue: '1.2rem',
+    inputType: 'text',
+  },
+  {
     label: 'Subtitle font size',
     cssVariable: '--modalSubtitleFontSize',
     defaultValue: '1.4rem',
