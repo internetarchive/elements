@@ -147,6 +147,28 @@ describe('IAImageViewer', () => {
       expect(counterText(el)).toBe('3 / 3');
     });
 
+    test('arrow keys typed in a field inside a shadow root are ignored', async () => {
+      const el = await viewerWith(3);
+      const host = document.createElement('div');
+      const input = document.createElement('input');
+      host.attachShadow({ mode: 'open' }).append(input);
+      document.body.append(host);
+      input.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: 'ArrowRight',
+          bubbles: true,
+          composed: true,
+        }),
+      );
+      await settle(el);
+      el.shadowRoot
+        ?.querySelector('.slide-track')
+        ?.dispatchEvent(new Event('animationend'));
+      await settle(el);
+      host.remove();
+      expect(counterText(el)).toBe('1 / 3');
+    });
+
     test('keyboard navigation is ignored with a single image', async () => {
       const el = await viewerWith(1);
       document.dispatchEvent(
