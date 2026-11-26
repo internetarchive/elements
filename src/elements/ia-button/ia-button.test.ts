@@ -137,6 +137,151 @@ describe('IA button', () => {
     expect(button?.disabled).to.equal(true);
   });
 
+  describe('role and ARIA state', () => {
+    const forwarded = [
+      ['role', 'role', 'menuitemcheckbox'],
+      ['ariaChecked', 'aria-checked', 'false'],
+      ['ariaDisabled', 'aria-disabled', 'true'],
+      ['ariaHasPopup', 'aria-haspopup', 'menu'],
+      ['ariaExpanded', 'aria-expanded', 'true'],
+      ['ariaBusy', 'aria-busy', 'true'],
+    ] as const;
+
+    test.each(forwarded)(
+      'sets %s on the inner button and not the host',
+      async (prop, attr, value) => {
+        const el = await fixture<IAButton>(html`<ia-button>Go</ia-button>`);
+        el[prop] = value;
+        await el.updateComplete;
+
+        const button = el.shadowRoot?.querySelector('button');
+        expect(button?.getAttribute(attr)).to.equal(value);
+        expect(el.hasAttribute(attr)).to.equal(false);
+      },
+    );
+
+    test('leaves them all off the inner button when unset', async () => {
+      const el = await fixture<IAButton>(html`<ia-button>Go</ia-button>`);
+
+      const button = el.shadowRoot?.querySelector('button');
+      for (const [, attr] of forwarded) {
+        expect(button?.hasAttribute(attr)).to.equal(false);
+      }
+      expect(button?.hasAttribute('aria-describedby')).to.equal(false);
+    });
+
+    test('removes one from the inner button when cleared', async () => {
+      const el = await fixture<IAButton>(
+        html`<ia-button .ariaDisabled=${'true'}>Go</ia-button>`,
+      );
+      const button = el.shadowRoot?.querySelector('button');
+      expect(button?.getAttribute('aria-disabled')).to.equal('true');
+
+      el.ariaDisabled = null;
+      await el.updateComplete;
+      expect(button?.hasAttribute('aria-disabled')).to.equal(false);
+
+      el.ariaDisabled = '';
+      await el.updateComplete;
+      expect(button?.hasAttribute('aria-disabled')).to.equal(false);
+    });
+
+    test('sets a boolean false as "false"', async () => {
+      const el = await fixture<IAButton>(html`<ia-button>Menu</ia-button>`);
+      // An untyped binding such as `.ariaExpanded=${this.open}`
+      (el as unknown as { ariaExpanded: boolean }).ariaExpanded = false;
+      await el.updateComplete;
+
+      const button = el.shadowRoot?.querySelector('button');
+      expect(button?.getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    test('leaves an attribute written on the host there', async () => {
+      const el = await fixture<IAButton>(
+        html`<ia-button aria-disabled="true">Go</ia-button>`,
+      );
+
+      const button = el.shadowRoot?.querySelector('button');
+      expect(el.getAttribute('aria-disabled')).to.equal('true');
+      expect(el.ariaDisabled).to.equal(null);
+      expect(button?.hasAttribute('aria-disabled')).to.equal(false);
+    });
+
+    test('sets them on the button inside a link too', async () => {
+      const el = await fixture<IAButton>(
+        html`<ia-button href="/foo" .role=${'menuitem'}>Go</ia-button>`,
+      );
+
+      const button = el.shadowRoot?.querySelector('a button');
+      expect(button?.getAttribute('role')).to.equal('menuitem');
+    });
+  });
+
+  describe('description', () => {
+    test('describes the inner button', async () => {
+      const el = await fixture<IAButton>(
+        html`<ia-button description="List full">My list</ia-button>`,
+      );
+
+      const button = el.shadowRoot?.querySelector('button');
+      const describedBy = button?.getAttribute('aria-describedby');
+      expect(describedBy).to.exist;
+
+      const description = el.shadowRoot?.getElementById(describedBy!);
+      expect(description?.textContent).to.equal('List full');
+      expect(description?.hidden).to.equal(true);
+    });
+
+    test('is not part of the button, so not of its name', async () => {
+      const el = await fixture<IAButton>(
+        html`<ia-button description="List full">My list</ia-button>`,
+      );
+
+      const button = el.shadowRoot?.querySelector('button');
+      expect(button?.querySelector('#description')).not.to.exist;
+    });
+
+    test('updates and clears', async () => {
+      const el = await fixture<IAButton>(
+        html`<ia-button description="List full">My list</ia-button>`,
+      );
+      el.description = 'Already added';
+      await el.updateComplete;
+      expect(
+        el.shadowRoot?.getElementById('description')?.textContent,
+      ).to.equal('Already added');
+
+      el.description = '';
+      await el.updateComplete;
+      const button = el.shadowRoot?.querySelector('button');
+      expect(button?.hasAttribute('aria-describedby')).to.equal(false);
+      expect(el.shadowRoot?.getElementById('description')).not.to.exist;
+    });
+  });
+
+  describe('focus', () => {
+    test('focus() on the host focuses the inner button', async () => {
+      const el = await fixture<IAButton>(html`<ia-button>Go</ia-button>`);
+
+      el.focus();
+
+      const button = el.shadowRoot?.querySelector('button');
+      expect(el.shadowRoot?.activeElement).to.equal(button);
+      expect(document.activeElement).to.equal(el);
+    });
+
+    test('focus() on the host focuses the link when there is an href', async () => {
+      const el = await fixture<IAButton>(
+        html`<ia-button href="/foo">Go</ia-button>`,
+      );
+
+      el.focus();
+
+      const link = el.shadowRoot?.querySelector('a');
+      expect(el.shadowRoot?.activeElement).to.equal(link);
+    });
+  });
+
   describe('shadow root text nodes', () => {
     // A text node at the top of the shadow root renders as a space when the
     // host is display:inline, so there must be none.
@@ -155,6 +300,13 @@ describe('IA button', () => {
     test('has none when wrapped in a link', async () => {
       const el = await fixture<IAButton>(
         html`<ia-button href="/foo">Write</ia-button>`,
+      );
+      expect(textNodes(el)).toHaveLength(0);
+    });
+
+    test('has none with a description', async () => {
+      const el = await fixture<IAButton>(
+        html`<ia-button description="List full">Write</ia-button>`,
       );
       expect(textNodes(el)).toHaveLength(0);
     });
