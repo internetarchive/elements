@@ -575,6 +575,21 @@ describe('IA OTP Input', () => {
     expect(inputs?.[5].value).to.equal('');
   });
 
+  test('does not throw if prefill value property is set to a non-string value', async () => {
+    const el = await fixture<IAOTPInput>(html`<ia-otp-input></ia-otp-input>`);
+    const inputs = el.shadowRoot?.querySelectorAll('input');
+
+    el.prefillValue = 23456 as unknown as string;
+    await el.updateComplete;
+
+    expect(inputs?.[0].value).to.equal('2');
+    expect(inputs?.[1].value).to.equal('3');
+    expect(inputs?.[2].value).to.equal('4');
+    expect(inputs?.[3].value).to.equal('5');
+    expect(inputs?.[4].value).to.equal('6');
+    expect(inputs?.[5].value).to.equal('');
+  });
+
   test('returns focus to first character if inputs cleared', async () => {
     const el = await fixture<IAOTPInput>(html`<ia-otp-input></ia-otp-input>`);
     const inputs = el.shadowRoot?.querySelectorAll('input');
