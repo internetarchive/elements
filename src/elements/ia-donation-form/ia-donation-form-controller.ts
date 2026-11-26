@@ -16,7 +16,7 @@ import type { ModalManagerInterface } from '@src/elements/modal-manager/models';
 import type {
   AnalyticsEvent,
   AnalyticsManagerInterface,
-} from '@internetarchive/analytics-manager';
+} from '@src/services/analytics-manager/analytics-manager';
 
 import { BraintreeManager } from './braintree/braintree-manager';
 import type {
