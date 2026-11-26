@@ -1,7 +1,7 @@
 import type * as braintree from 'braintree-web';
 import type * as paypal from 'paypal-checkout-components';
-import type { LazyLoaderServiceInterface } from '@internetarchive/lazy-loader-service';
-import { PromisedSingleton } from '@internetarchive/promised-singleton';
+import type { LazyLoaderServiceInterface } from '@src/services/lazy-loader-service/lazy-loader-service-interface';
+import { PromisedSingleton } from '@src/services/promised-singleton/promised-singleton';
 
 import { HostingEnvironment } from './hosting-environment';
 

@@ -1,5 +1,5 @@
-import { IaFetchHandler } from '@internetarchive/fetch-handler';
-import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
+import { IaFetchHandler } from '@src/services/fetch-handler/fetch-handler';
+import type { FetchHandlerInterface } from '@src/services/fetch-handler/fetch-handler-interface';
 
 import type {
   ReviewDeletion,

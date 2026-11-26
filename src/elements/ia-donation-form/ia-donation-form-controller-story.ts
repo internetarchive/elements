@@ -4,7 +4,7 @@ import { customElement } from '@src/utils/custom-element';
 import type {
   AnalyticsEvent,
   AnalyticsManagerInterface,
-} from '@internetarchive/analytics-manager';
+} from '@src/services/analytics-manager/analytics-manager';
 import '@src/elements/modal-manager/modal-manager';
 import type { ModalManagerInterface } from '@src/elements/modal-manager/models';
 

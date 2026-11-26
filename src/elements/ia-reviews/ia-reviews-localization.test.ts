@@ -4,8 +4,8 @@ import { generateMsgId } from '@lit/localize/internal/id-generation.js';
 import { html } from 'lit';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import { Review } from '@internetarchive/metadata-service';
-import type { RecaptchaManagerInterface } from '@internetarchive/recaptcha-manager';
+import { Review } from '@src/services/metadata-service';
+import type { RecaptchaManagerInterface } from '@src/services/recaptcha-manager/recaptcha-manager';
 
 import type { IAReviews } from './ia-reviews';
 import type { IAReview } from './ia-review';

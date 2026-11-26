@@ -166,39 +166,15 @@ importers:
 
   .:
     dependencies:
-      '@internetarchive/analytics-manager':
-        specifier: ^0.1.5
-        version: 0.1.5
-      '@internetarchive/fetch-handler':
-        specifier: ^1.4.0
-        version: 1.4.0
-      '@internetarchive/ia-dropdown':
-        specifier: ^2.2.0
-        version: 2.2.0
       '@internetarchive/icon-close':
         specifier: ^1.4.0
         version: 1.4.1
       '@internetarchive/icon-info':
         specifier: ^1.4.1
         version: 1.4.1
-      '@internetarchive/icon-user':
-        specifier: ^1.4.0
-        version: 1.4.1
-      '@internetarchive/lazy-loader-service':
-        specifier: ^0.2.0
-        version: 0.2.0
       '@internetarchive/local-cache':
         specifier: ^0.2.1
         version: 0.2.1
-      '@internetarchive/metadata-service':
-        specifier: ^1.0.4
-        version: 1.1.1
-      '@internetarchive/promised-singleton':
-        specifier: ^0.2.1
-        version: 0.2.1
-      '@internetarchive/recaptcha-manager':
-        specifier: ^1.0.0
-        version: 1.0.0
       '@internetarchive/shared-resize-observer':
         specifier: ^0.2.0
         version: 0.2.0
@@ -594,50 +570,14 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@internetarchive/analytics-manager@0.1.5':
-    resolution: {integrity: sha512-6p/EB1ls6x0+xU5WyDcpLU7N4Q1VGW4cNgVV52AUw3nmXJPFZsUM7l7iFGjjJvxWK7TpxU10Z8svAzfdpOQUaA==}
-
-  '@internetarchive/fetch-handler@1.4.0':
-    resolution: {integrity: sha512-hAWqvDHQpcjfxOF254GI0ch0UQWetwJnnrrJeEyFpcC9X6Kj7GxSSDa2yAh0mWA69R8MhtGwLX0uRVGisYpDMA==}
-
-  '@internetarchive/field-parsers@0.1.4':
-    resolution: {integrity: sha512-J5nhMsIU91eXnfoApa6SE0PffPbwK1Cd3YTLX/HjgayzMbXVkQvfebfVKSaoPmzHRRttbtY3Sg9FjviCwBq6qg==}
-
-  '@internetarchive/field-parsers@1.2.1':
-    resolution: {integrity: sha512-4Dx1EBuiAbmYgBPwXFyJdUE+DV9VwwY7kx6qoEGfmRBNjCjgf+hS8Rdoe0GRVc9/6IqrKUJJPRZKMF7vc2G1XQ==}
-
-  '@internetarchive/ia-dropdown@2.2.0':
-    resolution: {integrity: sha512-h1vF1qLmjbPcRVkYz3kv1HzNHhucaM+IorVzvUejgYhIYRxrBjCswpOpMXeoR16UE4pyDVc/mtkKq/QFaVinRw==}
-
-  '@internetarchive/iaux-item-metadata@1.5.0':
-    resolution: {integrity: sha512-p1wK181a2qrHsSaL+yc6WG3JNbNlD+8g3wFKIIKzbT9ipfmsYnqjOlc8JlQT5OcXXMq4EYYCw21Agi//n9gaTw==}
-
   '@internetarchive/icon-close@1.4.1':
     resolution: {integrity: sha512-nN1rGfScGssGFpfEew4azsrsMyUJtkDWqUDlckJi31PtyQnbZqUmZ07UO3Aw+wZIo3cU1MHxb5VxDy3Rmr8QGA==}
 
   '@internetarchive/icon-info@1.4.1':
     resolution: {integrity: sha512-lxb0K996QA+tpJKqKNHpV+3aSXmLKxfXisHcPfcoGCXxYzPYDqyk6XlcPj3h1H80XgqRk1pWRsHBykOvCui2ZA==}
 
-  '@internetarchive/icon-user@1.4.1':
-    resolution: {integrity: sha512-xRlpX954+lLKjC++A+jpIutptHCmVMwLZI/WqOoAQoKfnCNKKvJ6Wcdq4bM/qUDt44Oj2VgP/gM6hSdWyljzEA==}
-
-  '@internetarchive/lazy-loader-service@0.2.0':
-    resolution: {integrity: sha512-SI/ADWnIhdtuAbxkeOItb0xOqco+ueVtwEAdEb0D60sFngUCUpBr/EXeIeh+ykXveO9pmd5J0ZVpgEfKdbhE+g==}
-
   '@internetarchive/local-cache@0.2.1':
     resolution: {integrity: sha512-8FFAvEEoazktWsIEod2NVYp0r+Fk3OxM8woe42mNlXHbht3Je98yQjooIFiA3/sJYB7xsZB2RHzUzh+GmBHFgw==}
-
-  '@internetarchive/metadata-service@1.1.1':
-    resolution: {integrity: sha512-76Jr4kSkTwZFPCQJVkYGf9vsFZw4JuxIZKFiZdavEBt2mKoLw0bkX6LQBJ31LxJfy6fZWUjAGcK9D9AjIwhZ6A==}
-
-  '@internetarchive/promised-singleton@0.2.1':
-    resolution: {integrity: sha512-HR0bg3AuY0ffJ3m2vQyFo1qXhg12olAlef0L2nD05xr+7z3qZb5K3/NBcN16k523f9Y6z5T/ELf3U+IVHAVF7w==}
-
-  '@internetarchive/recaptcha-manager@1.0.0':
-    resolution: {integrity: sha512-/L5QQB88gz88NblU8n+sRFbH1ye1QBdNkBL7eDOPrKqkshnUrL/E5O6u5/v8CDoYJ2EA+0Qadd3TSiFPZTzvmA==}
-
-  '@internetarchive/result-type@0.0.1':
-    resolution: {integrity: sha512-sWahff5oP1xAK1CwAu1/5GTG2RXsdx/sQKn4SSOWH0r0vU2QoX9kAom/jSXeBsmgK0IjTc+9Ty9407SMORi+nQ==}
 
   '@internetarchive/shared-resize-observer@0.2.0':
     resolution: {integrity: sha512-E5Jh6rX03usPkihB/lnGpoL3qedE84NLRHxuAEGrlwC0zyQ7xTr6NNQWwKBDzG1OBcCrUJXIWaQuJdjqo+og1Q==}
@@ -661,9 +601,6 @@ packages:
 
   '@lit/localize@0.12.2':
     resolution: {integrity: sha512-Qv9kvgJKDq/JVSwXOxuWvQnnOBysHA99ti9im9a4fImCmx+fto+XXcUYQbjZHqiueEEc4V20PcRDPO+1g/6seQ==}
-
-  '@lit/reactive-element@1.6.3':
-    resolution: {integrity: sha512-QuTgnG52Poic7uM1AN5yJ09QMe0O28e10XzSvWDz02TJiiKee4stsiownEIadWm8nYzyDAyT+gKzUoZmiWQtsQ==}
 
   '@lit/reactive-element@2.1.2':
     resolution: {integrity: sha512-pbCDiVMnne1lYUIaYNN5wrwQXDtHaYtg7YEFPeW+hws6U47WeFvISGUWekPGKWOP1ygrs0ef0o1VJMk1exos5A==}
@@ -875,9 +812,6 @@ packages:
 
   '@types/googlepay@0.7.13':
     resolution: {integrity: sha512-Tj9Y/UfYxUHepJe84AXeLLeBaNHySq9NorRTQ0M2uzqEBS+mmzdJYJeK2Z4XhO58gtkndC0915DM7eIn90DCPA==}
-
-  '@types/grecaptcha@2.0.36':
-    resolution: {integrity: sha512-SfzcAJPls94/Lz1FznWe6Vm9NLkakhGmk3EO7g2QdkDDR2OU4FH63YILnDpGIU6l7gPnsf5WQ81Kr05JOYAlZw==}
 
   '@types/grecaptcha@3.0.9':
     resolution: {integrity: sha512-fFxMtjAvXXMYTzDFK5NpcVB7WHnrHVLl00QzEGpuFxSAC789io6M+vjcn+g5FTEamIJtJr/IHkCDsqvJxeWDyw==}
@@ -2030,20 +1964,11 @@ packages:
     resolution: {integrity: sha512-XiAjnwVipNrKav7r3CSEZpWt+mwYxrhPRVC7h8knDmn/HWTzzWJvPe+mwBcL2brn4xhItAMzZhFC8tzzqHKmiQ==}
     hasBin: true
 
-  lit-element@3.3.3:
-    resolution: {integrity: sha512-XbeRxmTHubXENkV4h8RIPyr8lXc+Ff28rkcQzw3G6up2xg5E8Zu1IgOWIwBLEQsu3cOVFqdYwiVi0hv0SlpqUA==}
-
   lit-element@4.2.2:
     resolution: {integrity: sha512-aFKhNToWxoyhkNDmWZwEva2SlQia+jfG0fjIWV//YeTaWrVnOxD89dPKfigCUspXFmjzOEUQpOkejH5Ly6sG0w==}
 
-  lit-html@2.8.0:
-    resolution: {integrity: sha512-o9t+MQM3P4y7M7yNzqAyjp7z+mQGa4NS4CxiyLqFPyFWyc4O+nodLrkrxSaCTrla6M5YOLaT3RpbbqjszB5g3Q==}
-
   lit-html@3.3.3:
     resolution: {integrity: sha512-el8M6jK2o3RXBnrSHX3ZKrsN8zEV63pSExTO1wYJz7QndGYZ8353e2a5PPX+qHe2aGayfnchQmkAojaWAREOIA==}
-
-  lit@2.8.0:
-    resolution: {integrity: sha512-4Sc3OFX9QHOJaHbmTMk28SYgVxLN3ePDjg7hofEft2zWlehFL3LiAuapWc4U/kYwMYJSh2hTCPZ6/LIC7ii0MA==}
 
   lit@3.3.3:
     resolution: {integrity: sha512-fycuvZg/hkpozL00lm1pEJH5nN/lr9ZXd6mJI2HSN4+Bzc+LDNdEApJ6HFbPkdFNHLvOplIIuJvxkS4XUxqirw==}
@@ -2132,10 +2057,6 @@ packages:
   mylas@2.1.14:
     resolution: {integrity: sha512-BzQguy9W9NJgoVn2mRWzbFrFWWztGCcng2QI9+41frfk+Athwgx3qhqhvStz7ExeUUu7Kzw427sNzHpEZNINog==}
     engines: {node: '>=16.0.0'}
-
-  nanoevents@6.0.2:
-    resolution: {integrity: sha512-FRS2otuFcPPYDPYViNWQ42+1iZqbXydinkRHTHFxrF4a1CpBfmydR9zkI44WSXAXCyPrkcGtPk5CnpW6Y3lFKQ==}
-    engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
 
   nanoevents@9.1.0:
     resolution: {integrity: sha512-Jd0fILWG44a9luj8v5kED4WI+zfkkgwKyRQKItTtlPfEsh7Lznfi1kr8/iZ+XAIss4Qq5GqRB0qtWbaz9ceO/A==}
@@ -3041,25 +2962,6 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@internetarchive/analytics-manager@0.1.5': {}
-
-  '@internetarchive/fetch-handler@1.4.0':
-    dependencies:
-      '@internetarchive/analytics-manager': 0.1.5
-
-  '@internetarchive/field-parsers@0.1.4': {}
-
-  '@internetarchive/field-parsers@1.2.1': {}
-
-  '@internetarchive/ia-dropdown@2.2.0':
-    dependencies:
-      lit: 2.8.0
-
-  '@internetarchive/iaux-item-metadata@1.5.0':
-    dependencies:
-      '@internetarchive/field-parsers': 1.2.1
-      typescript-memoize: 1.1.1
-
   '@internetarchive/icon-close@1.4.1':
     dependencies:
       lit: 3.3.3
@@ -3068,34 +2970,9 @@ snapshots:
     dependencies:
       lit: 3.3.3
 
-  '@internetarchive/icon-user@1.4.1':
-    dependencies:
-      lit: 3.3.3
-
-  '@internetarchive/lazy-loader-service@0.2.0':
-    dependencies:
-      nanoevents: 6.0.2
-
   '@internetarchive/local-cache@0.2.1':
     dependencies:
       idb-keyval: 6.3.0
-
-  '@internetarchive/metadata-service@1.1.1':
-    dependencies:
-      '@internetarchive/field-parsers': 0.1.4
-      '@internetarchive/iaux-item-metadata': 1.5.0
-      '@internetarchive/result-type': 0.0.1
-      typescript-memoize: 1.1.1
-
-  '@internetarchive/promised-singleton@0.2.1': {}
-
-  '@internetarchive/recaptcha-manager@1.0.0':
-    dependencies:
-      '@internetarchive/lazy-loader-service': 0.2.0
-      '@types/grecaptcha': 2.0.36
-      lit: 2.8.0
-
-  '@internetarchive/result-type@0.0.1': {}
 
   '@internetarchive/shared-resize-observer@0.2.0': {}
 
@@ -3127,10 +3004,6 @@ snapshots:
   '@lit/localize@0.12.2':
     dependencies:
       lit: 3.3.3
-
-  '@lit/reactive-element@1.6.3':
-    dependencies:
-      '@lit-labs/ssr-dom-shim': 1.6.0
 
   '@lit/reactive-element@2.1.2':
     dependencies:
@@ -3282,8 +3155,6 @@ snapshots:
   '@types/estree@1.0.9': {}
 
   '@types/googlepay@0.7.13': {}
-
-  '@types/grecaptcha@2.0.36': {}
 
   '@types/grecaptcha@3.0.9': {}
 
@@ -4669,31 +4540,15 @@ snapshots:
       vscode-html-languageservice: 3.1.0
       web-component-analyzer: 2.0.0
 
-  lit-element@3.3.3:
-    dependencies:
-      '@lit-labs/ssr-dom-shim': 1.6.0
-      '@lit/reactive-element': 1.6.3
-      lit-html: 2.8.0
-
   lit-element@4.2.2:
     dependencies:
       '@lit-labs/ssr-dom-shim': 1.6.0
       '@lit/reactive-element': 2.1.2
       lit-html: 3.3.3
 
-  lit-html@2.8.0:
-    dependencies:
-      '@types/trusted-types': 2.0.7
-
   lit-html@3.3.3:
     dependencies:
       '@types/trusted-types': 2.0.7
-
-  lit@2.8.0:
-    dependencies:
-      '@lit/reactive-element': 1.6.3
-      lit-element: 3.3.3
-      lit-html: 2.8.0
 
   lit@3.3.3:
     dependencies:
@@ -4786,8 +4641,6 @@ snapshots:
   ms@2.1.3: {}
 
   mylas@2.1.14: {}
-
-  nanoevents@6.0.2: {}
 
   nanoevents@9.1.0: {}
 

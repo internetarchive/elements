@@ -1,5 +1,5 @@
 import type * as braintree from 'braintree-web';
-import type { PromisedSingleton } from '@internetarchive/promised-singleton';
+import type { PromisedSingleton } from '@src/services/promised-singleton/promised-singleton';
 import type { Unsubscribe } from 'nanoevents';
 
 import type { HostedFieldName } from './hosted-field-container';

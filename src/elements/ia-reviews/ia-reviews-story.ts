@@ -2,11 +2,11 @@ import { css, html, LitElement, type CSSResultGroup } from 'lit';
 import { query, state } from 'lit/decorators.js';
 import { customElement } from '@src/utils/custom-element';
 
-import { Review } from '@internetarchive/metadata-service';
+import { Review } from '@src/services/metadata-service';
 
 import type { PropInputSettings } from '@demo/story-components/story-prop-settings';
 import type { StyleInputSettings } from '@demo/story-components/story-styles-settings';
-import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
+import type { FetchHandlerInterface } from '@src/services/fetch-handler/fetch-handler-interface';
 import type { IAReviews } from './ia-reviews';
 import { ReviewService } from './review-service';
 

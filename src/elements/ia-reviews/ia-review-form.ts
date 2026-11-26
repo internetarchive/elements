@@ -14,17 +14,15 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 
 import DOMPurify from 'dompurify';
 
-import type {
-  RecaptchaManagerInterface,
-  RecaptchaWidgetInterface,
-} from '@internetarchive/recaptcha-manager';
+import type { RecaptchaManagerInterface } from '@src/services/recaptcha-manager/recaptcha-manager';
+import type { RecaptchaWidgetInterface } from '@src/services/recaptcha-manager/recaptcha-widget';
 import '@src/elements/ia-button/ia-button';
-import { Review } from '@internetarchive/metadata-service';
+import { Review } from '@src/services/metadata-service';
 
 import starSelected from './assets/star-selected.svg';
 import starUnselected from './assets/star-unselected.svg';
 
-import type { FetchHandlerInterface } from '@internetarchive/fetch-handler';
+import type { FetchHandlerInterface } from '@src/services/fetch-handler/fetch-handler-interface';
 import type { ReviewServiceInterface } from './models';
 import { createLegacyReviewService } from './legacy-review-service';
 import './ia-review';

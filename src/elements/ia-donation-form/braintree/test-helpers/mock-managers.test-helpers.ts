@@ -3,8 +3,8 @@ import type * as paypal from 'paypal-checkout-components';
 import type {
   LazyLoaderServiceEvents,
   LazyLoaderServiceInterface,
-} from '@internetarchive/lazy-loader-service';
-import { PromisedSingleton } from '@internetarchive/promised-singleton';
+} from '@src/services/lazy-loader-service/lazy-loader-service-interface';
+import { PromisedSingleton } from '@src/services/promised-singleton/promised-singleton';
 import { createNanoEvents, type Unsubscribe } from 'nanoevents';
 
 import type { DonationPaymentInfo } from '../../models/donation-payment-info';
